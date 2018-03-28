@@ -18,10 +18,10 @@ package com.intellij.codeInsight.generation;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.CodeInsightUtilBase;
@@ -68,19 +68,19 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 	}
 
 	@Override
-	public boolean isAvailableForQuickList(@NotNull Editor editor, @NotNull PsiFile file, @NotNull DataContext dataContext)
+	public boolean isAvailableForQuickList(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext)
 	{
 		final PsiClass aClass = OverrideImplementUtil.getContextClass(file.getProject(), editor, file, false);
 		return aClass != null && hasMembers(aClass);
 	}
 
-	protected boolean hasMembers(@NotNull PsiClass aClass)
+	protected boolean hasMembers(@Nonnull PsiClass aClass)
 	{
 		return true;
 	}
 
 	@Override
-	public final void invoke(@NotNull final Project project, @NotNull final Editor editor, @NotNull PsiFile file)
+	public final void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file)
 	{
 		if(!CodeInsightUtilBase.prepareEditorForWrite(editor))
 		{
@@ -258,7 +258,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 							new WriteCommandAction(myProject)
 							{
 								@Override
-								protected void run(@NotNull Result result) throws Throwable
+								protected void run(@Nonnull Result result) throws Throwable
 								{
 									runTemplates(myProject, editor, templates, index + 1);
 								}
@@ -278,14 +278,14 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 		return chooseMembers(allMembers, false, false, project, null);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project, Editor editor)
 	{
 		return chooseOriginalMembers(aClass, project);
 	}
 
 	@Nullable
-	protected ClassMember[] chooseMembers(ClassMember[] members, boolean allowEmptySelection, boolean copyJavadocCheckbox, Project project, @Nullable Editor editor)
+	protected ClassMember[] chooseMembers(ClassMember[] members, boolean allowEmptySelection, boolean copyJavadocCheckbox, Project project, @javax.annotation.Nullable Editor editor)
 	{
 		MemberChooser<ClassMember> chooser = createMembersChooser(members, allowEmptySelection, copyJavadocCheckbox, project);
 		if(editor != null)
@@ -325,7 +325,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 	{
 		MemberChooser<ClassMember> chooser = new MemberChooser<ClassMember>(members, allowEmptySelection, true, project, false, getHeaderPanel(project))
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			protected String getHelpId()
 			{
@@ -348,7 +348,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] members) throws IncorrectOperationException
 	{
 		ArrayList<GenerationInfo> array = new ArrayList<GenerationInfo>();

@@ -35,7 +35,7 @@ import com.intellij.openapi.ui.Messages;
 import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.NativeMethodException;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class PopFrameAction extends DebuggerAction {
   public void actionPerformed(AnActionEvent e) {

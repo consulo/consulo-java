@@ -21,19 +21,19 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class UncheckedExceptionClassInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unchecked.exception.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unchecked.exception.class.problem.descriptor");
@@ -48,7 +48,7 @@ public class UncheckedExceptionClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass,
                                        CommonClassNames.JAVA_LANG_THROWABLE)) {
         return;

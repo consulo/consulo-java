@@ -46,7 +46,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashSet;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -72,12 +72,12 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
     return JavaPushDownHandler.REFACTORING_NAME;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new PushDownUsageViewDescriptor(myClass);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     final PsiClass[] inheritors = ClassInheritorsSearch.search(myClass, false).toArray(PsiClass.EMPTY_ARRAY);
     UsageInfo[] usages = new UsageInfo[inheritors.length];

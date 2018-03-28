@@ -25,8 +25,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class AnnotationUtilEx {
    * usage context ("expected type").
    */
   @Nullable
-  public static PsiModifierListOwner getAnnotatedElementFor(@Nullable PsiElement element, LookupType type) {
+  public static PsiModifierListOwner getAnnotatedElementFor(@javax.annotation.Nullable PsiElement element, LookupType type) {
     while (element != null) {
       if (type == LookupType.PREFER_DECLARATION || type == LookupType.DECLARATION_ONLY) {
         if (element instanceof PsiReferenceExpression) {
@@ -188,7 +188,7 @@ public class AnnotationUtilEx {
    * String and as a Set. This is done for performance reasons because the Set is required by the
    * {@link com.intellij.codeInsight.AnnotationUtil} utility class and allows to avoid unnecessary object constructions.
    */
-  @NotNull
+  @Nonnull
   public static PsiAnnotation[] getAnnotationFrom(PsiModifierListOwner owner,
                                                   Pair<String, ? extends Set<String>> annotationName,
                                                   boolean allowIndirect,
@@ -235,8 +235,8 @@ public class AnnotationUtilEx {
     return PsiAnnotation.EMPTY_ARRAY;
   }
 
-  public static PsiAnnotation[] getAnnotationFrom(@NotNull PsiModifierListOwner owner,
-                                                  @NotNull Pair<String, ? extends Set<String>> annotationName,
+  public static PsiAnnotation[] getAnnotationFrom(@Nonnull PsiModifierListOwner owner,
+                                                  @Nonnull Pair<String, ? extends Set<String>> annotationName,
                                                   boolean allowIndirect) {
     return getAnnotationFrom(owner, annotationName, allowIndirect, true);
   }
@@ -256,7 +256,7 @@ public class AnnotationUtilEx {
   }
 
   @Nullable
-  public static String calcAnnotationValue(@NotNull PsiAnnotation annotation, @NonNls String attr) {
+  public static String calcAnnotationValue(@Nonnull PsiAnnotation annotation, @NonNls String attr) {
     PsiElement value = annotation.findAttributeValue(attr);
     Object o = CONSTANT_EVALUATION_HELPER.computeConstantExpression(value);
     if (o instanceof String) {
@@ -270,7 +270,7 @@ public class AnnotationUtilEx {
    *
    * @see com.intellij.codeInsight.AnnotationUtil#isAnnotated(com.intellij.psi.PsiModifierListOwner, java.lang.String, boolean)
    */
-  private static PsiAnnotation[] getAnnotations(@NotNull PsiModifierListOwner listOwner, boolean inHierarchy) {
+  private static PsiAnnotation[] getAnnotations(@Nonnull PsiModifierListOwner listOwner, boolean inHierarchy) {
     final PsiModifierList modifierList = listOwner.getModifierList();
     if (modifierList == null) {
       return PsiAnnotation.EMPTY_ARRAY;

@@ -15,19 +15,20 @@
  */
 package com.intellij.usages.impl.rules;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.usages.Usage;
 import com.intellij.usages.UsageGroup;
-import org.jetbrains.annotations.NotNull;
 
 public class NonJavaFileGroupingRule extends FileGroupingRule {
   public NonJavaFileGroupingRule(Project project) {
     super(project);
   }
 
-  public UsageGroup groupUsage(@NotNull Usage usage) {
+  public UsageGroup groupUsage(@Nonnull Usage usage) {
     final FileUsageGroup usageGroup = (FileUsageGroup)super.groupUsage(usage);
     if (usageGroup != null) {
       final PsiFile psiFile = usageGroup.getPsiFile();

@@ -17,8 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
@@ -75,12 +75,12 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 	private boolean myMayNeedExplicitTypeParameters;
 	private String myForcedQualifier = "";
 
-	public JavaMethodCallElement(@NotNull PsiMethod method)
+	public JavaMethodCallElement(@Nonnull PsiMethod method)
 	{
 		this(method, method.getName());
 	}
 
-	public JavaMethodCallElement(@NotNull PsiMethod method, String methodName)
+	public JavaMethodCallElement(@Nonnull PsiMethod method, String methodName)
 	{
 		super(method, methodName);
 		myMethod = method;
@@ -107,7 +107,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 		}
 	}
 
-	void setForcedQualifier(@NotNull String forcedQualifier)
+	void setForcedQualifier(@Nonnull String forcedQualifier)
 	{
 		myForcedQualifier = forcedQualifier;
 		setLookupString(forcedQualifier + getLookupString());
@@ -119,25 +119,25 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 		return getSubstitutor().substitute(getInferenceSubstitutor().substitute(getObject().getReturnType()));
 	}
 
-	public void setInferenceSubstitutor(@NotNull final PsiSubstitutor substitutor, PsiElement place)
+	public void setInferenceSubstitutor(@Nonnull final PsiSubstitutor substitutor, PsiElement place)
 	{
 		myInferenceSubstitutor = substitutor;
 		myMayNeedExplicitTypeParameters = mayNeedTypeParameters(place);
 	}
 
-	public JavaMethodCallElement setQualifierSubstitutor(@NotNull PsiSubstitutor qualifierSubstitutor)
+	public JavaMethodCallElement setQualifierSubstitutor(@Nonnull PsiSubstitutor qualifierSubstitutor)
 	{
 		myQualifierSubstitutor = qualifierSubstitutor;
 		return this;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiSubstitutor getSubstitutor()
 	{
 		return myQualifierSubstitutor;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiSubstitutor getInferenceSubstitutor()
 	{
 		return myInferenceSubstitutor;
@@ -257,7 +257,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 
 	public static final Key<PsiMethod> ARGUMENT_TEMPLATE_ACTIVE = Key.create("ARGUMENT_TEMPLATE_ACTIVE");
 
-	@NotNull
+	@Nonnull
 	private static Template createArgTemplate(PsiMethod method, int caretOffset, PsiExpressionList argList, TextRange argRange)
 	{
 		Template template = TemplateManager.getInstance(method.getProject()).createTemplate("", "");

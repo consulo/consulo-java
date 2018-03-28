@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -41,14 +41,14 @@ public class SynchronizedMethodInspection extends BaseInspection {
   public boolean ignoreSynchronizedSuperMethods = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "synchronized.method.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethod method = (PsiMethod)infos[0];
     return InspectionGadgetsBundle.message(
@@ -81,7 +81,7 @@ public class SynchronizedMethodInspection extends BaseInspection {
   private static class SynchronizedMethodFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "synchronized.method.move.quickfix");
@@ -122,7 +122,7 @@ public class SynchronizedMethodInspection extends BaseInspection {
   private class SynchronizedMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         return;
       }

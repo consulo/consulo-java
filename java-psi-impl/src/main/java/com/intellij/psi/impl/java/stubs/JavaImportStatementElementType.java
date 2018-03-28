@@ -17,8 +17,9 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -42,19 +43,19 @@ import com.intellij.util.io.StringRef;
  */
 public abstract class JavaImportStatementElementType extends JavaStubElementType<PsiImportStatementStub, PsiImportStatementBase>
 {
-	public JavaImportStatementElementType(@NonNls @NotNull final String id)
+	public JavaImportStatementElementType(@NonNls @Nonnull final String id)
 	{
 		super(id);
 	}
 
 	@Override
-	public PsiImportStatementBase createPsi(@NotNull final PsiImportStatementStub stub)
+	public PsiImportStatementBase createPsi(@Nonnull final PsiImportStatementStub stub)
 	{
 		return getPsiFactory(stub).createImportStatement(stub);
 	}
 
 	@Override
-	public PsiImportStatementBase createPsi(@NotNull final ASTNode node)
+	public PsiImportStatementBase createPsi(@Nonnull final ASTNode node)
 	{
 		if(node instanceof ImportStaticStatementElement)
 		{
@@ -90,15 +91,15 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
 	}
 
 	@Override
-	public void serialize(@NotNull final PsiImportStatementStub stub, @NotNull final StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull final PsiImportStatementStub stub, @Nonnull final StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeByte(((PsiImportStatementStubImpl) stub).getFlags());
 		dataStream.writeName(stub.getImportReferenceText());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiImportStatementStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	public PsiImportStatementStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
 	{
 		final byte flags = dataStream.readByte();
 		final StringRef refText = dataStream.readName();
@@ -106,7 +107,7 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
 	}
 
 	@Override
-	public void indexStub(@NotNull final PsiImportStatementStub stub, @NotNull final IndexSink sink)
+	public void indexStub(@Nonnull final PsiImportStatementStub stub, @Nonnull final IndexSink sink)
 	{
 	}
 }

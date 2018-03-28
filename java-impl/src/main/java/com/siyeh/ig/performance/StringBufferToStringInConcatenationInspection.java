@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,20 +27,19 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class StringBufferToStringInConcatenationInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "string.buffer.to.string.in.concatenation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "string.buffer.to.string.in.concatenation.problem.descriptor");
@@ -56,7 +57,7 @@ public class StringBufferToStringInConcatenationInspection
 
   private static class StringBufferToStringFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "string.buffer.to.string.in.concatenation.remove.quickfix");
@@ -85,7 +86,7 @@ public class StringBufferToStringInConcatenationInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!ExpressionUtils.isStringConcatenationOperand(expression)) {
         return;

@@ -15,8 +15,8 @@
  */
 package com.intellij.openapi.projectRoots;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
 import consulo.annotations.RequiredReadAction;
@@ -28,20 +28,20 @@ import consulo.java.module.extension.JavaModuleExtension;
  */
 public class JavaSdkVersionUtil
 {
-	public static boolean isAtLeast(@NotNull PsiElement element, @NotNull JavaSdkVersion minVersion)
+	public static boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion minVersion)
 	{
 		JavaSdkVersion version = getJavaSdkVersion(element);
 		return version == null || version.isAtLeast(minVersion);
 	}
 
 	@RequiredReadAction
-	public static JavaSdkVersion getJavaSdkVersion(@NotNull PsiElement element)
+	public static JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element)
 	{
 		final Sdk sdk = ModuleUtilCore.getSdk(element, JavaModuleExtension.class);
 		return getJavaSdkVersion(sdk);
 	}
 
-	public static JavaSdkVersion getJavaSdkVersion(@Nullable Sdk sdk)
+	public static JavaSdkVersion getJavaSdkVersion(@javax.annotation.Nullable Sdk sdk)
 	{
 		return sdk != null && sdk.getSdkType() instanceof JavaSdk ? ((JavaSdk) sdk.getSdkType()).getVersion(sdk) : null;
 	}

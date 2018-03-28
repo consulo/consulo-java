@@ -24,12 +24,11 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
@@ -105,19 +104,19 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	private static final String LOG_MESSAGE_OPTION_NAME = "LOG_MESSAGE";
 	protected boolean myCachedVerifiedState = false;
 
-	protected Breakpoint(@NotNull Project project, XBreakpoint<P> xBreakpoint)
+	protected Breakpoint(@Nonnull Project project, XBreakpoint<P> xBreakpoint)
 	{
 		myProject = project;
 		myXBreakpoint = xBreakpoint;
 	}
 
-	@NotNull
+	@Nonnull
 	public Project getProject()
 	{
 		return myProject;
 	}
 
-	@NotNull
+	@Nonnull
 	protected P getProperties()
 	{
 		return myXBreakpoint.getProperties();
@@ -128,7 +127,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return myXBreakpoint;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public abstract PsiClass getPsiClass();
 
 	/**
@@ -173,7 +172,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return getDisplayName();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getClassName()
 	{
 		return null;
@@ -197,7 +196,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getShortClassName()
 	{
 		final String className = getClassName();
@@ -210,7 +209,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return dotIndex >= 0 && dotIndex + 1 < className.length() ? className.substring(dotIndex + 1) : className;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getPackageName()
 	{
 		return null;
@@ -242,7 +241,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		debugProcess.getVirtualMachineProxy().classesByName(classToBeLoaded).stream().filter(ReferenceType::isPrepared).forEach(aList -> processClassPrepare(debugProcess, aList));
 	}
 
-	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, @NotNull final SourcePosition classPosition)
+	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, @Nonnull final SourcePosition classPosition)
 	{
 		debugProcess.getRequestsManager().callbackOnPrepareClasses(this, classPosition);
 
@@ -459,7 +458,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			myEvaluator = evaluator;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		static ExpressionEvaluator cacheOrGet(String propertyName,
 				EventRequest request,
 				PsiElement context,
@@ -518,7 +517,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return event.location().declaringType().name();
 	}
 
-	protected static boolean typeMatchesClassFilters(@Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
+	protected static boolean typeMatchesClassFilters(@javax.annotation.Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
 	{
 		if(typeName == null)
 		{
@@ -616,7 +615,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public abstract PsiElement getEvaluationElement();
 
 	protected TextWithImports getLogMessage()
@@ -818,7 +817,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return !getCondition().isEmpty();
 	}
 
-	public void setCondition(@Nullable TextWithImports condition)
+	public void setCondition(@javax.annotation.Nullable TextWithImports condition)
 	{
 		myXBreakpoint.setConditionExpression(TextWithImportsImpl.toXExpression(condition));
 	}

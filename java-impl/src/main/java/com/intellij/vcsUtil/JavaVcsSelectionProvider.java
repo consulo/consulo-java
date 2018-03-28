@@ -15,7 +15,6 @@
  */
 package com.intellij.vcsUtil;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -39,7 +38,7 @@ import consulo.codeInsight.TargetElementUtilEx;
  * @author yole
  */
 public class JavaVcsSelectionProvider implements VcsSelectionProvider {
-  @Nullable
+  @javax.annotation.Nullable
   @RequiredDispatchThread
   public VcsSelection getSelection(final VcsContext context) {
     final Editor editor = context.getEditor();

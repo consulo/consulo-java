@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.visibility;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiParameter;
 import com.siyeh.InspectionGadgetsBundle;
@@ -22,18 +24,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
 
 public class AnonymousClassVariableHidesContainingMethodVariableInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "anonymous.class.variable.hides.containing.method.variable.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Object info = infos[0];
     if (info instanceof PsiParameter) {

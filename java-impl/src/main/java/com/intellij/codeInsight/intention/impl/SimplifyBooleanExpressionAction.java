@@ -27,24 +27,24 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.java.JavaQuickFixBundle;
 
 public class SimplifyBooleanExpressionAction implements IntentionAction{
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return getFamilyName();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("simplify.boolean.expression.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiExpression expression = getExpressionToSimplify(editor, file);
     return expression != null && SimplifyBooleanExpressionFix.canBeSimplified(expression);
   }
@@ -63,7 +63,7 @@ public class SimplifyBooleanExpressionAction implements IntentionAction{
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiExpression expression = getExpressionToSimplify(editor, file);
     SimplifyBooleanExpressionFix.simplifyExpression(expression);

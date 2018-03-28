@@ -15,6 +15,8 @@
  */
 package com.intellij.util.xml.ui;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -28,7 +30,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.xml.AbstractConvertContext;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.JvmPsiTypeConverterImpl;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author peter
@@ -39,7 +40,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
     super(domWrapper, commitOnEveryChange);
   }
 
-  @NotNull
+  @Nonnull
   protected String getValue() {
     final String rawValue = super.getValue();
     try {
@@ -60,7 +61,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
 
   protected void setValue(String value) {
     final PsiType type = JvmPsiTypeConverterImpl.convertFromString(value, new AbstractConvertContext() {
-      @NotNull
+      @Nonnull
       public DomElement getInvocationElement() {
         return getDomElement();
       }
@@ -75,7 +76,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
     super.setValue(value);
   }
 
-  protected EditorTextField getEditorTextField(@NotNull final PsiTypePanel component) {
+  protected EditorTextField getEditorTextField(@Nonnull final PsiTypePanel component) {
     return ((ReferenceEditorWithBrowseButton)component.getComponent(0)).getEditorTextField();
   }
 

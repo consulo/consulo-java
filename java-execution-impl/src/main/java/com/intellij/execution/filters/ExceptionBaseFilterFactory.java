@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.filters;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.search.GlobalSearchScope;
 
 /**
@@ -26,9 +27,9 @@ import com.intellij.psi.search.GlobalSearchScope;
  */
 public class ExceptionBaseFilterFactory implements ExceptionFilterFactory
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public Filter create(@NotNull GlobalSearchScope searchScope)
+	public Filter create(@Nonnull GlobalSearchScope searchScope)
 	{
 		return new ExceptionFilter(searchScope);
 	}

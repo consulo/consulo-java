@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lexer.JavaLexer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -29,23 +30,23 @@ import com.intellij.psi.tree.IElementType;
  */
 public class PsiLiteralStub extends StubBase<PsiLiteralExpressionImpl>
 {
-	@NotNull
+	@Nonnull
 	private final String myLiteralText;
 	private volatile IElementType myLiteralType;
 
-	public PsiLiteralStub(StubElement parent, @NotNull String literalText)
+	public PsiLiteralStub(StubElement parent, @Nonnull String literalText)
 	{
 		super(parent, JavaStubElementTypes.LITERAL_EXPRESSION);
 		myLiteralText = literalText;
 	}
 
-	@NotNull
+	@Nonnull
 	public String getLiteralText()
 	{
 		return myLiteralText;
 	}
 
-	@NotNull
+	@Nonnull
 	public IElementType getLiteralType()
 	{
 		IElementType type = myLiteralType;

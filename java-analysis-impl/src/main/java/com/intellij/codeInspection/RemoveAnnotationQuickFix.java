@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
 import com.intellij.codeInsight.FileModificationService;
@@ -39,13 +40,13 @@ public class RemoveAnnotationQuickFix implements LocalQuickFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return CodeInsightBundle.message("remove.annotation");
   }
 
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     if (myAnnotation.isPhysical()) {
       try {
         if (!FileModificationService.getInstance().preparePsiElementForWrite(myAnnotation)) return;
@@ -60,7 +61,7 @@ public class RemoveAnnotationQuickFix implements LocalQuickFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getName();
   }

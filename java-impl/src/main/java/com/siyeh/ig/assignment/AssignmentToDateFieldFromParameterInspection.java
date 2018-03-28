@@ -23,8 +23,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -37,14 +37,14 @@ public class AssignmentToDateFieldFromParameterInspection
   public boolean ignorePrivateMethods = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.to.date.calendar.field.from.parameter.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String type = (String)infos[0];
     final PsiExpression rhs = (PsiExpression)infos[1];
@@ -72,7 +72,7 @@ public class AssignmentToDateFieldFromParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!JavaTokenType.EQ.equals(tokenType)) {

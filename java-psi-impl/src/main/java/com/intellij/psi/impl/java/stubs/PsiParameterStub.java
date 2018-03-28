@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.stubs.NamedStub;
@@ -25,13 +26,13 @@ import com.intellij.psi.stubs.NamedStub;
  */
 public interface PsiParameterStub extends NamedStub<PsiParameter>
 {
-	@NotNull
+	@Nonnull
 	@Override
 	String getName();
 
 	boolean isParameterTypeEllipsis();
 
-	@NotNull
+	@Nonnull
 	TypeInfo getType(boolean doResolve);
 
 	PsiModifierListStub getModList();

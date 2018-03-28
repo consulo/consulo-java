@@ -17,9 +17,10 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -41,12 +42,12 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 {
 	public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
-	protected WrapObjectWithOptionalOfNullableFix(final @NotNull PsiExpressionList list, final int i, final @NotNull PsiType toType, final @NotNull ArgumentFixerActionFactory fixerActionFactory)
+	protected WrapObjectWithOptionalOfNullableFix(final @Nonnull PsiExpressionList list, final int i, final @Nonnull PsiType toType, final @Nonnull ArgumentFixerActionFactory fixerActionFactory)
 	{
 		super(list, i, toType, fixerActionFactory);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -61,12 +62,12 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
 	}
 
-	public static IntentionAction createFix(@Nullable PsiType type, @NotNull PsiExpression expression)
+	public static IntentionAction createFix(@Nullable PsiType type, @Nonnull PsiExpression expression)
 	{
 		class MyFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction
 		{
@@ -76,7 +77,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 			}
 
 			@Nls
-			@NotNull
+			@Nonnull
 			@Override
 			public String getFamilyName()
 			{
@@ -84,23 +85,23 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 			}
 
 			@Override
-			public void invoke(@NotNull Project project,
-					@NotNull PsiFile file,
-					@Nullable("is null when called from inspection") Editor editor,
-					@NotNull PsiElement startElement,
-					@NotNull PsiElement endElement)
+			public void invoke(@Nonnull Project project,
+					@Nonnull PsiFile file,
+					@Nullable Editor editor,
+					@Nonnull PsiElement startElement,
+					@Nonnull PsiElement endElement)
 			{
 				startElement.replace(getModifiedExpression((PsiExpression) getStartElement()));
 			}
 
 			@Override
-			public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+			public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 			{
 				return startElement.isValid() && startElement.getManager().isInProject(startElement) && PsiUtil.isLanguageLevel8OrHigher(startElement) && areConvertible(((PsiExpression)
 						startElement).getType(), type);
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
 			public String getText()
 			{
@@ -121,7 +122,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 		}
 
 		@Override
-		public boolean areTypesConvertible(@NotNull final PsiType exprType, @NotNull final PsiType parameterType, @NotNull final PsiElement context)
+		public boolean areTypesConvertible(@Nonnull final PsiType exprType, @Nonnull final PsiType parameterType, @Nonnull final PsiElement context)
 		{
 			return parameterType.isConvertibleFrom(exprType) || areConvertible(exprType, parameterType);
 		}
@@ -133,7 +134,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 		}
 	}
 
-	private static boolean areConvertible(@Nullable PsiType exprType, @Nullable PsiType parameterType)
+	private static boolean areConvertible(@javax.annotation.Nullable PsiType exprType, @Nullable PsiType parameterType)
 	{
 		if(exprType == null || !exprType.isValid() || !(parameterType instanceof PsiClassType) || !parameterType.isValid())
 		{
@@ -163,7 +164,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 		return TypeConversionUtil.isAssignable(optionalTypeParameter, exprType);
 	}
 
-	@NotNull
+	@Nonnull
 	private static PsiExpression getModifiedExpression(PsiExpression expression)
 	{
 		final Project project = expression.getProject();

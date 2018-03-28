@@ -15,12 +15,13 @@
  */
 package com.intellij.refactoring.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.convertToInstanceMethod.ConvertToInstanceMethodHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -30,16 +31,16 @@ public class ConvertToInstanceMethodAction extends BaseRefactoringAction {
     return false;
   }
 
-  protected boolean isEnabledOnElements(@NotNull PsiElement[] elements) {
+  protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     return elements.length == 1 && elements[0] instanceof PsiMethod;
   }
 
-  protected boolean isAvailableOnElementInEditorAndFile(@NotNull PsiElement element, @NotNull final Editor editor, @NotNull PsiFile file, @NotNull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     if (element instanceof PsiIdentifier) element = element.getParent();
     return element instanceof PsiMethod && ((PsiMethod) element).hasModifierProperty(PsiModifier.STATIC);
   }
 
-  protected RefactoringActionHandler getHandler(@NotNull DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new ConvertToInstanceMethodHandler();
   }
 }

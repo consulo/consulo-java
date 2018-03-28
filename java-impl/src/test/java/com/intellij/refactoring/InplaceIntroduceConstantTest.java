@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pass;
@@ -22,7 +24,6 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiLocalVariable;
 import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.refactoring.introduceField.IntroduceConstantHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * User: anna
@@ -133,7 +134,7 @@ public class InplaceIntroduceConstantTest extends AbstractJavaInplaceIntroduceTe
 
   public static class MyIntroduceConstantHandler extends IntroduceConstantHandler implements MyIntroduceHandler {
     @Override
-    public boolean invokeImpl(Project project, @NotNull PsiExpression selectedExpr, Editor editor) {
+    public boolean invokeImpl(Project project, @Nonnull PsiExpression selectedExpr, Editor editor) {
       return super.invokeImpl(project, selectedExpr, editor);
     }
 

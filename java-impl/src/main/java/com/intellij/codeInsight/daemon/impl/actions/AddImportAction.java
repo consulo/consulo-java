@@ -20,13 +20,12 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
@@ -71,7 +70,7 @@ public class AddImportAction implements QuestionAction
 	private final PsiClass[] myTargetClasses;
 	private final Editor myEditor;
 
-	public AddImportAction(@NotNull Project project, @NotNull PsiReference ref, @NotNull Editor editor, @NotNull PsiClass... targetClasses)
+	public AddImportAction(@Nonnull Project project, @Nonnull PsiReference ref, @Nonnull Editor editor, @Nonnull PsiClass... targetClasses)
 	{
 		myProject = project;
 		myReference = ref;
@@ -152,7 +151,7 @@ public class AddImportAction implements QuestionAction
 				return true;
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
 			public String getTextFor(PsiClass value)
 			{
@@ -191,7 +190,7 @@ public class AddImportAction implements QuestionAction
 		popup.showInBestPositionFor(myEditor);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PopupStep getExcludesStep(String qname, final Project project)
 	{
 		if(qname == null)
@@ -203,7 +202,7 @@ public class AddImportAction implements QuestionAction
 
 		return new BaseListPopupStep<String>(null, toExclude)
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public String getTextFor(String value)
 			{
@@ -237,7 +236,7 @@ public class AddImportAction implements QuestionAction
 		});
 	}
 
-	public static List<String> getAllExcludableStrings(@NotNull String qname)
+	public static List<String> getAllExcludableStrings(@Nonnull String qname)
 	{
 		List<String> toExclude = new ArrayList<>();
 		while(true)

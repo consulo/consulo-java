@@ -21,7 +21,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.usageView.*;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.refactoring.RefactoringBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class RefsToSuperViewDescriptor implements UsageViewDescriptor{
   private final PsiClass myClass;
@@ -35,7 +35,7 @@ class RefsToSuperViewDescriptor implements UsageViewDescriptor{
     mySuper = anInterface;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myClass, mySuper};
   }

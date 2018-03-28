@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -50,7 +50,7 @@ public class PathUtilEx {
     return chooseJdk(project, Arrays.asList(ModuleManager.getInstance(project).getModules()));
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static Sdk chooseJdk(Project project, Collection<Module> modules) {
    /* Sdk projectJdk = ProjectRootManager.getInstance(project).getProjectSdk();
     if (projectJdk != null) {
@@ -59,7 +59,7 @@ public class PathUtilEx {
     return chooseJdk(modules);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static Sdk chooseJdk(Collection<Module> modules) {
     List<Sdk> jdks = skipNulls(map(skipNulls(modules), MODULE_JDK));
     if (jdks.isEmpty()) {

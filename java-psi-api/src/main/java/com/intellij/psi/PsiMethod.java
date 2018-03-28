@@ -17,9 +17,9 @@ package com.intellij.psi;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.JvmParameter;
 import com.intellij.lang.jvm.types.JvmReferenceType;
@@ -49,7 +49,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 *
 	 * @return the method return type, or null if the method is a constructor.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiType getReturnType();
 
 	/**
@@ -57,7 +57,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 *
 	 * @return the type element for the return type, or null if the method is a constructor.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiTypeElement getReturnTypeElement();
 
 	/**
@@ -66,7 +66,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 * @return the parameter list instance.
 	 */
 	@Override
-	@NotNull
+	@Nonnull
 	PsiParameterList getParameterList();
 
 	/**
@@ -74,7 +74,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 *
 	 * @return the list of thrown exceptions instance.
 	 */
-	@NotNull
+	@Nonnull
 	PsiReferenceList getThrowsList();
 
 	/**
@@ -83,7 +83,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 * @return the method body, or null if the method belongs to a compiled class.
 	 */
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	PsiCodeBlock getBody();
 
 	/**
@@ -107,8 +107,8 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 * @param substitutor the substitutor.
 	 * @return the method signature instance.
 	 */
-	@NotNull
-	MethodSignature getSignature(@NotNull PsiSubstitutor substitutor);
+	@Nonnull
+	MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor);
 
 	/**
 	 * Returns the name identifier for the method.
@@ -116,7 +116,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 * @return the name identifier instance.
 	 */
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	PsiIdentifier getNameIdentifier();
 
 	/**
@@ -128,7 +128,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 *
 	 * @return the array of super methods, or an empty array if no methods are found.
 	 */
-	@NotNull
+	@Nonnull
 	PsiMethod[] findSuperMethods();
 
 	/**
@@ -143,7 +143,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 *                    is private. If true, an empty result list is returned for private methods.
 	 * @return the array of super methods, or an empty array if no methods are found.
 	 */
-	@NotNull
+	@Nonnull
 	PsiMethod[] findSuperMethods(boolean checkAccess);
 
 	/**
@@ -155,7 +155,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 * @param parentClass the class to search for super methods.
 	 * @return the array of super methods, or an empty array if no methods are found.
 	 */
-	@NotNull
+	@Nonnull
 	PsiMethod[] findSuperMethods(PsiClass parentClass);
 
 	/**
@@ -169,7 +169,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 *                    is private. If true, an empty result list is returned for private methods.
 	 * @return the array of matching method signatures, or an empty array if no methods are found.
 	 */
-	@NotNull
+	@Nonnull
 	List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess);
 
 	/**
@@ -180,35 +180,35 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 	 * or implement any other method.
 	 * @deprecated use {@link #findDeepestSuperMethods()} instead
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiMethod findDeepestSuperMethod();
 
-	@NotNull
+	@Nonnull
 	PsiMethod[] findDeepestSuperMethods();
 
 	@Override
-	@NotNull
+	@Nonnull
 	PsiModifierList getModifierList();
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	String getName();
 
 	@Override
-	PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException;
+	PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException;
 
-	@NotNull
+	@Nonnull
 	HierarchicalMethodSignature getHierarchicalMethodSignature();
 
-	@NotNull
+	@Nonnull
 	@Override
 	default JvmParameter[] getParameters()
 	{
 		return getParameterList().getParameters();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	default JvmReferenceType[] getThrowsTypes()
 	{

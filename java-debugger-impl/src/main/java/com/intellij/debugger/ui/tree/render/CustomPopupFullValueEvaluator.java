@@ -18,10 +18,10 @@ package com.intellij.debugger.ui.tree.render;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.openapi.Disposable;
@@ -37,7 +37,7 @@ import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
  */
 public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFullValueEvaluator
 {
-	public CustomPopupFullValueEvaluator(@NotNull String linkText, @NotNull EvaluationContextImpl evaluationContext)
+	public CustomPopupFullValueEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext)
 	{
 		super(linkText, evaluationContext);
 		setShowValuePopup(false);
@@ -48,7 +48,7 @@ public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFul
 	protected abstract JComponent createComponent(T data);
 
 	@Override
-	public void evaluate(@NotNull final XFullValueEvaluationCallback callback)
+	public void evaluate(@Nonnull final XFullValueEvaluationCallback callback)
 	{
 		final T data = getData();
 		DebuggerUIUtil.invokeLater(new Runnable()

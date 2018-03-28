@@ -17,8 +17,8 @@ package com.intellij.psi.scope.processor;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiSubstitutor;
@@ -39,24 +39,24 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	private final ElementFilter myFilter;
 	private final PsiScopeProcessor myProcessor;
 
-	public FilterScopeProcessor(@NotNull ElementFilter filter, @NotNull List<T> container)
+	public FilterScopeProcessor(@Nonnull ElementFilter filter, @Nonnull List<T> container)
 	{
 		this(filter, null, container);
 	}
 
-	public FilterScopeProcessor(@NotNull ElementFilter filter, @NotNull PsiScopeProcessor processor)
+	public FilterScopeProcessor(@Nonnull ElementFilter filter, @Nonnull PsiScopeProcessor processor)
 	{
 		this(filter, processor, new SmartList<T>());
 	}
 
-	public FilterScopeProcessor(@NotNull ElementFilter filter)
+	public FilterScopeProcessor(@Nonnull ElementFilter filter)
 	{
 		this(filter, null, new SmartList<T>());
 	}
 
-	public FilterScopeProcessor(@NotNull ElementFilter filter,
+	public FilterScopeProcessor(@Nonnull ElementFilter filter,
 			@Nullable PsiScopeProcessor processor,
-			@NotNull List<T> container)
+			@Nonnull List<T> container)
 	{
 		myFilter = filter;
 		myProcessor = processor;
@@ -64,7 +64,7 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	}
 
 	@Override
-	public void handleEvent(@NotNull PsiScopeProcessor.Event event, Object associated)
+	public void handleEvent(@Nonnull PsiScopeProcessor.Event event, Object associated)
 	{
 		if(myProcessor != null)
 		{
@@ -77,7 +77,7 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	}
 
 	@Override
-	public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		if(myFilter.isAcceptable(element, myCurrentDeclarationHolder))
 		{
@@ -90,14 +90,14 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 		return true;
 	}
 
-	protected void add(@NotNull PsiElement element, @NotNull PsiSubstitutor substitutor)
+	protected void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor)
 	{
 		//noinspection unchecked
 		myResults.add((T) element);
 	}
 
 	@Override
-	public <K> K getHint(@NotNull Key<K> hintKey)
+	public <K> K getHint(@Nonnull Key<K> hintKey)
 	{
 		if(myProcessor != null)
 		{
@@ -106,7 +106,7 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	public List<T> getResults()
 	{
 		return myResults;

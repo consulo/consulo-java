@@ -16,6 +16,8 @@
  */
 package com.intellij.codeInsight.generation.surroundWith;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 
 import com.intellij.openapi.project.Project;
@@ -24,23 +26,24 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.lang.surroundWith.Surrounder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 abstract class JavaStatementsSurrounder implements Surrounder {
   @Override
-  public boolean isApplicable(@NotNull PsiElement[] elements) {
+  public boolean isApplicable(@Nonnull PsiElement[] elements) {
     return true;
   }
 
   @Override
-  @Nullable public TextRange surroundElements(@NotNull Project project,
-                                              @NotNull Editor editor,
-                                              @NotNull PsiElement[] elements) throws IncorrectOperationException {
+  @Nullable public TextRange surroundElements(@Nonnull Project project,
+                                              @Nonnull Editor editor,
+                                              @Nonnull PsiElement[] elements) throws IncorrectOperationException {
     PsiElement container = elements[0].getParent();
     if (container == null) return null;
     return surroundStatements (project, editor, container, elements);
   }
 
- @Nullable protected abstract TextRange surroundStatements(final Project project, final Editor editor, final PsiElement container, final PsiElement[] statements) throws IncorrectOperationException;
+ @javax.annotation.Nullable
+ protected abstract TextRange surroundStatements(final Project project, final Editor editor, final PsiElement container, final PsiElement[] statements) throws IncorrectOperationException;
 }

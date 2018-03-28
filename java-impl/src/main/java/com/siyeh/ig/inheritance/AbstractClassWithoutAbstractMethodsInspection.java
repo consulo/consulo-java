@@ -21,7 +21,7 @@ import com.intellij.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,13 +29,13 @@ import java.util.Set;
 public class AbstractClassWithoutAbstractMethodsInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "abstract.class.without.abstract.methods.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "abstract.class.without.abstract.methods.problem.descriptor");
@@ -49,7 +49,7 @@ public class AbstractClassWithoutAbstractMethodsInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;

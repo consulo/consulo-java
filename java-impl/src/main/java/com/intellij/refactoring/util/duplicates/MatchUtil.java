@@ -21,15 +21,14 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class MatchUtil {
-  @Nullable
+  @javax.annotation.Nullable
   public static String getChangedSignature(Match match, final PsiMethod method, final boolean shouldBeStatic, String visibility) {
     final PsiType returnType = match.getChangedReturnType(method);
     if (!match.myChangedParams.isEmpty() || returnType != null) {
@@ -86,7 +85,7 @@ public class MatchUtil {
     return null;
   }
 
-  public static void changeSignature(@NotNull Match match, @NotNull PsiMethod psiMethod) {
+  public static void changeSignature(@Nonnull Match match, @Nonnull PsiMethod psiMethod) {
     final PsiType expressionType = match.getChangedReturnType(psiMethod);
     if (expressionType == null && match.myChangedParams.isEmpty()) return;
     final List<ParameterInfoImpl> newParameters = patchParams(match.myChangedParams, psiMethod);

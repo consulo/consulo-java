@@ -27,7 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
 import org.jetbrains.org.objectweb.asm.tree.JumpInsnNode;
 import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
@@ -47,7 +48,7 @@ class NullableInAnalysis extends Analysis<PResults.PResult> {
     this.pending = pending;
   }
 
-  @NotNull
+  @Nonnull
   Equation mkEquation(PResults.PResult result) {
     if (NPE == result) {
       return new Equation(aKey, new Final(Value.Top));
@@ -71,7 +72,7 @@ class NullableInAnalysis extends Analysis<PResults.PResult> {
   private PResults.PResult subResult = Identity;
   private boolean top;
 
-  @NotNull
+  @Nonnull
   protected Equation analyze() throws AnalyzerException
   {
     pendingPush(createStartState());

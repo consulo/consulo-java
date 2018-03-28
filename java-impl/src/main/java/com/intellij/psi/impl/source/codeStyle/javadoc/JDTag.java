@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 
 /**
@@ -37,27 +37,27 @@ public enum JDTag
 	DEPRECATED("deprecated");
 
 
-	@NotNull
+	@Nonnull
 	private final String myTag;
 
-	JDTag(@NotNull String tag)
+	JDTag(@Nonnull String tag)
 	{
 		this.myTag = tag;
 	}
 
-	@NotNull
-	public String getDescriptionPrefix(@NotNull String prefix)
+	@Nonnull
+	public String getDescriptionPrefix(@Nonnull String prefix)
 	{
 		return prefix + StringUtil.repeatSymbol(' ', getWithEndWhitespace().length());
 	}
 
-	@NotNull
+	@Nonnull
 	public String getWithEndWhitespace()
 	{
 		return "@" + myTag + " ";
 	}
 
-	public boolean tagEqual(@Nullable String tag)
+	public boolean tagEqual(@javax.annotation.Nullable String tag)
 	{
 		return myTag.equals(tag);
 	}

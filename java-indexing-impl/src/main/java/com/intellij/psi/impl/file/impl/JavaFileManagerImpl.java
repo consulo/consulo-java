@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ProjectTopics;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.Disposable;
@@ -81,9 +81,9 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 		myDisposed = true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiClass[] findClasses(@NotNull String qName, @NotNull final GlobalSearchScope scope)
+	public PsiClass[] findClasses(@Nonnull String qName, @Nonnull final GlobalSearchScope scope)
 	{
 		List<Pair<PsiClass, VirtualFile>> result = doFindClasses(qName, scope);
 
@@ -102,8 +102,8 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 		return result.stream().map(p -> p.getFirst()).toArray(PsiClass[]::new);
 	}
 
-	@NotNull
-	private List<Pair<PsiClass, VirtualFile>> doFindClasses(@NotNull String qName, @NotNull final GlobalSearchScope scope)
+	@Nonnull
+	private List<Pair<PsiClass, VirtualFile>> doFindClasses(@Nonnull String qName, @Nonnull final GlobalSearchScope scope)
 	{
 		final Collection<PsiClass> classes = JavaFullClassNameIndex.getInstance().get(qName.hashCode(), myManager.getProject(), scope);
 		if(classes.isEmpty())
@@ -147,7 +147,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 
 	@Override
 	@Nullable
-	public PsiClass findClass(@NotNull String qName, @NotNull GlobalSearchScope scope)
+	public PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope)
 	{
 		LOG.assertTrue(!myDisposed);
 		VirtualFile bestFile = null;
@@ -169,7 +169,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 		return bestClass;
 	}
 
-	private boolean hasAcceptablePackage(@NotNull VirtualFile vFile)
+	private boolean hasAcceptablePackage(@Nonnull VirtualFile vFile)
 	{
 		if(vFile.getFileType() == JavaClassFileType.INSTANCE)
 		{
@@ -190,7 +190,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Collection<String> getNonTrivialPackagePrefixes()
 	{
@@ -217,9 +217,9 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 		return names;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Collection<PsiJavaModule> findModules(@NotNull String moduleName, @NotNull GlobalSearchScope scope)
+	public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope)
 	{
 		Collection<PsiJavaModule> named = JavaModuleNameIndex.getInstance().get(moduleName, myManager.getProject(), scope);
 		if(!named.isEmpty())

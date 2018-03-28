@@ -22,14 +22,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.StringTokenizer;
 
 public class ClassNamePrefixedWithPackageNameInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.name.prefixed.with.package.name.display.name");
@@ -39,7 +39,7 @@ public class ClassNamePrefixedWithPackageNameInspection
     return new RenameFix();
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "class.name.prefixed.with.package.name.problem.descriptor");
@@ -57,7 +57,7 @@ public class ClassNamePrefixedWithPackageNameInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       final String className = aClass.getName();
       if (className == null) {

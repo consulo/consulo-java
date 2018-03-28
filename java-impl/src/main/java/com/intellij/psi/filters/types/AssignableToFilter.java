@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.filters.types;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiType;
@@ -34,7 +35,7 @@ public class AssignableToFilter implements ElementFilter
 {
 	private final PsiType myType;
 
-	public AssignableToFilter(@NotNull PsiType type)
+	public AssignableToFilter(@Nonnull PsiType type)
 	{
 		myType = type;
 	}

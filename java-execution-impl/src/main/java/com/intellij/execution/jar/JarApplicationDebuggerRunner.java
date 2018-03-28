@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.jar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.executors.DefaultDebugExecutor;
@@ -26,12 +27,12 @@ import com.intellij.execution.executors.DefaultDebugExecutor;
 public class JarApplicationDebuggerRunner extends GenericDebuggerRunner
 {
 	@Override
-	public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile)
+	public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile)
 	{
 		return DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof JarApplicationConfiguration;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getRunnerId()
 	{

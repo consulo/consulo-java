@@ -2,7 +2,7 @@ package com.intellij.find.findUsages;
 
 import java.util.LinkedHashSet;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.find.FindBundle;
 import com.intellij.openapi.project.Project;
 
@@ -18,7 +18,7 @@ public class JavaClassFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isCheckDeepInheritance = true;
   public boolean isIncludeInherited = false;
 
-  public JavaClassFindUsagesOptions(@NotNull Project project) {
+  public JavaClassFindUsagesOptions(@Nonnull Project project) {
     super(project);
   }
 

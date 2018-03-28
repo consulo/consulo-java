@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -22,7 +24,6 @@ import com.intellij.refactoring.RefactoringFactory;
 import com.intellij.refactoring.RenameRefactoring;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
-import org.jetbrains.annotations.NotNull;
 
 public class RenameParameterFix extends InspectionGadgetsFix {
   private final String m_targetName;
@@ -33,7 +34,7 @@ public class RenameParameterFix extends InspectionGadgetsFix {
     m_targetName = targetName;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("renameto.quickfix", m_targetName);
   }

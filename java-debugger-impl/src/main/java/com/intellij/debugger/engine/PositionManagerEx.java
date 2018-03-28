@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.PositionManager;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
@@ -27,7 +27,7 @@ import consulo.internal.com.sun.jdi.Location;
 public abstract class PositionManagerEx implements PositionManager
 {
 	@Nullable
-	public abstract XStackFrame createStackFrame(@NotNull StackFrameProxyImpl frame, @NotNull DebugProcessImpl debugProcess, @NotNull Location location);
+	public abstract XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @Nonnull DebugProcessImpl debugProcess, @Nonnull Location location);
 
-	public abstract ThreeState evaluateCondition(@NotNull EvaluationContext context, @NotNull StackFrameProxyImpl frame, @NotNull Location location, @NotNull String expression);
+	public abstract ThreeState evaluateCondition(@Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @Nonnull Location location, @Nonnull String expression);
 }

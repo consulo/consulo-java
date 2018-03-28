@@ -17,8 +17,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.JavaProjectCodeInsightSettings;
@@ -41,14 +41,14 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Inte
 {
 	private List<T> candidates;
 
-	@NotNull
+	@Nonnull
 	protected abstract String getBaseText();
 
-	@NotNull
+	@Nonnull
 	protected abstract String getMemberPresentableText(T t);
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		String text = getBaseText();
@@ -64,14 +64,14 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Inte
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return getText();
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return PsiUtil.isLanguageLevel5OrHigher(file) && file instanceof PsiJavaFile && getElement() != null && getElement().isValid() && getQualifierExpression() == null && resolveRef() == null &&
 				file.getManager().isInProject(file) && !(candidates == null ? candidates = getMembersToImport(false) : candidates).isEmpty();
@@ -82,7 +82,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Inte
 		return getMembersToImport(false);
 	}
 
-	@NotNull
+	@Nonnull
 	protected abstract List<T> getMembersToImport(boolean applicableOnly);
 
 	public static boolean isExcluded(PsiMember method)
@@ -91,20 +91,20 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Inte
 		return name != null && JavaProjectCodeInsightSettings.getSettings(method.getProject()).isExcluded(name);
 	}
 
-	@NotNull
-	protected abstract QuestionAction createQuestionAction(List<T> methodsToImport, @NotNull Project project, Editor editor);
+	@Nonnull
+	protected abstract QuestionAction createQuestionAction(List<T> methodsToImport, @Nonnull Project project, Editor editor);
 
 	@Nullable
 	protected abstract PsiElement getElement();
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected abstract PsiElement getQualifierExpression();
 
 	@Nullable
 	protected abstract PsiElement resolveRef();
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, PsiFile file)
+	public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file)
 	{
 		if(!FileModificationService.getInstance().prepareFileForWrite(file))
 		{
@@ -166,7 +166,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Inte
 	}
 
 	@Override
-	public boolean showHint(@NotNull Editor editor)
+	public boolean showHint(@Nonnull Editor editor)
 	{
 		final PsiElement callExpression = getElement();
 		if(callExpression == null || getQualifierExpression() != null)

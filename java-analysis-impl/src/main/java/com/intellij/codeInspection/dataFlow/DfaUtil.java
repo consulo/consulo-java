@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.instructions.AssignInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.CheckReturnValueInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.EmptyInstruction;
@@ -61,7 +61,10 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
  */
 public class DfaUtil
 {
-	@Nullable("null means DFA analysis has failed (too complex to analyze)")
+	/**
+	 * @return "null means DFA analysis has failed (too complex to analyze)"
+	 */
+	@Nullable
 	public static Collection<PsiExpression> getCachedVariableValues(@Nullable final PsiVariable variable, @Nullable final PsiElement context)
 	{
 		if(variable == null || context == null)
@@ -90,8 +93,11 @@ public class DfaUtil
 		return Collections.emptyList();
 	}
 
-	@Nullable("null means DFA analysis has failed (too complex to analyze)")
-	private static Map<PsiElement, ValuableInstructionVisitor.PlaceResult> getCachedPlaceResults(@NotNull final PsiElement codeBlock)
+	/**
+	 * @return "null means DFA analysis has failed (too complex to analyze)"
+	 */
+	@Nullable
+	private static Map<PsiElement, ValuableInstructionVisitor.PlaceResult> getCachedPlaceResults(@Nonnull final PsiElement codeBlock)
 	{
 		return CachedValuesManager.getCachedValue(codeBlock, () ->
 		{
@@ -101,14 +107,14 @@ public class DfaUtil
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	public static Nullness checkNullness(@Nullable final PsiVariable variable, @Nullable final PsiElement context)
 	{
 		return checkNullness(variable, context, null);
 	}
 
-	@NotNull
-	public static Nullness checkNullness(@Nullable final PsiVariable variable, @Nullable final PsiElement context, @Nullable final PsiElement outerBlock)
+	@Nonnull
+	public static Nullness checkNullness(@Nullable final PsiVariable variable, @javax.annotation.Nullable final PsiElement context, @Nullable final PsiElement outerBlock)
 	{
 		if(variable == null || context == null)
 		{
@@ -133,8 +139,8 @@ public class DfaUtil
 		return Nullness.UNKNOWN;
 	}
 
-	@NotNull
-	public static Collection<PsiExpression> getPossibleInitializationElements(@NotNull PsiElement qualifierExpression)
+	@Nonnull
+	public static Collection<PsiExpression> getPossibleInitializationElements(@Nonnull PsiElement qualifierExpression)
 	{
 		if(qualifierExpression instanceof PsiMethodCallExpression)
 		{
@@ -161,7 +167,7 @@ public class DfaUtil
 		return Collections.emptyList();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static PsiElement getClosureInside(Instruction instruction)
 	{
 		if(instruction instanceof MethodCallInstruction)
@@ -187,7 +193,7 @@ public class DfaUtil
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	public static Nullness inferMethodNullity(PsiMethod method)
 	{
 		final PsiCodeBlock body = method.getBody();
@@ -199,7 +205,7 @@ public class DfaUtil
 		return inferBlockNullity(body, InferenceFromSourceUtil.suppressNullable(method));
 	}
 
-	@NotNull
+	@Nonnull
 	public static Nullness inferLambdaNullity(PsiLambdaExpression lambda)
 	{
 		final PsiElement body = lambda.getBody();
@@ -211,7 +217,7 @@ public class DfaUtil
 		return inferBlockNullity(body, false);
 	}
 
-	@NotNull
+	@Nonnull
 	private static Nullness inferBlockNullity(PsiElement body, boolean suppressNullable)
 	{
 		final AtomicBoolean hasNulls = new AtomicBoolean();
@@ -259,7 +265,7 @@ public class DfaUtil
 		return Nullness.UNKNOWN;
 	}
 
-	static DfaValue getPossiblyNonInitializedValue(@NotNull DfaValueFactory factory, @NotNull PsiField target, @NotNull PsiElement context)
+	static DfaValue getPossiblyNonInitializedValue(@Nonnull DfaValueFactory factory, @Nonnull PsiField target, @Nonnull PsiElement context)
 	{
 		if(target.getType() instanceof PsiPrimitiveType)
 		{
@@ -378,7 +384,7 @@ public class DfaUtil
 		return Integer.MAX_VALUE; // accessed after initialization or at unknown moment
 	}
 
-	public static boolean hasInitializationHacks(@NotNull PsiField field)
+	public static boolean hasInitializationHacks(@Nonnull PsiField field)
 	{
 		PsiClass containingClass = field.getContainingClass();
 		return containingClass != null && System.class.getName().equals(containingClass.getQualifiedName());

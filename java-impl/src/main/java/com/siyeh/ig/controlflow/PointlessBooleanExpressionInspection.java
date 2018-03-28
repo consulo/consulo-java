@@ -29,8 +29,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("pointless.boolean.expression.display.name");
   }
@@ -73,7 +73,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     return InspectionGadgetsBundle.message("boolean.expression.can.be.simplified.problem.descriptor",
@@ -272,7 +272,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
 
   private class PointlessBooleanExpressionFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
     }
@@ -350,7 +350,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
   }
 
   @Nullable
-  private Boolean evaluate(@Nullable PsiExpression expression) {
+  private Boolean evaluate(@javax.annotation.Nullable PsiExpression expression) {
     if (expression == null || m_ignoreExpressionsContainingConstants && containsReference(expression)) {
       return null;
     }

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,12 +26,11 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class UnnecessaryLabelOnContinueStatementInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.label.on.continue.statement.display.name");
@@ -39,7 +40,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
     return true;
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.label.on.continue.statement.problem.descriptor");
@@ -52,7 +53,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
   private static class UnnecessaryLabelOnContinueStatementFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.label.remove.quickfix");
@@ -82,7 +83,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
 
     @Override
     public void visitContinueStatement(
-      @NotNull PsiContinueStatement statement) {
+      @Nonnull PsiContinueStatement statement) {
       final PsiIdentifier labelIdentifier =
         statement.getLabelIdentifier();
       if (labelIdentifier == null) {

@@ -38,8 +38,8 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.refactoring.util.classMembers.ClassMemberReferencesVisitor;
 import com.intellij.refactoring.util.occurrences.ExpressionOccurrenceManager;
 import com.intellij.refactoring.util.occurrences.OccurrenceManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class IntroduceConstantHandler extends BaseExpressionToFieldHandler {
     super.invoke(project, expressions, null);
   }
 
-  public void invoke(@NotNull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) return;
 
     PsiDocumentManager.getInstance(project).commitAllDocuments();
@@ -275,7 +275,7 @@ public class IntroduceConstantHandler extends BaseExpressionToFieldHandler {
     }
   }
 
-  public PsiClass getParentClass(@NotNull PsiExpression initializerExpression) {
+  public PsiClass getParentClass(@Nonnull PsiExpression initializerExpression) {
     final PsiType type = initializerExpression.getType();
 
     if (type != null && PsiUtil.isConstantExpression(initializerExpression)) {

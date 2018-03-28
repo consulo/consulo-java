@@ -31,8 +31,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
@@ -121,7 +121,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     return myCbPassOuterClass.isSelected();
   }
 
-  @NotNull
+  @Nonnull
   public PsiClass getInnerClass() {
     return myInnerClass;
   }
@@ -191,7 +191,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiElement getTargetContainer() {
     if (myTargetContainer instanceof PsiDirectory) {
       final PsiDirectory psiDirectory = (PsiDirectory)myTargetContainer;

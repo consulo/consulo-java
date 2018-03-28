@@ -28,18 +28,18 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class BooleanConstructorInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "BooleanConstructorCall";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("boolean.constructor.display.name");
   }
@@ -50,7 +50,7 @@ public class BooleanConstructorInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("boolean.constructor.problem.descriptor");
   }
@@ -71,7 +71,7 @@ public class BooleanConstructorInspection extends BaseInspection {
     private static final String FALSE = '\"' + PsiKeyword.FALSE + '\"';
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("boolean.constructor.simplify.quickfix");
     }
@@ -145,7 +145,7 @@ public class BooleanConstructorInspection extends BaseInspection {
   private static class BooleanConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@NotNull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
       if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {

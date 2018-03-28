@@ -25,7 +25,7 @@ import com.siyeh.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,27 +33,27 @@ import java.util.List;
 public class StringEqualsInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToStringEquals";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "string.equals.call.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "string.equals.call.problem.descriptor");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiMethodCallExpression methodCallExpression =
       (PsiMethodCallExpression)infos[0];
@@ -90,7 +90,7 @@ public class StringEqualsInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;

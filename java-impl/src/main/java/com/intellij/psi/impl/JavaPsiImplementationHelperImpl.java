@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
@@ -163,7 +163,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 		return clsFile;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile)
 	{
@@ -232,9 +232,9 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 		return importHelper.getDefaultAnchor(list, statement);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public PsiElement getDefaultMemberAnchor(@NotNull PsiClass aClass, @NotNull PsiMember member)
+	public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member)
 	{
 		CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(aClass.getProject());
 		MemberOrderService service = ServiceManager.getService(MemberOrderService.class);

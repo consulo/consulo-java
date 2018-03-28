@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import consulo.java.JavaQuickFixBundle;
@@ -69,7 +69,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
   protected final PsiMethodCallExpression myMethodCall;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.property.from.usage.family");
   }
@@ -166,7 +166,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     List<PsiClass> all = super.getTargetClasses(element);
     if (all.isEmpty()) return all;

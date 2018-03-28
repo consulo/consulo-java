@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiBreakStatement;
 import com.intellij.psi.PsiContinueStatement;
 import com.intellij.psi.PsiStatement;
@@ -22,12 +24,11 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ContinueOrBreakFromFinallyBlockInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "continue.or.break.from.finally.block.display.name");
@@ -37,7 +38,7 @@ public class ContinueOrBreakFromFinallyBlockInspection
     return true;
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "continue.or.break.from.finally.block.problem.descriptor");
@@ -52,7 +53,7 @@ public class ContinueOrBreakFromFinallyBlockInspection
 
     @Override
     public void visitContinueStatement(
-      @NotNull PsiContinueStatement statement) {
+      @Nonnull PsiContinueStatement statement) {
       super.visitContinueStatement(statement);
       if (!ControlFlowUtils.isInFinallyBlock(statement)) {
         return;
@@ -69,7 +70,7 @@ public class ContinueOrBreakFromFinallyBlockInspection
     }
 
     @Override
-    public void visitBreakStatement(@NotNull PsiBreakStatement statement) {
+    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
       super.visitBreakStatement(statement);
       if (!ControlFlowUtils.isInFinallyBlock(statement)) {
         return;

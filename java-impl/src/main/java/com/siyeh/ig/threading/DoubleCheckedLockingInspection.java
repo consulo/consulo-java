@@ -15,10 +15,9 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -41,21 +40,21 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
   public boolean ignoreOnVolatileVariables = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "double.checked.locking.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "double.checked.locking.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
       "double.checked.locking.ignore.on.volatiles.option"), this,
@@ -80,7 +79,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
       this.field = field;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "double.checked.locking.quickfix", field.getName());
@@ -107,7 +106,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
 
     @Override
     public void visitIfStatement(
-      @NotNull PsiIfStatement statement) {
+      @Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiExpression outerCondition = statement.getCondition();
       if (outerCondition == null) {
@@ -155,7 +154,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
       registerStatementError(statement, field);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiField findCheckedField(PsiExpression expression) {
       if (expression instanceof PsiReferenceExpression) {
         final PsiReferenceExpression referenceExpression =

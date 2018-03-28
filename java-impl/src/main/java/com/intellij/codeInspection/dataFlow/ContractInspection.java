@@ -18,8 +18,8 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -40,8 +40,8 @@ public class ContractInspection extends BaseJavaBatchLocalInspectionTool
 {
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -97,7 +97,7 @@ public class ContractInspection extends BaseJavaBatchLocalInspectionTool
 		};
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static String checkContract(PsiMethod method, String text)
 	{
 		List<StandardMethodContract> contracts;

@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.search.searches;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -29,11 +30,11 @@ public class AnnotatedMembersSearch {
 
   private AnnotatedMembersSearch() {}
 
-  public static Query<PsiMember> search(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiMember> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return AnnotatedElementsSearch.searchPsiMembers(annotationClass, scope);
   }
 
-  public static Query<PsiMember> search(@NotNull PsiClass annotationClass) {
+  public static Query<PsiMember> search(@Nonnull PsiClass annotationClass) {
     return search(annotationClass, GlobalSearchScope.allScope(annotationClass.getProject()));
   }
 }

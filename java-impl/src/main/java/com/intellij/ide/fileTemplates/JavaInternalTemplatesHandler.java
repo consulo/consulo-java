@@ -15,14 +15,15 @@
  */
 package com.intellij.ide.fileTemplates;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiDirectory;
 import com.intellij.util.ArrayUtil;
 
 public class JavaInternalTemplatesHandler extends JavaCreateFromTemplateHandler
 {
 	@Override
-	public boolean handlesTemplate(@NotNull FileTemplate template)
+	public boolean handlesTemplate(@Nonnull FileTemplate template)
 	{
 		return ArrayUtil.contains(template.getName(), JavaTemplateUtil.INTERNAL_CLASS_TEMPLATES);
 	}

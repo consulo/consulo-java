@@ -15,8 +15,8 @@
  */
 package com.intellij.lang.jvm.types;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.jvm.JvmTypeDeclaration;
 
 /**
@@ -35,13 +35,13 @@ public interface JvmReferenceType extends JvmType
 
 	JvmReferenceType[] EMPTY_ARRAY = new JvmReferenceType[0];
 
-	@NotNull
+	@Nonnull
 	String getName();
 
 	/**
 	 * @return declaration that declares this type or {@code null} if it cannot be resolved
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	default JvmTypeDeclaration resolve()
 	{
 		JvmTypeResolveResult result = resolveType();
@@ -51,13 +51,13 @@ public interface JvmReferenceType extends JvmType
 	/**
 	 * @return resolve result or {@code null} if it cannot be resolved
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	JvmTypeResolveResult resolveType();
 
 	/**
 	 * @return type arguments or empty iterable if this type is not a parameterized type
 	 * @see java.lang.reflect.ParameterizedType#getActualTypeArguments
 	 */
-	@NotNull
+	@Nonnull
 	Iterable<JvmType> typeArguments();
 }

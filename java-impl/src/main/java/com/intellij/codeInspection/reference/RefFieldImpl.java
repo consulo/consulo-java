@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection.reference;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
@@ -22,8 +24,6 @@ import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author max
@@ -34,7 +34,7 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
   private static final int USED_FOR_WRITING_MASK = 0x20000;
   private static final int ASSIGNED_ONLY_IN_INITIALIZER = 0x40000;
 
-  RefFieldImpl(@NotNull RefClass ownerClass, PsiField field, RefManager manager) {
+  RefFieldImpl(@Nonnull RefClass ownerClass, PsiField field, RefManager manager) {
     super(field, manager);
 
     ((RefClassImpl)ownerClass).add(this);
@@ -167,12 +167,12 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
     });
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static RefField fieldFromExternalName(RefManager manager, String externalName) {
     return (RefField)manager.getReference(findPsiField(PsiManager.getInstance(manager.getProject()), externalName));
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiField findPsiField(PsiManager manager, String externalName) {
     int classNameDelimeter = externalName.lastIndexOf(' ');
     if (classNameDelimeter > 0 && classNameDelimeter < externalName.length() - 1) {

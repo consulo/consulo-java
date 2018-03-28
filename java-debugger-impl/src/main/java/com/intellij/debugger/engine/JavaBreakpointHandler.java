@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.breakpoints.BreakpointManager;
@@ -36,20 +36,20 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 {
 	protected final DebugProcessImpl myProcess;
 
-	public JavaBreakpointHandler(@NotNull Class<? extends XBreakpointType<?, ?>> breakpointTypeClass, DebugProcessImpl process)
+	public JavaBreakpointHandler(@Nonnull Class<? extends XBreakpointType<?, ?>> breakpointTypeClass, DebugProcessImpl process)
 	{
 		super(breakpointTypeClass);
 		myProcess = process;
 	}
 
-	@Nullable
-	protected Breakpoint createJavaBreakpoint(@NotNull XBreakpoint xBreakpoint)
+	@javax.annotation.Nullable
+	protected Breakpoint createJavaBreakpoint(@Nonnull XBreakpoint xBreakpoint)
 	{
 		return null;
 	}
 
 	@Override
-	public void registerBreakpoint(@NotNull XBreakpoint breakpoint)
+	public void registerBreakpoint(@Nonnull XBreakpoint breakpoint)
 	{
 		Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint == null)
@@ -80,7 +80,7 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 	}
 
 	@Override
-	public void unregisterBreakpoint(@NotNull final XBreakpoint breakpoint, boolean temporary)
+	public void unregisterBreakpoint(@Nonnull final XBreakpoint breakpoint, boolean temporary)
 	{
 		final Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint != null)

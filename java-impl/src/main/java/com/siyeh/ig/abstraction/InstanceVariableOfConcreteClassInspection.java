@@ -22,7 +22,7 @@ import com.intellij.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -32,14 +32,14 @@ public class InstanceVariableOfConcreteClassInspection extends BaseInspection {
   public boolean ignoreAbstractClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instance.variable.of.concrete.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "instance.variable.of.concrete.class.problem.descriptor",
@@ -63,7 +63,7 @@ public class InstanceVariableOfConcreteClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return;

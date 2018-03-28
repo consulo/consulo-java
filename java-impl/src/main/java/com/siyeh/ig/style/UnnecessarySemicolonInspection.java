@@ -25,13 +25,12 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class UnnecessarySemicolonInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.semicolon.display.name");
@@ -43,7 +42,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.semicolon.problem.descriptor");
@@ -61,7 +60,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
 
   private static class UnnecessarySemicolonFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.semicolon.remove.quickfix");
@@ -111,7 +110,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
     }
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       super.visitClass(aClass);
 
       findUnnecessarySemicolonsAfterEnumConstants(aClass);
@@ -147,7 +146,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
     }
 
     private void findUnnecessarySemicolonsAfterEnumConstants(
-      @NotNull PsiClass aClass) {
+      @Nonnull PsiClass aClass) {
       PsiElement child = aClass.getFirstChild();
       while (child != null) {
         if (child instanceof PsiJavaToken) {
@@ -178,14 +177,14 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
       }
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiElement skipForwardWhiteSpacesAndComments(
       PsiElement element) {
       return PsiTreeUtil.skipSiblingsForward(element,
                                              PsiWhiteSpace.class, PsiComment.class);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiElement skipBackwardWhiteSpacesAndComments(
       PsiElement element) {
       return PsiTreeUtil.skipSiblingsBackward(element,

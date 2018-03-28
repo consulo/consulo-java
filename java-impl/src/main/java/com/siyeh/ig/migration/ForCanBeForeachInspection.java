@@ -32,8 +32,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.JComponent;
 
@@ -45,13 +45,13 @@ public class ForCanBeForeachInspection extends BaseInspection {
   public boolean ignoreUntypedCollections = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ForLoopReplaceableByForEach";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "for.can.be.foreach.display.name");
@@ -63,7 +63,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "for.can.be.foreach.problem.descriptor");
@@ -75,7 +75,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel =
       new MultipleCheckboxOptionsPanel(this);
@@ -88,7 +88,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
   private class ForCanBeForeachFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("foreach.replace.quickfix");
     }
@@ -123,7 +123,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Nullable
     private String createListIterationText(
-      @NotNull PsiForStatement forStatement) {
+      @Nonnull PsiForStatement forStatement) {
       final PsiBinaryExpression condition =
         (PsiBinaryExpression)ParenthesesUtils.stripParentheses(
           forStatement.getCondition());
@@ -290,7 +290,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return parameterType;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiType extractListTypeFromContainingClass(
       PsiElement element) {
       PsiClass listClass = PsiTreeUtil.getParentOfType(element,
@@ -344,7 +344,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Nullable
     private String createCollectionIterationText(
-      @NotNull PsiForStatement forStatement)
+      @Nonnull PsiForStatement forStatement)
       throws IncorrectOperationException {
       final PsiStatement body = forStatement.getBody();
       final PsiStatement firstStatement = getFirstStatement(body);
@@ -473,7 +473,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     @Nullable
-    private String createArrayIterationText(@NotNull PsiForStatement forStatement) {
+    private String createArrayIterationText(@Nonnull PsiForStatement forStatement) {
       final PsiExpression condition = forStatement.getCondition();
       final PsiBinaryExpression strippedCondition = (PsiBinaryExpression)ParenthesesUtils.stripParentheses(condition);
       if (strippedCondition == null) {
@@ -912,7 +912,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     private String createNewVariableName(
-      @NotNull PsiForStatement scope, PsiType type,
+      @Nonnull PsiForStatement scope, PsiType type,
       @Nullable String containerName) {
       final Project project = scope.getProject();
       final JavaCodeStyleManager codeStyleManager =
@@ -965,7 +965,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @NotNull PsiForStatement forStatement) {
+      @Nonnull PsiForStatement forStatement) {
       super.visitForStatement(forStatement);
       if (!PsiUtil.isLanguageLevel5OrHigher(forStatement)) {
         return;
@@ -1097,8 +1097,8 @@ public class ForCanBeForeachInspection extends BaseInspection {
   }
 
   private static boolean isIndexVariableOnlyUsedAsIndex(
-    @NotNull PsiVariable arrayVariable,
-    @NotNull PsiVariable indexVariable,
+    @Nonnull PsiVariable arrayVariable,
+    @Nonnull PsiVariable indexVariable,
     @Nullable PsiStatement body) {
     if (body == null) {
       return true;
@@ -1497,7 +1497,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression callExpression) {
+      @Nonnull PsiMethodCallExpression callExpression) {
       super.visitMethodCallExpression(callExpression);
       final PsiReferenceExpression methodExpression =
         callExpression.getMethodExpression();
@@ -1538,7 +1538,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!methodCalled) {
         super.visitElement(element);
       }
@@ -1546,7 +1546,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       if (methodCalled) {
         return;
       }
@@ -1589,7 +1589,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (indexVariableUsedOnlyAsIndex) {
         super.visitElement(element);
       }
@@ -1597,7 +1597,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression reference) {
+      @Nonnull PsiReferenceExpression reference) {
       if (!indexVariableUsedOnlyAsIndex) {
         return;
       }
@@ -1658,14 +1658,14 @@ public class ForCanBeForeachInspection extends BaseInspection {
     private final Holder collection;
 
     VariableOnlyUsedAsListIndexVisitor(
-      @NotNull Holder collection,
-      @NotNull PsiVariable indexVariable) {
+      @Nonnull Holder collection,
+      @Nonnull PsiVariable indexVariable) {
       this.collection = collection;
       this.indexVariable = indexVariable;
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (indexVariableUsedOnlyAsIndex) {
         super.visitElement(element);
       }
@@ -1673,7 +1673,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression reference) {
+      @Nonnull PsiReferenceExpression reference) {
       if (!indexVariableUsedOnlyAsIndex) {
         return;
       }
@@ -1798,7 +1798,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     private final PsiVariable variable;
 
-    public Holder(@NotNull PsiVariable variable) {
+    public Holder(@Nonnull PsiVariable variable) {
       this.variable = variable;
     }
 

@@ -18,8 +18,8 @@ package com.intellij.codeInsight.generation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
@@ -35,17 +35,17 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 {
 	private static final int FIELD_OPTIONS = PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.TYPE_AFTER;
 
-	public PsiFieldMember(@NotNull PsiField field)
+	public PsiFieldMember(@Nonnull PsiField field)
 	{
 		super(field, PsiFormatUtil.formatVariable(field, FIELD_OPTIONS, PsiSubstitutor.EMPTY));
 	}
 
-	public PsiFieldMember(@NotNull PsiField psiMember, PsiSubstitutor substitutor)
+	public PsiFieldMember(@Nonnull PsiField psiMember, PsiSubstitutor substitutor)
 	{
 		super(psiMember, substitutor, PsiFormatUtil.formatVariable(psiMember, FIELD_OPTIONS, PsiSubstitutor.EMPTY));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public GenerationInfo generateGetter() throws IncorrectOperationException
 	{
@@ -53,7 +53,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 		return infos != null && infos.length > 0 ? infos[0] : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public GenerationInfo[] generateGetters(PsiClass aClass) throws IncorrectOperationException
 	{
@@ -69,7 +69,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public GenerationInfo[] generateSetters(PsiClass aClass)
 	{
 		final PsiField field = getElement();

@@ -26,8 +26,8 @@ import com.intellij.psi.scope.processor.VariablesNotProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author cdr
@@ -41,19 +41,19 @@ public class ReuseVariableDeclarationFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("reuse.variable.declaration.family");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("reuse.variable.declaration.text", myVariable.getName());
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     if (myVariable == null || !myVariable.isValid()) {
       return false;
     }
@@ -64,7 +64,7 @@ public class ReuseVariableDeclarationFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     final PsiVariable refVariable = findPreviousVariable();
     if (refVariable == null) return;
 

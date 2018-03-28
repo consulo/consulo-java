@@ -18,11 +18,10 @@ package com.siyeh.ig.migration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -61,14 +60,14 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("unnecessary.unboxing.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("unnecessary.unboxing.problem.descriptor");
@@ -80,7 +79,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 		return true;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JComponent createOptionsPanel()
 	{
@@ -97,7 +96,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	{
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("unnecessary.unboxing.remove.quickfix");
@@ -164,7 +163,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression)
+		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 		{
 			super.visitMethodCallExpression(expression);
 			if(!isUnboxingExpression(expression))
@@ -180,7 +179,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 			registerError(expression);
 		}
 
-		private boolean canRemainBoxed(@NotNull PsiExpression expression, @NotNull PsiExpression unboxedExpression)
+		private boolean canRemainBoxed(@Nonnull PsiExpression expression, @Nonnull PsiExpression unboxedExpression)
 		{
 			PsiElement parent = expression.getParent();
 			while(parent instanceof PsiParenthesizedExpression)
@@ -313,7 +312,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 			return unboxingMethod.equals(methodName);
 		}
 
-		private boolean isSameMethodCalledWithoutUnboxing(@NotNull PsiCallExpression callExpression, @NotNull PsiExpression unboxingExpression, @NotNull PsiExpression unboxedExpression)
+		private boolean isSameMethodCalledWithoutUnboxing(@Nonnull PsiCallExpression callExpression, @Nonnull PsiExpression unboxingExpression, @Nonnull PsiExpression unboxedExpression)
 		{
 			final PsiMethod originalMethod = callExpression.resolveMethod();
 			if(originalMethod == null)

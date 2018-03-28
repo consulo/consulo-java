@@ -17,10 +17,10 @@ package com.intellij.psi.codeStyle;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -48,21 +48,21 @@ public abstract class JavaCodeStyleManager
 	})
 	public static final int UNCOMPLETE_CODE = INCOMPLETE_CODE;
 
-	public abstract boolean addImport(@NotNull PsiJavaFile file, @NotNull PsiClass refClass);
+	public abstract boolean addImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass refClass);
 
-	@NotNull
-	public abstract PsiElement shortenClassReferences(@NotNull PsiElement element, @MagicConstant(flags = {
+	@Nonnull
+	public abstract PsiElement shortenClassReferences(@Nonnull PsiElement element, @MagicConstant(flags = {
 			DO_NOT_ADD_IMPORTS,
 			INCOMPLETE_CODE
 	}) int flags) throws IncorrectOperationException;
 
-	@NotNull
-	public abstract String getPrefixByVariableKind(@NotNull VariableKind variableKind);
+	@Nonnull
+	public abstract String getPrefixByVariableKind(@Nonnull VariableKind variableKind);
 
-	@NotNull
-	public abstract String getSuffixByVariableKind(@NotNull VariableKind variableKind);
+	@Nonnull
+	public abstract String getSuffixByVariableKind(@Nonnull VariableKind variableKind);
 
-	public abstract int findEntryIndex(@NotNull PsiImportStatementBase statement);
+	public abstract int findEntryIndex(@Nonnull PsiImportStatementBase statement);
 
 	/**
 	 * Replaces fully-qualified class names in the contents of the specified element with
@@ -72,8 +72,8 @@ public abstract class JavaCodeStyleManager
 	 * @return the element in the PSI tree after the shorten references operation corresponding to the original element.
 	 * @throws IncorrectOperationException if the file to shorten references in is read-only.
 	 */
-	@NotNull
-	public abstract PsiElement shortenClassReferences(@NotNull PsiElement element) throws IncorrectOperationException;
+	@Nonnull
+	public abstract PsiElement shortenClassReferences(@Nonnull PsiElement element) throws IncorrectOperationException;
 
 	/**
 	 * Replaces fully-qualified class names in a part of contents of the specified element with
@@ -84,7 +84,7 @@ public abstract class JavaCodeStyleManager
 	 * @param endOffset   the end offset in the <b>element</b> of the part where class references are shortened.
 	 * @throws IncorrectOperationException if the file to shorten references in is read-only.
 	 */
-	public abstract void shortenClassReferences(@NotNull PsiElement element, int startOffset, int endOffset) throws IncorrectOperationException;
+	public abstract void shortenClassReferences(@Nonnull PsiElement element, int startOffset, int endOffset) throws IncorrectOperationException;
 
 	/**
 	 * Optimizes imports in the specified Java or JSP file.
@@ -92,7 +92,7 @@ public abstract class JavaCodeStyleManager
 	 * @param file the file to optimize the imports in.
 	 * @throws IncorrectOperationException if the file is read-only.
 	 */
-	public abstract void optimizeImports(@NotNull PsiFile file) throws IncorrectOperationException;
+	public abstract void optimizeImports(@Nonnull PsiFile file) throws IncorrectOperationException;
 
 	/**
 	 * Calculates the import list that would be substituted in the specified Java or JSP
@@ -101,7 +101,7 @@ public abstract class JavaCodeStyleManager
 	 * @param file the file to calculate the import list for.
 	 * @return the calculated import list.
 	 */
-	public abstract PsiImportList prepareOptimizeImportsResult(@NotNull PsiJavaFile file);
+	public abstract PsiImportList prepareOptimizeImportsResult(@Nonnull PsiJavaFile file);
 
 	/**
 	 * Single-static-import {@code import static classFQN.referenceName;} shadows on-demand static imports, like described
@@ -112,7 +112,7 @@ public abstract class JavaCodeStyleManager
 	 * @return true if file contains import which would be shadowed
 	 * false otherwise
 	 */
-	public boolean hasConflictingOnDemandImport(@NotNull PsiJavaFile file, @NotNull PsiClass psiClass, @NotNull String referenceName)
+	public boolean hasConflictingOnDemandImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass psiClass, @Nonnull String referenceName)
 	{
 		return false;
 	}
@@ -123,8 +123,8 @@ public abstract class JavaCodeStyleManager
 	 * @param variable the variable to get the kind for.
 	 * @return the variable kind.
 	 */
-	@NotNull
-	public VariableKind getVariableKind(@NotNull PsiVariable variable)
+	@Nonnull
+	public VariableKind getVariableKind(@Nonnull PsiVariable variable)
 	{
 		if(variable instanceof PsiField)
 		{
@@ -152,7 +152,7 @@ public abstract class JavaCodeStyleManager
 		}
 	}
 
-	public SuggestedNameInfo suggestVariableName(@NotNull final VariableKind kind, @Nullable final String propertyName, @Nullable final PsiExpression expr, @Nullable PsiType type)
+	public SuggestedNameInfo suggestVariableName(@Nonnull final VariableKind kind, @javax.annotation.Nullable final String propertyName, @javax.annotation.Nullable final PsiExpression expr, @javax.annotation.Nullable PsiType type)
 	{
 		return suggestVariableName(kind, propertyName, expr, type, true);
 	}
@@ -161,15 +161,15 @@ public abstract class JavaCodeStyleManager
 	 * Generates compiled parameter name for given type.
 	 * Should not access indices due to performance reasons (e.g. see IDEA-116803)
 	 */
-	@NotNull
-	public SuggestedNameInfo suggestCompiledParameterName(@NotNull PsiType type)
+	@Nonnull
+	public SuggestedNameInfo suggestCompiledParameterName(@Nonnull PsiType type)
 	{
 		return suggestVariableName(VariableKind.PARAMETER, null, null, type, true);
 	}
 
 
-	@NotNull
-	public abstract SuggestedNameInfo suggestVariableName(@NotNull VariableKind kind, @Nullable String propertyName, @Nullable PsiExpression expr, @Nullable PsiType type, boolean correctKeywords);
+	@Nonnull
+	public abstract SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind, @javax.annotation.Nullable String propertyName, @javax.annotation.Nullable PsiExpression expr, @javax.annotation.Nullable PsiType type, boolean correctKeywords);
 
 	/**
 	 * Generates a stripped-down name (with no code style defined prefixes or suffixes, usable as
@@ -179,8 +179,8 @@ public abstract class JavaCodeStyleManager
 	 * @param variableKind the kind of the variable.
 	 * @return the stripped-down name.
 	 */
-	@NotNull
-	public abstract String variableNameToPropertyName(@NonNls @NotNull String name, @NotNull VariableKind variableKind);
+	@Nonnull
+	public abstract String variableNameToPropertyName(@NonNls @Nonnull String name, @Nonnull VariableKind variableKind);
 
 	/**
 	 * Appends code style defined prefixes and/or suffixes for the specified variable kind
@@ -190,8 +190,8 @@ public abstract class JavaCodeStyleManager
 	 * @param variableKind the kind of the variable.
 	 * @return the variable name.
 	 */
-	@NotNull
-	public abstract String propertyNameToVariableName(@NonNls @NotNull String propertyName, @NotNull VariableKind variableKind);
+	@Nonnull
+	public abstract String propertyNameToVariableName(@NonNls @Nonnull String propertyName, @Nonnull VariableKind variableKind);
 
 	/**
 	 * Suggests a unique name for the variable used at the specified location.
@@ -201,8 +201,8 @@ public abstract class JavaCodeStyleManager
 	 * @param lookForward if true, the existing variables are searched in both directions; if false - only backward
 	 * @return the generated unique name,
 	 */
-	@NotNull
-	public abstract String suggestUniqueVariableName(@NonNls @NotNull String baseName, PsiElement place, boolean lookForward);
+	@Nonnull
+	public abstract String suggestUniqueVariableName(@NonNls @Nonnull String baseName, PsiElement place, boolean lookForward);
 
 	/**
 	 * Suggests a unique name for the variable used at the specified location.
@@ -212,8 +212,8 @@ public abstract class JavaCodeStyleManager
 	 * @param lookForward  if true, the existing variables are searched in both directions; if false - only backward
 	 * @return the generated unique name
 	 */
-	@NotNull
-	public SuggestedNameInfo suggestUniqueVariableName(@NotNull SuggestedNameInfo baseNameInfo, PsiElement place, boolean lookForward)
+	@Nonnull
+	public SuggestedNameInfo suggestUniqueVariableName(@Nonnull SuggestedNameInfo baseNameInfo, PsiElement place, boolean lookForward)
 	{
 		return suggestUniqueVariableName(baseNameInfo, place, false, lookForward);
 	}
@@ -228,8 +228,8 @@ public abstract class JavaCodeStyleManager
 	 * @return the generated unique name
 	 */
 
-	@NotNull
-	public abstract SuggestedNameInfo suggestUniqueVariableName(@NotNull SuggestedNameInfo baseNameInfo, PsiElement place, boolean ignorePlaceName, boolean lookForward);
+	@Nonnull
+	public abstract SuggestedNameInfo suggestUniqueVariableName(@Nonnull SuggestedNameInfo baseNameInfo, PsiElement place, boolean ignorePlaceName, boolean lookForward);
 
 	/**
 	 * Replaces all references to Java classes in the contents of the specified element,
@@ -239,8 +239,8 @@ public abstract class JavaCodeStyleManager
 	 * @param element the element to replace the references in.
 	 * @return the element in the PSI tree after the qualify operation corresponding to the original element.
 	 */
-	@NotNull
-	public abstract PsiElement qualifyClassReferences(@NotNull PsiElement element);
+	@Nonnull
+	public abstract PsiElement qualifyClassReferences(@Nonnull PsiElement element);
 
 	/**
 	 * Removes unused import statements from the specified Java file.
@@ -248,8 +248,8 @@ public abstract class JavaCodeStyleManager
 	 * @param file the file to remove the import statements from.
 	 * @throws IncorrectOperationException if the operation fails for some reason (for example, the file is read-only).
 	 */
-	public abstract void removeRedundantImports(@NotNull PsiJavaFile file) throws IncorrectOperationException;
+	public abstract void removeRedundantImports(@Nonnull PsiJavaFile file) throws IncorrectOperationException;
 
-	@Nullable
-	public abstract Collection<PsiImportStatementBase> findRedundantImports(@NotNull PsiJavaFile file);
+	@javax.annotation.Nullable
+	public abstract Collection<PsiImportStatementBase> findRedundantImports(@Nonnull PsiJavaFile file);
 }

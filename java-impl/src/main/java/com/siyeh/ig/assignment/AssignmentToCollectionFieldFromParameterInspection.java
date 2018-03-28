@@ -23,8 +23,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -36,18 +36,18 @@ public class AssignmentToCollectionFieldFromParameterInspection
    */
   public boolean ignorePrivateMethods = true;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "AssignmentToCollectionOrArrayFieldFromParameter";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.collection.array.field.from.parameter.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression rhs = (PsiExpression)infos[0];
     final PsiField field = (PsiField)infos[1];
@@ -80,7 +80,7 @@ public class AssignmentToCollectionFieldFromParameterInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitAssignmentExpression(@NotNull
+    public void visitAssignmentExpression(@Nonnull
                                           PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final PsiExpression rhs = expression.getRExpression();

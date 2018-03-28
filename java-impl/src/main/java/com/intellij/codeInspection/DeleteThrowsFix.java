@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection;
 
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.MethodThrowsFix;
 import com.intellij.openapi.project.Project;
@@ -22,7 +24,6 @@ import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author cdr
@@ -35,19 +36,19 @@ public class DeleteThrowsFix implements LocalQuickFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return myQuickFix.getText();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.throws.list.family");
   }
 
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
     final PsiFile psiFile = element.getContainingFile();

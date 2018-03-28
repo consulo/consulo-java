@@ -34,11 +34,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.Nonnull;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -127,7 +127,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 	 */
 	private volatile boolean myIsActive;
 
-	public ClassesFilteredView(@NotNull XDebugSession debugSession, @NotNull DebugProcessImpl debugProcess, @NotNull InstancesTracker tracker)
+	public ClassesFilteredView(@Nonnull XDebugSession debugSession, @Nonnull DebugProcessImpl debugProcess, @Nonnull InstancesTracker tracker)
 	{
 		myProject = debugSession.getProject();
 
@@ -136,7 +136,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 		final InstancesTrackerListener instancesTrackerListener = new InstancesTrackerListener()
 		{
 			@Override
-			public void classChanged(@NotNull String name, @NotNull TrackingType type)
+			public void classChanged(@Nonnull String name, @Nonnull TrackingType type)
 			{
 				ReferenceType ref = myTable.getClassByName(name);
 				if(ref != null)
@@ -155,7 +155,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 			}
 
 			@Override
-			public void classRemoved(@NotNull String name)
+			public void classRemoved(@Nonnull String name)
 			{
 				ReferenceType ref = myTable.getClassByName(name);
 				if(ref != null && myConstructorTrackedClasses.containsKey(ref))
@@ -211,7 +211,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 				});
 			}
 
-			private void trackWhenPrepared(@NotNull String className, @NotNull XDebugSession session, @NotNull DebugProcessImpl process, @NotNull TrackingType type)
+			private void trackWhenPrepared(@Nonnull String className, @Nonnull XDebugSession session, @Nonnull DebugProcessImpl process, @Nonnull TrackingType type)
 			{
 				final ClassPrepareRequestor request = new ClassPrepareRequestor()
 				{
@@ -345,12 +345,12 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 	}
 
 	@Nullable
-	TrackerForNewInstances getStrategy(@NotNull ReferenceType ref)
+	TrackerForNewInstances getStrategy(@Nonnull ReferenceType ref)
 	{
 		return myConstructorTrackedClasses.getOrDefault(ref, null);
 	}
 
-	private void trackClass(@NotNull XDebugSession session, @NotNull ReferenceType ref, @NotNull TrackingType type, boolean isTrackerEnabled)
+	private void trackClass(@Nonnull XDebugSession session, @Nonnull ReferenceType ref, @Nonnull TrackingType type, boolean isTrackerEnabled)
 	{
 		LOG.assertTrue(DebuggerManager.getInstance(myProject).isDebuggerManagerThread());
 		if(type == TrackingType.CREATION)
@@ -376,7 +376,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 		}
 	}
 
-	private void handleClassSelection(@Nullable ReferenceType ref)
+	private void handleClassSelection(@javax.annotation.Nullable ReferenceType ref)
 	{
 		final XDebugSession debugSession = XDebuggerManager.getInstance(myProject).getCurrentSession();
 		if(ref != null && debugSession != null && debugSession.isSuspended())
@@ -427,7 +427,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 		myConstructorTrackedClasses.clear();
 	}
 
-	public void setActive(boolean active, @NotNull DebuggerManagerThreadImpl managerThread)
+	public void setActive(boolean active, @Nonnull DebuggerManagerThreadImpl managerThread)
 	{
 		if(myIsActive == active)
 		{
@@ -484,13 +484,13 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 	private final class MyUpdateClassesCommand extends LowestPriorityCommand
 	{
 
-		MyUpdateClassesCommand(@Nullable SuspendContextImpl suspendContext)
+		MyUpdateClassesCommand(@javax.annotation.Nullable SuspendContextImpl suspendContext)
 		{
 			super(suspendContext);
 		}
 
 		@Override
-		public void contextAction(@NotNull SuspendContextImpl suspendContext) throws Exception
+		public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
 		{
 			handleTrackers();
 
@@ -527,7 +527,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 			}
 		}
 
-		private Map<ReferenceType, Long> getInstancesCounts(@NotNull List<ReferenceType> classes, @NotNull VirtualMachine vm)
+		private Map<ReferenceType, Long> getInstancesCounts(@Nonnull List<ReferenceType> classes, @Nonnull VirtualMachine vm)
 		{
 			final int batchSize = AndroidUtil.isAndroidVM(vm) ? AndroidUtil.ANDROID_COUNT_BY_CLASSES_BATCH_SIZE : DEFAULT_BATCH_SIZE;
 
@@ -644,7 +644,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 		}
 	}
 
-	private boolean isShowNewInstancesEvent(@NotNull MouseEvent e)
+	private boolean isShowNewInstancesEvent(@Nonnull MouseEvent e)
 	{
 		final int col = myTable.columnAtPoint(e.getPoint());
 		final int row = myTable.rowAtPoint(e.getPoint());

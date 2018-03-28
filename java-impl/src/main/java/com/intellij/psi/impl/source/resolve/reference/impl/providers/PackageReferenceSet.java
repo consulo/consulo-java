@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
@@ -41,25 +41,25 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
 {
 	private final GlobalSearchScope mySearchScope;
 
-	public PackageReferenceSet(@NotNull final String str, @NotNull final PsiElement element, final int startInElement)
+	public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement)
 	{
 		this(str, element, startInElement, element.getResolveScope());
 	}
 
-	public PackageReferenceSet(@NotNull final String str, @NotNull final PsiElement element, final int startInElement, @NotNull GlobalSearchScope scope)
+	public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement, @Nonnull GlobalSearchScope scope)
 	{
 		super(str, element, startInElement, DOT_SEPARATOR);
 		mySearchScope = scope;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected PsiPackageReference createReference(final TextRange range, final int index)
 	{
 		return new PsiPackageReference(this, range, index);
 	}
 
-	public Collection<PsiJavaPackage> resolvePackageName(@Nullable PsiJavaPackage context, final String packageName)
+	public Collection<PsiJavaPackage> resolvePackageName(@javax.annotation.Nullable PsiJavaPackage context, final String packageName)
 	{
 		if(context != null)
 		{
@@ -75,7 +75,7 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	protected GlobalSearchScope getResolveScope()
 	{
 		return mySearchScope;

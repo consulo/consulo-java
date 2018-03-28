@@ -23,7 +23,7 @@ package com.intellij.refactoring.extractMethodObject;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ExtractMethodObjectViewDescriptor implements UsageViewDescriptor {
   private final PsiMethod myMethod;
@@ -32,7 +32,7 @@ public class ExtractMethodObjectViewDescriptor implements UsageViewDescriptor {
     myMethod = method;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[]{myMethod};
   }

@@ -23,8 +23,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.guess.GuessManager;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
@@ -92,7 +92,7 @@ public class GuessManagerImpl extends GuessManager
 		myProject = project;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore)
 	{
@@ -141,7 +141,7 @@ public class GuessManagerImpl extends GuessManager
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType[] guessTypeToCast(PsiExpression expr)
 	{
@@ -155,9 +155,9 @@ public class GuessManagerImpl extends GuessManager
 		return types.toArray(PsiType.createArray(types.size()));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Map<PsiExpression, PsiType> getControlFlowExpressionTypes(@NotNull final PsiExpression forPlace)
+	public Map<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull final PsiExpression forPlace)
 	{
 		final Map<PsiExpression, PsiType> typeMap = buildDataflowTypeMap(forPlace);
 		if(typeMap != null)
@@ -168,7 +168,7 @@ public class GuessManagerImpl extends GuessManager
 		return Collections.emptyMap();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static Map<PsiExpression, PsiType> buildDataflowTypeMap(PsiExpression forPlace)
 	{
 		PsiElement scope = DfaPsiUtil.getTopmostBlockInSameClass(forPlace);
@@ -185,7 +185,7 @@ public class GuessManagerImpl extends GuessManager
 
 		DataFlowRunner runner = new DataFlowRunner()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected DfaMemoryState createMemoryState()
 			{
@@ -471,8 +471,8 @@ public class GuessManagerImpl extends GuessManager
 	}
 
 	@Override
-	@Nullable
-	public PsiType getControlFlowExpressionType(@NotNull PsiExpression expr)
+	@javax.annotation.Nullable
+	public PsiType getControlFlowExpressionType(@Nonnull PsiExpression expr)
 	{
 		final Map<PsiExpression, PsiType> allCasts = getAllTypeCasts(expr);
 		if(!allCasts.containsKey(expr))

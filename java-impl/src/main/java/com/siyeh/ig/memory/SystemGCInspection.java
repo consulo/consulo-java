@@ -15,26 +15,27 @@
  */
 package com.siyeh.ig.memory;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class SystemGCInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToSystemGC";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("gc.call.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("gc.call.problem.descriptor");
   }
@@ -47,7 +48,7 @@ public class SystemGCInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

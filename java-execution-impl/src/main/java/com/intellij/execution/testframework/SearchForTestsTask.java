@@ -21,8 +21,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.concurrency.SensitiveProgressWrapper;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
@@ -50,7 +50,7 @@ public abstract class SearchForTestsTask extends Task.Backgroundable
 	private ServerSocket myServerSocket;
 	private ProgressIndicator myProcessIndicator;
 
-	public SearchForTestsTask(@Nullable final Project project, final ServerSocket socket)
+	public SearchForTestsTask(@javax.annotation.Nullable final Project project, final ServerSocket socket)
 	{
 		super(project, ExecutionBundle.message("searching.test.progress.title"), true);
 		myServerSocket = socket;
@@ -102,14 +102,14 @@ public abstract class SearchForTestsTask extends Task.Backgroundable
 		handler.addProcessListener(new ProcessAdapter()
 		{
 			@Override
-			public void processTerminated(@NotNull final ProcessEvent event)
+			public void processTerminated(@Nonnull final ProcessEvent event)
 			{
 				handler.removeProcessListener(this);
 				ensureFinished();
 			}
 
 			@Override
-			public void startNotified(@NotNull final ProcessEvent event)
+			public void startNotified(@Nonnull final ProcessEvent event)
 			{
 				startSearch();
 			}
@@ -117,7 +117,7 @@ public abstract class SearchForTestsTask extends Task.Backgroundable
 	}
 
 	@Override
-	public void run(@NotNull ProgressIndicator indicator)
+	public void run(@Nonnull ProgressIndicator indicator)
 	{
 		try
 		{
@@ -168,7 +168,7 @@ public abstract class SearchForTestsTask extends Task.Backgroundable
 	/**
 	 * @return true if runnable has been executed with no write action interference and in "smart" mode
 	 */
-	private boolean runSmartModeReadActionWithWritePriority(@NotNull Runnable runnable, ProgressIndicator indicator)
+	private boolean runSmartModeReadActionWithWritePriority(@Nonnull Runnable runnable, ProgressIndicator indicator)
 	{
 		DumbService dumbService = DumbService.getInstance(myProject);
 

@@ -15,7 +15,8 @@
  */
 package com.intellij.spellchecker;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiTypeElement;
@@ -33,7 +34,7 @@ public class NamedElementTokenizer<T extends PsiNamedElement> extends Tokenizer<
   private final PsiTypeTokenizer myTypeTokenizer = new PsiTypeTokenizer();
 
   @Override
-   public void tokenize(@NotNull T element, TokenConsumer consumer) {
+   public void tokenize(@Nonnull T element, TokenConsumer consumer) {
     final PsiIdentifier psiIdentifier = PsiTreeUtil.getChildOfType(element, PsiIdentifier.class);
     final PsiTypeElement psiType = PsiTreeUtil.getChildOfType(element, PsiTypeElement.class);
 

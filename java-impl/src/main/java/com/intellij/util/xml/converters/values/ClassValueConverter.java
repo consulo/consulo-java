@@ -16,9 +16,11 @@
 
 package com.intellij.util.xml.converters.values;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -54,7 +56,7 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
     return psiClass == null? null : psiClass.getQualifiedName();
   }
 
-  @NotNull
+  @Nonnull
   public abstract PsiReference[] createReferences(GenericDomValue genericDomValue, PsiElement element, ConvertContext context);
 
   public static GlobalSearchScope getScope(Project project, @Nullable Module module, @Nullable PsiFile psiFile) {

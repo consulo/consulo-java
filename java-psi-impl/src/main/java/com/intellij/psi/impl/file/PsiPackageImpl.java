@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.scope.JavaCompletionHints;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -88,7 +88,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	public void handleQualifiedNameChange(@NotNull final String newQualifiedName)
+	public void handleQualifiedNameChange(@Nonnull final String newQualifiedName)
 	{
 		PsiPackageImplementationHelper.getInstance().handleQualifiedNameChange(this, newQualifiedName);
 	}
@@ -108,7 +108,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 
 	@RequiredReadAction
 	@Override
-	@NotNull
+	@Nonnull
 	public Language getLanguage()
 	{
 		return JavaLanguage.INSTANCE;
@@ -121,7 +121,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -139,7 +139,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClass[] getClasses()
 	{
 		return getClasses(allScope());
@@ -151,14 +151,14 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	@NotNull
-	public PsiClass[] getClasses(@NotNull GlobalSearchScope scope)
+	@Nonnull
+	public PsiClass[] getClasses(@Nonnull GlobalSearchScope scope)
 	{
 		return getFacade().getClasses(this, scope);
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiModifierList getAnnotationList()
 	{
 		if(myAnnotationList == null)
@@ -169,15 +169,15 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiJavaPackage[] getSubPackages()
 	{
 		return getFacade().getSubPackages(this, allScope());
 	}
 
 	@Override
-	@NotNull
-	public PsiJavaPackage[] getSubPackages(@NotNull GlobalSearchScope scope)
+	@Nonnull
+	public PsiJavaPackage[] getSubPackages(@Nonnull GlobalSearchScope scope)
 	{
 		return getFacade().getSubPackages(this, scope);
 	}
@@ -219,7 +219,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 		return cache;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiClass[] findClassesByName(String name, GlobalSearchScope scope)
 	{
 		final String qName = getQualifiedName();
@@ -233,14 +233,14 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 		return getClassNamesCache().contains(name);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiClass[] findClassByShortName(@NotNull String name, @NotNull GlobalSearchScope scope)
+	public PsiClass[] findClassByShortName(@Nonnull String name, @Nonnull GlobalSearchScope scope)
 	{
 		return getFacade().findClassByShortName(name, this, scope);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiJavaPackage findSubPackageByName(String name)
 	{
 		final String qName = getQualifiedName();
@@ -249,7 +249,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		GlobalSearchScope scope = place.getResolveScope();
 
@@ -317,7 +317,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 		return true;
 	}
 
-	private static boolean processClasses(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, @NotNull PsiClass[] classes, @NotNull Condition<String> nameCondition)
+	private static boolean processClasses(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, @Nonnull PsiClass[] classes, @Nonnull Condition<String> nameCondition)
 	{
 		for(PsiClass aClass : classes)
 		{
@@ -387,14 +387,14 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiModifierList getModifierList()
 	{
 		return getAnnotationList();
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NonNls @NotNull final String name)
+	public boolean hasModifierProperty(@NonNls @Nonnull final String name)
 	{
 		return false;
 	}

@@ -27,7 +27,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public class AbstractMethodOverridesAbstractMethodInspection extends BaseInspect
   public boolean ignoreAnnotations = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.display.name");
   }
@@ -54,7 +54,7 @@ public class AbstractMethodOverridesAbstractMethodInspection extends BaseInspect
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.problem.descriptor");
   }
@@ -72,7 +72,7 @@ public class AbstractMethodOverridesAbstractMethodInspection extends BaseInspect
   private static class AbstractMethodOverridesAbstractMethodFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.remove.quickfix");
     }
@@ -94,7 +94,7 @@ public class AbstractMethodOverridesAbstractMethodInspection extends BaseInspect
   private class AbstractMethodOverridesAbstractMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (method.isConstructor()) {
         return;

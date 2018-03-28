@@ -26,7 +26,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -38,18 +38,18 @@ public class InnerClassVariableHidesOuterClassVariableInspection
    */
   public boolean m_ignoreInvisibleFields = true;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "InnerClassFieldHidesOuterClassField";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "inner.class.field.hides.outer.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "inner.class.field.hides.outer.problem.descriptor");
@@ -77,7 +77,7 @@ public class InnerClassVariableHidesOuterClassVariableInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       final PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return;

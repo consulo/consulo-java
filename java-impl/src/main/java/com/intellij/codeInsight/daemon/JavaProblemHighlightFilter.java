@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import javax.annotation.Nonnull;
+
 import consulo.java.util.JavaProjectRootsUtil;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -25,12 +26,12 @@ import com.intellij.psi.PsiFile;
 
 public class JavaProblemHighlightFilter extends ProblemHighlightFilter {
   @Override
-  public boolean shouldHighlight(@NotNull PsiFile psiFile) {
+  public boolean shouldHighlight(@Nonnull PsiFile psiFile) {
     return psiFile.getFileType() != JavaFileType.INSTANCE || !JavaProjectRootsUtil.isOutsideSourceRoot(psiFile);
   }
 
   @Override
-  public boolean shouldProcessInBatch(@NotNull PsiFile psiFile) {
+  public boolean shouldProcessInBatch(@Nonnull PsiFile psiFile) {
     final boolean shouldHighlight = shouldHighlightFile(psiFile);
     if (shouldHighlight) {
       if (psiFile.getFileType() == JavaFileType.INSTANCE) {

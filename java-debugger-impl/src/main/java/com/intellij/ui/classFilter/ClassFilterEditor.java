@@ -41,8 +41,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -143,7 +143,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     getEmptyText().setText(UIBundle.message("no.patterns"));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public StatusText getEmptyText() {
     return myTable.getEmptyText();
@@ -309,7 +309,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     }
   }
 
-  @NotNull
+  @Nonnull
   protected com.intellij.ui.classFilter.ClassFilter createFilter(String pattern) {
     return new com.intellij.ui.classFilter.ClassFilter(pattern);
   }
@@ -347,7 +347,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getJvmClassName(PsiClass aClass) {
     PsiClass parentClass = PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true);
     if (parentClass != null) {

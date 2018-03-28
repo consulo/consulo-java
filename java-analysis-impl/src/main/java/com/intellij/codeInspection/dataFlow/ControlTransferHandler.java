@@ -23,8 +23,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.value.DfaTypeValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
@@ -84,7 +84,7 @@ class ControlTransferHandler
 		throw new UnsupportedOperationException();
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaInstructionState> processCatches(Trap.TryCatch tryCatch, DfaValue thrownValue, FList<Trap> traps)
 	{
 		List<DfaInstructionState> result = new ArrayList<>();
@@ -130,7 +130,7 @@ class ControlTransferHandler
 		return catchingCopy;
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaTypeValue> allCaughtTypes(PsiParameter param)
 	{
 		List<PsiType> psiTypes;
@@ -147,7 +147,7 @@ class ControlTransferHandler
 		return ContainerUtil.<DfaValue, DfaTypeValue>mapNotNull(result, dfaValue -> dfaValue instanceof DfaTypeValue ? (DfaTypeValue) dfaValue : null);
 	}
 
-	@NotNull
+	@Nonnull
 	private DfaVariableState initVariableState(PsiParameter param, DfaValue throwable)
 	{
 		DfaVariableValue sampleVar = ((DfaMemoryStateImpl) myState).getFactory().getVarFactory().createVariableValue(param, false);
@@ -162,21 +162,21 @@ class ControlTransferHandler
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaInstructionState> gotoFinally(int offset, FList<Trap> traps)
 	{
 		myState.push(myRunner.getFactory().controlTransfer(myTarget, traps));
 		return Collections.singletonList(new DfaInstructionState(myRunner.getInstruction(offset), myState));
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaInstructionState> leaveFinally(FList<Trap> traps)
 	{
 		DfaControlTransferValue unused = (DfaControlTransferValue) myState.pop();
 		return iteration(traps);
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaInstructionState> transferToTarget()
 	{
 		if(myTarget instanceof InstructionTransfer)

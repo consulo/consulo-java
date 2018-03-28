@@ -24,7 +24,7 @@ import com.intellij.util.ui.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,19 +43,19 @@ public class FieldCountInspection extends ClassMetricInspection {
   public boolean m_considerStaticFinalFieldsConstant = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ClassWithTooManyFields";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("too.many.fields.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "too.many.fields.problem.descriptor", infos[0]);
@@ -126,7 +126,7 @@ public class FieldCountInspection extends ClassMetricInspection {
   private class FieldCountVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // note: no call to super
       final int totalFields = countFields(aClass);
       if (totalFields <= getLimit()) {

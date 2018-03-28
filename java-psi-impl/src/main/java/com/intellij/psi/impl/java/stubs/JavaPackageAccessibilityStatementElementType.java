@@ -18,7 +18,8 @@ package com.intellij.psi.impl.java.stubs;
 import java.io.IOException;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -39,24 +40,24 @@ import com.intellij.util.io.StringRef;
 
 public class JavaPackageAccessibilityStatementElementType extends JavaStubElementType<PsiPackageAccessibilityStatementStub, PsiPackageAccessibilityStatement>
 {
-	public JavaPackageAccessibilityStatementElementType(@NotNull String debugName)
+	public JavaPackageAccessibilityStatementElementType(@Nonnull String debugName)
 	{
 		super(debugName);
 	}
 
 	@Override
-	public PsiPackageAccessibilityStatement createPsi(@NotNull PsiPackageAccessibilityStatementStub stub)
+	public PsiPackageAccessibilityStatement createPsi(@Nonnull PsiPackageAccessibilityStatementStub stub)
 	{
 		return getPsiFactory(stub).createPackageAccessibilityStatement(stub);
 	}
 
 	@Override
-	public PsiPackageAccessibilityStatement createPsi(@NotNull ASTNode node)
+	public PsiPackageAccessibilityStatement createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiPackageAccessibilityStatementImpl(node);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -86,15 +87,15 @@ public class JavaPackageAccessibilityStatementElementType extends JavaStubElemen
 	}
 
 	@Override
-	public void serialize(@NotNull PsiPackageAccessibilityStatementStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getPackageName());
 		dataStream.writeUTFFast(StringUtil.join(stub.getTargets(), "/"));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiPackageAccessibilityStatementStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiPackageAccessibilityStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		String packageName = StringRef.toString(dataStream.readName());
 		List<String> targets = StringUtil.split(dataStream.readUTFFast(), "/");
@@ -102,12 +103,12 @@ public class JavaPackageAccessibilityStatementElementType extends JavaStubElemen
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiPackageAccessibilityStatementStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull IndexSink sink)
 	{
 	}
 
-	@NotNull
-	public static PsiPackageAccessibilityStatement.Role typeToRole(@NotNull IElementType type)
+	@Nonnull
+	public static PsiPackageAccessibilityStatement.Role typeToRole(@Nonnull IElementType type)
 	{
 		if(type == JavaElementType.EXPORTS_STATEMENT)
 		{

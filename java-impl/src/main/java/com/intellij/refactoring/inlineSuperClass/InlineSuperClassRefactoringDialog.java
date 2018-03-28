@@ -29,7 +29,7 @@ import com.intellij.refactoring.inline.InlineOptionsDialog;
 import com.intellij.refactoring.ui.DocCommentPanel;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.Function;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +40,7 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
   private final PsiClass[] myTargetClasses;
   private final DocCommentPanel myDocPanel;
 
-  protected InlineSuperClassRefactoringDialog(@NotNull Project project, PsiClass superClass, PsiClass currentInheritor, final PsiClass... targetClasses) {
+  protected InlineSuperClassRefactoringDialog(@Nonnull Project project, PsiClass superClass, PsiClass currentInheritor, final PsiClass... targetClasses) {
     super(project, false, superClass);
     mySuperClass = superClass;
     myCurrentInheritor = currentInheritor;

@@ -19,7 +19,7 @@ import gnu.trove.THashSet;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiMethod;
@@ -32,7 +32,7 @@ import com.intellij.util.QueryExecutor;
 public class MethodDeepestSuperSearcher implements QueryExecutor<PsiMethod, PsiMethod>
 {
 	@Override
-	public boolean execute(@NotNull PsiMethod method, @NotNull Processor<PsiMethod> consumer)
+	public boolean execute(@Nonnull PsiMethod method, @Nonnull Processor<PsiMethod> consumer)
 	{
 		return processDeepestSuperMethods(method, consumer);
 	}

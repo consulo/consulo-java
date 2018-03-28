@@ -23,8 +23,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.java.IJavaElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class JavaBraceMatcher implements PairedBraceMatcher {
   private final BracePair[] pairs = new BracePair[] {
@@ -40,7 +39,7 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
   }
 
   @Override
-  public boolean isPairedBracesAllowedBeforeType(@NotNull final IElementType lbraceType, @Nullable final IElementType contextType) {
+  public boolean isPairedBracesAllowedBeforeType(@Nonnull final IElementType lbraceType, @javax.annotation.Nullable final IElementType contextType) {
     if (contextType instanceof IJavaElementType) return isPairedBracesAllowedBeforeTypeInJava(contextType);
     return true;
   }

@@ -17,8 +17,8 @@ package com.intellij.refactoring.move.moveClassesOrPackages;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
@@ -32,15 +32,15 @@ public interface MoveClassHandler
 {
 	ExtensionPointName<MoveClassHandler> EP_NAME = new ExtensionPointName<MoveClassHandler>("consulo.java.refactoring.moveClassHandler");
 
-	void prepareMove(@NotNull PsiClass aClass);
+	void prepareMove(@Nonnull PsiClass aClass);
 
-	void finishMoveClass(@NotNull PsiClass aClass);
+	void finishMoveClass(@Nonnull PsiClass aClass);
 
 	/**
 	 * @return null if it cannot move aClass
 	 */
 	@Nullable
-	PsiClass doMoveClass(@NotNull PsiClass aClass, @NotNull PsiDirectory moveDestination) throws IncorrectOperationException;
+	PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException;
 
 	/**
 	 * @param clazz psiClass

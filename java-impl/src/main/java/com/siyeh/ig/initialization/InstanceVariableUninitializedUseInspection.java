@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
@@ -69,31 +69,31 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "InstanceVariableUsedBeforeInitialized";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("instance.variable.used.before.initialized.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("instance.variable.used.before.initialized.problem.descriptor");
   }
 
   @Override
-  public void readSettings(@NotNull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(annotationNamesString, annotationNames);
   }
 
   @Override
-  public void writeSettings(@NotNull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     annotationNamesString = formatString(annotationNames);
     super.writeSettings(element);
   }
@@ -122,7 +122,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
     return panel;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiField field = (PsiField)infos[0];
@@ -137,7 +137,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
   private class InstanceVariableInitializationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
@@ -178,7 +178,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
       }
     }
 
-    private boolean isInitializedInInitializer(@NotNull PsiField field, UninitializedReadCollector uninitializedReadsCollector) {
+    private boolean isInitializedInInitializer(@Nonnull PsiField field, UninitializedReadCollector uninitializedReadsCollector) {
       final PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return false;

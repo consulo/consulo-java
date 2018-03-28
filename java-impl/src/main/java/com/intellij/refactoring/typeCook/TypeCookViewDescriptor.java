@@ -19,7 +19,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class TypeCookViewDescriptor implements UsageViewDescriptor {
   private final PsiElement[] myElements;
@@ -28,7 +28,7 @@ class TypeCookViewDescriptor implements UsageViewDescriptor {
     myElements = elements;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return myElements;
   }

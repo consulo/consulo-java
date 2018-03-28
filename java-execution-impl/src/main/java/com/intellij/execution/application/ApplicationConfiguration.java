@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
@@ -80,7 +80,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
 	{
 		final JavaCommandLineState state = new JavaApplicationCommandLineState<>(this, env);
 		JavaRunConfigurationModule module = getConfigurationModule();
@@ -89,7 +89,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
 		SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<>();
@@ -108,14 +108,14 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiClass getMainClass()
 	{
 		return getConfigurationModule().findClass(MAIN_CLASS_NAME);
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public String suggestedName()
 	{
 		if(MAIN_CLASS_NAME == null)
@@ -198,14 +198,14 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Map<String, String> getEnvs()
 	{
 		return myEnvs;
 	}
 
 	@Override
-	public void setEnvs(@NotNull final Map<String, String> envs)
+	public void setEnvs(@Nonnull final Map<String, String> envs)
 	{
 		myEnvs.clear();
 		myEnvs.putAll(envs);
@@ -218,14 +218,14 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public String getRunClass()
 	{
 		return MAIN_CLASS_NAME;
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public String getPackage()
 	{
 		return null;
@@ -243,7 +243,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 		ALTERNATIVE_JRE_PATH_ENABLED = enabled;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getAlternativeJrePath()
 	{
@@ -273,7 +273,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	public void readExternal(@NotNull final Element element)
+	public void readExternal(@Nonnull final Element element)
 	{
 		super.readExternal(element);
 		JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
@@ -283,7 +283,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	public void writeExternal(@NotNull Element element)
+	public void writeExternal(@Nonnull Element element)
 	{
 		super.writeExternal(element);
 
@@ -297,7 +297,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 		ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public ShortenCommandLine getShortenCommandLine()
 	{
@@ -312,7 +312,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 
 	public static class JavaApplicationCommandLineState<T extends ApplicationConfiguration> extends BaseJavaApplicationCommandLineState<T>
 	{
-		public JavaApplicationCommandLineState(@NotNull final T configuration, final ExecutionEnvironment environment)
+		public JavaApplicationCommandLineState(@Nonnull final T configuration, final ExecutionEnvironment environment)
 		{
 			super(environment, configuration);
 		}
@@ -360,7 +360,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 			return line;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		protected OSProcessHandler startProcess() throws ExecutionException
 		{

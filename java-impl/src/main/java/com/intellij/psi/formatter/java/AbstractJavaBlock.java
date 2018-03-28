@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
@@ -60,16 +60,16 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.formatter.java.AbstractJavaBlock");
 
-	@NotNull
+	@Nonnull
 	protected final CommonCodeStyleSettings mySettings;
-	@NotNull
+	@Nonnull
 	protected final JavaCodeStyleSettings myJavaSettings;
 	protected final CommonCodeStyleSettings.IndentOptions myIndentSettings;
 	private final Indent myIndent;
 	protected Indent myChildIndent;
 	protected Alignment myChildAlignment;
 	protected boolean myUseChildAttributes;
-	@NotNull
+	@Nonnull
 	protected final AlignmentStrategy myAlignmentStrategy;
 	private boolean myIsAfterClassKeyword;
 
@@ -101,27 +101,27 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		}
 	};
 
-	protected AbstractJavaBlock(@NotNull final ASTNode node,
+	protected AbstractJavaBlock(@Nonnull final ASTNode node,
 			final Wrap wrap,
 			final Alignment alignment,
 			final Indent indent,
-			@NotNull final CommonCodeStyleSettings settings,
-			@NotNull JavaCodeStyleSettings javaSettings)
+			@Nonnull final CommonCodeStyleSettings settings,
+			@Nonnull JavaCodeStyleSettings javaSettings)
 	{
 		this(node, wrap, indent, settings, javaSettings, JavaWrapManager.INSTANCE, AlignmentStrategy.wrap(alignment));
 	}
 
-	protected AbstractJavaBlock(@NotNull final ASTNode node,
+	protected AbstractJavaBlock(@Nonnull final ASTNode node,
 			final Wrap wrap,
-			@NotNull final AlignmentStrategy alignmentStrategy,
+			@Nonnull final AlignmentStrategy alignmentStrategy,
 			final Indent indent,
-			@NotNull final CommonCodeStyleSettings settings,
-			@NotNull JavaCodeStyleSettings javaSettings)
+			@Nonnull final CommonCodeStyleSettings settings,
+			@Nonnull JavaCodeStyleSettings javaSettings)
 	{
 		this(node, wrap, indent, settings, javaSettings, JavaWrapManager.INSTANCE, alignmentStrategy);
 	}
 
-	private AbstractJavaBlock(@NotNull ASTNode ignored, @NotNull CommonCodeStyleSettings commonSettings, @NotNull JavaCodeStyleSettings javaSettings)
+	private AbstractJavaBlock(@Nonnull ASTNode ignored, @Nonnull CommonCodeStyleSettings commonSettings, @Nonnull JavaCodeStyleSettings javaSettings)
 	{
 		super(ignored, null, null);
 		mySettings = commonSettings;
@@ -132,13 +132,13 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		myAlignmentStrategy = AlignmentStrategy.getNullStrategy();
 	}
 
-	protected AbstractJavaBlock(@NotNull final ASTNode node,
+	protected AbstractJavaBlock(@Nonnull final ASTNode node,
 			final Wrap wrap,
 			final Indent indent,
-			@NotNull final CommonCodeStyleSettings settings,
-			@NotNull JavaCodeStyleSettings javaSettings,
+			@Nonnull final CommonCodeStyleSettings settings,
+			@Nonnull JavaCodeStyleSettings javaSettings,
 			final JavaWrapManager wrapManager,
-			@NotNull final AlignmentStrategy alignmentStrategy)
+			@Nonnull final AlignmentStrategy alignmentStrategy)
 	{
 		super(node, wrap, createBlockAlignment(alignmentStrategy, node));
 		mySettings = settings;
@@ -149,8 +149,8 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		myAlignmentStrategy = alignmentStrategy;
 	}
 
-	@Nullable
-	private static Alignment createBlockAlignment(@NotNull AlignmentStrategy strategy, @NotNull ASTNode node)
+	@javax.annotation.Nullable
+	private static Alignment createBlockAlignment(@Nonnull AlignmentStrategy strategy, @Nonnull ASTNode node)
 	{
 		// There is a possible case that 'implements' section is incomplete (e.g. ends with comma). We may want to align lbrace
 		// to the first implemented interface reference then.
@@ -161,10 +161,10 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return strategy.getAlignment(node.getElementType());
 	}
 
-	@NotNull
-	public Block createJavaBlock(@NotNull ASTNode child,
-			@NotNull CommonCodeStyleSettings settings,
-			@NotNull JavaCodeStyleSettings javaSettings,
+	@Nonnull
+	public Block createJavaBlock(@Nonnull ASTNode child,
+			@Nonnull CommonCodeStyleSettings settings,
+			@Nonnull JavaCodeStyleSettings javaSettings,
 			@Nullable Indent indent,
 			@Nullable Wrap wrap,
 			Alignment alignment)
@@ -172,24 +172,24 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return createJavaBlock(child, settings, javaSettings, indent, wrap, AlignmentStrategy.wrap(alignment));
 	}
 
-	@NotNull
-	public Block createJavaBlock(@NotNull ASTNode child,
-			@NotNull CommonCodeStyleSettings settings,
-			@NotNull JavaCodeStyleSettings javaSettings,
+	@Nonnull
+	public Block createJavaBlock(@Nonnull ASTNode child,
+			@Nonnull CommonCodeStyleSettings settings,
+			@Nonnull JavaCodeStyleSettings javaSettings,
 			final Indent indent,
-			@Nullable Wrap wrap,
-			@NotNull AlignmentStrategy alignmentStrategy)
+			@javax.annotation.Nullable Wrap wrap,
+			@Nonnull AlignmentStrategy alignmentStrategy)
 	{
 		return createJavaBlock(child, settings, javaSettings, indent, wrap, alignmentStrategy, -1);
 	}
 
-	@NotNull
-	private Block createJavaBlock(@NotNull ASTNode child,
-			@NotNull CommonCodeStyleSettings settings,
-			@NotNull JavaCodeStyleSettings javaSettings,
+	@Nonnull
+	private Block createJavaBlock(@Nonnull ASTNode child,
+			@Nonnull CommonCodeStyleSettings settings,
+			@Nonnull JavaCodeStyleSettings javaSettings,
 			@Nullable Indent indent,
 			Wrap wrap,
-			@NotNull AlignmentStrategy alignmentStrategy,
+			@Nonnull AlignmentStrategy alignmentStrategy,
 			int startOffset)
 	{
 		Indent actualIndent = indent == null ? getDefaultSubtreeIndent(child, getJavaIndentOptions(settings)) : indent;
@@ -258,20 +258,20 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return simpleJavaBlock;
 	}
 
-	@NotNull
-	public static Block newJavaBlock(@NotNull ASTNode child, @NotNull CommonCodeStyleSettings settings, @NotNull JavaCodeStyleSettings javaSettings)
+	@Nonnull
+	public static Block newJavaBlock(@Nonnull ASTNode child, @Nonnull CommonCodeStyleSettings settings, @Nonnull JavaCodeStyleSettings javaSettings)
 	{
 		final Indent indent = getDefaultSubtreeIndent(child, getJavaIndentOptions(settings));
 		return newJavaBlock(child, settings, javaSettings, indent, null, AlignmentStrategy.getNullStrategy());
 	}
 
-	@NotNull
-	public static Block newJavaBlock(@NotNull ASTNode child,
-			@NotNull CommonCodeStyleSettings settings,
-			@NotNull JavaCodeStyleSettings javaSettings,
+	@Nonnull
+	public static Block newJavaBlock(@Nonnull ASTNode child,
+			@Nonnull CommonCodeStyleSettings settings,
+			@Nonnull JavaCodeStyleSettings javaSettings,
 			@Nullable Indent indent,
 			@Nullable Wrap wrap,
-			@NotNull AlignmentStrategy strategy)
+			@Nonnull AlignmentStrategy strategy)
 	{
 		return new AbstractJavaBlock(child, settings, javaSettings)
 		{
@@ -283,7 +283,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		}.createJavaBlock(child, settings, javaSettings, indent, wrap, strategy);
 	}
 
-	@NotNull
+	@Nonnull
 	private static CommonCodeStyleSettings.IndentOptions getJavaIndentOptions(CommonCodeStyleSettings settings)
 	{
 		CommonCodeStyleSettings.IndentOptions indentOptions = settings.getIndentOptions();
@@ -305,8 +305,8 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	}
 
 
-	@Nullable
-	private static Indent getDefaultSubtreeIndent(@NotNull ASTNode child, @NotNull CommonCodeStyleSettings.IndentOptions indentOptions)
+	@javax.annotation.Nullable
+	private static Indent getDefaultSubtreeIndent(@Nonnull ASTNode child, @Nonnull CommonCodeStyleSettings.IndentOptions indentOptions)
 	{
 		final ASTNode parent = child.getTreeParent();
 		final IElementType childNodeType = child.getElementType();
@@ -353,7 +353,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return null;
 	}
 
-	private static boolean isMethodParameterAnnotation(@NotNull ASTNode element)
+	private static boolean isMethodParameterAnnotation(@Nonnull ASTNode element)
 	{
 		ASTNode parent = element.getTreeParent();
 		if(parent != null && parent.getElementType() == JavaElementType.PARAMETER)
@@ -364,8 +364,8 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return false;
 	}
 
-	@Nullable
-	private static Indent getChildIndent(@NotNull ASTNode parent, @NotNull CommonCodeStyleSettings.IndentOptions indentOptions)
+	@javax.annotation.Nullable
+	private static Indent getChildIndent(@Nonnull ASTNode parent, @Nonnull CommonCodeStyleSettings.IndentOptions indentOptions)
 	{
 		final IElementType parentType = parent.getElementType();
 		if(parentType == JavaElementType.MODIFIER_LIST)
@@ -459,14 +459,14 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return null;
 	}
 
-	protected static boolean isRBrace(@NotNull final ASTNode child)
+	protected static boolean isRBrace(@Nonnull final ASTNode child)
 	{
 		return child.getElementType() == JavaTokenType.RBRACE;
 	}
 
 	@Nullable
 	@Override
-	public Spacing getSpacing(Block child1, @NotNull Block child2)
+	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return JavaSpacePropertyProcessor.getSpacing(getTreeNode(child2), mySettings, myJavaSettings);
 	}
@@ -581,7 +581,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	}
 
 	@Nullable
-	protected Alignment chooseAlignment(@Nullable Alignment alignment, @Nullable Alignment alignment2, @NotNull ASTNode child)
+	protected Alignment chooseAlignment(@Nullable Alignment alignment, @Nullable Alignment alignment2, @Nonnull ASTNode child)
 	{
 		if(isTernaryOperatorToken(child))
 		{
@@ -590,7 +590,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return alignment;
 	}
 
-	private boolean isTernaryOperatorToken(@NotNull final ASTNode child)
+	private boolean isTernaryOperatorToken(@Nonnull final ASTNode child)
 	{
 		final IElementType nodeType = myNode.getElementType();
 
@@ -620,21 +620,21 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 
 
 	@Nullable
-	protected ASTNode processChild(@NotNull final List<Block> result, @NotNull ASTNode child, Alignment defaultAlignment, final Wrap defaultWrap, final Indent childIndent)
+	protected ASTNode processChild(@Nonnull final List<Block> result, @Nonnull ASTNode child, Alignment defaultAlignment, final Wrap defaultWrap, final Indent childIndent)
 	{
 		return processChild(result, child, AlignmentStrategy.wrap(defaultAlignment), defaultWrap, childIndent, -1);
 	}
 
-	@Nullable
-	protected ASTNode processChild(@NotNull final List<Block> result, @NotNull ASTNode child, @NotNull AlignmentStrategy alignmentStrategy, @Nullable final Wrap defaultWrap, final Indent childIndent)
+	@javax.annotation.Nullable
+	protected ASTNode processChild(@Nonnull final List<Block> result, @Nonnull ASTNode child, @Nonnull AlignmentStrategy alignmentStrategy, @Nullable final Wrap defaultWrap, final Indent childIndent)
 	{
 		return processChild(result, child, alignmentStrategy, defaultWrap, childIndent, -1);
 	}
 
 	@Nullable
-	protected ASTNode processChild(@NotNull final List<Block> result,
-			@NotNull ASTNode child,
-			@NotNull AlignmentStrategy alignmentStrategy,
+	protected ASTNode processChild(@Nonnull final List<Block> result,
+			@Nonnull ASTNode child,
+			@Nonnull AlignmentStrategy alignmentStrategy,
 			final Wrap defaultWrap,
 			final Indent childIndent,
 			int childOffset)
@@ -764,7 +764,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return child;
 	}
 
-	private static boolean isInsideMethodCall(@NotNull PsiElement element)
+	private static boolean isInsideMethodCall(@Nonnull PsiElement element)
 	{
 		PsiElement e = element.getParent();
 		int parentsVisited = 0;
@@ -780,7 +780,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	private Wrap getMethodParametersWrap()
 	{
 		Wrap preferredWrap = getModifierListWrap();
@@ -794,7 +794,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private Wrap getModifierListWrap()
 	{
 		AbstractJavaBlock parentBlock = getParentBlock();
@@ -805,7 +805,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return null;
 	}
 
-	private ASTNode processField(@NotNull final List<Block> result, ASTNode child, @NotNull final AlignmentStrategy alignmentStrategy, final Wrap defaultWrap, final Indent childIndent)
+	private ASTNode processField(@Nonnull final List<Block> result, ASTNode child, @Nonnull final AlignmentStrategy alignmentStrategy, final Wrap defaultWrap, final Indent childIndent)
 	{
 		ASTNode lastFieldInGroup = findLastFieldInGroup(child);
 		if(lastFieldInGroup == child)
@@ -839,7 +839,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	}
 
 	@Nullable
-	private ASTNode processTernaryOperationRange(@NotNull final List<Block> result, @NotNull final ASTNode child, final Wrap defaultWrap, final Indent childIndent)
+	private ASTNode processTernaryOperationRange(@Nonnull final List<Block> result, @Nonnull final ASTNode child, final Wrap defaultWrap, final Indent childIndent)
 	{
 		final ArrayList<Block> localResult = new ArrayList<>();
 		final Wrap wrap = arrangeChildWrap(child, defaultWrap);
@@ -873,7 +873,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return current.getTreePrev();
 	}
 
-	private boolean isTernaryOperationSign(@NotNull final ASTNode child)
+	private boolean isTernaryOperationSign(@Nonnull final ASTNode child)
 	{
 		if(myNode.getElementType() != JavaElementType.CONDITIONAL_EXPRESSION)
 		{
@@ -883,15 +883,15 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return role == ChildRole.OPERATION_SIGN || role == ChildRole.COLON;
 	}
 
-	@NotNull
-	private Block createMethodCallExpressionBlock(@NotNull ASTNode node, Wrap blockWrap, Alignment alignment, Indent indent)
+	@Nonnull
+	private Block createMethodCallExpressionBlock(@Nonnull ASTNode node, Wrap blockWrap, Alignment alignment, Indent indent)
 	{
 		final ArrayList<ASTNode> nodes = new ArrayList<>();
 		collectNodes(nodes, node);
 		return new ChainMethodCallsBlockBuilder(alignment, blockWrap, indent, mySettings, myJavaSettings).build(nodes);
 	}
 
-	private static void collectNodes(@NotNull List<ASTNode> nodes, @NotNull ASTNode node)
+	private static void collectNodes(@Nonnull List<ASTNode> nodes, @Nonnull ASTNode node)
 	{
 		ASTNode child = node.getFirstChildNode();
 		while(child != null)
@@ -912,7 +912,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		}
 	}
 
-	private boolean shouldAlignChild(@NotNull final ASTNode child)
+	private boolean shouldAlignChild(@Nonnull final ASTNode child)
 	{
 		int role = getChildRole(child);
 		final IElementType nodeType = myNode.getElementType();
@@ -1035,7 +1035,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		}
 	}
 
-	private static int getChildRole(@NotNull ASTNode child)
+	private static int getChildRole(@Nonnull ASTNode child)
 	{
 		return ((CompositeElement) child.getTreeParent()).getChildRole(child);
 	}
@@ -1048,7 +1048,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	 * @return alignment to use for the given node
 	 * @see CodeStyleSettings#ALIGN_GROUP_FIELD_DECLARATIONS
 	 */
-	private boolean shouldAlignFieldInColumns(@NotNull ASTNode child)
+	private boolean shouldAlignFieldInColumns(@Nonnull ASTNode child)
 	{
 		// The whole idea of variable declarations alignment is that complete declaration blocks which children are to be aligned hold
 		// reference to the same AlignmentStrategy object, hence, reuse the same Alignment objects. So, there is no point in checking
@@ -1072,7 +1072,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	}
 
 	@Nullable
-	public static Alignment createAlignment(final boolean alignOption, @Nullable final Alignment defaultAlignment)
+	public static Alignment createAlignment(final boolean alignOption, @javax.annotation.Nullable final Alignment defaultAlignment)
 	{
 		return alignOption ? createAlignmentOrDefault(null, defaultAlignment) : defaultAlignment;
 	}
@@ -1090,8 +1090,8 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return isBuildIndentsOnly() ? null : myWrapManager.arrangeChildWrap(child, myNode, mySettings, myJavaSettings, defaultWrap, this);
 	}
 
-	@NotNull
-	private ASTNode processParenthesisBlock(@NotNull List<Block> result, @NotNull ASTNode child, @NotNull WrappingStrategy wrappingStrategy, final boolean doAlign)
+	@Nonnull
+	private ASTNode processParenthesisBlock(@Nonnull List<Block> result, @Nonnull ASTNode child, @Nonnull WrappingStrategy wrappingStrategy, final boolean doAlign)
 	{
 		myUseChildAttributes = true;
 
@@ -1101,12 +1101,12 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return processParenthesisBlock(from, to, result, child, wrappingStrategy, doAlign);
 	}
 
-	@NotNull
-	private ASTNode processParenthesisBlock(@NotNull IElementType from,
-			@Nullable final IElementType to,
-			@NotNull final List<Block> result,
-			@NotNull ASTNode child,
-			@NotNull final WrappingStrategy wrappingStrategy,
+	@Nonnull
+	private ASTNode processParenthesisBlock(@Nonnull IElementType from,
+			@javax.annotation.Nullable final IElementType to,
+			@Nonnull final List<Block> result,
+			@Nonnull ASTNode child,
+			@Nonnull final WrappingStrategy wrappingStrategy,
 			final boolean doAlign)
 	{
 		Indent externalIndent = Indent.getNoneIndent();
@@ -1189,7 +1189,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return false;
 	}
 
-	private static boolean canUseAnonymousClassAlignment(@NotNull ASTNode child)
+	private static boolean canUseAnonymousClassAlignment(@Nonnull ASTNode child)
 	{
 		// The general idea is to handle situations like below:
 		//     test(new Runnable() {
@@ -1248,7 +1248,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	}
 
 	@Nullable
-	private ASTNode processEnumBlock(@NotNull List<Block> result, @Nullable ASTNode child, ASTNode last)
+	private ASTNode processEnumBlock(@Nonnull List<Block> result, @Nullable ASTNode child, ASTNode last)
 	{
 		final WrappingStrategy wrappingStrategy = WrappingStrategy.createDoNotWrapCommaStrategy(Wrap.createWrap(getWrapType(mySettings.ENUM_CONSTANTS_WRAP), true));
 		while(child != null)
@@ -1388,7 +1388,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	 * @param elementType target element type
 	 * @return {@code null} all the time
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Wrap getReservedWrap(IElementType elementType)
 	{
@@ -1431,7 +1431,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		if(myUseChildAttributes)
@@ -1452,13 +1452,13 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return getChildIndent(myNode, myIndentSettings);
 	}
 
-	@NotNull
+	@Nonnull
 	public CommonCodeStyleSettings getSettings()
 	{
 		return mySettings;
 	}
 
-	protected boolean isAfter(final int newChildIndex, @NotNull final IElementType[] elementTypes)
+	protected boolean isAfter(final int newChildIndex, @Nonnull final IElementType[] elementTypes)
 	{
 		if(newChildIndex == 0)
 		{
@@ -1507,7 +1507,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 	}
 
 	@Nullable
-	protected ASTNode composeCodeBlock(@NotNull final List<Block> result, ASTNode child, final Indent indent, final int childrenIndent, @Nullable final Wrap childWrap)
+	protected ASTNode composeCodeBlock(@Nonnull final List<Block> result, ASTNode child, final Indent indent, final int childrenIndent, @Nullable final Wrap childWrap)
 	{
 		final ArrayList<Block> localResult = new ArrayList<>();
 		processChild(localResult, child, AlignmentStrategy.getNullStrategy(), null, Indent.getNoneIndent());
@@ -1576,12 +1576,12 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
 		return myParentBlock;
 	}
 
-	public void setParentBlock(@NotNull AbstractJavaBlock parentBlock)
+	public void setParentBlock(@Nonnull AbstractJavaBlock parentBlock)
 	{
 		myParentBlock = parentBlock;
 	}
 
-	@NotNull
+	@Nonnull
 	public SyntheticCodeBlock createCodeBlockBlock(final List<Block> localResult, final Indent indent, final int childrenIndent)
 	{
 		final SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, null, getSettings(), myJavaSettings, indent, null);

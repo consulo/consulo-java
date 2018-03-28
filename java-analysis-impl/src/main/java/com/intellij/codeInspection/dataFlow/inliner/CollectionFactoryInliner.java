@@ -20,7 +20,7 @@ import static com.intellij.codeInspection.dataFlow.SpecialField.MAP_SIZE;
 import static com.intellij.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
 import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.codeInspection.dataFlow.SpecialField;
@@ -52,7 +52,7 @@ public class CollectionFactoryInliner implements CallInliner
 			MAP_SIZE));
 
 	@Override
-	public boolean tryInlineCall(@NotNull CFGBuilder builder, @NotNull PsiMethodCallExpression call)
+	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
 	{
 		FactoryInfo factoryInfo = STATIC_FACTORIES.mapFirst(call);
 		if(factoryInfo == null)

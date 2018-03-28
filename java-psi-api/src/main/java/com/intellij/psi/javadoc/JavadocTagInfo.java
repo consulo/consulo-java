@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.javadoc;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -42,6 +42,6 @@ public interface JavadocTagInfo
 	@Nullable
 	String checkTagValue(PsiDocTagValue value);
 
-	@Nullable
+	@javax.annotation.Nullable
 	PsiReference getReference(PsiDocTagValue value);
 }

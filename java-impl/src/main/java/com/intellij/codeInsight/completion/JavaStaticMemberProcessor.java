@@ -17,7 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.VariableLookupItem;
@@ -51,9 +52,9 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected LookupElement createLookupElement(@NotNull PsiMember member, @NotNull final PsiClass containingClass, boolean shouldImport)
+	protected LookupElement createLookupElement(@Nonnull PsiMember member, @Nonnull final PsiClass containingClass, boolean shouldImport)
 	{
 		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
 
@@ -81,7 +82,7 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor
 	}
 
 	@Override
-	protected LookupElement createLookupElement(@NotNull List<PsiMethod> overloads, @NotNull PsiClass containingClass, boolean shouldImport)
+	protected LookupElement createLookupElement(@Nonnull List<PsiMethod> overloads, @Nonnull PsiClass containingClass, boolean shouldImport)
 	{
 		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
 

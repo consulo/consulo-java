@@ -23,14 +23,14 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Danila Ponomarenko
  */
 public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntentionAction {
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
@@ -60,7 +60,7 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiJavaToken)) {
       return;
     }
@@ -82,8 +82,8 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
   }
 
 
-  @NotNull
-  private static String breakOnLineBreaks(@NotNull String string) {
+  @Nonnull
+  private static String breakOnLineBreaks(@Nonnull String string) {
     final String result = StringUtil.replace(
       string,
       new String[]{"\\n\\r", "\\n"},
@@ -95,13 +95,13 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
     return result.endsWith(redundantSuffix) ? result.substring(0, result.length() - redundantSuffix.length()) : result;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return CodeInsightBundle.message("intention.break.string.on.line.breaks.text");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();

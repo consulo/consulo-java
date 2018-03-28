@@ -17,7 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -34,7 +35,7 @@ public class SmartType17CompletionTest extends LightFixtureCompletionTestCase {
     myItems = myFixture.complete(CompletionType.SMART);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected TestModuleDescriptor getProjectDescriptor() {
     return JAVA_LATEST;

@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.PackageUtil;
 import com.intellij.ide.util.TreeClassChooser;
@@ -262,7 +262,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     //if (getTargetClassName().length() == 0) throw new ConfigurationException("Destination class name not found");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private String validateInputData() {
     final PsiManager manager = PsiManager.getInstance(myProject);
     final String fqName = getTargetClassName();
@@ -320,7 +320,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiClass findOrCreateTargetClass(final PsiManager manager, final String fqName) throws IncorrectOperationException {
     final String className;
     final String packageName;
@@ -408,7 +408,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
       super(mySourceClass, null, false, DEFAULT_CONTAINMENT_VERIFIER);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public Boolean isFixedAbstract(MemberInfo member) {
       return null;
     }

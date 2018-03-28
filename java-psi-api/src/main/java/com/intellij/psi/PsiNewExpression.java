@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents the call of a Java class constructor (a simple or qualified class instance
@@ -29,7 +29,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall 
    *
    * @return the qualifier, or null if the expression is not qualified.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getQualifier();
 
   /**
@@ -39,7 +39,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall 
    * @return the array of expressions for the dimensions, or an empty array if the
    *         <code>new</code> expression is not an array creation expression.
    */
-  @NotNull
+  @Nonnull
   PsiExpression[] getArrayDimensions();
 
   /**
@@ -57,7 +57,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall 
    *
    * @return class reference, or null if the expression is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaCodeReferenceElement getClassReference();
 
   /**
@@ -65,7 +65,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall 
    *
    * @return the anonymous class, or null if the expression does not create an anonymous class.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiAnonymousClass getAnonymousClass();
 
   /**
@@ -84,6 +84,6 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall 
    * @param annotation annotation to find the type for.
    * @return annotated subtype or null, if annotation is incorrectly placed.
    */
-  @Nullable
-  PsiType getOwner(@NotNull PsiAnnotation annotation);
+  @javax.annotation.Nullable
+  PsiType getOwner(@Nonnull PsiAnnotation annotation);
 }

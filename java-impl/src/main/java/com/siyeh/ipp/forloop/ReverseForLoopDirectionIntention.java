@@ -15,7 +15,8 @@
  */
 package com.siyeh.ipp.forloop;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
@@ -29,14 +30,14 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class ReverseForLoopDirectionIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ReverseForLoopDirectionPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiForStatement forStatement =
       (PsiForStatement)element.getParent();

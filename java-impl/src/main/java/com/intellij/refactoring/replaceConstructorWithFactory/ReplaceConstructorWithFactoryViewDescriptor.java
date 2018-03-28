@@ -20,7 +20,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -42,7 +42,7 @@ class ReplaceConstructorWithFactoryViewDescriptor extends UsageViewDescriptorAda
     myConstructor = null;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     if (myConstructor != null) {
       return new PsiElement[] {myConstructor};

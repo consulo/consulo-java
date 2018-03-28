@@ -25,7 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -38,17 +38,17 @@ public class GutterIconTooltipHelper
 	{
 	}
 
-	public static String composeText(@NotNull PsiElement[] elements, @NotNull String start, @NotNull String pattern)
+	public static String composeText(@Nonnull PsiElement[] elements, @Nonnull String start, @Nonnull String pattern)
 	{
 		return composeText(Arrays.asList(elements), start, pattern);
 	}
 
-	public static String composeText(@NotNull Iterable<? extends PsiElement> elements, @NotNull String start, @NotNull String pattern)
+	public static String composeText(@Nonnull Iterable<? extends PsiElement> elements, @Nonnull String start, @Nonnull String pattern)
 	{
 		return composeText(elements, start, pattern, "");
 	}
 
-	public static String composeText(@NotNull Iterable<? extends PsiElement> elements, @NotNull String start, @NotNull String pattern, @NotNull String postfix)
+	public static String composeText(@Nonnull Iterable<? extends PsiElement> elements, @Nonnull String start, @Nonnull String pattern, @Nonnull String postfix)
 	{
 		@NonNls StringBuilder result = new StringBuilder();
 		result.append("<html><body>");

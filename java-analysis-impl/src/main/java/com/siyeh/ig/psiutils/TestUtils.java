@@ -20,9 +20,11 @@ import static com.intellij.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.MetaAnnotationUtil;
 import com.intellij.codeInsight.TestFrameworks;
@@ -59,13 +61,13 @@ public class TestUtils
 		return virtualFile != null && ProjectRootManager.getInstance(file.getProject()).getFileIndex().isInTestSourceContent(virtualFile);
 	}
 
-	public static boolean isPartOfJUnitTestMethod(@NotNull PsiElement element)
+	public static boolean isPartOfJUnitTestMethod(@Nonnull PsiElement element)
 	{
 		final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
 		return method != null && isJUnitTestMethod(method);
 	}
 
-	public static boolean isJUnit4BeforeOrAfterMethod(@NotNull PsiMethod method)
+	public static boolean isJUnit4BeforeOrAfterMethod(@Nonnull PsiMethod method)
 	{
 		return AnnotationUtil.isAnnotated(method, "org.junit.Before", CHECK_HIERARCHY) || AnnotationUtil.isAnnotated(method, "org.junit.After", CHECK_HIERARCHY);
 	}
@@ -192,12 +194,12 @@ public class TestUtils
 	/**
 	 * @return true if class is annotated with {@code @TestInstance(TestInstance.Lifecycle.PER_CLASS)}
 	 */
-	public static boolean testInstancePerClass(@NotNull PsiClass containingClass)
+	public static boolean testInstancePerClass(@Nonnull PsiClass containingClass)
 	{
 		return testInstancePerClass(containingClass, new HashSet<>());
 	}
 
-	private static boolean testInstancePerClass(@NotNull PsiClass containingClass, HashSet<PsiClass> classes)
+	private static boolean testInstancePerClass(@Nonnull PsiClass containingClass, HashSet<PsiClass> classes)
 	{
 		PsiAnnotation annotation = MetaAnnotationUtil.findMetaAnnotations(containingClass, Collections.singletonList(JUnitCommonClassNames.ORG_JUNIT_JUPITER_API_TEST_INSTANCE)).findFirst().orElse
 				(null);

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -158,7 +158,7 @@ public abstract class EvaluationDescriptor extends ValueDescriptorImpl
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Modifier getModifier()
 	{
 		return myModifier;
@@ -180,7 +180,7 @@ public abstract class EvaluationDescriptor extends ValueDescriptorImpl
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@NotNull String expression, @NotNull XModificationCallback callback)
+			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
 			{
 				final EvaluationDescriptor evaluationDescriptor = EvaluationDescriptor.this;
 				if(evaluationDescriptor.canSetValue())

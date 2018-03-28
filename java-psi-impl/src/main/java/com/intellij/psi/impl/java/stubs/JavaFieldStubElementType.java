@@ -17,8 +17,9 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -49,19 +50,19 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
 {
 	private static final int INITIALIZER_LENGTH_LIMIT = 1000;
 
-	public JavaFieldStubElementType(@NotNull @NonNls final String id)
+	public JavaFieldStubElementType(@Nonnull @NonNls final String id)
 	{
 		super(id);
 	}
 
 	@Override
-	public PsiField createPsi(@NotNull final PsiFieldStub stub)
+	public PsiField createPsi(@Nonnull final PsiFieldStub stub)
 	{
 		return getPsiFactory(stub).createField(stub);
 	}
 
 	@Override
-	public PsiField createPsi(@NotNull final ASTNode node)
+	public PsiField createPsi(@Nonnull final ASTNode node)
 	{
 		if(node instanceof EnumConstantElement)
 		{
@@ -137,8 +138,8 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
 	}
 
 	@Override
-	public void serialize(@NotNull final PsiFieldStub stub,
-			@NotNull final StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull final PsiFieldStub stub,
+			@Nonnull final StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getName());
 		TypeInfo.writeTYPE(dataStream, stub.getType(false));
@@ -146,9 +147,9 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
 		dataStream.writeByte(((PsiFieldStubImpl) stub).getFlags());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiFieldStub deserialize(@NotNull final StubInputStream dataStream,
+	public PsiFieldStub deserialize(@Nonnull final StubInputStream dataStream,
 			final StubElement parentStub) throws IOException
 	{
 		final StringRef name = dataStream.readName();
@@ -159,7 +160,7 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
 	}
 
 	@Override
-	public void indexStub(@NotNull final PsiFieldStub stub, @NotNull final IndexSink sink)
+	public void indexStub(@Nonnull final PsiFieldStub stub, @Nonnull final IndexSink sink)
 	{
 		final String name = stub.getName();
 		if(name != null)

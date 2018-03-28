@@ -17,7 +17,8 @@ package com.intellij.codeInsight.hint;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ExpressionTypeProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -30,25 +31,25 @@ import com.intellij.psi.SyntaxTraverser;
  */
 public class JavaTypeProvider extends ExpressionTypeProvider<PsiExpression>
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public String getInformationHint(@NotNull PsiExpression element)
+	public String getInformationHint(@Nonnull PsiExpression element)
 	{
 		PsiType type = element.getType();
 		String text = type == null ? "<unknown>" : type.getCanonicalText();
 		return StringUtil.escapeXml(text);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getErrorHint()
 	{
 		return "No expression found";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<PsiExpression> getExpressionsAt(@NotNull PsiElement elementAt)
+	public List<PsiExpression> getExpressionsAt(@Nonnull PsiElement elementAt)
 	{
 		return SyntaxTraverser.psiApi().parents(elementAt).filter(PsiExpression.class).toList();
 	}

@@ -23,11 +23,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -46,20 +44,20 @@ public class VariableOfTypeMacro extends Macro {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     final PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length == 0) return null;
     return new JavaPsiElementResult(vars[0]);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@NotNull Expression[] params, final ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, final ExpressionContext context) {
     final PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length < 2) return null;
     final Set<LookupElement> set = new LinkedHashSet<LookupElement>();
@@ -69,7 +67,7 @@ public class VariableOfTypeMacro extends Macro {
     return set.toArray(new LookupElement[set.size()]);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected PsiElement[] getVariables(Expression[] params, final ExpressionContext context) {
     if (params.length != 1) return null;
     final Result result = params[0].calculateResult(context);

@@ -18,9 +18,11 @@ package com.intellij.codeInspection.dataFlow.value;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiExpression;
@@ -54,7 +56,7 @@ public class DfaConstValue extends DfaValue
 			dfaFail = new DfaConstValue(ourThrowable, factory, null);
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		public DfaValue create(PsiLiteralExpression expr)
 		{
 			PsiType type = expr.getType();
@@ -70,7 +72,7 @@ public class DfaConstValue extends DfaValue
 			return createFromValue(value, type, null);
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		public DfaValue create(PsiVariable variable)
 		{
 			Object value = variable.computeConstantValue();
@@ -109,8 +111,8 @@ public class DfaConstValue extends DfaValue
 			return "TRUE".equals(name) ? Boolean.TRUE : "FALSE".equals(name) ? Boolean.FALSE : null;
 		}
 
-		@NotNull
-		public DfaConstValue createFromValue(Object value, final PsiType type, @Nullable PsiVariable constant)
+		@Nonnull
+		public DfaConstValue createFromValue(Object value, final PsiType type, @javax.annotation.Nullable PsiVariable constant)
 		{
 			if(value == Boolean.TRUE)
 			{
@@ -169,7 +171,7 @@ public class DfaConstValue extends DfaValue
 	@Nullable
 	private final PsiVariable myConstant;
 
-	private DfaConstValue(Object value, DfaValueFactory factory, @Nullable PsiVariable constant)
+	private DfaConstValue(Object value, DfaValueFactory factory, @javax.annotation.Nullable PsiVariable constant)
 	{
 		super(factory);
 		myValue = value;
@@ -191,7 +193,7 @@ public class DfaConstValue extends DfaValue
 		return myValue;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiVariable getConstant()
 	{
 		return myConstant;

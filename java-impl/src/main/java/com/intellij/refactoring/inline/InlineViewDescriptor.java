@@ -16,11 +16,12 @@
  */
 package com.intellij.refactoring.inline;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
 
 class InlineViewDescriptor implements UsageViewDescriptor{
 
@@ -30,7 +31,7 @@ class InlineViewDescriptor implements UsageViewDescriptor{
     myElement = element;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myElement};
   }

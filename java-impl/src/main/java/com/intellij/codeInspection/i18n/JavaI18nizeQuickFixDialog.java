@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -34,8 +35,8 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -79,9 +80,9 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
   @NonNls private static final String RESOURCE_BUNDLE_OPTION_KEY = "RESOURCE_BUNDLE";
   @NonNls public static final String PROPERTY_VALUE_ATTR = "PROPERTY_VALUE";
 
-  public JavaI18nizeQuickFixDialog(@NotNull Project project,
-                               @NotNull final PsiFile context,
-                               @Nullable final PsiLiteralExpression literalExpression,
+  public JavaI18nizeQuickFixDialog(@Nonnull Project project,
+                               @Nonnull final PsiFile context,
+                               @javax.annotation.Nullable final PsiLiteralExpression literalExpression,
                                String defaultPropertyValue,
                                DialogCustomization customization,
                                final boolean showJavaCodeInfo,

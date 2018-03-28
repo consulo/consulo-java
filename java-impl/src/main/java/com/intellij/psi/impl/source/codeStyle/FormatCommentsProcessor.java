@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
@@ -31,9 +32,9 @@ import com.intellij.psi.javadoc.PsiDocComment;
 
 public class FormatCommentsProcessor implements PreFormatProcessor
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public TextRange process(@NotNull final ASTNode element, @NotNull final TextRange range)
+	public TextRange process(@Nonnull final ASTNode element, @Nonnull final TextRange range)
 	{
 		PsiElement e = SourceTreeToPsiMap.treeElementToPsi(element);
 		assert e != null;
@@ -49,8 +50,8 @@ public class FormatCommentsProcessor implements PreFormatProcessor
 	/**
 	 * Formats PsiDocComments of current ASTNode element and all his children PsiDocComments
 	 */
-	@NotNull
-	private static TextRange formatCommentsInner(@NotNull Project project, @NotNull ASTNode element, @NotNull final TextRange markedRange)
+	@Nonnull
+	private static TextRange formatCommentsInner(@Nonnull Project project, @Nonnull ASTNode element, @Nonnull final TextRange markedRange)
 	{
 		TextRange resultTextRange = markedRange;
 		final PsiElement elementPsi = element.getPsi();

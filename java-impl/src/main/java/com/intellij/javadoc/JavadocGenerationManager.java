@@ -15,8 +15,9 @@
  */
 package com.intellij.javadoc;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.execution.ExecutionException;
@@ -37,7 +38,7 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
 	private final JavadocConfiguration myConfiguration = new JavadocConfiguration();
 	private final Project myProject;
 
-	public static JavadocGenerationManager getInstance(@NotNull Project project)
+	public static JavadocGenerationManager getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, JavadocGenerationManager.class);
 	}
@@ -59,7 +60,7 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
 		XmlSerializer.deserializeInto(myConfiguration, state);
 	}
 
-	@NotNull
+	@Nonnull
 	public JavadocConfiguration getConfiguration()
 	{
 		return myConfiguration;

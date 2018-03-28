@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.template.macro;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.template.*;
 import com.intellij.lang.LangBundle;
@@ -22,7 +24,6 @@ import com.intellij.psi.PsiClassInitializer;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
-import org.jetbrains.annotations.NotNull;
 
 public class MethodNameMacro extends Macro {
 
@@ -37,13 +38,13 @@ public class MethodNameMacro extends Macro {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
     while(place != null){
       if (place instanceof PsiMethod){

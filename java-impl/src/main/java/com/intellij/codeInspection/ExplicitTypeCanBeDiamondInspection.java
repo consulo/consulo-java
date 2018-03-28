@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -22,7 +24,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiDiamondTypeUtil;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * User: anna
@@ -32,14 +33,14 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
   public static final Logger LOG = Logger.getInstance("#" + ExplicitTypeCanBeDiamondInspection.class.getName());
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getGroupDisplayName() {
     return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Explicit type can be replaced with <>";
@@ -50,15 +51,15 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getShortName() {
     return "Convert2Diamond";
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       @Override
       public void visitNewExpression(PsiNewExpression expression) {
@@ -75,20 +76,20 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
   }
 
   private static class ReplaceWithDiamondFix implements LocalQuickFix, HighPriorityAction {
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return "Replace with <>";
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiDiamondTypeUtil.replaceExplicitWithDiamond(descriptor.getPsiElement());
     }
   }

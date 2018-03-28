@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a reference to some module inside a Java module declaration.
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface PsiJavaModuleReferenceElement extends PsiElement
 {
-	@NotNull
+	@Nonnull
 	String getReferenceText();
 
 	@Nullable

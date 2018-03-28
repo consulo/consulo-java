@@ -20,7 +20,7 @@ import static com.intellij.psi.formatter.java.JavaFormatterUtil.getWrapType;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
@@ -106,7 +106,7 @@ class ChainMethodCallsBlockBuilder
 		return false;
 	}
 
-	private Wrap createCallChunkWrap(int chunkIndex, @NotNull List<ChainedCallChunk> methodCall)
+	private Wrap createCallChunkWrap(int chunkIndex, @Nonnull List<ChainedCallChunk> methodCall)
 	{
 		if(mySettings.WRAP_FIRST_METHOD_IN_CALL_CHAIN)
 		{
@@ -125,13 +125,13 @@ class ChainMethodCallsBlockBuilder
 		return mySettings.ALIGN_MULTILINE_CHAINED_METHODS && !currentMethodChunk.isEmpty() && !chunkIsFirstInChainMethodCall(currentMethodChunk, methodCall);
 	}
 
-	private static boolean chunkIsFirstInChainMethodCall(@NotNull ChainedCallChunk callChunk, @NotNull List<ChainedCallChunk> methodCall)
+	private static boolean chunkIsFirstInChainMethodCall(@Nonnull ChainedCallChunk callChunk, @Nonnull List<ChainedCallChunk> methodCall)
 	{
 		return !methodCall.isEmpty() && callChunk == methodCall.get(0);
 	}
 
-	@NotNull
-	private static List<ChainedCallChunk> splitMethodCallOnChunksByDots(@NotNull List<ASTNode> nodes)
+	@Nonnull
+	private static List<ChainedCallChunk> splitMethodCallOnChunksByDots(@Nonnull List<ASTNode> nodes)
 	{
 		List<ChainedCallChunk> result = new ArrayList<>();
 
@@ -157,13 +157,13 @@ class ChainMethodCallsBlockBuilder
 		return result;
 	}
 
-	private Alignment createCallChunkAlignment(int chunkIndex, @NotNull List<ChainedCallChunk> methodCall)
+	private Alignment createCallChunkAlignment(int chunkIndex, @Nonnull List<ChainedCallChunk> methodCall)
 	{
 		ChainedCallChunk current = methodCall.get(chunkIndex);
 		return shouldAlignMethod(current, methodCall) ? AbstractJavaBlock.createAlignment(mySettings.ALIGN_MULTILINE_CHAINED_METHODS, null) : null;
 	}
 
-	private static boolean isMethodCall(@NotNull ChainedCallChunk callChunk)
+	private static boolean isMethodCall(@Nonnull ChainedCallChunk callChunk)
 	{
 		List<ASTNode> nodes = callChunk.nodes;
 		return nodes.size() >= 3 && nodes.get(2).getElementType() == JavaElementType.EXPRESSION_LIST;
@@ -172,10 +172,10 @@ class ChainMethodCallsBlockBuilder
 
 class ChainedCallChunk
 {
-	@NotNull
+	@Nonnull
 	final List<ASTNode> nodes;
 
-	ChainedCallChunk(@NotNull List<ASTNode> nodes)
+	ChainedCallChunk(@Nonnull List<ASTNode> nodes)
 	{
 		this.nodes = nodes;
 	}

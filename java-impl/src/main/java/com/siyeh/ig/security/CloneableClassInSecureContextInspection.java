@@ -23,16 +23,16 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class CloneableClassInSecureContextInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("cloneable.class.in.secure.context.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("cloneable.class.in.secure.context.problem.descriptor");
   }
@@ -44,7 +44,7 @@ public class CloneableClassInSecureContextInspection extends BaseInspection {
   private static class CloneableClassInSecureContextVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass instanceof PsiTypeParameter) {
         return;
       }

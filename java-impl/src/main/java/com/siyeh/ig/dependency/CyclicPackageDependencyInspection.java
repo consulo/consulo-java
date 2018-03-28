@@ -23,22 +23,21 @@ import com.intellij.codeInspection.reference.RefEntity;
 import com.intellij.codeInspection.reference.RefPackage;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class CyclicPackageDependencyInspection extends BaseGlobalInspection {
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "cyclic.package.dependency.display.name");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity,
     AnalysisScope analysisScope,

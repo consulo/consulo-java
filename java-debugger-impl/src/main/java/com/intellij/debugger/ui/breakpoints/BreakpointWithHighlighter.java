@@ -18,8 +18,8 @@ package com.intellij.debugger.ui.breakpoints;
 import javax.swing.Icon;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
@@ -59,14 +59,14 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.BreakpointWithHighlighter");
 
-	@Nullable
+	@javax.annotation.Nullable
 	private SourcePosition mySourcePosition;
 
 	private boolean myVisible = true;
 	private volatile Icon myIcon = getSetIcon(false);
-	@Nullable
+	@javax.annotation.Nullable
 	private String myClassName;
-	@Nullable
+	@javax.annotation.Nullable
 	private String myPackageName;
 	@Nullable
 	private String myInvalidMessage;
@@ -114,14 +114,14 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return super.getShortClassName();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getPackageName()
 	{
 		return myPackageName;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public BreakpointWithHighlighter init()
 	{
 		if(!isValid())
@@ -145,7 +145,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		myPackageName = JVMNameUtil.getSourcePositionPackageDisplayName(debugProcess, getSourcePosition());
 	}
 
-	private Icon calcIcon(@Nullable DebugProcessImpl debugProcess)
+	private Icon calcIcon(@javax.annotation.Nullable DebugProcessImpl debugProcess)
 	{
 		final boolean muted = debugProcess != null && isMuted(debugProcess);
 		if(!isEnabled())
@@ -188,7 +188,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return getSetIcon(muted);
 	}
 
-	protected BreakpointWithHighlighter(@NotNull Project project, XBreakpoint xBreakpoint)
+	protected BreakpointWithHighlighter(@Nonnull Project project, XBreakpoint xBreakpoint)
 	{
 		//for persistency
 		super(project, xBreakpoint);
@@ -206,14 +206,14 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return ReadAction.compute(() -> sourcePosition != null && sourcePosition.getFile().isValid()).booleanValue();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public SourcePosition getSourcePosition()
 	{
 		return mySourcePosition;
 	}
 
 	@SuppressWarnings("HardCodedStringLiteral")
-	@NotNull
+	@Nonnull
 	public String getDescription()
 	{
 		final StringBuilder buf = new StringBuilder();
@@ -259,7 +259,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	static void createLocationBreakpointRequest(@NotNull FilteredRequestor requestor, @Nullable Location location, @NotNull DebugProcessImpl debugProcess)
+	static void createLocationBreakpointRequest(@Nonnull FilteredRequestor requestor, @javax.annotation.Nullable Location location, @Nonnull DebugProcessImpl debugProcess)
 	{
 		if(location != null)
 		{
@@ -269,7 +269,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	}
 
 	@Override
-	public void createRequest(@NotNull DebugProcessImpl debugProcess)
+	public void createRequest(@Nonnull DebugProcessImpl debugProcess)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		// check is this breakpoint is enabled, vm reference is valid and there're no requests created yet
@@ -295,7 +295,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		updateUI();
 	}
 
-	protected boolean isMuted(@NotNull final DebugProcessImpl debugProcess)
+	protected boolean isMuted(@Nonnull final DebugProcessImpl debugProcess)
 	{
 		return debugProcess.areBreakpointsMuted();
 	}
@@ -364,7 +364,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	public boolean isAt(@NotNull Document document, int offset)
+	public boolean isAt(@Nonnull Document document, int offset)
 	{
 		final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
 		int line = document.getLineNumber(offset);
@@ -425,7 +425,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	}
 
 	@Override
-	public void readExternal(@NotNull Element breakpointNode) throws InvalidDataException
+	public void readExternal(@Nonnull Element breakpointNode) throws InvalidDataException
 	{
 		super.readExternal(breakpointNode);
 		//noinspection HardCodedStringLiteral

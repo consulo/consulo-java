@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -36,7 +37,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.DataManager;
@@ -68,7 +68,7 @@ public class NullableNotNullDialog extends DialogWrapper
 	private AnnotationsPanel myNullablePanel;
 	private AnnotationsPanel myNotNullPanel;
 
-	public NullableNotNullDialog(@NotNull Project project)
+	public NullableNotNullDialog(@Nonnull Project project)
 	{
 		super(project, true);
 		myProject = project;
@@ -149,7 +149,7 @@ public class NullableNotNullDialog extends DialogWrapper
 			myList.setCellRenderer(new ColoredListCellRenderer()
 			{
 				@Override
-				protected void customizeCellRenderer(@NotNull JList list, Object value, int index, boolean selected, boolean hasFocus)
+				protected void customizeCellRenderer(@Nonnull JList list, Object value, int index, boolean selected, boolean hasFocus)
 				{
 					append((String) value, SimpleTextAttributes.REGULAR_ATTRIBUTES);
 					if(value.equals(myDefaultAnnotation))

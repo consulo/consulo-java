@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.util.ArrayFactory;
 
 /**
@@ -44,7 +44,7 @@ public interface PsiTypeElement extends PsiElement, PsiAnnotationOwner
 	 * @see PsiParameter#getType()
 	 * @see PsiVariable#getType()
 	 */
-	@NotNull
+	@Nonnull
 	PsiType getType();
 
 	/**
@@ -54,7 +54,7 @@ public interface PsiTypeElement extends PsiElement, PsiAnnotationOwner
 	 * @return the referenced element instance, or null if the type element references
 	 * a primitive type.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiJavaCodeReferenceElement getInnermostComponentReferenceElement();
 
 

@@ -15,24 +15,25 @@
  */
 package com.siyeh.ig.classmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassInitializer;
 import com.intellij.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ClassComplexityInspection
   extends ClassMetricInspection {
 
   private static final int DEFAULT_COMPLEXITY_LIMIT = 80;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyComplexClass";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "overly.complex.class.display.name");
@@ -47,7 +48,7 @@ public class ClassComplexityInspection
       "cyclomatic.complexity.limit.option");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer totalComplexity = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -61,7 +62,7 @@ public class ClassComplexityInspection
   private class ClassComplexityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // note: no call to super
       final int totalComplexity = calculateTotalComplexity(aClass);
       if (totalComplexity <= getLimit()) {

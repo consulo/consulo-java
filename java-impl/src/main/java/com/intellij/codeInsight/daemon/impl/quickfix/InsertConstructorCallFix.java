@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.undo.UndoUtil;
@@ -31,41 +32,41 @@ public class InsertConstructorCallFix implements IntentionAction, HighPriorityAc
 	protected final PsiMethod myConstructor;
 	private final String myCall;
 
-	public InsertConstructorCallFix(@NotNull PsiMethod constructor, String call)
+	public InsertConstructorCallFix(@Nonnull PsiMethod constructor, String call)
 	{
 		myConstructor = constructor;
 		myCall = call;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		return JavaQuickFixBundle.message("insert.super.constructor.call.text", myCall);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("insert.super.constructor.call.family");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return myConstructor.isValid() && myConstructor.getBody() != null && myConstructor.getBody().getLBrace() != null && myConstructor.getManager().isInProject(myConstructor);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiElement getElementToMakeWritable(@NotNull PsiFile file)
+	public PsiElement getElementToMakeWritable(@Nonnull PsiFile file)
 	{
 		return myConstructor;
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file)
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		PsiStatement superCall = JavaPsiFacade.getInstance(myConstructor.getProject()).getElementFactory().createStatementFromText(myCall, null);
 

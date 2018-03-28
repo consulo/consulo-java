@@ -1,7 +1,8 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 class B {
-     @NotNull
+     @Nonnull
      B b;
 
     public B getB() {
@@ -12,7 +13,7 @@ class B {
         this.b = b;
     }
 
-        @NotNull
+        @Nonnull
         private String bug = "true";
 
         public boolean getBug() {
@@ -20,7 +21,8 @@ class B {
         }
 }
 class C {
-  @NotNull C c;
+  @Nonnull
+  C c;
 
   C(C c) {
     this.c = c;
@@ -39,8 +41,9 @@ class C {
     this.c = c;
   }
 
-  @NotNull C c1;
-  @org.jetbrains.annotations.Nullable
+  @Nonnull
+  C c1;
+  @Nullable
   public C getC1() {
     if (c1 != null) {
       return null;
@@ -58,7 +61,8 @@ class D {
 }
 
 class E {
-  final @NotNull C c;
+  final @Nonnull
+  C c;
 
   E(C c) {
     this.c = c;

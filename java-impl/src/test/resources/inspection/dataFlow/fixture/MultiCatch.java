@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +21,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 class Multicatch {
-  @NotNull
+  @Nonnull
   public Map test(String name) {
     try (InputStream s = build()) {
       return <warning descr="'null' is returned by the method declared as @NotNull">null</warning>;

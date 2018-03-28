@@ -15,11 +15,11 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.HelpID;
@@ -41,14 +41,14 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
 		super("java-wildcard-method", DebuggerBundle.message("method.breakpoints.tab.title"));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getEnabledIcon()
 	{
 		return AllIcons.Debugger.Db_method_breakpoint;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getDisabledIcon()
 	{

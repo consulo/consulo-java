@@ -17,7 +17,8 @@ package com.intellij.lang.java.lexer;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lexer.DocCommentTokenTypes;
 import com.intellij.lexer.JavaDocTokenTypes;
 import com.intellij.lexer.LexerBase;
@@ -29,7 +30,7 @@ import com.intellij.util.text.CharArrayUtil;
 
 public class JavaDocLexer extends MergingLexerAdapter
 {
-	public JavaDocLexer(@NotNull LanguageLevel level)
+	public JavaDocLexer(@Nonnull LanguageLevel level)
 	{
 		this(JavaDocTokenTypes.INSTANCE, level.isAtLeast(LanguageLevel.JDK_1_5));
 	}
@@ -59,7 +60,7 @@ public class JavaDocLexer extends MergingLexerAdapter
 		}
 
 		@Override
-		public final void start(@NotNull CharSequence buffer, int startOffset, int endOffset, int initialState)
+		public final void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState)
 		{
 			myBuffer = buffer;
 			myBufferIndex = startOffset;
@@ -75,7 +76,7 @@ public class JavaDocLexer extends MergingLexerAdapter
 			return myState;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public CharSequence getBufferSequence()
 		{

@@ -23,7 +23,7 @@ package com.intellij.ide.navigationToolbar;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;

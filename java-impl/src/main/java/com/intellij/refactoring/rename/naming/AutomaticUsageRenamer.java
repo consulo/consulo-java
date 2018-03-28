@@ -18,8 +18,8 @@ package com.intellij.refactoring.rename.naming;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.usages.RenameableUsage;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -104,7 +104,7 @@ public abstract class AutomaticUsageRenamer<T> {
     return myRenames;
   }
 
-  public void setRename(T element, @NotNull String replacement) {
+  public void setRename(T element, @Nonnull String replacement) {
     myRenames.put(element, replacement);
   }
 

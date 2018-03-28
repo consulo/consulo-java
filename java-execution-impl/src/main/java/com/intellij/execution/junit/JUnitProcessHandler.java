@@ -21,7 +21,7 @@ import com.intellij.execution.junit2.segments.Extractor;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.openapi.util.Disposer;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.Reader;
 import java.nio.charset.Charset;
@@ -34,7 +34,7 @@ public class JUnitProcessHandler extends OSProcessHandler {
   private final Extractor myErr;
   private final Charset myCharset;
 
-  public JUnitProcessHandler(@NotNull Process process, final String commandLine, @NotNull Charset charset) {
+  public JUnitProcessHandler(@Nonnull Process process, final String commandLine, @Nonnull Charset charset) {
     super(process, commandLine);
     myOut = new Extractor(getProcess().getInputStream(), charset);
     myErr = new Extractor(getProcess().getErrorStream(), charset);

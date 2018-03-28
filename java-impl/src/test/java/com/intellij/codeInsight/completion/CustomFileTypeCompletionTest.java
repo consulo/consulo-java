@@ -3,7 +3,7 @@ package com.intellij.codeInsight.completion;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileTypes.MockLanguageFileType;
 import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class CustomFileTypeCompletionTest extends LightCompletionTestCase {
   private static final String BASE_PATH = "/codeInsight/completion/customFileType/";
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

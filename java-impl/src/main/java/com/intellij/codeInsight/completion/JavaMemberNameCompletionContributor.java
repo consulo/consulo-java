@@ -27,8 +27,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
@@ -70,7 +70,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 	static final int MAX_SCOPE_SIZE_TO_SEARCH_UNRESOLVED = 50000;
 
 	@Override
-	public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result)
+	public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result)
 	{
 		if(parameters.getCompletionType() != CompletionType.BASIC && parameters.getCompletionType() != CompletionType.SMART)
 		{

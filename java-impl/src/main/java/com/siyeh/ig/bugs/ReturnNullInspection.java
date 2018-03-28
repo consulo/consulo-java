@@ -29,8 +29,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -47,19 +47,19 @@ public class ReturnNullInspection extends BaseInspection {
 
   @Override
   @Pattern("[a-zA-Z_0-9.-]+")
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ReturnOfNull";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.of.null.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "return.of.null.problem.descriptor");
@@ -105,7 +105,7 @@ public class ReturnNullInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @NotNull PsiLiteralExpression value) {
+      @Nonnull PsiLiteralExpression value) {
       super.visitLiteralExpression(value);
       final String text = value.getText();
       if (!PsiKeyword.NULL.equals(text)) {

@@ -20,8 +20,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class PsiLabelReference implements PsiReference{
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getCanonicalText(){
       return getElement().getText();
     }
@@ -82,7 +82,7 @@ public class PsiLabelReference implements PsiReference{
     }
 
     @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException{
+    public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException{
       if(element instanceof PsiLabeledStatement){
         myIdentifier = (PsiIdentifier) PsiImplUtil.setName(myIdentifier, ((PsiLabeledStatement)element).getName());
         return myIdentifier;
@@ -96,7 +96,7 @@ public class PsiLabelReference implements PsiReference{
     }
 
   @Override
-  @NotNull
+  @Nonnull
   public String[] getVariants() {
     final List<String> result = new ArrayList<String>();
     PsiElement context = myStatement;

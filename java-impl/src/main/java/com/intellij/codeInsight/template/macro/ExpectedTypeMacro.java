@@ -22,13 +22,10 @@ import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.template.*;
 import com.intellij.codeInsight.template.impl.JavaTemplateUtil;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.text.BlockSupport;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -46,20 +43,20 @@ public class ExpectedTypeMacro extends Macro {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultValue() {
     return "A";
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     PsiType[] types = getExpectedTypes(params, context);
     if (types == null || types.length == 0) return null;
     return new PsiTypeResult(types[0], context.getProject());
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@NotNull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
     PsiType[] types = getExpectedTypes(params, context);
     if (types == null || types.length < 2) return null;
     Set<LookupElement> set = new LinkedHashSet<LookupElement>();
@@ -69,7 +66,7 @@ public class ExpectedTypeMacro extends Macro {
     return set.toArray(new LookupElement[set.size()]);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiType[] getExpectedTypes(Expression[] params, final ExpressionContext context) {
     if (params.length != 0) return null;
 

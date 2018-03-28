@@ -21,7 +21,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.rt.execution.junit.segments.Packet;
 import com.intellij.rt.execution.junit.segments.PacketProcessor;
 import com.intellij.rt.execution.junit.segments.SegmentedStream;
@@ -32,7 +33,7 @@ public class SegmentedInputStream extends InputStream
 	private PacketProcessor myEventsDispatcher;
 	private int myStartupPassed = 0;
 
-	public SegmentedInputStream(@NotNull InputStream sourceStream, @NotNull Charset charset)
+	public SegmentedInputStream(@Nonnull InputStream sourceStream, @Nonnull Charset charset)
 	{
 		mySourceStream = new PushReader(new BufferedReader(new InputStreamReader(sourceStream, charset)));
 	}

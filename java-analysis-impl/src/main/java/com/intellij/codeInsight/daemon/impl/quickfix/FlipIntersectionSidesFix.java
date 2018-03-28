@@ -17,7 +17,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -48,7 +49,7 @@ public class FlipIntersectionSidesFix implements IntentionAction
 	private final PsiTypeElement myCastTypeElement;
 
 	public FlipIntersectionSidesFix(String className,
-			@NotNull List<PsiTypeElement> conjList,
+			@Nonnull List<PsiTypeElement> conjList,
 			PsiTypeElement conjunct,
 			PsiTypeElement castTypeElement)
 	{
@@ -59,14 +60,14 @@ public class FlipIntersectionSidesFix implements IntentionAction
 		myCastTypeElement = castTypeElement;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
 		return "Move '" + myClassName + "' to the beginning";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -74,7 +75,7 @@ public class FlipIntersectionSidesFix implements IntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		for(PsiTypeElement typeElement : myConjuncts)
 		{
@@ -87,7 +88,7 @@ public class FlipIntersectionSidesFix implements IntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		if(!FileModificationService.getInstance().prepareFileForWrite(file))
 		{

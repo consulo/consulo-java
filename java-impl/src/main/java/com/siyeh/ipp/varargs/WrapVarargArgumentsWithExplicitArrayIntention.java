@@ -15,23 +15,24 @@
  */
 package com.siyeh.ipp.varargs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class WrapVarargArgumentsWithExplicitArrayIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new VarargArgumentsPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiMethodCallExpression methodCallExpression =
       PsiTreeUtil.getParentOfType(element,

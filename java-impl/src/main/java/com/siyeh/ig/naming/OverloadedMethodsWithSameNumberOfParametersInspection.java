@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -31,13 +31,13 @@ public class OverloadedMethodsWithSameNumberOfParametersInspection extends BaseI
   public boolean ignoreInconvertibleTypes = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overloaded.methods.with.same.number.parameters.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("overloaded.methods.with.same.number.parameters.problem.descriptor");
   }
@@ -56,7 +56,7 @@ public class OverloadedMethodsWithSameNumberOfParametersInspection extends BaseI
   private class OverloadedMethodsWithSameNumberOfParametersVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (method.isConstructor()) {
         return;
       }

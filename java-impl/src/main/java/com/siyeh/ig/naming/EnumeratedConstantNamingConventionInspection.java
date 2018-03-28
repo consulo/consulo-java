@@ -15,12 +15,13 @@
  */
 package com.siyeh.ig.naming;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiEnumConstant;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
 
 public class EnumeratedConstantNamingConventionInspection extends ConventionInspection {
 
@@ -28,7 +29,7 @@ public class EnumeratedConstantNamingConventionInspection extends ConventionInsp
   private static final int DEFAULT_MAX_LENGTH = 32;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("enumerated.constant.naming.convention.display.name");
   }
@@ -44,7 +45,7 @@ public class EnumeratedConstantNamingConventionInspection extends ConventionInsp
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {

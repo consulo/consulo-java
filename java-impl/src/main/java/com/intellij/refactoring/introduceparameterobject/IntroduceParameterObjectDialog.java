@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -30,7 +31,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.TreeJavaClassChooserDialog;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.help.HelpManager;
@@ -230,22 +230,22 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     return  myInnerClassNameTextField.getText().trim();
   }
 
-  @NotNull
+  @Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }
 
-  @NotNull
+  @Nonnull
   public String getExistingClassName() {
     return existingClassField.getText().trim();
   }
 
-  @NotNull
+  @Nonnull
   public String getClassName() {
     return classNameField.getText().trim();
   }
 
-  @NotNull
+  @Nonnull
   public List<PsiParameter> getParametersToExtract() {
     final List<PsiParameter> out = new ArrayList<PsiParameter>();
     for (VariableData info : parameterInfo) {

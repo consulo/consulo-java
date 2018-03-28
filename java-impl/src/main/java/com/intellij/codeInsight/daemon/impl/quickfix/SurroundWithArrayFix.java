@@ -22,9 +22,11 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -48,19 +50,19 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return "Surround with array initialization";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     return getExpression(element) != null;
   }
 
@@ -117,7 +119,7 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     final PsiExpression expression = getExpression(element);
@@ -127,7 +129,7 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
   }
 
   @NonNls
-  private static String getArrayCreation(@NotNull PsiExpression expression) {
+  private static String getArrayCreation(@Nonnull PsiExpression expression) {
     final PsiType expressionType = expression.getType();
     assert expressionType != null;
     return "new " + expressionType.getCanonicalText() + "[]{" + expression.getText()+ "}";

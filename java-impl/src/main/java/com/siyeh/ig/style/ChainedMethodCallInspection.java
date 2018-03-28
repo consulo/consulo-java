@@ -25,8 +25,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.IntroduceVariableFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -39,13 +39,13 @@ public class ChainedMethodCallInspection extends BaseInspection {
   public boolean m_ignoreThisSuperCalls = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("chained.method.call.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("chained.method.call.problem.descriptor");
   }
@@ -87,7 +87,7 @@ public class ChainedMethodCallInspection extends BaseInspection {
   private class ChainedMethodCallVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression reference = expression.getMethodExpression();
       final PsiExpression qualifier = reference.getQualifierExpression();

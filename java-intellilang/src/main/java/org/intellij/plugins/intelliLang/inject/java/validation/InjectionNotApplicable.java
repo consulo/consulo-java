@@ -15,6 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.inject.java.validation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
@@ -26,11 +28,10 @@ import org.intellij.plugins.intelliLang.pattern.PatternValidator;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.intellij.plugins.intelliLang.util.RemoveAnnotationFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class InjectionNotApplicable extends LocalInspectionTool {
 
-  @NotNull
+  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
@@ -39,18 +40,18 @@ public class InjectionNotApplicable extends LocalInspectionTool {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Injection Annotation not applicable";
   }
 
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final String annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
 
@@ -90,7 +91,7 @@ public class InjectionNotApplicable extends LocalInspectionTool {
     holder.registerProblem(annotation, "Language Injection is only applicable to elements of type String", new RemoveAnnotationFix(this));
   }
 
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "InjectionNotApplicable";

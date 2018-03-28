@@ -34,8 +34,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.Query;
 import com.intellij.util.containers.BidirectionalMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
   @NonNls private static final String SHORT_NAME = "RedundantThrows";
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
                                                 AnalysisScope scope,
                                                 InspectionManager manager,
@@ -126,10 +125,10 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
   protected boolean queryExternalUsagesRequests(final RefManager manager, final GlobalJavaInspectionContext globalContext,
                                                 final ProblemDescriptionsProcessor processor) {
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@NotNull RefEntity refEntity) {
+      @Override public void visitElement(@Nonnull RefEntity refEntity) {
         if (processor.getDescriptions(refEntity) != null) {
           refEntity.accept(new RefJavaVisitor() {
-            @Override public void visitMethod(@NotNull final RefMethod refMethod) {
+            @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
               globalContext.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor() {
                 @Override
                 public boolean process(PsiMethod derivedMethod) {
@@ -147,19 +146,19 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
@@ -177,13 +176,13 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
 
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public QuickFix getQuickFix(String hint) {
     return getFix(null, hint);
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public String getHint(final QuickFix fix) {
     final List<String> hints = myQuickFixes.getKeysByValue(fix);
     LOG.assertTrue(hints != null && hints.size() == 1);
@@ -200,13 +199,13 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.redundant.throws.remove.quickfix");
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       if (myProcessor != null) {
         RefElement refElement = (RefElement)myProcessor.getElement(descriptor);
         if (refElement instanceof RefMethod && refElement.isValid()) {
@@ -226,14 +225,14 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
-    private void removeExcessiveThrows(@Nullable RefMethod refMethod, @Nullable final PsiModifierListOwner element, final CommonProblemDescriptor[] problems) {
+    private void removeExcessiveThrows(@javax.annotation.Nullable RefMethod refMethod, @javax.annotation.Nullable final PsiModifierListOwner element, final CommonProblemDescriptor[] problems) {
       try {
-        @Nullable final PsiMethod psiMethod;
+        @javax.annotation.Nullable final PsiMethod psiMethod;
         if (element == null) {
           LOG.assertTrue(refMethod != null);
           psiMethod = (PsiMethod)refMethod.getElement();

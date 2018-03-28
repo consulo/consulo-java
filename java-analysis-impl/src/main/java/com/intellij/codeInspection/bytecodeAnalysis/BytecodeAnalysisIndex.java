@@ -23,8 +23,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -52,25 +52,25 @@ public class BytecodeAnalysisIndex extends FileBasedIndexExtension<Bytes, HEquat
   private static final int ourInternalVersion = 9;
   private static final boolean ourEnabled = SystemProperties.getBooleanProperty("idea.enable.bytecode.contract.inference", true);
 
-  @NotNull
+  @Nonnull
   @Override
   public ID<Bytes, HEquations> getName() {
     return NAME;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public DataIndexer<Bytes, HEquations, FileContent> getIndexer() {
     return INDEXER;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public KeyDescriptor<Bytes> getKeyDescriptor() {
     return KEY_DESCRIPTOR;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public DataExternalizer<HEquations> getValueExternalizer() {
     return myExternalizer;
@@ -81,12 +81,12 @@ public class BytecodeAnalysisIndex extends FileBasedIndexExtension<Bytes, HEquat
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return new DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE) {
       @Override
-      public boolean acceptInput(@Nullable Project project, @NotNull VirtualFile file) {
+      public boolean acceptInput(@javax.annotation.Nullable Project project, @Nonnull VirtualFile file) {
         return ourEnabled && super.acceptInput(project, file);
       }
     };
@@ -108,12 +108,12 @@ public class BytecodeAnalysisIndex extends FileBasedIndexExtension<Bytes, HEquat
   private static class HKeyDescriptor implements KeyDescriptor<Bytes>, DifferentSerializableBytesImplyNonEqualityPolicy {
 
     @Override
-    public void save(@NotNull DataOutput out, Bytes value) throws IOException {
+    public void save(@Nonnull DataOutput out, Bytes value) throws IOException {
       out.write(value.bytes);
     }
 
     @Override
-    public Bytes read(@NotNull DataInput in) throws IOException {
+    public Bytes read(@Nonnull DataInput in) throws IOException {
       byte[] bytes = new byte[BytecodeAnalysisConverter.HASH_SIZE];
       in.readFully(bytes);
       return new Bytes(bytes);
@@ -135,7 +135,7 @@ public class BytecodeAnalysisIndex extends FileBasedIndexExtension<Bytes, HEquat
    */
   public static class HEquationsExternalizer implements DataExternalizer<HEquations> {
     @Override
-    public void save(@NotNull DataOutput out, HEquations eqs) throws IOException {
+    public void save(@Nonnull DataOutput out, HEquations eqs) throws IOException {
       out.writeBoolean(eqs.stable);
       DataInputOutputUtil.writeINT(out, eqs.results.size());
       for (DirectionResultPair pair : eqs.results) {
@@ -211,7 +211,7 @@ public class BytecodeAnalysisIndex extends FileBasedIndexExtension<Bytes, HEquat
     }
 
     @Override
-    public HEquations read(@NotNull DataInput in) throws IOException {
+    public HEquations read(@Nonnull DataInput in) throws IOException {
       boolean stable = in.readBoolean();
       int size = DataInputOutputUtil.readINT(in);
       ArrayList<DirectionResultPair> results = new ArrayList<DirectionResultPair>(size);

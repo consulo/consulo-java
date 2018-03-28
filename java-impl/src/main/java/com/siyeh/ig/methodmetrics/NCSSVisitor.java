@@ -15,19 +15,20 @@
  */
 package com.siyeh.ig.methodmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 class NCSSVisitor extends JavaRecursiveElementVisitor {
   private int m_statementCount = 0;
 
   @Override
-  public void visitAnonymousClass(@NotNull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
     // to call to super, to keep this from drilling down
   }
 
   @Override
-  public void visitStatement(@NotNull PsiStatement statement) {
+  public void visitStatement(@Nonnull PsiStatement statement) {
     super.visitStatement(statement);
     if (statement instanceof PsiEmptyStatement ||
         statement instanceof PsiBlockStatement) {

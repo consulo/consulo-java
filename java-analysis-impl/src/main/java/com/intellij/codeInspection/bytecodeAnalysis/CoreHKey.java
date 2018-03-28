@@ -18,15 +18,15 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 final class CoreHKey
 {
-	@NotNull
+	@Nonnull
 	final byte[] key;
 	final int dirKey;
 
-	CoreHKey(@NotNull byte[] key, int dirKey)
+	CoreHKey(@Nonnull byte[] key, int dirKey)
 	{
 		this.key = key;
 		this.dirKey = dirKey;

@@ -38,8 +38,8 @@ import com.intellij.util.Query;
 import com.intellij.util.containers.BidirectionalMap;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,11 +64,11 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
 
   @Override
   @Nullable
-  public CommonProblemDescriptor[] checkElement(@NotNull RefEntity refEntity,
-                                                @NotNull AnalysisScope scope,
-                                                @NotNull InspectionManager manager,
-                                                @NotNull GlobalInspectionContext globalContext,
-                                                @NotNull ProblemDescriptionsProcessor processor) {
+  public CommonProblemDescriptor[] checkElement(@Nonnull RefEntity refEntity,
+                                                @Nonnull AnalysisScope scope,
+                                                @Nonnull InspectionManager manager,
+                                                @Nonnull GlobalInspectionContext globalContext,
+                                                @Nonnull ProblemDescriptionsProcessor processor) {
     if (!(refEntity instanceof RefMethod)) {
       return null;
     }
@@ -176,7 +176,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static RefMethod findSuperWithBody(RefMethod refMethod) {
     for (RefMethod refSuper : refMethod.getSuperMethods()) {
       if (refSuper.hasBody()) return refSuper;
@@ -203,14 +203,14 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
   }
 
   @Override
-  protected boolean queryExternalUsagesRequests(@NotNull final RefManager manager,
-                                                @NotNull final GlobalJavaInspectionContext context,
-                                                @NotNull final ProblemDescriptionsProcessor descriptionsProcessor) {
+  protected boolean queryExternalUsagesRequests(@Nonnull final RefManager manager,
+                                                @Nonnull final GlobalJavaInspectionContext context,
+                                                @Nonnull final ProblemDescriptionsProcessor descriptionsProcessor) {
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@NotNull RefEntity refEntity) {
+      @Override public void visitElement(@Nonnull RefEntity refEntity) {
         if (refEntity instanceof RefElement && descriptionsProcessor.getDescriptions(refEntity) != null) {
           refEntity.accept(new RefJavaVisitor() {
-            @Override public void visitMethod(@NotNull final RefMethod refMethod) {
+            @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
               context.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor() {
                 @Override
                 public boolean process(PsiMethod derivedMethod) {
@@ -233,25 +233,25 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
 
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
 
   @Override
-  public void writeSettings(@NotNull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     if (!EXCLUDE_ANNOS.isEmpty()) {
       super.writeSettings(node);
     }
@@ -268,7 +268,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
   }
 
   @Override
-  public String getHint(@NotNull final QuickFix fix) {
+  public String getHint(@Nonnull final QuickFix fix) {
     final List<Boolean> list = myQuickFixes.getKeysByValue(fix);
     if (list != null) {
       LOG.assertTrue(list.size() == 1);
@@ -278,7 +278,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public LocalQuickFix getQuickFix(final String hint) {
     return new DeleteMethodIntention(hint);
   }
@@ -302,19 +302,19 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return QUICK_FIX_NAME;
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return QUICK_FIX_NAME;
     }
 
     @Override
-    public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
       final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class, false);
       if (psiMethod != null) {
         final List<PsiElement> psiElements = new ArrayList<PsiElement>();
@@ -353,18 +353,18 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return QUICK_FIX_NAME;
     }
 
     @Override
-    public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
       applyFix(project, new ProblemDescriptor[]{descriptor}, new ArrayList<PsiElement>(), null);
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
@@ -385,8 +385,8 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
     }
 
     @Override
-    public void applyFix(@NotNull final Project project,
-                         @NotNull final CommonProblemDescriptor[] descriptors,
+    public void applyFix(@Nonnull final Project project,
+                         @Nonnull final CommonProblemDescriptor[] descriptors,
                          final List<PsiElement> psiElementsToIgnore,
                          final Runnable refreshViews) {
       for (CommonProblemDescriptor descriptor : descriptors) {

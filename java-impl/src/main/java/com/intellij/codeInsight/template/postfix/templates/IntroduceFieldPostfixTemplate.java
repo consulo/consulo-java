@@ -21,7 +21,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.introduceField.IntroduceFieldHandler;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class IntroduceFieldPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
   public IntroduceFieldPostfixTemplate() {
@@ -29,13 +29,13 @@ public class IntroduceFieldPostfixTemplate extends ExpressionPostfixTemplateWith
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expression) {
+  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
     IntroduceFieldHandler handler = ApplicationManager.getApplication().isUnitTestMode() ? getMockHandler(expression) : new IntroduceFieldHandler();
     handler.invoke(expression.getProject(), new PsiElement[]{expression}, null);
   }
 
-  @NotNull
-  private static IntroduceFieldHandler getMockHandler(@NotNull final PsiExpression expression) {
+  @Nonnull
+  private static IntroduceFieldHandler getMockHandler(@Nonnull final PsiExpression expression) {
     final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
     assert containingClass != null;
 

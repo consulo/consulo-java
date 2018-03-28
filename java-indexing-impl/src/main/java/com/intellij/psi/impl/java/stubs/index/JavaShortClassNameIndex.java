@@ -21,7 +21,8 @@ package com.intellij.psi.impl.java.stubs.index;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.impl.search.JavaSourceFilterScope;
@@ -46,7 +47,7 @@ public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass>
 		return super.getVersion() + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 1 : 0);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public StubIndexKey<String, PsiClass> getKey()
 	{
@@ -54,7 +55,7 @@ public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass>
 	}
 
 	@Override
-	public Collection<PsiClass> get(@NotNull final String s, @NotNull final Project project, @NotNull final GlobalSearchScope scope)
+	public Collection<PsiClass> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final GlobalSearchScope scope)
 	{
 		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiClass.class);
 	}

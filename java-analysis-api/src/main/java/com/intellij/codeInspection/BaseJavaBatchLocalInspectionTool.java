@@ -15,24 +15,24 @@
  */
 package com.intellij.codeInspection;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseJavaBatchLocalInspectionTool extends AbstractBaseJavaLocalInspectionTool implements BatchSuppressableTool {
-  @NotNull
+  @Nonnull
   @Override
-  public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
+  public SuppressQuickFix[] getBatchSuppressActions(@javax.annotation.Nullable PsiElement element) {
     return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
   }
 
   @Override
-  public boolean isSuppressedFor(@NotNull PsiElement element) {
+  public boolean isSuppressedFor(@Nonnull PsiElement element) {
     return isSuppressedFor(element, this);
   }
 
-  public static boolean isSuppressedFor(@NotNull PsiElement element, @NotNull LocalInspectionTool tool) {
+  public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
     BatchSuppressManager manager = BatchSuppressManager.SERVICE.getInstance();
     String alternativeId;
     String toolId = tool.getID();

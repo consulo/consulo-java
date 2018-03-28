@@ -22,10 +22,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -170,8 +172,8 @@ public abstract class DebuggerUtils
 		return translateStringValue(str);
 	}
 
-	@Nullable
-	public static Method findMethod(@NotNull ReferenceType refType, @NonNls String methodName, @NonNls String methodSignature)
+	@javax.annotation.Nullable
+	public static Method findMethod(@Nonnull ReferenceType refType, @NonNls String methodName, @NonNls String methodSignature)
 	{
 		if(refType instanceof ArrayType)
 		{
@@ -241,8 +243,8 @@ public abstract class DebuggerUtils
 		return buffer.toString();
 	}
 
-	@Nullable
-	protected static ArrayClass getArrayClass(@NotNull String className)
+	@javax.annotation.Nullable
+	protected static ArrayClass getArrayClass(@Nonnull String className)
 	{
 		boolean searchBracket = false;
 		int dims = 0;
@@ -290,7 +292,7 @@ public abstract class DebuggerUtils
 		return new ArrayClass(className.substring(0, pos + 1), dims);
 	}
 
-	public static boolean instanceOf(@NotNull String subType, @NotNull String superType, @Nullable Project project)
+	public static boolean instanceOf(@Nonnull String subType, @Nonnull String superType, @Nullable Project project)
 	{
 		if(project == null)
 		{
@@ -318,8 +320,8 @@ public abstract class DebuggerUtils
 		return false;
 	}
 
-	@Nullable
-	public static Type getSuperType(@Nullable Type subType, @NotNull String superType)
+	@javax.annotation.Nullable
+	public static Type getSuperType(@javax.annotation.Nullable Type subType, @Nonnull String superType)
 	{
 		if(subType == null)
 		{
@@ -339,7 +341,7 @@ public abstract class DebuggerUtils
 		return getSuperTypeInt(subType, superType);
 	}
 
-	private static boolean typeEquals(@NotNull Type type, @NotNull String typeName)
+	private static boolean typeEquals(@Nonnull Type type, @Nonnull String typeName)
 	{
 		int genericPos = typeName.indexOf('<');
 		if(genericPos > -1)
@@ -349,7 +351,7 @@ public abstract class DebuggerUtils
 		return type.name().replace('$', '.').equals(typeName.replace('$', '.'));
 	}
 
-	private static Type getSuperTypeInt(@NotNull Type subType, @NotNull String superType)
+	private static Type getSuperTypeInt(@Nonnull Type subType, @Nonnull String superType)
 	{
 		if(typeEquals(subType, superType))
 		{
@@ -438,13 +440,13 @@ public abstract class DebuggerUtils
 		return null;
 	}
 
-	public static boolean instanceOf(@Nullable Type subType, @NotNull String superType)
+	public static boolean instanceOf(@javax.annotation.Nullable Type subType, @Nonnull String superType)
 	{
 		return getSuperType(subType, superType) != null;
 	}
 
 	@Nullable
-	public static PsiClass findClass(@NotNull final String className, @NotNull Project project, final GlobalSearchScope scope)
+	public static PsiClass findClass(@Nonnull final String className, @Nonnull Project project, final GlobalSearchScope scope)
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
 		try
@@ -478,7 +480,7 @@ public abstract class DebuggerUtils
 	}
 
 	@Nullable
-	public static PsiType getType(@NotNull String className, @NotNull Project project)
+	public static PsiType getType(@Nonnull String className, @Nonnull Project project)
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
 
@@ -603,7 +605,7 @@ public abstract class DebuggerUtils
 		return rv.get().booleanValue();
 	}
 
-	@NotNull
+	@Nonnull
 	public abstract TransportService.ListenKey findAvailableDebugAddress(int type) throws ExecutionException;
 
 	public static boolean isSynthetic(TypeComponent typeComponent)
@@ -615,7 +617,7 @@ public abstract class DebuggerUtils
 		return SyntheticTypeComponentProvider.EP_NAME.composite().isSynthetic(typeComponent);
 	}
 
-	public static boolean isInsideSimpleGetter(@NotNull PsiElement contextElement)
+	public static boolean isInsideSimpleGetter(@Nonnull PsiElement contextElement)
 	{
 		for(SimplePropertyGetterProvider provider : SimplePropertyGetterProvider.EP_NAME.getExtensions())
 		{

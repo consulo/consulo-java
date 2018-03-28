@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInspection.i18n;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.util.TextRange;
@@ -30,6 +30,6 @@ public abstract class I18nizeHandlerProvider {
   public static final ExtensionPointName<I18nizeHandlerProvider> EP_NAME = ExtensionPointName.create("consulo.java.i18nizeHandlerProvider");
 
   @Nullable
-  public abstract I18nQuickFixHandler getHandler(@NotNull final PsiFile psiFile, @NotNull final Editor editor, @NotNull TextRange range);
+  public abstract I18nQuickFixHandler getHandler(@Nonnull final PsiFile psiFile, @Nonnull final Editor editor, @Nonnull TextRange range);
 
 }

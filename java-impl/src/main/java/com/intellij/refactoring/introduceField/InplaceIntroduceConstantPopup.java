@@ -29,8 +29,7 @@ import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.refactoring.util.occurrences.OccurrenceManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,7 +75,7 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
     myWholePanel.add(createLeftPanel(), gc);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getExprText(PsiExpression expr, PsiLocalVariable localVariable) {
     final String exprText = expr != null ? expr.getText() : null;
     if (localVariable != null) {
@@ -181,7 +180,7 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
   }
 
   @Override
-  protected void saveSettings(@NotNull PsiVariable psiVariable) {
+  protected void saveSettings(@Nonnull PsiVariable psiVariable) {
     super.saveSettings(psiVariable);
     JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_VISIBILITY = getSelectedVisibility();
   }

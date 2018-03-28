@@ -17,8 +17,9 @@ package com.intellij.codeInspection;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -35,7 +36,7 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 	public static final Logger LOG = Logger.getInstance("#" + RedundantLambdaCodeBlockInspection.class.getName());
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getGroupDisplayName()
 	{
@@ -43,7 +44,7 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
@@ -56,16 +57,16 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getShortName()
 	{
 		return "CodeBlock2Expr";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -150,7 +151,7 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 
 	private static class ReplaceWithExprFix implements LocalQuickFix, HighPriorityAction
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -158,7 +159,7 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			final PsiElement element = descriptor.getPsiElement();
 			if(element != null)

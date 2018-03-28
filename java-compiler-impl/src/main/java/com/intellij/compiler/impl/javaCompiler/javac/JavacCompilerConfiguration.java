@@ -15,7 +15,8 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
@@ -32,7 +33,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
   }
 )
 public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJavaCompilerOptions> {
-  @NotNull
+  @Nonnull
   public static JpsJavaCompilerOptions getInstance(Project project) {
     final JavacCompilerConfiguration service = ServiceManager.getService(project, JavacCompilerConfiguration.class);
     return service.mySettings;
@@ -46,7 +47,7 @@ public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJ
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JpsJavaCompilerOptions getState() {
     JpsJavaCompilerOptions state = new JpsJavaCompilerOptions();
     XmlSerializerUtil.copyBean(mySettings, state);

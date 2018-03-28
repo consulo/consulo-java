@@ -1,6 +1,5 @@
 package com.intellij.coverage;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.openapi.project.Project;
@@ -86,7 +85,7 @@ public class CoverageProjectViewClassNodeDecorator extends AbstractCoverageProve
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static JavaCoverageAnnotator getCovAnnotator(final CoverageSuitesBundle currentSuite, Project project) {
     if (currentSuite != null) {
       final CoverageAnnotator coverageAnnotator = currentSuite.getAnnotator(project);

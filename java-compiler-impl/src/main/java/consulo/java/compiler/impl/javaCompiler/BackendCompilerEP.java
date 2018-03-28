@@ -17,7 +17,8 @@ package consulo.java.compiler.impl.javaCompiler;
 
 import java.lang.reflect.Constructor;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.compiler.impl.javaCompiler.BackendCompiler;
 import com.intellij.openapi.extensions.AbstractExtensionPointBean;
 import com.intellij.openapi.project.Project;
@@ -34,8 +35,8 @@ public class BackendCompilerEP extends AbstractExtensionPointBean {
 
   private BackendCompiler myBackendCompiler;
 
-  @NotNull
-  public BackendCompiler getInstance(@NotNull Project project) {
+  @Nonnull
+  public BackendCompiler getInstance(@Nonnull Project project) {
     if(myBackendCompiler == null) {
       final Class<BackendCompiler> classNoExceptions = findClassNoExceptions(implementationClass);
       if(classNoExceptions != null) {

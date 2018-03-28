@@ -34,8 +34,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
@@ -179,7 +179,7 @@ public class UnscrambleDialog extends DialogWrapper
 		return PropertiesComponent.getInstance().getValue(PROPERTY_LOG_FILE_LAST_URL);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static UnscrambleSupport getSavedUnscrambler()
 	{
 		final List<UnscrambleSupport> registeredUnscramblers = getRegisteredUnscramblers();
@@ -207,7 +207,7 @@ public class UnscrambleDialog extends DialogWrapper
 		return res;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private UnscrambleSupport getSelectedUnscrambler()
 	{
 		if(!myUseUnscrambler.isSelected())
@@ -225,7 +225,7 @@ public class UnscrambleDialog extends DialogWrapper
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected Action[] createActions()
 	{
 		return new Action[]{
@@ -460,7 +460,7 @@ public class UnscrambleDialog extends DialogWrapper
 	}
 
 	@Nullable
-	static RunContentDescriptor showUnscrambledText(@Nullable UnscrambleSupport unscrambleSupport, String logName, Project project, String textToUnscramble)
+	static RunContentDescriptor showUnscrambledText(@javax.annotation.Nullable UnscrambleSupport unscrambleSupport, String logName, Project project, String textToUnscramble)
 	{
 		String unscrambledTrace = unscrambleSupport == null ? textToUnscramble : unscrambleSupport.unscramble(project, textToUnscramble, logName);
 		if(unscrambledTrace == null)
@@ -538,7 +538,7 @@ public class UnscrambleDialog extends DialogWrapper
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String getExceptionAbbreviation(String line)
 	{
 		int lastDelimiter = 0;

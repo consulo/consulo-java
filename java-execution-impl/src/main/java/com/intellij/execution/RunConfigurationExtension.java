@@ -22,8 +22,8 @@
  */
 package com.intellij.execution;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.execution.configuration.RunConfigurationExtensionBase;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunConfigurationBase;
@@ -41,18 +41,18 @@ public abstract class RunConfigurationExtension extends RunConfigurationExtensio
 
 
   @Override
-  protected void patchCommandLine(@NotNull RunConfigurationBase configuration,
+  protected void patchCommandLine(@Nonnull RunConfigurationBase configuration,
                                   RunnerSettings runnerSettings,
-                                  @NotNull GeneralCommandLine cmdLine,
-                                  @NotNull String runnerId)  throws ExecutionException {}
+                                  @Nonnull GeneralCommandLine cmdLine,
+                                  @Nonnull String runnerId)  throws ExecutionException {}
 
   @Override
-  protected boolean isEnabledFor(@NotNull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+  protected boolean isEnabledFor(@Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
     return true;
   }
 
   @Override
-  protected void extendTemplateConfiguration(@NotNull RunConfigurationBase configuration) {
+  protected void extendTemplateConfiguration(@Nonnull RunConfigurationBase configuration) {
   }
 
   public void cleanUserData(RunConfigurationBase runConfigurationBase) {}

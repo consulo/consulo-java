@@ -1,6 +1,6 @@
 package consulo.java.manifest.lang;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestSyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
@@ -18,9 +18,9 @@ public class ManifestSyntaxHighlighterFactory extends LanguageVersionableSyntaxH
 		super(ManifestLanguage.INSTANCE);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public SyntaxHighlighter getSyntaxHighlighter(@NotNull LanguageVersion languageVersion)
+	public SyntaxHighlighter getSyntaxHighlighter(@Nonnull LanguageVersion languageVersion)
 	{
 		return new ManifestSyntaxHighlighter((ManifestLanguageVersion) languageVersion);
 	}

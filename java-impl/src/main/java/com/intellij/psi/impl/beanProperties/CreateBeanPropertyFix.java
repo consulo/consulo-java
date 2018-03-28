@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.beanProperties;
 
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -31,8 +33,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -43,14 +43,16 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
   private static final CreateBeanPropertyFix[] NO_FIXES = new CreateBeanPropertyFix[0];
 
   protected final String myPropertyName;
-  @NotNull protected final PsiClass myPsiClass;
-  @NotNull protected final PsiType myType;
+  @Nonnull
+  protected final PsiClass myPsiClass;
+  @Nonnull
+  protected final PsiType myType;
 
-  public static LocalQuickFix[] createFixes(String propertyName, @NotNull PsiClass psiClass, @Nullable PsiType type, final boolean createSetter) {
+  public static LocalQuickFix[] createFixes(String propertyName, @Nonnull PsiClass psiClass, @javax.annotation.Nullable PsiType type, final boolean createSetter) {
     return (LocalQuickFix[])create(propertyName, psiClass, type, createSetter);
   }
 
-  public static IntentionAction[] createActions(String propertyName, @NotNull PsiClass psiClass, @Nullable PsiType type, final boolean createSetter) {
+  public static IntentionAction[] createActions(String propertyName, @Nonnull PsiClass psiClass, @javax.annotation.Nullable PsiType type, final boolean createSetter) {
     return (IntentionAction[])create(propertyName, psiClass, type, createSetter);
   }
 
@@ -72,7 +74,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
         new CreateBeanPropertyFix(propertyName, psiClass, type) {
 
           @Override
-          @NotNull
+          @Nonnull
           public String getName() {
             return JavaQuickFixBundle.message("create.readable.writable.property.with.field", myPropertyName);
           }
@@ -98,7 +100,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
           }
 
           @Override
-          @NotNull
+          @Nonnull
           public String getName() {
             return JavaQuickFixBundle.message(createSetter ? "create.writable.property.with.field" : "create.readable.property.with.field", myPropertyName);
           }
@@ -106,20 +108,20 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
     };
   }
 
-  protected CreateBeanPropertyFix(String propertyName, @NotNull PsiClass psiClass, @NotNull PsiType type) {
+  protected CreateBeanPropertyFix(String propertyName, @Nonnull PsiClass psiClass, @Nonnull PsiType type) {
     myPropertyName = propertyName;
     myPsiClass = psiClass;
     myType = type;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getName();
   }
 
   @Override
-  public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
     applyFix(project);
   }
 
@@ -138,18 +140,18 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return getName();
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return true;
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     applyFix(project);
   }
 
@@ -244,7 +246,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return JavaQuickFixBundle.message(myCreateSetter ? "create.writable.property" : "create.readable.property", myPropertyName);
     }

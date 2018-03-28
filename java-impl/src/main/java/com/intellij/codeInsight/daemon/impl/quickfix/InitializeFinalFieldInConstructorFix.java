@@ -34,8 +34,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,24 +45,24 @@ import java.util.List;
 public class InitializeFinalFieldInConstructorFix implements IntentionAction {
   private final PsiField myField;
 
-  public InitializeFinalFieldInConstructorFix(@NotNull PsiField field) {
+  public InitializeFinalFieldInConstructorFix(@Nonnull PsiField field) {
     myField = field;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("initialize.final.field.in.constructor.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myField.isValid() || myField.hasModifierProperty(PsiModifier.STATIC) || myField.hasInitializer()) {
       return false;
     }
@@ -77,7 +77,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     final PsiClass myClass = myField.getContainingClass();
@@ -109,7 +109,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
   }
 
   @Nullable
-  private static <T extends PsiElement> T getHighestElement(@NotNull List<T> elements) {
+  private static <T extends PsiElement> T getHighestElement(@Nonnull List<T> elements) {
     T highest = null;
     int highestTextOffset = Integer.MAX_VALUE;
     for (T element : elements) {
@@ -123,10 +123,10 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     return highest;
   }
 
-  @NotNull
-  private static List<PsiExpressionStatement> addFieldInitialization(@NotNull List<PsiMethod> constructors,
-                                                                     @NotNull PsiField field,
-                                                                     @NotNull Project project) {
+  @Nonnull
+  private static List<PsiExpressionStatement> addFieldInitialization(@Nonnull List<PsiMethod> constructors,
+                                                                     @Nonnull PsiField field,
+                                                                     @Nonnull Project project) {
     final List<PsiExpressionStatement> statements = new ArrayList<PsiExpressionStatement>();
     for (PsiMethod constructor : constructors) {
       final PsiExpressionStatement statement = addFieldInitialization(constructor, field, project);
@@ -138,9 +138,9 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
   }
 
   @Nullable
-  private static PsiExpressionStatement addFieldInitialization(@NotNull PsiMethod constructor,
-                                                               @NotNull PsiField field,
-                                                               @NotNull Project project) {
+  private static PsiExpressionStatement addFieldInitialization(@Nonnull PsiMethod constructor,
+                                                               @Nonnull PsiField field,
+                                                               @Nonnull Project project) {
     PsiCodeBlock methodBody = constructor.getBody();
     if (methodBody == null) return null;
 
@@ -157,7 +157,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     return (PsiExpressionStatement)methodBody.add(codeStyleManager.reformat(factory.createStatementFromText(stmtText, methodBody)));
   }
 
-  private static boolean methodContainsParameterWithName(@NotNull PsiMethod constructor, @NotNull String name) {
+  private static boolean methodContainsParameterWithName(@Nonnull PsiMethod constructor, @Nonnull String name) {
     for (PsiParameter parameter : constructor.getParameterList().getParameters()) {
       if (name.equals(parameter.getName())) {
         return true;
@@ -166,8 +166,8 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     return false;
   }
 
-  @NotNull
-  private static List<PsiMethod> choose(@NotNull PsiMethod[] ctors, @NotNull final Project project) {
+  @Nonnull
+  private static List<PsiMethod> choose(@Nonnull PsiMethod[] ctors, @Nonnull final Project project) {
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       return Arrays.asList(ctors);
     }
@@ -190,7 +190,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     return Collections.emptyList();
   }
 
-  private static PsiMethodMember[] toPsiMethodMemberArray(@NotNull PsiMethod[] methods) {
+  private static PsiMethodMember[] toPsiMethodMemberArray(@Nonnull PsiMethod[] methods) {
     final PsiMethodMember[] result = new PsiMethodMember[methods.length];
     for (int i = 0; i < methods.length; i++) {
       result[i] = new PsiMethodMember(methods[i]);
@@ -198,7 +198,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     return result;
   }
 
-  private static PsiMethod[] toPsiMethodArray(@NotNull List<PsiMethodMember> methodMembers) {
+  private static PsiMethod[] toPsiMethodArray(@Nonnull List<PsiMethodMember> methodMembers) {
     final PsiMethod[] result = new PsiMethod[methodMembers.size()];
     int i = 0;
     for (PsiMethodMember methodMember : methodMembers) {
@@ -207,7 +207,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     return result;
   }
 
-  private static void createDefaultConstructor(PsiClass psiClass, @NotNull final Project project, final Editor editor, final PsiFile file) {
+  private static void createDefaultConstructor(PsiClass psiClass, @Nonnull final Project project, final Editor editor, final PsiFile file) {
     final AddDefaultConstructorFix defaultConstructorFix = new AddDefaultConstructorFix(psiClass);
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
@@ -217,7 +217,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     });
   }
 
-  private static PsiMethod[] filterIfFieldAlreadyAssigned(@NotNull PsiField field, @NotNull PsiMethod[] ctors) {
+  private static PsiMethod[] filterIfFieldAlreadyAssigned(@Nonnull PsiField field, @Nonnull PsiMethod[] ctors) {
     final List<PsiMethod> result = new ArrayList<PsiMethod>(Arrays.asList(ctors));
     for (PsiReference reference : ReferencesSearch.search(field, new LocalSearchScope(ctors))) {
       final PsiElement element = reference.getElement();
@@ -228,7 +228,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
     return result.toArray(new PsiMethod[result.size()]);
   }
 
-  private static String suggestInitValue(@NotNull PsiField field) {
+  private static String suggestInitValue(@Nonnull PsiField field) {
     PsiType type = field.getType();
     return PsiTypesUtil.getDefaultValueOfType(type);
   }

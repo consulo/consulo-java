@@ -15,7 +15,8 @@
  */
 package com.siyeh.ipp.parenthesis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
@@ -30,13 +31,13 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 public class RemoveUnnecessaryParenthesesIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new UnnecessaryParenthesesPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (element instanceof PsiParameterList) {
       stripLambdaParameterParentheses((PsiParameterList)element);
       return;

@@ -40,8 +40,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.usageView.UsageInfo;
 import gnu.trove.TIntArrayList;
 import gnu.trove.TIntProcedure;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -148,7 +147,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiParameter getParameter() {
     if (!myMethod.isValid()) return null;
     final PsiParameter[] parameters = myMethod.getParameterList().getParameters();
@@ -178,7 +177,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
 
 
   @Override
-  protected void saveSettings(@NotNull PsiVariable psiVariable) {
+  protected void saveSettings(@Nonnull PsiVariable psiVariable) {
     myPanel.saveSettings(JavaRefactoringSettings.getInstance());
   }
 
@@ -236,13 +235,13 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
   }
 
   @Override
-  protected void updateTitle(@Nullable PsiVariable variable) {
+  protected void updateTitle(@javax.annotation.Nullable PsiVariable variable) {
     if (variable == null) return;
     updateTitle(variable, variable.getName());
   }
 
   @Override
-  protected void updateTitle(@Nullable final PsiVariable variable, final String value) {
+  protected void updateTitle(@javax.annotation.Nullable final PsiVariable variable, final String value) {
     final PsiElement declarationScope = variable != null ? ((PsiParameter)variable).getDeclarationScope() : null;
     if (declarationScope instanceof PsiMethod) {
       final PsiMethod psiMethod = (PsiMethod)declarationScope;

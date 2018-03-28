@@ -15,7 +15,8 @@
  */
 package com.intellij.ide.hierarchy.call;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.hierarchy.CallHierarchyBrowserBase;
 import com.intellij.ide.hierarchy.HierarchyBrowser;
 import com.intellij.ide.hierarchy.HierarchyProvider;
@@ -32,7 +33,7 @@ import com.intellij.psi.util.PsiTreeUtil;
  */
 public class JavaCallHierarchyProvider implements HierarchyProvider {
   @Override
-  public PsiElement getTarget(@NotNull final DataContext dataContext) {
+  public PsiElement getTarget(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     if (project == null) return null;
 
@@ -41,13 +42,13 @@ public class JavaCallHierarchyProvider implements HierarchyProvider {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
     return new CallHierarchyBrowser(target.getProject(), (PsiMethod) target);
   }
 
   @Override
-  public void browserActivated(@NotNull final HierarchyBrowser hierarchyBrowser) {
+  public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
     ((CallHierarchyBrowser) hierarchyBrowser).changeView(CallHierarchyBrowserBase.CALLER_TYPE);
   }
 }

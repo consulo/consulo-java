@@ -15,8 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import consulo.annotations.RequiredReadAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -42,7 +42,7 @@ public class PsiUtilEx {
     return index.isInContent(file);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiParameter getParameterForArgument(PsiElement element) {
     PsiElement p = element.getParent();
     if (!(p instanceof PsiExpressionList)) return null;
@@ -86,7 +86,7 @@ public class PsiUtilEx {
     return false;
   }
 
-  public static boolean isString(@NotNull PsiType type) {
+  public static boolean isString(@Nonnull PsiType type) {
     if (type instanceof PsiClassType) {
       // optimization. doesn't require resolve
       final String shortName = ((PsiClassType)type).getClassName();
@@ -95,7 +95,7 @@ public class PsiUtilEx {
     return CommonClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
   }
 
-  public static boolean isStringOrStringArray(@NotNull PsiType type) {
+  public static boolean isStringOrStringArray(@Nonnull PsiType type) {
     if (type instanceof PsiArrayType) {
       return isString(((PsiArrayType)type).getComponentType());
     }

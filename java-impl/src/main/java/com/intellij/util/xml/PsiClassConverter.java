@@ -16,8 +16,8 @@
 
 package com.intellij.util.xml;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
@@ -40,8 +40,8 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return DomJavaUtil.findClass(s.trim(), context.getFile(), context.getModule(), scope);
   }
 
-  @Nullable
-  public String getErrorMessage(@Nullable final String s, final ConvertContext context) {
+  @javax.annotation.Nullable
+  public String getErrorMessage(@javax.annotation.Nullable final String s, final ConvertContext context) {
     return null;
   }
 
@@ -49,7 +49,7 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return t == null ? null : t.getQualifiedName();
   }
 
-  @NotNull
+  @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiClass> genericDomValue, PsiElement element, ConvertContext context) {
 
     ExtendClass extendClass = genericDomValue.getAnnotation(ExtendClass.class);
@@ -107,8 +107,8 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return provider;
   }
 
-  @Nullable
-  protected GlobalSearchScope getScope(@NotNull ConvertContext context) {
+  @javax.annotation.Nullable
+  protected GlobalSearchScope getScope(@Nonnull ConvertContext context) {
     return context.getSearchScope();
   }
 

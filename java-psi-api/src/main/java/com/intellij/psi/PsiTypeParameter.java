@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmTypeParameter;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.util.ArrayFactory;
@@ -41,7 +41,7 @@ public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeP
 	 * @return the extends list. For this particular kind of classes it never returns null.
 	 */
 	@Override
-	@NotNull
+	@Nonnull
 	PsiReferenceList getExtendsList();
 
 	/**
@@ -60,14 +60,14 @@ public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeP
 	 */
 	int getIndex();
 
-	@NotNull
+	@Nonnull
 	@Override
 	default PsiAnnotation[] getAnnotations()
 	{
 		return PsiClass.super.getAnnotations();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	default JvmReferenceType[] getBounds()
 	{

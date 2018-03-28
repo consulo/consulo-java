@@ -22,7 +22,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ConcurrentHashMap;
 import org.intellij.plugins.intelliLang.Configuration;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -53,7 +52,7 @@ public class SubstitutedExpressionEvaluationHelper {
     final ConcurrentMap<PsiElement, Object> map = new ConcurrentHashMap<PsiElement, Object>();
     //if (true) return myHelper.computeConstantExpression(e, false);
     return myHelper.computeExpression(e, false, new PsiConstantEvaluationHelper.AuxEvaluator() {
-      @Nullable
+      @javax.annotation.Nullable
       public Object computeExpression(final PsiExpression o, final PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
         PsiType resolvedType = null;
         if (o instanceof PsiMethodCallExpression) {
@@ -126,7 +125,7 @@ public class SubstitutedExpressionEvaluationHelper {
     });
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private Object calcSubstituted(final PsiModifierListOwner owner) {
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, myConfiguration.getAdvancedConfiguration().getSubstAnnotationPair().second);
     if (annotation != null) {

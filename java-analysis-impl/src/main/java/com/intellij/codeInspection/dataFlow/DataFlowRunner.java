@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.instructions.BranchingInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.ConditionalGotoInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.GotoInstruction;
@@ -61,7 +61,7 @@ public class DataFlowRunner
 
 	private Instruction[] myInstructions;
 	private final MultiMap<PsiElement, DfaMemoryState> myNestedClosures = new MultiMap<>();
-	@NotNull
+	@Nonnull
 	private final DfaValueFactory myValueFactory;
 	private boolean myInlining = true;
 	// Maximum allowed attempts to process instruction. Fail as too complex to process if certain instruction
@@ -78,14 +78,14 @@ public class DataFlowRunner
 		myValueFactory = new DfaValueFactory(honorFieldInitializers, unknownMembersAreNullable);
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaValueFactory getFactory()
 	{
 		return myValueFactory;
 	}
 
-	@Nullable
-	private Collection<DfaMemoryState> createInitialStates(@NotNull PsiElement psiBlock, @NotNull InstructionVisitor visitor)
+	@javax.annotation.Nullable
+	private Collection<DfaMemoryState> createInitialStates(@Nonnull PsiElement psiBlock, @Nonnull InstructionVisitor visitor)
 	{
 		PsiElement container = PsiTreeUtil.getParentOfType(psiBlock, PsiClass.class, PsiLambdaExpression.class);
 		if(container != null && (!(container instanceof PsiClass) || PsiUtil.isLocalOrAnonymousClass((PsiClass) container)))
@@ -118,15 +118,15 @@ public class DataFlowRunner
 		return Collections.singletonList(createMemoryState());
 	}
 
-	@NotNull
-	public final RunnerResult analyzeMethod(@NotNull PsiElement psiBlock, @NotNull InstructionVisitor visitor)
+	@Nonnull
+	public final RunnerResult analyzeMethod(@Nonnull PsiElement psiBlock, @Nonnull InstructionVisitor visitor)
 	{
 		Collection<DfaMemoryState> initialStates = createInitialStates(psiBlock, visitor);
 		return initialStates == null ? RunnerResult.NOT_APPLICABLE : analyzeMethod(psiBlock, visitor, false, initialStates);
 	}
 
-	@NotNull
-	final RunnerResult analyzeMethod(@NotNull PsiElement psiBlock, @NotNull InstructionVisitor visitor, boolean ignoreAssertions, @NotNull Collection<DfaMemoryState> initialStates)
+	@Nonnull
+	final RunnerResult analyzeMethod(@Nonnull PsiElement psiBlock, @Nonnull InstructionVisitor visitor, boolean ignoreAssertions, @Nonnull Collection<DfaMemoryState> initialStates)
 	{
 		try
 		{
@@ -275,7 +275,7 @@ public class DataFlowRunner
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static DfaValue makeInitialValue(DfaVariableValue var, PsiElement block)
 	{
 		if(var.getQualifier() != null)
@@ -306,14 +306,14 @@ public class DataFlowRunner
 		return false;
 	}
 
-	private void handleStepOutOfLoop(@NotNull final Instruction prevInstruction,
-			@NotNull Instruction nextInstruction,
-			@NotNull final int[] loopNumber,
-			@NotNull MultiMap<BranchingInstruction, DfaMemoryState> processedStates,
-			@NotNull MultiMap<BranchingInstruction, DfaMemoryState> incomingStates,
-			@NotNull List<DfaInstructionState> inFlightStates,
-			@NotNull DfaInstructionState[] afterStates,
-			@NotNull StateQueue queue)
+	private void handleStepOutOfLoop(@Nonnull final Instruction prevInstruction,
+			@Nonnull Instruction nextInstruction,
+			@Nonnull final int[] loopNumber,
+			@Nonnull MultiMap<BranchingInstruction, DfaMemoryState> processedStates,
+			@Nonnull MultiMap<BranchingInstruction, DfaMemoryState> incomingStates,
+			@Nonnull List<DfaInstructionState> inFlightStates,
+			@Nonnull DfaInstructionState[] afterStates,
+			@Nonnull StateQueue queue)
 	{
 		if(loopNumber[prevInstruction.getIndex()] == 0 || inSameLoop(prevInstruction, nextInstruction, loopNumber))
 		{
@@ -365,13 +365,13 @@ public class DataFlowRunner
 		}
 	}
 
-	private static boolean inSameLoop(@NotNull Instruction prevInstruction, @NotNull Instruction nextInstruction, @NotNull int[] loopNumber)
+	private static boolean inSameLoop(@Nonnull Instruction prevInstruction, @Nonnull Instruction nextInstruction, @Nonnull int[] loopNumber)
 	{
 		return loopNumber[nextInstruction.getIndex()] == loopNumber[prevInstruction.getIndex()];
 	}
 
-	@NotNull
-	protected DfaInstructionState[] acceptInstruction(@NotNull InstructionVisitor visitor, @NotNull DfaInstructionState instructionState)
+	@Nonnull
+	protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState)
 	{
 		Instruction instruction = instructionState.getInstruction();
 		DfaInstructionState[] states = instruction.accept(this, instructionState.getMemoryState(), visitor);
@@ -389,7 +389,7 @@ public class DataFlowRunner
 		return states;
 	}
 
-	private void registerNestedClosures(@NotNull DfaInstructionState instructionState, @NotNull PsiClass nestedClass)
+	private void registerNestedClosures(@Nonnull DfaInstructionState instructionState, @Nonnull PsiClass nestedClass)
 	{
 		DfaMemoryState state = instructionState.getMemoryState();
 		for(PsiMethod method : nestedClass.getMethods())
@@ -410,7 +410,7 @@ public class DataFlowRunner
 		}
 	}
 
-	private void registerNestedClosures(@NotNull DfaInstructionState instructionState, @NotNull PsiLambdaExpression expr)
+	private void registerNestedClosures(@Nonnull DfaInstructionState instructionState, @Nonnull PsiLambdaExpression expr)
 	{
 		DfaMemoryState state = instructionState.getMemoryState();
 		PsiElement body = expr.getBody();
@@ -425,31 +425,31 @@ public class DataFlowRunner
 		myNestedClosures.putValue(anchor, state.createClosureState());
 	}
 
-	@NotNull
+	@Nonnull
 	protected DfaMemoryState createMemoryState()
 	{
 		return new DfaMemoryStateImpl(myValueFactory);
 	}
 
-	@NotNull
+	@Nonnull
 	public Instruction[] getInstructions()
 	{
 		return myInstructions;
 	}
 
-	@NotNull
+	@Nonnull
 	public Instruction getInstruction(int index)
 	{
 		return myInstructions[index];
 	}
 
-	@NotNull
+	@Nonnull
 	MultiMap<PsiElement, DfaMemoryState> getNestedClosures()
 	{
 		return new MultiMap<>(myNestedClosures);
 	}
 
-	@NotNull
+	@Nonnull
 	public Pair<Set<Instruction>, Set<Instruction>> getConstConditionalExpressions()
 	{
 		Set<Instruction> trueSet = new HashSet<>();

@@ -15,7 +15,8 @@
  */
 package com.intellij.spellchecker;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.spellchecker.inspections.IdentifierSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
@@ -26,7 +27,7 @@ import com.intellij.spellchecker.tokenizer.Tokenizer;
  */
 public class PsiIdentifierTokenizer extends Tokenizer<PsiIdentifier> {
   @Override
-  public void tokenize(@NotNull PsiIdentifier element, TokenConsumer consumer) {
+  public void tokenize(@Nonnull PsiIdentifier element, TokenConsumer consumer) {
     consumer.consumeToken(element, true, IdentifierSplitter.getInstance());
   }
 }

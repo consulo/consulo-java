@@ -15,13 +15,13 @@
  */
 package com.intellij.psi.impl.source;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Dummy file element for using together with DummyHolder.
@@ -33,15 +33,15 @@ public class JavaDummyElement extends FileElement {
   private final boolean myConsumeAll;
   private Throwable myParserError = null;
 
-  public JavaDummyElement(@Nullable final CharSequence text,
-                          @NotNull final JavaParserUtil.ParserWrapper parser,
-                          @NotNull final LanguageLevel level) {
+  public JavaDummyElement(@javax.annotation.Nullable final CharSequence text,
+                          @Nonnull final JavaParserUtil.ParserWrapper parser,
+                          @Nonnull final LanguageLevel level) {
     this(text, parser, level, false);
   }
 
-  public JavaDummyElement(@Nullable final CharSequence text,
-                          @NotNull final JavaParserUtil.ParserWrapper parser,
-                          @NotNull final LanguageLevel level,
+  public JavaDummyElement(@javax.annotation.Nullable final CharSequence text,
+                          @Nonnull final JavaParserUtil.ParserWrapper parser,
+                          @Nonnull final LanguageLevel level,
                           final boolean consumeAll) {
     super(JavaElementType.DUMMY_ELEMENT, text);
     myParser = parser;
@@ -49,7 +49,7 @@ public class JavaDummyElement extends FileElement {
     myConsumeAll = consumeAll;
   }
 
-  @NotNull
+  @Nonnull
   public JavaParserUtil.ParserWrapper getParser() {
     return myParser;
   }
@@ -58,7 +58,7 @@ public class JavaDummyElement extends FileElement {
     return myConsumeAll;
   }
 
-  @NotNull
+  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel;
   }
@@ -85,7 +85,7 @@ public class JavaDummyElement extends FileElement {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public Throwable getParserError() {
     return myParserError;
   }

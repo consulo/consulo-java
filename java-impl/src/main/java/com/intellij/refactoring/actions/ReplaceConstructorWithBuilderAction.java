@@ -20,6 +20,8 @@
  */
 package com.intellij.refactoring.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiClass;
@@ -27,7 +29,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.replaceConstructorWithBuilder.ReplaceConstructorWithBuilderHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class ReplaceConstructorWithBuilderAction extends BaseRefactoringAction{
   protected boolean isAvailableInEditorOnly() {
@@ -35,18 +36,18 @@ public class ReplaceConstructorWithBuilderAction extends BaseRefactoringAction{
   }
 
   @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@NotNull PsiElement element, @NotNull Editor editor, @NotNull PsiFile file, @NotNull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     final int offset = editor.getCaretModel().getOffset();
     final PsiElement elementAt = file.findElementAt(offset);
     final PsiClass psiClass = ReplaceConstructorWithBuilderHandler.getParentNamedClass(elementAt);
     return psiClass != null && psiClass.getConstructors().length > 0;
   }
 
-  protected boolean isEnabledOnElements(@NotNull final PsiElement[] elements) {
+  protected boolean isEnabledOnElements(@Nonnull final PsiElement[] elements) {
     return false;
   }
 
-  protected RefactoringActionHandler getHandler(@NotNull final DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@Nonnull final DataContext dataContext) {
     return new ReplaceConstructorWithBuilderHandler();
   }
 }

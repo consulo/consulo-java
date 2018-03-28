@@ -25,8 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,18 +35,18 @@ public class SerializableClassInSecureContextInspection extends BaseInspection {
   public boolean ignoreThrowable = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("serializable.class.in.secure.context.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("serializable.class.in.secure.context.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
@@ -62,7 +61,7 @@ public class SerializableClassInSecureContextInspection extends BaseInspection {
   private class SerializableClassInSecureContextVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;
       }

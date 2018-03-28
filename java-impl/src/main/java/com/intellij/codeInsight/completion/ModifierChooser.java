@@ -18,8 +18,8 @@ package com.intellij.codeInsight.completion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.FilterPositionUtil;
 import com.intellij.psi.javadoc.PsiDocComment;
@@ -69,7 +69,7 @@ public class ModifierChooser
 			}
 	};
 
-	static String[] getKeywords(@NotNull PsiElement position)
+	static String[] getKeywords(@Nonnull PsiElement position)
 	{
 		final PsiModifierList list = findModifierList(position);
 		if(list == null && !shouldSuggestModifiers(position))
@@ -135,7 +135,7 @@ public class ModifierChooser
 	}
 
 	@Nullable
-	public static PsiModifierList findModifierList(@NotNull PsiElement element)
+	public static PsiModifierList findModifierList(@Nonnull PsiElement element)
 	{
 		if(element.getParent() instanceof PsiModifierList)
 		{

@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 public class BrokenAlignment {
 
   void main(Data data) {

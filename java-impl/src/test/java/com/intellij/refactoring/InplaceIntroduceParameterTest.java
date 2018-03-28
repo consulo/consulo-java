@@ -22,7 +22,7 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiLocalVariable;
 import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.refactoring.introduceParameter.IntroduceParameterHandler;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
@@ -122,7 +122,7 @@ public class InplaceIntroduceParameterTest extends AbstractJavaInplaceIntroduceT
   private static class MyIntroduceParameterHandler extends IntroduceParameterHandler implements MyIntroduceHandler {
 
     @Override
-    public boolean invokeImpl(Project project, @NotNull PsiExpression selectedExpr, Editor editor) {
+    public boolean invokeImpl(Project project, @Nonnull PsiExpression selectedExpr, Editor editor) {
       return super.invokeImpl(project, selectedExpr, editor);
     }
 

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClassInitializer;
@@ -26,22 +28,21 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class EmptyInitializerInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "EmptyClassInitializer";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "empty.class.initializer.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.class.initializer.problem.descriptor");
@@ -53,7 +54,7 @@ public class EmptyInitializerInspection extends BaseInspection {
 
   private static class EmptyInitializerFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "empty.class.initializer.delete.quickfix");
@@ -78,7 +79,7 @@ public class EmptyInitializerInspection extends BaseInspection {
 
     @Override
     public void visitClassInitializer(
-      @NotNull PsiClassInitializer initializer) {
+      @Nonnull PsiClassInitializer initializer) {
       super.visitClassInitializer(initializer);
       final PsiCodeBlock body = initializer.getBody();
       if (!codeBlockIsEmpty(body)) {

@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaElementVisitor;
@@ -25,7 +27,6 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiBlockStatementImpl extends CompositePsiElement implements PsiBlockStatement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiBlockStatementImpl");
@@ -35,7 +36,7 @@ public class PsiBlockStatementImpl extends CompositePsiElement implements PsiBlo
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiCodeBlock getCodeBlock() {
     return (PsiCodeBlock)findChildByRoleAsPsiElement(ChildRole.BLOCK);
   }
@@ -64,7 +65,7 @@ public class PsiBlockStatementImpl extends CompositePsiElement implements PsiBlo
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitBlockStatement(this);
     }

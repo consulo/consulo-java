@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -24,7 +24,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 public class MakeClassStaticTest extends LightRefactoringTestCase {
   private static final String TEST_ROOT = "/refactoring/makeClassStatic/";
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

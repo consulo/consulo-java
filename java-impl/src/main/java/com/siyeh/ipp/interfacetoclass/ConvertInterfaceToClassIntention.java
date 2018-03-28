@@ -32,8 +32,7 @@ import com.intellij.util.containers.MultiMap;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -98,7 +97,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiClass anInterface = (PsiClass)element.getParent();
     final SearchScope searchScope = anInterface.getUseScope();
     final Query<PsiClass> query = ClassInheritorsSearch.search(anInterface, searchScope, false);
@@ -157,7 +156,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertInterfaceToClassPredicate();
   }
@@ -196,8 +195,8 @@ public class ConvertInterfaceToClassIntention extends Intention {
     return true;
   }
 
-  private static void moveReference(@NotNull PsiReferenceList source, @Nullable PsiReferenceList target,
-                                    @NotNull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
+  private static void moveReference(@Nonnull PsiReferenceList source, @javax.annotation.Nullable PsiReferenceList target,
+                                    @Nonnull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
     final PsiJavaCodeReferenceElement[] implementsReferences = source.getReferenceElements();
     final String qualifiedName = reference.getQualifiedName();
     for (PsiJavaCodeReferenceElement implementsReference : implementsReferences) {

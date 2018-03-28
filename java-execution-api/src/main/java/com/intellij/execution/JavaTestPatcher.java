@@ -15,7 +15,8 @@
  */
 package com.intellij.execution;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
 import consulo.java.execution.configurations.OwnJavaParameters;
@@ -28,5 +29,5 @@ public interface JavaTestPatcher
 {
 	ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create("consulo.java.testPatcher");
 
-	void patchJavaParameters(@NotNull Module module, @NotNull OwnJavaParameters javaParameters);
+	void patchJavaParameters(@Nonnull Module module, @Nonnull OwnJavaParameters javaParameters);
 }

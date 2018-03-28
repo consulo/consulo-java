@@ -19,14 +19,13 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.codeInsight.intention.impl.AddSingleMemberStaticImportAction;
@@ -69,7 +68,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
 		myRef = ref;
 	}
 
-	@NotNull
+	@Nonnull
 	protected String getPopupTitle()
 	{
 		return JavaQuickFixBundle.message("method.to.import.chooser.title");
@@ -166,7 +165,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
 				return true;
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
 			public String getTextFor(T value)
 			{
@@ -204,7 +203,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
 						return 0;
 					}
 
-					@Nullable
+					@javax.annotation.Nullable
 					@Override
 					protected TextAttributes getNavigationItemAttributes(Object value)
 					{

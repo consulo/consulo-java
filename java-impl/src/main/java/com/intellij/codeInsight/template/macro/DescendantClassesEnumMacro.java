@@ -24,8 +24,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -44,7 +43,7 @@ public class DescendantClassesEnumMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     final List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
     Result[] results = calculateResults(classes);
@@ -62,7 +61,7 @@ public class DescendantClassesEnumMacro extends Macro {
     return results;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static List<PsiClass> findDescendants(ExpressionContext context, Expression[] params) {
     if (params == null || params.length == 0) return null;
     PsiManager instance = PsiManager.getInstance(context.getProject());
@@ -82,7 +81,7 @@ public class DescendantClassesEnumMacro extends Macro {
 
       ClassInheritorsSearch.search(myBaseClass, true).forEach(new PsiElementProcessorAdapter<PsiClass>(new PsiElementProcessor<PsiClass>() {
           @Override
-          public boolean execute(@NotNull PsiClass element) {
+          public boolean execute(@Nonnull PsiClass element) {
             if (isAllowAbstract || !isAbstractOrInterface(element)) {
               classes.add(element);
             }
@@ -98,7 +97,7 @@ public class DescendantClassesEnumMacro extends Macro {
   }
 
   @Override
-  public Result calculateQuickResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
     final List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
     Result[] results = calculateResults(classes);
@@ -107,7 +106,7 @@ public class DescendantClassesEnumMacro extends Macro {
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@NotNull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
     final List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
 

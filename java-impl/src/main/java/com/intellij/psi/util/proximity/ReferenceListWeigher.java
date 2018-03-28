@@ -20,8 +20,8 @@ import static com.intellij.psi.util.proximity.ReferenceListWeigher.ReferenceList
 import static com.intellij.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.inapplicable;
 import static com.intellij.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.unknown;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.ElementPattern;
@@ -50,8 +50,8 @@ public class ReferenceListWeigher extends ProximityWeigher
 		Exceptions
 	}
 
-	@Nullable
-	protected Preference getPreferredCondition(@NotNull final PsiElement position)
+	@javax.annotation.Nullable
+	protected Preference getPreferredCondition(@Nonnull final PsiElement position)
 	{
 		if(INSIDE_REFERENCE_LIST.accepts(position))
 		{
@@ -97,7 +97,7 @@ public class ReferenceListWeigher extends ProximityWeigher
 	}
 
 	@Override
-	public ReferenceListApplicability weigh(@NotNull PsiElement element, @NotNull ProximityLocation location)
+	public ReferenceListApplicability weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location)
 	{
 		if(element instanceof PsiClass && location.getPosition() != null)
 		{
@@ -106,8 +106,8 @@ public class ReferenceListWeigher extends ProximityWeigher
 		return unknown;
 	}
 
-	@NotNull
-	public ReferenceListApplicability getApplicability(@NotNull PsiClass aClass, @NotNull PsiElement position)
+	@Nonnull
+	public ReferenceListApplicability getApplicability(@Nonnull PsiClass aClass, @Nonnull PsiElement position)
 	{
 		Preference condition = getPreferredCondition(position);
 		if(condition == Preference.Interfaces)

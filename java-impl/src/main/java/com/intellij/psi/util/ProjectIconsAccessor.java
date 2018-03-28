@@ -25,8 +25,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.components.ServiceManager;
@@ -47,8 +47,8 @@ import com.intellij.util.ui.JBUI;
  */
 public class ProjectIconsAccessor implements Disposable
 {
-	@NotNull
-	public static ProjectIconsAccessor getInstance(@NotNull Project project)
+	@Nonnull
+	public static ProjectIconsAccessor getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, ProjectIconsAccessor.class);
 	}
@@ -66,8 +66,8 @@ public class ProjectIconsAccessor implements Disposable
 	{
 	}
 
-	@Nullable
-	public VirtualFile resolveIconFile(PsiType type, @Nullable PsiExpression initializer)
+	@javax.annotation.Nullable
+	public VirtualFile resolveIconFile(PsiType type, @javax.annotation.Nullable PsiExpression initializer)
 	{
 		if(initializer == null || !initializer.isValid() || !isIconClassType(type))
 		{
@@ -128,8 +128,8 @@ public class ProjectIconsAccessor implements Disposable
 		return null;
 	}
 
-	@Nullable
-	public Icon getIcon(@NotNull VirtualFile file, @Nullable PsiElement element)
+	@javax.annotation.Nullable
+	public Icon getIcon(@Nonnull VirtualFile file, @javax.annotation.Nullable PsiElement element)
 	{
 		final String path = file.getPath();
 		final long stamp = file.getModificationStamp();
@@ -166,7 +166,7 @@ public class ProjectIconsAccessor implements Disposable
 		return icon.getIconHeight() <= JBUI.scale(16) && icon.getIconWidth() <= JBUI.scale(16);
 	}
 
-	private static boolean isConsuloProject(@Nullable PsiElement element)
+	private static boolean isConsuloProject(@javax.annotation.Nullable PsiElement element)
 	{
 		if(element == null)
 		{

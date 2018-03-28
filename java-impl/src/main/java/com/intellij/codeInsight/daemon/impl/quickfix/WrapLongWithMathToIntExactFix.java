@@ -15,10 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
@@ -32,6 +32,7 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.JavaQuickFixBundle;
 
 /**
  * @author Dmitry Batkovich
@@ -42,13 +43,13 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
 	private final PsiType myType;
 
-	public WrapLongWithMathToIntExactFix(final PsiType type, final @NotNull PsiExpression expression)
+	public WrapLongWithMathToIntExactFix(final PsiType type, final @Nonnull PsiExpression expression)
 	{
 		super(expression);
 		myType = type;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -56,17 +57,17 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 	}
 
 	@Override
-	public void invoke(@NotNull Project project,
-			@NotNull PsiFile file,
-			@Nullable("is null when called from inspection") Editor editor,
-			@NotNull PsiElement startElement,
-			@NotNull PsiElement endElement)
+	public void invoke(@Nonnull Project project,
+			@Nonnull PsiFile file,
+			@javax.annotation.Nullable Editor editor,
+			@Nonnull PsiElement startElement,
+			@Nonnull PsiElement endElement)
 	{
 		startElement.replace(getModifiedExpression(startElement));
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		return startElement.isValid() &&
 				startElement.getManager().isInProject(startElement) &&
@@ -75,7 +76,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 				areSameTypes(((PsiExpression) startElement).getType(), PsiType.LONG);
 	}
 
-	private static boolean areSameTypes(@Nullable PsiType type, @NotNull PsiPrimitiveType expected)
+	private static boolean areSameTypes(@Nullable PsiType type, @Nonnull PsiPrimitiveType expected)
 	{
 		return !(type == null ||
 				!type.isValid() ||
@@ -83,7 +84,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -98,13 +99,13 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 	private static class MyMethodArgumentFix extends MethodArgumentFix implements HighPriorityAction
 	{
 
-		protected MyMethodArgumentFix(@NotNull PsiExpressionList list, int i, @NotNull PsiType toType, @NotNull ArgumentFixerActionFactory fixerActionFactory)
+		protected MyMethodArgumentFix(@Nonnull PsiExpressionList list, int i, @Nonnull PsiType toType, @Nonnull ArgumentFixerActionFactory fixerActionFactory)
 		{
 			super(list, i, toType, fixerActionFactory);
 		}
 
 		@Nls
-		@NotNull
+		@Nonnull
 		@Override
 		public String getText()
 		{
@@ -113,7 +114,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 		}
 
 		@Override
-		public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+		public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 		{
 			return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
 		}
@@ -129,7 +130,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 		}
 
 		@Override
-		public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, @NotNull final PsiElement context)
+		public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, @Nonnull final PsiElement context)
 		{
 			return parameterType.isConvertibleFrom(exprType) || (areSameTypes(parameterType, PsiType.INT) && areSameTypes(exprType, PsiType.LONG));
 		}

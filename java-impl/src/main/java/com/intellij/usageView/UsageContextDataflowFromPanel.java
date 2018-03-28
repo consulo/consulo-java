@@ -16,7 +16,7 @@
 
 package com.intellij.usageView;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.project.Project;
 import com.intellij.usages.UsageContextPanel;
 import com.intellij.usages.UsageView;
@@ -27,14 +27,14 @@ public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel
 {
 	public static class Provider extends UsageContextDataflowToPanel.Provider
 	{
-		@NotNull
+		@Nonnull
 		@Override
-		public UsageContextPanel create(@NotNull UsageView usageView)
+		public UsageContextPanel create(@Nonnull UsageView usageView)
 		{
 			return new UsageContextDataflowFromPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getTabTitle()
 		{
@@ -42,7 +42,7 @@ public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel
 		}
 	}
 
-	public UsageContextDataflowFromPanel(@NotNull Project project, @NotNull UsageViewPresentation presentation)
+	public UsageContextDataflowFromPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation)
 	{
 		super(project, presentation);
 	}

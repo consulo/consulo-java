@@ -25,8 +25,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Function;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,12 +40,12 @@ public class ClassNameReferenceEditor extends ReferenceEditorWithBrowseButton {
   private PsiClass mySelectedClass;
   private String myChooserTitle;
 
-  public ClassNameReferenceEditor(@NotNull final Project project, @Nullable final PsiClass selectedClass) {
+  public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable final PsiClass selectedClass) {
     this(project, selectedClass, null);
   }
 
-  public ClassNameReferenceEditor(@NotNull final Project project, @Nullable final PsiClass selectedClass,
-                                  @Nullable final GlobalSearchScope resolveScope) {
+  public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable final PsiClass selectedClass,
+                                  @javax.annotation.Nullable final GlobalSearchScope resolveScope) {
     super(null, project, new Function<String,Document>() {
       public Document fun(final String s) {
         PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");

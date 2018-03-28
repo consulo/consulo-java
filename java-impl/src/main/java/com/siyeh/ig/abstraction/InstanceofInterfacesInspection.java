@@ -21,7 +21,7 @@ import com.intellij.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -31,14 +31,14 @@ public class InstanceofInterfacesInspection extends BaseInspection {
   public boolean ignoreAbstractClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instanceof.concrete.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "instanceof.concrete.class.problem.descriptor");
@@ -61,7 +61,7 @@ public class InstanceofInterfacesInspection extends BaseInspection {
 
     @Override
     public void visitInstanceOfExpression(
-      @NotNull PsiInstanceOfExpression expression) {
+      @Nonnull PsiInstanceOfExpression expression) {
       super.visitInstanceOfExpression(expression);
       final PsiTypeElement typeElement = expression.getCheckType();
       if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,

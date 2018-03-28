@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,13 +35,13 @@ public class AssignmentToNullInspection extends BaseInspection {
   public boolean ignoreAssignmentsToFields = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("assignment.to.null.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.to.null.problem.descriptor");
@@ -77,7 +77,7 @@ public class AssignmentToNullInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @NotNull PsiLiteralExpression value) {
+      @Nonnull PsiLiteralExpression value) {
       super.visitLiteralExpression(value);
       final String text = value.getText();
       if (!PsiKeyword.NULL.equals(text)) {

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.javabeans;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,19 +26,18 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class ClassWithoutConstructorInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.without.constructor.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "class.without.constructor.problem.descriptor");
@@ -50,7 +51,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
   private static class ClassWithoutConstructorFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "class.without.constructor.create.quickfix");
@@ -99,7 +100,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (aClass.isInterface() || aClass.isEnum() ||
           aClass.isAnnotationType() /*|| JspPsiUtil.isInJspFile(aClass)*/) {

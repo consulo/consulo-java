@@ -30,8 +30,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
@@ -64,7 +64,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
 		GenerateAccessorProviderRegistrar.registerProvider(new NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>>()
 		{
 			@Override
-			@NotNull
+			@Nonnull
 			public Collection<EncapsulatableClassMember> fun(PsiClass s)
 			{
 				if(s.getLanguage() != JavaLanguage.INSTANCE)
@@ -90,7 +90,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
 	}
 
 	@Override
-	protected boolean hasMembers(@NotNull PsiClass aClass)
+	protected boolean hasMembers(@Nonnull PsiClass aClass)
 	{
 		return !GenerateAccessorProviderRegistrar.getEncapsulatableClassMembers(aClass).isEmpty();
 	}
@@ -165,7 +165,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
 		comboBox.addActionListener(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(@NotNull final ActionEvent M)
+			public void actionPerformed(@Nonnull final ActionEvent M)
 			{
 				templatesManager.setDefaultTemplate((TemplateResource) comboBox.getSelectedItem());
 			}
@@ -194,7 +194,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	protected ClassMember[] getAllOriginalMembers(final PsiClass aClass)
 	{
 		final List<EncapsulatableClassMember> list = GenerateAccessorProviderRegistrar.getEncapsulatableClassMembers(aClass);

@@ -25,7 +25,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
 import com.siyeh.ig.psiutils.MethodInheritanceUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
   private static final Key<Boolean> ALWAYS_CONSTANT =
     Key.create("ALWAYS_CONSTANT");
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

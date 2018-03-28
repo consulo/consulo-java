@@ -18,8 +18,8 @@ package com.intellij.lang.properties.psi;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.lang.properties.references.I18nUtil;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -45,22 +45,24 @@ public abstract class ResourceBundleManager {
     return I18nUtil.defaultGetPropertyFiles(myProject);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public I18nizedTextGenerator getI18nizedTextGenerator() {
     return null;
   }
 
-  @Nullable @NonNls
+  @javax.annotation.Nullable
+  @NonNls
   public abstract String getTemplateName();
 
-  @Nullable @NonNls
+  @javax.annotation.Nullable
+  @NonNls
   public abstract String getConcatenationTemplateName();
 
   public abstract boolean isActive(PsiFile context) throws ResourceBundleNotFoundException;
 
   public abstract boolean canShowJavaCodeInfo();
 
-  @Nullable
+  @javax.annotation.Nullable
   public static ResourceBundleManager getManager(PsiFile context) throws ResourceBundleNotFoundException {
     final Project project = context.getProject();
     final ResourceBundleManager[] managers = project.getExtensions(RESOURCE_BUNDLE_MANAGER);
@@ -73,13 +75,13 @@ public abstract class ResourceBundleManager {
     return manager.isActive(context) ? manager : null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PropertyCreationHandler getPropertyCreationHandler() {
     return null;
   }
 
-  @Nullable
-  public String suggestPropertyKey(@NotNull final String value) {
+  @javax.annotation.Nullable
+  public String suggestPropertyKey(@Nonnull final String value) {
     return null;
   }
 

@@ -23,8 +23,8 @@ import static com.intellij.patterns.StandardPatterns.or;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.DfaControlTransferValue;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -74,8 +74,8 @@ public class DfaValueFactory
 	private static final ElementPattern<? extends PsiModifierListOwner> MEMBER_OR_METHOD_PARAMETER = or(psiMember(), psiParameter().withSuperParent(2, psiMember()));
 
 
-	@NotNull
-	public Nullness suggestNullabilityForNonAnnotatedMember(@NotNull PsiModifierListOwner member)
+	@Nonnull
+	public Nullness suggestNullabilityForNonAnnotatedMember(@Nonnull PsiModifierListOwner member)
 	{
 		if(myUnknownMembersAreNullable && MEMBER_OR_METHOD_PARAMETER.accepts(member) && AnnotationUtil.getSuperAnnotationOwners(member).isEmpty())
 		{
@@ -85,8 +85,8 @@ public class DfaValueFactory
 		return Nullness.UNKNOWN;
 	}
 
-	@NotNull
-	public DfaValue createTypeValue(@Nullable PsiType type, @NotNull Nullness nullability)
+	@Nonnull
+	public DfaValue createTypeValue(@Nullable PsiType type, @Nonnull Nullness nullability)
 	{
 		if(type instanceof PsiClassType)
 		{
@@ -99,7 +99,7 @@ public class DfaValueFactory
 		return getTypeFactory().createTypeValue(internType(type), nullability);
 	}
 
-	private DfaPsiType internType(@NotNull PsiType psiType)
+	private DfaPsiType internType(@Nonnull PsiType psiType)
 	{
 		DfaPsiType dfaType = myDfaTypes.get(psiType);
 		if(dfaType == null)
@@ -141,7 +141,7 @@ public class DfaValueFactory
 	 * @param dfaRight     right operand
 	 * @return resulting condition: either {@link DfaRelationValue} or {@link DfaConstValue} (true or false) or {@link DfaUnknownValue}.
 	 */
-	@NotNull
+	@Nonnull
 	public DfaValue createCondition(DfaValue dfaLeft, RelationType relationType, DfaValue dfaRight)
 	{
 		DfaConstValue value = tryEvaluate(dfaLeft, relationType, dfaRight);
@@ -256,43 +256,43 @@ public class DfaValueFactory
 	private final DfaOptionalValue.Factory myOptionalFactory;
 	private final DfaRangeValue.Factory myRangeFactory;
 
-	@NotNull
+	@Nonnull
 	public DfaVariableValue.Factory getVarFactory()
 	{
 		return myVarFactory;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaConstValue.Factory getConstFactory()
 	{
 		return myConstFactory;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaBoxedValue.Factory getBoxedFactory()
 	{
 		return myBoxedFactory;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaTypeValue.Factory getTypeFactory()
 	{
 		return myTypeFactory;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaRelationValue.Factory getRelationFactory()
 	{
 		return myRelationFactory;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaOptionalValue.Factory getOptionalFactory()
 	{
 		return myOptionalFactory;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaRangeValue.Factory getRangeFactory()
 	{
 		return myRangeFactory;

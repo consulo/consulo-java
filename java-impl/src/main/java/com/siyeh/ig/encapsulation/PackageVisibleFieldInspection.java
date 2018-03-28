@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.encapsulation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
@@ -22,19 +24,18 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.EncapsulateVariableFix;
-import org.jetbrains.annotations.NotNull;
 
 public class PackageVisibleFieldInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "package.visible.field.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "package.visible.field.problem.descriptor");
@@ -60,7 +61,7 @@ public class PackageVisibleFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (field.hasModifierProperty(PsiModifier.PROTECTED) ||
           field.hasModifierProperty(PsiModifier.PUBLIC) ||
           field.hasModifierProperty(PsiModifier.PRIVATE)) {

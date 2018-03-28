@@ -1,6 +1,7 @@
 package consulo.java.manifest.lang;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestLexer;
 import org.osmorc.manifest.lang.ManifestParser;
@@ -18,14 +19,14 @@ public abstract class ManifestLanguageVersion extends LanguageVersion implements
 {
 	public static final ManifestLanguageVersion Manifest = new ManifestLanguageVersion("Manifest")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public Lexer createLexer()
 		{
 			return new ManifestLexer();
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public TokenSet getCommentTokens()
 		{
@@ -35,14 +36,14 @@ public abstract class ManifestLanguageVersion extends LanguageVersion implements
 
 	public static final ManifestLanguageVersion Bnd = new ManifestLanguageVersion("Bnd")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public Lexer createLexer()
 		{
 			return new BndLexer();
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public TokenSet getCommentTokens()
 		{
@@ -55,26 +56,26 @@ public abstract class ManifestLanguageVersion extends LanguageVersion implements
 			Bnd
 	};
 
-	protected ManifestLanguageVersion(@NotNull String id)
+	protected ManifestLanguageVersion(@Nonnull String id)
 	{
 		super(id, id,  ManifestLanguage.INSTANCE);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiParser createParser()
 	{
 		return new ManifestParser();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public TokenSet getStringLiteralElements()
 	{
 		return TokenSet.EMPTY;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public TokenSet getWhitespaceTokens()
 	{

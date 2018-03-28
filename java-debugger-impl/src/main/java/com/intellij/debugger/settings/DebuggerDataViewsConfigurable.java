@@ -29,8 +29,8 @@ import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.JavaDebuggerSupport;
@@ -70,7 +70,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 
 	private Project myProject;
 
-	public DebuggerDataViewsConfigurable(@Nullable Project project)
+	public DebuggerDataViewsConfigurable(@javax.annotation.Nullable Project project)
 	{
 		myProject = project;
 	}
@@ -319,14 +319,14 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getHelpTopic()
 	{
 		return "reference.idesettings.debugger.dataviews";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getId()
 	{
 		return getHelpTopic();

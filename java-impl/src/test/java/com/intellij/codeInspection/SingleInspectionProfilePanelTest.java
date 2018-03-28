@@ -23,7 +23,7 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
 import com.intellij.profile.codeInspection.ui.SingleInspectionProfilePanel;
 import com.intellij.testFramework.LightIdeaTestCase;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Dmitry Avdeev
@@ -122,7 +122,7 @@ public class SingleInspectionProfilePanelTest extends LightIdeaTestCase {
 
   private final JavaDocLocalInspection myInspection = new JavaDocLocalInspection();
 
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[] {myInspection};

@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.proc.VariablesProcessor;
 import com.intellij.codeInsight.template.ExpressionContext;
 import com.intellij.codeInsight.template.PsiElementResult;
@@ -40,7 +40,7 @@ public class MacroUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.template.macro.MacroUtil");
 
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	public static PsiType resultToPsiType(Result result, ExpressionContext context)
 	{
@@ -119,7 +119,7 @@ public class MacroUtil
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	private static PsiExpression[] getStandardExpressions(PsiElement place)
 	{
@@ -170,7 +170,7 @@ public class MacroUtil
 		return array.toArray(new PsiExpression[array.size()]);
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiExpression[] getStandardExpressionsOfType(PsiElement place, PsiType type)
 	{
 		List<PsiExpression> array = new ArrayList<>();
@@ -186,8 +186,8 @@ public class MacroUtil
 		return array.toArray(new PsiExpression[array.size()]);
 	}
 
-	@NotNull
-	public static PsiVariable[] getVariablesVisibleAt(@Nullable final PsiElement place, String prefix)
+	@Nonnull
+	public static PsiVariable[] getVariablesVisibleAt(@javax.annotation.Nullable final PsiElement place, String prefix)
 	{
 		if(place == null)
 		{
@@ -199,7 +199,7 @@ public class MacroUtil
 		VariablesProcessor varproc = new VariablesProcessor(prefix, true, list)
 		{
 			@Override
-			public boolean execute(@NotNull PsiElement pe, @NotNull ResolveState state)
+			public boolean execute(@Nonnull PsiElement pe, @Nonnull ResolveState state)
 			{
 				if(pe instanceof PsiVariable)
 				{

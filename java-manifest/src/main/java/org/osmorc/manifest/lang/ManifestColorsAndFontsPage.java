@@ -31,8 +31,7 @@ import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -71,44 +70,44 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage
 		ADDITIONAL_HIGHLIGHTING.put("parameterSeparator", ManifestColorsAndFonts.PARAMETER_SEPARATOR_KEY);
 	}
 
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return "Manifest & Bnd";
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Icon getIcon()
 	{
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	public AttributesDescriptor[] getAttributeDescriptors()
 	{
 		return ATTRIBUTE_DESCRIPTORS;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap()
 	{
 		return ADDITIONAL_HIGHLIGHTING;
 	}
 
-	@NotNull
+	@Nonnull
 	public ColorDescriptor[] getColorDescriptors()
 	{
 		return new ColorDescriptor[0];
 	}
 
-	@NotNull
+	@Nonnull
 	public SyntaxHighlighter getHighlighter()
 	{
 		return new ManifestSyntaxHighlighter(ManifestLanguageVersion.Bnd);
 	}
 
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getDemoText()
 	{
 		return "# Bnd comment\n" +

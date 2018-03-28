@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
@@ -90,7 +90,7 @@ public class RefactoringUtil {
     return Comparing.equal(virtualFile, sourceRootForFile);
   }
 
-  public static boolean isInStaticContext(PsiElement element, @Nullable final PsiClass aClass) {
+  public static boolean isInStaticContext(PsiElement element, @javax.annotation.Nullable final PsiClass aClass) {
     return PsiUtil.getEnclosingStaticElement(element, aClass) != null;
   }
 
@@ -520,7 +520,7 @@ public class RefactoringUtil {
     }
   }
 
-  public static PsiElement getAnchorElementForMultipleExpressions(@NotNull PsiExpression[] occurrences, PsiElement scope) {
+  public static PsiElement getAnchorElementForMultipleExpressions(@Nonnull PsiExpression[] occurrences, PsiElement scope) {
     PsiElement anchor = null;
     for (PsiExpression occurrence : occurrences) {
       if (scope != null && !PsiTreeUtil.isAncestor(scope, occurrence, false)) {
@@ -754,7 +754,7 @@ public class RefactoringUtil {
     return result;
   }
 
-  public static void makeMethodAbstract(@NotNull PsiClass targetClass, @NotNull PsiMethod method) throws IncorrectOperationException {
+  public static void makeMethodAbstract(@Nonnull PsiClass targetClass, @Nonnull PsiMethod method) throws IncorrectOperationException {
     if (!method.hasModifierProperty(PsiModifier.DEFAULT)) {
       PsiCodeBlock body = method.getBody();
       if (body != null) {
@@ -772,7 +772,7 @@ public class RefactoringUtil {
 
   }
 
-  public static void makeMethodDefault(@NotNull PsiMethod method) throws IncorrectOperationException {
+  public static void makeMethodDefault(@Nonnull PsiMethod method) throws IncorrectOperationException {
     PsiUtil.setModifierProperty(method, PsiModifier.DEFAULT, true);
     PsiUtil.setModifierProperty(method, PsiModifier.ABSTRACT, false);
 
@@ -873,7 +873,7 @@ public class RefactoringUtil {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiMethod getChainedConstructor(PsiMethod constructor) {
     final PsiCodeBlock constructorBody = constructor.getBody();
     if (constructorBody == null) return null;
@@ -1269,20 +1269,20 @@ public class RefactoringUtil {
   }
 
   @Nullable
-  public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@NotNull final PsiElement... elements) {
+  public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nonnull final PsiElement... elements) {
     return createTypeParameterListWithUsedTypeParameters(null, elements);
   }
 
   @Nullable
   public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable final PsiTypeParameterList fromList,
-                                                                                   @NotNull final PsiElement... elements) {
+                                                                                   @Nonnull final PsiElement... elements) {
     return createTypeParameterListWithUsedTypeParameters(fromList, Condition.TRUE, elements);
   }
 
   @Nullable
   public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable final PsiTypeParameterList fromList,
                                                                                    Condition<PsiTypeParameter> filter,
-                                                                                   @NotNull final PsiElement... elements) {
+                                                                                   @Nonnull final PsiElement... elements) {
     if (elements.length == 0) return null;
     final Set<PsiTypeParameter> used = new HashSet<PsiTypeParameter>();
     for (final PsiElement element : elements) {

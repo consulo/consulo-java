@@ -1,5 +1,5 @@
 <root>
   <item name='p.TestDeannotation java.lang.String get()'>
-    <annotation name='org.jetbrains.annotations.NotNull'/>
+    <annotation name='javax.annotation.Nonnull'/>
   </item>
 </root>

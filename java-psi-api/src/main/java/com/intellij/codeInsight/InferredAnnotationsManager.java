@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInsight;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
@@ -29,15 +31,15 @@ import com.intellij.psi.PsiModifierListOwner;
  *
  * @see NullableNotNullManager
  * @see Contract
- * @see Nullable
- * @see NotNull
+ * @see javax.annotation.Nullable
+ * @see javax.annotation.Nonnull
  * @see AnnotationUtil
  */
 public abstract class InferredAnnotationsManager
 {
 	private static final NotNullLazyKey<InferredAnnotationsManager, Project> INSTANCE_KEY = ServiceManager.createLazyKey(InferredAnnotationsManager.class);
 
-	public static InferredAnnotationsManager getInstance(@NotNull Project project)
+	public static InferredAnnotationsManager getInstance(@Nonnull Project project)
 	{
 		return INSTANCE_KEY.getValue(project);
 	}
@@ -47,17 +49,17 @@ public abstract class InferredAnnotationsManager
 	 * different instances of {@link PsiAnnotation}, which are not guaranteed to be equal.
 	 */
 	@Nullable
-	public abstract PsiAnnotation findInferredAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
+	public abstract PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
 	/**
 	 * There is a number of well-known methods where automatic inference fails (for example, {@link java.util.Objects#requireNonNull(Object)}.
 	 * For such methods, contracts are hardcoded, and for their parameters inferred @NotNull are suppressed.<p/>
 	 * <p>
-	 * {@link Contract} and {@link NotNull} annotations on methods are not necessarily applicable to the overridden implementations, so they're ignored, too.<p/>
+	 * {@link Contract} and {@link javax.annotation.Nonnull} annotations on methods are not necessarily applicable to the overridden implementations, so they're ignored, too.<p/>
 	 *
 	 * @return whether inference is to be suppressed the given annotation on the given method or parameter
 	 */
-	public abstract boolean ignoreInference(@NotNull PsiModifierListOwner owner, @Nullable String annotationFQN);
+	public abstract boolean ignoreInference(@Nonnull PsiModifierListOwner owner, @javax.annotation.Nullable String annotationFQN);
 
 	/**
 	 * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as
@@ -65,12 +67,12 @@ public abstract class InferredAnnotationsManager
 	 *
 	 * @return all inferred annotations for the given element
 	 */
-	@NotNull
-	public abstract PsiAnnotation[] findInferredAnnotations(@NotNull PsiModifierListOwner listOwner);
+	@Nonnull
+	public abstract PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner);
 
 	/**
 	 * @return whether the given annotation was inferred by this service.
 	 * @see AnnotationUtil#isInferredAnnotation(PsiAnnotation)
 	 */
-	public abstract boolean isInferredAnnotation(@NotNull PsiAnnotation annotation);
+	public abstract boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation);
 }

@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.LibraryUtil;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,13 +40,13 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
   public boolean ignoreOverridingMethods = false;
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.can.be.variable.arity.method.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("method.can.be.variable.arity.method.problem.descriptor");
@@ -69,7 +69,7 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
 
   private static class MethodCanBeVariableArityMethodFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("convert.to.variable.arity.method.quickfix");

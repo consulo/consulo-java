@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -38,7 +38,7 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix
 	private final Module myCurrentModule;
 	private final String myQualifiedClassName;
 
-	public AddLibraryToDependenciesFix(@NotNull Module currentModule, @NotNull Library library, @NotNull PsiReference reference, @Nullable String qualifiedClassName)
+	public AddLibraryToDependenciesFix(@Nonnull Module currentModule, @Nonnull Library library, @Nonnull PsiReference reference, @javax.annotation.Nullable String qualifiedClassName)
 	{
 		super(reference);
 		myLibrary = library;
@@ -47,27 +47,27 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		return JavaQuickFixBundle.message("orderEntry.fix.add.library.to.classpath", LibraryUtil.getPresentableName(myLibrary));
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("orderEntry.fix.family.add.library.to.classpath");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return !project.isDisposed() && !myCurrentModule.isDisposed() && !((LibraryEx) myLibrary).isDisposed();
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @Nullable Editor editor, PsiFile file)
+	public void invoke(@Nonnull Project project, @javax.annotation.Nullable Editor editor, PsiFile file)
 	{
 		DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
 		JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibrary, scope);

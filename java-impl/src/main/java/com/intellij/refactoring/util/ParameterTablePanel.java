@@ -29,7 +29,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.psi.PsiElement;
@@ -134,7 +133,7 @@ public abstract class ParameterTablePanel extends JPanel {
       TypeSelector myCurrentSelector;
       final JBComboBoxTableCellEditorComponent myEditorComponent = new JBComboBoxTableCellEditorComponent();
 
-      @Nullable
+      @javax.annotation.Nullable
       public Object getCellEditorValue() {
         return myEditorComponent.getEditorValue();
       }

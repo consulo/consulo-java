@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.compiled;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiDocCommentOwner;
@@ -36,14 +36,14 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	private final PsiDocCommentOwner myParent;
 	private final PsiDocTag[] myTags;
 
-	ClsDocCommentImpl(@NotNull PsiDocCommentOwner parent)
+	ClsDocCommentImpl(@Nonnull PsiDocCommentOwner parent)
 	{
 		myParent = parent;
 		myTags = new PsiDocTag[]{new ClsDocTagImpl(this, "@deprecated")};
 	}
 
 	@Override
-	public void appendMirrorText(final int indentLevel, @NotNull final StringBuilder buffer)
+	public void appendMirrorText(final int indentLevel, @Nonnull final StringBuilder buffer)
 	{
 		buffer.append("/**");
 		for(PsiDocTag tag : getTags())
@@ -57,13 +57,13 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaDocElementType.DOC_COMMENT);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return getTags();
@@ -82,14 +82,14 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getDescriptionElements()
 	{
 		return PsiElement.EMPTY_ARRAY;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiDocTag[] getTags()
 	{
 		return myTags;
@@ -102,7 +102,7 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiDocTag[] findTagsByName(@NonNls String name)
 	{
 		return name.equals("deprecated") ? getTags() : PsiDocTag.EMPTY_ARRAY;
@@ -115,7 +115,7 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

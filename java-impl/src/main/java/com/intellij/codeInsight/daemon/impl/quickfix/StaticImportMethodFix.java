@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -43,26 +43,26 @@ public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod>
 {
 	private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
 
-	public StaticImportMethodFix(@NotNull PsiMethodCallExpression methodCallExpression)
+	public StaticImportMethodFix(@Nonnull PsiMethodCallExpression methodCallExpression)
 	{
 		myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getBaseText()
 	{
 		return JavaQuickFixBundle.message("static.import.method.text");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getMemberPresentableText(PsiMethod method)
 	{
 		return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_FQ_NAME, 0);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected List<PsiMethod> getMembersToImport(boolean applicableOnly)
 	{
@@ -80,8 +80,8 @@ public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod>
 		return processor.getMembersToImport(applicableOnly);
 	}
 
-	@NotNull
-	protected StaticImportMethodQuestionAction<PsiMethod> createQuestionAction(List<PsiMethod> methodsToImport, @NotNull Project project, Editor editor)
+	@Nonnull
+	protected StaticImportMethodQuestionAction<PsiMethod> createQuestionAction(List<PsiMethod> methodsToImport, @Nonnull Project project, Editor editor)
 	{
 		return new StaticImportMethodQuestionAction<>(project, editor, methodsToImport, myMethodCall);
 	}

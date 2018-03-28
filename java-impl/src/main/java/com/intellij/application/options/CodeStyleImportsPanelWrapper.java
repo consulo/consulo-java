@@ -21,7 +21,7 @@ import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -48,7 +48,7 @@ public class CodeStyleImportsPanelWrapper extends CodeStyleAbstractPanel {
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected FileType getFileType() {
     return JavaFileType.INSTANCE;

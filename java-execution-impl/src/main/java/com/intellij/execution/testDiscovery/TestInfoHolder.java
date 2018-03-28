@@ -32,8 +32,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.vfs.newvfs.persistent.FlushingDaemon;
 import com.intellij.util.io.*;
 
@@ -56,7 +56,7 @@ final class TestInfoHolder
 
 	private static final int VERSION = 4;
 
-	TestInfoHolder(@NotNull Path basePath, boolean readOnly, Object lock)
+	TestInfoHolder(@Nonnull Path basePath, boolean readOnly, Object lock)
 	{
 		myLock = lock;
 		final Path versionFile = getVersionFile(basePath);
@@ -224,7 +224,7 @@ final class TestInfoHolder
 		}
 	}
 
-	private static void writeVersion(@NotNull Path versionFile) throws IOException
+	private static void writeVersion(@Nonnull Path versionFile) throws IOException
 	{
 		try (final DataOutputStream versionOut = new DataOutputStream(PathKt.outputStream(versionFile)))
 		{
@@ -232,7 +232,7 @@ final class TestInfoHolder
 		}
 	}
 
-	private static int readVersion(@NotNull Path versionFile) throws IOException
+	private static int readVersion(@Nonnull Path versionFile) throws IOException
 	{
 		InputStream inputStream = PathKt.inputStreamIfExists(versionFile);
 		if(inputStream == null)
@@ -315,7 +315,7 @@ final class TestInfoHolder
 		return myDisposed;
 	}
 
-	public static boolean isValidPath(@NotNull Path path)
+	public static boolean isValidPath(@Nonnull Path path)
 	{
 		try
 		{
@@ -329,7 +329,7 @@ final class TestInfoHolder
 
 	private static class TestNamesExternalizer implements DataExternalizer<TIntArrayList>
 	{
-		public void save(@NotNull DataOutput dataOutput, TIntArrayList testNameIds) throws IOException
+		public void save(@Nonnull DataOutput dataOutput, TIntArrayList testNameIds) throws IOException
 		{
 			for(int testNameId : testNameIds.toNativeArray())
 			{
@@ -337,7 +337,7 @@ final class TestInfoHolder
 			}
 		}
 
-		public TIntArrayList read(@NotNull DataInput dataInput) throws IOException
+		public TIntArrayList read(@Nonnull DataInput dataInput) throws IOException
 		{
 			TIntHashSet result = new TIntHashSet();
 
@@ -364,7 +364,7 @@ final class TestInfoHolder
 
 	private static class ClassesAndMethodsMapDataExternalizer implements DataExternalizer<TIntObjectHashMap<TIntArrayList>>
 	{
-		public void save(@NotNull final DataOutput dataOutput, TIntObjectHashMap<TIntArrayList> classAndMethodsMap) throws IOException
+		public void save(@Nonnull final DataOutput dataOutput, TIntObjectHashMap<TIntArrayList> classAndMethodsMap) throws IOException
 		{
 			DataInputOutputUtil.writeINT(dataOutput, classAndMethodsMap.size());
 			final int[] classNameIds = classAndMethodsMap.keys();
@@ -389,7 +389,7 @@ final class TestInfoHolder
 			}
 		}
 
-		public TIntObjectHashMap<TIntArrayList> read(@NotNull DataInput dataInput) throws IOException
+		public TIntObjectHashMap<TIntArrayList> read(@Nonnull DataInput dataInput) throws IOException
 		{
 			int numberOfClasses = DataInputOutputUtil.readINT(dataInput);
 			TIntObjectHashMap<TIntArrayList> result = new TIntObjectHashMap<>();
@@ -421,13 +421,13 @@ final class TestInfoHolder
 		public static final MethodQNameSerializer INSTANCE = new MethodQNameSerializer();
 
 		@Override
-		public void save(@NotNull DataOutput out, Long value) throws IOException
+		public void save(@Nonnull DataOutput out, Long value) throws IOException
 		{
 			out.writeLong(value);
 		}
 
 		@Override
-		public Long read(@NotNull DataInput in) throws IOException
+		public Long read(@Nonnull DataInput in) throws IOException
 		{
 			return in.readLong();
 		}
@@ -445,7 +445,7 @@ final class TestInfoHolder
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	static Path getVersionFile(Path path)
 	{
 		return path.resolve("index.version");

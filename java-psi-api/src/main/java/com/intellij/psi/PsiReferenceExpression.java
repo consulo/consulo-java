@@ -16,8 +16,8 @@
 package com.intellij.psi;
 
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a reference in Java code used as part of an expression.
@@ -29,7 +29,7 @@ public interface PsiReferenceExpression extends PsiExpression, PsiJavaCodeRefere
    *
    * @return the qualifier, or null if the reference is not qualified.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getQualifierExpression();
 
   /**
@@ -41,7 +41,7 @@ public interface PsiReferenceExpression extends PsiExpression, PsiJavaCodeRefere
    * @return the element corresponding to this element in the PSI tree after the modification.
    * @throws IncorrectOperationException if the modification failed for some reason.
    */
-  PsiElement bindToElementViaStaticImport(@NotNull PsiClass qualifierClass) throws IncorrectOperationException ;
+  PsiElement bindToElementViaStaticImport(@Nonnull PsiClass qualifierClass) throws IncorrectOperationException ;
 
   void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException;
 }

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.assignment;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -22,20 +24,19 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ExtractParameterAsLocalVariableFix;
 import com.siyeh.ig.psiutils.WellFormednessUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class AssignmentToCatchBlockParameterInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.to.catch.block.parameter.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.to.catch.block.parameter.problem.descriptor");
@@ -56,7 +57,7 @@ public class AssignmentToCatchBlockParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;

@@ -27,7 +27,6 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +153,7 @@ public class ParameterInfoImpl implements JavaParameterInfo {
     return result.toArray(new ParameterInfoImpl[result.size()]);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiExpression getValue(final PsiCallExpression expr) throws IncorrectOperationException {
     if (StringUtil.isEmpty(defaultValue)) return null;
     final PsiExpression expression =

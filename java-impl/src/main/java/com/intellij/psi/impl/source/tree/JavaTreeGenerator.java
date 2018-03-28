@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
@@ -55,7 +55,7 @@ public class JavaTreeGenerator implements TreeGenerator
 
 	@Override
 	@Nullable
-	public TreeElement generateTreeFor(@NotNull PsiElement original, @NotNull final CharTable table, @NotNull final PsiManager manager)
+	public TreeElement generateTreeFor(@Nonnull PsiElement original, @Nonnull final CharTable table, @Nonnull final PsiManager manager)
 	{
 		if(original instanceof PsiKeyword || original instanceof PsiIdentifier)
 		{
@@ -174,7 +174,7 @@ public class JavaTreeGenerator implements TreeGenerator
 		return Factory.createSingleLeafElement(type, text, 0, text.length(), table, manager, CodeEditUtil.isNodeGenerated(original.getNode()));
 	}
 
-	private static TreeElement markGeneratedIfNeeded(@NotNull PsiElement original, @NotNull TreeElement copy)
+	private static TreeElement markGeneratedIfNeeded(@Nonnull PsiElement original, @Nonnull TreeElement copy)
 	{
 		if(CodeEditUtil.isNodeGenerated(original.getNode()))
 		{
@@ -271,7 +271,7 @@ public class JavaTreeGenerator implements TreeGenerator
 		}
 	}
 
-	private static void encodeClassTypeInfoInReference(@NotNull CompositeElement reference, PsiClass referencedClass, PsiSubstitutor substitutor)
+	private static void encodeClassTypeInfoInReference(@Nonnull CompositeElement reference, PsiClass referencedClass, PsiSubstitutor substitutor)
 	{
 		reference.putCopyableUserData(REFERENCED_CLASS_KEY, referencedClass);
 

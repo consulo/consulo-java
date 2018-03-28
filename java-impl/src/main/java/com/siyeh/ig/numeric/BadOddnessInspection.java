@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.numeric;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.ConstantExpressionUtil;
@@ -22,16 +24,15 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class BadOddnessInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("bad.oddness.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "bad.oddness.problem.descriptor");
@@ -45,7 +46,7 @@ public class BadOddnessInspection extends BaseInspection {
 
     @Override
     public void visitBinaryExpression(
-      @NotNull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (expression.getROperand() == null) {
         return;

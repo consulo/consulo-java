@@ -15,7 +15,8 @@
  */
 package com.intellij.unscramble;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -31,7 +32,7 @@ public final class UnscrambleAction extends AnAction implements DumbAware
 {
 	@RequiredDispatchThread
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e)
+	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
 		final Project project = e.getData(CommonDataKeys.PROJECT);
 		new UnscrambleDialog(project).show();
@@ -39,7 +40,7 @@ public final class UnscrambleAction extends AnAction implements DumbAware
 
 	@RequiredDispatchThread
 	@Override
-	public void update(@NotNull AnActionEvent event)
+	public void update(@Nonnull AnActionEvent event)
 	{
 		final Presentation presentation = event.getPresentation();
 		final Project project = event.getData(CommonDataKeys.PROJECT);

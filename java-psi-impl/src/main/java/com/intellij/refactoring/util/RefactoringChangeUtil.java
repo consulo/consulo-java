@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -29,8 +29,8 @@ public class RefactoringChangeUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.ChangeUtil");
 
-	@Nullable
-	private static String getMethodExpressionName(@Nullable PsiElement element)
+	@javax.annotation.Nullable
+	private static String getMethodExpressionName(@javax.annotation.Nullable PsiElement element)
 	{
 		if(!(element instanceof PsiMethodCallExpression))
 		{
@@ -40,13 +40,13 @@ public class RefactoringChangeUtil
 		return methodExpression.getReferenceName();
 	}
 
-	public static boolean isSuperOrThisMethodCall(@Nullable PsiElement element)
+	public static boolean isSuperOrThisMethodCall(@javax.annotation.Nullable PsiElement element)
 	{
 		String name = getMethodExpressionName(element);
 		return PsiKeyword.SUPER.equals(name) || PsiKeyword.THIS.equals(name);
 	}
 
-	public static boolean isSuperMethodCall(@Nullable PsiElement element)
+	public static boolean isSuperMethodCall(@javax.annotation.Nullable PsiElement element)
 	{
 		String name = getMethodExpressionName(element);
 		return PsiKeyword.SUPER.equals(name);
@@ -86,9 +86,9 @@ public class RefactoringChangeUtil
 		return GenericsUtil.getVariableTypeByExpressionType(type);
 	}
 
-	public static PsiReferenceExpression qualifyReference(@NotNull PsiReferenceExpression referenceExpression,
-			@NotNull PsiMember member,
-			@Nullable final PsiClass qualifyingClass) throws IncorrectOperationException
+	public static PsiReferenceExpression qualifyReference(@Nonnull PsiReferenceExpression referenceExpression,
+			@Nonnull PsiMember member,
+			@javax.annotation.Nullable final PsiClass qualifyingClass) throws IncorrectOperationException
 	{
 		PsiManager manager = referenceExpression.getManager();
 		PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(referenceExpression,
@@ -137,7 +137,7 @@ public class RefactoringChangeUtil
 		return (PsiReferenceExpression) referenceExpression.replace(expressionFromText);
 	}
 
-	public static PsiClass getThisClass(@NotNull PsiElement place)
+	public static PsiClass getThisClass(@Nonnull PsiElement place)
 	{
 		PsiElement parent = place.getContext();
 		if(parent == null)
@@ -163,9 +163,9 @@ public class RefactoringChangeUtil
 		}
 	}
 
-	static <T extends PsiQualifiedExpression> T createQualifiedExpression(@NotNull PsiManager manager,
+	static <T extends PsiQualifiedExpression> T createQualifiedExpression(@Nonnull PsiManager manager,
 			PsiClass qualifierClass,
-			@NotNull String qName) throws IncorrectOperationException
+			@Nonnull String qName) throws IncorrectOperationException
 	{
 		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 		if(qualifierClass != null)

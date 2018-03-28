@@ -15,12 +15,13 @@
  */
 package com.intellij.application.options;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.application.options.codeStyle.arrangement.ArrangementSettingsPanel;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Denis Zhdanov
@@ -28,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JavaArrangementPanel extends ArrangementSettingsPanel {
 
-  public JavaArrangementPanel(@NotNull CodeStyleSettings settings) {
+  public JavaArrangementPanel(@Nonnull CodeStyleSettings settings) {
     super(settings, JavaLanguage.INSTANCE);
   }
 
@@ -37,7 +38,7 @@ public class JavaArrangementPanel extends ArrangementSettingsPanel {
     return 80;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected FileType getFileType() {
     return JavaFileType.INSTANCE;

@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -34,13 +34,13 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
   private static final Set<String> loggingMethodNames = ContainerUtilRt.newHashSet("trace", "debug", "info", "warn", "error");
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("placeholder.count.matches.argument.count.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final int argumentCount = ((Integer)infos[0]).intValue();

@@ -24,17 +24,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.WellFormednessUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AssignmentUsedAsConditionInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.used.as.condition.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.used.as.condition.problem.descriptor");
@@ -47,7 +47,7 @@ public class AssignmentUsedAsConditionInspection extends BaseInspection {
   private static class AssignmentUsedAsConditionFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "assignment.used.as.condition.replace.quickfix");
@@ -75,7 +75,7 @@ public class AssignmentUsedAsConditionInspection extends BaseInspection {
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;

@@ -23,7 +23,7 @@ import com.intellij.util.ProcessingContext;
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import static com.intellij.patterns.PsiJavaPatterns.literalExpression;
 
@@ -37,30 +37,30 @@ public final class LanguageReferenceProvider extends PsiReferenceContributor {
     registrar.registerReferenceProvider(
       literalExpression().annotationParam(StandardPatterns.string().with(new PatternCondition<String>("isLanguageAnnotation") {
         @Override
-        public boolean accepts(@NotNull final String s, final ProcessingContext context) {
+        public boolean accepts(@Nonnull final String s, final ProcessingContext context) {
           return Comparing.equal(configuration.getAdvancedConfiguration().getLanguageAnnotationClass(), s);
         }
       }), "value").and(literalExpression().with(new PatternCondition<PsiLiteralExpression>("isStringLiteral") {
         @Override
-        public boolean accepts(@NotNull final PsiLiteralExpression expression, final ProcessingContext context) {
+        public boolean accepts(@Nonnull final PsiLiteralExpression expression, final ProcessingContext context) {
           return PsiUtilEx.isStringOrCharacterLiteral(expression);
         }
       })), new PsiReferenceProvider() {
-        @NotNull
+        @Nonnull
         @Override
-        public PsiReference[] getReferencesByElement(@NotNull final PsiElement element, @NotNull final ProcessingContext context) {
+        public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context) {
           return new PsiReference[]{new LanguageReference((PsiLiteralExpression)element)};
         }
       });
     registrar.registerReferenceProvider(literalExpression().with(new PatternCondition<PsiLiteralExpression>("isStringLiteral") {
       @Override
-      public boolean accepts(@NotNull final PsiLiteralExpression expression, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiLiteralExpression expression, final ProcessingContext context) {
         return PsiUtilEx.isStringOrCharacterLiteral(expression);
       }
     }), new PsiReferenceProvider() {
-      @NotNull
+      @Nonnull
       @Override
-      public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(@Nonnull PsiElement psiElement, @Nonnull ProcessingContext context) {
         final PsiLiteralExpression expression = (PsiLiteralExpression)psiElement;
         final PsiModifierListOwner owner =
           AnnotationUtilEx.getAnnotatedElementFor(expression, AnnotationUtilEx.LookupType.PREFER_DECLARATION);

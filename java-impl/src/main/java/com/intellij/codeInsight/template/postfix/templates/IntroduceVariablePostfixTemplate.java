@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -26,7 +28,6 @@ import com.intellij.refactoring.introduceVariable.InputValidator;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableHandler;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableSettings;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
-import org.jetbrains.annotations.NotNull;
 
 // todo: support for int[].var (parses as .class access!)
 public class IntroduceVariablePostfixTemplate extends ExpressionPostfixTemplateWithChooser {
@@ -35,13 +36,13 @@ public class IntroduceVariablePostfixTemplate extends ExpressionPostfixTemplateW
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expression) {
+  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
     // for advanced stuff use ((PsiJavaCodeReferenceElement)expression).advancedResolve(true).getElement();
     IntroduceVariableHandler handler = ApplicationManager.getApplication().isUnitTestMode() ? getMockHandler() : new IntroduceVariableHandler();
     handler.invoke(expression.getProject(), editor, expression);
   }
 
-  @NotNull
+  @Nonnull
   private static IntroduceVariableHandler getMockHandler() {
     return new IntroduceVariableHandler() {
       // mock default settings

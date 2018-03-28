@@ -15,7 +15,6 @@
  */
 package org.jetbrains.java.debugger.breakpoints.properties;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.InstanceFilter;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.ui.classFilter.ClassFilter;
@@ -98,7 +97,7 @@ public class JavaBreakpointProperties<T extends JavaBreakpointProperties> extend
 		return changed;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public T getState()
 	{

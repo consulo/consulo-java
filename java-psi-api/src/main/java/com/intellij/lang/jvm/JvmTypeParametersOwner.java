@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.jvm;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents an element which declares type parameters.
@@ -28,6 +28,6 @@ public interface JvmTypeParametersOwner extends JvmMember
 	/**
 	 * @see java.lang.reflect.GenericDeclaration#getTypeParameters
 	 */
-	@NotNull
+	@Nonnull
 	JvmTypeParameter[] getTypeParameters();
 }

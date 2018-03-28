@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class NonStaticInnerClass {
   public NonStaticInnerClass() {
@@ -6,7 +6,7 @@ public class NonStaticInnerClass {
   }
 
   public class Inner {
-    public Inner(@NotNull String s) {
+    public Inner(@Nonnull String s) {
     }
   }
 }

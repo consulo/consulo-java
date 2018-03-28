@@ -18,8 +18,8 @@ package com.intellij.codeInsight.completion;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
@@ -52,7 +52,7 @@ public class MemberLookupHelper
 		this(overloads.get(0), containingClass, shouldImport, true);
 	}
 
-	public MemberLookupHelper(PsiMember member, @Nullable PsiClass containingClass, boolean shouldImport, final boolean mergedOverloads)
+	public MemberLookupHelper(PsiMember member, @javax.annotation.Nullable PsiClass containingClass, boolean shouldImport, final boolean mergedOverloads)
 	{
 		myMember = member;
 		myContainingClass = containingClass;
@@ -65,7 +65,7 @@ public class MemberLookupHelper
 		return myMember;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiClass getContainingClass()
 	{
 		return myContainingClass;
@@ -119,7 +119,7 @@ public class MemberLookupHelper
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiType patchGetClass(@Nullable PsiType type)
 	{
 		if(myMember instanceof PsiMethod && PsiTypesUtil.isGetClass((PsiMethod) myMember) && type instanceof PsiClassType)
@@ -134,8 +134,8 @@ public class MemberLookupHelper
 		return type;
 	}
 
-	@NotNull
-	static String getMethodParameterString(@NotNull PsiMethod method, @NotNull PsiSubstitutor substitutor)
+	@Nonnull
+	static String getMethodParameterString(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor)
 	{
 		return PsiFormatUtil.formatMethod(method, substitutor, PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE);
 	}

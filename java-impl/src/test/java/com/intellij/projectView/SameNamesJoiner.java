@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.TreeStructureProvider;
@@ -106,7 +107,7 @@ class SameNamesJoiner implements TreeStructureProvider {
     Collection<AbstractTreeNode> myChildren;
 
     @Override
-    @NotNull
+    @Nonnull
     public Collection<AbstractTreeNode> getChildren() {
       return myChildren;
     }
@@ -122,7 +123,7 @@ class SameNamesJoiner implements TreeStructureProvider {
     }
 
     @Override
-    public boolean contains(@NotNull VirtualFile file) {
+    public boolean contains(@Nonnull VirtualFile file) {
       return false;
     }
 

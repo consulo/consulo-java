@@ -34,7 +34,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,20 +53,20 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.constructor.matching.super");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) return false;
     setText(JavaQuickFixBundle.message("create.constructor.matching.super"));
     return true;
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, PsiFile file) {
+  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
     PsiClass baseClass = myClass.getSuperClass();
     LOG.assertTrue(baseClass != null);

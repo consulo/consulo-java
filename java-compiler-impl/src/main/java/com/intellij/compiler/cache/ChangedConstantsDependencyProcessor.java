@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.compiler.classParsing.FieldInfo;
 import com.intellij.compiler.impl.ExitException;
 import com.intellij.compiler.impl.ExitStatus;
@@ -136,7 +136,7 @@ public class ChangedConstantsDependencyProcessor {
     final Ref<CacheCorruptedException> exRef = new Ref<CacheCorruptedException>(null);
     processIdentifiers(psiSearchHelper, new PsiElementProcessor<PsiIdentifier>() {
       @Override
-      public synchronized boolean execute(@NotNull PsiIdentifier identifier) {
+      public synchronized boolean execute(@Nonnull PsiIdentifier identifier) {
         try {
           final PsiElement parent = identifier.getParent();
           if (parent instanceof PsiReferenceExpression) {
@@ -174,9 +174,9 @@ public class ChangedConstantsDependencyProcessor {
   }
 
   private static boolean processIdentifiers(PsiSearchHelper helper,
-                                            @NotNull final PsiElementProcessor<PsiIdentifier> processor,
-                                            @NotNull final String identifier,
-                                            @NotNull SearchScope searchScope,
+                                            @Nonnull final PsiElementProcessor<PsiIdentifier> processor,
+                                            @Nonnull final String identifier,
+                                            @Nonnull SearchScope searchScope,
                                             short searchContext) {
     TextOccurenceProcessor processor1 = new TextOccurenceProcessor() {
       public boolean execute(PsiElement element, int offsetInElement) {
@@ -282,7 +282,7 @@ public class ChangedConstantsDependencyProcessor {
   }
   */
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiField getOwnerField(PsiElement element) {
     while (!(element instanceof PsiFile)) {
       if (element instanceof PsiClass) {
@@ -296,7 +296,7 @@ public class ChangedConstantsDependencyProcessor {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private FieldChangeInfo findChangeInfo(PsiField field) throws CacheCorruptedException {
     String name = field.getName();
     for (final FieldChangeInfo changeInfo : myChangedFields) {

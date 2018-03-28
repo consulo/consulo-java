@@ -2,7 +2,8 @@ package com.intellij.codeInsight.completion;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.junit.Assert;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupEvent;
@@ -18,7 +19,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 public abstract class LightFixtureCompletionTestCase extends LightCodeInsightFixtureTestCase {
   protected LookupElement[] myItems;
 
-  @NotNull
+  @Nonnull
   @Override
   protected TestModuleDescriptor getProjectDescriptor() {
     return JAVA_1_6;

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
@@ -22,24 +24,22 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MakeFieldFinalFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class StaticNonFinalFieldInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "static.non.final.field.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.non.final.field.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     return MakeFieldFinalFix.buildFix(field);
@@ -53,7 +53,7 @@ public class StaticNonFinalFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.STATIC) ||
           field.hasModifierProperty(PsiModifier.FINAL)) {
         return;

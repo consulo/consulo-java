@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.compiled;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
@@ -36,7 +36,7 @@ public class ClassFileDecompilers
 	 */
 	public interface Decompiler
 	{
-		boolean accepts(@NotNull VirtualFile file);
+		boolean accepts(@Nonnull VirtualFile file);
 	}
 
 
@@ -50,8 +50,8 @@ public class ClassFileDecompilers
 	 */
 	public abstract static class Light implements Decompiler
 	{
-		@NotNull
-		public abstract CharSequence getText(@NotNull VirtualFile file);
+		@Nonnull
+		public abstract CharSequence getText(@Nonnull VirtualFile file);
 	}
 
 
@@ -62,7 +62,7 @@ public class ClassFileDecompilers
 	 */
 	public abstract static class Full implements Decompiler
 	{
-		@NotNull
+		@Nonnull
 		public abstract ClsStubBuilder getStubBuilder();
 
 		/**
@@ -78,8 +78,8 @@ public class ClassFileDecompilers
 		 * A standard practice is to hide such files by returning {@code null} from
 		 * {@link FileViewProvider#getPsi(com.intellij.lang.Language)}.</p>
 		 */
-		@NotNull
-		public abstract FileViewProvider createFileViewProvider(@NotNull VirtualFile file, @NotNull PsiManager manager, boolean physical);
+		@Nonnull
+		public abstract FileViewProvider createFileViewProvider(@Nonnull VirtualFile file, @Nonnull PsiManager manager, boolean physical);
 	}
 
 
@@ -90,7 +90,7 @@ public class ClassFileDecompilers
 	}
 
 	@Nullable
-	public static Decompiler find(@NotNull VirtualFile file)
+	public static Decompiler find(@Nonnull VirtualFile file)
 	{
 		for(Decompiler decompiler : EP_NAME.getExtensions())
 		{

@@ -15,7 +15,6 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
@@ -25,6 +24,6 @@ import com.intellij.xdebugger.frame.XFullValueEvaluator;
  */
 public interface FullValueEvaluatorProvider
 {
-	@Nullable
+	@javax.annotation.Nullable
 	XFullValueEvaluator getFullValueEvaluator(EvaluationContextImpl evaluationContext, ValueDescriptorImpl valueDescriptor);
 }

@@ -20,17 +20,17 @@ import com.intellij.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class BreakStatementWithLabelInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "break.statement.with.label.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "break.statement.with.label.problem.descriptor");
@@ -44,7 +44,7 @@ public class BreakStatementWithLabelInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitBreakStatement(@NotNull PsiBreakStatement statement) {
+    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
       super.visitBreakStatement(statement);
       final PsiIdentifier labelIdentifier =
         statement.getLabelIdentifier();

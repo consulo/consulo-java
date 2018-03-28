@@ -18,16 +18,16 @@ package com.siyeh.ig.methodmetrics;
 import com.intellij.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class CyclomaticComplexityInspection extends MethodMetricInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyComplexMethod";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "cyclomatic.complexity.display.name");
@@ -42,7 +42,7 @@ public class CyclomaticComplexityInspection extends MethodMetricInspection {
       "method.complexity.limit.option");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer complexity = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -56,7 +56,7 @@ public class CyclomaticComplexityInspection extends MethodMetricInspection {
   private class MethodComplexityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

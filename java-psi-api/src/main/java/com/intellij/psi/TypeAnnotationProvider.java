@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * An object that returns annotations for {@link PsiType}. Since computing type annotations might be computationally expensive sometimes,
@@ -29,7 +29,7 @@ public interface TypeAnnotationProvider
 {
 	TypeAnnotationProvider EMPTY = new TypeAnnotationProvider()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiAnnotation[] getAnnotations()
 		{
@@ -37,7 +37,7 @@ public interface TypeAnnotationProvider
 		}
 	};
 
-	@NotNull
+	@Nonnull
 	PsiAnnotation[] getAnnotations();
 
 
@@ -50,15 +50,15 @@ public interface TypeAnnotationProvider
 			myAnnotations = annotations;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiAnnotation[] getAnnotations()
 		{
 			return myAnnotations;
 		}
 
-		@NotNull
-		public static TypeAnnotationProvider create(@NotNull PsiAnnotation[] annotations)
+		@Nonnull
+		public static TypeAnnotationProvider create(@Nonnull PsiAnnotation[] annotations)
 		{
 			return annotations.length == 0 ? EMPTY : new Static(annotations);
 		}

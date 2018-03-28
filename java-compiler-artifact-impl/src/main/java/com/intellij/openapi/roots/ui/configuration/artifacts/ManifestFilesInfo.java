@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -36,7 +35,7 @@ public class ManifestFilesInfo
 	private final Map<VirtualFile, ManifestFileConfiguration> myManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
 	private final Map<VirtualFile, ManifestFileConfiguration> myOriginalManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
 
-	@Nullable
+	@javax.annotation.Nullable
 	public ManifestFileConfiguration getManifestFile(CompositePackagingElement<?> element, ArtifactType artifactType,
 			final PackagingElementResolvingContext context)
 	{

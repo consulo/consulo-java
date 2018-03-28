@@ -50,7 +50,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.HashMap;
 import consulo.psi.PsiPackage;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -62,7 +62,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
            element instanceof PsiField || element instanceof PsiParameter || element instanceof PsiLocalVariable || element instanceof PsiPackage;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public NonCodeUsageSearchInfo findUsages(final PsiElement element, final PsiElement[] allElementsToDelete, final List<UsageInfo> usages) {
     Condition<PsiElement> insideDeletedCondition = getUsageInsideDeletedFilter(allElementsToDelete);
     if (element instanceof PsiClass) {
@@ -238,7 +238,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public UsageInfo[] preprocessUsages(final Project project, final UsageInfo[] usages) {
     ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
     ArrayList<UsageInfo> overridingMethods = new ArrayList<UsageInfo>();
@@ -447,7 +447,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static Condition<PsiElement> findMethodUsages(PsiMethod psiMethod, final PsiElement[] allElementsToDelete, List<UsageInfo> usages) {
     final Collection<PsiReference> references = ReferencesSearch.search(psiMethod).findAll();
 
@@ -497,7 +497,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     return list.toArray(new PsiMethod[list.size()]);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static Condition<PsiElement> findConstructorUsages(PsiMethod constructor, Collection<PsiReference> originalReferences, List<UsageInfo> usages,
                                                              final PsiElement[] allElementsToDelete) {
     HashMap<PsiMethod, Collection<PsiReference>> constructorsToRefs = new HashMap<PsiMethod, Collection<PsiReference>>();
@@ -617,7 +617,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     return false;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiMethod getOverridingConstructorOfSuperCall(final PsiElement element) {
     if(element instanceof PsiReferenceExpression && "super".equals(element.getText())) {
       PsiElement parent = element.getParent();

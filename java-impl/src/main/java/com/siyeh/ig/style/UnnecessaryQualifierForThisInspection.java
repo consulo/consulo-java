@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.project.Project;
@@ -25,18 +27,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class UnnecessaryQualifierForThisInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.qualifier.for.this.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.qualifier.for.this.problem.descriptor");
@@ -53,7 +54,7 @@ public class UnnecessaryQualifierForThisInspection
   private static class UnnecessaryQualifierForThisFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.qualifier.for.this.remove.quickfix");
@@ -73,7 +74,7 @@ public class UnnecessaryQualifierForThisInspection
 
     @Override
     public void visitThisExpression(
-      @NotNull PsiThisExpression thisExpression) {
+      @Nonnull PsiThisExpression thisExpression) {
       super.visitThisExpression(thisExpression);
       final PsiJavaCodeReferenceElement qualifier =
         thisExpression.getQualifier();

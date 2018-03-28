@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiJavaModule;
@@ -39,13 +39,13 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
 {
 	private final String myInterfaceName;
 
-	MergeProvidesStatementsFix(@NotNull PsiJavaModule javaModule, @NotNull String interfaceName)
+	MergeProvidesStatementsFix(@Nonnull PsiJavaModule javaModule, @Nonnull String interfaceName)
 	{
 		super(javaModule);
 		myInterfaceName = interfaceName;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -53,24 +53,24 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", PsiKeyword.PROVIDES);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected String getReplacementText(@NotNull List<PsiProvidesStatement> statementsToMerge)
+	protected String getReplacementText(@Nonnull List<PsiProvidesStatement> statementsToMerge)
 	{
 		final List<String> implementationNames = getImplementationNames(statementsToMerge);
 		LOG.assertTrue(!implementationNames.isEmpty());
 		return PsiKeyword.PROVIDES + " " + myInterfaceName + " " + PsiKeyword.WITH + " " + joinUniqueNames(implementationNames) + ";";
 	}
 
-	@NotNull
-	private static List<String> getImplementationNames(@NotNull List<PsiProvidesStatement> statements)
+	@Nonnull
+	private static List<String> getImplementationNames(@Nonnull List<PsiProvidesStatement> statements)
 	{
 		List<String> list = new ArrayList<>();
 		for(PsiProvidesStatement statement : statements)
@@ -88,9 +88,9 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
 		return list;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected List<PsiProvidesStatement> getStatementsToMerge(@NotNull PsiJavaModule javaModule)
+	protected List<PsiProvidesStatement> getStatementsToMerge(@Nonnull PsiJavaModule javaModule)
 	{
 		return StreamSupport.stream(javaModule.getProvides().spliterator(), false).filter(statement ->
 		{
@@ -99,8 +99,8 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
 		}).collect(Collectors.toList());
 	}
 
-	@Nullable
-	public static MergeModuleStatementsFix createFix(@Nullable PsiProvidesStatement statement)
+	@javax.annotation.Nullable
+	public static MergeModuleStatementsFix createFix(@javax.annotation.Nullable PsiProvidesStatement statement)
 	{
 		if(statement != null)
 		{

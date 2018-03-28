@@ -7,9 +7,11 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.ExecutionBundle;
@@ -54,7 +56,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		myConfigurationModule = new JavaRunConfigurationModule(project, true);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
@@ -66,7 +68,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 	}
 
 	@Override
-	public void readExternal(@NotNull Element element) throws InvalidDataException
+	public void readExternal(@Nonnull Element element) throws InvalidDataException
 	{
 		super.readExternal(element);
 		JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
@@ -97,7 +99,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 	}
 
 	@Override
-	public void writeExternal(@NotNull Element element) throws WriteExternalException
+	public void writeExternal(@Nonnull Element element) throws WriteExternalException
 	{
 		super.writeExternal(element);
 		JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
@@ -122,16 +124,16 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
 	}
 
-	@NotNull
+	@Nonnull
 	public Module[] getModules()
 	{
 		Module module = myConfigurationModule.getModule();
 		return module != null ? new Module[]{module} : Module.EMPTY_ARRAY;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment environment) throws ExecutionException
+	public RunProfileState getState(@Nonnull Executor executor, @Nonnull ExecutionEnvironment environment) throws ExecutionException
 	{
 		return new JarApplicationCommandLineState(this, environment);
 	}
@@ -170,7 +172,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		myBean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getAlternativeJrePath()
 	{
@@ -183,14 +185,14 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		myBean.ALTERNATIVE_JRE_PATH = path;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getRunClass()
 	{
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getPackage()
 	{
@@ -198,12 +200,12 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 	}
 
 	@Override
-	public void setProgramParameters(@Nullable String value)
+	public void setProgramParameters(@javax.annotation.Nullable String value)
 	{
 		myBean.PROGRAM_PARAMETERS = value;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getProgramParameters()
 	{
@@ -216,7 +218,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		myBean.WORKING_DIRECTORY = value;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getWorkingDirectory()
 	{
@@ -224,13 +226,13 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 	}
 
 	@Override
-	public void setEnvs(@NotNull Map<String, String> envs)
+	public void setEnvs(@Nonnull Map<String, String> envs)
 	{
 		myEnvs.clear();
 		myEnvs.putAll(envs);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Map<String, String> getEnvs()
 	{

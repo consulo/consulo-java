@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -27,8 +29,6 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.MethodThrowsFix");
@@ -48,7 +48,7 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
                                               0);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message(myShouldThrow ? "fix.throws.list.add.exception" : "fix.throws.list.remove.exception",
@@ -57,27 +57,27 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.throws.list.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod)startElement;
     return myMethod.isValid()
         && myMethod.getManager().isInProject(myMethod);
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
     PsiJavaCodeReferenceElement[] referenceElements = myMethod.getThrowsList().getReferenceElements();

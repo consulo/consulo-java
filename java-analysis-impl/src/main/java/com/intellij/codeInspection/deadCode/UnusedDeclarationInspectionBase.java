@@ -33,10 +33,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -173,28 +175,28 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return DISPLAY_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;
 	}
 
 	@Override
-	public void readSettings(@NotNull Element node) throws InvalidDataException
+	public void readSettings(@Nonnull Element node) throws InvalidDataException
 	{
 		super.readSettings(node);
 		myLocalInspectionBase.readSettings(node);
@@ -205,7 +207,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	}
 
 	@Override
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		myLocalInspectionBase.writeSettings(node);
 		writeUnusedDeclarationSettings(node);
@@ -220,7 +222,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		}
 	}
 
-	private static boolean isExternalizableNoParameterConstructor(@NotNull PsiMethod method, RefClass refClass)
+	private static boolean isExternalizableNoParameterConstructor(@Nonnull PsiMethod method, RefClass refClass)
 	{
 		if(!method.isConstructor())
 		{
@@ -239,7 +241,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return aClass == null || isExternalizable(aClass, refClass);
 	}
 
-	private static boolean isSerializationImplicitlyUsedField(@NotNull PsiField field)
+	private static boolean isSerializationImplicitlyUsedField(@Nonnull PsiField field)
 	{
 		@NonNls final String name = field.getName();
 		if(!HighlightUtilBase.SERIAL_VERSION_UID_FIELD_NAME.equals(name) && !"serialPersistentFields".equals(name))
@@ -254,7 +256,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return aClass == null || isSerializable(aClass, null);
 	}
 
-	private static boolean isWriteObjectMethod(@NotNull PsiMethod method, RefClass refClass)
+	private static boolean isWriteObjectMethod(@Nonnull PsiMethod method, RefClass refClass)
 	{
 		@NonNls final String name = method.getName();
 		if(!"writeObject".equals(name))
@@ -278,7 +280,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return !(aClass != null && !isSerializable(aClass, refClass));
 	}
 
-	private static boolean isReadObjectMethod(@NotNull PsiMethod method, RefClass refClass)
+	private static boolean isReadObjectMethod(@Nonnull PsiMethod method, RefClass refClass)
 	{
 		@NonNls final String name = method.getName();
 		if(!"readObject".equals(name))
@@ -302,7 +304,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return !(aClass != null && !isSerializable(aClass, refClass));
 	}
 
-	private static boolean isWriteReplaceMethod(@NotNull PsiMethod method, RefClass refClass)
+	private static boolean isWriteReplaceMethod(@Nonnull PsiMethod method, RefClass refClass)
 	{
 		@NonNls final String name = method.getName();
 		if(!"writeReplace".equals(name))
@@ -326,7 +328,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return !(aClass != null && !isSerializable(aClass, refClass));
 	}
 
-	private static boolean isReadResolveMethod(@NotNull PsiMethod method, RefClass refClass)
+	private static boolean isReadResolveMethod(@Nonnull PsiMethod method, RefClass refClass)
 	{
 		@NonNls final String name = method.getName();
 		if(!"readResolve".equals(name))
@@ -357,7 +359,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return serializableClass != null && isSerializable(aClass, refClass, serializableClass);
 	}
 
-	private static boolean isExternalizable(@NotNull PsiClass aClass, RefClass refClass)
+	private static boolean isExternalizable(@Nonnull PsiClass aClass, RefClass refClass)
 	{
 		final GlobalSearchScope scope = aClass.getResolveScope();
 		final PsiClass externalizableClass = JavaPsiFacade.getInstance(aClass.getProject()).findClass("java.io" +
@@ -390,15 +392,15 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	}
 
 	@Override
-	public void runInspection(@NotNull final AnalysisScope scope,
-			@NotNull InspectionManager manager,
-			@NotNull final GlobalInspectionContext globalContext,
-			@NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor)
+	public void runInspection(@Nonnull final AnalysisScope scope,
+			@Nonnull InspectionManager manager,
+			@Nonnull final GlobalInspectionContext globalContext,
+			@Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor)
 	{
 		globalContext.getRefManager().iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@NotNull final RefEntity refEntity)
+			public void visitElement(@Nonnull final RefEntity refEntity)
 			{
 				if(refEntity instanceof RefJavaElement)
 				{
@@ -428,7 +430,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 					refElement.accept(new RefJavaVisitor()
 					{
 						@Override
-						public void visitMethod(@NotNull RefMethod method)
+						public void visitMethod(@Nonnull RefMethod method)
 						{
 							if(isAddMainsEnabled() && method.isAppMain())
 							{
@@ -437,7 +439,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 						}
 
 						@Override
-						public void visitClass(@NotNull RefClass aClass)
+						public void visitClass(@Nonnull RefClass aClass)
 						{
 							if(isAddAppletEnabled() && aClass.isApplet() || isAddServletEnabled() && aClass
 									.isServlet())
@@ -465,7 +467,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 					refManager.iterate(new RefJavaVisitor()
 					{
 						@Override
-						public void visitElement(@NotNull final RefEntity refEntity)
+						public void visitElement(@Nonnull final RefEntity refEntity)
 						{
 							if(refEntity instanceof RefClass && strictUnreferencedFilter.accepts((RefClass) refEntity))
 							{
@@ -503,7 +505,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 										(projectScope)
 								{
 									@Override
-									public boolean contains(@NotNull VirtualFile file)
+									public boolean contains(@Nonnull VirtualFile file)
 									{
 										return file.getFileType() != JavaFileType.INSTANCE && super.contains(file);
 									}
@@ -537,7 +539,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		myPhase = 1;
 	}
 
-	public boolean isEntryPoint(@NotNull RefElement owner)
+	public boolean isEntryPoint(@Nonnull RefElement owner)
 	{
 		final PsiElement element = owner.getElement();
 		if(RefUtil.isImplicitUsage(element))
@@ -565,7 +567,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return false;
 	}
 
-	public boolean isEntryPoint(@NotNull PsiElement element)
+	public boolean isEntryPoint(@Nonnull PsiElement element)
 	{
 		final Project project = element.getProject();
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -626,14 +628,14 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 
 	private static class StrictUnreferencedFilter extends UnreferencedFilter
 	{
-		private StrictUnreferencedFilter(@NotNull UnusedDeclarationInspectionBase tool,
-				@NotNull GlobalInspectionContext context)
+		private StrictUnreferencedFilter(@Nonnull UnusedDeclarationInspectionBase tool,
+				@Nonnull GlobalInspectionContext context)
 		{
 			super(tool, context);
 		}
 
 		@Override
-		public int getElementProblemCount(@NotNull RefJavaElement refElement)
+		public int getElementProblemCount(@Nonnull RefJavaElement refElement)
 		{
 			final int problemCount = super.getElementProblemCount(refElement);
 			if(problemCount > -1)
@@ -645,9 +647,9 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	}
 
 	@Override
-	public boolean queryExternalUsagesRequests(@NotNull InspectionManager manager,
-			@NotNull GlobalInspectionContext globalContext,
-			@NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor)
+	public boolean queryExternalUsagesRequests(@Nonnull InspectionManager manager,
+			@Nonnull GlobalInspectionContext globalContext,
+			@Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor)
 	{
 		checkForReachables(globalContext);
 		final RefFilter filter = myPhase == 1 ? new StrictUnreferencedFilter(this,
@@ -657,7 +659,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		globalContext.getRefManager().iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@NotNull RefEntity refEntity)
+			public void visitElement(@Nonnull RefEntity refEntity)
 			{
 				if(!(refEntity instanceof RefJavaElement))
 				{
@@ -673,7 +675,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 					refEntity.accept(new RefJavaVisitor()
 					{
 						@Override
-						public void visitField(@NotNull final RefField refField)
+						public void visitField(@Nonnull final RefField refField)
 						{
 							myProcessedSuspicious.add(refField);
 							PsiField psiField = refField.getElement();
@@ -698,7 +700,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 						}
 
 						@Override
-						public void visitMethod(@NotNull final RefMethod refMethod)
+						public void visitMethod(@Nonnull final RefMethod refMethod)
 						{
 							myProcessedSuspicious.add(refMethod);
 							if(refMethod instanceof RefImplicitConstructor)
@@ -728,7 +730,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 						}
 
 						@Override
-						public void visitClass(@NotNull final RefClass refClass)
+						public void visitClass(@Nonnull final RefClass refClass)
 						{
 							myProcessedSuspicious.add(refClass);
 							if(!refClass.isAnonymous())
@@ -778,7 +780,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return true;
 	}
 
-	private static boolean isSerializablePatternMethod(@NotNull PsiMethod psiMethod, RefClass refClass)
+	private static boolean isSerializablePatternMethod(@Nonnull PsiMethod psiMethod, RefClass refClass)
 	{
 		return isReadObjectMethod(psiMethod, refClass) || isWriteObjectMethod(psiMethod,
 				refClass) || isReadResolveMethod(psiMethod, refClass) ||
@@ -814,7 +816,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		return getContext().getExtension(GlobalJavaInspectionContext.CONTEXT);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JobDescriptor[] getAdditionalJobs()
 	{
@@ -825,7 +827,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	}
 
 
-	void checkForReachables(@NotNull final GlobalInspectionContext context)
+	void checkForReachables(@Nonnull final GlobalInspectionContext context)
 	{
 		CodeScanner codeScanner = new CodeScanner();
 
@@ -833,7 +835,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		context.getRefManager().iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@NotNull RefEntity refEntity)
+			public void visitElement(@Nonnull RefEntity refEntity)
 			{
 				if(refEntity instanceof RefJavaElement)
 				{
@@ -874,7 +876,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		private final Set<RefMethod> myProcessedMethods = new HashSet<RefMethod>();
 
 		@Override
-		public void visitMethod(@NotNull RefMethod method)
+		public void visitMethod(@Nonnull RefMethod method)
 		{
 			if(!myProcessedMethods.contains(method))
 			{
@@ -914,7 +916,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		}
 
 		@Override
-		public void visitClass(@NotNull RefClass refClass)
+		public void visitClass(@Nonnull RefClass refClass)
 		{
 			boolean alreadyActive = refClass.isReachable();
 			((RefClassImpl) refClass).setReachable(true);
@@ -929,7 +931,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		}
 
 		@Override
-		public void visitField(@NotNull RefField field)
+		public void visitField(@Nonnull RefField field)
 		{
 			// Process class's static intitializers.
 			if(!field.isReachable())
@@ -1023,7 +1025,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	}
 
 	@Override
-	public void initialize(@NotNull GlobalInspectionContext context)
+	public void initialize(@Nonnull GlobalInspectionContext context)
 	{
 		super.initialize(context);
 		myContext = context;
@@ -1031,7 +1033,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		point.addExtensionPointListener(new ExtensionPointListener<EntryPoint>()
 		{
 			@Override
-			public void extensionAdded(@NotNull final EntryPoint extension, @Nullable PluginDescriptor
+			public void extensionAdded(@Nonnull final EntryPoint extension, @Nullable PluginDescriptor
 					pluginDescriptor)
 			{
 				boolean alreadyAdded = ContainerUtil.find(myExtensions, new Condition<EntryPoint>()
@@ -1056,7 +1058,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 			}
 
 			@Override
-			public void extensionRemoved(@NotNull final EntryPoint extension,
+			public void extensionRemoved(@Nonnull final EntryPoint extension,
 					@Nullable PluginDescriptor pluginDescriptor)
 			{
 				ContainerUtil.retainAll(myExtensions, new Condition<EntryPoint>()

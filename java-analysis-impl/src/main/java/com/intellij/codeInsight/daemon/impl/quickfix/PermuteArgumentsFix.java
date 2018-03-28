@@ -18,7 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -50,7 +51,7 @@ public class PermuteArgumentsFix implements IntentionAction {
   private final PsiCall myCall;
   private final PsiCall myPermutation;
 
-  private PermuteArgumentsFix(@NotNull PsiCall call, @NotNull PsiCall permutation) {
+  private PermuteArgumentsFix(@Nonnull PsiCall call, @Nonnull PsiCall permutation) {
     myCall = call;
     myPermutation = permutation;
   }
@@ -62,25 +63,25 @@ public class PermuteArgumentsFix implements IntentionAction {
 
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("permute.arguments");
   }
 
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return !project.isDisposed() && myCall.isValid() && myCall.getManager().isInProject(myCall);
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     myCall.getArgumentList().replace(myPermutation.getArgumentList());
   }

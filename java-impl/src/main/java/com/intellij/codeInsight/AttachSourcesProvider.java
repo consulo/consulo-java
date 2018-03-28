@@ -18,7 +18,8 @@ package com.intellij.codeInsight;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.roots.LibraryOrderEntry;
 import com.intellij.openapi.util.ActionCallback;
@@ -29,7 +30,7 @@ public interface AttachSourcesProvider {
     new ExtensionPointName<AttachSourcesProvider>("consulo.java.attachSourcesProvider");
 
 
-  @NotNull
+  @Nonnull
   Collection<AttachSourcesAction> getActions(List<LibraryOrderEntry> orderEntries, PsiFile psiFile);
 
   interface AttachSourcesAction {

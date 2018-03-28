@@ -21,19 +21,19 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class AddClarifyingParenthesesIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new AddClarifyingParenthesesPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiExpression expression = getTopLevelExpression(element);
     if (expression == null) {

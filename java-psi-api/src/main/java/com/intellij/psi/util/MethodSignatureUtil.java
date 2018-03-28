@@ -22,9 +22,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
@@ -81,15 +83,15 @@ public class MethodSignatureUtil
 				.getSignature(PsiSubstitutor.EMPTY));
 	}
 
-	public static boolean areErasedParametersEqual(@NotNull MethodSignature method1, @NotNull MethodSignature method2)
+	public static boolean areErasedParametersEqual(@Nonnull MethodSignature method1, @Nonnull MethodSignature method2)
 	{
 		PsiType[] erased1 = method1 instanceof MethodSignatureBase ? ((MethodSignatureBase) method1).getErasedParameterTypes() : calcErasedParameterTypes(method1);
 		PsiType[] erased2 = method2 instanceof MethodSignatureBase ? ((MethodSignatureBase) method2).getErasedParameterTypes() : calcErasedParameterTypes(method2);
 		return Arrays.equals(erased1, erased2);
 	}
 
-	@NotNull
-	public static PsiType[] calcErasedParameterTypes(@NotNull MethodSignature signature)
+	@Nonnull
+	public static PsiType[] calcErasedParameterTypes(@Nonnull MethodSignature signature)
 	{
 		PsiType[] parameterTypes = signature.getParameterTypes();
 		if(parameterTypes.length == 0)
@@ -106,50 +108,50 @@ public class MethodSignatureUtil
 		return erasedTypes;
 	}
 
-	@NotNull
-	public static MethodSignature createMethodSignature(@NonNls @NotNull String name,
-			@Nullable PsiParameterList parameterTypes,
-			@Nullable PsiTypeParameterList typeParameterList,
-			@NotNull PsiSubstitutor substitutor)
+	@Nonnull
+	public static MethodSignature createMethodSignature(@NonNls @Nonnull String name,
+			@javax.annotation.Nullable PsiParameterList parameterTypes,
+			@javax.annotation.Nullable PsiTypeParameterList typeParameterList,
+			@Nonnull PsiSubstitutor substitutor)
 	{
 		return createMethodSignature(name, parameterTypes, typeParameterList, substitutor, false);
 	}
 
-	@NotNull
-	public static MethodSignature createMethodSignature(@NonNls @NotNull String name,
-			@Nullable PsiParameterList parameterTypes,
-			@Nullable PsiTypeParameterList typeParameterList,
-			@NotNull PsiSubstitutor substitutor,
+	@Nonnull
+	public static MethodSignature createMethodSignature(@NonNls @Nonnull String name,
+			@javax.annotation.Nullable PsiParameterList parameterTypes,
+			@javax.annotation.Nullable PsiTypeParameterList typeParameterList,
+			@Nonnull PsiSubstitutor substitutor,
 			boolean isConstructor)
 	{
 		return new MethodSignatureHandMade(name, parameterTypes, typeParameterList, substitutor, isConstructor);
 	}
 
-	@NotNull
-	public static MethodSignature createMethodSignature(@NonNls @NotNull String name,
-			@NotNull PsiType[] parameterTypes,
-			@NotNull PsiTypeParameter[] typeParameterList,
-			@NotNull PsiSubstitutor substitutor)
+	@Nonnull
+	public static MethodSignature createMethodSignature(@NonNls @Nonnull String name,
+			@Nonnull PsiType[] parameterTypes,
+			@Nonnull PsiTypeParameter[] typeParameterList,
+			@Nonnull PsiSubstitutor substitutor)
 	{
 		return createMethodSignature(name, parameterTypes, typeParameterList, substitutor, false);
 	}
 
-	@NotNull
-	public static MethodSignature createMethodSignature(@NonNls @NotNull String name,
-			@NotNull PsiType[] parameterTypes,
-			@NotNull PsiTypeParameter[] typeParameterList,
-			@NotNull PsiSubstitutor substitutor,
+	@Nonnull
+	public static MethodSignature createMethodSignature(@NonNls @Nonnull String name,
+			@Nonnull PsiType[] parameterTypes,
+			@Nonnull PsiTypeParameter[] typeParameterList,
+			@Nonnull PsiSubstitutor substitutor,
 			boolean isConstructor)
 	{
 		return new MethodSignatureHandMade(name, parameterTypes, typeParameterList, substitutor, isConstructor);
 	}
 
-	public static boolean areSignaturesEqual(@NotNull PsiMethod method1, @NotNull PsiMethod method2)
+	public static boolean areSignaturesEqual(@Nonnull PsiMethod method1, @Nonnull PsiMethod method2)
 	{
 		return areSignaturesEqual(method1.getSignature(PsiSubstitutor.EMPTY), method2.getSignature(PsiSubstitutor.EMPTY));
 	}
 
-	public static boolean areSignaturesEqual(@NotNull MethodSignature method1, @NotNull MethodSignature method2)
+	public static boolean areSignaturesEqual(@Nonnull MethodSignature method1, @Nonnull MethodSignature method2)
 	{
 		if(method2 == method1)
 		{
@@ -163,7 +165,7 @@ public class MethodSignatureUtil
 				(method2, method1));
 	}
 
-	private static boolean checkSignaturesEqualInner(@NotNull MethodSignature subSignature, @NotNull MethodSignature superSignature, final PsiSubstitutor unifyingSubstitutor)
+	private static boolean checkSignaturesEqualInner(@Nonnull MethodSignature subSignature, @Nonnull MethodSignature superSignature, final PsiSubstitutor unifyingSubstitutor)
 	{
 		if(unifyingSubstitutor == null)
 		{
@@ -189,7 +191,7 @@ public class MethodSignatureUtil
 		return true;
 	}
 
-	public static boolean areSignaturesEqualLightweight(@NotNull MethodSignature sig1, @NotNull MethodSignature sig2)
+	public static boolean areSignaturesEqualLightweight(@Nonnull MethodSignature sig1, @Nonnull MethodSignature sig2)
 	{
 		final boolean isConstructor1 = sig1.isConstructor();
 		final boolean isConstructor2 = sig2.isConstructor();
@@ -233,7 +235,7 @@ public class MethodSignatureUtil
 		return true;
 	}
 
-	public static boolean isSuperMethod(@NotNull PsiMethod superMethodCandidate, @NotNull PsiMethod derivedMethod)
+	public static boolean isSuperMethod(@Nonnull PsiMethod superMethodCandidate, @Nonnull PsiMethod derivedMethod)
 	{
 		PsiClass superClassCandidate = superMethodCandidate.getContainingClass();
 		PsiClass derivedClass = derivedMethod.getContainingClass();
@@ -252,16 +254,16 @@ public class MethodSignatureUtil
 	}
 
 	@Nullable
-	public static PsiMethod findMethodInSuperClassBySignatureInDerived(@NotNull final PsiClass aClass, @NotNull final PsiClass superClass, @NotNull MethodSignature signature, final boolean checkDeep)
+	public static PsiMethod findMethodInSuperClassBySignatureInDerived(@Nonnull final PsiClass aClass, @Nonnull final PsiClass superClass, @Nonnull MethodSignature signature, final boolean checkDeep)
 	{
 		PsiSubstitutor superSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(superClass, aClass, PsiSubstitutor.EMPTY);
 		return doFindMethodInSuperClassBySignatureInDerived(superClass, superSubstitutor, signature, checkDeep);
 	}
 
-	@Nullable
-	private static PsiMethod doFindMethodInSuperClassBySignatureInDerived(@NotNull PsiClass superClass,
-			@NotNull PsiSubstitutor superSubstitutor,
-			@NotNull MethodSignature signature,
+	@javax.annotation.Nullable
+	private static PsiMethod doFindMethodInSuperClassBySignatureInDerived(@Nonnull PsiClass superClass,
+			@Nonnull PsiSubstitutor superSubstitutor,
+			@Nonnull MethodSignature signature,
 			final boolean checkDeep)
 	{
 		final String name = signature.getName();
@@ -288,13 +290,13 @@ public class MethodSignatureUtil
 	}
 
 	@Nullable
-	public static PsiMethod findMethodBySignature(@NotNull PsiClass aClass, @NotNull PsiMethod pattenMethod, boolean checkBases)
+	public static PsiMethod findMethodBySignature(@Nonnull PsiClass aClass, @Nonnull PsiMethod pattenMethod, boolean checkBases)
 	{
 		return findMethodBySignature(aClass, pattenMethod.getSignature(PsiSubstitutor.EMPTY), checkBases);
 	}
 
 	@Nullable
-	public static PsiMethod findMethodBySignature(@NotNull PsiClass aClass, @NotNull MethodSignature methodSignature, boolean checkBases)
+	public static PsiMethod findMethodBySignature(@Nonnull PsiClass aClass, @Nonnull MethodSignature methodSignature, boolean checkBases)
 	{
 		String name = methodSignature.isConstructor() ? aClass.getName() : methodSignature.getName();
 		List<Pair<PsiMethod, PsiSubstitutor>> pairs = aClass.findMethodsAndTheirSubstitutorsByName(name, checkBases);
@@ -312,7 +314,7 @@ public class MethodSignatureUtil
 	}
 
 	@Nullable
-	public static PsiMethod findMethodBySuperSignature(@NotNull PsiClass aClass, @NotNull MethodSignature methodSignature, final boolean checkBases)
+	public static PsiMethod findMethodBySuperSignature(@Nonnull PsiClass aClass, @Nonnull MethodSignature methodSignature, final boolean checkBases)
 	{
 		String name = methodSignature.isConstructor() ? aClass.getName() : methodSignature.getName();
 		List<Pair<PsiMethod, PsiSubstitutor>> pairs = aClass.findMethodsAndTheirSubstitutorsByName(name, checkBases);
@@ -330,7 +332,7 @@ public class MethodSignatureUtil
 	}
 
 	@Nullable
-	public static PsiMethod findMethodBySuperMethod(@NotNull PsiClass aClass, @NotNull PsiMethod method, final boolean checkBases)
+	public static PsiMethod findMethodBySuperMethod(@Nonnull PsiClass aClass, @Nonnull PsiMethod method, final boolean checkBases)
 	{
 		List<Pair<PsiMethod, PsiSubstitutor>> pairs = aClass.findMethodsAndTheirSubstitutorsByName(method.getName(), checkBases);
 		for(Pair<PsiMethod, PsiSubstitutor> pair : pairs)
@@ -358,13 +360,13 @@ public class MethodSignatureUtil
 		return null;
 	}
 
-	public static boolean hasOverloads(@NotNull PsiMethod method)
+	public static boolean hasOverloads(@Nonnull PsiMethod method)
 	{
 		return getOverloads(method).length > 1;
 	}
 
-	@NotNull
-	public static PsiMethod[] getOverloads(@NotNull PsiMethod method)
+	@Nonnull
+	public static PsiMethod[] getOverloads(@Nonnull PsiMethod method)
 	{
 		PsiClass aClass = method.getContainingClass();
 		if(aClass == null)
@@ -374,7 +376,7 @@ public class MethodSignatureUtil
 		return aClass.findMethodsByName(method.getName(), false);
 	}
 
-	public static boolean areParametersErasureEqual(@NotNull PsiMethod method1, @NotNull PsiMethod method2)
+	public static boolean areParametersErasureEqual(@Nonnull PsiMethod method1, @Nonnull PsiMethod method2)
 	{
 		if(method1.getParameterList().getParametersCount() != method2.getParameterList().getParametersCount())
 		{
@@ -383,7 +385,7 @@ public class MethodSignatureUtil
 		return areSignaturesErasureEqual(method1.getSignature(PsiSubstitutor.EMPTY), method2.getSignature(PsiSubstitutor.EMPTY));
 	}
 
-	public static boolean areSignaturesErasureEqual(@NotNull MethodSignature signature1, @NotNull MethodSignature signature2)
+	public static boolean areSignaturesErasureEqual(@Nonnull MethodSignature signature1, @Nonnull MethodSignature signature2)
 	{
 		return METHOD_PARAMETERS_ERASURE_EQUALITY.equals(signature1, signature2);
 	}
@@ -400,7 +402,7 @@ public class MethodSignatureUtil
 	 * @return null if signatures do not match
 	 */
 	@Nullable
-	public static PsiSubstitutor getSuperMethodSignatureSubstitutor(@NotNull MethodSignature methodSignature, @NotNull MethodSignature superMethodSignature)
+	public static PsiSubstitutor getSuperMethodSignatureSubstitutor(@Nonnull MethodSignature methodSignature, @Nonnull MethodSignature superMethodSignature)
 	{
 		PsiTypeParameter[] methodTypeParameters = methodSignature.getTypeParameters();
 		PsiTypeParameter[] superTypeParameters = superMethodSignature.getTypeParameters();
@@ -448,8 +450,8 @@ public class MethodSignatureUtil
 		return result;
 	}
 
-	@NotNull
-	public static PsiSubstitutor combineSubstitutors(@NotNull PsiSubstitutor substitutor1, @NotNull PsiSubstitutor substitutor2)
+	@Nonnull
+	public static PsiSubstitutor combineSubstitutors(@Nonnull PsiSubstitutor substitutor1, @Nonnull PsiSubstitutor substitutor2)
 	{
 		if(substitutor1 == PsiSubstitutor.EMPTY)
 		{
@@ -476,8 +478,8 @@ public class MethodSignatureUtil
 		return substitutor1;
 	}
 
-	@NotNull
-	public static PsiMethod[] convertMethodSignaturesToMethods(@NotNull List<? extends MethodSignatureBackedByPsiMethod> sameNameMethodList)
+	@Nonnull
+	public static PsiMethod[] convertMethodSignaturesToMethods(@Nonnull List<? extends MethodSignatureBackedByPsiMethod> sameNameMethodList)
 	{
 		final PsiMethod[] methods = new PsiMethod[sameNameMethodList.size()];
 		for(int i = 0; i < sameNameMethodList.size(); i++)
@@ -487,7 +489,7 @@ public class MethodSignatureUtil
 		return methods;
 	}
 
-	public static boolean isSubsignature(@NotNull MethodSignature superSignature, @NotNull MethodSignature subSignature)
+	public static boolean isSubsignature(@Nonnull MethodSignature superSignature, @Nonnull MethodSignature subSignature)
 	{
 		if(subSignature == superSignature)
 		{

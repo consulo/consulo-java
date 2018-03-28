@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,8 +34,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
@@ -84,7 +84,7 @@ public class PackageChooserDialog extends PackageChooser {
   private final String myTitle;
   private Module myModule;
 
-  public PackageChooserDialog(String title, @NotNull Module module) {
+  public PackageChooserDialog(String title, @Nonnull Module module) {
     super(module.getProject(), true);
     setTitle(title);
     myTitle = title;
@@ -220,7 +220,7 @@ public class PackageChooserDialog extends PackageChooser {
       }, ModalityState.stateForComponent(getRootPane()));*/
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiJavaPackage getTreeSelection() {
     if (myTree == null) return null;
     TreePath path = myTree.getSelectionPath();
@@ -259,7 +259,7 @@ public class PackageChooserDialog extends PackageChooser {
     });
   }
 
-  @NotNull
+  @Nonnull
   private DefaultMutableTreeNode addPackage(PsiJavaPackage aPackage) {
     final String qualifiedPackageName = aPackage.getQualifiedName();
     final PsiJavaPackage parentPackage = aPackage.getParentPackage();

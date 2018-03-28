@@ -28,7 +28,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
@@ -36,13 +36,13 @@ import java.util.Collection;
 public class NonThreadSafeLazyInitializationInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.thread.safe.lazy.initialization.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.thread.safe.lazy.initialization.problem.descriptor");
@@ -57,7 +57,7 @@ public class NonThreadSafeLazyInitializationInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final PsiExpression lhs = expression.getLExpression();
       if (!(lhs instanceof PsiReferenceExpression)) {
@@ -226,7 +226,7 @@ public class NonThreadSafeLazyInitializationInspection
       return string + "Holder";
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return "Introduce holder class";
     }

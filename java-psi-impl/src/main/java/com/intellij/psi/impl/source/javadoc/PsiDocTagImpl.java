@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -30,7 +32,6 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Constants {
   private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(
@@ -62,7 +63,7 @@ public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Con
     return getChildrenAsPsiElements(VALUE_BIT_SET, PsiElement.ARRAY_FACTORY);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     if (getNameElement() == null) return "";
@@ -70,7 +71,7 @@ public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Con
   }
 
   @Override
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameElement(), name);
     return this;
   }
@@ -97,13 +98,13 @@ public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Con
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiReference[] getReferences() {
     return ReferenceProvidersRegistry.getReferencesFromProviders(this, PsiReferenceService.Hints.NO_HINTS);
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocTag(this);
     }

@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
@@ -68,7 +69,7 @@ public class ClassInstanceMethodFilter extends ConstructorStepMethodFilter
 		return RequestHint.STOP;
 	}
 
-	static void setUpStepIntoBreakpoint(SuspendContextImpl context, @NotNull StepIntoBreakpoint breakpoint, RequestHint hint)
+	static void setUpStepIntoBreakpoint(SuspendContextImpl context, @Nonnull StepIntoBreakpoint breakpoint, RequestHint hint)
 	{
 		DebugProcessImpl debugProcess = context.getDebugProcess();
 		BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(debugProcess.getProject()).getBreakpointManager();

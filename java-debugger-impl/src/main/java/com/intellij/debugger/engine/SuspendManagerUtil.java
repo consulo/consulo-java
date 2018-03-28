@@ -17,8 +17,8 @@ package com.intellij.debugger.engine;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.SmartHashSet;
@@ -44,7 +44,7 @@ public class SuspendManagerUtil
 	 * Returns suspend context that suspends the thread specified (may be currently evaluating)
 	 */
 	@Nullable
-	public static SuspendContextImpl findContextByThread(@NotNull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	public static SuspendContextImpl findContextByThread(@Nonnull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
 	{
 		for(SuspendContextImpl context : ((SuspendManagerImpl) suspendManager).getPausedContexts())
 		{
@@ -65,8 +65,8 @@ public class SuspendManagerUtil
 		}
 	}
 
-	@NotNull
-	public static Set<SuspendContextImpl> getSuspendingContexts(@NotNull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	@Nonnull
+	public static Set<SuspendContextImpl> getSuspendingContexts(@Nonnull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		Set<SuspendContextImpl> result = new SmartHashSet<SuspendContextImpl>();
@@ -80,8 +80,8 @@ public class SuspendManagerUtil
 		return result;
 	}
 
-	@Nullable
-	public static SuspendContextImpl getSuspendingContext(@NotNull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	@javax.annotation.Nullable
+	public static SuspendContextImpl getSuspendingContext(@Nonnull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		for(SuspendContextImpl suspendContext : suspendManager.getEventContexts())

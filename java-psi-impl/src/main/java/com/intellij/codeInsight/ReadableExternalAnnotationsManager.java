@@ -22,8 +22,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
@@ -38,7 +38,7 @@ import com.intellij.psi.PsiManager;
 
 public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsManager
 {
-	@Nullable
+	@javax.annotation.Nullable
 	private Set<VirtualFile> myAnnotationsRoots = null;
 
 	public ReadableExternalAnnotationsManager(PsiManager psiManager)
@@ -52,7 +52,7 @@ public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsM
 		return !initRoots().isEmpty();
 	}
 
-	@NotNull
+	@Nonnull
 	private synchronized Set<VirtualFile> initRoots()
 	{
 		if(myAnnotationsRoots == null)
@@ -75,8 +75,8 @@ public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsM
 	}
 
 	@Override
-	@NotNull
-	protected List<VirtualFile> getExternalAnnotationsRoots(@NotNull VirtualFile libraryFile)
+	@Nonnull
+	protected List<VirtualFile> getExternalAnnotationsRoots(@Nonnull VirtualFile libraryFile)
 	{
 		ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myPsiManager.getProject()).getFileIndex();
 		Set<VirtualFile> result = new LinkedHashSet<VirtualFile>();

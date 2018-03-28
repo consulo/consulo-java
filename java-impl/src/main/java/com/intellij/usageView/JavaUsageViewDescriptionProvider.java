@@ -15,16 +15,17 @@
  */
 package com.intellij.usageView;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.lang.LangBundle;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yole
  */
 public class JavaUsageViewDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(@NotNull final PsiElement element, @NotNull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (location instanceof UsageViewShortNameLocation) {
       if (element instanceof PsiThrowStatement) {
         return UsageViewBundle.message("usage.target.exception");

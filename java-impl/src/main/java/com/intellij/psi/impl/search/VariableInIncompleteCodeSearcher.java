@@ -24,7 +24,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Looks for references to local variable or method parameter in invalid (incomplete) code.
@@ -35,7 +35,7 @@ public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiRefer
   }
 
   @Override
-  public void processQuery(@NotNull final ReferencesSearch.SearchParameters p, @NotNull final Processor<PsiReference> consumer) {
+  public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer) {
     final PsiElement refElement = p.getElementToSearch();
     if (!refElement.isValid() || !(refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter)) return;
 
@@ -50,7 +50,7 @@ public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiRefer
 
     PsiElementProcessor processor = new PsiElementProcessor() {
       @Override
-      public boolean execute(@NotNull final PsiElement element) {
+      public boolean execute(@Nonnull final PsiElement element) {
         if (element instanceof PsiJavaCodeReferenceElement) {
           final PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)element;
           if (!ref.isQualified() && name.equals(ref.getText()) &&

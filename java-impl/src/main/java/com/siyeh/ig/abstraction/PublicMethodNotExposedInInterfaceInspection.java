@@ -18,10 +18,10 @@ package com.siyeh.ig.abstraction;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.psi.CommonClassNames;
@@ -50,20 +50,20 @@ public class PublicMethodNotExposedInInterfaceInspection
     new ExternalizableStringSet();
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "public.method.not.in.interface.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "public.method.not.in.interface.problem.descriptor");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner)infos[0], ignorableAnnotations);
@@ -101,7 +101,7 @@ public class PublicMethodNotExposedInInterfaceInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (method.isConstructor()) {
         return;

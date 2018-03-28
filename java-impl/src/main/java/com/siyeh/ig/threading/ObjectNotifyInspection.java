@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,21 +26,20 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class ObjectNotifyInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToNotifyInsteadOfNotifyAll";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("object.notify.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "object.notify.problem.descriptor");
@@ -54,7 +55,7 @@ public class ObjectNotifyInspection extends BaseInspection {
 
   private static class ObjectNotifyFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "object.notify.replace.quickfix");
@@ -85,7 +86,7 @@ public class ObjectNotifyInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

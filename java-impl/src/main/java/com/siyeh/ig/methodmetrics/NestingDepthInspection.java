@@ -15,19 +15,20 @@
  */
 package com.siyeh.ig.methodmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class NestingDepthInspection extends MethodMetricInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyNestedMethod";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("nesting.depth.display.name");
   }
@@ -40,7 +41,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
     return InspectionGadgetsBundle.message("nesting.depth.limit.option");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingDepth = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -54,7 +55,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
   private class NestingDepthMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

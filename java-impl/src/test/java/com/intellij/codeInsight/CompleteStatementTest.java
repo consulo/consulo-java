@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.pom.java.LanguageLevel;
@@ -277,7 +277,7 @@ public class CompleteStatementTest extends EditorActionTestCase {
     return IdeActions.ACTION_EDITOR_COMPLETE_STATEMENT;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

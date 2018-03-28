@@ -25,8 +25,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ExtractIncrementIntention extends MutablyNamedIntention {
 
@@ -45,13 +45,13 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ExtractIncrementPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiExpression operand;
     if (element instanceof PsiPostfixExpression) {
@@ -256,7 +256,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
     replaceExpression(operandText, (PsiExpression)element);
   }
 
-  private static String getElementText(@NotNull PsiElement element,
+  private static String getElementText(@Nonnull PsiElement element,
                                        @Nullable PsiElement elementToReplace,
                                        @Nullable String replacement) {
     final StringBuilder out = new StringBuilder();
@@ -265,10 +265,10 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
   }
 
   private static void getElementText(
-    @NotNull PsiElement element,
-    @Nullable PsiElement elementToReplace,
+    @Nonnull PsiElement element,
+    @javax.annotation.Nullable PsiElement elementToReplace,
     @Nullable String replacement,
-    @NotNull StringBuilder out) {
+    @Nonnull StringBuilder out) {
     if (element.equals(elementToReplace)) {
       out.append(replacement);
       return;

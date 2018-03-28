@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -61,10 +61,10 @@ public class DuplicatesFinder
 	private final List<? extends PsiVariable> myOutputParameters;
 	private final List<PsiElement> myPatternAsList;
 	private boolean myMultipleExitPoints = false;
-	@Nullable
+	@javax.annotation.Nullable
 	private final ReturnValue myReturnValue;
 
-	public DuplicatesFinder(PsiElement[] pattern, InputVariables parameters, @Nullable ReturnValue returnValue, @NotNull List<? extends PsiVariable> outputParameters)
+	public DuplicatesFinder(PsiElement[] pattern, InputVariables parameters, @javax.annotation.Nullable ReturnValue returnValue, @Nonnull List<? extends PsiVariable> outputParameters)
 	{
 		myReturnValue = returnValue;
 		LOG.assertTrue(pattern.length > 0);
@@ -140,7 +140,7 @@ public class DuplicatesFinder
 		return result;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Match isDuplicate(PsiElement element, boolean ignoreParameterTypesAndPostVariableUsages)
 	{
 		annotatePattern();
@@ -213,7 +213,7 @@ public class DuplicatesFinder
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	private Match isDuplicateFragment(PsiElement candidate, boolean ignoreParameterTypesAndPostVariableUsages)
 	{
 		if(isSelf(candidate))

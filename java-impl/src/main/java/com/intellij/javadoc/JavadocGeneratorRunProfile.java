@@ -27,7 +27,7 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
@@ -89,12 +89,12 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile
 		myConfiguration = configuration;
 	}
 
-	public static Sdk getSdk(@NotNull Project project)
+	public static Sdk getSdk(@Nonnull Project project)
 	{
 		return PathUtilEx.getAnyJdk(project);
 	}
 
-	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
 	{
 		return new MyJavaCommandLineState(myConfiguration, myProject, myGenerationScope, env);
 	}
@@ -109,7 +109,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	public Module[] getModules()
 	{
 		return Module.EMPTY_ARRAY;
@@ -351,7 +351,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile
 			}
 		}
 
-		@NotNull
+		@Nonnull
 		protected OSProcessHandler startProcess() throws ExecutionException
 		{
 			final OSProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());

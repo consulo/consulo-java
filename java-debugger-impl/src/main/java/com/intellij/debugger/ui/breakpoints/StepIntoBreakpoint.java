@@ -18,8 +18,8 @@ package com.intellij.debugger.ui.breakpoints;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.BreakpointStepMethodFilter;
 import com.intellij.debugger.engine.CompoundPositionManager;
@@ -47,12 +47,12 @@ import consulo.internal.com.sun.jdi.event.LocatableEvent;
 public class StepIntoBreakpoint extends RunToCursorBreakpoint
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.StepIntoBreakpoint");
-	@NotNull
+	@Nonnull
 	private final BreakpointStepMethodFilter myFilter;
-	@Nullable
+	@javax.annotation.Nullable
 	private RequestHint myHint;
 
-	protected StepIntoBreakpoint(@NotNull Project project, @NotNull SourcePosition pos, @NotNull BreakpointStepMethodFilter filter)
+	protected StepIntoBreakpoint(@Nonnull Project project, @Nonnull SourcePosition pos, @Nonnull BreakpointStepMethodFilter filter)
 	{
 		super(project, pos, false);
 		myFilter = filter;
@@ -153,8 +153,8 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 		return true;
 	}
 
-	@Nullable
-	protected static StepIntoBreakpoint create(@NotNull Project project, @NotNull BreakpointStepMethodFilter filter)
+	@javax.annotation.Nullable
+	protected static StepIntoBreakpoint create(@Nonnull Project project, @Nonnull BreakpointStepMethodFilter filter)
 	{
 		final SourcePosition pos = filter.getBreakpointPosition();
 		if(pos != null)

@@ -15,10 +15,10 @@
  */
 package com.intellij.ide.highlighter;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import consulo.java.JavaIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.lang.java.JavaLanguage;
@@ -34,19 +34,19 @@ public class JavaFileType extends LanguageFileType {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getId() {
     return "JAVA";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDescription() {
     return IdeBundle.message("filetype.description.java");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultExtension() {
     return DEFAULT_EXTENSION;
   }

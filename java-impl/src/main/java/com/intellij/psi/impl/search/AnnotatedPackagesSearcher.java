@@ -32,7 +32,7 @@ import com.intellij.psi.search.searches.AnnotatedPackagesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -40,7 +40,7 @@ public class AnnotatedPackagesSearcher implements QueryExecutor<PsiJavaPackage, 
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.AnnotatedPackagesSearcher");
 
   @Override
-  public boolean execute(@NotNull final AnnotatedPackagesSearch.Parameters p, @NotNull final Processor<PsiJavaPackage> consumer) {
+  public boolean execute(@Nonnull final AnnotatedPackagesSearch.Parameters p, @Nonnull final Processor<PsiJavaPackage> consumer) {
     final PsiClass annClass = p.getAnnotationClass();
     assert annClass.isAnnotationType() : "Annotation type should be passed to annotated packages search";
 
@@ -128,7 +128,7 @@ public class AnnotatedPackagesSearcher implements QueryExecutor<PsiJavaPackage, 
     }
 
     @Override
-    public boolean isSearchInModuleContent(@NotNull final Module aModule) {
+    public boolean isSearchInModuleContent(@Nonnull final Module aModule) {
       return true;
     }
   }

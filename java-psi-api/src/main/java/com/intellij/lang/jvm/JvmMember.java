@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.jvm;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @see java.lang.reflect.Member

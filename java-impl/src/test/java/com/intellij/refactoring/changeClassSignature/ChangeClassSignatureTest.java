@@ -2,8 +2,9 @@ package com.intellij.refactoring.changeClassSignature;
 
 import static org.junit.Assert.assertTrue;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -19,7 +20,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 public class ChangeClassSignatureTest extends LightRefactoringTestCase {
   @NonNls private static final String DATA_PATH = "/refactoring/changeClassSignature/";
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

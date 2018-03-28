@@ -19,7 +19,7 @@ import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class HighlightSeverityTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/highlightSeverity";
@@ -27,7 +27,7 @@ public class HighlightSeverityTest extends LightDaemonAnalyzerTestCase {
 
   public void testErrorLikeUnusedSymbol() throws Exception {
     enableInspectionTool(new LocalInspectionToolWrapper(new UnusedSymbolLocalInspection()) {
-      @NotNull
+      @Nonnull
       @Override
       public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;

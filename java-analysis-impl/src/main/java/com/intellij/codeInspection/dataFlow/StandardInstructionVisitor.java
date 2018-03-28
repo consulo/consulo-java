@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.instructions.*;
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
@@ -215,7 +215,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		returnValues.forEach(res -> processMethodReferenceResult(methodRef, contracts, res));
 	}
 
-	@NotNull
+	@Nonnull
 	private static DfaCallArguments getMethodReferenceCallArguments(PsiMethodReferenceExpression methodRef,
 			DfaValue qualifier,
 			DataFlowRunner runner,
@@ -409,7 +409,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		return result;
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaMemoryState> handleKnownMethods(MethodCallInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
 		CustomMethodHandlers.CustomMethodHandler handler = CustomMethodHandlers.find(instruction);
@@ -427,7 +427,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		return states;
 	}
 
-	@NotNull
+	@Nonnull
 	private DfaCallArguments popCall(MethodCallInstruction instruction, DataFlowRunner runner, DfaMemoryState memState, boolean contractOnly)
 	{
 		DfaValue[] argValues = popCallArguments(instruction, runner, memState, contractOnly);
@@ -493,7 +493,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 
 	private DfaValue popQualifier(MethodCallInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
-		@NotNull final DfaValue qualifier = memState.pop();
+		@Nonnull final DfaValue qualifier = memState.pop();
 		boolean unboxing = instruction.getMethodType() == MethodCallInstruction.MethodType.UNBOXING;
 		NullabilityProblem problem = unboxing ? NullabilityProblem.unboxingNullable : NullabilityProblem.callNPE;
 		PsiElement anchor = instruction.getContext();
@@ -572,8 +572,8 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		}
 	}
 
-	@NotNull
-	private static DfaValue getMethodResultValue(MethodCallInstruction instruction, @Nullable DfaValue qualifierValue, DfaValueFactory factory)
+	@Nonnull
+	private static DfaValue getMethodResultValue(MethodCallInstruction instruction, @javax.annotation.Nullable DfaValue qualifierValue, DfaValueFactory factory)
 	{
 		DfaValue precalculated = instruction.getPrecalculatedReturnValue();
 		if(precalculated != null)
@@ -728,7 +728,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		return nextInstruction(instruction, runner, memState);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private DfaInstructionState[] handleRelationBinop(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState, DfaValue dfaRight, DfaValue dfaLeft, RelationType relationType)
 	{
 		DfaValueFactory factory = runner.getFactory();
@@ -767,7 +767,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		return states.toArray(new DfaInstructionState[states.size()]);
 	}
 
-	public void skipConstantConditionReporting(@Nullable PsiElement anchor)
+	public void skipConstantConditionReporting(@javax.annotation.Nullable PsiElement anchor)
 	{
 		ContainerUtil.addIfNotNull(myNotToReportReachability, anchor);
 	}
@@ -859,7 +859,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static Number getKnownNumberValue(DfaMemoryState memState, DfaVariableValue var)
 	{
 		DfaConstValue knownConstantValue = memState.getConstantValue(var);

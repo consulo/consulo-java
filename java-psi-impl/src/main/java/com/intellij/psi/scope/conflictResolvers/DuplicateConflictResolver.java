@@ -18,7 +18,7 @@ package com.intellij.psi.scope.conflictResolvers;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.infos.CandidateInfo;
@@ -43,7 +43,7 @@ public class DuplicateConflictResolver implements PsiConflictResolver
 	}
 
 	@Override
-	public CandidateInfo resolveConflict(@NotNull List<CandidateInfo> conflicts)
+	public CandidateInfo resolveConflict(@Nonnull List<CandidateInfo> conflicts)
 	{
 		if(conflicts.size() == 1)
 		{

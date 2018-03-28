@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -41,7 +42,7 @@ public class JavaUsesStatementElementType extends JavaStubElementType<PsiUsesSta
 		super("USES_STATEMENT");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -49,13 +50,13 @@ public class JavaUsesStatementElementType extends JavaStubElementType<PsiUsesSta
 	}
 
 	@Override
-	public PsiUsesStatement createPsi(@NotNull PsiUsesStatementStub stub)
+	public PsiUsesStatement createPsi(@Nonnull PsiUsesStatementStub stub)
 	{
 		return getPsiFactory(stub).createUsesStatement(stub);
 	}
 
 	@Override
-	public PsiUsesStatement createPsi(@NotNull ASTNode node)
+	public PsiUsesStatement createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiUsesStatementImpl(node);
 	}
@@ -69,20 +70,20 @@ public class JavaUsesStatementElementType extends JavaStubElementType<PsiUsesSta
 	}
 
 	@Override
-	public void serialize(@NotNull PsiUsesStatementStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiUsesStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getClassName());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiUsesStatementStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiUsesStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new PsiUsesStatementStubImpl(parentStub, StringRef.toString(dataStream.readName()));
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiUsesStatementStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiUsesStatementStub stub, @Nonnull IndexSink sink)
 	{
 	}
 }

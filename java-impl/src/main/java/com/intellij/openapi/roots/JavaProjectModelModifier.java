@@ -17,8 +17,8 @@ package com.intellij.openapi.roots;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.libraries.Library;
@@ -47,7 +47,7 @@ public abstract class JavaProjectModelModifier
 	 * {@code null} otherwise
 	 */
 	@Nullable
-	public abstract AsyncResult<Void> addModuleDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addModuleDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope);
 
 	/**
 	 * Implementation of this method should add dependency from modules {@code modules} to an external library with scope {@code scope} accordingly
@@ -58,8 +58,8 @@ public abstract class JavaProjectModelModifier
 	 * @return {@link AsyncResult} instance if dependencies of these modules can be handled by this dependencies management system or
 	 * {@code null} otherwise
 	 */
-	@Nullable
-	public abstract AsyncResult<Void> addExternalLibraryDependency(@NotNull Collection<Module> modules, @NotNull ExternalLibraryDescriptor descriptor, @NotNull DependencyScope scope);
+	@javax.annotation.Nullable
+	public abstract AsyncResult<Void> addExternalLibraryDependency(@Nonnull Collection<Module> modules, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope);
 
 	/**
 	 * Implementation of this method should add dependency from module {@code from} to {@code library} with scope {@code scope} accordingly
@@ -71,7 +71,7 @@ public abstract class JavaProjectModelModifier
 	 * {@code null} otherwise
 	 */
 	@Nullable
-	public abstract AsyncResult<Void> addLibraryDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addLibraryDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope);
 
 	/**
 	 * Implementation of this method should set language level for module {@code module} to the specified value accordingly
@@ -81,6 +81,6 @@ public abstract class JavaProjectModelModifier
 	 *
 	 * @return {@link AsyncResult} instance if language level can be set by this dependencies management system or {@code null} otherwise
 	 */
-	@Nullable
-	public abstract AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel level);
+	@javax.annotation.Nullable
+	public abstract AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel level);
 }

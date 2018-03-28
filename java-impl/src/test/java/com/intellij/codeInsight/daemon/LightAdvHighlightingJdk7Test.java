@@ -19,9 +19,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.compiler.JavacQuirksInspection;
@@ -60,7 +61,7 @@ public class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTestCase {
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, checkWeakWarnings, checkInfos);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{
@@ -110,7 +111,8 @@ public class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTestCase {
   public void testDynamicallyAddIgnoredAnnotations() throws Exception {
     ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
     EntryPoint extension = new EntryPoint() {
-      @NotNull @Override public String getDisplayName() { return "duh"; }
+      @Nonnull
+	  @Override public String getDisplayName() { return "duh"; }
       @Override public boolean isEntryPoint(RefElement refElement, PsiElement psiElement) { return false; }
       @Override public boolean isEntryPoint(PsiElement psiElement) { return false; }
       @Override public boolean isSelected() { return false; }

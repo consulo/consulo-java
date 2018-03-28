@@ -23,7 +23,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.PropertyCreationHandler;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -43,6 +42,6 @@ public interface I18nQuickFixHandler {
                           PsiExpression[] parameters,
                           PropertyCreationHandler propertyCreationHandler) throws IncorrectOperationException;
 
-  @Nullable
+  @javax.annotation.Nullable
   JavaI18nizeQuickFixDialog createDialog(Project project, Editor editor, PsiFile psiFile);
 }

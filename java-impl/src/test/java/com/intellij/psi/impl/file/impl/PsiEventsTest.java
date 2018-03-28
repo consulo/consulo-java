@@ -18,7 +18,7 @@ import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.WaitFor;
 import com.intellij.util.io.ReadOnlyAttributeUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -506,7 +506,7 @@ public class PsiEventsTest extends PsiTestCase {
     final VirtualFile virtualFile = createFile("a.xml", "<tag/>").getVirtualFile();
     final PsiTreeChangeAdapter listener = new PsiTreeChangeAdapter() {
       @Override
-      public void propertyChanged(@NotNull PsiTreeChangeEvent event) {
+      public void propertyChanged(@Nonnull PsiTreeChangeEvent event) {
         getJavaFacade().findClass("XXX", GlobalSearchScope.allScope(myProject));
       }
     };
@@ -521,67 +521,67 @@ public class PsiEventsTest extends PsiTestCase {
   public void testBeforeAfterChildrenChange() throws Throwable {
     listener = new PsiTreeChangeListener() {
       @Override
-      public void beforeChildAddition(@NotNull PsiTreeChangeEvent event) {
+      public void beforeChildAddition(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
       @Override
-      public void beforeChildRemoval(@NotNull PsiTreeChangeEvent event) {
+      public void beforeChildRemoval(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
       @Override
-      public void beforeChildReplacement(@NotNull PsiTreeChangeEvent event) {
+      public void beforeChildReplacement(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
       @Override
-      public void beforeChildMovement(@NotNull PsiTreeChangeEvent event) {
+      public void beforeChildMovement(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
       @Override
-      public void beforeChildrenChange(@NotNull PsiTreeChangeEvent event) {
+      public void beforeChildrenChange(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
       @Override
-      public void beforePropertyChange(@NotNull PsiTreeChangeEvent event) {
+      public void beforePropertyChange(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
       @Override
-      public void childAdded(@NotNull PsiTreeChangeEvent event) {
-        logEvent(event);
-        assertBeforeEventFired(event);
-      }
-
-      @Override
-      public void childRemoved(@NotNull PsiTreeChangeEvent event) {
+      public void childAdded(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
 
       @Override
-      public void childReplaced(@NotNull PsiTreeChangeEvent event) {
+      public void childRemoved(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
 
       @Override
-      public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
+      public void childReplaced(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
 
       @Override
-      public void childMoved(@NotNull PsiTreeChangeEvent event) {
+      public void childrenChanged(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
 
       @Override
-      public void propertyChanged(@NotNull PsiTreeChangeEvent event) {
+      public void childMoved(@Nonnull PsiTreeChangeEvent event) {
+        logEvent(event);
+        assertBeforeEventFired(event);
+      }
+
+      @Override
+      public void propertyChanged(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -29,19 +31,19 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class StringBufferReplaceableByStringInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiElement element = (PsiElement)infos[0];
     if (element instanceof PsiNewExpression) {
@@ -65,7 +67,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
       this.isStringBuilder = isStringBuilder;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       if (isStringBuilder) {
@@ -209,7 +211,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
   private static class StringBufferReplaceableByStringVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLocalVariable(@NotNull PsiLocalVariable variable) {
+    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
       if (codeBlock == null) {

@@ -22,7 +22,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.ui.StateRestoringCheckBox;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -30,9 +30,9 @@ public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> exte
   private StateRestoringCheckBox myCbIncludeOverloadedMethods;
   private boolean myIncludeOverloadedMethodsAvailable;
 
-  protected JavaFindUsagesDialog(@NotNull PsiElement element,
-                                 @NotNull Project project,
-                                 @NotNull FindUsagesOptions findUsagesOptions,
+  protected JavaFindUsagesDialog(@Nonnull PsiElement element,
+                                 @Nonnull Project project,
+                                 @Nonnull FindUsagesOptions findUsagesOptions,
                                  boolean toShowInNewTab,
                                  boolean mustOpenInNewTab,
                                  boolean isSingleFile,

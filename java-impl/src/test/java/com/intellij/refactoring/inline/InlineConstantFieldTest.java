@@ -3,7 +3,7 @@ package com.intellij.refactoring.inline;
 import static org.junit.Assert.assertTrue;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
@@ -17,7 +17,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 
 public class InlineConstantFieldTest extends LightRefactoringTestCase
 {
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

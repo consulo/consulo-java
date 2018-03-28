@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -50,13 +50,13 @@ public abstract class JavaPsiImplementationHelper
 	 * @param virtualFile virtual file for which language level is requested.
 	 * @return language level for classes root or null if file is not under a library source root or no matching classes root is found.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public abstract LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile);
 
 	public abstract ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement);
 
-	@Nullable
-	public abstract PsiElement getDefaultMemberAnchor(@NotNull PsiClass psiClass, @NotNull PsiMember firstPsi);
+	@javax.annotation.Nullable
+	public abstract PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi);
 
 	public abstract void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element);
 }

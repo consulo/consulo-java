@@ -18,7 +18,8 @@ package com.intellij.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.ASTBlock;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
@@ -212,7 +213,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		}
 	}
 
-	private static boolean isNodeParentMethod(@NotNull ASTNode node)
+	private static boolean isNodeParentMethod(@Nonnull ASTNode node)
 	{
 		return node.getTreeParent() != null && node.getTreeParent().getElementType() == JavaElementType.METHOD;
 	}
@@ -291,7 +292,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		if(isAfter(newChildIndex, new IElementType[]{JavaDocElementType.DOC_COMMENT}))

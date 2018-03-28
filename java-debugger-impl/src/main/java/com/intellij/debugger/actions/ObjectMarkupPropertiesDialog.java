@@ -19,7 +19,7 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.ui.ex.MultiLineLabel;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkerPresentationDialogBase;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +35,7 @@ public class ObjectMarkupPropertiesDialog extends ValueMarkerPresentationDialogB
   private JPanel myAdditionalPropertiesPanel;
   private MultiLineLabel myDescriptionLabel;
 
-  public ObjectMarkupPropertiesDialog(@NotNull final String defaultText, boolean suggestAdditionalMarkup) {
+  public ObjectMarkupPropertiesDialog(@Nonnull final String defaultText, boolean suggestAdditionalMarkup) {
     super(defaultText);
     mySuggestAdditionalMarkup = suggestAdditionalMarkup;
     myDescriptionLabel.setText("If the value is referenced by a constant field of an abstract class,\n" +

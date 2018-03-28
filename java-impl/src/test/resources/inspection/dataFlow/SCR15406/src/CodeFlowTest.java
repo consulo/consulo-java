@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class CodeFlowTest {
   public static void main (String[] args) {
@@ -18,7 +18,7 @@ public class CodeFlowTest {
       exception.printStackTrace();
   }
 
-  @NotNull 
+  @Nonnull
   private static String getString () throws SomeException {
     if (Math.random() < 0.5)
       throw new SomeException();

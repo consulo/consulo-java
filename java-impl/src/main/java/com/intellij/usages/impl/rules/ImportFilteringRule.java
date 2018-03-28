@@ -15,6 +15,8 @@
  */
 package com.intellij.usages.impl.rules;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiImportList;
@@ -22,14 +24,13 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.Usage;
 import com.intellij.usages.rules.PsiElementUsage;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Jan 17, 2005
  */
 public class ImportFilteringRule extends com.intellij.usages.rules.ImportFilteringRule {
-  public boolean isVisible(@NotNull Usage usage) {
+  public boolean isVisible(@Nonnull Usage usage) {
     if (usage instanceof PsiElementUsage) {
       final PsiElement psiElement = ((PsiElementUsage)usage).getElement();
       final PsiFile containingFile = psiElement.getContainingFile();

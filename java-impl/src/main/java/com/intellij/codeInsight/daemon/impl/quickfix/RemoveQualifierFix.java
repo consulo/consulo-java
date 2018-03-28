@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -25,7 +27,6 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author cdr
@@ -42,19 +43,19 @@ public class RemoveQualifierFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("remove.qualifier.action.text");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return
       myQualifier != null
       && myQualifier.isValid()
@@ -67,7 +68,7 @@ public class RemoveQualifierFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     myQualifier.delete();
     myExpression.bindToElement(myResolved);

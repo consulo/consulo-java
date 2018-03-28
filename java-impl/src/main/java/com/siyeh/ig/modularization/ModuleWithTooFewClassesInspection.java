@@ -28,8 +28,7 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -39,14 +38,14 @@ public class ModuleWithTooFewClassesInspection extends BaseGlobalInspection {
   @SuppressWarnings({"PublicField"})
   public int limit = 10;
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("module.with.too.few.classes.display.name");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public CommonProblemDescriptor[] checkElement(RefEntity refEntity, AnalysisScope analysisScope, InspectionManager inspectionManager,
                                                 GlobalInspectionContext globalInspectionContext) {
     if (!(refEntity instanceof RefModule)) {

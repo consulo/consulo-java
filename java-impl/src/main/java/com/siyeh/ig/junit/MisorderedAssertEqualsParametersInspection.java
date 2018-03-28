@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,8 +28,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
 
@@ -38,13 +40,13 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("misordered.assert.equals.parameters.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("misordered.assert.equals.parameters.problem.descriptor");
   }
@@ -57,7 +59,7 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
   private static class FlipParametersFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("misordered.assert.equals.parameters.flip.quickfix");
     }
@@ -103,7 +105,7 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
   private static class MisorderedAssertEqualsParametersVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       @NonNls final String methodName = methodExpression.getReferenceName();

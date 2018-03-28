@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.WriteAction;
@@ -39,18 +41,17 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RemoveModifierFix;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ProtectedMemberInFinalClassInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("protected.member.in.final.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("protected.member.in.final.class.problem.descriptor");
   }
@@ -60,7 +61,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     return new RemoveModifierFix((String)infos[0]);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return new InspectionGadgetsFix[] {
@@ -71,7 +72,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
 
   private static class MakePrivateFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.private.quickfix");
     }
@@ -169,7 +170,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
   private static class ProtectedMemberInFinalClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!method.hasModifierProperty(PsiModifier.PROTECTED)) {
         return;
       }
@@ -184,7 +185,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.PROTECTED)) {
         return;
       }

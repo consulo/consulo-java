@@ -29,8 +29,8 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.JavaDebugProcess;
 import com.intellij.debugger.impl.DebuggerContextImpl;
@@ -63,13 +63,13 @@ public abstract class DebuggerAction extends AnAction
 		return dataContext.getData(DebuggerTree.DATA_KEY);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static DebuggerTreePanel getPanel(DataContext dataContext)
 	{
 		return dataContext.getData(DebuggerTreePanel.DATA_KEY);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static DebuggerTreeNodeImpl getSelectedNode(DataContext dataContext)
 	{
 		DebuggerTree tree = getTree(dataContext);
@@ -205,7 +205,7 @@ public abstract class DebuggerAction extends AnAction
 		});
 	}
 
-	public static void refreshViews(@NotNull XValueNodeImpl node)
+	public static void refreshViews(@Nonnull XValueNodeImpl node)
 	{
 		refreshViews(XDebugView.getSession(node.getTree()));
 	}

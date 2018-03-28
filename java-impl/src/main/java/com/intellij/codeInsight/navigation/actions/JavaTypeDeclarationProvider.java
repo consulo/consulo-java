@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.navigation.actions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.openapi.editor.Editor;
@@ -35,9 +35,9 @@ import com.intellij.psi.util.PsiUtil;
  */
 public class JavaTypeDeclarationProvider extends TypeDeclarationProvider {
   @RequiredReadAction
-  @Nullable
+  @javax.annotation.Nullable
   @Override
-  public PsiElement[] getSymbolTypeDeclarations(@NotNull PsiElement targetElement, Editor editor, int offset) {
+  public PsiElement[] getSymbolTypeDeclarations(@Nonnull PsiElement targetElement, Editor editor, int offset) {
     PsiType type;
     if (targetElement instanceof PsiVariable){
       type = ((PsiVariable)targetElement).getType();

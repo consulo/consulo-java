@@ -28,7 +28,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -56,7 +57,7 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
 		return super.getVersion() + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 2 : 0);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public StubIndexKey<String, PsiJavaModule> getKey()
 	{
@@ -64,7 +65,7 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
 	}
 
 	@Override
-	public Collection<PsiJavaModule> get(@NotNull String name, @NotNull Project project, @NotNull GlobalSearchScope scope)
+	public Collection<PsiJavaModule> get(@Nonnull String name, @Nonnull Project project, @Nonnull GlobalSearchScope scope)
 	{
 		Collection<PsiJavaModule> modules = StubIndex.getElements(getKey(), name, project, new JavaSourceFilterScope(scope), PsiJavaModule.class);
 		if(modules.size() > 1)

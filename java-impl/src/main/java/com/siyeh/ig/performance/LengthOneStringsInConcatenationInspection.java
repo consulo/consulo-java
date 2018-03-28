@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -27,26 +29,25 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class LengthOneStringsInConcatenationInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "length.one.strings.in.concatenation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "SingleCharacterStringConcatenation";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String string = (String)infos[0];
     final String escapedString = StringUtil.escapeStringCharacters(string);
@@ -63,7 +64,7 @@ public class LengthOneStringsInConcatenationInspection
   private static class ReplaceStringsWithCharsFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "length.one.strings.in.concatenation.replace.quickfix");
@@ -101,7 +102,7 @@ public class LengthOneStringsInConcatenationInspection
 
     @Override
     public void visitLiteralExpression(
-      @NotNull PsiLiteralExpression expression) {
+      @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (!TypeUtils.isJavaLangString(type)) {

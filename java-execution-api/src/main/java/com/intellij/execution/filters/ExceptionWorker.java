@@ -19,9 +19,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.markup.TextAttributes;
@@ -58,7 +58,7 @@ public class ExceptionWorker
 	private Trinity<TextRange, TextRange, TextRange> myInfo;
 	private final ExceptionInfoCache myCache;
 
-	public ExceptionWorker(@NotNull ExceptionInfoCache cache)
+	public ExceptionWorker(@Nonnull ExceptionInfoCache cache)
 	{
 		myProject = cache.getProject();
 		myCache = cache;
@@ -197,7 +197,7 @@ public class ExceptionWorker
 	}
 
 	//todo [roma] regexp
-	@Nullable
+	@javax.annotation.Nullable
 	static Trinity<TextRange, TextRange, TextRange> parseExceptionLine(final String line)
 	{
 		int startIdx;

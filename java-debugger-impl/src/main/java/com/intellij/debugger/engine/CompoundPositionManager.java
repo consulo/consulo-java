@@ -22,8 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.MultiRequestPositionManager;
 import com.intellij.debugger.NoDataException;
 import com.intellij.debugger.PositionManager;
@@ -115,7 +115,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		return defaultValue;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public SourcePosition getSourcePosition(final Location location)
 	{
@@ -144,7 +144,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		}, null, null, false));
 	}
 
-	private static boolean checkCacheEntry(@Nullable SourcePosition position, @NotNull Location location)
+	private static boolean checkCacheEntry(@Nullable SourcePosition position, @Nonnull Location location)
 	{
 		if(position == null)
 		{
@@ -165,15 +165,15 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	@NotNull
-	public List<ReferenceType> getAllClasses(@NotNull final SourcePosition classPosition)
+	@Nonnull
+	public List<ReferenceType> getAllClasses(@Nonnull final SourcePosition classPosition)
 	{
 		return iterate(positionManager -> positionManager.getAllClasses(classPosition), Collections.emptyList(), classPosition);
 	}
 
 	@Override
-	@NotNull
-	public List<Location> locationsOfLine(@NotNull final ReferenceType type, @NotNull SourcePosition position)
+	@Nonnull
+	public List<Location> locationsOfLine(@Nonnull final ReferenceType type, @Nonnull SourcePosition position)
 	{
 		VirtualFile file = position.getFile().getVirtualFile();
 		if(file != null)
@@ -194,14 +194,14 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@NotNull final ClassPrepareRequestor requestor, @NotNull final SourcePosition position)
+	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position)
 	{
 		return iterate(positionManager -> positionManager.createPrepareRequest(requestor, position), null, position);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<ClassPrepareRequest> createPrepareRequests(@NotNull final ClassPrepareRequestor requestor, @NotNull final SourcePosition position)
+	public List<ClassPrepareRequest> createPrepareRequests(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position)
 	{
 		return iterate(positionManager ->
 		{
@@ -221,9 +221,9 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		}, Collections.emptyList(), position);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public XStackFrame createStackFrame(@NotNull StackFrameProxyImpl frame, @NotNull DebugProcessImpl debugProcess, @NotNull Location location)
+	public XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @Nonnull DebugProcessImpl debugProcess, @Nonnull Location location)
 	{
 		for(PositionManager positionManager : myPositionManagers)
 		{
@@ -251,7 +251,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	public ThreeState evaluateCondition(@NotNull EvaluationContext context, @NotNull StackFrameProxyImpl frame, @NotNull Location location, @NotNull String expression)
+	public ThreeState evaluateCondition(@Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @Nonnull Location location, @Nonnull String expression)
 	{
 		for(PositionManager positionManager : myPositionManagers)
 		{

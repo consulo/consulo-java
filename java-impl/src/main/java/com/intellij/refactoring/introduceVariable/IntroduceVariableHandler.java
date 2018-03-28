@@ -33,13 +33,13 @@ import com.intellij.refactoring.ui.ConflictsDialog;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
 public class IntroduceVariableHandler extends IntroduceVariableBase {
 
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiExpression expression) {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiExpression expression) {
     invokeImpl(project, expression, editor);
   }
 

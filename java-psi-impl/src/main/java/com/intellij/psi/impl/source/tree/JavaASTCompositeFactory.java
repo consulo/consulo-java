@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source.tree;
 import com.intellij.psi.impl.source.javadoc.PsiDocTagValueImpl;
 import com.intellij.psi.tree.IElementType;
 import consulo.java.psi.impl.source.tree.CoreJavaASTCompositeFactory;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class JavaASTCompositeFactory extends CoreJavaASTCompositeFactory
 {
   @Override
-  @NotNull
+  @Nonnull
   public CompositeElement createComposite(final IElementType type) {
     if (type == DOC_TAG_VALUE_ELEMENT) {
       return new PsiDocTagValueImpl();

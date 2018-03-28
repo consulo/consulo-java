@@ -20,8 +20,7 @@ import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public abstract class GenericsInspectionToolBase extends BaseJavaBatchLocalInspe
     return true;
   }
   @Override
-  public ProblemDescriptor[] checkClass(@NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     if (initializers.length == 0) return null;
     List<ProblemDescriptor> descriptors = new ArrayList<ProblemDescriptor>();
@@ -50,7 +49,7 @@ public abstract class GenericsInspectionToolBase extends BaseJavaBatchLocalInspe
   }
 
   @Override
-  public ProblemDescriptor[] checkField(@NotNull PsiField field, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     final PsiExpression initializer = field.getInitializer();
     if (initializer != null) {
       return getDescriptions(initializer, manager, isOnTheFly);
@@ -62,7 +61,7 @@ public abstract class GenericsInspectionToolBase extends BaseJavaBatchLocalInspe
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@NotNull PsiMethod psiMethod, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     final PsiCodeBlock body = psiMethod.getBody();
     if (body != null) {
       return getDescriptions(body, manager, isOnTheFly);
@@ -70,6 +69,6 @@ public abstract class GenericsInspectionToolBase extends BaseJavaBatchLocalInspe
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public abstract ProblemDescriptor[] getDescriptions(PsiElement place, InspectionManager manager, boolean isOnTheFly);
 }

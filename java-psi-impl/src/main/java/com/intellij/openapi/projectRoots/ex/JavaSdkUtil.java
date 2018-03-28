@@ -15,10 +15,12 @@
  */
 package com.intellij.openapi.projectRoots.ex;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -79,7 +81,7 @@ public class JavaSdkUtil
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Deprecated
 	@DeprecationInfo("Use #getJavaRtJarPath()")
 	public static String getIdeaRtJarPath()
@@ -87,7 +89,7 @@ public class JavaSdkUtil
 		return getJavaRtJarPath();
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getJavaRtJarPath()
 	{
 		try
@@ -100,12 +102,12 @@ public class JavaSdkUtil
 		}
 	}
 
-	public static boolean isLanguageLevelAcceptable(@NotNull Project project, @NotNull Module module, @NotNull LanguageLevel level)
+	public static boolean isLanguageLevelAcceptable(@Nonnull Project project, @Nonnull Module module, @Nonnull LanguageLevel level)
 	{
 		return isJdkSupportsLevel(getRelevantJdk(project, module), level);
 	}
 
-	private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, @NotNull LanguageLevel level)
+	private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, @Nonnull LanguageLevel level)
 	{
 		if(jdk == null)
 		{
@@ -116,14 +118,14 @@ public class JavaSdkUtil
 	}
 
 	@Nullable
-	private static Sdk getRelevantJdk(@NotNull Project project, @NotNull Module module)
+	private static Sdk getRelevantJdk(@Nonnull Project project, @Nonnull Module module)
 	{
 		Sdk moduleJdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
 		return moduleJdk == null ? null : moduleJdk;
 	}
 
 	@Contract("null, _ -> false")
-	public static boolean isJdkAtLeast(@Nullable Sdk jdk, @NotNull JavaSdkVersion expected)
+	public static boolean isJdkAtLeast(@javax.annotation.Nullable Sdk jdk, @Nonnull JavaSdkVersion expected)
 	{
 		if(jdk != null)
 		{

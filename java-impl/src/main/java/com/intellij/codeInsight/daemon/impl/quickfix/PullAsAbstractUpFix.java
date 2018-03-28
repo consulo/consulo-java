@@ -17,8 +17,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.LinkedHashSet;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
 import com.intellij.codeInsight.intention.impl.RunRefactoringAction;
@@ -54,31 +54,31 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return myName;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return "Pull up";
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     return startElement instanceof PsiMethod && startElement.isValid() && ((PsiMethod)startElement).getContainingClass() != null;
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiMethod method = (PsiMethod)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(method.getContainingFile())) return;
 
@@ -110,7 +110,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
                                           "Choose super class",
                                           new PsiElementProcessor<PsiClass>() {
                                             @Override
-                                            public boolean execute(@NotNull PsiClass aClass) {
+                                            public boolean execute(@Nonnull PsiClass aClass) {
                                               pullUp(method, containingClass, aClass);
                                               return false;
                                             }
@@ -142,7 +142,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
     return false;
   }
 
-  public static void registerQuickFix(@NotNull PsiMethod methodWithOverrides, @NotNull QuickFixActionRegistrar registrar) {
+  public static void registerQuickFix(@Nonnull PsiMethod methodWithOverrides, @Nonnull QuickFixActionRegistrar registrar) {
     PsiClass containingClass = methodWithOverrides.getContainingClass();
     if (containingClass == null) return;
     final PsiManager manager = containingClass.getManager();

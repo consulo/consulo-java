@@ -22,7 +22,7 @@ import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.TokenSet;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class PsiDeclarationStatementImpl extends CompositePsiElement implements PsiDeclarationStatement {
   public PsiDeclarationStatementImpl() {
@@ -30,7 +30,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getDeclaredElements() {
     return getChildrenAsPsiElements(DECLARED_ELEMENT_BIT_SET, PsiElement.ARRAY_FACTORY);
   }
@@ -44,7 +44,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (DECLARED_ELEMENT_BIT_SET.contains(child.getElementType())) {
       PsiElement[] declaredElements = getDeclaredElements();
       int length = declaredElements.length;
@@ -84,7 +84,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDeclarationStatement(this);
     }
@@ -98,7 +98,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     PsiElement[] decls = getDeclaredElements();
     for (PsiElement decl : decls) {

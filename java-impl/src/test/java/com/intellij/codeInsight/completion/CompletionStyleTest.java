@@ -2,7 +2,8 @@ package com.intellij.codeInsight.completion;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -31,7 +32,7 @@ public class CompletionStyleTest extends LightCodeInsightTestCase{
     return LanguageLevel.JDK_1_6;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

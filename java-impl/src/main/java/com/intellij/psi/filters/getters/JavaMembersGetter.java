@@ -26,8 +26,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +38,7 @@ import java.util.Set;
 public class JavaMembersGetter extends MembersGetter {
   private final PsiType myExpectedType;
 
-  public JavaMembersGetter(@NotNull PsiType expectedType, CompletionParameters parameters) {
+  public JavaMembersGetter(@Nonnull PsiType expectedType, CompletionParameters parameters) {
     super(new JavaStaticMemberProcessor(parameters), parameters.getPosition());
     myExpectedType = JavaCompletionUtil.originalize(expectedType);
   }
@@ -102,7 +102,7 @@ public class JavaMembersGetter extends MembersGetter {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass getCalledClass(@Nullable PsiElement call) {
     if (call instanceof PsiMethodCallExpression) {
       for (final JavaResolveResult result : ((PsiMethodCallExpression)call).getMethodExpression().multiResolve(true)) {

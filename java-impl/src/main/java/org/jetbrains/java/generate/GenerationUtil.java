@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.generate.element.ClassElement;
 import org.jetbrains.java.generate.element.Element;
 import org.jetbrains.java.generate.element.ElementComparator;
@@ -126,7 +125,7 @@ public class GenerationUtil
 	 * @param classMemberList list of {@link com.intellij.codeInsight.generation.PsiElementClassMember}
 	 * @return a list of {PsiMember} objects.
 	 */
-	public static List<PsiMember> convertClassMembersToPsiMembers(@Nullable List<PsiElementClassMember> classMemberList)
+	public static List<PsiMember> convertClassMembersToPsiMembers(@javax.annotation.Nullable List<PsiElementClassMember> classMemberList)
 	{
 		if(classMemberList == null || classMemberList.isEmpty())
 		{
@@ -184,7 +183,7 @@ public class GenerationUtil
 	 * @return code (usually javacode). Returns null if templateMacro is null.
 	 * @throws GenerateCodeException is thrown when there is an error generating the javacode.
 	 */
-	public static String velocityGenerateCode(@Nullable PsiClass clazz,
+	public static String velocityGenerateCode(@javax.annotation.Nullable PsiClass clazz,
 			Collection<? extends PsiMember> selectedMembers,
 			Collection<? extends PsiMember> selectedNotNullMembers,
 			Map<String, String> params,

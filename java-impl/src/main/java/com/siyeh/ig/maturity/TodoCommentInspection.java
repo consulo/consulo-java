@@ -15,20 +15,21 @@
  */
 package com.siyeh.ig.maturity;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiComment;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class TodoCommentInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("todo.comment.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("todo.comment.problem.descriptor");
   }

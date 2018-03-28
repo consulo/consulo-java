@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiExpression;
@@ -53,7 +53,7 @@ class MethodCallContract implements PreContract
 		return states;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body)
 	{

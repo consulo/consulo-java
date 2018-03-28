@@ -17,11 +17,11 @@ package com.siyeh.ipp.integer;
 
 import com.intellij.psi.PsiType;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ConvertIntegerToHexIntention extends ConvertNumberIntentionBase {
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ConvertIntegerToHexPredicate();
   }

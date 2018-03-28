@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -29,7 +30,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -60,7 +60,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
 	private final Set<ChangeListener> myListeners = new HashSet<>();
 	private String myCurrentModifier;
 
-	public VisibilityModifierChooser(@NotNull Supplier<Boolean> canBeEnabled, @NotNull String modifier, @NotNull Consumer<String> modifierChangedConsumer)
+	public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @Nonnull String modifier, @Nonnull Consumer<String> modifierChangedConsumer)
 	{
 		this(canBeEnabled, modifier, modifierChangedConsumer, MODIFIERS);
 	}
@@ -72,7 +72,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
 		super.setText(text);
 	}
 
-	public VisibilityModifierChooser(@NotNull Supplier<Boolean> canBeEnabled, @NotNull String modifier, @NotNull Consumer<String> modifierChangedConsumer, @NotNull String[] modifiers)
+	public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @Nonnull String modifier, @Nonnull Consumer<String> modifierChangedConsumer, @Nonnull String[] modifiers)
 	{
 		myCanBeEnabled = canBeEnabled;
 		setIcon(AllIcons.General.Combo2);
@@ -84,7 +84,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
 		new ClickListener()
 		{
 			@Override
-			public boolean onClick(@NotNull MouseEvent e, int clickCount)
+			public boolean onClick(@Nonnull MouseEvent e, int clickCount)
 			{
 				if(!isEnabled())
 				{

@@ -16,7 +16,7 @@
 package com.intellij.unscramble;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +38,7 @@ public class ThreadState {
   private final Set<ThreadState> myThreadsWaitingForMyLock = new HashSet<ThreadState>();
   private final Set<ThreadState> myDeadlockedThreads = new HashSet<ThreadState>();
 
-  @Nullable
+  @javax.annotation.Nullable
   private ThreadOperation myOperation;
 
   public ThreadState(final String name, final String state) {
@@ -133,7 +133,7 @@ public class ThreadState {
     return myOperation;
   }
 
-  public void setOperation(@Nullable final ThreadOperation operation) {
+  public void setOperation(@javax.annotation.Nullable final ThreadOperation operation) {
     myOperation = operation;
   }
 

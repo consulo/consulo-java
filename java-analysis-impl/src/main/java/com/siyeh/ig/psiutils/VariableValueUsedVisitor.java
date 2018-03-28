@@ -15,23 +15,24 @@
  */
 package com.siyeh.ig.psiutils;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 
 class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
-  @NotNull
+  @Nonnull
   private final PsiVariable variable;
   private boolean read = false;
   private boolean written = false;
 
-  VariableValueUsedVisitor(@NotNull PsiVariable variable) {
+  VariableValueUsedVisitor(@Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (read || written) {
       return;
     }
@@ -40,7 +41,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssignmentExpression(
-    @NotNull PsiAssignmentExpression assignment) {
+    @Nonnull PsiAssignmentExpression assignment) {
     if (read || written) {
       return;
     }
@@ -67,7 +68,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPrefixExpression(
-    @NotNull PsiPrefixExpression prefixExpression) {
+    @Nonnull PsiPrefixExpression prefixExpression) {
     if (read || written) {
       return;
     }
@@ -92,7 +93,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPostfixExpression(
-    @NotNull PsiPostfixExpression postfixExpression) {
+    @Nonnull PsiPostfixExpression postfixExpression) {
     if (read || written) {
       return;
     }
@@ -116,7 +117,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitVariable(@NotNull PsiVariable variable) {
+  public void visitVariable(@Nonnull PsiVariable variable) {
     if (read || written) {
       return;
     }
@@ -133,7 +134,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @NotNull PsiMethodCallExpression call) {
+    @Nonnull PsiMethodCallExpression call) {
     if (read || written) {
       return;
     }
@@ -164,7 +165,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitNewExpression(
-    @NotNull PsiNewExpression newExpression) {
+    @Nonnull PsiNewExpression newExpression) {
     if (read || written) {
       return;
     }
@@ -207,7 +208,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReturnStatement(
-    @NotNull PsiReturnStatement returnStatement) {
+    @Nonnull PsiReturnStatement returnStatement) {
     if (read || written) {
       return;
     }

@@ -15,7 +15,8 @@
  */
 package org.jetbrains.java.generate.config;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiClass;
@@ -39,7 +40,7 @@ public class InsertAfterEqualsHashCodeStrategy implements InsertNewMethodStrateg
 	}
 
 	@Override
-	public PsiMethod insertNewMethod(PsiClass clazz, @NotNull PsiMethod newMethod, Editor editor)
+	public PsiMethod insertNewMethod(PsiClass clazz, @Nonnull PsiMethod newMethod, Editor editor)
 	{
 		PsiMethod methodHashCode = PsiAdapter.findHashCodeMethod(clazz);
 		PsiMethod methodEquals = PsiAdapter.findEqualsMethod(clazz);

@@ -35,8 +35,8 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -164,7 +164,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] members) throws IncorrectOperationException {
     List<PsiMethod> baseConstructors = new ArrayList<PsiMethod>();
     List<PsiField> fieldsVector = new ArrayList<PsiField>();

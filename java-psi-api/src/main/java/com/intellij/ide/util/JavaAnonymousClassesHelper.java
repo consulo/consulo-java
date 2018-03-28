@@ -19,8 +19,8 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.*;
 import gnu.trove.THashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class JavaAnonymousClassesHelper {
   public static final AnonClassProvider ANON_CLASS_PROVIDER = new AnonClassProvider();
 
   @Nullable
-  public static String getName(@NotNull PsiAnonymousClass cls) {
+  public static String getName(@Nonnull PsiAnonymousClass cls) {
     final PsiClass upper = PsiTreeUtil.getParentOfType(cls, PsiClass.class);
     if (upper == null) {
       return null;

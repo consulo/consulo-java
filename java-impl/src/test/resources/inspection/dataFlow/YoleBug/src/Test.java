@@ -1,6 +1,6 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.Nonnull;
 public class Test {
-    @NotNull
+    @Nonnull
     public Object foo() {
         return new Object();
     }

@@ -15,22 +15,23 @@
  */
 package com.siyeh.ipp.comment;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class ChangeToEndOfLineCommentIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new CStyleCommentPredicate();
   }
 
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiComment comment = (PsiComment)element;
     final Project project = comment.getProject();

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -29,7 +29,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	public static final String REFACTORING_NAME = "Type Migration";
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
 		final int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
@@ -59,7 +59,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, @NotNull final PsiElement[] elements, final DataContext dataContext)
+	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
 	{
 		LOG.assertTrue(elements.length == 1);
 		final PsiElement element = elements[0];
@@ -93,7 +93,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 		return false;
 	}
 
-	private static void invoke(@NotNull Project project, @NotNull PsiElement[] roots, @Nullable Editor editor)
+	private static void invoke(@Nonnull Project project, @Nonnull PsiElement[] roots, @javax.annotation.Nullable Editor editor)
 	{
 		if(Util.canBeMigrated(roots))
 		{
@@ -106,8 +106,8 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 				".type.migration"), null);
 	}
 
-	@NotNull
-	private static PsiElement[] extractReferencedVariables(@NotNull PsiTypeElement typeElement)
+	@Nonnull
+	private static PsiElement[] extractReferencedVariables(@Nonnull PsiTypeElement typeElement)
 	{
 		final PsiElement parent = typeElement.getParent();
 		if(parent instanceof PsiVariable)

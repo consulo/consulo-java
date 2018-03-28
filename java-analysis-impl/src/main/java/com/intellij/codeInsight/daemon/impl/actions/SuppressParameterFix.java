@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.actions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.JavaSuppressionUtil;
 import com.intellij.openapi.project.Project;
@@ -32,7 +32,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCommentFix
 {
-	public SuppressParameterFix(@NotNull HighlightDisplayKey key)
+	public SuppressParameterFix(@Nonnull HighlightDisplayKey key)
 	{
 		this(key.getID());
 	}
@@ -43,7 +43,7 @@ public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCom
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		return "Suppress for parameter";
@@ -64,8 +64,8 @@ public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCom
 	}
 
 	@Override
-	protected void createSuppression(@NotNull Project project, @NotNull PsiElement element,
-			@NotNull PsiElement cont) throws IncorrectOperationException
+	protected void createSuppression(@Nonnull Project project, @Nonnull PsiElement element,
+			@Nonnull PsiElement cont) throws IncorrectOperationException
 	{
 		PsiModifierListOwner container = (PsiModifierListOwner) cont;
 		final PsiModifierList modifierList = container.getModifierList();

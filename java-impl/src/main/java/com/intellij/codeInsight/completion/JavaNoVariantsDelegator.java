@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.completion.impl.BetterPrefixMatcher;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
@@ -50,7 +50,7 @@ import consulo.psi.PsiPackage;
 public class JavaNoVariantsDelegator extends CompletionContributor
 {
 	@Override
-	public void fillCompletionVariants(@NotNull final CompletionParameters parameters, @NotNull final CompletionResultSet result)
+	public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result)
 	{
 		if(JavaModuleCompletion.isModuleFile(parameters.getOriginalFile()))
 		{
@@ -99,7 +99,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		}
 	}
 
-	private static boolean areNonImportedInheritorsAlreadySuggested(@NotNull CompletionParameters parameters)
+	private static boolean areNonImportedInheritorsAlreadySuggested(@Nonnull CompletionParameters parameters)
 	{
 		return JavaSmartCompletionContributor.AFTER_NEW.accepts(parameters.getPosition()) && JavaSmartCompletionContributor.getExpectedTypes(parameters).length > 0;
 	}
@@ -217,7 +217,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		return allClasses;
 	}
 
-	private static void suggestNonImportedClasses(CompletionParameters parameters, CompletionResultSet result, @Nullable JavaCompletionSession session)
+	private static void suggestNonImportedClasses(CompletionParameters parameters, CompletionResultSet result, @javax.annotation.Nullable JavaCompletionSession session)
 	{
 		JavaClassNameCompletionContributor.addAllClasses(parameters, true, result.getPrefixMatcher(), element ->
 		{

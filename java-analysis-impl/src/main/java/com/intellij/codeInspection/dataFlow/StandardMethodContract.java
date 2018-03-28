@@ -18,7 +18,8 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.ContainerUtil;
 import one.util.streamex.IntStreamEx;
@@ -34,7 +35,7 @@ public final class StandardMethodContract extends MethodContract
 	public final ValueConstraint[] arguments;
 	public final ValueConstraint returnValue;
 
-	public StandardMethodContract(@NotNull ValueConstraint[] arguments, @NotNull ValueConstraint returnValue)
+	public StandardMethodContract(@Nonnull ValueConstraint[] arguments, @Nonnull ValueConstraint returnValue)
 	{
 		this.arguments = arguments;
 		this.returnValue = returnValue;
@@ -46,7 +47,7 @@ public final class StandardMethodContract extends MethodContract
 		return returnValue;
 	}
 
-	@NotNull
+	@Nonnull
 	static ValueConstraint[] createConstraintArray(int paramCount)
 	{
 		ValueConstraint[] args = new ValueConstraint[paramCount];

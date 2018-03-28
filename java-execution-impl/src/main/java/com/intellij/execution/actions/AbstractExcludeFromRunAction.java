@@ -17,7 +17,8 @@ package com.intellij.execution.actions;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.Location;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
@@ -45,7 +46,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
 
 	@RequiredDispatchThread
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e)
+	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
 		final Project project = e.getData(CommonDataKeys.PROJECT);
 		LOG.assertTrue(project != null);
@@ -60,7 +61,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
 
 	@RequiredDispatchThread
 	@Override
-	public void update(@NotNull AnActionEvent e)
+	public void update(@Nonnull AnActionEvent e)
 	{
 		final Presentation presentation = e.getPresentation();
 		presentation.setVisible(false);

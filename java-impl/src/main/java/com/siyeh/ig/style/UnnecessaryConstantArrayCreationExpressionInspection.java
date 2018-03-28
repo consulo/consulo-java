@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -23,28 +25,26 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class UnnecessaryConstantArrayCreationExpressionInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.constant.array.creation.expression.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.constant.array.creation.expression.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new UnnecessaryConstantArrayCreationExpressionFix();
   }
@@ -52,7 +52,7 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
   private static class UnnecessaryConstantArrayCreationExpressionFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.constant.array.creation.expression.quickfix");

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.codeinsight;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.generation.surroundWith.JavaExpressionSurrounder;
 import com.intellij.debugger.DebuggerBundle;
@@ -104,7 +104,7 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder
 		}
 
 		@Override
-		protected void typeCalculationFinished(@Nullable final PsiType type)
+		protected void typeCalculationFinished(@javax.annotation.Nullable final PsiType type)
 		{
 			if(type == null)
 			{
@@ -121,7 +121,7 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder
 					new WriteCommandAction(project, CodeInsightBundle.message("command.name.surround.with.runtime.cast"))
 					{
 						@Override
-						protected void run(@NotNull Result result) throws Throwable
+						protected void run(@Nonnull Result result) throws Throwable
 						{
 							try
 							{

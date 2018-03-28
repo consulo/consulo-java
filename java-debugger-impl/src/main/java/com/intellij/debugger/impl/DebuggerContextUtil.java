@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.IdentifierHighlighterPass;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -63,13 +64,13 @@ public class DebuggerContextUtil
 		contextManager.setState(newContext, session != null ? session.getState() : DebuggerSession.State.DISPOSED, DebuggerSession.Event.CONTEXT, null);
 	}
 
-	@NotNull
-	public static DebuggerContextImpl createDebuggerContext(@NotNull DebuggerSession session, SuspendContextImpl suspendContext)
+	@Nonnull
+	public static DebuggerContextImpl createDebuggerContext(@Nonnull DebuggerSession session, SuspendContextImpl suspendContext)
 	{
 		return DebuggerContextImpl.createDebuggerContext(session, suspendContext, suspendContext != null ? suspendContext.getThread() : null, null);
 	}
 
-	public static SourcePosition findNearest(@NotNull DebuggerContextImpl context, @NotNull PsiElement psi, @NotNull PsiFile file)
+	public static SourcePosition findNearest(@Nonnull DebuggerContextImpl context, @Nonnull PsiElement psi, @Nonnull PsiFile file)
 	{
 		final DebuggerSession session = context.getDebuggerSession();
 		if(session != null)

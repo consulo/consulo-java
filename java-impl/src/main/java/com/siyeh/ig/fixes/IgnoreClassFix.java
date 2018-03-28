@@ -3,8 +3,9 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.command.undo.BasicUndoableAction;
 import com.intellij.openapi.command.undo.UndoManager;
@@ -31,7 +32,7 @@ public class IgnoreClassFix extends InspectionGadgetsFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -39,7 +40,7 @@ public class IgnoreClassFix extends InspectionGadgetsFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{

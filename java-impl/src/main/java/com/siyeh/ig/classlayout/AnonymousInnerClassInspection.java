@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiEnumConstantInitializer;
@@ -23,17 +25,16 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MoveAnonymousToInnerClassFix;
-import org.jetbrains.annotations.NotNull;
 
 public class AnonymousInnerClassInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "anonymous.inner.class.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "anonymous.inner.class.problem.descriptor");
@@ -55,12 +56,12 @@ public class AnonymousInnerClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       //no call to super here, to avoid double counting
     }
 
     @Override
-    public void visitAnonymousClass(@NotNull PsiAnonymousClass aClass) {
+    public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
       super.visitAnonymousClass(aClass);
       if (aClass instanceof PsiEnumConstantInitializer) {
         return;

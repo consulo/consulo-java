@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
@@ -103,7 +104,7 @@ public class ReferenceListElement extends CompositeElement
 	}
 
 	@Override
-	public void deleteChildInternal(@NotNull ASTNode child)
+	public void deleteChildInternal(@Nonnull ASTNode child)
 	{
 		if(child.getElementType() == JavaElementType.JAVA_CODE_REFERENCE)
 		{

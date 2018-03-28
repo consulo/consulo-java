@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.execution.filters.ExceptionInfoCache;
 import com.intellij.execution.filters.ExceptionWorker;
 import com.intellij.execution.filters.Filter;
@@ -70,7 +70,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin
 	private final Map<VirtualFile, VcsRevisionNumber> myRevNumbersCache;
 	private final ExceptionInfoCache myCache;
 
-	public VcsContentAnnotationExceptionFilter(@NotNull GlobalSearchScope scope)
+	public VcsContentAnnotationExceptionFilter(@Nonnull GlobalSearchScope scope)
 	{
 		myProject = scope.getProject();
 		mySettings = VcsContentAnnotationSettings.getInstance(myProject);
@@ -85,7 +85,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin
 			super(start, end);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public TextAttributes getTextAttributes(@Nullable TextAttributes source)
 		{
@@ -110,7 +110,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin
 	}
 
 	@Override
-	public void applyHeavyFilter(@NotNull final Document copiedFragment, int startOffset, int startLineNumber, @NotNull Consumer<AdditionalHighlight> consumer)
+	public void applyHeavyFilter(@Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @Nonnull Consumer<AdditionalHighlight> consumer)
 	{
 		VcsContentAnnotation vcsContentAnnotation = VcsContentAnnotationImpl.getInstance(myProject);
 		final LocalChangesCorrector localChangesCorrector = new LocalChangesCorrector(myProject);
@@ -206,7 +206,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getUpdateMessage()
 	{

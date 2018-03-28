@@ -20,7 +20,8 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -40,7 +41,7 @@ class CatchTypeProvider implements CompletionProvider
 	static final ElementPattern<PsiElement> CATCH_CLAUSE_TYPE = psiElement().insideStarting(psiElement(PsiTypeElement.class).withParent(psiElement(PsiCatchSection.class)));
 
 	@Override
-	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 	{
 		PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiTryStatement.class);
 		final PsiCodeBlock tryBlock = tryStatement == null ? null : tryStatement.getTryBlock();
@@ -78,7 +79,7 @@ class CatchTypeProvider implements CompletionProvider
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	private static LookupElement createCatchTypeVariant(PsiCodeBlock tryBlock, PsiClassType type)
 	{
 		return TailTypeDecorator.withTail(PsiTypeLookupItem.createLookupItem(type, tryBlock), TailType.HUMBLE_SPACE_BEFORE_WORD);

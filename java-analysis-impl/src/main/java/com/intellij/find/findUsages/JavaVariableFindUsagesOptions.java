@@ -1,6 +1,7 @@
 package com.intellij.find.findUsages;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 
 /**
@@ -10,7 +11,7 @@ public class JavaVariableFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isReadAccess = true;
   public boolean isWriteAccess = true;
 
-  public JavaVariableFindUsagesOptions(@NotNull Project project) {
+  public JavaVariableFindUsagesOptions(@Nonnull Project project) {
     super(project);
     isSearchForTextOccurrences = false;
   }

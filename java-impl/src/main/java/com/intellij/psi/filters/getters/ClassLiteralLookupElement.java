@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.filters.getters;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -26,7 +28,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author peter
@@ -43,7 +44,7 @@ public class ClassLiteralLookupElement extends LookupElement implements TypedLoo
     myExpr = JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createExpressionFromText(myCanonicalText + DOT_CLASS, context);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getLookupString() {
     return myPresentableText + ".class";
@@ -59,7 +60,7 @@ public class ClassLiteralLookupElement extends LookupElement implements TypedLoo
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Object getObject() {
     return myExpr;

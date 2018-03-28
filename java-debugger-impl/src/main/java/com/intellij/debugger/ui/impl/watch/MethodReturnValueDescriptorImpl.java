@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -38,7 +38,7 @@ public class MethodReturnValueDescriptorImpl extends ValueDescriptorImpl
 	private final Method myMethod;
 	private final Value myValue;
 
-	public MethodReturnValueDescriptorImpl(Project project, @NotNull Method method, Value value)
+	public MethodReturnValueDescriptorImpl(Project project, @Nonnull Method method, Value value)
 	{
 		super(project);
 		myMethod = method;
@@ -51,7 +51,7 @@ public class MethodReturnValueDescriptorImpl extends ValueDescriptorImpl
 		return myValue;
 	}
 
-	@NotNull
+	@Nonnull
 	public Method getMethod()
 	{
 		return myMethod;

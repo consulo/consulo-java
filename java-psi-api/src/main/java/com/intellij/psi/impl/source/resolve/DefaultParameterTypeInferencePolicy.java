@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.ConstraintType;
 import com.intellij.psi.PsiCallExpression;

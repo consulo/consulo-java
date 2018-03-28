@@ -15,13 +15,14 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, PsiJavaToken {
   public PsiIdentifierImpl(CharSequence text) {
@@ -34,7 +35,7 @@ public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, 
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitIdentifier(this);
     }
@@ -44,7 +45,7 @@ public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, 
   }
 
   @Override
-  public PsiElement replace(@NotNull PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(@Nonnull PsiElement newElement) throws IncorrectOperationException {
     PsiElement result = super.replace(newElement);
 
     // We want to reformat method parameters on method name change as well because there is a possible situation that they are aligned

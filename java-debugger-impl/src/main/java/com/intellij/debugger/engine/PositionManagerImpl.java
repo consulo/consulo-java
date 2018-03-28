@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.MultiRequestPositionManager;
 import com.intellij.debugger.NoDataException;
 import com.intellij.debugger.PositionManager;
@@ -81,8 +81,8 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 	}
 
 	@Override
-	@NotNull
-	public List<Location> locationsOfLine(@NotNull ReferenceType type, @NotNull SourcePosition position) throws NoDataException
+	@Nonnull
+	public List<Location> locationsOfLine(@Nonnull ReferenceType type, @Nonnull SourcePosition position) throws NoDataException
 	{
 		try
 		{
@@ -96,14 +96,14 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@NotNull final ClassPrepareRequestor requestor, @NotNull final SourcePosition position) throws NoDataException
+	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
 	{
 		throw new IllegalStateException("This class implements MultiRequestPositionManager, corresponding createPrepareRequests version should be used");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<ClassPrepareRequest> createPrepareRequests(@NotNull final ClassPrepareRequestor requestor, @NotNull final SourcePosition position) throws NoDataException
+	public List<ClassPrepareRequest> createPrepareRequests(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
 	{
 		return ReadAction.compute(() ->
 		{
@@ -247,7 +247,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		private final String myExpectedMethodName;
 		private final int myLambdaOrdinal;
 
-		public JavaSourcePosition(@NotNull SourcePosition delegate, ReferenceType declaringType, Method method, int lambdaOrdinal)
+		public JavaSourcePosition(@Nonnull SourcePosition delegate, ReferenceType declaringType, Method method, int lambdaOrdinal)
 		{
 			super(delegate);
 			myExpectedClassName = declaringType != null ? declaringType.name() : null;
@@ -255,7 +255,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 			myLambdaOrdinal = lambdaOrdinal;
 		}
 
-		public JavaSourcePosition(@NotNull SourcePosition delegate, int lambdaOrdinal)
+		public JavaSourcePosition(@Nonnull SourcePosition delegate, int lambdaOrdinal)
 		{
 			super(delegate);
 			assert lambdaOrdinal > -1;
@@ -287,7 +287,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 			return null;
 		}
 
-		private static boolean insideBody(@NotNull PsiElement element, @Nullable PsiElement body)
+		private static boolean insideBody(@Nonnull PsiElement element, @Nullable PsiElement body)
 		{
 			if(!PsiTreeUtil.isAncestor(body, element, false))
 			{
@@ -545,8 +545,8 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 	}
 
 	@Override
-	@NotNull
-	public List<ReferenceType> getAllClasses(@NotNull final SourcePosition position) throws NoDataException
+	@Nonnull
+	public List<ReferenceType> getAllClasses(@Nonnull final SourcePosition position) throws NoDataException
 	{
 		return ReadAction.compute(() ->
 		{
@@ -559,7 +559,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		});
 	}
 
-	private List<ReferenceType> getClassReferences(@NotNull final PsiClass psiClass, SourcePosition position)
+	private List<ReferenceType> getClassReferences(@Nonnull final PsiClass psiClass, SourcePosition position)
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
 		boolean isLocalOrAnonymous = false;

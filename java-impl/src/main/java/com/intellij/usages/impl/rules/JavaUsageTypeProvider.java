@@ -24,8 +24,8 @@ import com.intellij.usages.PsiElementUsageTarget;
 import com.intellij.usages.UsageTarget;
 import com.intellij.util.Processor;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -40,7 +40,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
   }
 
   @Override
-  public UsageType getUsageType(PsiElement element, @NotNull UsageTarget[] targets) {
+  public UsageType getUsageType(PsiElement element, @Nonnull UsageTarget[] targets) {
     UsageType classUsageType = getClassUsageType(element, targets);
     if (classUsageType != null) return classUsageType;
 
@@ -107,7 +107,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return true;
   }
 
-  private static boolean haveCommonSuperMethod(@NotNull PsiMethod m1, @NotNull PsiMethod m2) {
+  private static boolean haveCommonSuperMethod(@Nonnull PsiMethod m1, @Nonnull PsiMethod m2) {
     final Queue<PsiMethod> supers1Q = new ArrayDeque<PsiMethod>();
     supers1Q.add(m1);
     final Queue<PsiMethod> supers2Q = new ArrayDeque<PsiMethod>();
@@ -155,8 +155,8 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     */
   }
 
-  @Nullable
-  private static UsageType getClassUsageType(@NotNull PsiElement element, @NotNull UsageTarget[] targets) {
+  @javax.annotation.Nullable
+  private static UsageType getClassUsageType(@Nonnull PsiElement element, @Nonnull UsageTarget[] targets) {
     final PsiJavaCodeReferenceElement codeReference = PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElement.class);
     if(codeReference != null && isNestedClassOf(codeReference,targets)){
       return UsageType.CLASS_NESTED_CLASS_ACCESS;
@@ -239,11 +239,11 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return null;
   }
 
-  private static boolean isNewArrayCreation(@NotNull PsiNewExpression expression){
+  private static boolean isNewArrayCreation(@Nonnull PsiNewExpression expression){
     return expression.getArrayDimensions().length > 0 || expression.getArrayInitializer() != null;
   }
 
-  private static boolean isAnonymousClassOf(@Nullable PsiAnonymousClass anonymousClass, @NotNull UsageTarget[] targets) {
+  private static boolean isAnonymousClassOf(@javax.annotation.Nullable PsiAnonymousClass anonymousClass, @Nonnull UsageTarget[] targets) {
     if (anonymousClass == null) {
       return false;
     }
@@ -251,7 +251,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return qualifiesToTargetClasses(anonymousClass.getBaseClassReference(), targets);
   }
 
-  private static boolean isNestedClassOf(PsiJavaCodeReferenceElement classReference, @NotNull UsageTarget[] targets) {
+  private static boolean isNestedClassOf(PsiJavaCodeReferenceElement classReference, @Nonnull UsageTarget[] targets) {
     final PsiElement qualifier = classReference.getQualifier();
     if (qualifier instanceof PsiJavaCodeReferenceElement) {
       return qualifiesToTargetClasses((PsiJavaCodeReferenceElement)qualifier, targets);
@@ -259,7 +259,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return false;
   }
 
-  private static boolean qualifiesToTargetClasses(@NotNull PsiJavaCodeReferenceElement qualifier, @NotNull UsageTarget[] targets) {
+  private static boolean qualifiesToTargetClasses(@Nonnull PsiJavaCodeReferenceElement qualifier, @Nonnull UsageTarget[] targets) {
     for (UsageTarget target : targets) {
       if (target instanceof PsiElementUsageTarget) {
         PsiElement element = ((PsiElementUsageTarget)target).getElement();

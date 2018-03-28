@@ -26,10 +26,9 @@ import com.intellij.psi.PsiReference;
 import com.intellij.refactoring.move.MoveCallback;
 import com.intellij.refactoring.move.MoveHandlerDelegate;
 import com.intellij.refactoring.move.moveClassesOrPackages.JavaMoveClassesOrPackagesHandler;
-import org.jetbrains.annotations.Nullable;
 
 public class MoveInnerToUpperHandler extends MoveHandlerDelegate {
-  public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
+  public boolean canMove(final PsiElement[] elements, @javax.annotation.Nullable final PsiElement targetContainer) {
     if (elements.length != 1) return false;
     PsiElement element = elements [0];
     return isNonStaticInnerClass(element) &&

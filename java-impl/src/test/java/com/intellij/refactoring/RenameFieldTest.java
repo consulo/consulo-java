@@ -26,8 +26,9 @@ package com.intellij.refactoring;
 
 import static org.junit.Assert.assertFalse;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.PsiElement;
@@ -40,7 +41,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 
 public class RenameFieldTest extends LightRefactoringTestCase
 {
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

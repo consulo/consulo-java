@@ -1,8 +1,8 @@
 // "Remove annotation" "true"
 
-import org.jetbrains.annotations.*;
+import javax.annotation.*;
 
 class Foo {
-  <caret>@NotNull @Nullable
+  <caret>@Nonnull @javax.annotation.Nullable
   String foo(){return "";}
 }

@@ -18,9 +18,10 @@ package com.intellij.execution.util;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.JavaExecutionUtil;
@@ -115,8 +116,11 @@ public class JavaParametersUtil
 		return inProduction ? (includeProvidedDependencies ? OwnJavaParameters.JDK_AND_CLASSES_AND_PROVIDED : OwnJavaParameters.JDK_AND_CLASSES) : OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS;
 	}
 
-	@Nullable("null if class not found")
-	public static Boolean isClassInProductionSources(@NotNull String mainClassName, @NotNull Module module)
+	/**
+	 * @return null if class not found
+	 */
+	@Nullable
+	public static Boolean isClassInProductionSources(@Nonnull String mainClassName, @Nonnull Module module)
 	{
 		final PsiClass psiClass = JavaExecutionUtil.findMainClass(module, mainClassName);
 		if(psiClass == null)
@@ -167,8 +171,8 @@ public class JavaParametersUtil
 		configureModule(module, parameters, classPathType, alternativeJreName);
 	}
 
-	public static void configureModule(@NotNull Module module,
-			@NotNull OwnJavaParameters parameters,
+	public static void configureModule(@Nonnull Module module,
+			@Nonnull OwnJavaParameters parameters,
 			@MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType,
 			@Nullable String alternativeJreName) throws CantRunException
 	{
@@ -203,7 +207,7 @@ public class JavaParametersUtil
 		return jdk;
 	}
 
-	private static Sdk createAlternativeJdk(@NotNull String jreHome) throws CantRunException
+	private static Sdk createAlternativeJdk(@Nonnull String jreHome) throws CantRunException
 	{
 		final Sdk configuredJdk = SdkTable.getInstance().findSdk(jreHome);
 		if(configuredJdk != null)
@@ -220,7 +224,7 @@ public class JavaParametersUtil
 		return javaSdk.createJdk(ObjectUtil.notNull(javaSdk.getVersionString(jreHome), ""), jreHome);
 	}
 
-	public static void checkAlternativeJRE(@NotNull CommonJavaRunConfigurationParameters configuration) throws RuntimeConfigurationWarning
+	public static void checkAlternativeJRE(@Nonnull CommonJavaRunConfigurationParameters configuration) throws RuntimeConfigurationWarning
 	{
 		if(configuration.isAlternativeJrePathEnabled())
 		{
@@ -228,7 +232,7 @@ public class JavaParametersUtil
 		}
 	}
 
-	public static void checkAlternativeJRE(@Nullable String jrePath) throws RuntimeConfigurationWarning
+	public static void checkAlternativeJRE(@javax.annotation.Nullable String jrePath) throws RuntimeConfigurationWarning
 	{
 		if(StringUtil.isEmptyOrSpaces(jrePath) || SdkTable.getInstance().findSdk(jrePath) == null && !OwnJdkUtil.checkForJre(jrePath))
 		{

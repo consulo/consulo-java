@@ -15,16 +15,17 @@
  */
 package com.siyeh.ipp.varargs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameterList;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 class ConvertVarargParameterToArrayPredicate
   implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@NotNull PsiElement element) {
+  public boolean satisfiedBy(@Nonnull PsiElement element) {
     if (!(element instanceof PsiParameterList)) {
       return false;
     }

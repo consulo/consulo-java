@@ -22,8 +22,9 @@
  */
 package com.intellij.psi.impl.source.tree.injected;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
@@ -79,7 +80,7 @@ public class MyTestInjector {
     if (language == null) return;
     final ConcatenationAwareInjector injector = new ConcatenationAwareInjector() {
       @Override
-      public void getLanguagesToInject(@NotNull MultiHostRegistrar injectionPlacesRegistrar, @NotNull PsiElement... operands) {
+      public void getLanguagesToInject(@Nonnull MultiHostRegistrar injectionPlacesRegistrar, @Nonnull PsiElement... operands) {
         PsiElement operand = operands[0];
         if (!(operand instanceof PsiLiteralExpression)) return;
         if (!(operand.getParent() instanceof PsiExpressionList)) return;
@@ -109,16 +110,16 @@ public class MyTestInjector {
     });
   }
 
-  private static void registerForStringVarInitializer(@NotNull Disposable parent,
-                                                      @NotNull final Project project,
+  private static void registerForStringVarInitializer(@Nonnull Disposable parent,
+                                                      @Nonnull final Project project,
                                                       final Language language,
-                                                      @NotNull @NonNls final String varName,
+                                                      @Nonnull @NonNls final String varName,
                                                       @NonNls final String prefix,
                                                       @NonNls final String suffix) {
     if (language == null) return;
     final ConcatenationAwareInjector injector = new ConcatenationAwareInjector() {
       @Override
-      public void getLanguagesToInject(@NotNull MultiHostRegistrar injectionPlacesRegistrar, @NotNull PsiElement... operands) {
+      public void getLanguagesToInject(@Nonnull MultiHostRegistrar injectionPlacesRegistrar, @Nonnull PsiElement... operands) {
         PsiVariable variable = PsiTreeUtil.getParentOfType(operands[0], PsiVariable.class);
         if (variable == null) return;
         if (!varName.equals(variable.getName())) return;
@@ -166,7 +167,7 @@ public class MyTestInjector {
 
     final MultiHostInjector myMultiHostInjector = new MultiHostInjector() {
       @Override
-      public void injectLanguages(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {
+      public void injectLanguages(@Nonnull MultiHostRegistrar registrar, @Nonnull PsiElement context) {
         XmlAttributeValue value = (XmlAttributeValue)context;
         PsiElement parent = value.getParent();
         if (parent instanceof XmlAttribute) {
@@ -197,7 +198,7 @@ public class MyTestInjector {
 
     final LanguageInjector myInjector = new LanguageInjector() {
       @Override
-      public void getLanguagesToInject(@NotNull PsiLanguageInjectionHost host, @NotNull InjectedLanguagePlaces placesToInject) {
+      public void getLanguagesToInject(@Nonnull PsiLanguageInjectionHost host, @Nonnull InjectedLanguagePlaces placesToInject) {
         if (host instanceof XmlAttributeValue) {
           XmlAttributeValue value = (XmlAttributeValue)host;
           PsiElement parent = value.getParent();

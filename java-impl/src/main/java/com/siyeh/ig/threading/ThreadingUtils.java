@@ -15,10 +15,11 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 class ThreadingUtils {
 
@@ -26,7 +27,7 @@ class ThreadingUtils {
   }
 
   public static boolean isWaitCall(
-    @NotNull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();
@@ -59,7 +60,7 @@ class ThreadingUtils {
   }
 
   public static boolean isNotifyOrNotifyAllCall(
-    @NotNull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();
@@ -72,7 +73,7 @@ class ThreadingUtils {
   }
 
   public static boolean isSignalOrSignalAllCall(
-    @NotNull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();
@@ -97,7 +98,7 @@ class ThreadingUtils {
   }
 
   public static boolean isAwaitCall(
-    @NotNull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();

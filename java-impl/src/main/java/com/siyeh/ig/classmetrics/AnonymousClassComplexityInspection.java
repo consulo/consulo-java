@@ -20,7 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MoveAnonymousToInnerClassFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AnonymousClassComplexityInspection
   extends ClassMetricInspection {
@@ -28,13 +28,13 @@ public class AnonymousClassComplexityInspection
   private static final int DEFAULT_COMPLEXITY_LIMIT = 3;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyComplexAnonymousInnerClass";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "overly.complex.anonymous.inner.class.display.name");
@@ -62,7 +62,7 @@ public class AnonymousClassComplexityInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer totalComplexity = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -78,13 +78,13 @@ public class AnonymousClassComplexityInspection
   private class ClassComplexityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass psiClass) {
+    public void visitClass(@Nonnull PsiClass psiClass) {
       // no call to super, to prevent double counting
     }
 
     @Override
     public void visitAnonymousClass(
-      @NotNull PsiAnonymousClass aClass) {
+      @Nonnull PsiAnonymousClass aClass) {
       if (aClass instanceof PsiEnumConstantInitializer) {
         return;
       }

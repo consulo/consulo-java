@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
@@ -55,7 +55,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 
 	// cached data
 	private final Map<ObjectReference, ObjectReferenceProxyImpl> myObjectReferenceProxies = new HashMap<ObjectReference, ObjectReferenceProxyImpl>();
-	@NotNull
+	@Nonnull
 	private Map<ThreadReference, ThreadReferenceProxyImpl> myAllThreads = new HashMap<ThreadReference, ThreadReferenceProxyImpl>();
 	private final Map<ThreadGroupReference, ThreadGroupReferenceProxyImpl> myThreadGroups = new HashMap<ThreadGroupReference, ThreadGroupReferenceProxyImpl>();
 	private boolean myAllThreadsDirty = true;
@@ -66,7 +66,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 	private final boolean myVersionHigher_15;
 	private final boolean myVersionHigher_14;
 
-	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, @NotNull VirtualMachine virtualMachine)
+	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, @Nonnull VirtualMachine virtualMachine)
 	{
 		myVirtualMachine = virtualMachine;
 		myDebugProcess = debugProcess;
@@ -101,7 +101,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public VirtualMachine getVirtualMachine()
 	{
 		return myVirtualMachine;
@@ -760,9 +760,9 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		myVirtualMachine.setDebugTraceMode(i);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Contract("null -> null; !null -> !null")
-	public ThreadReferenceProxyImpl getThreadReferenceProxy(@Nullable ThreadReference thread)
+	public ThreadReferenceProxyImpl getThreadReferenceProxy(@javax.annotation.Nullable ThreadReference thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		if(thread == null)

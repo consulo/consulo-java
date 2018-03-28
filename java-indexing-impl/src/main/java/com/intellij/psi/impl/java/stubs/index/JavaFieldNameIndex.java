@@ -25,7 +25,7 @@ import com.intellij.psi.impl.search.JavaSourceFilterScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StringStubIndexExtension;
 import com.intellij.psi.stubs.StubIndexKey;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -36,14 +36,14 @@ public class JavaFieldNameIndex extends StringStubIndexExtension<PsiField> {
     return ourInstance;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public StubIndexKey<String, PsiField> getKey() {
     return JavaStubIndexKeys.FIELDS;
   }
 
   @Override
-  public Collection<PsiField> get(final String s, final Project project, @NotNull final GlobalSearchScope scope) {
+  public Collection<PsiField> get(final String s, final Project project, @Nonnull final GlobalSearchScope scope) {
     return super.get(s, project, new JavaSourceFilterScope(scope));
   }
 }

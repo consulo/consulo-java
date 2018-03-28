@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -42,25 +43,25 @@ public class SetupJDKFix implements IntentionAction, HighPriorityAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("setup.jdk.location.text");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("setup.jdk.location.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return false;
     //return JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_OBJECT, file.getResolveScope()) == null;
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, final PsiFile file) {
     Sdk projectJdk = null;
     if (projectJdk == null) return;
     ApplicationManager.getApplication().runWriteAction(new Runnable() {

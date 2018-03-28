@@ -29,8 +29,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.cls.BytePointer;
 import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.cls.ClsUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +56,7 @@ public class ClassFileReader {
   private static final String CONSTRUCTOR_NAME = "<init>";
   private boolean myParsingDone;
 
-  public ClassFileReader(@NotNull File file, SymbolTable symbolTable, @Nullable final byte[] fileContent) {
+  public ClassFileReader(@Nonnull File file, SymbolTable symbolTable, @javax.annotation.Nullable final byte[] fileContent) {
     mySymbolTable = symbolTable;
     myFile = file;
     myData = fileContent;

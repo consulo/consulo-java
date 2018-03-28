@@ -28,7 +28,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ForeachPostfixTemplate extends PostfixTemplate {
   public ForeachPostfixTemplate() {
@@ -36,13 +36,13 @@ public class ForeachPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     return expr != null && (JavaPostfixTemplatesUtils.isArray(expr.getType()) || JavaPostfixTemplatesUtils.isIterable(expr.getType()));
   }
 
   @Override
-  public void expand(@NotNull PsiElement context, @NotNull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     if (expr == null) return;
     Project project = context.getProject();

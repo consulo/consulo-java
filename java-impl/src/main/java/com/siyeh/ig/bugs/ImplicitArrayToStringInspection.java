@@ -27,20 +27,19 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class ImplicitArrayToStringInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "implicit.array.to.string.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     if (((Boolean)infos[1]).booleanValue()) {
       return InspectionGadgetsBundle.message(
@@ -62,7 +61,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final boolean removeToString = ((Boolean)infos[1]).booleanValue();
@@ -86,7 +85,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
       this.removeToString = removeToString;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       @NonNls final String expressionText;
       if (deepString) {

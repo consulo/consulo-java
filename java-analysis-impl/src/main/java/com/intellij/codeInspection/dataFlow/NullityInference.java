@@ -19,8 +19,8 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.*;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.util.RecursionManager;
@@ -167,7 +167,7 @@ public class NullityInference
 			}
 		}
 
-		private boolean containsNulls(@NotNull LighterASTNode value)
+		private boolean containsNulls(@Nonnull LighterASTNode value)
 		{
 			return value.getTokenType() == LITERAL_EXPRESSION && tree.getChildren(value).get(0).getTokenType() == JavaTokenType.NULL_KEYWORD;
 		}

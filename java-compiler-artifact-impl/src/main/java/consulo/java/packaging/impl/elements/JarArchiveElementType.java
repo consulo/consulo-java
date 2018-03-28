@@ -15,10 +15,10 @@
  */
 package consulo.java.packaging.impl.elements;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.module.ModuleUtil;
@@ -41,7 +41,7 @@ import consulo.java.module.extension.JavaModuleExtension;
  */
 public class JarArchiveElementType extends CompositePackagingElementType<JarArchivePackagingElement>
 {
-	@NotNull
+	@Nonnull
 	public static JarArchiveElementType getInstance()
 	{
 		return getInstance(JarArchiveElementType.class);
@@ -53,21 +53,21 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 	}
 
 	@Override
-	public boolean isAvailableForAdd(@NotNull ArtifactEditorContext context, @NotNull Artifact artifact)
+	public boolean isAvailableForAdd(@Nonnull ArtifactEditorContext context, @Nonnull Artifact artifact)
 	{
 		return ModuleUtil.hasModuleExtension(context.getModulesProvider(), JavaModuleExtension.class);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getIcon()
 	{
 		return AllIcons.Nodes.PpJar;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public JarArchivePackagingElement createEmpty(@NotNull Project project)
+	public JarArchivePackagingElement createEmpty(@Nonnull Project project)
 	{
 		return new JarArchivePackagingElement();
 	}
@@ -81,7 +81,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 
 	@Override
 	public CompositePackagingElement<?> createComposite(CompositePackagingElement<?> parent, @Nullable String baseName,
-			@NotNull ArtifactEditorContext context)
+			@Nonnull ArtifactEditorContext context)
 	{
 		final String initialValue = PackagingElementFactoryImpl.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
 		String path = Messages.showInputDialog(context.getProject(), "Enter archive name: ", "New Archive", null, initialValue,

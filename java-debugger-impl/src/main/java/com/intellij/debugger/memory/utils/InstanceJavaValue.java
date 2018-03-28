@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.memory.utils;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.ui.impl.watch.NodeManagerImpl;
@@ -25,12 +25,12 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 
 public class InstanceJavaValue extends JavaValue
 {
-	public InstanceJavaValue(@NotNull ValueDescriptorImpl valueDescriptor, @NotNull EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager)
+	public InstanceJavaValue(@Nonnull ValueDescriptorImpl valueDescriptor, @Nonnull EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager)
 	{
 		super(null, valueDescriptor, evaluationContext, nodeManager, false);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getEvaluationExpression()
 	{

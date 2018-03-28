@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.decls;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.colors.EditorColors;
@@ -31,16 +33,15 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class MoveDeclarationIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new MoveDeclarationPredicate();
   }
 
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiLocalVariable variable = (PsiLocalVariable)element;
     final PsiReference[] references = ReferencesSearch.search(variable, variable.getUseScope(), false).toArray(PsiReference.EMPTY_ARRAY);
@@ -80,7 +81,7 @@ public class MoveDeclarationIntention extends Intention {
     highlightElement(newDeclaration);
   }
 
-  private static void highlightElement(@NotNull PsiElement element) {
+  private static void highlightElement(@Nonnull PsiElement element) {
     final Project project = element.getProject();
     final FileEditorManager editorManager =
       FileEditorManager.getInstance(project);
@@ -103,9 +104,9 @@ public class MoveDeclarationIntention extends Intention {
   }
 
   private static PsiDeclarationStatement moveDeclarationToReference(
-    @NotNull PsiElement referenceElement,
-    @NotNull PsiLocalVariable variable,
-    @NotNull PsiCodeBlock block)
+    @Nonnull PsiElement referenceElement,
+    @Nonnull PsiLocalVariable variable,
+    @Nonnull PsiCodeBlock block)
     throws IncorrectOperationException {
     PsiStatement statement =
       PsiTreeUtil.getParentOfType(referenceElement,
@@ -136,7 +137,7 @@ public class MoveDeclarationIntention extends Intention {
   }
 
   private static PsiDeclarationStatement createNewDeclaration(
-    @NotNull PsiLocalVariable variable, PsiExpression initializer)
+    @Nonnull PsiLocalVariable variable, PsiExpression initializer)
     throws IncorrectOperationException {
     final PsiManager manager = variable.getManager();
     final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();

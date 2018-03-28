@@ -21,8 +21,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,14 +30,14 @@ import java.util.Set;
 public class CollectionContainsUrlInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "collection.contains.url.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final ClassType type = (ClassType)infos[0];
     return InspectionGadgetsBundle.message(
@@ -111,7 +111,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
     }
 
     private static ClassType isMapOrSet(
-      @Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
+      @javax.annotation.Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
       if (aClass == null) {
         return ClassType.OTHER;
       }

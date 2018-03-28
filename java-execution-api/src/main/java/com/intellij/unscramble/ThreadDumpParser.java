@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.text.StringUtil;
 
 /**
@@ -112,7 +112,7 @@ public class ThreadDumpParser {
     });
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String findWaitingForLock(final String stackTrace) {
     Matcher m = ourWaitingForLockPattern.matcher(stackTrace);
     if (m.find()) {

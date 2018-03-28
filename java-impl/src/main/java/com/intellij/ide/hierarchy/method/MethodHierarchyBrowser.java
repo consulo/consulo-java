@@ -18,10 +18,10 @@ package com.intellij.ide.hierarchy.method;
 import java.util.Comparator;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeBuilder;
@@ -46,7 +46,7 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
     super(project, method);
   }
 
-  protected void createTrees(@NotNull Map<String, JTree> trees) {
+  protected void createTrees(@Nonnull Map<String, JTree> trees) {
     final JTree tree = createTree(false);
     ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_METHOD_HIERARCHY_POPUP);
     PopupHandler.installPopupHandler(tree, group, ActionPlaces.METHOD_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
@@ -65,18 +65,18 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
   }
 
 
-  protected PsiElement getElementFromDescriptor(@NotNull final HierarchyNodeDescriptor descriptor) {
+  protected PsiElement getElementFromDescriptor(@Nonnull final HierarchyNodeDescriptor descriptor) {
     if (descriptor instanceof MethodHierarchyNodeDescriptor) {
       return ((MethodHierarchyNodeDescriptor)descriptor).getTargetElement();
     }
     return null;
   }
 
-  protected boolean isApplicableElement(@NotNull final PsiElement psiElement) {
+  protected boolean isApplicableElement(@Nonnull final PsiElement psiElement) {
     return psiElement instanceof PsiMethod;
   }
 
-  protected HierarchyTreeStructure createHierarchyTreeStructure(@NotNull final String typeName, @NotNull final PsiElement psiElement) {
+  protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
     if (!METHOD_TYPE.equals(typeName)) {
       LOG.error("unexpected type: " + typeName);
       return null;

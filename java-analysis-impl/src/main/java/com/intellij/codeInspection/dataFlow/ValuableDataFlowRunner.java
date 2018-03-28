@@ -18,8 +18,8 @@ package com.intellij.codeInspection.dataFlow;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.value.DfaPsiType;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
@@ -32,7 +32,7 @@ import com.intellij.util.containers.FList;
  */
 class ValuableDataFlowRunner extends DataFlowRunner
 {
-	@NotNull
+	@Nonnull
 	@Override
 	protected DfaMemoryState createMemoryState()
 	{
@@ -41,26 +41,26 @@ class ValuableDataFlowRunner extends DataFlowRunner
 
 	static class MyDfaMemoryState extends DfaMemoryStateImpl
 	{
-		private MyDfaMemoryState(@NotNull DfaValueFactory factory)
+		private MyDfaMemoryState(@Nonnull DfaValueFactory factory)
 		{
 			super(factory);
 		}
 
-		private MyDfaMemoryState(@NotNull DfaMemoryStateImpl toCopy)
+		private MyDfaMemoryState(@Nonnull DfaMemoryStateImpl toCopy)
 		{
 			super(toCopy);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public DfaMemoryStateImpl createCopy()
 		{
 			return new MyDfaMemoryState(this);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		protected DfaVariableState createVariableState(@NotNull DfaVariableValue var)
+		protected DfaVariableState createVariableState(@Nonnull DfaVariableValue var)
 		{
 			return new ValuableDfaVariableState(var);
 		}
@@ -75,10 +75,10 @@ class ValuableDataFlowRunner extends DataFlowRunner
 	static class ValuableDfaVariableState extends DfaVariableState
 	{
 		private final DfaValue myValue;
-		@NotNull
+		@Nonnull
 		final FList<PsiExpression> myConcatenation;
 
-		private ValuableDfaVariableState(@NotNull DfaVariableValue psiVariable)
+		private ValuableDfaVariableState(@Nonnull DfaVariableValue psiVariable)
 		{
 			super(psiVariable);
 			myValue = null;
@@ -88,22 +88,22 @@ class ValuableDataFlowRunner extends DataFlowRunner
 		private ValuableDfaVariableState(Set<DfaPsiType> instanceofValues,
 				Set<DfaPsiType> notInstanceofValues,
 				DfaValue value,
-				@NotNull FList<PsiExpression> concatenation,
-				@NotNull DfaFactMap factMap)
+				@Nonnull FList<PsiExpression> concatenation,
+				@Nonnull DfaFactMap factMap)
 		{
 			super(instanceofValues, notInstanceofValues, factMap);
 			myValue = value;
 			myConcatenation = concatenation;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		protected DfaVariableState createCopy(@NotNull Set<DfaPsiType> instanceofValues, @NotNull Set<DfaPsiType> notInstanceofValues, @NotNull DfaFactMap factMap)
+		protected DfaVariableState createCopy(@Nonnull Set<DfaPsiType> instanceofValues, @Nonnull Set<DfaPsiType> notInstanceofValues, @Nonnull DfaFactMap factMap)
 		{
 			return new ValuableDfaVariableState(instanceofValues, notInstanceofValues, myValue, myConcatenation, factMap);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public DfaVariableState withValue(@Nullable final DfaValue value)
 		{
@@ -114,7 +114,7 @@ class ValuableDataFlowRunner extends DataFlowRunner
 			return new ValuableDfaVariableState(myInstanceofValues, myNotInstanceofValues, value, myConcatenation, myFactMap);
 		}
 
-		ValuableDfaVariableState withExpression(@NotNull final FList<PsiExpression> concatenation)
+		ValuableDfaVariableState withExpression(@Nonnull final FList<PsiExpression> concatenation)
 		{
 			if(concatenation == myConcatenation)
 			{

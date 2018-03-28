@@ -31,8 +31,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.AddEditDeleteListPanel;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
@@ -70,27 +70,27 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.BUGS_GROUP_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("suspicious.name.combination.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "SuspiciousNameCombination";
   }
 
   @Override
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
     return new MyVisitor(holder);
   }
 
@@ -99,7 +99,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     return new MyOptionsPanel();
   }
 
-  @Override public void readSettings(@NotNull Element node) throws InvalidDataException {
+  @Override public void readSettings(@Nonnull Element node) throws InvalidDataException {
     clearNameGroups();
     for(Object o: node.getChildren(ELEMENT_GROUPS)) {
       Element e = (Element) o;
@@ -107,7 +107,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
   }
 
-  @Override public void writeSettings(@NotNull Element node) throws WriteExternalException {
+  @Override public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     for(String group: myNameGroups) {
       Element e = new Element(ELEMENT_GROUPS);
       node.addContent(e);
@@ -172,7 +172,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
 
     private void checkCombination(final PsiElement location,
-                                  @Nullable final String name,
+                                  @javax.annotation.Nullable final String name,
                                   @Nullable final String referenceName,
                                   final String key) {
       String nameGroup1 = findNameGroup(name);
@@ -182,7 +182,8 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
       }
     }
 
-    @Nullable private String findNameGroup(@Nullable final String name) {
+    @javax.annotation.Nullable
+	private String findNameGroup(@Nullable final String name) {
       if (name == null) {
         return null;
       }

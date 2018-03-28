@@ -16,13 +16,15 @@
 
 package com.intellij.util.descriptors;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -32,7 +34,7 @@ public interface ConfigFile extends Disposable, ModificationTracker {
  
   String getUrl();
 
-  @Nullable
+  @javax.annotation.Nullable
   VirtualFile getVirtualFile();
 
   @Nullable
@@ -42,10 +44,10 @@ public interface ConfigFile extends Disposable, ModificationTracker {
   XmlFile getXmlFile();
 
 
-  @NotNull
+  @Nonnull
   ConfigFileMetaData getMetaData();
 
-  @NotNull
+  @Nonnull
   ConfigFileInfo getInfo();
 
   boolean isValid();

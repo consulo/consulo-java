@@ -17,13 +17,13 @@ package com.siyeh.ig.abstraction;
 
 import com.intellij.psi.*;
 import com.siyeh.ig.psiutils.LibraryUtil;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 class ConcreteClassUtil {
 
   private ConcreteClassUtil() {}
 
-  public static boolean typeIsConcreteClass(@Nullable PsiTypeElement typeElement, boolean ignoreCastToAbstractClass) {
+  public static boolean typeIsConcreteClass(@javax.annotation.Nullable PsiTypeElement typeElement, boolean ignoreCastToAbstractClass) {
     if (typeElement == null) {
       return false;
     }

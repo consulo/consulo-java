@@ -21,8 +21,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -33,7 +32,7 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
   protected static final String JAVA_AWT_COLOR = "java.awt.Color";
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!psiElement().inside(psiElement(PsiNewExpression.class)).accepts(element)) {
       return false;
     }
@@ -46,7 +45,7 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
     return isJavaAwtColor(expression.getClassOrAnonymousClassReference()) && isValueArguments(expression.getArgumentList());
   }
 
-  private static boolean isJavaAwtColor(@Nullable PsiJavaCodeReferenceElement ref) {
+  private static boolean isJavaAwtColor(@javax.annotation.Nullable PsiJavaCodeReferenceElement ref) {
     if (ref == null) {
       return false;
     }
@@ -64,7 +63,7 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
     return false;
   }
 
-  private static boolean isValueArguments(@Nullable PsiExpressionList arguments) {
+  private static boolean isValueArguments(@javax.annotation.Nullable PsiExpressionList arguments) {
     if (arguments == null) {
       return false;
     }

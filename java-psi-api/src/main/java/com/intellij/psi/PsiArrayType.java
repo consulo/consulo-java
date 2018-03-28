@@ -15,7 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.search.GlobalSearchScope;
 
 /**
@@ -27,45 +28,45 @@ public class PsiArrayType extends PsiType.Stub
 {
 	private final PsiType myComponentType;
 
-	public PsiArrayType(@NotNull PsiType componentType)
+	public PsiArrayType(@Nonnull PsiType componentType)
 	{
 		this(componentType, TypeAnnotationProvider.EMPTY);
 	}
 
-	public PsiArrayType(@NotNull PsiType componentType, @NotNull PsiAnnotation[] annotations)
+	public PsiArrayType(@Nonnull PsiType componentType, @Nonnull PsiAnnotation[] annotations)
 	{
 		super(annotations);
 		myComponentType = componentType;
 	}
 
-	public PsiArrayType(@NotNull PsiType componentType, @NotNull TypeAnnotationProvider provider)
+	public PsiArrayType(@Nonnull PsiType componentType, @Nonnull TypeAnnotationProvider provider)
 	{
 		super(provider);
 		myComponentType = componentType;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableText(boolean annotated)
 	{
 		return getText(myComponentType.getPresentableText(), "[]", false, annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText(boolean annotated)
 	{
 		return getText(myComponentType.getCanonicalText(annotated), "[]", true, annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
 		return getText(myComponentType.getInternalCanonicalText(), "[]", true, true);
 	}
 
-	protected String getText(@NotNull String prefix, @NotNull String suffix, boolean qualified, boolean annotated)
+	protected String getText(@Nonnull String prefix, @Nonnull String suffix, boolean qualified, boolean annotated)
 	{
 		StringBuilder sb = new StringBuilder(prefix.length() + suffix.length());
 		sb.append(prefix);
@@ -89,13 +90,13 @@ public class PsiArrayType extends PsiType.Stub
 	}
 
 	@Override
-	public boolean equalsToText(@NotNull String text)
+	public boolean equalsToText(@Nonnull String text)
 	{
 		return text.endsWith("[]") && myComponentType.equalsToText(text.substring(0, text.length() - 2));
 	}
 
 	@Override
-	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitArrayType(this);
 	}
@@ -107,7 +108,7 @@ public class PsiArrayType extends PsiType.Stub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getSuperTypes()
 	{
 		final PsiType[] superTypes = myComponentType.getSuperTypes();
@@ -124,7 +125,7 @@ public class PsiArrayType extends PsiType.Stub
 	 *
 	 * @return the component type instance.
 	 */
-	@NotNull
+	@Nonnull
 	public PsiType getComponentType()
 	{
 		return myComponentType;

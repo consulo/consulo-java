@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -31,20 +31,20 @@ public class SocketResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "SocketOpenedButNotSafelyClosed";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "socket.opened.not.closed.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -71,7 +71,7 @@ public class SocketResourceInspection extends ResourceInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isSocketFactoryMethod(expression)) {
         return;
@@ -93,7 +93,7 @@ public class SocketResourceInspection extends ResourceInspection {
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!isSocketResource(expression)) {
         return;

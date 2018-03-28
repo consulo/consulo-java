@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.testDiscovery;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.testframework.autotest.AbstractAutoTestManager;
 import com.intellij.execution.testframework.autotest.AutoTestWatcher;
 import com.intellij.openapi.Disposable;
@@ -32,18 +33,18 @@ import com.intellij.openapi.util.Disposer;
 @State(name = "JavaAutoRunManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 public class JavaAutoRunManager extends AbstractAutoTestManager
 {
-	@NotNull
+	@Nonnull
 	public static JavaAutoRunManager getInstance(Project project)
 	{
 		return ServiceManager.getService(project, JavaAutoRunManager.class);
 	}
 
-	public JavaAutoRunManager(@NotNull Project project)
+	public JavaAutoRunManager(@Nonnull Project project)
 	{
 		super(project);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected AutoTestWatcher createWatcher(Project project)
 	{

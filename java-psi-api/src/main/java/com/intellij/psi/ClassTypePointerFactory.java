@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
 
@@ -27,6 +27,6 @@ public interface ClassTypePointerFactory
 {
 	ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create("consulo.java.classTypePointerFactory");
 
-	@Nullable
-	SmartTypePointer createClassTypePointer(@NotNull PsiClassType classType, @NotNull Project project);
+	@javax.annotation.Nullable
+	SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project);
 }

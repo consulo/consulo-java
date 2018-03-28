@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.equality;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionList;
@@ -28,7 +28,7 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class ReplaceEqualsWithEqualityIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new EqualsPredicate();
   }

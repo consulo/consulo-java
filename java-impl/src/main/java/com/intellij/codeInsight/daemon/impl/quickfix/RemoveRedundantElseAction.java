@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -25,8 +27,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ven
@@ -35,19 +35,19 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.RemoveRedundantElseAction");
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("remove.redundant.else.fix");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.redundant.else.fix");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof PsiKeyword &&
         element.getParent() instanceof PsiIfStatement &&
         PsiKeyword.ELSE.equals(element.getText())) {
@@ -67,8 +67,8 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
     return false;
   }
 
-  @Nullable
-  private static PsiStatement getPrevThenBranch(@NotNull PsiElement thenBranch) {
+  @javax.annotation.Nullable
+  private static PsiStatement getPrevThenBranch(@Nonnull PsiElement thenBranch) {
     final PsiElement ifStatement = thenBranch.getParent();
     final PsiElement parent = ifStatement.getParent();
     if (parent instanceof PsiIfStatement && ((PsiIfStatement)parent).getElseBranch() == ifStatement) {
@@ -77,7 +77,7 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
     return null;
   }
 
-  private static boolean cantCompleteNormally(@NotNull PsiStatement thenBranch, PsiElement block) {
+  private static boolean cantCompleteNormally(@Nonnull PsiStatement thenBranch, PsiElement block) {
     try {
       ControlFlow controlFlow = ControlFlowFactory.getInstance(thenBranch.getProject()).getControlFlow(block, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance());
       int startOffset = controlFlow.getStartOffset(thenBranch);
@@ -90,7 +90,7 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     PsiIfStatement ifStatement = (PsiIfStatement)element.getParent();
     LOG.assertTrue(ifStatement != null && ifStatement.getElseBranch() != null);

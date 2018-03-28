@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -28,19 +30,19 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class TailRecursionInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("tail.recursion.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "tail.recursion.problem.descriptor");
@@ -71,7 +73,7 @@ public class TailRecursionInspection extends BaseInspection {
 
   private static class RemoveTailRecursionFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "tail.recursion.replace.quickfix");
@@ -380,7 +382,7 @@ public class TailRecursionInspection extends BaseInspection {
 
     @Override
     public void visitReturnStatement(
-      @NotNull PsiReturnStatement statement) {
+      @Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       final PsiExpression returnValue = statement.getReturnValue();
       if (!(returnValue instanceof PsiMethodCallExpression)) {

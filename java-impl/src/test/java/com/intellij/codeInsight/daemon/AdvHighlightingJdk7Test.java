@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.defUse.DefUseInspection;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
@@ -67,7 +67,7 @@ public class AdvHighlightingJdk7Test extends DaemonAnalyzerTestCase {
   }
 
   //ambiguous method calls
-  private void doTestAmbiguous(@NotNull JavaSdkVersion javaSdkVersion) throws Exception {
+  private void doTestAmbiguous(@Nonnull JavaSdkVersion javaSdkVersion) throws Exception {
     final String name = getTestName(true);
     IdeaTestUtil.setTestVersion(javaSdkVersion, getModule(), myTestRootDisposable);
     doTest(BASE_PATH + name + "/pck/AmbiguousMethodCall.java", BASE_PATH + "/" + name, false, false);

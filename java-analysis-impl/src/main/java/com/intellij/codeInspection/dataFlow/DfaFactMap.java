@@ -17,8 +17,8 @@ package com.intellij.codeInspection.dataFlow;
 
 import java.util.Objects;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.openapi.util.Key;
 import com.intellij.util.keyFMap.KeyFMap;
@@ -39,10 +39,10 @@ public final class DfaFactMap
 
 	// Contains DfaFactType as keys only
 	private final
-	@NotNull
+	@Nonnull
 	KeyFMap myMap;
 
-	private DfaFactMap(@NotNull KeyFMap map)
+	private DfaFactMap(@Nonnull KeyFMap map)
 	{
 		myMap = map;
 	}
@@ -55,8 +55,8 @@ public final class DfaFactMap
 	 * @param <T>  type of the fact value
 	 * @return a fact value or null
 	 */
-	@Nullable
-	public <T> T get(@NotNull DfaFactType<T> type)
+	@javax.annotation.Nullable
+	public <T> T get(@Nonnull DfaFactType<T> type)
 	{
 		return myMap.get(type);
 	}
@@ -69,8 +69,8 @@ public final class DfaFactMap
 	 * @param <T>   the type of fact value
 	 * @return a new fact map. May return itself if it's detected that this fact map already contains the supplied value.
 	 */
-	@NotNull
-	public <T> DfaFactMap with(@NotNull DfaFactType<T> type, @Nullable T value)
+	@Nonnull
+	public <T> DfaFactMap with(@Nonnull DfaFactType<T> type, @javax.annotation.Nullable T value)
 	{
 		KeyFMap newMap = value == null ? myMap.minus(type) : myMap.plus(type, value);
 		return newMap == myMap ? this : new DfaFactMap(newMap);
@@ -115,8 +115,8 @@ public final class DfaFactMap
 	 * which conforms to the new fact and to this fact map simultaneously). May return itself if
 	 * it's known that new fact does not actually change this map.
 	 */
-	@Nullable
-	public <T> DfaFactMap intersect(@NotNull DfaFactType<T> type, @Nullable T value)
+	@javax.annotation.Nullable
+	public <T> DfaFactMap intersect(@Nonnull DfaFactType<T> type, @javax.annotation.Nullable T value)
 	{
 		if(value == null)
 		{
@@ -161,7 +161,7 @@ public final class DfaFactMap
 	 * @param value variable value to calculate facts from
 	 * @return a calculated fact map.
 	 */
-	public static DfaFactMap calcFromVariable(@NotNull DfaVariableValue value)
+	public static DfaFactMap calcFromVariable(@Nonnull DfaVariableValue value)
 	{
 		return StreamEx.of(DfaFactType.getTypes()).foldLeft(EMPTY, (factMap, type) -> updateMap(factMap, type, value));
 	}

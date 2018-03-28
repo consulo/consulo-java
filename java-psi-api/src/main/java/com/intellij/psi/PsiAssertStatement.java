@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Represents a Java <code>assert</code> statement.
  */
@@ -27,7 +25,7 @@ public interface PsiAssertStatement extends PsiStatement{
    * @return the asserted conditione expression, or null if the assert statement
    * is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getAssertCondition();
 
   /**
@@ -35,6 +33,6 @@ public interface PsiAssertStatement extends PsiStatement{
    *
    * @return the assert description expression, or null if none has been specified.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getAssertDescription();
 }

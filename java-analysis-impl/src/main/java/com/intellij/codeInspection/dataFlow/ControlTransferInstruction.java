@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 
 /**
@@ -31,10 +31,10 @@ import com.intellij.codeInspection.dataFlow.instructions.Instruction;
  */
 public class ControlTransferInstruction extends Instruction
 {
-	@Nullable
+	@javax.annotation.Nullable
 	private DfaControlTransferValue myTransfer;
 
-	public ControlTransferInstruction(@Nullable DfaControlTransferValue transfer)
+	public ControlTransferInstruction(@javax.annotation.Nullable DfaControlTransferValue transfer)
 	{
 		myTransfer = transfer;
 	}
@@ -48,7 +48,7 @@ public class ControlTransferInstruction extends Instruction
 		return iteration.toArray(new DfaInstructionState[iteration.size()]);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public DfaControlTransferValue getTransfer()
 	{
 		return myTransfer;
@@ -60,7 +60,7 @@ public class ControlTransferInstruction extends Instruction
 		return myTransfer == null ? "null" : myTransfer.toString();
 	}
 
-	@NotNull
+	@Nonnull
 	public List<Integer> getPossibleTargetIndices()
 	{
 		if(myTransfer == null)
@@ -76,7 +76,7 @@ public class ControlTransferInstruction extends Instruction
 		return result;
 	}
 
-	@NotNull
+	@Nonnull
 	public Collection<? extends Instruction> getPossibleTargetInstructions(Instruction[] allInstruction)
 	{
 		return getPossibleTargetIndices().stream().map(it -> allInstruction[it]).collect(Collectors.toList());

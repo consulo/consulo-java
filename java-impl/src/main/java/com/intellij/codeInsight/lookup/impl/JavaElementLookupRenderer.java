@@ -17,7 +17,6 @@ package com.intellij.codeInsight.lookup.impl;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -76,7 +75,7 @@ public class JavaElementLookupRenderer implements ElementLookupRenderer
 		return isDeprecated(item.getPsiElement());
 	}
 
-	private static boolean isDeprecated(@Nullable PsiElement element)
+	private static boolean isDeprecated(@javax.annotation.Nullable PsiElement element)
 	{
 		return element instanceof PsiDocCommentOwner && ((PsiDocCommentOwner) element).isDeprecated();
 	}

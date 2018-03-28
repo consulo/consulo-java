@@ -20,7 +20,7 @@ import com.intellij.psi.util.ClassUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -29,12 +29,12 @@ import java.util.Set;
 
 public class ReplaceOnDemandImportIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new OnDemandImportPredicate();
   }
 
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiImportStatementBase importStatementBase =
       (PsiImportStatementBase)element;

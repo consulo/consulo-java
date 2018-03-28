@@ -20,7 +20,8 @@ import java.lang.annotation.IncompleteAnnotationException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
@@ -28,12 +29,12 @@ import com.intellij.psi.PsiNameValuePair;
 
 class AnnotationInvocationHandler implements InvocationHandler
 {
-	@NotNull
+	@Nonnull
 	private final Class<? extends Annotation> type;
-	@NotNull
+	@Nonnull
 	private final PsiAnnotation myAnnotation;
 
-	AnnotationInvocationHandler(@NotNull Class<? extends Annotation> type, @NotNull PsiAnnotation annotation)
+	AnnotationInvocationHandler(@Nonnull Class<? extends Annotation> type, @Nonnull PsiAnnotation annotation)
 	{
 		this.type = type;
 		myAnnotation = annotation;

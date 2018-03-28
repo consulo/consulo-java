@@ -19,7 +19,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
@@ -93,7 +94,7 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
     return result;
   }
 
-  private static Collection<TextRange> selectWithTypeParameters(@NotNull PsiClass psiClass) {
+  private static Collection<TextRange> selectWithTypeParameters(@Nonnull PsiClass psiClass) {
     final PsiIdentifier identifier = psiClass.getNameIdentifier();
     final PsiTypeParameterList list = psiClass.getTypeParameterList();
     if (identifier != null && list != null) {
@@ -102,8 +103,8 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
     return Collections.emptyList();
   }
 
-  private static Collection<TextRange> selectBetweenBracesLines(@NotNull PsiElement[] children,
-                                                                @NotNull CharSequence editorText) {
+  private static Collection<TextRange> selectBetweenBracesLines(@Nonnull PsiElement[] children,
+                                                                @Nonnull CharSequence editorText) {
     int start = CodeBlockOrInitializerSelectioner.findOpeningBrace(children);
     // in non-Java PsiClasses, there can be no opening brace
     if (start != 0) {

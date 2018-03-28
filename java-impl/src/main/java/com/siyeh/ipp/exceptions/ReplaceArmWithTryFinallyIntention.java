@@ -19,21 +19,21 @@ import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
 public class ReplaceArmWithTryFinallyIntention
   extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new AutomaticResourceManagementPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiJavaToken token = (PsiJavaToken)element;
     final PsiTryStatement tryStatement =

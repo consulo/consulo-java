@@ -17,7 +17,7 @@ package com.intellij.psi.impl.source.resolve.graphInference;
 
 import java.util.HashSet;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
@@ -63,7 +63,7 @@ public class FunctionalInterfaceParameterizationUtil
 		return getGroundTargetType(psiClassType, null);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getGroundTargetType(@Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr)
 	{
 		return getGroundTargetType(psiClassType, expr, true);
@@ -206,7 +206,7 @@ public class FunctionalInterfaceParameterizationUtil
 	 * If Ai is a upper-bounded wildcard ? extends Ui, then Ti = glb(Ui, Bi).
 	 * If Ai is a lower-bounded wildcard ? super Li, then Ti = Li.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getNonWildcardParameterization(PsiClassType psiClassType)
 	{
 		final PsiClass psiClass = psiClassType.resolve();

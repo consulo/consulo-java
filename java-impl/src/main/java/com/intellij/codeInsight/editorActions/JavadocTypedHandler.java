@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.editorActions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.java.application.options.JavaSmartKeysSettings;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
@@ -63,7 +63,7 @@ public class JavadocTypedHandler extends TypedHandlerDelegate {
    * @param file      current file
    * @return          <code>true</code> if closing tag is inserted; <code>false</code> otherwise
    */
-  private static boolean insertClosingTagIfNecessary(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
+  private static boolean insertClosingTagIfNecessary(char c, @Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     if (c != CLOSE_TAG_SYMBOL || !JavaSmartKeysSettings.getInstance().JAVADOC_GENERATE_CLOSING_TAG) {
       return false;
     }
@@ -104,7 +104,7 @@ public class JavadocTypedHandler extends TypedHandlerDelegate {
    * @return                tag name if the one is parsed; <code>null</code> otherwise
    */
   @Nullable
-  static CharSequence getTagName(@NotNull CharSequence text, int afterTagOffset) {
+  static CharSequence getTagName(@Nonnull CharSequence text, int afterTagOffset) {
     if (afterTagOffset > text.length()) {
       return null;
     }

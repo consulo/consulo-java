@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Represents a method which is declared on an annotation interface and
  * possibly specifies the default value of the annotation element.
@@ -34,6 +32,6 @@ public interface PsiAnnotationMethod extends PsiMethod {
    *
    * @return the default value of the element, or null if no default value is specified.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiAnnotationMemberValue getDefaultValue();
 }

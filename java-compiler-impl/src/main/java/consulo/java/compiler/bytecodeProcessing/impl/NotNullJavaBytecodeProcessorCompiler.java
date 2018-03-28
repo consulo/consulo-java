@@ -19,7 +19,6 @@ package consulo.java.compiler.bytecodeProcessing.impl;
 import java.io.File;
 import java.io.IOException;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.compiler.cache.Cache;
@@ -46,7 +45,7 @@ import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
  */
 public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcessor
 {
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public byte[] processClassFile(CompileContext compileContext,
 			Module affectedModule,

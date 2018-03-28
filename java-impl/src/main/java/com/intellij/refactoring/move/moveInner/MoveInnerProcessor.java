@@ -50,8 +50,7 @@ import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.MultiMap;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -94,12 +93,12 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     return RefactoringBundle.message("move.inner.class.command", myDescriptiveName);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveInnerViewDescriptor(myInnerClass);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     LOG.assertTrue(myTargetContainer != null);
 
@@ -421,7 +420,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
                     final String parameterName,
                     boolean searchInComments,
                     boolean searchInNonJava,
-                    @NotNull final PsiElement targetContainer) {
+                    @Nonnull final PsiElement targetContainer) {
     myNewClassName = className;
     myInnerClass = innerClass;
     myDescriptiveName = DescriptiveNameUtil.getDescriptiveName(myInnerClass);
@@ -505,7 +504,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     return statement;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiElement getAnchorElement(PsiCodeBlock body) {
     PsiStatement[] statements = body.getStatements();
     if (statements.length > 0) {

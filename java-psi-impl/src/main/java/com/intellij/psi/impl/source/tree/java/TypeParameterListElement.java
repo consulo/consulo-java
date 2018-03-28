@@ -23,7 +23,7 @@ import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -106,7 +106,7 @@ public class TypeParameterListElement extends CompositeElement {
   }
 
   @Override
-  public void deleteChildInternal(@NotNull final ASTNode child) {
+  public void deleteChildInternal(@Nonnull final ASTNode child) {
     if (child.getElementType() == JavaElementType.TYPE_PARAMETER){
       final ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
       if (next != null && next.getElementType() == JavaTokenType.COMMA){

@@ -22,7 +22,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.UnfairTextRange;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +45,7 @@ public class PsiSelectionSearcher {
    * @param <T>             type based on PsiElement type
    * @return elements in selection
    */
-  @NotNull
+  @Nonnull
   public static <T extends PsiElement> List<T> searchElementsInSelection(Editor editor,
                                                                          Project project,
                                                                          final Class<T> filter,

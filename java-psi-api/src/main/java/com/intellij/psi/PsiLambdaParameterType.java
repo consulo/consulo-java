@@ -15,9 +15,10 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A type which represents an omitted type for parameter of lambda expression.
@@ -56,7 +57,7 @@ public class PsiLambdaParameterType extends PsiType {
   }
 
   @Override
-  public <A> A accept(@NotNull final PsiTypeVisitor<A> visitor) {
+  public <A> A accept(@Nonnull final PsiTypeVisitor<A> visitor) {
     return visitor.visitType(this);
   }
 
@@ -65,7 +66,7 @@ public class PsiLambdaParameterType extends PsiType {
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

@@ -17,7 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class RecursionUtils {
 
@@ -220,7 +220,7 @@ public class RecursionUtils {
     return endsInImplicitReturn;
   }
 
-  public static boolean methodMayRecurse(@NotNull PsiMethod method) {
+  public static boolean methodMayRecurse(@Nonnull PsiMethod method) {
     final RecursionVisitor recursionVisitor = new RecursionVisitor(method);
     method.accept(recursionVisitor);
     return recursionVisitor.isRecursive();
@@ -671,7 +671,7 @@ public class RecursionUtils {
   }
 
   public static boolean methodDefinitelyRecurses(
-    @NotNull PsiMethod method) {
+    @Nonnull PsiMethod method) {
     final PsiCodeBlock body = method.getBody();
     return body != null &&
            !codeBlockMayReturnBeforeRecursing(body, method, true);

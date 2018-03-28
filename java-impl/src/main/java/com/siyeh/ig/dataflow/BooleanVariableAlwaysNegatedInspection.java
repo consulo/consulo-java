@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.dataflow;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -33,14 +34,14 @@ import com.siyeh.ig.InspectionGadgetsFix;
 public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "boolean.variable.always.inverted.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];
@@ -69,7 +70,7 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
       this.name = name;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message(

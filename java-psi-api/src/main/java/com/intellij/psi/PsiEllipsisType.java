@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents the type of a variable arguments array passed as a method parameter.
@@ -24,17 +24,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PsiEllipsisType extends PsiArrayType
 {
-	public PsiEllipsisType(@NotNull PsiType componentType)
+	public PsiEllipsisType(@Nonnull PsiType componentType)
 	{
 		super(componentType);
 	}
 
-	public PsiEllipsisType(@NotNull PsiType componentType, @NotNull PsiAnnotation[] annotations)
+	public PsiEllipsisType(@Nonnull PsiType componentType, @Nonnull PsiAnnotation[] annotations)
 	{
 		super(componentType, annotations);
 	}
 
-	public PsiEllipsisType(@NotNull PsiType componentType, @NotNull TypeAnnotationProvider provider)
+	public PsiEllipsisType(@Nonnull PsiType componentType, @Nonnull TypeAnnotationProvider provider)
 	{
 		super(componentType, provider);
 	}
@@ -42,26 +42,26 @@ public class PsiEllipsisType extends PsiArrayType
 	/**
 	 * @deprecated use {@link #annotate(TypeAnnotationProvider)} (to be removed in IDEA 18)
 	 */
-	public static PsiType createEllipsis(@NotNull PsiType componentType, @NotNull PsiAnnotation[] annotations)
+	public static PsiType createEllipsis(@Nonnull PsiType componentType, @Nonnull PsiAnnotation[] annotations)
 	{
 		return new PsiEllipsisType(componentType, annotations);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableText(boolean annotated)
 	{
 		return getText(getComponentType().getPresentableText(), "...", false, annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText(boolean annotated)
 	{
 		return getText(getComponentType().getCanonicalText(annotated), "...", true, annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
@@ -69,7 +69,7 @@ public class PsiEllipsisType extends PsiArrayType
 	}
 
 	@Override
-	public boolean equalsToText(@NotNull String text)
+	public boolean equalsToText(@Nonnull String text)
 	{
 		return text.endsWith("...") && getComponentType().equalsToText(text.substring(0, text.length() - 3)) || super.equalsToText(text);
 	}
@@ -85,7 +85,7 @@ public class PsiEllipsisType extends PsiArrayType
 	}
 
 	@Override
-	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitEllipsisType(this);
 	}

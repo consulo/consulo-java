@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.JavaClassNameCompletionContributor;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.codeInsight.completion.scope.JavaCompletionProcessor;
@@ -91,7 +91,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiElement getContext()
 	{
 		final PsiReference contextRef = getContextReference();
@@ -100,7 +100,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	public void processVariants(@NotNull final PsiScopeProcessor processor)
+	public void processVariants(@Nonnull final PsiScopeProcessor processor)
 	{
 		if(processor instanceof JavaCompletionProcessor)
 		{
@@ -129,19 +129,19 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 			processorToUse = new PsiScopeProcessor()
 			{
 				@Override
-				public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+				public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 				{
 					return !(element instanceof PsiClass || element instanceof PsiPackage) || processor.execute(element, state);
 				}
 
 				@Override
-				public <V> V getHint(@NotNull Key<V> hintKey)
+				public <V> V getHint(@Nonnull Key<V> hintKey)
 				{
 					return processor.getHint(hintKey);
 				}
 
 				@Override
-				public void handleEvent(@NotNull Event event, Object associated)
+				public void handleEvent(@Nonnull Event event, Object associated)
 				{
 					processor.handleEvent(event, associated);
 				}
@@ -167,7 +167,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiReference getContextReference()
 	{
 		return myIndex > 0 ? myJavaClassReferenceSet.getReference(myIndex - 1) : null;
@@ -197,7 +197,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getCanonicalText()
 	{
 		return myText;
@@ -219,7 +219,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		if(isReferenceTo(element))
 		{
@@ -265,7 +265,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Object[] getVariants()
 	{
 		PsiElement context = getCompletionContext();
@@ -299,7 +299,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return ArrayUtil.EMPTY_OBJECT_ARRAY;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiElement getCompletionContext()
 	{
 		PsiElement context = getContext();
@@ -311,8 +311,8 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return JavaClassReferenceProvider.EXTEND_CLASS_NAMES.getValue(getOptions());
 	}
 
-	@NotNull
-	private LookupElement[] processPackage(@NotNull PsiJavaPackage aPackage)
+	@Nonnull
+	private LookupElement[] processPackage(@Nonnull PsiJavaPackage aPackage)
 	{
 		final ArrayList<LookupElement> list = ContainerUtil.newArrayList();
 		final int startOffset = StringUtil.isEmpty(aPackage.getName()) ? 0 : aPackage.getQualifiedName().length() + 1;
@@ -361,14 +361,14 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return list.toArray(new LookupElement[list.size()]);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public ClassKind getClassKind()
 	{
 		return JavaClassReferenceProvider.CLASS_KIND.getValue(getOptions());
 	}
 
 	private static boolean isClassAccepted(final PsiClass clazz,
-			@Nullable final ClassKind classKind,
+			@javax.annotation.Nullable final ClassKind classKind,
 			final boolean instantiatable,
 			final boolean concrete,
 			final boolean notInterface,
@@ -419,7 +419,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult advancedResolve(boolean incompleteCode)
 	{
 		PsiFile file = getJavaContextFile();
@@ -432,8 +432,8 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return myJavaClassReferenceSet.getProvider().getContextFile(getElement());
 	}
 
-	@NotNull
-	private JavaResolveResult doAdvancedResolve(@NotNull PsiFile containingFile)
+	@Nonnull
+	private JavaResolveResult doAdvancedResolve(@Nonnull PsiFile containingFile)
 	{
 		final PsiElement psiElement = getElement();
 
@@ -482,7 +482,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return advancedResolveInner(psiElement, qName, containingFile);
 	}
 
-	private JavaResolveResult advancedResolveInner(@NotNull PsiElement psiElement, @NotNull String qName, @NotNull PsiFile containingFile)
+	private JavaResolveResult advancedResolveInner(@Nonnull PsiElement psiElement, @Nonnull String qName, @Nonnull PsiFile containingFile)
 	{
 		final PsiManager manager = containingFile.getManager();
 		final GlobalSearchScope scope = getScope(containingFile);
@@ -560,7 +560,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return resolveResult != null ? new CandidateInfo(resolveResult, PsiSubstitutor.EMPTY, false, false, psiElement) : JavaResolveResult.EMPTY;
 	}
 
-	private GlobalSearchScope getScope(@NotNull PsiFile containingFile)
+	private GlobalSearchScope getScope(@Nonnull PsiFile containingFile)
 	{
 		Project project = containingFile.getProject();
 		GlobalSearchScope scope = myJavaClassReferenceSet.getProvider().getScope(project);
@@ -579,7 +579,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult[] multiResolve(boolean incompleteCode)
 	{
 		final JavaResolveResult javaResolveResult = advancedResolve(incompleteCode);
@@ -590,7 +590,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return new JavaResolveResult[]{javaResolveResult};
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private List<? extends LocalQuickFix> registerFixes()
 	{
 		final List<LocalQuickFix> list = QuickFixFactory.getInstance().registerOrderEntryFixes(new QuickFixActionRegistrarImpl(null), this);
@@ -640,7 +640,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return list;
 	}
 
-	public void processSubclassVariants(@NotNull PsiJavaPackage context, @NotNull String[] extendClasses, Consumer<LookupElement> result)
+	public void processSubclassVariants(@Nonnull PsiJavaPackage context, @Nonnull String[] extendClasses, Consumer<LookupElement> result)
 	{
 		GlobalSearchScope packageScope = PackageScope.packageScope(context, true);
 		GlobalSearchScope scope = myJavaClassReferenceSet.getProvider().getScope(getElement().getProject());
@@ -681,8 +681,8 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		}
 	}
 
-	@NotNull
-	private static LookupElementBuilder createSubclassLookupValue(@NotNull final PsiClass clazz, @NotNull String qname)
+	@Nonnull
+	private static LookupElementBuilder createSubclassLookupValue(@Nonnull final PsiClass clazz, @Nonnull String qname)
 	{
 		return JavaLookupElementBuilder.forClass(clazz, qname, true).withPresentableText(StringUtil.getShortName(qname));
 	}
@@ -694,7 +694,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return list == null ? LocalQuickFix.EMPTY_ARRAY : list.toArray(new LocalQuickFix[list.size()]);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiElement resolveMember(String fqn, PsiManager manager, GlobalSearchScope resolveScope)
 	{
 		PsiClass aClass = JavaPsiFacade.getInstance(manager.getProject()).findClass(fqn, resolveScope);
@@ -717,7 +717,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return doResolveMember(aClass, memberName);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiElement doResolveMember(PsiClass aClass, String memberName)
 	{
 		PsiMember member = aClass.findFieldByName(memberName, true);
@@ -735,7 +735,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		return myJavaClassReferenceSet;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getUnresolvedMessagePattern()
 	{
@@ -746,9 +746,9 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 	{
 		private static final MyResolver INSTANCE = new MyResolver();
 
-		@NotNull
+		@Nonnull
 		@Override
-		public ResolveResult[] resolve(@NotNull JavaClassReference ref, @NotNull PsiFile containingFile, boolean incompleteCode)
+		public ResolveResult[] resolve(@Nonnull JavaClassReference ref, @Nonnull PsiFile containingFile, boolean incompleteCode)
 		{
 			return new JavaResolveResult[]{ref.doAdvancedResolve(containingFile)};
 		}

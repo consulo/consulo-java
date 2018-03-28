@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.numeric;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
@@ -22,16 +24,15 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ComparisonOfShortAndCharInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("comparison.of.short.and.char.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("comparison.of.short.and.char.problem.descriptor");
   }
@@ -43,7 +44,7 @@ public class ComparisonOfShortAndCharInspection extends BaseInspection {
   private static class ComparisonOfShortAndCharVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@NotNull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;

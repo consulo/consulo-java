@@ -17,7 +17,6 @@
 package com.intellij.util.descriptors;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public class ConfigFileMetaData {
                             final @NonNls String fileName,
                             final @NonNls String directoryPath,
                             final ConfigFileVersion[] versions,
-                            final @Nullable ConfigFileVersion defaultVersion,
+                            final @javax.annotation.Nullable ConfigFileVersion defaultVersion,
                             final boolean optional,
                             final boolean fileNameFixed,
                             final boolean unique) {

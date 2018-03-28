@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.completion.AllClassesGetter;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
@@ -52,7 +52,7 @@ import consulo.java.codeInsight.JavaCodeInsightUtilCore;
 public class CodeInsightUtil extends JavaCodeInsightUtilCore
 {
 	private static final Logger LOG = Logger.getInstance(CodeInsightUtil.class);
-	public static <T extends PsiMember & PsiDocCommentOwner> void sortIdenticalShortNamedMembers(T[] members, @NotNull PsiReference context)
+	public static <T extends PsiMember & PsiDocCommentOwner> void sortIdenticalShortNamedMembers(T[] members, @Nonnull PsiReference context)
 	{
 		if(members.length <= 1)
 		{
@@ -162,13 +162,13 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore
 		}
 	}
 
-	public static Editor positionCursorAtLBrace(final Project project, PsiFile targetFile, @NotNull PsiClass psiClass)
+	public static Editor positionCursorAtLBrace(final Project project, PsiFile targetFile, @Nonnull PsiClass psiClass)
 	{
 		final PsiElement lBrace = psiClass.getLBrace();
 		return positionCursor(project, targetFile, lBrace != null ? lBrace : psiClass);
 	}
 
-	public static Editor positionCursor(final Project project, PsiFile targetFile, @NotNull PsiElement element)
+	public static Editor positionCursor(final Project project, PsiFile targetFile, @Nonnull PsiElement element)
 	{
 		TextRange range = element.getTextRange();
 		LOG.assertTrue(range != null, "element: " + element + "; valid: " + element.isValid());
@@ -178,12 +178,12 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore
 		return FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
 	}
 
-	public static boolean preparePsiElementsForWrite(@NotNull PsiElement... elements)
+	public static boolean preparePsiElementsForWrite(@Nonnull PsiElement... elements)
 	{
 		return FileModificationService.getInstance().preparePsiElementsForWrite(Arrays.asList(elements));
 	}
 
-	public static void processSubTypes(PsiType psiType, final PsiElement context, boolean getRawSubtypes, @NotNull final PrefixMatcher matcher, Consumer<PsiType> consumer)
+	public static void processSubTypes(PsiType psiType, final PsiElement context, boolean getRawSubtypes, @Nonnull final PrefixMatcher matcher, Consumer<PsiType> consumer)
 	{
 		int arrayDim = psiType.getArrayDimensions();
 
@@ -260,7 +260,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore
 			int arrayDim,
 			boolean getRawSubtypes,
 			Consumer<PsiType> result,
-			@NotNull PsiClass baseClass,
+			@Nonnull PsiClass baseClass,
 			PsiSubstitutor baseSubstitutor)
 	{
 		PsiManager manager = context.getManager();

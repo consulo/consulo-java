@@ -24,7 +24,7 @@ import com.intellij.ui.components.panels.ValidatingComponent;
 import com.intellij.util.ui.Table;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.ide.IdeBundle;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -114,7 +114,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private String getErrorText(T element) {
     return isChecked(element) ? myRenamer.getErrorText(element) : null;
   }

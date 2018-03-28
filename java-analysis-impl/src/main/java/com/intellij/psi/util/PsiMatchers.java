@@ -19,7 +19,7 @@
  */
 package com.intellij.psi.util;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
@@ -55,7 +55,7 @@ public class PsiMatchers {
     };
   }
 
-  public static PsiMatcherExpression hasText(@NotNull final String... texts) {
+  public static PsiMatcherExpression hasText(@Nonnull final String... texts) {
     return new PsiMatcherExpression() {
       @Override
       public Boolean match(PsiElement element) {

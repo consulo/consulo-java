@@ -17,8 +17,8 @@ package com.intellij.refactoring.typeMigration;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -134,7 +134,7 @@ public class TypeMigrationReplacementUtil
 		return expression;
 	}
 
-	static PsiType revalidateType(@NotNull PsiType migrationType, @NotNull Project project)
+	static PsiType revalidateType(@Nonnull PsiType migrationType, @Nonnull Project project)
 	{
 		if(!migrationType.isValid())
 		{
@@ -214,7 +214,7 @@ public class TypeMigrationReplacementUtil
 		return null;
 	}
 
-	static boolean tryToReplaceWithDiamond(PsiNewExpression newExpression, @Nullable PsiType changeType)
+	static boolean tryToReplaceWithDiamond(PsiNewExpression newExpression, @javax.annotation.Nullable PsiType changeType)
 	{
 		if(newExpression != null && PsiDiamondTypeUtil.canCollapseToDiamond(newExpression, newExpression, changeType))
 		{

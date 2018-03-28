@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiBinaryExpression;
@@ -27,24 +29,23 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConstantOnLeftSideOfComparison";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.problem.descriptor");
   }
@@ -61,7 +62,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
   private static class SwapComparisonFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("flip.comparison.quickfix");
     }
@@ -87,7 +88,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   private static class ConstantOnLHSOfComparisonVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@NotNull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isComparison(expression)) {
         return;

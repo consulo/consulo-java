@@ -15,14 +15,14 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiReferenceExpression {
   private final ClsElementImpl myParent;
@@ -58,12 +58,12 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public PsiElement bindToElementViaStaticImport(@NotNull PsiClass aClass) throws IncorrectOperationException {
+  public PsiElement bindToElementViaStaticImport(@Nonnull PsiClass aClass) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException {
+  public void setQualifierExpression(@javax.annotation.Nullable PsiExpression newQualifier) throws IncorrectOperationException {
     throw new IncorrectOperationException("This method should not be called for compiled elements");
   }
 
@@ -78,7 +78,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getChildren() {
     if (myQualifier != null) {
       return new PsiElement[]{myQualifier, myNameElement};
@@ -109,13 +109,13 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     return myPatternExpression.advancedResolve(incompleteCode);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     final JavaResolveResult result = advancedResolve(incompleteCode);
     return result != JavaResolveResult.EMPTY ? new JavaResolveResult[]{result} : JavaResolveResult.EMPTY_ARRAY;
@@ -132,7 +132,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getCanonicalText() {
     return myPatternExpression.getCanonicalText();
   }
@@ -153,7 +153,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -163,7 +163,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Object[] getVariants() {
     return myPatternExpression.getVariants();
   }
@@ -179,17 +179,17 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     buffer.append(getText());
   }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.REFERENCE_EXPRESSION);
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceExpression(this);
     }
@@ -199,7 +199,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getTypeParameters() {
     return PsiType.EMPTY_ARRAY;
   }

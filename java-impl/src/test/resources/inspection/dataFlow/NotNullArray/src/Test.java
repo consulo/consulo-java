@@ -1,9 +1,9 @@
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class TestNPEafterNew {
-  @Nullable Object[] arr;
-  void test(@NotNull Object[] notnull) {
+  @javax.annotation.Nullable
+  Object[] arr;
+  void test(@Nonnull Object[] notnull) {
       arr = notnull;
       System.out.println(arr.length);
   }

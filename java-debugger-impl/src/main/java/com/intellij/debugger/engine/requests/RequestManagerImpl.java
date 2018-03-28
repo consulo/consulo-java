@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebugProcessAdapterImpl;
@@ -73,7 +73,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 	private final Map<Requestor, Set<EventRequest>> myRequestorToBelongedRequests = new HashMap<>();
 	private EventRequestManager myEventRequestManager;
 	private
-	@Nullable
+	@javax.annotation.Nullable
 	ThreadReference myFilterThread;
 
 	public RequestManagerImpl(DebugProcessImpl debugProcess)
@@ -109,7 +109,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		return Collections.unmodifiableSet(requestSet);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Requestor findRequestor(EventRequest request)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

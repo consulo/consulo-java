@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -31,13 +31,13 @@ import java.util.regex.PatternSyntaxException;
 public class MalformedRegexInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("malformed.regular.expression.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     if (infos.length == 0) {
       return InspectionGadgetsBundle.message("malformed.regular.expression.problem.descriptor1");
@@ -60,7 +60,7 @@ public class MalformedRegexInspection extends BaseInspection {
   private static class MalformedRegexVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {

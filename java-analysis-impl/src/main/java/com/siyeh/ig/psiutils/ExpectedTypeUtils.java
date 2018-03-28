@@ -20,8 +20,8 @@ import gnu.trove.THashSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -39,8 +39,8 @@ public class ExpectedTypeUtils
 	{
 	}
 
-	@Nullable
-	public static PsiType findExpectedType(@NotNull PsiExpression expression, boolean calculateTypeForComplexReferences)
+	@javax.annotation.Nullable
+	public static PsiType findExpectedType(@Nonnull PsiExpression expression, boolean calculateTypeForComplexReferences)
 	{
 		return findExpectedType(expression, calculateTypeForComplexReferences, false);
 	}
@@ -108,13 +108,13 @@ public class ExpectedTypeUtils
 			operatorAssignmentOps.add(JavaTokenType.GTGTGTEQ);
 		}
 
-		@NotNull
+		@Nonnull
 		private final PsiExpression wrappedExpression;
 		private final boolean calculateTypeForComplexReferences;
 		private final boolean reportCasts;
 		private PsiType expectedType = null;
 
-		ExpectedTypeVisitor(@NotNull PsiExpression wrappedExpression, boolean calculateTypeForComplexReferences, boolean reportCasts)
+		ExpectedTypeVisitor(@Nonnull PsiExpression wrappedExpression, boolean calculateTypeForComplexReferences, boolean reportCasts)
 		{
 			this.wrappedExpression = wrappedExpression;
 			this.calculateTypeForComplexReferences = calculateTypeForComplexReferences;
@@ -127,7 +127,7 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitField(@NotNull PsiField field)
+		public void visitField(@Nonnull PsiField field)
 		{
 			final PsiExpression initializer = field.getInitializer();
 			if(wrappedExpression.equals(initializer))
@@ -137,7 +137,7 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitVariable(@NotNull PsiVariable variable)
+		public void visitVariable(@Nonnull PsiVariable variable)
 		{
 			expectedType = variable.getType();
 		}
@@ -180,7 +180,7 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitPolyadicExpression(@NotNull PsiPolyadicExpression polyadicExpression)
+		public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression polyadicExpression)
 		{
 			final PsiExpression[] operands = polyadicExpression.getOperands();
 			if(operands.length < 2)
@@ -277,7 +277,7 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitPrefixExpression(@NotNull PsiPrefixExpression expression)
+		public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression)
 		{
 			final PsiType type = expression.getType();
 			if(type instanceof PsiPrimitiveType)
@@ -291,7 +291,7 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitPostfixExpression(@NotNull PsiPostfixExpression expression)
+		public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression)
 		{
 			final PsiType type = expression.getType();
 			if(type instanceof PsiPrimitiveType)
@@ -334,13 +334,13 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitWhileStatement(@NotNull PsiWhileStatement whileStatement)
+		public void visitWhileStatement(@Nonnull PsiWhileStatement whileStatement)
 		{
 			expectedType = PsiType.BOOLEAN;
 		}
 
 		@Override
-		public void visitForStatement(@NotNull PsiForStatement statement)
+		public void visitForStatement(@Nonnull PsiForStatement statement)
 		{
 			expectedType = PsiType.BOOLEAN;
 		}
@@ -374,25 +374,25 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitIfStatement(@NotNull PsiIfStatement statement)
+		public void visitIfStatement(@Nonnull PsiIfStatement statement)
 		{
 			expectedType = PsiType.BOOLEAN;
 		}
 
 		@Override
-		public void visitDoWhileStatement(@NotNull PsiDoWhileStatement statement)
+		public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement)
 		{
 			expectedType = PsiType.BOOLEAN;
 		}
 
 		@Override
-		public void visitSynchronizedStatement(@NotNull PsiSynchronizedStatement statement)
+		public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement)
 		{
 			expectedType = TypeUtils.getObjectType(statement);
 		}
 
 		@Override
-		public void visitAssignmentExpression(@NotNull PsiAssignmentExpression assignment)
+		public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment)
 		{
 			final PsiExpression rExpression = assignment.getRExpression();
 			final IElementType tokenType = assignment.getOperationTokenType();
@@ -460,7 +460,7 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitReturnStatement(@NotNull PsiReturnStatement returnStatement)
+		public void visitReturnStatement(@Nonnull PsiReturnStatement returnStatement)
 		{
 			expectedType = PsiTypesUtil.getMethodReturnType(returnStatement);
 		}
@@ -525,7 +525,7 @@ public class ExpectedTypeUtils
 			}
 		}
 
-		@NotNull
+		@Nonnull
 		private static JavaResolveResult findCalledMethod(PsiExpressionList expressionList)
 		{
 			final PsiElement parent = expressionList.getParent();
@@ -547,7 +547,7 @@ public class ExpectedTypeUtils
 		}
 
 		@Override
-		public void visitReferenceExpression(@NotNull PsiReferenceExpression referenceExpression)
+		public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression)
 		{
 			if(calculateTypeForComplexReferences)
 			{
@@ -622,7 +622,7 @@ public class ExpectedTypeUtils
 			}
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		private static PsiMethod findDeepestVisibleSuperMethod(PsiMethod method, PsiType returnType, PsiElement element)
 		{
 			if(method.isConstructor())
@@ -721,33 +721,33 @@ public class ExpectedTypeUtils
 			return ClassUtils.inSamePackage(containingClass, referencingLocation);
 		}
 
-		private static boolean isArithmeticOperation(@NotNull IElementType sign)
+		private static boolean isArithmeticOperation(@Nonnull IElementType sign)
 		{
 			return arithmeticOps.contains(sign);
 		}
 
-		private static boolean isBooleanOperation(@NotNull IElementType sign)
+		private static boolean isBooleanOperation(@Nonnull IElementType sign)
 		{
 			return booleanOps.contains(sign);
 		}
 
-		private static boolean isShiftOperation(@NotNull IElementType sign)
+		private static boolean isShiftOperation(@Nonnull IElementType sign)
 		{
 			return shiftOps.contains(sign);
 		}
 
-		private static boolean isOperatorAssignmentOperation(@NotNull IElementType sign)
+		private static boolean isOperatorAssignmentOperation(@Nonnull IElementType sign)
 		{
 			return operatorAssignmentOps.contains(sign);
 		}
 
-		private static int getParameterPosition(@NotNull PsiExpressionList expressionList, PsiExpression expression)
+		private static int getParameterPosition(@Nonnull PsiExpressionList expressionList, PsiExpression expression)
 		{
 			return ArrayUtil.indexOf(expressionList.getExpressions(), expression);
 		}
 
 		@Nullable
-		private static PsiType getTypeOfParameter(@NotNull JavaResolveResult result, int parameterPosition)
+		private static PsiType getTypeOfParameter(@Nonnull JavaResolveResult result, int parameterPosition)
 		{
 			final PsiMethod method = (PsiMethod) result.getElement();
 			if(method == null)

@@ -30,7 +30,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.diff.DiffContentFactory;
 import com.intellij.diff.DiffManager;
@@ -146,7 +145,7 @@ public class ExtractMethodSignatureSuggester
 		return myVariableData;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public List<Match> findDuplicatesSignature(final PsiMethod method, ParametersFolder folder)
 	{
 		final List<PsiExpression> copies = new ArrayList<PsiExpression>();
@@ -355,7 +354,7 @@ public class ExtractMethodSignatureSuggester
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	private InputVariables detectTopLevelExpressionsToReplaceWithParameters(List<PsiExpression> copies)
 	{
 		final PsiParameter[] parameters = myExtractedMethod.getParameterList().getParameters();
@@ -469,7 +468,7 @@ public class ExtractMethodSignatureSuggester
 			init();
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		protected JComponent createNorthPanel()
 		{
@@ -477,7 +476,7 @@ public class ExtractMethodSignatureSuggester
 					"") + " </html>");
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		@RequiredDispatchThread
 		protected JComponent createCenterPanel()

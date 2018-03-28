@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.naming;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiTypeParameter;
@@ -25,19 +27,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ExceptionNameDoesntEndWithExceptionInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ExceptionClassNameDoesntEndWithException";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "exception.name.doesnt.end.with.exception.display.name");
@@ -49,7 +50,7 @@ public class ExceptionNameDoesntEndWithExceptionInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "exception.name.doesnt.end.with.exception.problem.descriptor");
@@ -69,7 +70,7 @@ public class ExceptionNameDoesntEndWithExceptionInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       if (aClass instanceof PsiTypeParameter) {
         return;

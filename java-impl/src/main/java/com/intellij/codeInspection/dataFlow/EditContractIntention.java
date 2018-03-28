@@ -17,14 +17,15 @@ package com.intellij.codeInspection.dataFlow;
 
 import java.awt.BorderLayout;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
 import com.intellij.codeInsight.ExternalAnnotationsManagerImpl;
@@ -56,7 +57,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
 	private static final String ourPrompt = "<html>Please specify the contract text<p>" + "Example: <code>_, null -> false</code><br>" + "<small>See intention action description for more " +
 			"details</small></html>";
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -64,7 +65,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
 	}
 
 	@Nullable
-	private static PsiMethod getTargetMethod(@NotNull Project project, Editor editor, PsiFile file)
+	private static PsiMethod getTargetMethod(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		final PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
 		if(owner instanceof PsiMethod && ExternalAnnotationsManagerImpl.areExternalAnnotationsApplicable(owner))
@@ -76,7 +77,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		final PsiMethod method = getTargetMethod(project, editor, file);
 		if(method != null)
@@ -89,7 +90,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		final PsiMethod method = getTargetMethod(project, editor, file);
 		assert method != null;
@@ -116,7 +117,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
 		}
 	}
 
-	private static DialogBuilder createDialog(@NotNull Project project, JBTextField contractText, JCheckBox pureCB)
+	private static DialogBuilder createDialog(@Nonnull Project project, JBTextField contractText, JCheckBox pureCB)
 	{
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(Messages.configureMessagePaneUi(new JTextPane(), ourPrompt), BorderLayout.NORTH);

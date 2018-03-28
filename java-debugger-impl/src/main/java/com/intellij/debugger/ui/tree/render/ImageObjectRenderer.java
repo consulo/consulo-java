@@ -29,8 +29,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import org.intellij.images.editor.impl.ImageEditorManagerImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.FullValueEvaluatorProvider;
@@ -59,7 +59,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 		setEnabled(true);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext, final ValueDescriptorImpl valueDescriptor)
 	{
@@ -73,7 +73,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 		};
 	}
 
-	static JComponent createIconViewer(@Nullable Icon icon)
+	static JComponent createIconViewer(@javax.annotation.Nullable Icon icon)
 	{
 		if(icon == null)
 		{
@@ -89,7 +89,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 		return ImageEditorManagerImpl.createImageEditorUI(image);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static ImageIcon getIcon(EvaluationContext evaluationContext, Value obj, String methodName)
 	{
 		try
@@ -150,7 +150,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 
 	static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Icon>
 	{
-		public IconPopupEvaluator(@NotNull String linkText, @NotNull EvaluationContextImpl evaluationContext)
+		public IconPopupEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext)
 		{
 			super(linkText, evaluationContext);
 		}

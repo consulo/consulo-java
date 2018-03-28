@@ -19,7 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.inplace.MemberInplaceRenameHandler;
@@ -34,7 +35,7 @@ import consulo.codeInsight.TargetElementUtil;
 public class RenameMembersInplaceTest extends LightCodeInsightTestCase {
   private static final String BASE_PATH = "/refactoring/renameInplace/";
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

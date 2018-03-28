@@ -15,12 +15,13 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.javadoc.PsiDocToken;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiDocTokenImpl extends LeafPsiElement implements PsiDocToken{
   public PsiDocTokenImpl(IElementType type, CharSequence text) {
@@ -33,7 +34,7 @@ public class PsiDocTokenImpl extends LeafPsiElement implements PsiDocToken{
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocToken(this);
     }

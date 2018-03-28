@@ -21,10 +21,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.DefaultDebugEnvironment;
@@ -40,24 +40,24 @@ import com.intellij.execution.ui.RunContentDescriptor;
 
 public abstract class JavaTestFrameworkDebuggerRunner extends GenericDebuggerRunner
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public abstract String getRunnerId();
 
-	protected abstract boolean validForProfile(@NotNull RunProfile profile);
+	protected abstract boolean validForProfile(@Nonnull RunProfile profile);
 
-	@NotNull
+	@Nonnull
 	protected abstract String getThreadName();
 
 	@Override
-	public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile)
+	public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile)
 	{
 		return DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && validForProfile(profile);
 	}
 
 	@Nullable
 	@Override
-	protected RunContentDescriptor createContentDescriptor(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment environment) throws ExecutionException
+	protected RunContentDescriptor createContentDescriptor(@Nonnull final RunProfileState state, @Nonnull final ExecutionEnvironment environment) throws ExecutionException
 	{
 		final RunContentDescriptor res = super.createContentDescriptor(state, environment);
 		final ServerSocket socket = ((JavaTestFrameworkRunnableState) state).getForkSocket();

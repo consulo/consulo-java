@@ -17,8 +17,8 @@ package com.intellij.debugger.engine.requests;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.openapi.diagnostic.Logger;
@@ -163,7 +163,7 @@ public class MethodReturnValueWatcher
 		return myLastExecutedMethod;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Value getLastMethodReturnValue()
 	{
 		return myLastMethodReturnValue;
@@ -249,7 +249,7 @@ public class MethodReturnValueWatcher
 		return myEntryRequest;
 	}
 
-	@NotNull
+	@Nonnull
 	private MethodExitRequest createExitRequest()
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread(); // to ensure EventRequestManager synchronization
@@ -261,7 +261,7 @@ public class MethodReturnValueWatcher
 		return myExitRequest;
 	}
 
-	@NotNull
+	@Nonnull
 	private <T extends EventRequest> T prepareRequest(T request)
 	{
 		request.setSuspendPolicy(JavaRegistry.DEBUGGER_WATCH_RETURN_SPEEDUP ? EventRequest.SUSPEND_EVENT_THREAD : EventRequest.SUSPEND_NONE);

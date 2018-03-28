@@ -1,8 +1,6 @@
-import org.jetbrains.annotations.Nullable;
-
 class Zoo2 {
 
-  void foo(@Nullable Object foo) {
+  void foo(@javax.annotation.Nullable Object foo) {
     if (foo == null) {
       return;
     }

@@ -20,8 +20,8 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
@@ -56,36 +56,36 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool
 	public boolean IGNORE_METHODS_OF_DEPRECATED = true;
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
 	{
 		return new DeprecationElementVisitor(holder, IGNORE_INSIDE_DEPRECATED, IGNORE_ABSTRACT_DEPRECATED_OVERRIDES, IGNORE_IMPORT_STATEMENTS,
 				IGNORE_METHODS_OF_DEPRECATED);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return DISPLAY_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return "";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getID()
 	{
@@ -340,7 +340,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool
 
 	public static void checkDeprecated(PsiElement refElement,
 			PsiElement elementToHighlight,
-			@Nullable TextRange rangeInElement,
+			@javax.annotation.Nullable TextRange rangeInElement,
 			boolean ignoreInsideDeprecated,
 			boolean ignoreImportStatements,
 			boolean ignoreMethodsOfDeprecated,

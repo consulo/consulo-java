@@ -17,8 +17,8 @@ package com.siyeh.ig.controlflow;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.CleanupLocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
@@ -49,14 +49,14 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		final EquivalenceChecker.Decision decision = (EquivalenceChecker.Decision) infos[1];
@@ -80,7 +80,7 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getName()
 		{
 			return InspectionGadgetsBundle.message(getEquivalenceDecision().getExactlyMatches() ? "conditional.expression.with.identical.branches.collapse.quickfix" : "conditional.expression.with" +
@@ -88,7 +88,7 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.collapse.quickfix.family");

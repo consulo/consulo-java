@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.instructions.CheckReturnValueInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.ConditionalGotoInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
@@ -87,9 +88,9 @@ class ContractChecker extends DataFlowRunner
 		return checker.getErrors();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected DfaInstructionState[] acceptInstruction(@NotNull InstructionVisitor visitor, @NotNull DfaInstructionState instructionState)
+	protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState)
 	{
 		DfaMemoryState memState = instructionState.getMemoryState();
 		if(memState.isEphemeral())

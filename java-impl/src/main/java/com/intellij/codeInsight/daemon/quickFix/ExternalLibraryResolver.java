@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ExternalLibraryDescriptor;
@@ -30,10 +30,10 @@ public abstract class ExternalLibraryResolver
 	public static final ExtensionPointName<ExternalLibraryResolver> EP_NAME = ExtensionPointName.create("consulo.java.codeInsight.externalLibraryResolver");
 
 	@Nullable
-	public abstract ExternalClassResolveResult resolveClass(@NotNull String shortClassName, @NotNull ThreeState isAnnotation, @NotNull Module contextModule);
+	public abstract ExternalClassResolveResult resolveClass(@Nonnull String shortClassName, @Nonnull ThreeState isAnnotation, @Nonnull Module contextModule);
 
-	@Nullable
-	public ExternalLibraryDescriptor resolvePackage(@NotNull String packageName)
+	@javax.annotation.Nullable
+	public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName)
 	{
 		return null;
 	}

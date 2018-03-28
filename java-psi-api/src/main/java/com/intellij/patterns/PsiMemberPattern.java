@@ -20,14 +20,13 @@ import com.intellij.psi.PsiMember;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class PsiMemberPattern<T extends PsiMember, Self extends PsiMemberPattern<T,Self>> extends PsiModifierListOwnerPattern<T,Self> {
-  public PsiMemberPattern(@NotNull final InitialPatternCondition<T> condition) {
+  public PsiMemberPattern(@Nonnull final InitialPatternCondition<T> condition) {
     super(condition);
   }
 
@@ -52,7 +51,7 @@ public class PsiMemberPattern<T extends PsiMember, Self extends PsiMemberPattern
 
     protected Capture() {
       super(new InitialPatternCondition<PsiMember>(PsiMember.class) {
-        public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
+        public boolean accepts(@javax.annotation.Nullable final Object o, final ProcessingContext context) {
           return o instanceof PsiMember;
         }
       });

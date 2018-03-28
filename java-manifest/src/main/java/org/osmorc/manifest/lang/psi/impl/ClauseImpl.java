@@ -25,10 +25,11 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Directive;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
@@ -38,7 +39,7 @@ import org.osmorc.manifest.lang.psi.stub.ClauseStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class ClauseImpl extends ManifestElementBase<ClauseStub> implements Clause {
-  public ClauseImpl(ClauseStub stub, @NotNull IStubElementType nodeType) {
+  public ClauseImpl(ClauseStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -51,14 +52,14 @@ public class ClauseImpl extends ManifestElementBase<ClauseStub> implements Claus
     return findChildByClass(HeaderValuePart.class);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Directive[] getDirectives() {
     return findChildrenByClass(Directive.class);
   }
 
   @Override
-  public Directive getDirectiveByName(@NotNull String name) {
+  public Directive getDirectiveByName(@Nonnull String name) {
     Directive childOfType = PsiTreeUtil.findChildOfType(this, Directive.class);
     while (childOfType != null) {
       if (name.equals(childOfType.getName())) {

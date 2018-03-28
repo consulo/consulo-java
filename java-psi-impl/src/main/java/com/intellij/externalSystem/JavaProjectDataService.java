@@ -18,8 +18,8 @@ package com.intellij.externalSystem;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import consulo.java.module.extension.JavaMutableModuleExtension;
 import com.intellij.openapi.externalSystem.model.DataNode;
 import com.intellij.openapi.externalSystem.model.Key;
@@ -43,7 +43,7 @@ import com.intellij.pom.java.LanguageLevel;
  */
 public class JavaProjectDataService implements ProjectDataService<JavaProjectData, Project>
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public Key<JavaProjectData> getTargetDataKey()
 	{
@@ -51,7 +51,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 	}
 
 	@Override
-	public void importData(@NotNull Collection<DataNode<JavaProjectData>> toImport, @NotNull final Project project, boolean synchronous)
+	public void importData(@Nonnull Collection<DataNode<JavaProjectData>> toImport, @Nonnull final Project project, boolean synchronous)
 	{
 		if(toImport.size() != 1)
 		{
@@ -96,8 +96,8 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 		});
 	}
 
-	@Nullable
-	private static Sdk findJdk(@NotNull JavaSdkVersion version)
+	@javax.annotation.Nullable
+	private static Sdk findJdk(@Nonnull JavaSdkVersion version)
 	{
 		JavaSdk javaSdk = JavaSdk.getInstance();
 		List<Sdk> javaSdks = SdkTable.getInstance().getSdksOfType(javaSdk);
@@ -118,7 +118,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 	}
 
 	@Override
-	public void removeData(@NotNull Collection<? extends Project> toRemove, @NotNull Project project, boolean synchronous)
+	public void removeData(@Nonnull Collection<? extends Project> toRemove, @Nonnull Project project, boolean synchronous)
 	{
 	}
 }

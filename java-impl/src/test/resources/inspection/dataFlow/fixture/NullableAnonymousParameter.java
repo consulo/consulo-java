@@ -1,8 +1,6 @@
-import org.jetbrains.annotations.Nullable;
-
 public class Bar {
 
-    void navigateTo(final@Nullable Object p) {
+    void navigateTo(final@javax.annotation.Nullable Object p) {
       if (p == null) {
         return;
       }

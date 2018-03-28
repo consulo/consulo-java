@@ -27,8 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
@@ -66,19 +66,19 @@ import consulo.ui.impl.ModalityPerProjectEAPDescriptor;
  */
 public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiReference> implements HintAction, HighPriorityAction
 {
-	@NotNull
+	@Nonnull
 	private final T myElement;
-	@NotNull
+	@Nonnull
 	private final R myRef;
 
-	protected ImportClassFixBase(@NotNull T elem, @NotNull R ref)
+	protected ImportClassFixBase(@Nonnull T elem, @Nonnull R ref)
 	{
 		myElement = elem;
 		myRef = ref;
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiFile file)
 	{
 		if(!myElement.isValid())
 		{
@@ -104,20 +104,20 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		return manager.isInProject(file) && !getClassesToImport(true).isEmpty();
 	}
 
-	@Nullable
-	protected abstract String getReferenceName(@NotNull R reference);
+	@javax.annotation.Nullable
+	protected abstract String getReferenceName(@Nonnull R reference);
 
-	protected abstract PsiElement getReferenceNameElement(@NotNull R reference);
+	protected abstract PsiElement getReferenceNameElement(@Nonnull R reference);
 
-	protected abstract boolean hasTypeParameters(@NotNull R reference);
+	protected abstract boolean hasTypeParameters(@Nonnull R reference);
 
-	@NotNull
+	@Nonnull
 	public List<PsiClass> getClassesToImport()
 	{
 		return getClassesToImport(false);
 	}
 
-	@NotNull
+	@Nonnull
 	public List<PsiClass> getClassesToImport(boolean acceptWrongNumberOfTypeParams)
 	{
 		if(myRef instanceof PsiJavaReference)
@@ -274,7 +274,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		return classList;
 	}
 
-	private void filterAlreadyImportedButUnresolved(@NotNull List<PsiClass> list)
+	private void filterAlreadyImportedButUnresolved(@Nonnull List<PsiClass> list)
 	{
 		PsiElement element = myRef.getElement();
 		PsiFile containingFile = element == null ? null : element.getContainingFile();
@@ -307,14 +307,14 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected String getRequiredMemberName(T reference)
 	{
 		return null;
 	}
 
-	@NotNull
-	protected List<PsiClass> filterByContext(@NotNull List<PsiClass> candidates, @NotNull T ref)
+	@Nonnull
+	protected List<PsiClass> filterByContext(@Nonnull List<PsiClass> candidates, @Nonnull T ref)
 	{
 		return candidates;
 	}
@@ -375,7 +375,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		POPUP_NOT_SHOWN
 	}
 
-	public Result doFix(@NotNull final Editor editor, boolean allowPopup, final boolean allowCaretNearRef)
+	public Result doFix(@Nonnull final Editor editor, boolean allowPopup, final boolean allowCaretNearRef)
 	{
 		List<PsiClass> classesToImport = getClassesToImport();
 		if(classesToImport.isEmpty())
@@ -434,7 +434,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		return Result.POPUP_NOT_SHOWN;
 	}
 
-	public static boolean isAddUnambiguousImportsOnTheFlyEnabled(@NotNull PsiFile psiFile)
+	public static boolean isAddUnambiguousImportsOnTheFlyEnabled(@Nonnull PsiFile psiFile)
 	{
 		return/* FileTypeUtils.isInServerPageFile(psiFile) ? CodeInsightSettings.getInstance().JSP_ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY :*/ CodeInsightSettings.getInstance()
 				.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
@@ -465,7 +465,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 	protected abstract boolean isQualified(R reference);
 
 	@Override
-	public boolean showHint(@NotNull final Editor editor)
+	public boolean showHint(@Nonnull final Editor editor)
 	{
 		if(isQualified(myRef))
 		{
@@ -476,14 +476,14 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		return JavaQuickFixBundle.message("import.class.fix");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("import.class.fix");
@@ -521,7 +521,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		}
 	}
 
-	private boolean isCaretNearRef(@NotNull Editor editor, @NotNull R ref)
+	private boolean isCaretNearRef(@Nonnull Editor editor, @Nonnull R ref)
 	{
 		PsiElement nameElement = getReferenceNameElement(ref);
 		if(nameElement == null)
@@ -535,7 +535,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file)
+	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file)
 	{
 		if(!FileModificationService.getInstance().prepareFileForWrite(file))
 		{

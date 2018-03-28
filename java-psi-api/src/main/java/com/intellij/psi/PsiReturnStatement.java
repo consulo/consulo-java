@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.util.ArrayFactory;
 
 /**
@@ -28,7 +28,7 @@ public interface PsiReturnStatement extends PsiStatement
 
 	public static ArrayFactory<PsiReturnStatement> ARRAY_FACTORY = new ArrayFactory<PsiReturnStatement>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiReturnStatement[] create(int count)
 		{
@@ -41,6 +41,6 @@ public interface PsiReturnStatement extends PsiStatement
 	 *
 	 * @return the return value expression, or null if the statement does not return any value.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiExpression getReturnValue();
 }

@@ -19,7 +19,6 @@ package com.intellij.util.descriptors;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author nik
@@ -40,8 +39,8 @@ public abstract class ConfigFileFactory {
 
   public abstract ConfigFileMetaDataRegistry createMetaDataRegistry();
 
-  @Nullable
-  public abstract VirtualFile createFile(@Nullable Project project, String url, ConfigFileVersion version, final boolean forceNew);
+  @javax.annotation.Nullable
+  public abstract VirtualFile createFile(@javax.annotation.Nullable Project project, String url, ConfigFileVersion version, final boolean forceNew);
 
   public abstract ConfigFileContainer createSingleFileContainer(Project project, ConfigFileMetaData metaData);
 }

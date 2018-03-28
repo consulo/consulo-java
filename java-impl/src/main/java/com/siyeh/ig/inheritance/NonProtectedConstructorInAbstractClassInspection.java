@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ChangeModifierFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,20 +37,20 @@ public class NonProtectedConstructorInAbstractClassInspection
   public boolean m_ignoreNonPublicClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.protected.constructor.in.abstract.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConstructorNotProtectedInAbstractClass";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.protected.constructor.in.abstract.class.problem.descriptor");
@@ -78,7 +78,7 @@ public class NonProtectedConstructorInAbstractClassInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (!method.isConstructor()) {
         return;

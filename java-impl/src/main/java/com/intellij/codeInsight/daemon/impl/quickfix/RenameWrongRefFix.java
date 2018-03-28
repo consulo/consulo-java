@@ -39,7 +39,7 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -59,19 +59,19 @@ public class RenameWrongRefFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("rename.wrong.reference.text");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("rename.wrong.reference.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myRefExpr.isValid() || !myRefExpr.getManager().isInProject(myRefExpr)) return false;
     int offset = editor.getCaretModel().getOffset();
     PsiElement refName = myRefExpr.getReferenceNameElement();
@@ -160,7 +160,7 @@ public class RenameWrongRefFix implements IntentionAction {
         }
 
         @Override
-        public boolean execute(@NotNull PsiElement element, ResolveState state) {
+        public boolean execute(@Nonnull PsiElement element, ResolveState state) {
           if (element instanceof PsiNamedElement
               && element instanceof PsiModifierListOwner
               && myFilterMethods == element instanceof PsiMethod) {
@@ -189,7 +189,7 @@ public class RenameWrongRefFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, final Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, final Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiReferenceExpression[] refs = CreateFromUsageUtils.collectExpressions(myRefExpr, PsiMember.class, PsiFile.class);
     PsiElement element = PsiTreeUtil.getParentOfType(myRefExpr, PsiMember.class, PsiFile.class);

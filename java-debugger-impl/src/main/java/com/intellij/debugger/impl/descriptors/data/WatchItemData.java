@@ -19,7 +19,6 @@ import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.ui.impl.watch.WatchItemDescriptor;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.Value;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -29,7 +28,7 @@ public final class WatchItemData extends DescriptorData<WatchItemDescriptor>{
   private final TextWithImports myText;
   private final Value myValue;
 
-  public WatchItemData(TextWithImports text, @Nullable Value value) {
+  public WatchItemData(TextWithImports text, @javax.annotation.Nullable Value value) {
     myText = text;
     myValue = value;
   }

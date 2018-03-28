@@ -19,9 +19,10 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiReferenceExpression;
-import org.jetbrains.annotations.NotNull;
 
 public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
   @Override
@@ -46,7 +47,7 @@ public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.constant.from.usage.family");
   }

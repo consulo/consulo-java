@@ -4,9 +4,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
@@ -177,7 +179,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
 		}
 	}
 
-	private static void reformatEnclosingExpressionListAtOffset(@NotNull PsiFile file, int offset)
+	private static void reformatEnclosingExpressionListAtOffset(@Nonnull PsiFile file, int offset)
 	{
 		final PsiElement elementAtOffset = PsiUtilCore.getElementAtOffset(file, offset);
 		PsiExpressionList listToReformat = getEnclosingExpressionList(elementAtOffset.getParent());
@@ -188,7 +190,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
 	}
 
 	@Nullable
-	private static PsiExpressionList getEnclosingExpressionList(@NotNull PsiElement element)
+	private static PsiExpressionList getEnclosingExpressionList(@Nonnull PsiElement element)
 	{
 		if(!(element instanceof PsiAnonymousClass))
 		{
@@ -240,7 +242,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
 		return true;
 	}
 
-	static boolean hasConstructorParameters(PsiClass psiClass, @NotNull PsiElement place)
+	static boolean hasConstructorParameters(PsiClass psiClass, @Nonnull PsiElement place)
 	{
 		final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(place.getProject()).getResolveHelper();
 		boolean hasParams = false;
@@ -259,7 +261,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
 		return hasParams;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static Runnable generateAnonymousBody(final Editor editor, final PsiFile file)
 	{
 		final Project project = file.getProject();
@@ -383,13 +385,13 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
 		return false;
 	}
 
-	private static void startTemplate(final PsiAnonymousClass aClass, final Editor editor, final Runnable runnable, @NotNull final PsiTypeElement[] parameters)
+	private static void startTemplate(final PsiAnonymousClass aClass, final Editor editor, final Runnable runnable, @Nonnull final PsiTypeElement[] parameters)
 	{
 		final Project project = aClass.getProject();
 		new WriteCommandAction(project, getCommandName(), getCommandName())
 		{
 			@Override
-			protected void run(@NotNull Result result) throws Throwable
+			protected void run(@Nonnull Result result) throws Throwable
 			{
 				PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
 				editor.getCaretModel().moveToOffset(aClass.getTextOffset());

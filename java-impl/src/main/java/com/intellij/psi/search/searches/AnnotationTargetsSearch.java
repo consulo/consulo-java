@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.search.searches;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiModifierListOwner;
@@ -23,7 +25,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.MergeQuery;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
@@ -51,13 +52,13 @@ public class AnnotationTargetsSearch {
 
   private AnnotationTargetsSearch() {}
 
-  public static Query<PsiModifierListOwner> search(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiModifierListOwner> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     final Query<PsiMember> members = AnnotatedMembersSearch.search(annotationClass, scope);
     final Query<PsiJavaPackage> packages = AnnotatedPackagesSearch.search(annotationClass, scope);
     return new MergeQuery<PsiModifierListOwner>(members, packages);
   }
 
-  public static Query<PsiModifierListOwner> search(@NotNull PsiClass annotationClass) {
+  public static Query<PsiModifierListOwner> search(@Nonnull PsiClass annotationClass) {
     return search(annotationClass, GlobalSearchScope.allScope(annotationClass.getProject()));
   }
 }

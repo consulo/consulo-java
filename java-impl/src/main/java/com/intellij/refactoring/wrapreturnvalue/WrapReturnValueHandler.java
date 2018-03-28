@@ -15,7 +15,8 @@
  */
 package com.intellij.refactoring.wrapreturnvalue;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -40,7 +41,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 class WrapReturnValueHandler implements RefactoringActionHandler {
     public static final String REFACTORING_NAME = RefactorJBundle.message("wrap.return.value");
 
-    public void invoke(@NotNull Project project,
+    public void invoke(@Nonnull Project project,
                        Editor editor,
                        PsiFile file,
                        DataContext dataContext){
@@ -78,8 +79,8 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
         return HelpID.WrapReturnValue;
     }
 
-    public void invoke(@NotNull Project project,
-                       @NotNull PsiElement[] elements,
+    public void invoke(@Nonnull Project project,
+                       @Nonnull PsiElement[] elements,
                        DataContext dataContext){
         if(elements.length != 1){
             return;

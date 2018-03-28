@@ -26,7 +26,7 @@ import com.intellij.refactoring.makeStatic.Settings;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author ven

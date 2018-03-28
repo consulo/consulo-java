@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.finalization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,17 +26,16 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class FinalizeNotProtectedInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "finalize.not.declared.protected.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "finalize.not.declared.protected.problem.descriptor");
@@ -50,7 +51,7 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
 
   private static class ProtectedFinalizeFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.protected.quickfix");
     }
@@ -71,7 +72,7 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       final String methodName = method.getName();
       if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {

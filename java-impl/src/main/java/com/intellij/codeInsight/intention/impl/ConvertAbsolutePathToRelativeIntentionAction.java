@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -39,7 +40,7 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		final int offset = editor.getCaretModel().getOffset();
 		final PsiElement element = file.findElementAt(offset);
@@ -64,14 +65,14 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return "Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute");
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		if(!FileModificationService.getInstance().prepareFileForWrite(file))
 		{
@@ -90,7 +91,7 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{

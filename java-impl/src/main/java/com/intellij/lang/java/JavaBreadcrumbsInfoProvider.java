@@ -20,8 +20,8 @@ import static com.intellij.openapi.util.text.StringUtil.isEmpty;
 import static com.intellij.openapi.util.text.StringUtil.notNullize;
 import static com.intellij.psi.PsiNameHelper.getShortClassName;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.*;
@@ -36,7 +36,7 @@ import com.intellij.usageView.UsageViewShortNameLocation;
  */
 public class JavaBreadcrumbsInfoProvider implements BreadcrumbsProvider
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public Language getLanguage()
 	{
@@ -44,14 +44,14 @@ public class JavaBreadcrumbsInfoProvider implements BreadcrumbsProvider
 	}
 
 	@Override
-	public boolean acceptElement(@NotNull PsiElement e)
+	public boolean acceptElement(@Nonnull PsiElement e)
 	{
 		return e instanceof PsiMember || e instanceof PsiLambdaExpression;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public String getElementInfo(@NotNull PsiElement e)
+	public String getElementInfo(@Nonnull PsiElement e)
 	{
 		if(e instanceof PsiLambdaExpression)
 		{
@@ -67,9 +67,9 @@ public class JavaBreadcrumbsInfoProvider implements BreadcrumbsProvider
 		return suffix != null ? description + suffix : description;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public String getElementTooltip(@NotNull PsiElement e)
+	public String getElementTooltip(@Nonnull PsiElement e)
 	{
 		if(e instanceof PsiLambdaExpression)
 		{
@@ -82,7 +82,7 @@ public class JavaBreadcrumbsInfoProvider implements BreadcrumbsProvider
 		return ElementDescriptionUtil.getElementDescription(e, RefactoringDescriptionLocation.WITH_PARENT);
 	}
 
-	@NotNull
+	@Nonnull
 	private static String getMethodPresentableText(PsiMethod e)
 	{
 		boolean isDumb = DumbService.isDumb(e.getProject());
@@ -97,8 +97,8 @@ public class JavaBreadcrumbsInfoProvider implements BreadcrumbsProvider
 		return sb.toString();
 	}
 
-	@NotNull
-	private static String getLambdaDescription(@NotNull PsiLambdaExpression e)
+	@Nonnull
+	private static String getLambdaDescription(@Nonnull PsiLambdaExpression e)
 	{
 		boolean isDumb = DumbService.isDumb(e.getProject());
 		StringBuilder sb = new StringBuilder("lambda");
@@ -111,7 +111,7 @@ public class JavaBreadcrumbsInfoProvider implements BreadcrumbsProvider
 		return sb.toString();
 	}
 
-	private static void appendParameters(@NotNull PsiParameterListOwner e, StringBuilder sb, boolean skipIfEmpty, boolean isDumb)
+	private static void appendParameters(@Nonnull PsiParameterListOwner e, StringBuilder sb, boolean skipIfEmpty, boolean isDumb)
 	{
 		PsiParameter[] parameters = e.getParameterList().getParameters();
 		if(parameters.length == 0 && skipIfEmpty)
@@ -145,7 +145,7 @@ public class JavaBreadcrumbsInfoProvider implements BreadcrumbsProvider
 		sb.append(")");
 	}
 
-	@NotNull
+	@Nonnull
 	private static String getTypeText(@Nullable PsiType type, boolean isDumb)
 	{
 		// todo PsiTypeVisitor ?

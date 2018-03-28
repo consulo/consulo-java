@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.j2me;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,24 +28,22 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SingleCharacterStartsWithInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "single.character.startswith.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "single.character.startswith.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new SingleCharacterStartsWithFix();
   }
@@ -51,7 +51,7 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
   private static class SingleCharacterStartsWithFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "single.character.startswith.quickfix");
@@ -102,7 +102,7 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiReferenceExpression methodExpression =
         call.getMethodExpression();

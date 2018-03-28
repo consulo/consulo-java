@@ -15,11 +15,12 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -48,14 +49,14 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   public boolean m_ignoreIgnoreParameter = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "empty.catch.block.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.catch.block.problem.descriptor");
@@ -88,7 +89,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
 
   private static class EmptyCatchBlockFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "rename.catch.parameter.to.ignored");
@@ -127,7 +128,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   private class EmptyCatchBlockVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@NotNull PsiTryStatement statement) {
+    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
     /*  if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

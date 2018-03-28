@@ -15,8 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -27,11 +31,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
+import consulo.java.JavaQuickFixBundle;
 
 public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
@@ -42,23 +42,23 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
     myName = parameter.getName();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("remove.unused.parameter.text", myName);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.unused.parameter.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     final PsiParameter myParameter = (PsiParameter)startElement;
     return
       myParameter.isValid()
@@ -67,11 +67,11 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiParameter myParameter = (PsiParameter)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) return;
     removeReferences(myParameter);

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.search.searches;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.QueryExecutor;
 
@@ -30,6 +30,6 @@ public interface ScopedQueryExecutor<Result, Param> extends QueryExecutor<Result
 	/**
 	 * Returns the scope handled by this executor.
 	 */
-	@NotNull
+	@Nonnull
 	GlobalSearchScope getScope(Param param);
 }

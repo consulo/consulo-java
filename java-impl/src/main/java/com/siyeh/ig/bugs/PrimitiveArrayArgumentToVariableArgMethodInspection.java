@@ -15,24 +15,25 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("primitive.array.argument.to.var.arg.method.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("primitive.array.argument.to.var.arg.method.problem.descriptor");
   }
@@ -50,7 +51,7 @@ public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseIns
   private static class PrimitiveArrayArgumentToVariableArgVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       if (!PsiUtil.isLanguageLevel5OrHigher(call)) {
         return;

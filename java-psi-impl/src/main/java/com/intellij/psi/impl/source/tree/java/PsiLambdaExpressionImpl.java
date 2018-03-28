@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source.tree.java;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
@@ -42,37 +42,37 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
 {
 	private static final ControlFlowPolicy ourPolicy = new ControlFlowPolicy()
 	{
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
-		public PsiVariable getUsedVariable(@NotNull PsiReferenceExpression refExpr)
+		public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr)
 		{
 			return null;
 		}
 
 		@Override
-		public boolean isParameterAccepted(@NotNull PsiParameter psiParameter)
+		public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter)
 		{
 			return true;
 		}
 
 		@Override
-		public boolean isLocalVariableAccepted(@NotNull PsiLocalVariable psiVariable)
+		public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable)
 		{
 			return true;
 		}
 	};
 
-	public PsiLambdaExpressionImpl(@NotNull FunctionalExpressionStub<PsiLambdaExpression> stub)
+	public PsiLambdaExpressionImpl(@Nonnull FunctionalExpressionStub<PsiLambdaExpression> stub)
 	{
 		super(stub, JavaStubElementTypes.LAMBDA_EXPRESSION);
 	}
 
-	public PsiLambdaExpressionImpl(@NotNull ASTNode node)
+	public PsiLambdaExpressionImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiParameterList getParameterList()
 	{
@@ -87,7 +87,7 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiType getFunctionalInterfaceType()
 	{
@@ -165,7 +165,7 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
 	}
 
 	@Override
-	public void accept(@NotNull final PsiElementVisitor visitor)
+	public void accept(@Nonnull final PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -178,7 +178,7 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull final PsiScopeProcessor processor, @NotNull final ResolveState state, final PsiElement lastParent, @NotNull final PsiElement place)
+	public boolean processDeclarations(@Nonnull final PsiScopeProcessor processor, @Nonnull final ResolveState state, final PsiElement lastParent, @Nonnull final PsiElement place)
 	{
 		return PsiImplUtil.processDeclarationsInLambda(this, processor, state, lastParent, place);
 	}

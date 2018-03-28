@@ -15,13 +15,21 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.PsiWildcardType;
 
 /**
 * User: anna
@@ -37,23 +45,23 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
     myBoxedTypeName = boxedTypeName;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Convert '" + myPrimitiveName + "' to '" + myBoxedTypeName + "'";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     if (startElement instanceof PsiTypeElement) {
       PsiType type = ((PsiTypeElement)startElement).getType();
       if (type instanceof PsiWildcardType) {
@@ -67,11 +75,11 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiType type = ((PsiTypeElement)startElement).getType();
     PsiType boxedType;
     if (type instanceof PsiPrimitiveType) {

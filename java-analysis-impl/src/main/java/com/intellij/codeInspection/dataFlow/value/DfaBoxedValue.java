@@ -18,8 +18,8 @@ package com.intellij.codeInspection.dataFlow.value;
 import java.util.Map;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 
@@ -64,7 +64,7 @@ public class DfaBoxedValue extends DfaValue {
 
     private final Map<DfaVariableValue, DfaUnboxedValue> cachedUnboxedValues = ContainerUtil.newTroveMap();
 
-    @NotNull
+    @Nonnull
     public DfaValue createUnboxed(DfaValue value) {
       if (value instanceof DfaBoxedValue) {
         return ((DfaBoxedValue)value).getWrappedValue();

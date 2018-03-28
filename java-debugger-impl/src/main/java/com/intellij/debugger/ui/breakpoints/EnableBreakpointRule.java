@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev
@@ -27,11 +27,11 @@ public class EnableBreakpointRule {
   private final Breakpoint myMasterBreakpoint;
   private final Breakpoint mySlaveBreakpoint;
 
-  public EnableBreakpointRule(@NotNull BreakpointManager manager, @NotNull Breakpoint masterBreakpoint, @NotNull Breakpoint slaveBreakpoint) {
+  public EnableBreakpointRule(@Nonnull BreakpointManager manager, @Nonnull Breakpoint masterBreakpoint, @Nonnull Breakpoint slaveBreakpoint) {
     this(manager,masterBreakpoint, slaveBreakpoint, false);
   }
 
-  public EnableBreakpointRule(@NotNull BreakpointManager manager, @NotNull Breakpoint masterBreakpoint, @NotNull Breakpoint slaveBreakpoint, boolean leaveEnabled) {
+  public EnableBreakpointRule(@Nonnull BreakpointManager manager, @Nonnull Breakpoint masterBreakpoint, @Nonnull Breakpoint slaveBreakpoint, boolean leaveEnabled) {
     myMasterBreakpoint = masterBreakpoint;
     mySlaveBreakpoint = slaveBreakpoint;
     myManager = manager;

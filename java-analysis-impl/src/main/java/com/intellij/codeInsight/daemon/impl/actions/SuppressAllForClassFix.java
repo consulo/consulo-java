@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.JavaSuppressionUtil;
@@ -26,8 +28,6 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * User: anna
@@ -41,7 +41,7 @@ public class SuppressAllForClassFix extends SuppressFix {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiDocCommentOwner getContainer(final PsiElement element) {
     PsiDocCommentOwner container = super.getContainer(element);
     if (container == null) {
@@ -58,13 +58,13 @@ public class SuppressAllForClassFix extends SuppressFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return InspectionsBundle.message("suppress.all.for.class");
   }
 
   @Override
-  public void invoke(@NotNull final Project project, @NotNull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiDocCommentOwner container = getContainer(element);
     LOG.assertTrue(container != null);
     if (!FileModificationService.getInstance().preparePsiElementForWrite(container)) return;

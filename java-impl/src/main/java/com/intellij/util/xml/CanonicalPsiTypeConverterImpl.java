@@ -15,8 +15,9 @@
  */
 package com.intellij.util.xml;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.completion.scope.JavaCompletionProcessor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulator;
@@ -60,7 +61,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
     return t == null? null:t.getCanonicalText();
   }
 
-  @NotNull
+  @Nonnull
   public PsiReference[] createReferences(final GenericDomValue<PsiType> genericDomValue, final PsiElement element, ConvertContext context) {
     final String str = genericDomValue.getStringValue();
     if (str == null) {
@@ -86,7 +87,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
             return true;
           }
 
-          @NotNull
+          @Nonnull
           public JavaResolveResult advancedResolve(final boolean incompleteCode) {
             PsiType type = genericDomValue.getValue();
             if (type != null) {
@@ -107,7 +108,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
             }
           }
 
-          @NotNull
+          @Nonnull
           public Object[] getVariants() {
             final Object[] variants = super.getVariants();
             if (myIndex == 0) {

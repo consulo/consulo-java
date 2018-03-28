@@ -21,9 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -53,19 +53,19 @@ public class TooBroadThrowsInspection extends BaseInspection {
   public boolean ignoreThrown = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyBroadThrowsClause";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overly.broad.throws.clause.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final List<SmartTypePointer> typesMasked = (List<SmartTypePointer>)infos[0];
     final PsiType type = typesMasked.get(0).getType();
@@ -100,7 +100,7 @@ public class TooBroadThrowsInspection extends BaseInspection {
     return panel;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final Collection<SmartTypePointer> maskedExceptions = (Collection<SmartTypePointer>)infos[0];
@@ -119,7 +119,7 @@ public class TooBroadThrowsInspection extends BaseInspection {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       if (originalNeeded) {
         return InspectionGadgetsBundle.message("overly.broad.throws.clause.quickfix1");

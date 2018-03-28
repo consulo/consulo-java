@@ -15,23 +15,25 @@
  */
 package com.siyeh.ig.abstraction;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class ClassReferencesSubclassInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.references.subclass.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String containingClassName = element.getName();
@@ -54,34 +56,34 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       final PsiTypeElement typeElement = variable.getTypeElement();
       checkTypeElement(typeElement);
     }
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiTypeElement typeElement = method.getReturnTypeElement();
       checkTypeElement(typeElement);
     }
 
     @Override
     public void visitInstanceOfExpression(
-      @NotNull PsiInstanceOfExpression expression) {
+      @Nonnull PsiInstanceOfExpression expression) {
       final PsiTypeElement typeElement = expression.getCheckType();
       checkTypeElement(typeElement);
     }
 
     @Override
     public void visitTypeCastExpression(
-      @NotNull PsiTypeCastExpression expression) {
+      @Nonnull PsiTypeCastExpression expression) {
       final PsiTypeElement typeElement = expression.getCastType();
       checkTypeElement(typeElement);
     }
 
     @Override
     public void visitClassObjectAccessExpression(
-      @NotNull PsiClassObjectAccessExpression expression) {
+      @Nonnull PsiClassObjectAccessExpression expression) {
       final PsiTypeElement typeElement = expression.getOperand();
       checkTypeElement(typeElement);
     }

@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.xdebugger.frame.XValueMarkerProvider;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
@@ -31,14 +32,14 @@ public class JavaValueMarker extends XValueMarkerProvider<JavaValue, Long>
 	}
 
 	@Override
-	public boolean canMark(@NotNull JavaValue value)
+	public boolean canMark(@Nonnull JavaValue value)
 	{
 		Value obj = value.getDescriptor().getValue();
 		return obj instanceof ObjectReference;
 	}
 
 	@Override
-	public Long getMarker(@NotNull JavaValue value)
+	public Long getMarker(@Nonnull JavaValue value)
 	{
 		Value obj = value.getDescriptor().getValue();
 		if(obj instanceof ObjectReference)

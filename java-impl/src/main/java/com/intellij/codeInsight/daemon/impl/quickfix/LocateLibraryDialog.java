@@ -23,13 +23,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ApplicationNamesInfo;
@@ -56,7 +57,7 @@ public class LocateLibraryDialog extends DialogWrapper
 	private final Project myProject;
 	private List<String> myResultingLibraryPaths;
 
-	public LocateLibraryDialog(@NotNull Module module, @NotNull List<String> defaultLibraryPaths, @NotNull @NonNls final String presentableName)
+	public LocateLibraryDialog(@Nonnull Module module, @Nonnull List<String> defaultLibraryPaths, @Nonnull @NonNls final String presentableName)
 	{
 		super(module.getProject(), true);
 		myDefaultLibraryPaths = defaultLibraryPaths;
@@ -94,7 +95,7 @@ public class LocateLibraryDialog extends DialogWrapper
 		init();
 	}
 
-	@NotNull
+	@Nonnull
 	public List<String> showAndGetResult()
 	{
 		if(ApplicationManager.getApplication().isHeadlessEnvironment())

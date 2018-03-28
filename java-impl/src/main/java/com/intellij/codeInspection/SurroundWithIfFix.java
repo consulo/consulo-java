@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.surroundWith.JavaWithIfSurrounder;
 import com.intellij.openapi.diagnostic.Logger;
@@ -28,7 +30,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
@@ -38,17 +39,17 @@ public class SurroundWithIfFix implements LocalQuickFix {
   private final String myText;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionsBundle.message("inspection.surround.if.quickfix", myText);
   }
 
-  public SurroundWithIfFix(@NotNull PsiExpression expressionToAssert) {
+  public SurroundWithIfFix(@Nonnull PsiExpression expressionToAssert) {
     myText = expressionToAssert.getText();
   }
 
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     PsiStatement anchorStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
     LOG.assertTrue(anchorStatement != null);
@@ -79,7 +80,7 @@ public class SurroundWithIfFix implements LocalQuickFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return InspectionsBundle.message("inspection.surround.if.family");
   }

@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
@@ -25,12 +26,12 @@ public class CloneUtils {
 
   private CloneUtils() {}
 
-  public static boolean isCloneable(@NotNull PsiClass aClass) {
+  public static boolean isCloneable(@Nonnull PsiClass aClass) {
     return InheritanceUtil.isInheritor(aClass,
                                        CommonClassNames.JAVA_LANG_CLONEABLE);
   }
 
-  public static boolean isDirectlyCloneable(@NotNull PsiClass aClass) {
+  public static boolean isDirectlyCloneable(@Nonnull PsiClass aClass) {
     final PsiClass[] interfaces = aClass.getInterfaces();
     for (PsiClass anInterface : interfaces) {
       if (anInterface == null) {
@@ -44,7 +45,7 @@ public class CloneUtils {
     return false;
   }
 
-  public static boolean isClone(@NotNull PsiMethod method) {
+  public static boolean isClone(@Nonnull PsiMethod method) {
     final PsiClassType javaLangObject;
     if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
       javaLangObject = TypeUtils.getObjectType(method);
@@ -58,7 +59,7 @@ public class CloneUtils {
   }
 
   public static boolean onlyThrowsCloneNotSupportedException(
-    @NotNull PsiMethod method) {
+    @Nonnull PsiMethod method) {
     final PsiCodeBlock body = method.getBody();
     if (body == null) {
       return false;

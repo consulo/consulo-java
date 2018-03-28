@@ -30,7 +30,7 @@ import com.siyeh.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,19 +70,19 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ResultOfMethodCallIgnored";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("result.of.method.call.ignored.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass containingClass = (PsiClass)infos[0];
     final String className = containingClass.getName();
@@ -90,13 +90,13 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@NotNull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(callCheckString, classNames, methodNamePatterns);
   }
 
   @Override
-  public void writeSettings(@NotNull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     callCheckString = formatString(classNames, methodNamePatterns);
     super.writeSettings(element);
   }
@@ -128,7 +128,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   private class IgnoreResultOfCallVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitExpressionStatement(@NotNull PsiExpressionStatement statement) {
+    public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
       super.visitExpressionStatement(statement);
       final PsiExpression expression = statement.getExpression();
       if (!(expression instanceof PsiMethodCallExpression)) {

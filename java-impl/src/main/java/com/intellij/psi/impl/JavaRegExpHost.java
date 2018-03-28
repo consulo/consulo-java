@@ -17,6 +17,8 @@ package com.intellij.psi.impl;
 
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.regexp.AsciiUtil;
 import org.intellij.lang.regexp.DefaultRegExpPropertiesProvider;
 import org.intellij.lang.regexp.RegExpLanguageHost;
@@ -27,8 +29,6 @@ import org.intellij.lang.regexp.psi.RegExpGroup;
 import org.intellij.lang.regexp.psi.RegExpNamedCharacter;
 import org.intellij.lang.regexp.psi.RegExpNamedGroupRef;
 import org.intellij.lang.regexp.psi.RegExpSimpleClass;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -350,7 +350,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 	}
 
 	@Override
-	public boolean isValidGroupName(String name, @NotNull PsiElement context)
+	public boolean isValidGroupName(String name, @Nonnull PsiElement context)
 	{
 		for(int i = 0, length = name.length(); i < length; i++)
 		{
@@ -425,7 +425,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 		return getJavaVersion(element).isAtLeast(version);
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	private static JavaSdkVersion getJavaVersion(PsiElement element)
 	{
@@ -446,7 +446,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 	}
 
 	@Override
-	public boolean isValidCategory(@NotNull String category)
+	public boolean isValidCategory(@Nonnull String category)
 	{
 		if(category.startsWith("In"))
 		{
@@ -496,7 +496,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 		return isValidProperty(category);
 	}
 
-	private boolean isValidProperty(@NotNull String category)
+	private boolean isValidProperty(@Nonnull String category)
 	{
 		for(String[] name : myPropertyNames)
 		{
@@ -508,7 +508,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 		return false;
 	}
 
-	private boolean isValidUnicodeBlock(@NotNull String category)
+	private boolean isValidUnicodeBlock(@Nonnull String category)
 	{
 		try
 		{
@@ -520,7 +520,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 		}
 	}
 
-	private boolean isValidUnicodeScript(@NotNull String category)
+	private boolean isValidUnicodeScript(@Nonnull String category)
 	{
 		try
 		{
@@ -538,16 +538,16 @@ public class JavaRegExpHost implements RegExpLanguageHost
 		return UnicodeCharacterNames.getCodePoint(namedCharacter.getName()) >= 0;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String[][] getAllKnownProperties()
 	{
 		return myPropertyNames;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public String getPropertyDescription(@Nullable String name)
+	public String getPropertyDescription(@javax.annotation.Nullable String name)
 	{
 		if(StringUtil.isEmptyOrSpaces(name))
 		{
@@ -563,7 +563,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String[][] getKnownCharacterClasses()
 	{

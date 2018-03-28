@@ -17,8 +17,8 @@ package com.intellij.psi.impl.search;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.find.findUsages.FindUsagesOptions;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
@@ -64,7 +64,7 @@ public class ThrowSearchUtil {
    * @param root
    * @return true, if we should continue processing
    */
-  private static boolean processExn(@NotNull PsiParameter aCatch, @NotNull Processor<UsageInfo> processor, @NotNull Root root) {
+  private static boolean processExn(@Nonnull PsiParameter aCatch, @Nonnull Processor<UsageInfo> processor, @Nonnull Root root) {
     final PsiType type = aCatch.getType();
     if (type.isAssignableFrom(root.myType)) {
       processor.process(new UsageInfo(aCatch));
@@ -77,11 +77,11 @@ public class ThrowSearchUtil {
     return true;
   }
 
-  private static boolean scanCatches(@NotNull PsiElement elem,
-                                     @NotNull Processor<UsageInfo> processor,
-                                     @NotNull Root root,
-                                     @NotNull FindUsagesOptions options,
-                                     @NotNull Set<PsiMethod> processed) {
+  private static boolean scanCatches(@Nonnull PsiElement elem,
+                                     @Nonnull Processor<UsageInfo> processor,
+                                     @Nonnull Root root,
+                                     @Nonnull FindUsagesOptions options,
+                                     @Nonnull Set<PsiMethod> processed) {
     while (elem != null) {
       final PsiElement parent = elem.getParent();
       if (elem instanceof PsiMethod) {
@@ -117,7 +117,7 @@ public class ThrowSearchUtil {
     return true;
   }
 
-  public static boolean addThrowUsages(@NotNull Processor<UsageInfo> processor, @NotNull Root root, @NotNull FindUsagesOptions options) {
+  public static boolean addThrowUsages(@Nonnull Processor<UsageInfo> processor, @Nonnull Root root, @Nonnull FindUsagesOptions options) {
     Set<PsiMethod> processed = new HashSet<PsiMethod>();
     return scanCatches(root.myElement, processor, root, options, processed);
   }

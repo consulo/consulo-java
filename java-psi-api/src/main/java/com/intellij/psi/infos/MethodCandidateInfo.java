@@ -17,9 +17,11 @@ package com.intellij.psi.infos;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
@@ -54,7 +56,7 @@ public class MethodCandidateInfo extends CandidateInfo
 	private volatile String myInferenceError;
 	private final LanguageLevel myLanguageLevel;
 
-	public MethodCandidateInfo(@NotNull PsiElement candidate,
+	public MethodCandidateInfo(@Nonnull PsiElement candidate,
 			PsiSubstitutor substitutor,
 			boolean accessProblem,
 			boolean staticsProblem,
@@ -66,15 +68,15 @@ public class MethodCandidateInfo extends CandidateInfo
 		this(candidate, substitutor, accessProblem, staticsProblem, argumentList, currFileContext, argumentTypes, typeArguments, PsiUtil.getLanguageLevel(argumentList));
 	}
 
-	public MethodCandidateInfo(@NotNull PsiElement candidate,
-			@NotNull PsiSubstitutor substitutor,
+	public MethodCandidateInfo(@Nonnull PsiElement candidate,
+			@Nonnull PsiSubstitutor substitutor,
 			boolean accessProblem,
 			boolean staticsProblem,
 			PsiElement argumentList,
 			PsiElement currFileContext,
 			@Nullable PsiType[] argumentTypes,
 			PsiType[] typeArguments,
-			@NotNull LanguageLevel languageLevel)
+			@Nonnull LanguageLevel languageLevel)
 	{
 		super(candidate, substitutor, accessProblem, staticsProblem, currFileContext);
 		myArgumentList = argumentList;
@@ -331,7 +333,7 @@ public class MethodCandidateInfo extends CandidateInfo
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiSubstitutor getSiteSubstitutor()
 	{
 		PsiSubstitutor incompleteSubstitutor = super.getSubstitutor();
@@ -347,14 +349,14 @@ public class MethodCandidateInfo extends CandidateInfo
 		return incompleteSubstitutor;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiSubstitutor getSubstitutor()
 	{
 		return getSubstitutor(true);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiSubstitutor getSubstitutor(boolean includeReturnConstraint)
 	{
 		PsiSubstitutor substitutor = myCalcedSubstitutor;
@@ -424,20 +426,20 @@ public class MethodCandidateInfo extends CandidateInfo
 		return super.isValidResult() && isApplicable();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiMethod getElement()
 	{
 		return (PsiMethod) super.getElement();
 	}
 
-	@NotNull
-	public PsiSubstitutor inferTypeArguments(@NotNull ParameterTypeInferencePolicy policy, boolean includeReturnConstraint)
+	@Nonnull
+	public PsiSubstitutor inferTypeArguments(@Nonnull ParameterTypeInferencePolicy policy, boolean includeReturnConstraint)
 	{
 		return inferTypeArguments(policy, myArgumentList instanceof PsiExpressionList ? ((PsiExpressionList) myArgumentList).getExpressions() : PsiExpression.EMPTY_ARRAY, includeReturnConstraint);
 	}
 
-	public PsiSubstitutor inferSubstitutorFromArgs(@NotNull ParameterTypeInferencePolicy policy, final PsiExpression[] arguments)
+	public PsiSubstitutor inferSubstitutorFromArgs(@Nonnull ParameterTypeInferencePolicy policy, final PsiExpression[] arguments)
 	{
 		if(myTypeArguments == null)
 		{
@@ -452,8 +454,8 @@ public class MethodCandidateInfo extends CandidateInfo
 	/**
 	 * If iterated through all candidates, should be called under {@link #ourOverloadGuard} guard so results won't be cached on the top level call
 	 */
-	@NotNull
-	public PsiSubstitutor inferTypeArguments(@NotNull final ParameterTypeInferencePolicy policy, @NotNull final PsiExpression[] arguments, boolean includeReturnConstraint)
+	@Nonnull
+	public PsiSubstitutor inferTypeArguments(@Nonnull final ParameterTypeInferencePolicy policy, @Nonnull final PsiExpression[] arguments, boolean includeReturnConstraint)
 	{
 		return computeForOverloadedCandidate(() ->
 		{
@@ -516,7 +518,7 @@ public class MethodCandidateInfo extends CandidateInfo
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiType[] getArgumentTypes()
 	{
 		return myArgumentTypes;

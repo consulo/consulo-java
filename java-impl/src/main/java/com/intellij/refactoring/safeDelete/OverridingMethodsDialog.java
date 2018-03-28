@@ -30,7 +30,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
@@ -106,7 +106,7 @@ class OverridingMethodsDialog extends DialogWrapper
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected Action[] createActions()
 	{
 		return new Action[]{

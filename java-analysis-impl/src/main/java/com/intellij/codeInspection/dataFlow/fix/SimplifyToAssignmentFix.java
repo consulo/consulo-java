@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection.dataFlow.fix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -32,14 +32,14 @@ import com.intellij.psi.util.PsiTreeUtil;
  */
 public class SimplifyToAssignmentFix implements LocalQuickFix
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
 		return InspectionsBundle.message("inspection.data.flow.simplify.to.assignment.quickfix.name");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -47,7 +47,7 @@ public class SimplifyToAssignmentFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 		if(psiElement == null)

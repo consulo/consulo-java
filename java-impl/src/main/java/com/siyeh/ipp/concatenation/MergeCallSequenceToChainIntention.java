@@ -15,26 +15,27 @@
  */
 package com.siyeh.ipp.concatenation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Bas Leijdekkers
  */
 public class MergeCallSequenceToChainIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new CallSequencePredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiExpressionStatement)) {
       return;
     }

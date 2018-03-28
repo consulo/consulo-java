@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
@@ -33,7 +33,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 public class JavaSimpleGetterProvider implements SimplePropertyGetterProvider
 {
 	@Override
-	public boolean isInsideSimpleGetter(@NotNull PsiElement element)
+	public boolean isInsideSimpleGetter(@Nonnull PsiElement element)
 	{
 		PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
 		if(method == null)

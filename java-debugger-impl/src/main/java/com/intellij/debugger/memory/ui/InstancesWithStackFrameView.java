@@ -19,11 +19,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.memory.component.InstancesTracker;
 import com.intellij.debugger.memory.component.MemoryViewDebugProcessData;
@@ -53,7 +53,7 @@ class InstancesWithStackFrameView
 	private final JBSplitter mySplitter = new JBSplitter(false, DEFAULT_SPLITTER_PROPORTION);
 	private boolean myIsHided = false;
 
-	InstancesWithStackFrameView(@NotNull XDebugSession debugSession, @NotNull InstancesTree tree, @NotNull StackFrameList list, @NotNull String className)
+	InstancesWithStackFrameView(@Nonnull XDebugSession debugSession, @Nonnull InstancesTree tree, @Nonnull StackFrameList list, @Nonnull String className)
 	{
 		mySplitter.setFirstComponent(new JBScrollPane(tree));
 
@@ -94,7 +94,7 @@ class InstancesWithStackFrameView
 			tracker.addTrackerListener(new InstancesTrackerListener()
 			{
 				@Override
-				public void classChanged(@NotNull String name, @NotNull TrackingType type)
+				public void classChanged(@Nonnull String name, @Nonnull TrackingType type)
 				{
 					if(Objects.equals(className, name) && type == TrackingType.CREATION)
 					{
@@ -103,7 +103,7 @@ class InstancesWithStackFrameView
 				}
 
 				@Override
-				public void classRemoved(@NotNull String name)
+				public void classRemoved(@Nonnull String name)
 				{
 					if(Objects.equals(name, className))
 					{
@@ -150,7 +150,7 @@ class InstancesWithStackFrameView
 		return mySplitter;
 	}
 
-	private static boolean isArrayType(@NotNull String className)
+	private static boolean isArrayType(@Nonnull String className)
 	{
 		return className.contains("[]");
 	}

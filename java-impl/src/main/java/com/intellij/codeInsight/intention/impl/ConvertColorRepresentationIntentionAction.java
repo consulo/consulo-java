@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.openapi.editor.Editor;
@@ -23,8 +25,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class ConvertColorRepresentationIntentionAction extends BaseColorIntentionAction {
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!super.isAvailable(project, editor, element)) {
       return false;
     }
@@ -64,7 +66,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 
     final PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false);
@@ -96,9 +98,9 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  private static PsiExpressionList createNewArguments(@NotNull PsiElementFactory factory,
-                                                      @NotNull PsiParameter[] parameters,
-                                                      @NotNull PsiExpression[] arguments) {
+  private static PsiExpressionList createNewArguments(@Nonnull PsiElementFactory factory,
+                                                      @Nonnull PsiParameter[] parameters,
+                                                      @Nonnull PsiExpression[] arguments) {
     final String[] newValues = createArguments(parameters, arguments);
     if (newValues == null) {
       return null;
@@ -115,8 +117,8 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  private static String[] createArguments(@NotNull PsiParameter[] parameters,
-                                          @NotNull PsiExpression[] arguments) {
+  private static String[] createArguments(@Nonnull PsiParameter[] parameters,
+                                          @Nonnull PsiExpression[] arguments) {
     if (parameters.length != arguments.length) {
       return null;
     }
@@ -136,13 +138,13 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  private static String[] createArguments(@NotNull PsiExpression rgbExpression) {
+  private static String[] createArguments(@Nonnull PsiExpression rgbExpression) {
     return createArguments(rgbExpression, 3);
   }
 
   @Nullable
-  private static String[] createArguments(@NotNull PsiExpression rgbExpression,
-                                          @NotNull PsiExpression hasAlphaExpression) {
+  private static String[] createArguments(@Nonnull PsiExpression rgbExpression,
+                                          @Nonnull PsiExpression hasAlphaExpression) {
     final Boolean hasAlpha = computeBoolean(hasAlphaExpression);
     if (hasAlpha == null) {
       return null;
@@ -151,18 +153,18 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  private static String[] createArguments(@NotNull PsiExpression rExpression,
-                                          @NotNull PsiExpression gExpression,
-                                          @NotNull PsiExpression bExpression) {
+  private static String[] createArguments(@Nonnull PsiExpression rExpression,
+                                          @Nonnull PsiExpression gExpression,
+                                          @Nonnull PsiExpression bExpression) {
     final Integer value = createInt(computeInteger(rExpression), computeInteger(gExpression), computeInteger(bExpression));
     return value != null ? new String[]{"0x" + Integer.toHexString(value)} : null;
   }
 
   @Nullable
-  private static String[] createArguments(@NotNull PsiExpression rExpression,
-                                          @NotNull PsiExpression gExpression,
-                                          @NotNull PsiExpression bExpression,
-                                          @NotNull PsiExpression aExpression) {
+  private static String[] createArguments(@Nonnull PsiExpression rExpression,
+                                          @Nonnull PsiExpression gExpression,
+                                          @Nonnull PsiExpression bExpression,
+                                          @Nonnull PsiExpression aExpression) {
     final Integer value = createInt(computeInteger(rExpression), computeInteger(gExpression), computeInteger(bExpression), computeInteger(aExpression));
     if (value == null) {
       return null;
@@ -175,7 +177,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  private static String[] createArguments(@NotNull PsiExpression rgbExpression,
+  private static String[] createArguments(@Nonnull PsiExpression rgbExpression,
                                           int parts) {
     final Integer rgb = computeInteger(rgbExpression);
     if (rgb == null) {
@@ -202,23 +204,23 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  public static Integer computeInteger(@NotNull PsiExpression expr) {
+  public static Integer computeInteger(@Nonnull PsiExpression expr) {
     final Object result = compute(expr);
     return result instanceof Integer ? (Integer)result : null;
   }
 
   @Nullable
-  public static Boolean computeBoolean(@NotNull PsiExpression expr) {
+  public static Boolean computeBoolean(@Nonnull PsiExpression expr) {
     final Object result = compute(expr);
     return result instanceof Boolean ? (Boolean)result : null;
   }
 
   @Nullable
-  private static Object compute(@NotNull PsiExpression expr) {
+  private static Object compute(@Nonnull PsiExpression expr) {
     return JavaConstantExpressionEvaluator.computeConstantExpression(expr, true);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.convert.color.representation.family");

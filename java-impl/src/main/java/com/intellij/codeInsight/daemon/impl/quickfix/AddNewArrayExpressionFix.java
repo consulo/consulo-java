@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -37,26 +38,26 @@ public class AddNewArrayExpressionFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     PsiType type = getType();
     return JavaQuickFixBundle.message("add.new.array.text", type.getPresentableText());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("add.new.array.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myInitializer.isValid() || !myInitializer.getManager().isInProject(myInitializer)) return false;
     return getType() != null;
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(myInitializer, file)) return;
     PsiManager manager = file.getManager();
     PsiType type = getType();

@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -76,7 +76,7 @@ public final class Match {
     return myMatchEnd;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public List<PsiElement> getParameterValues(PsiVariable parameter) {
     return myParameterValues.get(parameter);
   }
@@ -213,7 +213,7 @@ public final class Match {
     }
   }
 
-  boolean putDeclarationCorrespondence(PsiElement patternDeclaration, @NotNull PsiElement matchDeclaration) {
+  boolean putDeclarationCorrespondence(PsiElement patternDeclaration, @Nonnull PsiElement matchDeclaration) {
     PsiElement originalValue = myDeclarationCorrespondence.get(patternDeclaration);
     if (originalValue == null) {
       myDeclarationCorrespondence.put(patternDeclaration, matchDeclaration);

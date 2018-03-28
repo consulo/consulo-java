@@ -1,9 +1,9 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 
 class Zoo2 {
-  public static boolean startsWith(@NotNull String path, @NotNull String start, final boolean caseSensitive) {
+  public static boolean startsWith(@Nonnull String path, @Nonnull String start, final boolean caseSensitive) {
     final int length1 = path.length();
     final int length2 = start.length();
     if (length2 == 0) return true;

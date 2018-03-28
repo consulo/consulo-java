@@ -35,8 +35,8 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.HighlightUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.JComponent;
 import java.util.Collection;
@@ -54,13 +54,13 @@ public class TooBroadScopeInspection extends BaseInspection {
   public boolean m_onlyLookAtBlocks = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("too.broad.scope.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "TooBroadScope";
   }
@@ -75,7 +75,7 @@ public class TooBroadScopeInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("too.broad.scope.problem.descriptor");
   }
@@ -94,13 +94,13 @@ public class TooBroadScopeInspection extends BaseInspection {
       this.variableName = variableName;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("too.broad.scope.narrow.quickfix", variableName);
     }
 
     @Override
-    protected void doFix(@NotNull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+    protected void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement variableIdentifier = descriptor.getPsiElement();
       if (!(variableIdentifier instanceof PsiIdentifier)) {
         return;
@@ -153,7 +153,7 @@ public class TooBroadScopeInspection extends BaseInspection {
       }
     }
 
-    private void removeOldVariable(@NotNull PsiVariable variable) throws IncorrectOperationException {
+    private void removeOldVariable(@Nonnull PsiVariable variable) throws IncorrectOperationException {
       final PsiDeclarationStatement declaration = (PsiDeclarationStatement)variable.getParent();
       if (declaration == null) {
         return;
@@ -167,7 +167,7 @@ public class TooBroadScopeInspection extends BaseInspection {
       }
     }
 
-    private PsiDeclarationStatement createNewDeclaration(@NotNull PsiVariable variable, @Nullable PsiExpression initializer)
+    private PsiDeclarationStatement createNewDeclaration(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiExpression initializer)
       throws IncorrectOperationException {
       final Project project = variable.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -219,7 +219,7 @@ public class TooBroadScopeInspection extends BaseInspection {
       return lastChild.getText();
     }
 
-    private PsiDeclarationStatement moveDeclarationToLocation(@NotNull PsiVariable variable, @NotNull PsiElement location)
+    private PsiDeclarationStatement moveDeclarationToLocation(@Nonnull PsiVariable variable, @Nonnull PsiElement location)
       throws IncorrectOperationException {
       PsiStatement statement = PsiTreeUtil.getParentOfType(location, PsiStatement.class, false);
       assert statement != null;
@@ -329,7 +329,7 @@ public class TooBroadScopeInspection extends BaseInspection {
   private class TooBroadScopeVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       if (!(variable instanceof PsiLocalVariable)) {
         return;

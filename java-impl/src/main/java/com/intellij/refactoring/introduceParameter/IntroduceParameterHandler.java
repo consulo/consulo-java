@@ -65,8 +65,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ArrayUtil;
 import gnu.trove.TIntArrayList;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -86,7 +85,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
   private JBPopup myEnclosingMethodsPopup;
   private InplaceIntroduceParameterPopup myInplaceIntroduceParameterPopup;
 
-  public void invoke(@NotNull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     PsiDocumentManager.getInstance(project).commitAllDocuments();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     ElementToWorkOn.processElementToWorkOn(editor, file, REFACTORING_NAME, HelpID.INTRODUCE_PARAMETER, project, new ElementToWorkOn.ElementsProcessor<ElementToWorkOn>() {
@@ -303,7 +302,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
   }
 
 
-  public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     // Never called
     /* do nothing */
   }
@@ -337,8 +336,8 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
   }
 
 
-  @Nullable
-  public static PsiMethod chooseEnclosingMethod(@NotNull PsiMethod method) {
+  @javax.annotation.Nullable
+  public static PsiMethod chooseEnclosingMethod(@Nonnull PsiMethod method) {
     final List<PsiMethod> validEnclosingMethods = getEnclosingMethods(method);
     if (validEnclosingMethods.size() > 1 && !ApplicationManager.getApplication().isUnitTestMode()) {
       final EnclosingMethodSelectionDialog dialog = new EnclosingMethodSelectionDialog(method.getProject(), validEnclosingMethods);

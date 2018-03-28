@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,18 +26,17 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class UnnecessaryLabelOnBreakStatementInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.label.on.break.statement.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.label.on.break.statement.problem.descriptor");
@@ -52,7 +53,7 @@ public class UnnecessaryLabelOnBreakStatementInspection
   private static class UnnecessaryLabelOnBreakStatementFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.label.remove.quickfix");
@@ -80,7 +81,7 @@ public class UnnecessaryLabelOnBreakStatementInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitBreakStatement(@NotNull PsiBreakStatement statement) {
+    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
       final PsiIdentifier labelIdentifier =
         statement.getLabelIdentifier();
       if (labelIdentifier == null) {

@@ -42,8 +42,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -75,13 +75,13 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
     myMemberInfos = members.toArray(new MemberInfo[members.size()]);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(final UsageInfo[] usages) {
     return new InlineSuperClassUsageViewDescriptor(mySuperClass);
   }
 
 
-  protected void findUsages(@NotNull final List<FixableUsageInfo> usages) {
+  protected void findUsages(@Nonnull final List<FixableUsageInfo> usages) {
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(myProject);
     final PsiElementFactory elementFactory = facade.getElementFactory();
     final PsiResolveHelper resolveHelper = facade.getResolveHelper();

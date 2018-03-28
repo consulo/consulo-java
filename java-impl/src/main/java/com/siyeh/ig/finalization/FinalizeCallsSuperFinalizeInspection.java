@@ -22,7 +22,7 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,20 +35,20 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
   public boolean ignoreTrivialFinalizers = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "FinalizeDoesntCallSuperFinalize";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "finalize.doesnt.call.super.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "finalize.doesnt.call.super.problem.descriptor");
@@ -80,7 +80,7 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
   private class NoExplicitFinalizeCallsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       final String methodName = method.getName();
       if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {

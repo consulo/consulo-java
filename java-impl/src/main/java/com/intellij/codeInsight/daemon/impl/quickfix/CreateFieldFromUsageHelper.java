@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.editor.Editor;
@@ -32,7 +32,7 @@ public abstract class CreateFieldFromUsageHelper
 	private static final LanguageExtension<CreateFieldFromUsageHelper> EP_NAME = new LanguageExtension<>("consulo.java" +
 			".codeInsight.createFieldFromUsageHelper");
 
-	@NotNull
+	@Nonnull
 	public static Template setupTemplate(
 			PsiField field,
 			Object expectedTypes,
@@ -50,8 +50,8 @@ public abstract class CreateFieldFromUsageHelper
 				CreateFromUsageBaseFix.getTargetSubstitutor(context));
 	}
 
-	@NotNull
-	public static PsiField insertField(@NotNull PsiClass targetClass, @NotNull PsiField field, @NotNull PsiElement place)
+	@Nonnull
+	public static PsiField insertField(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place)
 	{
 		CreateFieldFromUsageHelper helper = EP_NAME.forLanguage(field.getLanguage());
 		if(helper == null)
@@ -61,7 +61,7 @@ public abstract class CreateFieldFromUsageHelper
 		return helper.insertFieldImpl(targetClass, field, place);
 	}
 
-	public abstract PsiField insertFieldImpl(@NotNull PsiClass targetClass, @NotNull PsiField field, @NotNull PsiElement place);
+	public abstract PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place);
 
 	public abstract Template setupTemplateImpl(
 			PsiField field,

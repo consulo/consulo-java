@@ -30,7 +30,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.impl.HeaderImpl;
 import org.osmorc.manifest.lang.psi.stub.HeaderStub;
@@ -48,7 +48,7 @@ public class HeaderElementType extends AbstractManifestStubElementType<HeaderStu
 
 
   @Override
-  public Header createPsi(@NotNull HeaderStub stub) {
+  public Header createPsi(@Nonnull HeaderStub stub) {
     return new HeaderImpl(stub, this);
   }
 
@@ -58,19 +58,19 @@ public class HeaderElementType extends AbstractManifestStubElementType<HeaderStu
   }
 
   @Override
-  public HeaderStub createStub(@NotNull Header psi, StubElement parentStub) {
+  public HeaderStub createStub(@Nonnull Header psi, StubElement parentStub) {
     return new HeaderStubImpl(parentStub, psi.getName());
   }
 
-  public void serialize(@NotNull HeaderStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull HeaderStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
   }
 
-  @NotNull
-  public HeaderStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  @Nonnull
+  public HeaderStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new HeaderStubImpl(parentStub, dataStream.readName().toString());
   }
 
-  public void indexStub(@NotNull HeaderStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull HeaderStub stub, @Nonnull IndexSink sink) {
   }
 }

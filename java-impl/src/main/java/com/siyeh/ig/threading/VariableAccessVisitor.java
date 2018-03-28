@@ -21,7 +21,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -58,7 +58,7 @@ class VariableAccessVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReferenceExpression(@NotNull PsiReferenceExpression ref) {
+  public void visitReferenceExpression(@Nonnull PsiReferenceExpression ref) {
     super.visitReferenceExpression(ref);
     final PsiExpression qualifier = ref.getQualifierExpression();
     if (qualifier != null && !(qualifier instanceof PsiThisExpression)) {
@@ -125,7 +125,7 @@ class VariableAccessVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitMethod(@NotNull PsiMethod method) {
+  public void visitMethod(@Nonnull PsiMethod method) {
     if (method.hasModifierProperty(PsiModifier.PRIVATE)) {
       if (unusedMethods.contains(method)) {
         return;
@@ -318,14 +318,14 @@ class VariableAccessVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitClassInitializer(@NotNull PsiClassInitializer initializer) {
+  public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
     m_inInitializer = true;
     super.visitClassInitializer(initializer);
     m_inInitializer = false;
   }
 
   @Override
-  public void visitField(@NotNull PsiField field) {
+  public void visitField(@Nonnull PsiField field) {
     m_inInitializer = true;
     super.visitField(field);
     m_inInitializer = false;

@@ -19,7 +19,8 @@ import static com.intellij.psi.codeStyle.JavaCodeStyleSettings.FULLY_QUALIFY_NAM
 import static com.intellij.psi.codeStyle.JavaCodeStyleSettings.FULLY_QUALIFY_NAMES_IF_NOT_IMPORTED;
 import static com.intellij.psi.codeStyle.JavaCodeStyleSettings.SHORTEN_NAMES_ALWAYS_AND_ADD_IMPORT;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.Lookup;
@@ -141,7 +142,7 @@ class JavaClassNameInsertHandler implements InsertHandler<JavaPsiClassReferenceE
 		}
 	}
 
-	private static boolean shouldInsertFqnInJavadoc(@NotNull JavaPsiClassReferenceElement item, @NotNull PsiFile file, @NotNull Project project)
+	private static boolean shouldInsertFqnInJavadoc(@Nonnull JavaPsiClassReferenceElement item, @Nonnull PsiFile file, @Nonnull Project project)
 	{
 		CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
 		JavaCodeStyleSettings javaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);

@@ -15,7 +15,8 @@
  */
 package com.intellij.testFramework.fixtures;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
@@ -37,7 +38,7 @@ public class DefaultLightProjectDescriptor implements TestModuleDescriptor
 	}
 
 	@Override
-	public void configureSdk(@NotNull Consumer<Sdk> consumer)
+	public void configureSdk(@Nonnull Consumer<Sdk> consumer)
 	{
 		consumer.consume(getSdk());
 	}

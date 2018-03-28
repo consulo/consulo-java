@@ -15,11 +15,12 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
@@ -34,19 +35,19 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     myTypeElement.appendMirrorText(0, buffer);
     buffer.append('.').append(PsiKeyword.CLASS);
   }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirror(getOperand(), SourceTreeToPsiMap.<PsiClassObjectAccessExpression>treeToPsiNotNull(element).getOperand());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getChildren() {
     return new PsiElement[]{myTypeElement};
   }
@@ -57,7 +58,7 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitClassObjectAccessExpression(this);
     }
@@ -67,7 +68,7 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiTypeElement getOperand() {
     return myTypeElement;
   }

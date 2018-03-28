@@ -25,19 +25,19 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RemoveModifierFix;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PublicConstructorInNonPublicClassInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethod method = (PsiMethod)infos[0];
     return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.problem.descriptor",
@@ -48,7 +48,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
     return new PublicConstructorInNonPublicClassVisitor();
   }
 
-  @NotNull
+  @Nonnull
   public InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> fixes = new ArrayList();
     final PsiMethod constructor = (PsiMethod)infos[0];
@@ -68,7 +68,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
       this.modifier = modifier;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "public.constructor.in.non.public.class.quickfix",
@@ -87,7 +87,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
   private static class PublicConstructorInNonPublicClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (!method.isConstructor()) {
         return;

@@ -17,7 +17,7 @@ package com.intellij.codeInsight.template.postfix.templates;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
@@ -68,17 +68,17 @@ public class SwitchStatementPostfixTemplate extends JavaStatementWrapPostfixTemp
   }
 
   @Override
-  protected void afterExpand(@NotNull PsiElement newStatement, @NotNull Editor editor) {
+  protected void afterExpand(@Nonnull PsiElement newStatement, @Nonnull Editor editor) {
     JavaPostfixTemplatesUtils.formatPsiCodeBlock(newStatement, editor);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getHead() {
     return "switch (";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTail() {
     return ") {\nst;\n}";

@@ -1,9 +1,9 @@
 // "Replace with 'list != null ?:'" "true"
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class A{
-  void test(@NotNull List l) {
+  void test(@Nonnull List l) {
     final List list = null;
     test(list != null ? list : <selection>null</selection>);
   }

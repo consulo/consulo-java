@@ -40,7 +40,6 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
@@ -169,7 +168,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable {
                           bounds.y + bounds.height - bounds.height / 4, 0, false);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createToolTip(MouseEvent e) {
     final DebuggerTreeNodeImpl node = getNodeToShowTip(e);
     if (node == null) {
@@ -246,7 +245,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable {
     return myCurrentTooltip;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private String getTipText(DebuggerTreeNodeImpl node) {
     NodeDescriptorImpl descriptor = node.getDescriptor();
     if (descriptor instanceof ValueDescriptorImpl) {
@@ -273,7 +272,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable {
     return node.getMarkupTooltipText() != null? "" : null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private DebuggerTreeNodeImpl getNodeToShowTip(MouseEvent event) {
     TreePath path = getPathForLocation(event.getX(), event.getY());
     if (path != null) {

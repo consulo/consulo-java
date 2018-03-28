@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.psi.JavaElementVisitor;
@@ -35,12 +36,12 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
 
 	private final NotNullLazyValue<ClsJavaCodeReferenceElementImpl[]> myRefs;
 
-	public ClsReferenceListImpl(@NotNull PsiClassReferenceListStub stub)
+	public ClsReferenceListImpl(@Nonnull PsiClassReferenceListStub stub)
 	{
 		super(stub);
 		myRefs = new AtomicNotNullLazyValue<ClsJavaCodeReferenceElementImpl[]>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected ClsJavaCodeReferenceElementImpl[] compute()
 			{
@@ -63,21 +64,21 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiJavaCodeReferenceElement[] getReferenceElements()
 	{
 		return myRefs.getValue();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return getReferenceElements();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClassType[] getReferencedTypes()
 	{
 		return getStub().getReferencedTypes();
@@ -90,7 +91,7 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		String[] names = getStub().getReferencedNames();
 		if(names.length != 0)
@@ -123,14 +124,14 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, null);
 		setMirrors(getReferenceElements(), SourceTreeToPsiMap.<PsiReferenceList>treeToPsiNotNull(element).getReferenceElements());
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

@@ -18,9 +18,9 @@ package com.intellij.util.xml.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -54,7 +54,7 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
     super(domWrapper, commitOnEveryChange);
   }
 
-  protected EditorTextField getEditorTextField(@NotNull final PsiClassPanel component) {
+  protected EditorTextField getEditorTextField(@Nonnull final PsiClassPanel component) {
     return ((ReferenceEditorWithBrowseButton)component.getComponent(0)).getEditorTextField();
   }
 

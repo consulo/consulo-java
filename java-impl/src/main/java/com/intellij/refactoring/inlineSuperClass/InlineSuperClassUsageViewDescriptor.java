@@ -23,7 +23,7 @@ package com.intellij.refactoring.inlineSuperClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class InlineSuperClassUsageViewDescriptor extends UsageViewDescriptorAdapter{
   private final PsiClass myClass;
@@ -32,7 +32,7 @@ public class InlineSuperClassUsageViewDescriptor extends UsageViewDescriptorAdap
     myClass = aClass;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myClass};
   }

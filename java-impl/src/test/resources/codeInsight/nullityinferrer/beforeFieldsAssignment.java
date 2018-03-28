@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.*;
 
 class Test {
   String myFoo = "";
@@ -6,10 +6,12 @@ class Test {
   String myFoo1 = null;
 
   String myFoo2 = foo2();
-  @NotNull String foo2() { return "";}
+  @Nonnull
+  String foo2() { return "";}
 
   String myFoo3 = foo3();
-  @Nullable String foo3() { return null;}
+  @javax.annotation.Nullable
+  String foo3() { return null;}
 
   String myFoo4;
   void setFoo4() {
@@ -30,7 +32,7 @@ class Test {
   /**
    * {@link #myFoo6}
    */
-  Test(@NotNull String param, @Nullable String paramNullable, String simpleParam) {
+  Test(@Nonnull String param, @javax.annotation.Nullable String paramNullable, String simpleParam) {
     myFoo5 = "";
     myFoo6 = null;
     myFoo7 = param;

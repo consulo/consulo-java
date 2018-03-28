@@ -15,8 +15,9 @@
  */
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiModifierList;
@@ -28,7 +29,7 @@ import com.intellij.util.containers.ContainerUtil;
  * @author peter
  */
 public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self extends PsiModifierListOwnerPattern<T,Self>> extends PsiElementPattern<T,Self> {
-  public PsiModifierListOwnerPattern(@NotNull final InitialPatternCondition<T> condition) {
+  public PsiModifierListOwnerPattern(@Nonnull final InitialPatternCondition<T> condition) {
     super(condition);
   }
 
@@ -38,7 +39,7 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
 
   public Self withModifiers(final String... modifiers) {
     return with(new PatternCondition<T>("withModifiers") {
-      public boolean accepts(@NotNull final T t, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
         return ContainerUtil.and(modifiers, new Condition<String>() {
           public boolean value(final String s) {
             return t.hasModifierProperty(s);
@@ -50,7 +51,7 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
 
   public Self withoutModifiers(final String... modifiers) {
     return with(new PatternCondition<T>("withoutModifiers") {
-      public boolean accepts(@NotNull final T t, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
         return ContainerUtil.and(modifiers, new Condition<String>() {
           public boolean value(final String s) {
             return !t.hasModifierProperty(s);
@@ -62,7 +63,7 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
 
   public Self withAnnotation(@NonNls final String qualifiedName) {
     return with(new PatternCondition<T>("withAnnotation") {
-      public boolean accepts(@NotNull final T t, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
         final PsiModifierList modifierList = t.getModifierList();
         return modifierList != null && modifierList.findAnnotation(qualifiedName) != null;
       }
@@ -71,14 +72,14 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
 
   public Self withAnnotations(@NonNls final String... qualifiedNames) {
     return with(new PatternCondition<T>("withAnnotations") {
-      public boolean accepts(@NotNull final T t, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
         return AnnotationUtil.findAnnotation(t, qualifiedNames) != null;
       }
     });
   }
 
   public static class Capture<T extends PsiModifierListOwner> extends PsiModifierListOwnerPattern<T, Capture<T>> {
-    public Capture(@NotNull InitialPatternCondition<T> condition) {
+    public Capture(@Nonnull InitialPatternCondition<T> condition) {
       super(condition);
     }
   }

@@ -320,13 +320,13 @@
     </annotation>
   </item>
   <item name="javax.swing.JTable JTable(java.lang.Object[][], java.lang.Object[]) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable JTable(java.lang.Object[][], java.lang.Object[]) 1">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable int columnAtPoint(java.awt.Point) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable int getTabLayoutPolicy()">
     <annotation name="org.intellij.lang.annotations.MagicConstant">
@@ -339,58 +339,58 @@
     </annotation>
   </item>
   <item name="javax.swing.JTable int rowAtPoint(java.awt.Point) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable java.awt.Dimension getIntercellSpacing()">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable java.awt.Rectangle getCellRect(int, int, boolean)">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable java.lang.String getToolTipText(java.awt.event.MouseEvent) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable javax.swing.table.TableColumn getColumn(java.lang.Object) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void addColumn(javax.swing.table.TableColumn) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void removeColumn(javax.swing.table.TableColumn) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void setColumnModel(javax.swing.table.TableColumnModel) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void setDropMode(javax.swing.DropMode) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void setGridColor(java.awt.Color) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void setIntercellSpacing(java.awt.Dimension) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void setModel(javax.swing.table.TableModel) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void setSelectionModel(javax.swing.ListSelectionModel) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTable void sorterChanged(javax.swing.event.RowSorterEvent) 0">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.JTree java.awt.Rectangle getPathBounds(javax.swing.tree.TreePath)">
-    <annotation name="org.jetbrains.annotations.Nullable" />
+    <annotation name="javax.annotation.Nullable" />
   </item>
   <item name="javax.swing.JTree javax.swing.tree.TreePath getPathForLocation(int, int)">
-    <annotation name="org.jetbrains.annotations.Nullable" />
+    <annotation name="javax.annotation.Nullable" />
   </item>
   <item name="javax.swing.JTree javax.swing.tree.TreePath[] getSelectionPaths()">
-    <annotation name="org.jetbrains.annotations.Nullable" />
+    <annotation name="javax.annotation.Nullable" />
   </item>
   <item name="javax.swing.JViewport java.awt.Rectangle getViewRect()">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.KeyStroke">
     <annotation name="org.jetbrains.annotations.NonNls" />
@@ -441,7 +441,7 @@
     <annotation name="org.jetbrains.annotations.NonNls" />
   </item>
   <item name="javax.swing.RowSorter.SortKey SortKey(int, javax.swing.SortOrder) 1">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.Scrollable int getScrollableBlockIncrement(java.awt.Rectangle, int, int) 1">
     <annotation name="org.intellij.lang.annotations.MagicConstant">
@@ -454,13 +454,13 @@
     </annotation>
   </item>
   <item name="javax.swing.SwingUtilities java.awt.Point convertPoint(java.awt.Component, java.awt.Point, java.awt.Component)">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.SwingUtilities java.awt.Point convertPoint(java.awt.Component, java.awt.Point, java.awt.Component) 1">
-    <annotation name="org.jetbrains.annotations.NotNull" />
+    <annotation name="javax.annotation.Nonnull" />
   </item>
   <item name="javax.swing.TransferHandler java.awt.datatransfer.Transferable createTransferable(javax.swing.JComponent)">
-    <annotation name="org.jetbrains.annotations.Nullable" />
+    <annotation name="javax.annotation.Nullable" />
   </item>
   <item name="javax.swing.UIManager">
     <annotation name="org.jetbrains.annotations.NonNls" />

@@ -33,7 +33,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -104,13 +104,13 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor
 		myElementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
 	}
 
-	@NotNull
-	protected UsageViewDescriptor createUsageViewDescriptor(@NotNull final UsageInfo[] usages)
+	@Nonnull
+	protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull final UsageInfo[] usages)
 	{
 		return new ExtractMethodObjectViewDescriptor(getMethod());
 	}
 
-	@NotNull
+	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		final ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
@@ -167,7 +167,7 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor
 		return UsageViewUtil.removeDuplicatedUsages(usageInfos);
 	}
 
-	public void performRefactoring(@NotNull final UsageInfo[] usages)
+	public void performRefactoring(@Nonnull final UsageInfo[] usages)
 	{
 		try
 		{
@@ -571,7 +571,7 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor
 		return (PsiMethodCallExpression) methodCallExpression.replace(myElementFactory.createExpressionFromText(newReplacement + "invoke()", null));
 	}
 
-	@NotNull
+	@Nonnull
 	private String inferTypeArguments(final PsiMethodCallExpression methodCallExpression)
 	{
 		final PsiReferenceParameterList list = methodCallExpression.getMethodExpression().getParameterList();

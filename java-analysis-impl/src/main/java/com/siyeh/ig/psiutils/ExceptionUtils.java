@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -43,14 +43,14 @@ public class ExceptionUtils
 		s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_ERROR);
 	}
 
-	@NotNull
-	public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element)
+	@Nonnull
+	public static Set<PsiClassType> calculateExceptionsThrown(@javax.annotation.Nullable PsiElement element)
 	{
 		return calculateExceptionsThrown(element, new LinkedHashSet<>(5));
 	}
 
-	@NotNull
-	public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element, @NotNull Set<PsiClassType> out)
+	@Nonnull
+	public static Set<PsiClassType> calculateExceptionsThrown(@javax.annotation.Nullable PsiElement element, @Nonnull Set<PsiClassType> out)
 	{
 		if(element == null)
 		{
@@ -69,7 +69,7 @@ public class ExceptionUtils
 		return out;
 	}
 
-	public static boolean isGenericExceptionClass(@Nullable PsiType exceptionType)
+	public static boolean isGenericExceptionClass(@javax.annotation.Nullable PsiType exceptionType)
 	{
 		if(!(exceptionType instanceof PsiClassType))
 		{
@@ -163,7 +163,7 @@ public class ExceptionUtils
 		}
 	}
 
-	static boolean blockThrowsException(@Nullable PsiCodeBlock block)
+	static boolean blockThrowsException(@javax.annotation.Nullable PsiCodeBlock block)
 	{
 		if(block == null)
 		{
@@ -262,7 +262,7 @@ public class ExceptionUtils
 		return out;
 	}
 
-	public static boolean isExceptionArgument(@NotNull PsiExpression expression)
+	public static boolean isExceptionArgument(@Nonnull PsiExpression expression)
 	{
 		final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(expression, PsiNewExpression.class, true, PsiCodeBlock.class, PsiClass.class);
 		if(newExpression != null)
@@ -335,7 +335,7 @@ public class ExceptionUtils
 		}
 
 		@Override
-		public void visitTryStatement(@NotNull PsiTryStatement statement)
+		public void visitTryStatement(@Nonnull PsiTryStatement statement)
 		{
 			final Set<PsiType> exceptionsHandled = getExceptionTypesHandled(statement);
 
@@ -360,7 +360,7 @@ public class ExceptionUtils
 			}
 		}
 
-		private static boolean isExceptionHandled(Set<PsiType> exceptionsHandled, @NotNull PsiType thrownType)
+		private static boolean isExceptionHandled(Set<PsiType> exceptionsHandled, @Nonnull PsiType thrownType)
 		{
 			if(exceptionsHandled.contains(thrownType))
 			{

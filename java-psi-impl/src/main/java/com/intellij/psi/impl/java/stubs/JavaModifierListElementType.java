@@ -21,7 +21,8 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.RESOURCE_VARIABL
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -46,7 +47,7 @@ public class JavaModifierListElementType extends JavaStubElementType<PsiModifier
 		super("MODIFIER_LIST");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -54,13 +55,13 @@ public class JavaModifierListElementType extends JavaStubElementType<PsiModifier
 	}
 
 	@Override
-	public PsiModifierList createPsi(@NotNull final PsiModifierListStub stub)
+	public PsiModifierList createPsi(@Nonnull final PsiModifierListStub stub)
 	{
 		return getPsiFactory(stub).createModifierList(stub);
 	}
 
 	@Override
-	public PsiModifierList createPsi(@NotNull final ASTNode node)
+	public PsiModifierList createPsi(@Nonnull final ASTNode node)
 	{
 		return new PsiModifierListImpl(node);
 	}
@@ -72,7 +73,7 @@ public class JavaModifierListElementType extends JavaStubElementType<PsiModifier
 	}
 
 	@Override
-	public void serialize(@NotNull final PsiModifierListStub stub, @NotNull final StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull final PsiModifierListStub stub, @Nonnull final StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeVarInt(stub.getModifiersMask());
 	}
@@ -97,15 +98,15 @@ public class JavaModifierListElementType extends JavaStubElementType<PsiModifier
 		return parentType != null && parentType != LOCAL_VARIABLE && parentType != RESOURCE_VARIABLE && parentType != RESOURCE_LIST;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiModifierListStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	public PsiModifierListStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
 	{
 		return new PsiModifierListStubImpl(parentStub, dataStream.readVarInt());
 	}
 
 	@Override
-	public void indexStub(@NotNull final PsiModifierListStub stub, @NotNull final IndexSink sink)
+	public void indexStub(@Nonnull final PsiModifierListStub stub, @Nonnull final IndexSink sink)
 	{
 	}
 }

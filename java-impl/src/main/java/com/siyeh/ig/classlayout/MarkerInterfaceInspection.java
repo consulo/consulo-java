@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class MarkerInterfaceInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("marker.interface.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "marker.interface.problem.descriptor");
@@ -44,7 +45,7 @@ public class MarkerInterfaceInspection extends BaseInspection {
   private static class MarkerInterfaceVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }

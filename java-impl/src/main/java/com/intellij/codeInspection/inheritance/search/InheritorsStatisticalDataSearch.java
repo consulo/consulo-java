@@ -6,7 +6,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -22,9 +22,9 @@ public class InheritorsStatisticalDataSearch {
    * @param minPercentRatio - head volume
    * @return - search results in relevant ordering (frequency descent)
    */
-  public static List<InheritorsStatisticsSearchResult> search(final @NotNull PsiClass superClass,
-                                          final @NotNull PsiClass aClass,
-                                          final @NotNull GlobalSearchScope scope,
+  public static List<InheritorsStatisticsSearchResult> search(final @Nonnull PsiClass superClass,
+                                          final @Nonnull PsiClass aClass,
+                                          final @Nonnull GlobalSearchScope scope,
                                           final int minPercentRatio) {
     final String superClassName = superClass.getName();
     final String aClassName = aClass.getName();

@@ -16,27 +16,27 @@
 package com.intellij.codeInsight.template.postfix.templates;
 
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 
 public abstract class JavaStatementWrapPostfixTemplate extends StatementWrapPostfixTemplate {
 
-  protected JavaStatementWrapPostfixTemplate(@NotNull String name,
-                                             @NotNull String descr,
-                                             @NotNull PostfixTemplatePsiInfo psiInfo,
-                                             @NotNull Condition<PsiElement> typeChecker) {
+  protected JavaStatementWrapPostfixTemplate(@Nonnull String name,
+                                             @Nonnull String descr,
+                                             @Nonnull PostfixTemplatePsiInfo psiInfo,
+                                             @Nonnull Condition<PsiElement> typeChecker) {
     super(name, descr, psiInfo, typeChecker);
   }
 
   @Override
-  protected void afterExpand(@NotNull PsiElement newElement, @NotNull Editor editor) {
+  protected void afterExpand(@Nonnull PsiElement newElement, @Nonnull Editor editor) {
     super.afterExpand(newElement, editor);
     JavaPostfixTemplateProvider.doNotDeleteSemicolon(newElement.getContainingFile());
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTail() {
     return ";";

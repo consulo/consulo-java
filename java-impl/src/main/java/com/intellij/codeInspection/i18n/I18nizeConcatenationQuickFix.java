@@ -26,8 +26,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,15 +54,15 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return CodeInsightBundle.message("quickfix.i18n.concatentation");
   }
 
   @Override
-  protected PsiElement doReplacementInJava(@NotNull final PsiFile psiFile,
-                                           @NotNull final Editor editor,
-                                           @Nullable PsiLiteralExpression literalExpression,
+  protected PsiElement doReplacementInJava(@Nonnull final PsiFile psiFile,
+                                           @Nonnull final Editor editor,
+                                           @javax.annotation.Nullable PsiLiteralExpression literalExpression,
                                            String i18nizedText) throws IncorrectOperationException {
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(psiFile, editor);
     PsiExpression expression = JavaPsiFacade.getInstance(psiFile.getProject()).getElementFactory().createExpressionFromText(i18nizedText, concatenation);
@@ -96,7 +95,7 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
 
     return new JavaI18nizeQuickFixDialog(project, context, literalExpression, formatString.toString(), null, true, true) {
       @Override
-      @Nullable
+      @javax.annotation.Nullable
       protected String getTemplateName() {
         return myResourceBundleManager.getConcatenationTemplateName();
       }
@@ -119,13 +118,13 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
     };
   }
 
-  @Nullable
-  private static PsiPolyadicExpression getEnclosingLiteralConcatenation(@NotNull PsiFile file, @NotNull Editor editor) {
+  @javax.annotation.Nullable
+  private static PsiPolyadicExpression getEnclosingLiteralConcatenation(@Nonnull PsiFile file, @Nonnull Editor editor) {
     final PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset());
     return getEnclosingLiteralConcatenation(elementAt);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiPolyadicExpression getEnclosingLiteralConcatenation(final PsiElement psiElement) {
     PsiPolyadicExpression element = PsiTreeUtil.getParentOfType(psiElement, PsiPolyadicExpression.class, false, PsiMember.class);
     if (element == null) return null;

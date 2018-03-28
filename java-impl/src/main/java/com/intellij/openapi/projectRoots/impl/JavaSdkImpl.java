@@ -28,11 +28,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -57,7 +56,7 @@ import com.intellij.util.containers.HashMap;
 import consulo.fileTypes.ZipArchiveFileType;
 import consulo.java.JavaIcons;
 import consulo.java.fileTypes.JModFileType;
-import consulo.java.projectRoots.impl.JavaSdkTypeUtil;
+import consulo.java.projectRoots.OwnJdkUtil;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.DocumentationOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
@@ -86,7 +85,7 @@ public class JavaSdkImpl extends JavaSdk
 		super("JDK");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableName()
 	{
@@ -99,7 +98,7 @@ public class JavaSdkImpl extends JavaSdk
 		return JavaIcons.Java;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getHelpTopic()
 	{
@@ -108,8 +107,8 @@ public class JavaSdkImpl extends JavaSdk
 
 	@NonNls
 	@Override
-	@Nullable
-	public String getDefaultDocumentationUrl(@NotNull final Sdk sdk)
+	@javax.annotation.Nullable
+	public String getDefaultDocumentationUrl(@Nonnull final Sdk sdk)
 	{
 		final JavaSdkVersion version = getVersion(sdk);
 		if(version == JavaSdkVersion.JDK_1_5)
@@ -152,7 +151,7 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 	@Override
-	public void setupCommandLine(@NotNull GeneralCommandLine commandLine, @NotNull Sdk sdk)
+	public void setupCommandLine(@Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk)
 	{
 		commandLine.setExePath(getBinPath(sdk) + File.separator + VM_EXE_NAME);
 	}
@@ -169,7 +168,7 @@ public class JavaSdkImpl extends JavaSdk
 		return path;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Collection<String> suggestHomePaths()
 	{
@@ -274,7 +273,7 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public boolean isValidSdkHome(String path)
 	{
-		return JavaSdkTypeUtil.checkForJdk(new File(path));
+		return OwnJdkUtil.checkForJdk(new File(path));
 	}
 
 	@Override
@@ -304,8 +303,8 @@ public class JavaSdkImpl extends JavaSdk
 		return suggestedName;
 	}
 
-	@NotNull
-	private static String getVersionNumber(@NotNull String versionString)
+	@Nonnull
+	private static String getVersionNumber(@Nonnull String versionString)
 	{
 		if(versionString.startsWith(JAVA_VERSION_PREFIX) || versionString.startsWith(OPENJDK_VERSION_PREFIX))
 		{
@@ -447,7 +446,7 @@ public class JavaSdkImpl extends JavaSdk
 		sdkModificator.commitChanges();
 	}
 
-	public static boolean attachJdkAnnotations(@NotNull SdkModificator modificator)
+	public static boolean attachJdkAnnotations(@Nonnull SdkModificator modificator)
 	{
 		File pluginPath = PluginManager.getPluginPath(JavaSdkImpl.class);
 
@@ -498,13 +497,13 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 	@Override
-	public int compareTo(@NotNull String versionString, @NotNull String versionNumber)
+	public int compareTo(@Nonnull String versionString, @Nonnull String versionNumber)
 	{
 		return getVersionNumber(versionString).compareTo(versionNumber);
 	}
 
 	@Override
-	public JavaSdkVersion getVersion(@NotNull Sdk sdk)
+	public JavaSdkVersion getVersion(@Nonnull Sdk sdk)
 	{
 		return getVersion1(sdk);
 	}
@@ -520,21 +519,21 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 	@Override
-	@Nullable
-	public JavaSdkVersion getVersion(@NotNull String versionString)
+	@javax.annotation.Nullable
+	public JavaSdkVersion getVersion(@Nonnull String versionString)
 	{
 		return JavaSdkVersion.fromVersionString(versionString);
 	}
 
 	@Override
-	public boolean isOfVersionOrHigher(@NotNull Sdk sdk, @NotNull JavaSdkVersion version)
+	public boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version)
 	{
 		JavaSdkVersion sdkVersion = getVersion(sdk);
 		return sdkVersion != null && sdkVersion.isAtLeast(version);
 	}
 
 	@Override
-	public Sdk createJdk(@NotNull String jdkName, @NotNull String home, boolean isJre)
+	public Sdk createJdk(@Nonnull String jdkName, @Nonnull String home, boolean isJre)
 	{
 		SdkImpl jdk = new SdkImpl(jdkName, this);
 		SdkModificator sdkModificator = jdk.getSdkModificator();
@@ -654,7 +653,7 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String getCanonicalPath(File file)
 	{
 		try
@@ -692,7 +691,7 @@ public class JavaSdkImpl extends JavaSdk
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static VirtualFile findInJar(File jarFile, String relativePath)
 	{
 		VirtualFile fileByIoFile = LocalFileSystem.getInstance().findFileByIoFile(jarFile);
@@ -704,7 +703,7 @@ public class JavaSdkImpl extends JavaSdk
 		return archiveRootForLocalFile == null ? null : archiveRootForLocalFile.findFileByRelativePath(relativePath);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static VirtualFile findDocs(File file, final String relativePath)
 	{
 		file = new File(file.getAbsolutePath() + File.separator + relativePath.replace('/', File.separatorChar));

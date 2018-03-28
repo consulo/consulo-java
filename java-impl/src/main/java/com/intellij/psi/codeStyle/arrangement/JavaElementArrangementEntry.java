@@ -19,8 +19,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.arrangement.std.ArrangementSettingsToken;
 import com.intellij.util.containers.ContainerUtilRt;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Set;
 
@@ -34,15 +34,18 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
   implements TypeAwareArrangementEntry, NameAwareArrangementEntry,ModifierAwareArrangementEntry
 {
 
-  @NotNull private final Set<ArrangementSettingsToken> myModifiers = ContainerUtilRt.newHashSet();
-  @NotNull private final Set<ArrangementSettingsToken> myTypes     = ContainerUtilRt.newHashSet();
+  @Nonnull
+  private final Set<ArrangementSettingsToken> myModifiers = ContainerUtilRt.newHashSet();
+  @Nonnull
+  private final Set<ArrangementSettingsToken> myTypes     = ContainerUtilRt.newHashSet();
 
-  @NotNull private final  ArrangementSettingsToken myType;
+  @Nonnull
+  private final  ArrangementSettingsToken myType;
   @Nullable private final String                   myName;
 
   public JavaElementArrangementEntry(@Nullable ArrangementEntry parent,
-                                     @NotNull TextRange range,
-                                     @NotNull ArrangementSettingsToken type,
+                                     @Nonnull TextRange range,
+                                     @Nonnull ArrangementSettingsToken type,
                                      @Nullable String name,
                                      boolean canBeMatched)
   {
@@ -52,7 +55,7 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
   public JavaElementArrangementEntry(@Nullable ArrangementEntry parent,
                                      int startOffset,
                                      int endOffset,
-                                     @NotNull ArrangementSettingsToken type,
+                                     @Nonnull ArrangementSettingsToken type,
                                      @Nullable String name,
                                      boolean canBeArranged)
   {
@@ -62,13 +65,13 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     myName = name;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Set<ArrangementSettingsToken> getModifiers() {
     return myModifiers;
   }
 
-  public void addModifier(@NotNull ArrangementSettingsToken modifier) {
+  public void addModifier(@Nonnull ArrangementSettingsToken modifier) {
     myModifiers.add(modifier);
   }
 
@@ -78,13 +81,13 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     return myName;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Set<ArrangementSettingsToken> getTypes() {
     return myTypes;
   }
 
-  @NotNull
+  @Nonnull
   public ArrangementSettingsToken getType() {
     return myType;
   }

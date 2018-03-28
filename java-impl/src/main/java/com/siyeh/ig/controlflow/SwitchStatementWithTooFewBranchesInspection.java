@@ -22,7 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SwitchUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -33,7 +33,7 @@ public class SwitchStatementWithTooFewBranchesInspection extends BaseInspection 
   @SuppressWarnings("PublicField")
   public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("switch.statement.with.too.few.branches.display.name");
   }
@@ -43,7 +43,7 @@ public class SwitchStatementWithTooFewBranchesInspection extends BaseInspection 
                                               this, "m_limit");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message("switch.statement.with.too.few.branches.problem.descriptor", branchCount);
@@ -56,7 +56,7 @@ public class SwitchStatementWithTooFewBranchesInspection extends BaseInspection 
   private class SwitchStatementWithTooFewBranchesVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSwitchStatement(@NotNull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {
         return;

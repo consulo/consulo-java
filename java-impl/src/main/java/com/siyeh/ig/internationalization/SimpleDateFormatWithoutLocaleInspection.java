@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.internationalization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionList;
 import com.intellij.psi.PsiNewExpression;
@@ -22,18 +24,17 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("instantiating.simpledateformat.without.locale.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("instantiating.simpledateformat.without.locale.problem.descriptor");
   }
@@ -46,7 +47,7 @@ public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
   private static class SimpleDateFormatWithoutLocaleVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@NotNull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!ExpressionUtils.hasType(expression, "java.text.SimpleDateFormat")) {
         return;

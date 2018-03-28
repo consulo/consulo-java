@@ -26,8 +26,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.LibraryUtil;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -37,20 +37,20 @@ public class ObsoleteCollectionInspection extends BaseInspection {
   public boolean ignoreRequiredObsoleteCollectionTypes = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UseOfObsoleteCollectionType";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.obsolete.collection.type.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.obsolete.collection.type.problem.descriptor");
@@ -73,7 +73,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final PsiType type = variable.getType();
       if (!isObsoleteCollectionType(type)) {
@@ -116,7 +116,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (!isObsoleteCollectionType(type)) {

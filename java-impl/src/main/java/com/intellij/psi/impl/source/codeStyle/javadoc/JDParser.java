@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
@@ -44,7 +44,7 @@ public class JDParser
 	private final CodeStyleSettings mySettings;
 	private final LanguageLevel myLanguageLevel;
 
-	public JDParser(@NotNull CodeStyleSettings settings, @NotNull LanguageLevel languageLevel)
+	public JDParser(@Nonnull CodeStyleSettings settings, @Nonnull LanguageLevel languageLevel)
 	{
 		mySettings = settings;
 		myLanguageLevel = languageLevel;
@@ -52,8 +52,8 @@ public class JDParser
 
 	private static final char lineSeparator = '\n';
 
-	@NotNull
-	public JDComment parse(@Nullable String text, @NotNull JDComment comment)
+	@Nonnull
+	public JDComment parse(@Nullable String text, @Nonnull JDComment comment)
 	{
 		if(text == null)
 		{
@@ -192,7 +192,7 @@ public class JDParser
 	 * @return array of strings (lines)
 	 */
 	@Nullable
-	private List<String> toArray(@Nullable String s, @NotNull String separators, @Nullable List<Boolean> markers)
+	private List<String> toArray(@Nullable String s, @Nonnull String separators, @Nullable List<Boolean> markers)
 	{
 		if(s == null)
 		{
@@ -263,14 +263,14 @@ public class JDParser
 		return list;
 	}
 
-	private static boolean isParaTag(@NotNull final String token)
+	private static boolean isParaTag(@Nonnull final String token)
 	{
 		String withoutWS = removeWhiteSpacesFrom(token).toLowerCase();
 		return withoutWS.equals(SELF_CLOSED_P_TAG) || withoutWS.equals(P_START_TAG);
 	}
 
-	@NotNull
-	private static String removeWhiteSpacesFrom(@NotNull final String token)
+	@Nonnull
+	private static String removeWhiteSpacesFrom(@Nonnull final String token)
 	{
 		final StringBuilder result = new StringBuilder();
 		for(char c : token.toCharArray())
@@ -292,7 +292,7 @@ public class JDParser
 	 * @return array of strings (lines)
 	 */
 	@Nullable
-	private List<String> toArrayWrapping(@Nullable String s, int width)
+	private List<String> toArrayWrapping(@javax.annotation.Nullable String s, int width)
 	{
 		List<String> list = new ArrayList<String>();
 		List<Pair<String, Boolean>> pairs = splitToParagraphs(s);
@@ -361,7 +361,7 @@ public class JDParser
 	 * @param s string to process
 	 * @return processing result
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	private List<Pair<String, Boolean>> splitToParagraphs(@Nullable String s)
 	{
 		if(s == null)
@@ -582,13 +582,13 @@ public class JDParser
 	/**
 	 * @see JDParser#formatJDTagDescription(String, CharSequence, boolean, int)
 	 */
-	@NotNull
-	protected StringBuilder formatJDTagDescription(@Nullable String s, @NotNull CharSequence prefix)
+	@Nonnull
+	protected StringBuilder formatJDTagDescription(@Nullable String s, @Nonnull CharSequence prefix)
 	{
 		return formatJDTagDescription(s, prefix, false, 0);
 	}
 
-	private static boolean lineHasUnclosedPreTag(@NotNull String line)
+	private static boolean lineHasUnclosedPreTag(@Nonnull String line)
 	{
 		return StringUtil.getOccurrenceCount(line, PRE_TAG_START) > StringUtil.getOccurrenceCount(line, PRE_TAG_END);
 	}
@@ -602,8 +602,8 @@ public class JDParser
 	 * @param firstLinePrefixLength first line prefix length
 	 * @return formatted JavaDoc tag description
 	 */
-	@NotNull
-	protected StringBuilder formatJDTagDescription(@Nullable String str, @NotNull CharSequence prefix, boolean firstLineShorter,
+	@Nonnull
+	protected StringBuilder formatJDTagDescription(@Nullable String str, @Nonnull CharSequence prefix, boolean firstLineShorter,
 			int firstLinePrefixLength)
 	{
 		int rightMargin = mySettings.getRightMargin(JavaLanguage.INSTANCE);

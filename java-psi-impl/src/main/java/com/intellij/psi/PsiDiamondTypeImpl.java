@@ -21,9 +21,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -68,21 +70,21 @@ public class PsiDiamondTypeImpl extends PsiDiamondType
 		myTypeElement = psiTypeElement;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableText()
 	{
 		return "";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText()
 	{
 		return "";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
@@ -96,25 +98,25 @@ public class PsiDiamondTypeImpl extends PsiDiamondType
 	}
 
 	@Override
-	public boolean equalsToText(@NotNull @NonNls String text)
+	public boolean equalsToText(@Nonnull @NonNls String text)
 	{
 		return text.isEmpty();
 	}
 
 	@Override
-	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitDiamondType(this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public GlobalSearchScope getResolveScope()
 	{
 		return GlobalSearchScope.allScope(myManager.getProject());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType[] getSuperTypes()
 	{
@@ -139,7 +141,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType
 		return PsiTreeUtil.getParentOfType(typeElementWithDiamondTypeArgument, PsiNewExpression.class, true, PsiTypeElement.class);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JavaResolveResult getStaticFactory()
 	{
@@ -369,7 +371,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType
 		return processor.getResult();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiClass findClass(PsiNewExpression newExpression)
 	{
 		final PsiJavaCodeReferenceElement classReference = newExpression.getClassOrAnonymousClassReference();
@@ -524,7 +526,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType
 	}
 
 
-	private static MethodCandidateInfo createMethodCandidate(@NotNull final PsiMethod staticFactoryMethod, final PsiElement parent, final boolean varargs, final PsiExpressionList argumentList)
+	private static MethodCandidateInfo createMethodCandidate(@Nonnull final PsiMethod staticFactoryMethod, final PsiElement parent, final boolean varargs, final PsiExpressionList argumentList)
 	{
 		return new MethodCandidateInfo(staticFactoryMethod, PsiSubstitutor.EMPTY, false, false, argumentList, parent, null, null)
 		{
@@ -565,7 +567,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType
 		};
 	}
 
-	public static boolean hasDefaultConstructor(@NotNull final PsiClass psiClass)
+	public static boolean hasDefaultConstructor(@Nonnull final PsiClass psiClass)
 	{
 		final PsiMethod[] constructors = psiClass.getConstructors();
 		for(PsiMethod method : constructors)
@@ -578,7 +580,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType
 		return constructors.length == 0;
 	}
 
-	public static boolean haveConstructorsGenericsParameters(@NotNull final PsiClass psiClass)
+	public static boolean haveConstructorsGenericsParameters(@Nonnull final PsiClass psiClass)
 	{
 		for(final PsiMethod method : psiClass.getConstructors())
 		{

@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.psi.PsiClass;
@@ -26,7 +27,7 @@ import com.intellij.psi.PsiType;
 
 class PsiMethodReferenceHighlightingUtil
 {
-	static HighlightInfo checkRawConstructorReference(@NotNull PsiMethodReferenceExpression expression)
+	static HighlightInfo checkRawConstructorReference(@Nonnull PsiMethodReferenceExpression expression)
 	{
 		if(expression.isConstructor())
 		{

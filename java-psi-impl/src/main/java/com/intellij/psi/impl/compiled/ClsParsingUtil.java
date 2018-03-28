@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.org.objectweb.asm.Opcodes;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
@@ -53,7 +53,7 @@ public class ClsParsingUtil
 	{
 	}
 
-	public static PsiExpression createExpressionFromText(@NotNull String exprText, @NotNull PsiManager manager, @NotNull ClsElementImpl parent)
+	public static PsiExpression createExpressionFromText(@Nonnull String exprText, @Nonnull PsiManager manager, @Nonnull ClsElementImpl parent)
 	{
 		PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(manager.getProject()).getParserFacade();
 		try
@@ -68,7 +68,7 @@ public class ClsParsingUtil
 		}
 	}
 
-	public static PsiAnnotationMemberValue createMemberValueFromText(@NotNull String text, @NotNull PsiManager manager, @NotNull ClsElementImpl parent)
+	public static PsiAnnotationMemberValue createMemberValueFromText(@Nonnull String text, @Nonnull PsiManager manager, @Nonnull ClsElementImpl parent)
 	{
 		LanguageLevel level = PsiUtil.getLanguageLevel(parent);
 		DummyHolder holder = DummyHolderFactory.createHolder(manager, new JavaDummyElement(text, ANNOTATION_VALUE, level), null);
@@ -81,7 +81,7 @@ public class ClsParsingUtil
 		return getMemberValue(element, parent);
 	}
 
-	public static PsiAnnotationMemberValue getMemberValue(@NotNull PsiElement element, @NotNull ClsElementImpl parent)
+	public static PsiAnnotationMemberValue getMemberValue(@Nonnull PsiElement element, @Nonnull ClsElementImpl parent)
 	{
 		if(element instanceof PsiExpression)
 		{
@@ -133,7 +133,7 @@ public class ClsParsingUtil
 		}
 	}
 
-	static PsiExpression psiToClsExpression(@NotNull PsiExpression expr, @NotNull ClsElementImpl parent)
+	static PsiExpression psiToClsExpression(@Nonnull PsiExpression expr, @Nonnull ClsElementImpl parent)
 	{
 		if(expr instanceof PsiLiteralExpression)
 		{
@@ -199,7 +199,7 @@ public class ClsParsingUtil
 		return null;
 	}
 
-	public static boolean isJavaIdentifier(@NotNull String identifier, @NotNull LanguageLevel level)
+	public static boolean isJavaIdentifier(@Nonnull String identifier, @Nonnull LanguageLevel level)
 	{
 		return StringUtil.isJavaIdentifier(identifier) && !JavaLexer.isKeyword(identifier, level);
 	}

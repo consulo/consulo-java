@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.trivialif;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -22,18 +24,17 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ExpandBooleanIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ExpandBooleanPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiStatement containingStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
     if (containingStatement == null) {
       return;

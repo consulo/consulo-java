@@ -18,8 +18,8 @@ package com.intellij.psi.util.proximity;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.NotNullLazyKey;
@@ -62,7 +62,7 @@ public class ExplicitlyImportedWeigher extends ProximityWeigher
 		return importedNames;
 	});
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiPackage getContextPackage(PsiElement position)
 	{
 		PsiFile file = position.getContainingFile();
@@ -96,7 +96,7 @@ public class ExplicitlyImportedWeigher extends ProximityWeigher
 	}
 
 	@Override
-	public Integer weigh(@NotNull final PsiElement element, @NotNull final ProximityLocation location)
+	public Integer weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location)
 	{
 		final PsiElement position = location.getPosition();
 		if(position == null)

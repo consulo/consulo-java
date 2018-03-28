@@ -18,6 +18,7 @@ package com.intellij.refactoring.typeMigration.ui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
+import javax.annotation.Nonnull;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -27,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.refactoring.RefactoringBundle;
@@ -56,7 +56,7 @@ public class FailedConversionsDialog extends DialogWrapper
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected Action[] createActions()
 	{
 		return new Action[]{

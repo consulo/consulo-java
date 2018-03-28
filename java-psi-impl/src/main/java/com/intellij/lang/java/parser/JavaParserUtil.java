@@ -17,8 +17,8 @@ package com.intellij.lang.java.parser;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.ASTNode;
@@ -170,7 +170,7 @@ public class JavaParserUtil
 		builder.putUserDataUnprotected(LANG_LEVEL_KEY, level);
 	}
 
-	@NotNull
+	@Nonnull
 	public static LanguageLevel getLanguageLevel(final PsiBuilder builder)
 	{
 		final LanguageLevel level = builder.getUserDataUnprotected(LANG_LEVEL_KEY);
@@ -188,7 +188,7 @@ public class JavaParserUtil
 		return Boolean.TRUE.equals(builder.getUserDataUnprotected(DEEP_PARSE_BLOCKS_IN_STATEMENTS));
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiBuilder createBuilder(final ASTNode chameleon)
 	{
 		final PsiElement psi = chameleon.getPsi();
@@ -223,7 +223,7 @@ public class JavaParserUtil
 		return builder;
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiBuilder createBuilder(final LighterLazyParseableNode chameleon)
 	{
 		final PsiElement psi = chameleon.getContainingFile();
@@ -239,13 +239,13 @@ public class JavaParserUtil
 		return builder;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper)
 	{
 		return parseFragment(chameleon, wrapper, true, LanguageLevel.HIGHEST);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper, final boolean eatAll, final LanguageLevel level)
 	{
 		final PsiElement psi = (chameleon.getTreeParent() != null ? chameleon.getTreeParent().getPsi() : chameleon.getPsi());
@@ -285,8 +285,8 @@ public class JavaParserUtil
 		marker.setCustomEdgeTokenBinders(left, right);
 	}
 
-	@Nullable
-	public static IElementType exprType(@Nullable final PsiBuilder.Marker marker)
+	@javax.annotation.Nullable
+	public static IElementType exprType(@javax.annotation.Nullable final PsiBuilder.Marker marker)
 	{
 		return marker != null ? ((LighterASTNode) marker).getTokenType() : null;
 	}
@@ -297,7 +297,7 @@ public class JavaParserUtil
 		builder.mark().error(message);
 	}
 
-	public static void error(final PsiBuilder builder, final String message, @Nullable final PsiBuilder.Marker before)
+	public static void error(final PsiBuilder builder, final String message, @javax.annotation.Nullable final PsiBuilder.Marker before)
 	{
 		if(before == null)
 		{

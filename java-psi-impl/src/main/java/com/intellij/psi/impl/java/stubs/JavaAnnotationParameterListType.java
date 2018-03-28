@@ -26,7 +26,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -41,11 +41,11 @@ public class JavaAnnotationParameterListType extends JavaStubElementType<PsiAnno
   }
 
   @Override
-  public PsiAnnotationParameterList createPsi(@NotNull ASTNode node) {
+  public PsiAnnotationParameterList createPsi(@Nonnull ASTNode node) {
     return new PsiAnnotationParamListImpl(node);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new AnnotationParamListElement();
@@ -57,21 +57,21 @@ public class JavaAnnotationParameterListType extends JavaStubElementType<PsiAnno
   }
 
   @Override
-  public PsiAnnotationParameterList createPsi(@NotNull PsiAnnotationParameterListStub stub) {
+  public PsiAnnotationParameterList createPsi(@Nonnull PsiAnnotationParameterListStub stub) {
     return getPsiFactory(stub).createAnnotationParameterList(stub);
   }
 
   @Override
-  public void serialize(@NotNull PsiAnnotationParameterListStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull PsiAnnotationParameterListStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiAnnotationParameterListStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiAnnotationParameterListStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new PsiAnnotationParameterListStubImpl(parentStub);
   }
 
   @Override
-  public void indexStub(@NotNull PsiAnnotationParameterListStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull PsiAnnotationParameterListStub stub, @Nonnull IndexSink sink) {
   }
 }

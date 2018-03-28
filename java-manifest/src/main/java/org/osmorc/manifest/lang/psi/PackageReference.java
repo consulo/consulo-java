@@ -24,8 +24,8 @@
  */
 package org.osmorc.manifest.lang.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -69,7 +69,7 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiJavaPackage resolve() {
     final PsiJavaPackage parentPackage = getPsiPackage();
     if (parentPackage != null) {
@@ -82,7 +82,7 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     return null;
   }
 
-  @NotNull
+  @Nonnull
   public Object[] getVariants() {
     final PsiJavaPackage psiPackage = getPsiPackage();
     if (psiPackage == null) {
@@ -95,7 +95,7 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
   }
 
 
-  @NotNull
+  @Nonnull
   public String getUnresolvedMessagePattern() {
     return "Cannot resolve symbol";
   }

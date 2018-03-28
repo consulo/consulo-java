@@ -15,26 +15,27 @@
  */
 package com.siyeh.ig.visibility;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ClassEscapesItsScopeInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ClassEscapesDefinedScope";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.escapes.defined.scope.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "class.escapes.defined.scope.problem.descriptor");
@@ -48,7 +49,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (method.isConstructor()) {
         return;
@@ -88,7 +89,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       //no call to super, so we don't drill into anonymous classes
       if (field.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;

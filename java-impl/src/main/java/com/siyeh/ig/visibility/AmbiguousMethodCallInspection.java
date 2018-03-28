@@ -24,17 +24,17 @@ import com.intellij.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class AmbiguousMethodCallInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("ambiguous.method.call.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiClass superClass = (PsiClass)infos[0];
     final PsiClass outerClass = (PsiClass)infos[1];
@@ -48,7 +48,7 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
 
   private static class AmbiguousMethodCallFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("ambiguous.method.call.quickfix");
     }

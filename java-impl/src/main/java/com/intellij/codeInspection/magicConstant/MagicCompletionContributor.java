@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.completion.CompletionContributor;
@@ -63,7 +63,7 @@ public class MagicCompletionContributor extends CompletionContributor
 
 	@RequiredReadAction
 	@Override
-	public void fillCompletionVariants(@NotNull final CompletionParameters parameters, @NotNull final CompletionResultSet result)
+	public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result)
 	{
 		//if (parameters.getCompletionType() != CompletionType.SMART) return;
 		PsiElement pos = parameters.getPosition();
@@ -81,8 +81,8 @@ public class MagicCompletionContributor extends CompletionContributor
 		addCompletionVariants(parameters, result, pos, allowedValues);
 	}
 
-	@Nullable
-	private static MagicConstantInspection.AllowedValues getAllowedValues(@NotNull PsiElement pos)
+	@javax.annotation.Nullable
+	private static MagicConstantInspection.AllowedValues getAllowedValues(@Nonnull PsiElement pos)
 	{
 		MagicConstantInspection.AllowedValues allowedValues = null;
 		for(Pair<PsiModifierListOwner, PsiType> pair : getMembersWithAllowedValues(pos))
@@ -124,8 +124,8 @@ public class MagicCompletionContributor extends CompletionContributor
 		return null;
 	}
 
-	@NotNull
-	public static List<Pair<PsiModifierListOwner, PsiType>> getMembersWithAllowedValues(@NotNull PsiElement pos)
+	@Nonnull
+	public static List<Pair<PsiModifierListOwner, PsiType>> getMembersWithAllowedValues(@Nonnull PsiElement pos)
 	{
 		List<Pair<PsiModifierListOwner, PsiType>> result = ContainerUtil.newArrayList();
 		if(IN_METHOD_CALL_ARGUMENT.accepts(pos))
@@ -232,8 +232,8 @@ public class MagicCompletionContributor extends CompletionContributor
 		return result;
 	}
 
-	private static void addCompletionVariants(@NotNull final CompletionParameters parameters,
-			@NotNull final CompletionResultSet result,
+	private static void addCompletionVariants(@Nonnull final CompletionParameters parameters,
+			@Nonnull final CompletionResultSet result,
 			PsiElement pos,
 			MagicConstantInspection.AllowedValues allowedValues)
 	{

@@ -18,9 +18,11 @@ package com.siyeh.ig.dataflow;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -44,14 +46,14 @@ public class ReuseOfLocalVariableInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "reuse.of.local.variable.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "reuse.of.local.variable.problem.descriptor");
@@ -65,7 +67,7 @@ public class ReuseOfLocalVariableInspection
   private static class ReuseOfLocalVariableFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "reuse.of.local.variable.split.quickfix");
@@ -165,7 +167,7 @@ public class ReuseOfLocalVariableInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression assignment) {
+      @Nonnull PsiAssignmentExpression assignment) {
       super.visitAssignmentExpression(assignment);
       final PsiElement assignmentParent = assignment.getParent();
       if (!(assignmentParent instanceof PsiExpressionStatement)) {
@@ -277,8 +279,8 @@ public class ReuseOfLocalVariableInspection
      */
     @Nullable
     public static PsiElement getChildWhichContainsElement(
-      @NotNull PsiCodeBlock ancestor,
-      @NotNull PsiElement descendant) {
+      @Nonnull PsiCodeBlock ancestor,
+      @Nonnull PsiElement descendant) {
       PsiElement element = descendant;
       while (!element.equals(ancestor)) {
         descendant = element;

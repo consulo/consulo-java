@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.formatter.java.wrap.impl;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.formatting.ASTBlock;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.WrapType;
@@ -50,7 +49,7 @@ public class JavaChildBlockWrapFactory
 	 *                              soon as formatting code refactoring is done
 	 * @return wrap to use for the sub-blocks of the given block
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public Wrap create(ASTBlock block, CommonCodeStyleSettings settings, ReservedWrapsProvider reservedWrapsProvider)
 	{
 		ASTNode node = block.getNode();

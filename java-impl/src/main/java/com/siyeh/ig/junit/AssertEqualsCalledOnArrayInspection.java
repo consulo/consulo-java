@@ -27,17 +27,17 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ImportUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("assertequals.called.on.arrays.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("assertequals.called.on.arrays.problem.descriptor");
@@ -51,7 +51,7 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
   private static class AssertEqualsCalledOnArrayFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("assertequals.called.on.arrays.quickfix");
     }

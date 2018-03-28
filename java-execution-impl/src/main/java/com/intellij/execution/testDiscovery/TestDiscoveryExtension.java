@@ -21,9 +21,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.JavaTestConfigurationBase;
 import com.intellij.execution.RunConfigurationExtension;
 import com.intellij.execution.TestDiscoveryListener;
@@ -56,7 +56,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 
 	private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getSerializationId()
 	{
@@ -64,7 +64,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 	}
 
 	@Override
-	protected void attachToProcess(@NotNull final RunConfigurationBase configuration, @NotNull final ProcessHandler handler, @Nullable RunnerSettings runnerSettings)
+	protected void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @javax.annotation.Nullable RunnerSettings runnerSettings)
 	{
 		if(runnerSettings == null && isApplicableFor(configuration))
 		{
@@ -79,7 +79,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 				private List<String> myCompletedMethodNames = new ArrayList<>();
 
 				@Override
-				public void onTestFinished(@NotNull SMTestProxy test)
+				public void onTestFinished(@Nonnull SMTestProxy test)
 				{
 					final SMTestProxy.SMRootTestProxy root = test.getRoot();
 					if((root == null || root.getHandler() == handler))
@@ -100,7 +100,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 				}
 
 				@Override
-				public void onTestingFinished(@NotNull SMTestProxy.SMRootTestProxy testsRoot)
+				public void onTestingFinished(@Nonnull SMTestProxy.SMRootTestProxy testsRoot)
 				{
 					if(testsRoot.getHandler() == handler)
 					{
@@ -132,7 +132,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 		params.getVMParametersList().addProperty(ProjectData.TRACE_DIR, getTracesDirectory(configuration));
 	}
 
-	@NotNull
+	@Nonnull
 	private static String getTracesDirectory(RunConfigurationBase configuration)
 	{
 		return baseTestDiscoveryPathForProject(configuration.getProject()) + File.separator + configuration.getUniqueID();
@@ -145,23 +145,23 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 	}
 
 	@Override
-	public void readExternal(@NotNull final RunConfigurationBase runConfiguration, @NotNull Element element) throws InvalidDataException
+	public void readExternal(@Nonnull final RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException
 	{
 	}
 
 	@Override
-	public void writeExternal(@NotNull RunConfigurationBase runConfiguration, @NotNull Element element) throws WriteExternalException
+	public void writeExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws WriteExternalException
 	{
 		throw new WriteExternalException();
 	}
 
 	@Override
-	protected boolean isApplicableFor(@NotNull final RunConfigurationBase configuration)
+	protected boolean isApplicableFor(@Nonnull final RunConfigurationBase configuration)
 	{
 		return configuration instanceof JavaTestConfigurationBase && TESTDISCOVERY_ENABLED;
 	}
 
-	@NotNull
+	@Nonnull
 	public static Path baseTestDiscoveryPathForProject(Project project)
 	{
 		return ProjectUtil.getProjectCachePath(project, "testDiscovery", true);

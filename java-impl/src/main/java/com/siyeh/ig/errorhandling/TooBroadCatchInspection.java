@@ -21,9 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.editor.Document;
@@ -54,19 +54,19 @@ public class TooBroadCatchInspection extends BaseInspection {
   public boolean ignoreThrown = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyBroadCatchBlock";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("too.broad.catch.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final List<PsiClass> typesMasked = (List<PsiClass>)infos[0];
     String typesMaskedString = typesMasked.get(0).getName();
@@ -85,7 +85,7 @@ public class TooBroadCatchInspection extends BaseInspection {
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<PsiClass> maskedTypes = (List<PsiClass>)infos[0];
@@ -116,7 +116,7 @@ public class TooBroadCatchInspection extends BaseInspection {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("too.broad.catch.quickfix", myText);
     }
@@ -197,7 +197,7 @@ public class TooBroadCatchInspection extends BaseInspection {
   private class TooBroadCatchVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@NotNull PsiTryStatement statement) {
+    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
       final PsiCodeBlock tryBlock = statement.getTryBlock();
       if (tryBlock == null) {

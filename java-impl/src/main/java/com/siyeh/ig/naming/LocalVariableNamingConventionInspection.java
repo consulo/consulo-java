@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 import java.util.Arrays;
@@ -43,14 +43,14 @@ public class LocalVariableNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 20;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "local.variable.naming.convention.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String varName = (String)infos[0];
     if (varName.length() < getMinLength()) {
@@ -102,7 +102,7 @@ public class LocalVariableNamingConventionInspection
 
     @Override
     public void visitLocalVariable(
-      @NotNull PsiLocalVariable variable) {
+      @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       if (m_ignoreForLoopParameters) {
         final PsiElement parent = variable.getParent();
@@ -130,7 +130,7 @@ public class LocalVariableNamingConventionInspection
     }
 
     @Override
-    public void visitParameter(@NotNull PsiParameter variable) {
+    public void visitParameter(@Nonnull PsiParameter variable) {
       final PsiElement scope = variable.getDeclarationScope();
       final boolean isCatchParameter =
         scope instanceof PsiCatchSection;

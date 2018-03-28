@@ -18,7 +18,8 @@ package com.intellij.codeInsight.navigation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFunctionalExpression;
 import com.intellij.psi.PsiMethod;
@@ -33,7 +34,7 @@ import com.intellij.util.containers.ContainerUtil;
 public class MethodImplementationsSearch implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final DefinitionsScopedSearch.SearchParameters queryParameters, @NotNull final Processor<PsiElement> consumer)
+	public boolean execute(@Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull final Processor<PsiElement> consumer)
 	{
 		final PsiElement sourceElement = queryParameters.getElement();
 		if(sourceElement instanceof PsiMethod)

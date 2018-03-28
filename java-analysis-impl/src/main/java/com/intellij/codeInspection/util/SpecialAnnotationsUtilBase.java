@@ -29,38 +29,38 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.util.Processor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
 
 public class SpecialAnnotationsUtilBase {
-  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(@NotNull final String text,
-                                                                        @NotNull final String family,
-                                                                        @NotNull final List<String> targetList,
-                                                                        @NotNull final String qualifiedName,
+  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(@Nonnull final String text,
+                                                                        @Nonnull final String family,
+                                                                        @Nonnull final List<String> targetList,
+                                                                        @Nonnull final String qualifiedName,
                                                                         final PsiElement context) {
     return new LocalQuickFix() {
       @Override
-      @NotNull
+      @Nonnull
       public String getName() {
         return text;
       }
 
       @Override
-      @NotNull
+      @Nonnull
       public String getFamilyName() {
         return family;
       }
 
       @Override
-      public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
+      public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
         doQuickFixInternal(project, targetList, qualifiedName);
       }
     };
   }
 
-  static void doQuickFixInternal(@NotNull Project project, @NotNull List<String> targetList, @NotNull String qualifiedName) {
+  static void doQuickFixInternal(@Nonnull Project project, @Nonnull List<String> targetList, @Nonnull String qualifiedName) {
     targetList.add(qualifiedName);
     Collections.sort(targetList);
     final InspectionProfile inspectionProfile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
@@ -79,7 +79,7 @@ public class SpecialAnnotationsUtilBase {
     */
   }
 
-  public static void createAddToSpecialAnnotationFixes(@NotNull PsiModifierListOwner owner, @NotNull Processor<String> processor) {
+  public static void createAddToSpecialAnnotationFixes(@Nonnull PsiModifierListOwner owner, @Nonnull Processor<String> processor) {
     final PsiModifierList modifierList = owner.getModifierList();
     if (modifierList != null) {
       final PsiAnnotation[] psiAnnotations = modifierList.getAnnotations();

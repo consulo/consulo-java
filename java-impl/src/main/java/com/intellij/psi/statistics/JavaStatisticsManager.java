@@ -21,8 +21,8 @@ import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -94,8 +94,8 @@ public abstract class JavaStatisticsManager {
     return key2.substring(index + 1);
   }
 
-  @NonNls @NotNull
-  public static String getMemberUseKey1(@Nullable PsiType qualifierType) {
+  @NonNls @Nonnull
+  public static String getMemberUseKey1(@javax.annotation.Nullable PsiType qualifierType) {
     qualifierType = TypeConversionUtil.erasure(qualifierType);
     return "member#" + (qualifierType == null ? "" : qualifierType.getCanonicalText());
   }

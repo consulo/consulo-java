@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -32,14 +32,14 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection
 {
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("class.name.differs.from.file.name.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("class.name.differs.from.file.name.problem.descriptor");
@@ -81,7 +81,7 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitClass(@NotNull PsiClass aClass)
+		public void visitClass(@Nonnull PsiClass aClass)
 		{
 			final PsiElement parent = aClass.getParent();
 			if(!(parent instanceof PsiJavaFile))

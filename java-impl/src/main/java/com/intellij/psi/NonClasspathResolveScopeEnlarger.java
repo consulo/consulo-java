@@ -2,7 +2,7 @@ package com.intellij.psi;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.extensions.Extensions;
@@ -20,7 +20,7 @@ import com.intellij.psi.search.SearchScope;
 public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger
 {
 	@Override
-	public SearchScope getAdditionalResolveScope(@NotNull VirtualFile file, Project project)
+	public SearchScope getAdditionalResolveScope(@Nonnull VirtualFile file, Project project)
 	{
 		ProjectFileIndex index = ProjectFileIndex.SERVICE.getInstance(project);
 		if(index.isInLibraryClasses(file) || index.isInContent(file))

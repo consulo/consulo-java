@@ -24,6 +24,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
@@ -34,18 +36,18 @@ import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class ImplementAbstractMethodAction extends BaseIntentionAction {
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.implement.abstract.method.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     final PsiMethod method = findMethod(file, offset);
 
@@ -117,7 +119,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     }
 
     @Override
-    public boolean execute(@NotNull PsiElement element) {
+    public boolean execute(@Nonnull PsiElement element) {
       if (element instanceof PsiClass) {
         PsiClass aClass = (PsiClass) element;
         if (aClass.isInterface()) return true;
@@ -165,7 +167,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method == null) return;
     if (!ApplicationManager.getApplication().isUnitTestMode() && !editor.getContentComponent().isShowing()) return;

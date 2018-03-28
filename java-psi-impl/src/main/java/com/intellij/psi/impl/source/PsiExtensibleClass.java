@@ -18,17 +18,17 @@ package com.intellij.psi.impl.source;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
 public interface PsiExtensibleClass extends PsiClass {
-  @NotNull
+  @Nonnull
   List<PsiField> getOwnFields();
 
-  @NotNull
+  @Nonnull
   List<PsiMethod> getOwnMethods();
 
-  @NotNull
+  @Nonnull
   List<PsiClass> getOwnInnerClasses();
 }

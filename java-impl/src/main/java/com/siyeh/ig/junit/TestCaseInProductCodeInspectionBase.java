@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -25,21 +26,21 @@ import com.siyeh.ig.psiutils.TestUtils;
 public class TestCaseInProductCodeInspectionBase extends BaseInspection
 {
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("test.case.in.product.code.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getID()
 	{
 		return "JUnitTestCaseInProductSource";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("test.case.in.product.code.problem.descriptor");
@@ -61,7 +62,7 @@ public class TestCaseInProductCodeInspectionBase extends BaseInspection
 	{
 
 		@Override
-		public void visitClass(@NotNull PsiClass aClass)
+		public void visitClass(@Nonnull PsiClass aClass)
 		{
 			if(TestUtils.isInTestSourceContent(aClass) || !TestUtils.isJUnitTestClass(aClass))
 			{

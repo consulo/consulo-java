@@ -4,8 +4,8 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -63,12 +63,12 @@ class SmartCastProvider implements CompletionProvider
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 	{
 		addCastVariants(parameters, result.getPrefixMatcher(), result, false);
 	}
 
-	static void addCastVariants(@NotNull CompletionParameters parameters, PrefixMatcher matcher, @NotNull Consumer<LookupElement> result, boolean quick)
+	static void addCastVariants(@Nonnull CompletionParameters parameters, PrefixMatcher matcher, @Nonnull Consumer<LookupElement> result, boolean quick)
 	{
 		if(!shouldSuggestCast(parameters))
 		{

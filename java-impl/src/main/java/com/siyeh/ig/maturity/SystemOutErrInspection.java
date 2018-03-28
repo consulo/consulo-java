@@ -23,22 +23,22 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class SystemOutErrInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UseOfSystemOutOrSystemErr";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.system.out.err.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.system.out.err.problem.descriptor");
@@ -52,7 +52,7 @@ public class SystemOutErrInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression expression) {
+      @Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       final String name = expression.getReferenceName();
       if (!HardcodedMethodConstants.OUT.equals(name) &&

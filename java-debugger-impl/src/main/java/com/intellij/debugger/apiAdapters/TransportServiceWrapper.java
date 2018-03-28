@@ -20,7 +20,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.diagnostic.Logger;
@@ -32,7 +33,7 @@ public class TransportServiceWrapper
 {
 	private static final Logger LOGGER = Logger.getInstance(TransportServiceWrapper.class);
 
-	@NotNull
+	@Nonnull
 	public static TransportServiceWrapper createTransportService(int type) throws ExecutionException
 	{
 		Class<?> transportClass = null;
@@ -72,7 +73,7 @@ public class TransportServiceWrapper
 		myDelegateObject = (TransportService) constructor.newInstance(ArrayUtil.EMPTY_OBJECT_ARRAY);
 	}
 
-	@NotNull
+	@Nonnull
 	public TransportService.ListenKey startListening() throws IOException
 	{
 		return myDelegateObject.startListening();
@@ -83,7 +84,7 @@ public class TransportServiceWrapper
 		myDelegateObject.stopListening(listenKey);
 	}
 
-	@NotNull
+	@Nonnull
 	public String transportId()
 	{
 		if(myDelegateClass == TransportClassDelegates.getSharedMemoryTransportServiceClass())

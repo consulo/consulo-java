@@ -18,7 +18,8 @@ package com.intellij.psi.impl.light;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.JavaPsiFacade;
@@ -72,7 +73,7 @@ public class LightReferenceListBuilder extends LightElement implements PsiRefere
     myRefs.add(ref);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiJavaCodeReferenceElement[] getReferenceElements() {
     if (myCachedRefs == null) {
@@ -86,7 +87,7 @@ public class LightReferenceListBuilder extends LightElement implements PsiRefere
     return myCachedRefs;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiClassType[] getReferencedTypes() {
     if (myCachedTypes == null) {

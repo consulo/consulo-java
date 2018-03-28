@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-
 class Test {
   public static void main(String[] args) {
     Object first = null;

@@ -18,7 +18,7 @@ package com.intellij.psi.codeStyle.arrangement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Denis Zhdanov
@@ -27,29 +27,29 @@ import org.jetbrains.annotations.NotNull;
 public class ArrangementEntryDependencyInfo
 {
 
-	@NotNull
+	@Nonnull
 	private final List<ArrangementEntryDependencyInfo> myDependentEntries = new ArrayList<ArrangementEntryDependencyInfo>();
 
-	@NotNull
+	@Nonnull
 	private final JavaElementArrangementEntry myAnchorEntry;
 
-	public ArrangementEntryDependencyInfo(@NotNull JavaElementArrangementEntry entry)
+	public ArrangementEntryDependencyInfo(@Nonnull JavaElementArrangementEntry entry)
 	{
 		myAnchorEntry = entry;
 	}
 
-	public void addDependentEntryInfo(@NotNull ArrangementEntryDependencyInfo info)
+	public void addDependentEntryInfo(@Nonnull ArrangementEntryDependencyInfo info)
 	{
 		myDependentEntries.add(info);
 	}
 
-	@NotNull
+	@Nonnull
 	public List<ArrangementEntryDependencyInfo> getDependentEntriesInfos()
 	{
 		return myDependentEntries;
 	}
 
-	@NotNull
+	@Nonnull
 	public JavaElementArrangementEntry getAnchorEntry()
 	{
 		return myAnchorEntry;

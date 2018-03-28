@@ -17,7 +17,8 @@ package com.intellij.testFramework.fixtures;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -46,7 +47,7 @@ public class JavaCodeInsightTestUtil
 	{
 	}
 
-	public static void doInlineLocalTest(@NotNull final CodeInsightTestFixture fixture, @NotNull final String before, @NotNull final String after)
+	public static void doInlineLocalTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -63,7 +64,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineParameterTest(@NotNull final CodeInsightTestFixture fixture, @NotNull final String before, @NotNull final String after)
+	public static void doInlineParameterTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -80,7 +81,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineMethodTest(@NotNull final CodeInsightTestFixture fixture, @NotNull final String before, @NotNull final String after)
+	public static void doInlineMethodTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -103,7 +104,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineConstantTest(@NotNull final CodeInsightTestFixture fixture, @NotNull final String before, @NotNull final String after)
+	public static void doInlineConstantTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())

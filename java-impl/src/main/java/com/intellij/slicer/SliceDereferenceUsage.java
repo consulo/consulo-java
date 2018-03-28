@@ -15,9 +15,9 @@
  */
 package com.intellij.slicer;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.usages.TextChunk;
@@ -29,18 +29,18 @@ import com.intellij.util.Processor;
  */
 public class SliceDereferenceUsage extends SliceUsage
 {
-	public SliceDereferenceUsage(@NotNull PsiElement element, @NotNull SliceUsage parent, @NotNull PsiSubstitutor substitutor)
+	public SliceDereferenceUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor)
 	{
 		super(element, parent, substitutor, 0, "");
 	}
 
 	@Override
-	public void processChildren(@NotNull Processor<SliceUsage> processor)
+	public void processChildren(@Nonnull Processor<SliceUsage> processor)
 	{
 		// no children
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public UsagePresentation getPresentation()
 	{
@@ -49,14 +49,14 @@ public class SliceDereferenceUsage extends SliceUsage
 		return new UsagePresentation()
 		{
 			@Override
-			@NotNull
+			@Nonnull
 			public TextChunk[] getText()
 			{
 				return presentation.getText();
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public String getPlainText()
 			{
 				return presentation.getPlainText();

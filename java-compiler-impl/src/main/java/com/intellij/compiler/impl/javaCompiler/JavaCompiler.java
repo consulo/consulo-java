@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.make.CacheCorruptedException;
@@ -71,7 +71,7 @@ public class JavaCompiler implements TranslatingCompiler
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDescription()
 	{
 		return CompilerBundle.message("java.compiler.description");
@@ -135,7 +135,7 @@ public class JavaCompiler implements TranslatingCompiler
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<VirtualFile> filterResourceFiles(CompileContext compileContext, VirtualFile[] virtualFiles)
 	{
 		ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(compileContext.getProject());
@@ -153,14 +153,14 @@ public class JavaCompiler implements TranslatingCompiler
 		return list;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileType[] getInputFileTypes()
 	{
 		return new FileType[]{JavaFileType.INSTANCE};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileType[] getOutputFileTypes()
 	{
@@ -174,7 +174,7 @@ public class JavaCompiler implements TranslatingCompiler
 	}
 
 	@Override
-	public void registerCompilableFileTypes(@NotNull Consumer<FileType> fileTypeConsumer)
+	public void registerCompilableFileTypes(@Nonnull Consumer<FileType> fileTypeConsumer)
 	{
 		fileTypeConsumer.accept(JavaFileType.INSTANCE);
 	}

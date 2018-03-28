@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiProvidesStatement;
@@ -51,7 +52,7 @@ public class ClsProvidesStatementImpl extends ClsRepositoryPsiElement<PsiProvide
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		StringUtil.repeatSymbol(buffer, ' ', indentLevel);
 		buffer.append("provides ").append(myClassReference.getCanonicalText()).append(' ');
@@ -60,7 +61,7 @@ public class ClsProvidesStatementImpl extends ClsRepositoryPsiElement<PsiProvide
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.PROVIDES_STATEMENT);
 		setMirror(getInterfaceReference(), SourceTreeToPsiMap.<PsiProvidesStatement>treeToPsiNotNull(element).getInterfaceReference());

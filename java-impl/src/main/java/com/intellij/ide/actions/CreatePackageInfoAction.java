@@ -17,7 +17,7 @@ package com.intellij.ide.actions;
 
 import static com.intellij.ide.fileTemplates.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.IdeView;
@@ -131,7 +131,7 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public AttributesDefaults getAttributesDefaults(DataContext dataContext)
 	{

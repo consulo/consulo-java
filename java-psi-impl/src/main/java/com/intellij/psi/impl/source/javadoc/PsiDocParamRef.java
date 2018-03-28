@@ -20,7 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -103,7 +104,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public String getCanonicalText()
 			{
 				return valueToken.getText();
@@ -119,7 +120,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
 			}
 
 			@Override
-			public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException
+			public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
 			{
 				if(isReferenceTo(element))
 				{
@@ -148,7 +149,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public PsiElement[] getVariants()
 			{
 				final PsiElement firstChild = getFirstChild();
@@ -206,7 +207,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
 			}
 
 			@Override
-			public void processVariants(@NotNull PsiScopeProcessor processor)
+			public void processVariants(@Nonnull PsiScopeProcessor processor)
 			{
 				for(final PsiElement element : getVariants())
 				{
@@ -218,14 +219,14 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public JavaResolveResult advancedResolve(boolean incompleteCode)
 			{
 				return resultReference == null ? JavaResolveResult.EMPTY : new CandidateInfo(resultReference, PsiSubstitutor.EMPTY);
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public JavaResolveResult[] multiResolve(boolean incompleteCode)
 			{
 				return resultReference == null ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{new CandidateInfo(resultReference, PsiSubstitutor.EMPTY)};
@@ -234,7 +235,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

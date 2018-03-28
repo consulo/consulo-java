@@ -45,7 +45,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -413,7 +412,7 @@ public class TargetOptionsComponent extends JPanel
 		myCbProjectTargetLevel.setSelectedItem(level == null ? "" : level);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getProjectBytecodeTarget()
 	{
 		String item = ((String) myCbProjectTargetLevel.getSelectedItem()).trim();

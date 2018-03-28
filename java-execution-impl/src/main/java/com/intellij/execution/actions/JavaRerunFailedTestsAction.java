@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.actions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.testframework.Filter;
 import com.intellij.execution.testframework.JavaAwareFilter;
 import com.intellij.execution.testframework.TestConsoleProperties;
@@ -30,15 +31,15 @@ import com.intellij.psi.search.GlobalSearchScope;
  */
 public class JavaRerunFailedTestsAction extends AbstractRerunFailedTestsAction
 {
-	public JavaRerunFailedTestsAction(@NotNull ComponentContainer componentContainer, @NotNull TestConsoleProperties consoleProperties)
+	public JavaRerunFailedTestsAction(@Nonnull ComponentContainer componentContainer, @Nonnull TestConsoleProperties consoleProperties)
 	{
 		super(componentContainer);
 		init(consoleProperties);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected Filter getFilter(@NotNull Project project, @NotNull GlobalSearchScope searchScope)
+	protected Filter getFilter(@Nonnull Project project, @Nonnull GlobalSearchScope searchScope)
 	{
 		return super.getFilter(project, searchScope).and(JavaAwareFilter.METHOD(project, searchScope));
 	}

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -31,13 +33,13 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "manual.array.to.collection.copy.display.name");
@@ -49,7 +51,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "manual.array.to.collection.copy.problem.descriptor");
@@ -63,7 +65,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   private static class ManualArrayToCollectionCopyFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "manual.array.to.collection.copy.replace.quickfix");
@@ -435,7 +437,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @NotNull PsiForStatement statement) {
+      @Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiStatement initialization = statement.getInitialization();
       if (!(initialization instanceof PsiDeclarationStatement)) {

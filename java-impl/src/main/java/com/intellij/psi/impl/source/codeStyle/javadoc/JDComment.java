@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source.codeStyle.javadoc;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.util.containers.ContainerUtilRt;
 
 /**
@@ -39,7 +39,7 @@ public class JDComment
 	private String myDeprecated;
 	private boolean myMultiLineComment;
 
-	public JDComment(@NotNull CommentFormatter formatter)
+	public JDComment(@Nonnull CommentFormatter formatter)
 	{
 		myFormatter = formatter;
 	}
@@ -49,7 +49,7 @@ public class JDComment
 		return s == null || s.trim().isEmpty();
 	}
 
-	protected static boolean isNull(@Nullable List<?> l)
+	protected static boolean isNull(@javax.annotation.Nullable List<?> l)
 	{
 		return l == null || l.isEmpty();
 	}
@@ -59,8 +59,8 @@ public class JDComment
 		myMultiLineComment = value;
 	}
 
-	@Nullable
-	public String generate(@NotNull String indent)
+	@javax.annotation.Nullable
+	public String generate(@Nonnull String indent)
 	{
 		final String prefix;
 
@@ -162,11 +162,11 @@ public class JDComment
 		return sb.toString();
 	}
 
-	protected void generateSpecial(@NotNull String prefix, @NotNull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 	}
 
-	public void addSeeAlso(@NotNull String seeAlso)
+	public void addSeeAlso(@Nonnull String seeAlso)
 	{
 		if(mySeeAlsoList == null)
 		{
@@ -175,7 +175,7 @@ public class JDComment
 		mySeeAlsoList.add(seeAlso);
 	}
 
-	public void addUnknownTag(@NotNull String unknownTag)
+	public void addUnknownTag(@Nonnull String unknownTag)
 	{
 		if(myUnknownList == null)
 		{
@@ -184,23 +184,23 @@ public class JDComment
 		myUnknownList.add(unknownTag);
 	}
 
-	public void setSince(@Nullable String since)
+	public void setSince(@javax.annotation.Nullable String since)
 	{
 		this.mySince = since;
 	}
 
-	public void setDeprecated(@Nullable String deprecated)
+	public void setDeprecated(@javax.annotation.Nullable String deprecated)
 	{
 		this.myDeprecated = deprecated;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getDescription()
 	{
 		return myDescription;
 	}
 
-	public void setDescription(@Nullable String description)
+	public void setDescription(@javax.annotation.Nullable String description)
 	{
 		this.myDescription = description;
 	}

@@ -17,7 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,8 @@ public class VariableSearchUtils {
   }
 
   public static boolean variableNameResolvesToTarget(
-    @NotNull String variableName, @NotNull PsiVariable target,
-    @NotNull PsiElement context) {
+    @Nonnull String variableName, @Nonnull PsiVariable target,
+    @Nonnull PsiElement context) {
 
     final Project project = context.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);

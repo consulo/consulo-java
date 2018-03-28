@@ -1,7 +1,7 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.AnnotateMethodFix;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.nullable.NullableStuffInspection;
@@ -16,7 +16,7 @@ public class AnnotateMethodTest extends LightQuickFix15TestCase {
     return "/codeInsight/daemonCodeAnalyzer/quickFix/annotateMethod";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new NullableStuffInspection(){

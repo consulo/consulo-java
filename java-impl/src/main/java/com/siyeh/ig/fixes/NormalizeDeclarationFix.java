@@ -21,11 +21,11 @@ import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class NormalizeDeclarationFix extends InspectionGadgetsFix {
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("normalize.declaration.quickfix");
   }

@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection.equalsAndHashcode;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -30,16 +32,16 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.MethodSignatureUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author max
  */
 public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
   @Override
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     final Project project = holder.getProject();
     Pair<PsiMethod, PsiMethod> pair = CachedValuesManager.getManager(project).getCachedValue(project, new CachedValueProvider<Pair<PsiMethod, PsiMethod>>() {
       @Override
@@ -114,19 +116,19 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.equals.hashcode.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "EqualsAndHashcode";
   }

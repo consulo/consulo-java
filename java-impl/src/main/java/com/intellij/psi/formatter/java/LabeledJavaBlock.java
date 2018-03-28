@@ -18,7 +18,7 @@ package com.intellij.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
@@ -76,7 +76,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		return new ChildAttributes(Indent.getNoneIndent(), null);

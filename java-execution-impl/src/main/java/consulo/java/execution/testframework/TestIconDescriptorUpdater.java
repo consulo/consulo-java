@@ -15,7 +15,7 @@
  */
 package consulo.java.execution.testframework;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiElement;
 import com.intellij.testIntegration.TestFramework;
@@ -31,7 +31,7 @@ public class TestIconDescriptorUpdater implements IconDescriptorUpdater
 {
 	@RequiredReadAction
 	@Override
-	public void updateIcon(@NotNull IconDescriptor iconDescriptor, @NotNull PsiElement element, int flags)
+	public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement element, int flags)
 	{
 		for(TestFramework framework : TestFramework.EXTENSION_NAME.getExtensions())
 		{

@@ -20,7 +20,7 @@ import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -52,12 +52,12 @@ public class VisibilitySorter implements Sorter{
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public ActionPresentation getPresentation() {
     return PRESENTATION;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return ID;
   }

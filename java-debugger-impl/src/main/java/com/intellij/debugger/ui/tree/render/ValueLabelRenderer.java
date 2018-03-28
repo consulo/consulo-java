@@ -18,7 +18,6 @@ package com.intellij.debugger.ui.tree.render;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -30,6 +29,6 @@ import javax.swing.*;
 public interface ValueLabelRenderer extends Renderer {
   String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException;
 
-  @Nullable
+  @javax.annotation.Nullable
   Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException;
 }

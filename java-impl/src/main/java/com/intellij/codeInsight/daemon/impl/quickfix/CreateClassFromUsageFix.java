@@ -28,7 +28,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Mike
@@ -46,7 +46,7 @@ public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix {
 
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     final PsiJavaCodeReferenceElement element = getRefElement();
     assert element != null;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;

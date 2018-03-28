@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.quickfix.DefineParamsDefaultValueAction;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -50,7 +50,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl
 	DetectedJavaChangeInfo(@PsiModifier.ModifierConstant String newVisibility,
 			PsiMethod method,
 			CanonicalTypes.Type newType,
-			@NotNull ParameterInfoImpl[] newParms,
+			@Nonnull ParameterInfoImpl[] newParms,
 			ThrownExceptionInfo[] newExceptions,
 			String newName,
 			String oldName,
@@ -213,7 +213,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl
 		})
 		{
 			@Override
-			protected void performRefactoring(@NotNull UsageInfo[] usages)
+			protected void performRefactoring(@Nonnull UsageInfo[] usages)
 			{
 				super.performRefactoring(usages);
 				final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(method.getProject());

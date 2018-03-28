@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java <code>try ... catch ... finally</code> statement.
@@ -36,7 +36,7 @@ public interface PsiTryStatement extends PsiStatement {
    *
    * @return the array of code blocks, or an empty array if the statement has no catch sections.
    */
-  @NotNull
+  @Nonnull
   PsiCodeBlock[] getCatchBlocks();
 
   /**
@@ -44,7 +44,7 @@ public interface PsiTryStatement extends PsiStatement {
    *
    * @return the array of parameters, or an empty array if the statement has no catch sections.
    */
-  @NotNull
+  @Nonnull
   PsiParameter[] getCatchBlockParameters();
 
   /**
@@ -53,7 +53,7 @@ public interface PsiTryStatement extends PsiStatement {
    * @return the array of <code>catch</code> sections, or an empty array if the statement
    * has no catch sections.
    */
-  @NotNull
+  @Nonnull
   PsiCatchSection[] getCatchSections();
 
   /**
@@ -62,7 +62,7 @@ public interface PsiTryStatement extends PsiStatement {
    * @return the code block for the <code>finally</code> section, or null if the statement
    * does not have one.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiCodeBlock getFinallyBlock();
 
   /**
@@ -70,6 +70,6 @@ public interface PsiTryStatement extends PsiStatement {
    *
    * @return resource list, or null if the statement doesn't have it.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiResourceList getResourceList();
 }

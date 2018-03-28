@@ -27,7 +27,7 @@ import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
@@ -36,14 +36,14 @@ import org.jetbrains.annotations.NotNull;
 public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance("#" + PossibleHeapPollutionVarargsInspection.class.getName());
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getGroupDisplayName() {
     return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Possible heap pollution from parameterized vararg type";
@@ -54,21 +54,21 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getShortName() {
     return "SafeVarargsDetector";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getID() {
     return "unchecked";
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new HeapPollutionVisitor() {
       @Override
       protected void registerProblem(PsiMethod method, PsiIdentifier nameIdentifier) {
@@ -92,20 +92,20 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
   }
 
   private static class AnnotateAsSafeVarargsQuickFix implements LocalQuickFix {
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return "Annotate as @SafeVarargs";
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
         final PsiMethod psiMethod = (PsiMethod)psiElement.getParent();
@@ -117,20 +117,20 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
   }
 
   private static class MakeFinalAndAnnotateQuickFix implements LocalQuickFix {
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return "Make final and annotate as @SafeVarargs";
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
         final PsiMethod psiMethod = (PsiMethod)psiElement.getParent();

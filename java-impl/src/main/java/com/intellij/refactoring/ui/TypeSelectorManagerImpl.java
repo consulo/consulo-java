@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeUtil;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -404,12 +404,12 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager
 	}
 
 	@Override
-	public void typeSelected(@NotNull PsiType type)
+	public void typeSelected(@Nonnull PsiType type)
 	{
 		typeSelected(type, getDefaultType());
 	}
 
-	public static void typeSelected(@NotNull final PsiType type, @Nullable final PsiType defaultType)
+	public static void typeSelected(@Nonnull final PsiType type, @javax.annotation.Nullable final PsiType defaultType)
 	{
 		if(defaultType == null)
 		{
@@ -433,7 +433,7 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager
 		return "IntroduceVariable##" + serialize(defaultType);
 	}
 
-	private static String serialize(@NotNull PsiType type)
+	private static String serialize(@Nonnull PsiType type)
 	{
 		if(PsiUtil.resolveClassInType(type) instanceof PsiTypeParameter)
 		{

@@ -21,7 +21,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.indexing.DataIndexer;
 import com.intellij.util.indexing.FileContent;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.org.objectweb.asm.*;
 import org.jetbrains.org.objectweb.asm.tree.MethodNode;
 import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
@@ -48,9 +48,9 @@ public class ClassDataIndexer implements DataIndexer<Bytes, HEquations, FileCont
   public static final Final FINAL_NOT_NULL = new Final(Value.NotNull);
   public static final Final FINAL_NULL = new Final(Value.Null);
 
-  @NotNull
+  @Nonnull
   @Override
-  public Map<Bytes, HEquations> map(@NotNull FileContent inputData) {
+  public Map<Bytes, HEquations> map(@Nonnull FileContent inputData) {
     HashMap<Bytes, HEquations> map = new HashMap<Bytes, HEquations>();
     try {
       MessageDigest md = BytecodeAnalysisConverter.getMessageDigest();
@@ -447,7 +447,7 @@ public class ClassDataIndexer implements DataIndexer<Bytes, HEquations, FileCont
         return result;
       }
 
-      @NotNull
+      @Nonnull
       private LeakingParameters leakingParametersAndFrames(Method method, MethodNode methodNode, Type[] argumentTypes, boolean jsr)
         throws AnalyzerException {
         return argumentTypes.length < 32 ?

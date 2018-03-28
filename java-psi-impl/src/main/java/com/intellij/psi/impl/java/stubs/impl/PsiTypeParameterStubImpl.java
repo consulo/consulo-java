@@ -28,7 +28,7 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class PsiTypeParameterStubImpl extends StubBase<PsiTypeParameter> impleme
   }
   
   @Override
-  @NotNull
+  @Nonnull
   public List<PsiAnnotationStub> getAnnotations() {
     List<StubElement> children = getChildrenStubs();
 

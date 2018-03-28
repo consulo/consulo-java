@@ -44,7 +44,7 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -56,8 +56,8 @@ public class HighlightUtil {
   }
 
   public static void highlightElements(
-    @NotNull final Collection<? extends PsiElement> elementCollection,
-    @NotNull final String statusBarText) {
+    @Nonnull final Collection<? extends PsiElement> elementCollection,
+    @Nonnull final String statusBarText) {
     if (elementCollection.isEmpty()) {
       return;
     }
@@ -103,7 +103,7 @@ public class HighlightUtil {
   }
 
   public static void highlightElement(
-    @NotNull PsiElement element, @NotNull final String statusBarText) {
+    @Nonnull PsiElement element, @Nonnull final String statusBarText) {
     final List<PsiElement> elements = Collections.singletonList(element);
     highlightElements(elements, statusBarText);
   }

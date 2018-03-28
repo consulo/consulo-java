@@ -16,8 +16,9 @@
 
 package com.intellij.codeInspection.unusedImport;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -32,19 +33,19 @@ public class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool imp
   public static final String DISPLAY_NAME = InspectionsBundle.message("unused.import");
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.IMPORTS_GROUP_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return SHORT_NAME;

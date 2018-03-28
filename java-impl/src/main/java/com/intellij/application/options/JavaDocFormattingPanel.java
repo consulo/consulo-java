@@ -20,11 +20,11 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.codeStyle.OptionTreeWithPreviewPanel;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.java.JavaLanguage;
@@ -164,7 +164,7 @@ public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel {
     return super.isModified(settings) || myEnableCheckBox.isSelected() != settings.ENABLE_JAVADOC_FORMATTING;
   }
 
-  @NotNull
+  @Nonnull
   protected final FileType getFileType() {
     return JavaFileType.INSTANCE;
   }

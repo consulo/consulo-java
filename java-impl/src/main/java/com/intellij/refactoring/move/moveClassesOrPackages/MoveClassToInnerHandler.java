@@ -18,8 +18,8 @@ package com.intellij.refactoring.move.moveClassesOrPackages;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -35,17 +35,17 @@ public interface MoveClassToInnerHandler {
   ExtensionPointName<MoveClassToInnerHandler> EP_NAME =
 		  new ExtensionPointName<MoveClassToInnerHandler>("consulo.java.refactoring.moveClassToInnerHandler");
 
-  @Nullable
-  PsiClass moveClass(@NotNull PsiClass aClass, @NotNull PsiClass targetClass);
+  @javax.annotation.Nullable
+  PsiClass moveClass(@Nonnull PsiClass aClass, @Nonnull PsiClass targetClass);
 
   /**
    * filters out import usages from results. Returns all found import usages
    */
-  List<PsiElement> filterImports(@NotNull List<UsageInfo> usageInfos, @NotNull Project project);
+  List<PsiElement> filterImports(@Nonnull List<UsageInfo> usageInfos, @Nonnull Project project);
 
-  void retargetClassRefsInMoved(@NotNull Map<PsiElement, PsiElement> mapping);
+  void retargetClassRefsInMoved(@Nonnull Map<PsiElement, PsiElement> mapping);
 
-  void retargetNonCodeUsages(@NotNull final Map<PsiElement, PsiElement> oldToNewElementMap, @NotNull NonCodeUsageInfo[] myNonCodeUsages);
+  void retargetNonCodeUsages(@Nonnull final Map<PsiElement, PsiElement> oldToNewElementMap, @Nonnull NonCodeUsageInfo[] myNonCodeUsages);
 
   void removeRedundantImports(PsiFile targetClassFile);
 }

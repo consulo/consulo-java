@@ -24,8 +24,9 @@
  */
 package org.osmorc.manifest.lang;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.tree.IElementType;
 
 /**
@@ -51,7 +52,7 @@ public class ManifestTokenType extends IElementType
 	public static final ManifestTokenType CLOSING_BRACKET_TOKEN = new ManifestTokenType("CLOSING_BRACKET_TOKEN");
 	public static final ManifestTokenType LINE_COMMENT = new ManifestTokenType("LINE_COMMENT");
 
-	public ManifestTokenType(@NotNull @NonNls String debugName)
+	public ManifestTokenType(@Nonnull @NonNls String debugName)
 	{
 		super(debugName, ManifestLanguage.INSTANCE);
 	}

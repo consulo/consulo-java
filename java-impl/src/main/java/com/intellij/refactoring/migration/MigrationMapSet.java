@@ -26,12 +26,14 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.Extensions;
@@ -92,7 +94,7 @@ public class MigrationMapSet
 	}
 
 	@Nullable
-	public MigrationMap findMigrationMap(@NotNull String name)
+	public MigrationMap findMigrationMap(@Nonnull String name)
 	{
 		if(myMaps == null)
 		{

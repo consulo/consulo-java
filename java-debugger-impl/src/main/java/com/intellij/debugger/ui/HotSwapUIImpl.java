@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -131,7 +130,7 @@ public class HotSwapUIImpl extends HotSwapUI
 		return false;
 	}
 
-	private void hotSwapSessions(final List<DebuggerSession> sessions, @Nullable final Map<String, List<String>> generatedPaths)
+	private void hotSwapSessions(final List<DebuggerSession> sessions, @javax.annotation.Nullable final Map<String, List<String>> generatedPaths)
 	{
 		final boolean shouldAskBeforeHotswap = myAskBeforeHotswap;
 		myAskBeforeHotswap = true;

@@ -19,7 +19,7 @@ import java.awt.Font;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
@@ -34,18 +34,18 @@ import com.intellij.util.Processor;
  */
 public class SliceTooComplexDFAUsage extends SliceUsage
 {
-	public SliceTooComplexDFAUsage(@NotNull PsiElement element, @NotNull SliceUsage parent, @NotNull PsiSubstitutor substitutor)
+	public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor)
 	{
 		super(element, parent, substitutor, 0, "");
 	}
 
 	@Override
-	public void processChildren(@NotNull Processor<SliceUsage> processor)
+	public void processChildren(@Nonnull Processor<SliceUsage> processor)
 	{
 		// no children
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public UsagePresentation getPresentation()
 	{
@@ -53,7 +53,7 @@ public class SliceTooComplexDFAUsage extends SliceUsage
 		return new UsagePresentation()
 		{
 			@Override
-			@NotNull
+			@Nonnull
 			public TextChunk[] getText()
 			{
 				return new TextChunk[]{
@@ -62,7 +62,7 @@ public class SliceTooComplexDFAUsage extends SliceUsage
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public String getPlainText()
 			{
 				return presentation.getPlainText();

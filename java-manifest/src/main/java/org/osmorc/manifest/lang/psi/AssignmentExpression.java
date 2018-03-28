@@ -25,10 +25,11 @@
 
 package org.osmorc.manifest.lang.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.StubBasedPsiElement;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
 
 /**
@@ -41,7 +42,7 @@ public interface AssignmentExpression extends PsiNamedElement, StubBasedPsiEleme
 
   String getValue();
 
-  PsiElement setName(@NotNull String name);
+  PsiElement setName(@Nonnull String name);
 
-  void setValue(@NotNull String value);
+  void setValue(@Nonnull String value);
 }

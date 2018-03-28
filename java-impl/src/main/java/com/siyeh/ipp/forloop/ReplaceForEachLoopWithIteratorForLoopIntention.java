@@ -15,8 +15,9 @@
  */
 package com.siyeh.ipp.forloop;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
@@ -30,13 +31,13 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 public class ReplaceForEachLoopWithIteratorForLoopIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new IterableForEachLoopPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiForeachStatement statement = (PsiForeachStatement)element.getParent();
     if (statement == null) {
       return;

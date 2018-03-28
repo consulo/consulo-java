@@ -20,7 +20,7 @@ import gnu.trove.TObjectHashingStrategy;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.codeInspection.dataFlow.DfaMemoryStateImpl;
 import com.intellij.codeInspection.dataFlow.value.DfaInstanceofValue;
@@ -72,7 +72,7 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 		super(toCopy);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DfaMemoryStateImpl createCopy()
 	{
@@ -141,7 +141,7 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 		return super.toString() + " states=[" + new HashMap<>(myStates) + "]";
 	}
 
-	public void setExpressionType(PsiExpression expression, @NotNull PsiType type)
+	public void setExpressionType(PsiExpression expression, @Nonnull PsiType type)
 	{
 		PsiType prev = myStates.get(expression);
 		if(prev == null || !type.isAssignableFrom(prev))

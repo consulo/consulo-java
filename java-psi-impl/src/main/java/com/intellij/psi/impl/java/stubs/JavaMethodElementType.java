@@ -20,8 +20,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -59,13 +60,13 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 	}
 
 	@Override
-	public PsiMethod createPsi(@NotNull final PsiMethodStub stub)
+	public PsiMethod createPsi(@Nonnull final PsiMethodStub stub)
 	{
 		return getPsiFactory(stub).createMethod(stub);
 	}
 
 	@Override
-	public PsiMethod createPsi(@NotNull final ASTNode node)
+	public PsiMethod createPsi(@Nonnull final ASTNode node)
 	{
 		if(node instanceof AnnotationMethodElement)
 		{
@@ -141,7 +142,7 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 	}
 
 	@Override
-	public void serialize(@NotNull final PsiMethodStub stub, @NotNull final StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull final PsiMethodStub stub, @Nonnull final StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getName());
 		TypeInfo.writeTYPE(dataStream, stub.getReturnTypeText(false));
@@ -152,9 +153,9 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiMethodStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	public PsiMethodStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
 	{
 		StringRef name = dataStream.readName();
 		final TypeInfo type = TypeInfo.readTYPE(dataStream);
@@ -164,7 +165,7 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 	}
 
 	@Override
-	public void indexStub(@NotNull final PsiMethodStub stub, @NotNull final IndexSink sink)
+	public void indexStub(@Nonnull final PsiMethodStub stub, @Nonnull final IndexSink sink)
 	{
 		final String name = stub.getName();
 		if(name != null)

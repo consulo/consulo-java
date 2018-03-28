@@ -1,6 +1,6 @@
 <root>
   <item name='multiRoot.Test java.lang.String get(java.lang.String)'>
-    <annotation name='org.jetbrains.annotations.Nullable'>
+    <annotation name='javax.annotation.Nullable'>
       <val name="value" val="&quot;foo&quot;"/>
     </annotation>
   </item>

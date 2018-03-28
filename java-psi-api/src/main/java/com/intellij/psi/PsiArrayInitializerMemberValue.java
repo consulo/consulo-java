@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents an array used as a value of an annotation element. For example:
@@ -29,6 +29,6 @@ public interface PsiArrayInitializerMemberValue extends PsiAnnotationMemberValue
    *
    * @return the initializer array elements.
    */
-  @NotNull
+  @Nonnull
   PsiAnnotationMemberValue[] getInitializers();
 }

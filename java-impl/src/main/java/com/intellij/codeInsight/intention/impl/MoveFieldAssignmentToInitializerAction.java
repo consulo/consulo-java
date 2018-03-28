@@ -29,7 +29,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,19 +40,19 @@ import java.util.List;
  */
 public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction {
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.move.field.assignment.to.declaration");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
     if (assignment == null) return false;
     PsiField field = getAssignedField(assignment);
@@ -159,7 +159,7 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
     if (assignment == null) return;
     PsiField field = getAssignedField(assignment);

@@ -15,9 +15,11 @@
  */
 package com.intellij.psi.javadoc;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiDocCommentBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaDocumentedElement;
@@ -38,13 +40,13 @@ public interface PsiDocComment extends PsiDocCommentBase
 	 * Returns the PSI elements containing the description of the element being documented
 	 * (all significant tokens up to the first doc comment tag).
 	 */
-	@NotNull
+	@Nonnull
 	PsiElement[] getDescriptionElements();
 
 	/**
 	 * Returns the list of JavaDoc tags in the comment.
 	 */
-	@NotNull
+	@Nonnull
 	PsiDocTag[] getTags();
 
 	/**
@@ -61,6 +63,6 @@ public interface PsiDocComment extends PsiDocCommentBase
 	 *
 	 * @param name The name of the tags to find (not including the leading @ character).
 	 */
-	@NotNull
+	@Nonnull
 	PsiDocTag[] findTagsByName(@NonNls String name);
 }

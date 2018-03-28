@@ -30,8 +30,8 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -62,8 +62,8 @@ public class JavaModuleGraphUtil
 	{
 	}
 
-	@Nullable
-	public static PsiJavaModule findDescriptorByElement(@Nullable PsiElement element)
+	@javax.annotation.Nullable
+	public static PsiJavaModule findDescriptorByElement(@javax.annotation.Nullable PsiElement element)
 	{
 		if(element != null)
 		{
@@ -77,34 +77,34 @@ public class JavaModuleGraphUtil
 		return null;
 	}
 
-	@Nullable
-	public static Collection<PsiJavaModule> findCycle(@NotNull PsiJavaModule module)
+	@javax.annotation.Nullable
+	public static Collection<PsiJavaModule> findCycle(@Nonnull PsiJavaModule module)
 	{
 		Project project = module.getProject();
 		List<Set<PsiJavaModule>> cycles = CachedValuesManager.getManager(project).getCachedValue(project, () -> Result.create(findCycles(project), OUT_OF_CODE_BLOCK_MODIFICATION_COUNT));
 		return ContainerUtil.find(cycles, set -> set.contains(module));
 	}
 
-	public static boolean exports(@NotNull PsiJavaModule source, @NotNull String packageName, @NotNull PsiJavaModule target)
+	public static boolean exports(@Nonnull PsiJavaModule source, @Nonnull String packageName, @Nonnull PsiJavaModule target)
 	{
 		Map<String, Set<String>> exports = CachedValuesManager.getCachedValue(source, () -> Result.create(exportsMap(source), source.getContainingFile()));
 		Set<String> targets = exports.get(packageName);
 		return targets != null && (targets.isEmpty() || targets.contains(target.getName()));
 	}
 
-	public static boolean reads(@NotNull PsiJavaModule source, @NotNull PsiJavaModule destination)
+	public static boolean reads(@Nonnull PsiJavaModule source, @Nonnull PsiJavaModule destination)
 	{
 		return getRequiresGraph(source).reads(source, destination);
 	}
 
-	@Nullable
-	public static Trinity<String, PsiJavaModule, PsiJavaModule> findConflict(@NotNull PsiJavaModule module)
+	@javax.annotation.Nullable
+	public static Trinity<String, PsiJavaModule, PsiJavaModule> findConflict(@Nonnull PsiJavaModule module)
 	{
 		return getRequiresGraph(module).findConflict(module);
 	}
 
 	@Nullable
-	public static PsiJavaModule findOrigin(@NotNull PsiJavaModule module, @NotNull String packageName)
+	public static PsiJavaModule findOrigin(@Nonnull PsiJavaModule module, @Nonnull String packageName)
 	{
 		return getRequiresGraph(module).findOrigin(module, packageName);
 	}
@@ -156,7 +156,7 @@ public class JavaModuleGraphUtil
 		return Collections.emptyList();
 	}
 
-	private static Map<String, Set<String>> exportsMap(@NotNull PsiJavaModule source)
+	private static Map<String, Set<String>> exportsMap(@Nonnull PsiJavaModule source)
 	{
 		Map<String, Set<String>> map = ContainerUtil.newHashMap();
 		for(PsiPackageAccessibilityStatement statement : source.getExports())

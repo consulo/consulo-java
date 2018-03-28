@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,11 +27,10 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class EmptyFinallyBlockInspection extends BaseInspection {
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("empty.finally.block.display.name");
   }
@@ -40,7 +41,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("empty.finally.block.problem.descriptor");
   }
@@ -57,7 +58,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   }
 
   private static class RemoveTryFinallyBlockFix extends InspectionGadgetsFix {
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("remove.try.finally.block.quickfix");
     }
@@ -98,7 +99,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   }
 
   private static class RemoveFinallyBlockFix extends InspectionGadgetsFix {
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("remove.finally.block.quickfix");
     }
@@ -145,7 +146,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
 
     @Override
     public void visitTryStatement(
-      @NotNull PsiTryStatement statement) {
+      @Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
      /* if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

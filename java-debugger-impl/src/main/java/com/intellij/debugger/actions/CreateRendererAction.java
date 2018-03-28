@@ -17,7 +17,7 @@ package com.intellij.debugger.actions;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JavaValue;
@@ -47,7 +47,7 @@ public class CreateRendererAction extends AnAction
 		}
 	}
 
-	public void actionPerformed(@NotNull final AnActionEvent event)
+	public void actionPerformed(@Nonnull final AnActionEvent event)
 	{
 		final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
 		final List<JavaValue> values = ViewAsGroup.getSelectedValues(event);
@@ -78,7 +78,7 @@ public class CreateRendererAction extends AnAction
 					ConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable = new ConfigurableBase<UserRenderersConfigurable, NodeRendererSettings>("reference.idesettings" +
 							".debugger.typerenderers", DebuggerBundle.message("user.renderers.configurable.display.name"), "reference.idesettings.debugger.typerenderers")
 					{
-						@NotNull
+						@Nonnull
 						@Override
 						protected NodeRendererSettings getSettings()
 						{

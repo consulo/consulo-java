@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
@@ -46,7 +46,7 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
     super(isInherited, method);
   }
 
-  @NotNull
+  @Nonnull
   public Collection<StructureViewTreeElement> getChildrenBase() {
     final ArrayList<StructureViewTreeElement> result = new ArrayList<StructureViewTreeElement>();
     final PsiMethod element = getElement();

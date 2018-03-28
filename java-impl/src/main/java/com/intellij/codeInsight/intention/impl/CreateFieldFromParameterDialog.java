@@ -36,7 +36,6 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
@@ -296,7 +295,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
     return myNameField;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiType getType() {
     return myTypeSelector.getSelectedType();
   }

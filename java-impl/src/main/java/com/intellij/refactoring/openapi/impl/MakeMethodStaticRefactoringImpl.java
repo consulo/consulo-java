@@ -26,8 +26,6 @@ import com.intellij.refactoring.makeStatic.Settings;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * @author dsl
  */
@@ -65,7 +63,7 @@ public class MakeMethodStaticRefactoringImpl extends RefactoringImpl<MakeMethodS
     return result;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String getParameterNameForField(PsiField field) {
     return myProcessor.getSettings().getNameForField(field);
   }

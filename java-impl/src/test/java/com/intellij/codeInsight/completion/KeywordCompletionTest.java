@@ -15,10 +15,11 @@
  */
 package com.intellij.codeInsight.completion;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ik
@@ -36,7 +37,7 @@ public class KeywordCompletionTest extends LightCompletionTestCase {
   private static final String[] INTERFACE_SCOPE_KEYWORDS = {
     "package", "public", "private", "protected", "transient", "volatile", "static", "import", "final", "class", "interface", "abstract", "default"};
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -51,7 +51,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 	private Boolean myIsObsolete = null;
 	private Map<LocalVariable, Value> myAllValues;
 
-	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, @NotNull StackFrame frame, int fromBottomIndex /* 1-based */)
+	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, @Nonnull StackFrame frame, int fromBottomIndex /* 1-based */)
 	{
 		super(threadProxy.getVirtualMachine());
 		myThreadProxy = threadProxy;
@@ -186,7 +186,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		return (VirtualMachineProxyImpl) myTimer;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Location location() throws EvaluateException
 	{
@@ -232,7 +232,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public ObjectReference thisObject() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -309,7 +309,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 	}
 
 	@Nullable
-	public Value visibleValueByName(@NotNull String name) throws EvaluateException
+	public Value visibleValueByName(@Nonnull String name) throws EvaluateException
 	{
 		LocalVariable variable = visibleVariableByNameInt(name);
 		return variable != null ? getValue(new LocalVariableProxyImpl(this, variable)) : null;

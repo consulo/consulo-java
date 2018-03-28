@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source.codeStyle.javadoc;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.util.containers.ContainerUtilRt;
 
 /**
@@ -31,13 +31,13 @@ public class JDClassComment extends JDParamListOwnerComment
 	private List<String> myAuthorsList;
 	private String myVersion;
 
-	public JDClassComment(@NotNull CommentFormatter formatter)
+	public JDClassComment(@Nonnull CommentFormatter formatter)
 	{
 		super(formatter);
 	}
 
 	@Override
-	protected void generateSpecial(@NotNull String prefix, @NotNull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 		super.generateSpecial(prefix, sb);
 		if(!isNull(myAuthorsList))
@@ -59,7 +59,7 @@ public class JDClassComment extends JDParamListOwnerComment
 		}
 	}
 
-	public void addAuthor(@NotNull String author)
+	public void addAuthor(@Nonnull String author)
 	{
 		if(myAuthorsList == null)
 		{
@@ -74,7 +74,7 @@ public class JDClassComment extends JDParamListOwnerComment
 		return myVersion;
 	}
 
-	public void setVersion(@NotNull String version)
+	public void setVersion(@Nonnull String version)
 	{
 		this.myVersion = version;
 	}

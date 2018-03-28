@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.completion.impl.CompletionSorterImpl;
@@ -116,7 +116,7 @@ public class JavaCompletionSorting
 		return result.withRelevanceSorter(sorter);
 	}
 
-	@NotNull
+	@Nonnull
 	private static ExpectedTypeInfo[] getExpectedTypesWithDfa(CompletionParameters parameters, PsiElement position)
 	{
 		if(psiElement().beforeLeaf(psiElement().withText(".")).accepts(position))
@@ -132,7 +132,7 @@ public class JavaCompletionSorting
 		return JavaSmartCompletionContributor.getExpectedTypes(parameters);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static LookupElementWeigher recursion(CompletionParameters parameters, final ExpectedTypeInfo[] expectedInfos)
 	{
 		final PsiElement position = parameters.getPosition();
@@ -169,9 +169,9 @@ public class JavaCompletionSorting
 
 		return new LookupElementWeigher("statics")
 		{
-			@NotNull
+			@Nonnull
 			@Override
-			public Comparable weigh(@NotNull LookupElement element)
+			public Comparable weigh(@Nonnull LookupElement element)
 			{
 				final Object o = element.getObject();
 				if(o instanceof PsiKeyword)
@@ -206,7 +206,7 @@ public class JavaCompletionSorting
 		};
 	}
 
-	private static ExpectedTypeMatching getExpectedTypeMatching(LookupElement item, ExpectedTypeInfo[] expectedInfos, @Nullable String expectedMemberName)
+	private static ExpectedTypeMatching getExpectedTypeMatching(LookupElement item, ExpectedTypeInfo[] expectedInfos, @javax.annotation.Nullable String expectedMemberName)
 	{
 		PsiType itemType = JavaCompletionUtil.getLookupElementType(item);
 
@@ -259,8 +259,8 @@ public class JavaCompletionSorting
 		return preferByMemberName(expectedMemberName, itemType);
 	}
 
-	@NotNull
-	private static ExpectedTypeMatching preferByMemberName(@Nullable String expectedMemberName, @Nullable PsiType itemType)
+	@Nonnull
+	private static ExpectedTypeMatching preferByMemberName(@javax.annotation.Nullable String expectedMemberName, @javax.annotation.Nullable PsiType itemType)
 	{
 		if(expectedMemberName != null)
 		{
@@ -291,7 +291,7 @@ public class JavaCompletionSorting
 		return hasNonVoid;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String getLookupObjectName(Object o)
 	{
 		if(o instanceof PsiVariable)
@@ -405,9 +405,9 @@ public class JavaCompletionSorting
 			myLocation = new CompletionLocation(myParameters);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public MyResult weigh(@NotNull LookupElement item)
+		public MyResult weigh(@Nonnull LookupElement item)
 		{
 			final Object object = item.getObject();
 
@@ -532,9 +532,9 @@ public class JavaCompletionSorting
 			INACCESSIBLE,
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public Comparable weigh(@NotNull LookupElement element)
+		public Comparable weigh(@Nonnull LookupElement element)
 		{
 			final Object object = element.getObject();
 			if(object instanceof PsiDocCommentOwner)
@@ -560,9 +560,9 @@ public class JavaCompletionSorting
 			super("nonGeneric");
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public Comparable weigh(@NotNull LookupElement element)
+		public Comparable weigh(@Nonnull LookupElement element)
 		{
 			final Object object = element.getObject();
 			if(object instanceof PsiMethod)
@@ -591,9 +591,9 @@ public class JavaCompletionSorting
 			super("simple");
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public Comparable weigh(@NotNull LookupElement element)
+		public Comparable weigh(@Nonnull LookupElement element)
 		{
 			final PsiTypeLookupItem lookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
 			if(lookupItem != null)
@@ -624,7 +624,7 @@ public class JavaCompletionSorting
 			myExpectedMemberName = calcExpectedMemberNameByParentCall(position);
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		private static String calcExpectedMemberNameByParentCall(PsiElement position)
 		{
 			if(position.getParent() instanceof PsiJavaCodeReferenceElement)
@@ -638,9 +638,9 @@ public class JavaCompletionSorting
 			return null;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public ExpectedTypeMatching weigh(@NotNull LookupElement item)
+		public ExpectedTypeMatching weigh(@Nonnull LookupElement item)
 		{
 			if(item.getObject() instanceof PsiClass && !myConstructorPossible)
 			{
@@ -676,9 +676,9 @@ public class JavaCompletionSorting
 			myExpectedTypes = expectedTypes;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public Comparable weigh(@NotNull LookupElement element)
+		public Comparable weigh(@Nonnull LookupElement element)
 		{
 			final String name = getLookupObjectName(element.getObject());
 			return -getNameEndMatchingDegree(name, myExpectedTypes);
@@ -695,9 +695,9 @@ public class JavaCompletionSorting
 			myExpectedTypes = expectedTypes;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public Comparable weigh(@NotNull LookupElement element)
+		public Comparable weigh(@Nonnull LookupElement element)
 		{
 			final Object object = element.getObject();
 
@@ -732,9 +732,9 @@ public class JavaCompletionSorting
 			myExpectedTypes = expectedTypes;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public Comparable weigh(@NotNull LookupElement element)
+		public Comparable weigh(@Nonnull LookupElement element)
 		{
 			final Object object = element.getObject();
 			final String name = getLookupObjectName(object);

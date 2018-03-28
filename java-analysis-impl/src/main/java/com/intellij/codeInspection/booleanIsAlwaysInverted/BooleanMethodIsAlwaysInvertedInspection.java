@@ -14,8 +14,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.refactoring.RefactoringActionHandler;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -27,19 +27,19 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
   private static final Key<Boolean> ALWAYS_INVERTED = Key.create("ALWAYS_INVERTED_METHOD");
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("boolean.method.is.always.inverted.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DATA_FLOW_ISSUES;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "BooleanMethodIsAlwaysInverted";
@@ -91,7 +91,7 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
                                                 final ProblemDescriptionsProcessor descriptionsProcessor) {
     manager.iterate(new RefJavaVisitor() {
       @Override
-      public void visitMethod(@NotNull final RefMethod refMethod) {
+      public void visitMethod(@Nonnull final RefMethod refMethod) {
         if (descriptionsProcessor.getDescriptions(refMethod) != null) { //suspicious method -> need to check external usages
           final GlobalJavaInspectionContext.UsagesProcessor usagesProcessor = new GlobalJavaInspectionContext.UsagesProcessor() {
             @Override
@@ -178,19 +178,19 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
   private static class InvertMethodFix implements LocalQuickFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return "Invert method";
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
       final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
       assert psiMethod != null;

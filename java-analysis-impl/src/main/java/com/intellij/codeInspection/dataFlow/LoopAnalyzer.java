@@ -25,7 +25,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.instructions.ConditionalGotoInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.GotoInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
@@ -38,12 +39,12 @@ class LoopAnalyzer
 {
 	private static class MyGraph implements Graph<Instruction>
 	{
-		@NotNull
+		@Nonnull
 		private final ControlFlow myFlow;
 		private final Instruction[] myInstructions;
 		private final TIntObjectHashMap<int[]> myIns = new TIntObjectHashMap<>();
 
-		private MyGraph(@NotNull ControlFlow flow)
+		private MyGraph(@Nonnull ControlFlow flow)
 		{
 			myFlow = flow;
 			myInstructions = flow.getInstructions();
@@ -89,7 +90,7 @@ class LoopAnalyzer
 			return indicesToInstructions(next);
 		}
 
-		@NotNull
+		@Nonnull
 		private Iterator<Instruction> indicesToInstructions(int[] next)
 		{
 			if(next == null)
@@ -135,7 +136,7 @@ class LoopAnalyzer
 		return loop;
 	}
 
-	@NotNull
+	@Nonnull
 	static int[] getSuccessorIndices(int i, Instruction[] myInstructions)
 	{
 		Instruction instruction = myInstructions[i];

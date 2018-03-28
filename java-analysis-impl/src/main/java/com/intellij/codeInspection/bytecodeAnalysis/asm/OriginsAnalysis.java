@@ -20,8 +20,8 @@ import gnu.trove.TIntArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.org.objectweb.asm.Opcodes;
 import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
 import org.jetbrains.org.objectweb.asm.tree.InsnList;
@@ -99,7 +99,7 @@ public class OriginsAnalysis {
    * @return array, array[i] == true means that the result of a method execution may originate at an i-th instruction
    * @throws AnalyzerException
    */
-  @NotNull
+  @Nonnull
   public static boolean[] resultOrigins(Frame<Value>[] frames, InsnList instructions, ControlFlowGraph graph) throws AnalyzerException {
 
     TIntArrayList[] backTransitions = new TIntArrayList[instructions.size()];
@@ -157,7 +157,7 @@ public class OriginsAnalysis {
    * @return location of an interesting value *before* execution of an instruction (in the past) or null if it is not traceable
    * @throws AnalyzerException
    */
-  @Nullable
+  @javax.annotation.Nullable
   private static Location previousLocation(Frame<Value> frame, Location location, AbstractInsnNode insn) throws AnalyzerException {
     int insnType = insn.getType();
     if (insnType == AbstractInsnNode.LABEL || insnType == AbstractInsnNode.LINE || insnType == AbstractInsnNode.FRAME) {
@@ -185,8 +185,8 @@ public class OriginsAnalysis {
     return null;
   }
 
-  @NotNull
-  private static Frame<SourceValue> makePreFrame(@NotNull Frame<Value> frame) {
+  @Nonnull
+  private static Frame<SourceValue> makePreFrame(@Nonnull Frame<Value> frame) {
     Frame<SourceValue> preFrame = new Frame<SourceValue>(frame.getLocals(), frame.getMaxStackSize());
     for (int i = 0; i < frame.getLocals(); i++) {
       preFrame.setLocal(i, new PreValue(true, i, frame.getLocal(i).getSize()));

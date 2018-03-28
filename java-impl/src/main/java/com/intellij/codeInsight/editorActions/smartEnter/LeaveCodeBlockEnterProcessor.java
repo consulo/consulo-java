@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.DataManager;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -106,7 +105,7 @@ public class LeaveCodeBlockEnterProcessor implements EnterProcessor
 	 * @param element
 	 * @return
 	 */
-	private static boolean isControlFlowBreak(@Nullable PsiElement element)
+	private static boolean isControlFlowBreak(@javax.annotation.Nullable PsiElement element)
 	{
 		return element instanceof PsiReturnStatement || element instanceof PsiThrowStatement;
 	}

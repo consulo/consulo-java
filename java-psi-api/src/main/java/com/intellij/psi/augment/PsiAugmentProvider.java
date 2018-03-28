@@ -20,7 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.extensions.Extensions;
@@ -37,11 +38,11 @@ public abstract class PsiAugmentProvider
 {
 	public static final ExtensionPointName<PsiAugmentProvider> EP_NAME = ExtensionPointName.create("consulo.java.augmentProvider");
 
-	@NotNull
-	public abstract <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type);
+	@Nonnull
+	public abstract <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type);
 
-	@NotNull
-	public static <Psi extends PsiElement> List<Psi> collectAugments(@NotNull final PsiElement element, @NotNull final Class<Psi> type)
+	@Nonnull
+	public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull final PsiElement element, @Nonnull final Class<Psi> type)
 	{
 		final List<Psi> augments = new ArrayList<Psi>();
 		for(PsiAugmentProvider provider : Extensions.getExtensions(EP_NAME))
@@ -58,14 +59,14 @@ public abstract class PsiAugmentProvider
 	 *
 	 * @since 2016.2
 	 */
-	@NotNull
-	protected Set<String> transformModifiers(@NotNull PsiModifierList modifierList, @NotNull final Set<String> modifiers)
+	@Nonnull
+	protected Set<String> transformModifiers(@Nonnull PsiModifierList modifierList, @Nonnull final Set<String> modifiers)
 	{
 		return modifiers;
 	}
 
-	@NotNull
-	public static Set<String> transformModifierProperties(@NotNull final PsiModifierList modifierList, @NotNull Project project, @NotNull final Set<String> modifiers)
+	@Nonnull
+	public static Set<String> transformModifierProperties(@Nonnull final PsiModifierList modifierList, @Nonnull Project project, @Nonnull final Set<String> modifiers)
 	{
 		final Ref<Set<String>> result = Ref.create(modifiers);
 

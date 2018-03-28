@@ -25,7 +25,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerSession;
@@ -44,7 +45,7 @@ import com.intellij.util.SystemProperties;
 public class ExportThreadsAction extends AnAction implements AnAction.TransparentUpdate
 {
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e)
+	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
 		Project project = e.getData(CommonDataKeys.PROJECT);
 		if(project == null)
@@ -84,7 +85,7 @@ public class ExportThreadsAction extends AnAction implements AnAction.Transparen
 	}
 
 	@Override
-	public void update(@NotNull AnActionEvent event)
+	public void update(@Nonnull AnActionEvent event)
 	{
 		Presentation presentation = event.getPresentation();
 		Project project = event.getData(CommonDataKeys.PROJECT);

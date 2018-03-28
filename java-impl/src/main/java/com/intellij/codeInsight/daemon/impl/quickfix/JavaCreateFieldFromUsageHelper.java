@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.template.Template;
@@ -23,7 +25,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.introduceField.BaseExpressionToFieldHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Max Medvedev
@@ -62,7 +63,7 @@ public class JavaCreateFieldFromUsageHelper extends CreateFieldFromUsageHelper {
   }
 
   @Override
-  public PsiField insertFieldImpl(@NotNull PsiClass targetClass, @NotNull PsiField field, @NotNull PsiElement place) {
+  public PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place) {
     PsiMember enclosingContext = null;
     PsiClass parentClass;
     do {

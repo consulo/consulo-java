@@ -34,7 +34,7 @@ import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.ui.RowIcon;
 import com.intellij.util.IconUtil;
 import com.intellij.util.VisibilityIcons;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.List;

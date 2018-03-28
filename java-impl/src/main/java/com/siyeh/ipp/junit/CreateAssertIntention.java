@@ -23,12 +23,12 @@ import com.intellij.codeInsight.AnnotationUtil;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ig.psiutils.BoolUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 public class CreateAssertIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new CreateAssertPredicate();
   }

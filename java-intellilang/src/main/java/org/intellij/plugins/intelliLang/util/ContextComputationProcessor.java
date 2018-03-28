@@ -20,7 +20,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.util.SmartList;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,8 @@ public class ContextComputationProcessor {
     myEvaluationHelper = new SubstitutedExpressionEvaluationHelper(project);
   }
 
-  @NotNull
-  public static List<Object> collectOperands(@NotNull final String prefix, final String suffix, final Ref<Boolean> unparsable, final PsiElement[] operands) {
+  @Nonnull
+  public static List<Object> collectOperands(@Nonnull final String prefix, final String suffix, final Ref<Boolean> unparsable, final PsiElement[] operands) {
     final ArrayList<Object> result = new ArrayList<Object>();
     final ContextComputationProcessor processor = new ContextComputationProcessor(operands[0].getProject());
     addStringFragment(prefix, result);
@@ -109,8 +109,8 @@ public class ContextComputationProcessor {
     }
   }
 
-  @NotNull
-  public static PsiElement getTopLevelInjectionTarget(@NotNull final PsiElement host) {
+  @Nonnull
+  public static PsiElement getTopLevelInjectionTarget(@Nonnull final PsiElement host) {
     PsiElement target = host;
     PsiElement parent = target.getParent();
     for (; parent != null; target = parent, parent = target.getParent()) {

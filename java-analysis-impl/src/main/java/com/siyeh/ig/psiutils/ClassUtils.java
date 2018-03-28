@@ -18,7 +18,7 @@ package com.siyeh.ig.psiutils;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
@@ -78,7 +78,7 @@ public class ClassUtils {
 
   private ClassUtils() {}
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiClass findClass(String fqClassName, PsiElement context) {
     return JavaPsiFacade.getInstance(context.getProject()).findClass(fqClassName, context.getResolveScope());
   }
@@ -157,7 +157,7 @@ public class ClassUtils {
     return parentClass != null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiClass getContainingClass(PsiElement element) {
     return PsiTreeUtil.getParentOfType(element, PsiClass.class);
   }
@@ -184,7 +184,7 @@ public class ClassUtils {
     return aClass;
   }
 
-  public static boolean isNonStaticClass(@Nullable PsiClass aClass) {
+  public static boolean isNonStaticClass(@javax.annotation.Nullable PsiClass aClass) {
     if (aClass == null) {
       return false;
     }

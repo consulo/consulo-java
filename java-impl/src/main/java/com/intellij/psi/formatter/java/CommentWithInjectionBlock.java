@@ -18,7 +18,7 @@ package com.intellij.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
@@ -59,7 +59,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
@@ -67,7 +67,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @NotNull Block child2)
+	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return null;
 	}
@@ -109,7 +109,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 			myRange = range;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public TextRange getTextRange()
 		{

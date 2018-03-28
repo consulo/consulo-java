@@ -17,8 +17,8 @@ package com.intellij.codeInspection.i18n;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.lang.properties.psi.PropertiesFile;
@@ -55,7 +55,7 @@ public class I18nizeAction extends AnAction {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static I18nQuickFixHandler getHandler(final AnActionEvent e) {
     final Editor editor = getEditor(e);
     if (editor == null) return null;
@@ -100,10 +100,10 @@ public class I18nizeAction extends AnAction {
     return e.getData(PlatformDataKeys.EDITOR);
   }
 
-  public static void doI18nSelectedString(final @NotNull Project project,
-                                          final @NotNull Editor editor,
-                                          final @NotNull PsiFile psiFile,
-                                          final @NotNull I18nQuickFixHandler handler) {
+  public static void doI18nSelectedString(final @Nonnull Project project,
+                                          final @Nonnull Editor editor,
+                                          final @Nonnull PsiFile psiFile,
+                                          final @Nonnull I18nQuickFixHandler handler) {
     try {
       handler.checkApplicability(psiFile, editor);
     }

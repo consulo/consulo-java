@@ -10,7 +10,6 @@ import com.intellij.refactoring.move.moveInner.MoveInnerDialog;
 import com.intellij.refactoring.move.moveInner.MoveInnerImpl;
 import com.intellij.refactoring.move.moveInner.MoveInnerProcessor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 /**
  *  @author dsl
@@ -105,7 +104,7 @@ public class MoveInnerTest extends MultiFileTestCase {
                                      @NonNls final String parameterName,
                                      final boolean searchInComments,
                                      final boolean searchInNonJava,
-                                     @NonNls @Nullable final String packageName) {
+                                     @NonNls @javax.annotation.Nullable final String packageName) {
     return new MyPerformAction(innerClassName, newClassName, passOuterClass, parameterName, searchInComments, searchInNonJava, packageName);
   }
 

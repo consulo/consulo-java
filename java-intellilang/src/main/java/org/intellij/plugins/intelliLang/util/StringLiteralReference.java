@@ -15,14 +15,14 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Base class for references in String literals.
@@ -42,7 +42,7 @@ public abstract class StringLiteralReference implements PsiReference {
     return ElementManipulators.getValueTextRange(myValue);
   }
 
-  @NotNull
+  @Nonnull
   public String getCanonicalText() {
     return myValue.getText();
   }
@@ -51,7 +51,7 @@ public abstract class StringLiteralReference implements PsiReference {
     return myValue;
   }
 
-  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
     return myValue;
   }
 
@@ -59,7 +59,7 @@ public abstract class StringLiteralReference implements PsiReference {
     return resolve() == element;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected String getValue() {
     return (String)myValue.getValue();
   }

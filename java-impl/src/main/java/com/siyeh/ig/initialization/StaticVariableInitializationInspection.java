@@ -24,7 +24,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MakeInitializerExplicitFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.InitializationUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,20 +36,20 @@ public class StaticVariableInitializationInspection extends BaseInspection {
   public boolean m_ignorePrimitives = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "StaticVariableMayNotBeInitialized";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "static.variable.may.not.be.initialized.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.variable.may.not.be.initialized.problem.descriptor");
@@ -76,7 +76,7 @@ public class StaticVariableInitializationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

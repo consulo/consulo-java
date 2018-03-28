@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.codeStyle.arrangement;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,23 +26,25 @@ import java.util.List;
  */
 public class JavaArrangementOverriddenMethodsInfo {
 
-  @NotNull private final List<JavaElementArrangementEntry> myMethodEntries = new ArrayList<JavaElementArrangementEntry>();
-  @NotNull private final String myName;
+  @Nonnull
+  private final List<JavaElementArrangementEntry> myMethodEntries = new ArrayList<JavaElementArrangementEntry>();
+  @Nonnull
+  private final String myName;
 
-  public JavaArrangementOverriddenMethodsInfo(@NotNull String name) {
+  public JavaArrangementOverriddenMethodsInfo(@Nonnull String name) {
     myName = name;
   }
 
-  public void addMethodEntry(@NotNull JavaElementArrangementEntry entry) {
+  public void addMethodEntry(@Nonnull JavaElementArrangementEntry entry) {
     myMethodEntries.add(entry);
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return myName;
   }
 
-  @NotNull
+  @Nonnull
   public List<JavaElementArrangementEntry> getMethodEntries() {
     return myMethodEntries;
   }

@@ -23,7 +23,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -42,7 +43,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction
 	private String myText;
 
 
-	public QualifyThisOrSuperArgumentFix(@NotNull PsiExpression expression, @NotNull PsiClass psiClass)
+	public QualifyThisOrSuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass)
 	{
 		myExpression = expression;
 		myPsiClass = psiClass;
@@ -54,7 +55,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -66,7 +67,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction
 	protected abstract PsiExpression getQualifier(PsiManager manager);
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		if(!myExpression.isValid())
 		{
@@ -80,7 +81,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -88,7 +89,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		myExpression.replace(getQualifier(PsiManager.getInstance(project)));
 	}

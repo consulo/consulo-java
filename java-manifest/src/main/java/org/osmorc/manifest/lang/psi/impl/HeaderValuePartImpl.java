@@ -25,6 +25,8 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -32,7 +34,6 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
@@ -46,7 +47,7 @@ import org.osmorc.manifest.lang.psi.stub.HeaderValuePartStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class HeaderValuePartImpl extends ManifestElementBase<HeaderValuePartStub> implements HeaderValuePart {
-  public HeaderValuePartImpl(HeaderValuePartStub stub, @NotNull IStubElementType nodeType) {
+  public HeaderValuePartImpl(HeaderValuePartStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -55,7 +56,7 @@ public class HeaderValuePartImpl extends ManifestElementBase<HeaderValuePartStub
   }
 
 
-  @NotNull
+  @Nonnull
   public String getUnwrappedText() {
     String result;
     HeaderValuePartStub stub = getStub();
@@ -86,7 +87,7 @@ public class HeaderValuePartImpl extends ManifestElementBase<HeaderValuePartStub
   }
 
   @Override
-  public void setText(@NotNull String text) {
+  public void setText(@Nonnull String text) {
     final String dummyTemplate;
     if (getText().endsWith("\n")) {
       dummyTemplate = "Dummy: %s\n";
@@ -118,7 +119,7 @@ public class HeaderValuePartImpl extends ManifestElementBase<HeaderValuePartStub
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiReference[] getReferences() {
     HeaderParser headerParser = HeaderUtil.getHeaderParser(this);

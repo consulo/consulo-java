@@ -19,8 +19,9 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.impl.cache.TypeInfo;
 
@@ -31,7 +32,7 @@ public interface PsiFieldStub extends PsiMemberStub<PsiField>
 	@NonNls
 	String INITIALIZER_NOT_STORED = ";INITIALIZER_NOT_STORED;";
 
-	@NotNull
+	@Nonnull
 	TypeInfo getType(boolean doResolve);
 
 	String getInitializerText();

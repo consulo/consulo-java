@@ -19,12 +19,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.annotation.Nonnull;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.find.FindBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -40,13 +40,13 @@ public class FindThrowUsagesDialog extends JavaFindUsagesDialog<JavaThrowFindUsa
 	private boolean myHasFindWhatPanel;
 	private ThrowSearchUtil.Root[] myRoots;
 
-	public FindThrowUsagesDialog(@NotNull PsiElement element,
-			@NotNull Project project,
-			@NotNull JavaThrowFindUsagesOptions findUsagesOptions,
+	public FindThrowUsagesDialog(@Nonnull PsiElement element,
+			@Nonnull Project project,
+			@Nonnull JavaThrowFindUsagesOptions findUsagesOptions,
 			boolean toShowInNewTab,
 			boolean mustOpenInNewTab,
 			boolean isSingleFile,
-			@NotNull FindUsagesHandler handler)
+			@Nonnull FindUsagesHandler handler)
 	{
 		super(element, project, findUsagesOptions, toShowInNewTab, mustOpenInNewTab, isSingleFile, handler);
 	}

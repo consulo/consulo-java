@@ -33,7 +33,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.HighlightUtils;
 import com.siyeh.ig.psiutils.ImportUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   public boolean m_ignoreJavadoc = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.display.name");
   }
@@ -62,7 +62,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean inSameFile = ((Boolean)infos[0]).booleanValue();
     if (inSameFile) {
@@ -85,7 +85,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       if (inSameFile) {
         return InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.remove.quickfix");

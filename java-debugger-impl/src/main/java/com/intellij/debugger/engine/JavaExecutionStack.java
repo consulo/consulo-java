@@ -18,10 +18,9 @@ package com.intellij.debugger.engine;
 import java.util.Collections;
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
@@ -52,7 +51,7 @@ public class JavaExecutionStack extends XExecutionStack
 	private volatile boolean myTopFrameReady = false;
 	private final MethodsTracker myTracker = new MethodsTracker();
 
-	public JavaExecutionStack(@NotNull ThreadReferenceProxyImpl threadProxy, @NotNull DebugProcessImpl debugProcess, boolean current)
+	public JavaExecutionStack(@Nonnull ThreadReferenceProxyImpl threadProxy, @Nonnull DebugProcessImpl debugProcess, boolean current)
 	{
 		super(calcRepresentation(threadProxy), calcIcon(threadProxy, current));
 		myThreadProxy = threadProxy;
@@ -79,7 +78,7 @@ public class JavaExecutionStack extends XExecutionStack
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	ThreadReferenceProxyImpl getThreadProxy()
 	{
 		return myThreadProxy;
@@ -106,7 +105,7 @@ public class JavaExecutionStack extends XExecutionStack
 		}
 	}
 
-	private static XStackFrame createStackFrame(@NotNull StackFrameProxyImpl stackFrameProxy, @NotNull MethodsTracker tracker)
+	private static XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl stackFrameProxy, @Nonnull MethodsTracker tracker)
 	{
 		StackFrameDescriptorImpl descriptor = new StackFrameDescriptorImpl(stackFrameProxy, tracker);
 		DebugProcessImpl debugProcess = (DebugProcessImpl) descriptor.getDebugProcess();
@@ -122,7 +121,7 @@ public class JavaExecutionStack extends XExecutionStack
 		return new JavaStackFrame(descriptor, true);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XStackFrame getTopFrame()
 	{
@@ -241,7 +240,7 @@ public class JavaExecutionStack extends XExecutionStack
 		}
 	}
 
-	private static boolean showFrame(@NotNull XStackFrame frame)
+	private static boolean showFrame(@Nonnull XStackFrame frame)
 	{
 		if(XDebuggerSettingsManager.getInstance().getDataViewSettings().isShowLibraryStackFrames())
 		{

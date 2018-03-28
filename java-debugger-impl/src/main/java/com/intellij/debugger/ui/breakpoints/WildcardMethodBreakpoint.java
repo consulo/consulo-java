@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 import javax.swing.Icon;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -74,7 +74,7 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 		return MethodBreakpoint.CATEGORY;
 	}
 
-	protected WildcardMethodBreakpoint(Project project, @NotNull String classPattern, @NotNull String methodName, XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
+	protected WildcardMethodBreakpoint(Project project, @Nonnull String classPattern, @Nonnull String methodName, XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
 	{
 		super(project, breakpoint);
 		setClassPattern(classPattern);

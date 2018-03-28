@@ -15,28 +15,29 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "thread.with.default.run.method.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "InstantiatingAThreadWithDefaultRunMethod";
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "thread.with.default.run.method.problem.descriptor");
@@ -50,7 +51,7 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@NotNull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiAnonymousClass anonymousClass =
         expression.getAnonymousClass();

@@ -37,8 +37,8 @@ import com.intellij.util.Processor;
 import gnu.trove.TIntArrayList;
 import gnu.trove.TIntHashSet;
 import gnu.trove.TIntIterator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -78,8 +78,8 @@ public class Util {
     }
   }
 
-  @NotNull
-  private static PsiElement getPhysical(@NotNull PsiElement expr) {
+  @Nonnull
+  private static PsiElement getPhysical(@Nonnull PsiElement expr) {
     PsiElement physicalElement = expr.getUserData(ElementToWorkOn.PARENT);
     if (physicalElement != null) expr = physicalElement;
     return expr;
@@ -113,9 +113,9 @@ public class Util {
   }
 
   // returns parameters that are used solely in specified expression
-  @NotNull
-  public static TIntArrayList findParametersToRemove(@NotNull PsiMethod method,
-                                                     @NotNull final PsiExpression expr,
+  @Nonnull
+  public static TIntArrayList findParametersToRemove(@Nonnull PsiMethod method,
+                                                     @Nonnull final PsiExpression expr,
                                                      @Nullable final PsiExpression[] occurences) {
     final PsiParameter[] parameters = method.getParameterList().getParameters();
     if (parameters.length == 0) return new TIntArrayList();

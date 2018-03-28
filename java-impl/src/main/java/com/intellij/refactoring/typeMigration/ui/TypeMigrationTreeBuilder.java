@@ -4,7 +4,6 @@ package com.intellij.refactoring.typeMigration.ui;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.ide.util.treeView.AlphaComparator;
 import com.intellij.ide.util.treeView.NodeDescriptor;
@@ -34,7 +33,7 @@ public class TypeMigrationTreeBuilder extends AbstractTreeBuilder
 		((TypeMigrationTreeStructure) getTreeStructure()).setRoots(root);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	protected ProgressIndicator createProgressIndicator()
 	{

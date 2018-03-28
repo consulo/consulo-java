@@ -17,8 +17,9 @@ package com.intellij.codeInsight;
 
 import java.util.Collections;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.codeInspection.inferNullity.InferNullityAnnotationsAction;
 import com.intellij.lang.java.JavaLanguage;
@@ -52,7 +53,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction
 {
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -60,7 +61,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull final Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file)
 	{
 		final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
 		final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
@@ -96,7 +97,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
 		final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
@@ -130,8 +131,8 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction
 
 	}
 
-	@NotNull
-	private static PsiAnnotation correctAnnotation(@NotNull PsiAnnotation annotation)
+	@Nonnull
+	private static PsiAnnotation correctAnnotation(@Nonnull PsiAnnotation annotation)
 	{
 		Project project = annotation.getProject();
 		JavaPsiFacade facade = JavaPsiFacade.getInstance(project);

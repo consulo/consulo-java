@@ -19,7 +19,7 @@ import com.intellij.codeInsight.highlighting.HighlightErrorFilter;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class JavadocErrorFilter extends HighlightErrorFilter {
 
   @Override
-  public boolean shouldHighlightErrorElement(@NotNull final PsiErrorElement element) {
+  public boolean shouldHighlightErrorElement(@Nonnull final PsiErrorElement element) {
     return !value(element);
   }
 

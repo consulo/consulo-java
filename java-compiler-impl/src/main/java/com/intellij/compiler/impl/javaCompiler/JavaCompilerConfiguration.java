@@ -11,9 +11,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -39,8 +41,8 @@ import consulo.java.module.extension.JavaModuleExtension;
 		})
 public class JavaCompilerConfiguration implements PersistentStateComponent<Element>
 {
-	@NotNull
-	public static JavaCompilerConfiguration getInstance(@NotNull Project project)
+	@Nonnull
+	public static JavaCompilerConfiguration getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, JavaCompilerConfiguration.class);
 	}
@@ -57,7 +59,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
 	public static final String DEFAULT_COMPILER = "JavacCompiler";
 
-	@NotNull
+	@Nonnull
 	private final Project myProject;
 
 	private BackendCompiler myBackendCompilerCache;
@@ -76,14 +78,14 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 	@DeprecationInfo("We used JavaModuleExtension for store info about bytecode version")
 	private final Map<String, String> myModuleBytecodeTarget = new HashMap<String, String>();
 
-	public JavaCompilerConfiguration(@NotNull Project project)
+	public JavaCompilerConfiguration(@Nonnull Project project)
 	{
 		myProject = project;
 	}
 
 	@Nullable
 	@RequiredReadAction
-	public String getBytecodeTargetLevel(@NotNull Module module)
+	public String getBytecodeTargetLevel(@Nonnull Module module)
 	{
 		String level = myModuleBytecodeTarget.get(module.getName());
 		if(level != null)
@@ -103,7 +105,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 		return myBytecodeTargetLevel;
 	}
 
-	@NotNull
+	@Nonnull
 	public BackendCompiler getActiveCompiler()
 	{
 		if(myBackendCompilerCache == null)
@@ -113,13 +115,13 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 		return myBackendCompilerCache;
 	}
 
-	public void setActiveCompiler(@NotNull BackendCompiler key)
+	public void setActiveCompiler(@Nonnull BackendCompiler key)
 	{
 		myBackendCompilerCache = key;
 	}
 
 	@Nullable
-	public BackendCompiler findCompiler(@NotNull String className)
+	public BackendCompiler findCompiler(@Nonnull String className)
 	{
 		for(BackendCompilerEP ep : BackendCompiler.EP_NAME.getExtensions(myProject))
 		{
@@ -344,7 +346,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public ProcessorConfigProfile getAnnotationProcessingConfiguration(Module module)
 	{
 		Map<Module, ProcessorConfigProfile> map = myProcessorsProfilesMap;
@@ -376,13 +378,13 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 		return profile != null ? profile : myDefaultProcessorsProfile;
 	}
 
-	@NotNull
+	@Nonnull
 	public ProcessorConfigProfile getDefaultProcessorProfile()
 	{
 		return myDefaultProcessorsProfile;
 	}
 
-	@NotNull
+	@Nonnull
 	public List<ProcessorConfigProfile> getModuleProcessorProfiles()
 	{
 		return myModuleProcessorProfiles;
@@ -422,14 +424,14 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 		myProcessorsProfilesMap = null; // clear cache
 	}
 
-	public void addModuleProcessorProfile(@NotNull ProcessorConfigProfile profile)
+	public void addModuleProcessorProfile(@Nonnull ProcessorConfigProfile profile)
 	{
 		myModuleProcessorProfiles.add(profile);
 		myProcessorsProfilesMap = null; // clear cache
 	}
 
 	@Nullable
-	public ProcessorConfigProfile findModuleProcessorProfile(@NotNull String name)
+	public ProcessorConfigProfile findModuleProcessorProfile(@Nonnull String name)
 	{
 		for(ProcessorConfigProfile profile : myModuleProcessorProfiles)
 		{
@@ -453,7 +455,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 	}
 
 	@Deprecated
-	public void setModulesBytecodeTargetMap(@NotNull Map<String, String> mapping)
+	public void setModulesBytecodeTargetMap(@Nonnull Map<String, String> mapping)
 	{
 		myModuleBytecodeTarget.clear();
 		myModuleBytecodeTarget.putAll(mapping);

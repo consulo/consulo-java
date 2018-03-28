@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.quickfix.ChangeToAppendFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -28,12 +30,11 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class StringConcatenationInsideStringBufferAppendInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.inside.string.buffer.append.display.name");
   }
@@ -44,7 +45,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     final String className = aClass.getName();
@@ -63,7 +64,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
 
   private static class ReplaceWithChainedAppendFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "string.concatenation.inside.string.buffer.append.replace.quickfix");

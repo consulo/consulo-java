@@ -19,7 +19,7 @@ import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -105,7 +105,7 @@ public class LabelRenderer extends TypeRenderer implements ValueLabelRenderer, O
 		return result;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getLinkText()
 	{

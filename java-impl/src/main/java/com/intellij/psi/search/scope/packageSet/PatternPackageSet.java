@@ -19,9 +19,11 @@ import java.io.File;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.LibraryOrderEntry;
 import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
@@ -48,7 +50,7 @@ public class PatternPackageSet extends PatternBasedPackageSet {
   private final String myModulePatternText;
 
   public PatternPackageSet(@NonNls @Nullable String aspectPattern,
-                           @NotNull String scope,
+                           @Nonnull String scope,
                            @NonNls String modulePattern) {
     myAspectJSyntaxPattern = aspectPattern;
     myScope = scope;
@@ -110,7 +112,7 @@ public class PatternPackageSet extends PatternBasedPackageSet {
     return StringUtil.getQualifiedName(fileIndex.getPackageNameByDirectory(file.isDirectory() ? file :  file.getParent()), file.getNameWithoutExtension());
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PackageSet createCopy() {
     return new PatternPackageSet(myAspectJSyntaxPattern, myScope, myModulePatternText);
@@ -121,7 +123,7 @@ public class PatternPackageSet extends PatternBasedPackageSet {
     return 0;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     StringBuilder buf = new StringBuilder();

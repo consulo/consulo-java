@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
@@ -64,13 +64,13 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem
 	private final int myBracketsCount;
 	private boolean myIndicateAnonymous;
 	private final InsertHandler<PsiTypeLookupItem> myImportFixer;
-	@NotNull
+	@Nonnull
 	private final PsiSubstitutor mySubstitutor;
 	private boolean myAddArrayInitializer;
 	private String myLocationString = "";
 	private final String myForcedPresentableName;
 
-	private PsiTypeLookupItem(Object o, @NotNull @NonNls String lookupString, boolean diamond, int bracketsCount, InsertHandler<PsiTypeLookupItem> fixer, @NotNull PsiSubstitutor substitutor)
+	private PsiTypeLookupItem(Object o, @Nonnull @NonNls String lookupString, boolean diamond, int bracketsCount, InsertHandler<PsiTypeLookupItem> fixer, @Nonnull PsiSubstitutor substitutor)
 	{
 		super(o, lookupString);
 		myDiamond = diamond;
@@ -80,7 +80,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem
 		myForcedPresentableName = o instanceof PsiClass && !lookupString.equals(((PsiClass) o).getName()) ? lookupString : null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType getType()
 	{
@@ -94,7 +94,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem
 		return type;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getForcedPresentableName()
 	{
 		return myForcedPresentableName;
@@ -174,7 +174,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem
 		}
 	}
 
-	public String calcGenerics(@NotNull PsiElement context, InsertionContext insertionContext)
+	public String calcGenerics(@Nonnull PsiElement context, InsertionContext insertionContext)
 	{
 		if(insertionContext.getCompletionChar() == '<')
 		{
@@ -228,19 +228,19 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem
 		return myBracketsCount;
 	}
 
-	public static PsiTypeLookupItem createLookupItem(@NotNull PsiType type, @Nullable PsiElement context)
+	public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @javax.annotation.Nullable PsiElement context)
 	{
 		final boolean diamond = isDiamond(type);
 		return createLookupItem(type, context, diamond);
 	}
 
-	public static PsiTypeLookupItem createLookupItem(@NotNull PsiType type, @Nullable PsiElement context, boolean isDiamond)
+	public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @javax.annotation.Nullable PsiElement context, boolean isDiamond)
 	{
 		return createLookupItem(type, context, isDiamond, DEFAULT_IMPORT_FIXER);
 	}
 
 
-	public static PsiTypeLookupItem createLookupItem(@NotNull PsiType type, @Nullable PsiElement context, boolean isDiamond, InsertHandler<PsiTypeLookupItem> importFixer)
+	public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @javax.annotation.Nullable PsiElement context, boolean isDiamond, InsertHandler<PsiTypeLookupItem> importFixer)
 	{
 		int dim = 0;
 		while(type instanceof PsiArrayType)
@@ -302,7 +302,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem
 		return diamond;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiSubstitutor getSubstitutor()
 	{
 		return mySubstitutor;

@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
@@ -48,34 +48,34 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 	private final VirtualFile myJarRoot;
 	private final NotNullLazyValue<List<PsiPackageAccessibilityStatement>> myExports = AtomicNotNullLazyValue.createValue(() -> findExports());
 
-	private LightJavaModule(@NotNull PsiManager manager, @NotNull VirtualFile jarRoot)
+	private LightJavaModule(@Nonnull PsiManager manager, @Nonnull VirtualFile jarRoot)
 	{
 		super(manager, JavaLanguage.INSTANCE);
 		myJarRoot = jarRoot;
 		myRefElement = new LightJavaModuleReferenceElement(manager, moduleName(jarRoot.getNameWithoutExtension()));
 	}
 
-	@NotNull
+	@Nonnull
 	public VirtualFile getRootVirtualFile()
 	{
 		return myJarRoot;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiDocComment getDocComment()
 	{
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Iterable<PsiRequiresStatement> getRequires()
 	{
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Iterable<PsiPackageAccessibilityStatement> getExports()
 	{
@@ -91,7 +91,7 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 			private JavaDirectoryService service = JavaDirectoryService.getInstance();
 
 			@Override
-			public boolean visitFile(@NotNull VirtualFile file)
+			public boolean visitFile(@Nonnull VirtualFile file)
 			{
 				if(file.isDirectory() && !myJarRoot.equals(file))
 				{
@@ -116,35 +116,35 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 		return exports;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Iterable<PsiPackageAccessibilityStatement> getOpens()
 	{
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Iterable<PsiUsesStatement> getUses()
 	{
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Iterable<PsiProvidesStatement> getProvides()
 	{
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiJavaModuleReferenceElement getNameIdentifier()
 	{
 		return myRefElement;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -152,7 +152,7 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 	}
 
 	@Override
-	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
 	{
 		throw new IncorrectOperationException("Cannot modify automatic module '" + getName() + "'");
 	}
@@ -164,7 +164,7 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		return false;
 	}
@@ -175,7 +175,7 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 		return ItemPresentationProviders.getItemPresentation(this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiElement getNavigationElement()
 	{
@@ -204,20 +204,20 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 	{
 		private final String myText;
 
-		public LightJavaModuleReferenceElement(@NotNull PsiManager manager, @NotNull String text)
+		public LightJavaModuleReferenceElement(@Nonnull PsiManager manager, @Nonnull String text)
 		{
 			super(manager, JavaLanguage.INSTANCE);
 			myText = text;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getReferenceText()
 		{
 			return myText;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public PsiPolyVariantReference getReference()
 		{
@@ -235,41 +235,41 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 	{
 		private final String myPackageName;
 
-		public LightPackageAccessibilityStatement(@NotNull PsiManager manager, @NotNull String packageName)
+		public LightPackageAccessibilityStatement(@Nonnull PsiManager manager, @Nonnull String packageName)
 		{
 			super(manager, JavaLanguage.INSTANCE);
 			myPackageName = packageName;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public Role getRole()
 		{
 			return Role.EXPORTS;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public PsiJavaCodeReferenceElement getPackageReference()
 		{
 			return null;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public String getPackageName()
 		{
 			return myPackageName;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public Iterable<PsiJavaModuleReferenceElement> getModuleReferences()
 		{
 			return Collections.emptyList();
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public List<String> getModuleNames()
 		{
@@ -283,8 +283,8 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 		}
 	}
 
-	@NotNull
-	public static LightJavaModule getModule(@NotNull final PsiManager manager, @NotNull final VirtualFile jarRoot)
+	@Nonnull
+	public static LightJavaModule getModule(@Nonnull final PsiManager manager, @Nonnull final VirtualFile jarRoot)
 	{
 		final PsiDirectory directory = manager.findDirectory(jarRoot);
 		assert directory != null : jarRoot;
@@ -301,8 +301,8 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 	 * @param name a .jar file name without extension
 	 * @see <a href="http://download.java.net/java/jdk9/docs/api/java/lang/module/ModuleFinder.html#of-java.nio.file.Path...-">ModuleFinder.of(Path...)</a>
 	 */
-	@NotNull
-	public static String moduleName(@NotNull String name)
+	@Nonnull
+	public static String moduleName(@Nonnull String name)
 	{
 		// If the name matches the regular expression "-(\\d+(\\.|$))" then the module name will be derived from the sub-sequence
 		// preceding the hyphen of the first occurrence.

@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.instructions.AssignInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.ConditionalGotoInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.FinishElementInstruction;
@@ -135,7 +135,7 @@ public class LiveVariablesAnalyzer
 		return result;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static DfaVariableValue getWrittenVariable(Instruction instruction)
 	{
 		if(instruction instanceof AssignInstruction)
@@ -150,7 +150,7 @@ public class LiveVariablesAnalyzer
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaVariableValue> getReadVariables(Instruction instruction)
 	{
 		if(instruction instanceof PushInstruction && !((PushInstruction) instruction).isReferenceWrite())

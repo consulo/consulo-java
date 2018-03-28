@@ -23,7 +23,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.compiled.ClsFileImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +36,13 @@ public class CoreJavaDirectoryService extends JavaDirectoryService {
   private static final Logger LOG = Logger.getInstance("#com.intellij.core.CoreJavaDirectoryService");
 
   @Override
-  public PsiJavaPackage getPackage(@NotNull PsiDirectory dir) {
+  public PsiJavaPackage getPackage(@Nonnull PsiDirectory dir) {
     return null;//TODO [VISTALL] ServiceManager.getService(dir.getProject(), CoreJavaFileManager.class).getPackage(dir);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass[] getClasses(@NotNull PsiDirectory dir) {
+  public PsiClass[] getClasses(@Nonnull PsiDirectory dir) {
     LOG.assertTrue(dir.isValid());
 
     FileIndexFacade index = FileIndexFacade.getInstance(dir.getProject());
@@ -64,65 +64,65 @@ public class CoreJavaDirectoryService extends JavaDirectoryService {
     return classes == null ? PsiClass.EMPTY_ARRAY : classes.toArray(new PsiClass[classes.size()]);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
+  public PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String templateName)
+  public PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName)
     throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public PsiClass createClass(@NotNull PsiDirectory dir,
-                              @NotNull String name,
-                              @NotNull String templateName,
+  public PsiClass createClass(@Nonnull PsiDirectory dir,
+                              @Nonnull String name,
+                              @Nonnull String templateName,
                               boolean askForUndefinedVariables) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public PsiClass createClass(@NotNull PsiDirectory dir,
-                              @NotNull String name,
-                              @NotNull String templateName,
-                              boolean askForUndefinedVariables, @NotNull final Map<String, String> additionalProperties) throws IncorrectOperationException {
+  public PsiClass createClass(@Nonnull PsiDirectory dir,
+                              @Nonnull String name,
+                              @Nonnull String templateName,
+                              boolean askForUndefinedVariables, @Nonnull final Map<String, String> additionalProperties) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void checkCreateClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
+  public void checkCreateClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass createInterface(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
+  public PsiClass createInterface(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass createEnum(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
+  public PsiClass createEnum(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass createAnnotationType(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
+  public PsiClass createAnnotationType(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public boolean isSourceRoot(@NotNull PsiDirectory dir) {
+  public boolean isSourceRoot(@Nonnull PsiDirectory dir) {
     return false;
   }
 
   @Override
-  public LanguageLevel getLanguageLevel(@NotNull PsiDirectory dir) {
+  public LanguageLevel getLanguageLevel(@Nonnull PsiDirectory dir) {
     return LanguageLevel.HIGHEST;
   }
 }

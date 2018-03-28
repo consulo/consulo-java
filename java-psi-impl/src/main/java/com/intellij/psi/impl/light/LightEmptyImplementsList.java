@@ -17,7 +17,7 @@ package com.intellij.psi.impl.light;
 
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -37,7 +37,7 @@ public class LightEmptyImplementsList extends LightElement implements PsiReferen
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceList(this);
     }
@@ -52,13 +52,13 @@ public class LightEmptyImplementsList extends LightElement implements PsiReferen
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiJavaCodeReferenceElement[] getReferenceElements() {
     return PsiJavaCodeReferenceElement.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClassType[] getReferencedTypes() {
     return PsiClassType.EMPTY_ARRAY;
   }

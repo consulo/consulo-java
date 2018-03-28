@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnonymousClass;
@@ -42,13 +42,13 @@ import com.intellij.psi.util.PsiUtilCore;
  */
 public class InferenceFromSourceUtil
 {
-	static boolean shouldInferFromSource(@NotNull PsiMethodImpl method)
+	static boolean shouldInferFromSource(@Nonnull PsiMethodImpl method)
 	{
 		return CachedValuesManager.getCachedValue(method, () -> CachedValueProvider.Result.create(calcShouldInferFromSource(method), method, PsiModificationTracker
 				.JAVA_STRUCTURE_MODIFICATION_COUNT));
 	}
 
-	private static boolean calcShouldInferFromSource(@NotNull PsiMethod method)
+	private static boolean calcShouldInferFromSource(@Nonnull PsiMethod method)
 	{
 		if(isLibraryCode(method) || method.hasModifierProperty(PsiModifier.ABSTRACT) || PsiUtil.canBeOverriden(method))
 		{
@@ -63,7 +63,7 @@ public class InferenceFromSourceUtil
 		return !isUnusedInAnonymousClass(method);
 	}
 
-	private static boolean isUnusedInAnonymousClass(@NotNull PsiMethod method)
+	private static boolean isUnusedInAnonymousClass(@Nonnull PsiMethod method)
 	{
 		PsiClass containingClass = method.getContainingClass();
 		if(!(containingClass instanceof PsiAnonymousClass))
@@ -81,7 +81,7 @@ public class InferenceFromSourceUtil
 		return MethodReferencesSearch.search(method, new LocalSearchScope(containingClass), false).findFirst() == null;
 	}
 
-	private static boolean isLibraryCode(@NotNull PsiMethod method)
+	private static boolean isLibraryCode(@Nonnull PsiMethod method)
 	{
 		if(method instanceof PsiCompiledElement)
 		{
@@ -91,7 +91,7 @@ public class InferenceFromSourceUtil
 		return virtualFile != null && FileIndexFacade.getInstance(method.getProject()).isInLibrarySource(virtualFile);
 	}
 
-	static boolean isReturnTypeCompatible(@Nullable PsiType returnType, @NotNull MethodContract.ValueConstraint returnValue)
+	static boolean isReturnTypeCompatible(@Nullable PsiType returnType, @Nonnull MethodContract.ValueConstraint returnValue)
 	{
 		if(returnValue == MethodContract.ValueConstraint.ANY_VALUE || returnValue == MethodContract.ValueConstraint.THROW_EXCEPTION)
 		{

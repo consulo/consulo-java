@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -43,19 +43,19 @@ import com.siyeh.ig.psiutils.CommentTracker;
 public abstract class MergeModuleStatementsFix<T extends PsiElement> extends LocalQuickFixAndIntentionActionOnPsiElement
 {
 
-	protected MergeModuleStatementsFix(@NotNull PsiJavaModule javaModule)
+	protected MergeModuleStatementsFix(@Nonnull PsiJavaModule javaModule)
 	{
 		super(javaModule);
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		return PsiUtil.isLanguageLevel9OrHigher(file);
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		if(startElement instanceof PsiJavaModule)
 		{
@@ -90,21 +90,21 @@ public abstract class MergeModuleStatementsFix<T extends PsiElement> extends Loc
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	protected abstract String getReplacementText(List<T> statementsToMerge);
 
-	@NotNull
-	protected abstract List<T> getStatementsToMerge(@NotNull PsiJavaModule javaModule);
+	@Nonnull
+	protected abstract List<T> getStatementsToMerge(@Nonnull PsiJavaModule javaModule);
 
-	@NotNull
-	protected static String joinUniqueNames(@NotNull List<String> names)
+	@Nonnull
+	protected static String joinUniqueNames(@Nonnull List<String> names)
 	{
 		final Set<String> unique = new THashSet<>();
 		return names.stream().filter(name -> unique.add(name)).collect(Collectors.joining(","));
 	}
 
-	@Nullable
-	public static MergeModuleStatementsFix createFix(@Nullable PsiElement statement)
+	@javax.annotation.Nullable
+	public static MergeModuleStatementsFix createFix(@javax.annotation.Nullable PsiElement statement)
 	{
 		if(statement instanceof PsiPackageAccessibilityStatement)
 		{

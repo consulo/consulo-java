@@ -15,7 +15,7 @@
  */
 package com.intellij.execution.filters;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.search.GlobalSearchScope;
 
@@ -23,7 +23,7 @@ public class ExceptionFilter implements Filter, DumbAware
 {
 	private final ExceptionInfoCache myCache;
 
-	public ExceptionFilter(@NotNull final GlobalSearchScope scope)
+	public ExceptionFilter(@Nonnull final GlobalSearchScope scope)
 	{
 		myCache = new ExceptionInfoCache(scope);
 	}

@@ -25,8 +25,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.structureView.impl.StructureNodeRenderer;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Condition;
@@ -61,7 +61,7 @@ public class MethodListDlg extends DialogWrapper
 		myWholePanel.add(ScrollPaneFactory.createScrollPane(myList));
 		myList.setCellRenderer(new ColoredListCellRenderer()
 		{
-			protected void customizeCellRenderer(@NotNull final JList list, final Object value, final int index, final boolean selected, final boolean hasFocus)
+			protected void customizeCellRenderer(@Nonnull final JList list, final Object value, final int index, final boolean selected, final boolean hasFocus)
 			{
 				final PsiMethod psiMethod = (PsiMethod) value;
 				append(PsiFormatUtil.formatMethod(psiMethod, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME, 0), StructureNodeRenderer.applyDeprecation(psiMethod, SimpleTextAttributes

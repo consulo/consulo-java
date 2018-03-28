@@ -25,8 +25,8 @@ import static com.intellij.lang.java.parser.JavaParserUtil.error;
 import static com.intellij.lang.java.parser.JavaParserUtil.expectOrError;
 import static com.intellij.lang.java.parser.JavaParserUtil.exprType;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
@@ -83,18 +83,18 @@ public class ExpressionParser
 
 	private final JavaParser myParser;
 
-	public ExpressionParser(@NotNull final JavaParser javaParser)
+	public ExpressionParser(@Nonnull final JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parse(final PsiBuilder builder)
 	{
 		return parseAssignment(builder);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseAssignment(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker left = parseConditional(builder);
@@ -213,7 +213,7 @@ public class ExpressionParser
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseBinary(final PsiBuilder builder, final ExprType type, final TokenSet ops)
 	{
 		PsiBuilder.Marker result = parseExpression(builder, type);
@@ -393,8 +393,8 @@ public class ExpressionParser
 		P4
 	}
 
-	@Nullable
-	private PsiBuilder.Marker parsePrimary(PsiBuilder builder, @Nullable BreakPoint breakPoint, int breakOffset)
+	@javax.annotation.Nullable
+	private PsiBuilder.Marker parsePrimary(PsiBuilder builder, @javax.annotation.Nullable BreakPoint breakPoint, int breakOffset)
 	{
 		PsiBuilder.Marker startMarker = builder.mark();
 
@@ -589,7 +589,7 @@ public class ExpressionParser
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parsePrimaryExpressionStart(final PsiBuilder builder)
 	{
 		IElementType tokenType = builder.getTokenType();
@@ -735,17 +735,17 @@ public class ExpressionParser
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseArrayInitializer(PsiBuilder builder)
 	{
 		return parseArrayInitializer(builder, JavaElementType.ARRAY_INITIALIZER_EXPRESSION, builder1 -> parse(builder1) != null, "expected.expression");
 	}
 
-	@NotNull
-	public PsiBuilder.Marker parseArrayInitializer(@NotNull PsiBuilder builder,
-			@NotNull IElementType type,
-			@NotNull Function<PsiBuilder, Boolean> elementParser,
-			@NotNull @PropertyKey(resourceBundle = BUNDLE) String missingElementKey)
+	@Nonnull
+	public PsiBuilder.Marker parseArrayInitializer(@Nonnull PsiBuilder builder,
+			@Nonnull IElementType type,
+			@Nonnull Function<PsiBuilder, Boolean> elementParser,
+			@Nonnull @PropertyKey(resourceBundle = BUNDLE) String missingElementKey)
 	{
 		final PsiBuilder.Marker arrayInit = builder.mark();
 		builder.advanceLexer();
@@ -800,8 +800,8 @@ public class ExpressionParser
 		return arrayInit;
 	}
 
-	@NotNull
-	private PsiBuilder.Marker parseNew(PsiBuilder builder, @Nullable PsiBuilder.Marker start)
+	@Nonnull
+	private PsiBuilder.Marker parseNew(PsiBuilder builder, @javax.annotation.Nullable PsiBuilder.Marker start)
 	{
 		PsiBuilder.Marker newExpr = (start != null ? start.precede() : builder.mark());
 		builder.advanceLexer();
@@ -923,7 +923,7 @@ public class ExpressionParser
 		return result;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseClassAccessOrMethodReference(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword)
 	{
 		IElementType tokenType = builder.getTokenType();
@@ -939,7 +939,7 @@ public class ExpressionParser
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiBuilder.Marker parseClassObjectAccess(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword)
 	{
 		final PsiBuilder.Marker mark = builder.mark();
@@ -964,7 +964,7 @@ public class ExpressionParser
 		return expr;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseMethodReference(final PsiBuilder builder, final PsiBuilder.Marker start)
 	{
 		builder.advanceLexer();
@@ -980,7 +980,7 @@ public class ExpressionParser
 		return start;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseLambdaAfterParenth(final PsiBuilder builder)
 	{
 		final boolean isLambda;
@@ -1072,7 +1072,7 @@ public class ExpressionParser
 		return start;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiBuilder.Marker parseArgumentList(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker list = builder.mark();
@@ -1141,7 +1141,7 @@ public class ExpressionParser
 		emptyElement(builder, JavaElementType.EMPTY_EXPRESSION);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static IElementType getGtTokenType(final PsiBuilder builder)
 	{
 		IElementType tokenType = builder.getTokenType();

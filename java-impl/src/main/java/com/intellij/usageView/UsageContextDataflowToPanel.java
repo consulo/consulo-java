@@ -19,12 +19,12 @@ package com.intellij.usageView;
 import java.awt.BorderLayout;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
@@ -51,21 +51,21 @@ import com.intellij.usages.impl.UsageViewImpl;
 
 public class UsageContextDataflowToPanel extends UsageContextPanelBase
 {
-	@NotNull
+	@Nonnull
 	private final UsageViewPresentation myPresentation;
 	private JComponent myPanel;
 
 	public static class Provider implements UsageContextPanel.Provider
 	{
-		@NotNull
+		@Nonnull
 		@Override
-		public UsageContextPanel create(@NotNull UsageView usageView)
+		public UsageContextPanel create(@Nonnull UsageView usageView)
 		{
 			return new UsageContextDataflowToPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
 		}
 
 		@Override
-		public boolean isAvailableFor(@NotNull UsageView usageView)
+		public boolean isAvailableFor(@Nonnull UsageView usageView)
 		{
 			UsageTarget[] targets = ((UsageViewImpl) usageView).getTargets();
 			if(targets.length == 0)
@@ -90,7 +90,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase
 			return file instanceof PsiJavaFile;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getTabTitle()
 		{
@@ -98,7 +98,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase
 		}
 	}
 
-	public UsageContextDataflowToPanel(@NotNull Project project, @NotNull UsageViewPresentation presentation)
+	public UsageContextDataflowToPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation)
 	{
 		super(project, presentation);
 		myPresentation = presentation;
@@ -148,7 +148,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	private static SliceAnalysisParams createParams(PsiElement element, boolean dataFlowToThis)
 	{
 		SliceAnalysisParams params = new SliceAnalysisParams();
@@ -158,8 +158,8 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase
 		return params;
 	}
 
-	@NotNull
-	protected JComponent createPanel(@NotNull PsiElement element, final boolean dataFlowToThis)
+	@Nonnull
+	protected JComponent createPanel(@Nonnull PsiElement element, final boolean dataFlowToThis)
 	{
 		ToolWindow toolWindow = ToolWindowManager.getInstance(myProject).getToolWindow(ToolWindowId.FIND);
 		SliceAnalysisParams params = createParams(element, dataFlowToThis);
@@ -210,7 +210,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase
 		};
 	}
 
-	private static PsiElement getElementToSliceOn(@NotNull List<UsageInfo> infos)
+	private static PsiElement getElementToSliceOn(@Nonnull List<UsageInfo> infos)
 	{
 		UsageInfo info = infos.get(0);
 		return info.getElement();

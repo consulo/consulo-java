@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -36,7 +37,7 @@ public class JUnitTestClassNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 64;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "junit.test.class.naming.convention.display.name");
@@ -53,7 +54,7 @@ public class JUnitTestClassNamingConventionInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     if (className.length() < getMinLength()) {
@@ -124,7 +125,7 @@ public class JUnitTestClassNamingConventionInspection
       registerClassError(aClass, name);
     }
 
-    private boolean hasJUnit4TestMethods(@NotNull PsiClass aClass) {
+    private boolean hasJUnit4TestMethods(@Nonnull PsiClass aClass) {
       //use this if this method turns out to have bad performance:
       //if (!TestUtils.isTest(aClass)) {
       //    return false;

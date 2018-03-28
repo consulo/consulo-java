@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.projectView.impl.ModuleGroup;
@@ -198,12 +198,12 @@ public class TreeModelBuilder {
     return new TreeModel(myRoot, myTotalFileCount, myMarkedFileCount);
   }
 
-  private void processFilesRecursively(@NotNull VirtualFile file) {
+  private void processFilesRecursively(@Nonnull VirtualFile file) {
     VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
       private PackageDependenciesNode parent = null;
 
       @Override
-      public boolean visitFile(@NotNull VirtualFile file) {
+      public boolean visitFile(@Nonnull VirtualFile file) {
         if (file.isDirectory()) {
           parent = null;
         }
@@ -214,7 +214,7 @@ public class TreeModelBuilder {
       }
 
       @Override
-      public void afterChildrenVisited(@NotNull VirtualFile file) {
+      public void afterChildrenVisited(@Nonnull VirtualFile file) {
         if (file.isDirectory()) {
           parent = null;
         }
@@ -225,7 +225,7 @@ public class TreeModelBuilder {
   private void countFilesRecursively(VirtualFile file) {
     VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
       @Override
-      public boolean visitFile(@NotNull VirtualFile file) {
+      public boolean visitFile(@Nonnull VirtualFile file) {
         if (!file.isDirectory()) {
           counting();
         }
@@ -269,7 +269,7 @@ public class TreeModelBuilder {
     return new TreeModel(myRoot, myTotalFileCount, myMarkedFileCount);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PackageDependenciesNode buildFileNode(final VirtualFile file, @Nullable PackageDependenciesNode parent) {
     final ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
     if (indicator != null) {
@@ -294,7 +294,8 @@ public class TreeModelBuilder {
     return null;
   }
 
-  public @Nullable PackageDependenciesNode getFileParentNode(VirtualFile vFile) {
+  public @javax.annotation.Nullable
+  PackageDependenciesNode getFileParentNode(VirtualFile vFile) {
     LOG.assertTrue(vFile != null);
     final VirtualFile containingDirectory = vFile.getParent();
     LOG.assertTrue(containingDirectory != null);
@@ -321,7 +322,7 @@ public class TreeModelBuilder {
     return ScopeType.SOURCE;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private OrderEntry getLibraryForFile(VirtualFile virtualFile) {
     if (virtualFile == null) return null;
     List<OrderEntry> orders = myFileIndex.getOrderEntriesForFile(virtualFile);
@@ -385,7 +386,7 @@ public class TreeModelBuilder {
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   private PackageDependenciesNode getModuleNode(Module module, ScopeType scopeType) {
     if (module == null || !myShowModules) {
       return getRootNode(scopeType);
@@ -452,7 +453,7 @@ public class TreeModelBuilder {
   }
 
 
-  @NotNull
+  @Nonnull
   private PackageDependenciesNode getRootNode(ScopeType scopeType) {
     if (!myGroupByScopeType) {
       return myRoot;

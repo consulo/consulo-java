@@ -29,7 +29,7 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class DefaultResourceBundleManager extends ResourceBundleManager {
   public DefaultResourceBundleManager(final Project project) {

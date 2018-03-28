@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.NullableNotNullDialog;
 import com.intellij.codeInspection.AddAssertStatementFix;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -95,7 +95,7 @@ public class DataFlowInspection extends DataFlowInspectionBase
 		return target instanceof PsiField && ((PsiField) target).hasModifierProperty(PsiModifier.VOLATILE);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected List<LocalQuickFix> createMethodReferenceNPEFixes(PsiMethodReferenceExpression methodRef)
 	{
@@ -105,7 +105,7 @@ public class DataFlowInspection extends DataFlowInspectionBase
 		return fixes;
 	}
 
-	@NotNull
+	@Nonnull
 	protected List<LocalQuickFix> createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly)
 	{
 		qualifier = PsiUtil.deparenthesizeExpression(qualifier);

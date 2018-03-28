@@ -20,7 +20,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.StateRestoringCheckBox;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -37,7 +36,7 @@ public class FindMethodUsagesDialog extends JavaFindUsagesDialog<JavaMethodFindU
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent getPreferredFocusedControl() {
     return myHasFindWhatPanel ? myCbUsages : null;
   }

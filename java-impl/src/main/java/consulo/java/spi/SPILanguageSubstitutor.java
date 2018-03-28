@@ -17,8 +17,8 @@ package consulo.java.spi;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -40,7 +40,7 @@ public class SPILanguageSubstitutor extends LanguageSubstitutor {
 
   @Nullable
   @Override
-  public Language getLanguage(@NotNull VirtualFile file, @NotNull Project project) {
+  public Language getLanguage(@Nonnull VirtualFile file, @Nonnull Project project) {
     final Module moduleForPsiElement = ModuleUtilCore.findModuleForFile(file, project);
     if (moduleForPsiElement == null) {
       return null;

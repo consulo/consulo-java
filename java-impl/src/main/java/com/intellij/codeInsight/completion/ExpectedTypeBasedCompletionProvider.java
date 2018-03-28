@@ -17,7 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
@@ -32,7 +33,7 @@ public abstract class ExpectedTypeBasedCompletionProvider implements CompletionP
 {
 
   @Override
-  public void addCompletions(@NotNull final CompletionParameters params, final ProcessingContext matchingContext, @NotNull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull final CompletionParameters params, final ProcessingContext matchingContext, @Nonnull final CompletionResultSet result) {
     final PsiElement position = params.getPosition();
     if (position.getParent() instanceof PsiLiteralExpression) return;
 

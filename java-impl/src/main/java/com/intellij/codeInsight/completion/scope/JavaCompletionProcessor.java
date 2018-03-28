@@ -18,8 +18,8 @@ package com.intellij.codeInsight.completion.scope;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.SuppressManager;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstanceBase;
 import com.intellij.openapi.util.Condition;
@@ -70,7 +70,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 	private final Options myOptions;
 	private final boolean myAllowStaticWithInstanceQualifier;
 
-	public JavaCompletionProcessor(@NotNull PsiElement element, ElementFilter filter, Options options, @NotNull Condition<String> nameCondition)
+	public JavaCompletionProcessor(@Nonnull PsiElement element, ElementFilter filter, Options options, @Nonnull Condition<String> nameCondition)
 	{
 		myOptions = options;
 		myElement = element;
@@ -132,7 +132,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 	}
 
 	@Override
-	public void handleEvent(@NotNull Event event, Object associated)
+	public void handleEvent(@Nonnull Event event, Object associated)
 	{
 		if(event == JavaScopeProcessorEvent.START_STATIC)
 		{
@@ -151,7 +151,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 	}
 
 	@Override
-	public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		if(element instanceof PsiPackage && !isQualifiedContext())
 		{
@@ -224,8 +224,8 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 		return true;
 	}
 
-	@NotNull
-	private String getCallQualifierText(@NotNull PsiElement element)
+	@Nonnull
+	private String getCallQualifierText(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiMethod)
 		{
@@ -277,7 +277,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 		return StaticProblem.none;
 	}
 
-	public boolean satisfies(@NotNull PsiElement element, @NotNull ResolveState state)
+	public boolean satisfies(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		final String name = PsiUtilCore.getName(element);
 		if(name != null && StringUtil.isNotEmpty(name) && myMatcher.value(name))
@@ -302,7 +302,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 		return myQualifierType;
 	}
 
-	public boolean isAccessible(@Nullable final PsiElement element)
+	public boolean isAccessible(@javax.annotation.Nullable final PsiElement element)
 	{
 		// if checkAccess is false, we only show inaccessible source elements because their access modifiers can be changed later by the user.
 		// compiled element can't be changed so we don't pollute the completion with them. In Javadoc, everything is allowed.
@@ -324,7 +324,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 		return !myOptions.checkAccess && !(element instanceof PsiCompiledElement);
 	}
 
-	public void setCompletionElements(@NotNull Object[] elements)
+	public void setCompletionElements(@Nonnull Object[] elements)
 	{
 		for(Object element : elements)
 		{
@@ -376,7 +376,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 	}
 
 	@Override
-	public <T> T getHint(@NotNull Key<T> hintKey)
+	public <T> T getHint(@Nonnull Key<T> hintKey)
 	{
 		if(hintKey == ElementClassHint.KEY)
 		{

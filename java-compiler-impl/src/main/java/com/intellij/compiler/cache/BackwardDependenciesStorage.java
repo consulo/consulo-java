@@ -24,7 +24,7 @@ import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorIntegerDescriptor;
 import com.intellij.util.io.PersistentHashMap;
 import gnu.trove.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.*;
 import java.util.*;
@@ -46,7 +46,7 @@ public class BackwardDependenciesStorage implements Flushable, Disposable {
     myMap = new PersistentHashMap<Integer, DependenciesSet>(file, EnumeratorIntegerDescriptor.INSTANCE, new MyDataExternalizer());
 
     myCache = new SLRUCache<Integer, ReferencerSetHolder>(cacheSize * 2, cacheSize) {
-      @NotNull
+      @Nonnull
       public ReferencerSetHolder createValue(Integer key) {
         return new ReferencerSetHolder(key);
       }

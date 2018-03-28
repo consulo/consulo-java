@@ -22,7 +22,8 @@ package com.intellij.execution.filters;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import consulo.java.module.extension.JavaModuleExtension;
@@ -30,16 +31,16 @@ import consulo.module.extension.ModuleExtensionHelper;
 
 public class DefaultConsoleFiltersProvider implements ConsoleFilterProviderEx
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public Filter[] getDefaultFilters(@NotNull Project project)
+	public Filter[] getDefaultFilters(@Nonnull Project project)
 	{
 		return getDefaultFilters(project, GlobalSearchScope.allScope(project));
 	}
 
 	@Override
-	@NotNull
-	public Filter[] getDefaultFilters(@NotNull Project project, @NotNull GlobalSearchScope scope)
+	@Nonnull
+	public Filter[] getDefaultFilters(@Nonnull Project project, @Nonnull GlobalSearchScope scope)
 	{
 		if(!ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class))
 		{

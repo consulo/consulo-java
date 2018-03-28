@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.safeDelete;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
 
@@ -28,7 +28,7 @@ public abstract class ImportSearcher {
   /**
    * @return found import or null
    */
-  @Nullable
+  @javax.annotation.Nullable
   public abstract PsiElement findImport(PsiElement element, boolean onlyNonStatic);
 
   @Nullable

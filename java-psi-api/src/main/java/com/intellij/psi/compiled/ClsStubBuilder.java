@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.compiled;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.indexing.FileContent;
@@ -32,5 +32,5 @@ public abstract class ClsStubBuilder
 	 * May return {@code null} for inner or synthetic classes - i.e. those indexed as a part of their parent .class file.
 	 */
 	@Nullable
-	public abstract PsiFileStub<?> buildFileStub(@NotNull FileContent fileContent) throws ClsFormatException;
+	public abstract PsiFileStub<?> buildFileStub(@Nonnull FileContent fileContent) throws ClsFormatException;
 }

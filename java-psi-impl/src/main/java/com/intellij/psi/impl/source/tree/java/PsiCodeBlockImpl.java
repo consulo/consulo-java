@@ -31,8 +31,8 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiStatement[] getStatements() {
     return PsiImplUtil.getChildStatements(this);
   }
@@ -102,7 +102,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
       final Ref<Boolean> conflict = new Ref<Boolean>(Boolean.FALSE);
       PsiScopesUtil.walkChildrenScopes(this, new BaseScopeProcessor() {
         @Override
-        public boolean execute(@NotNull PsiElement element, ResolveState state) {
+        public boolean execute(@Nonnull PsiElement element, ResolveState state) {
           if (element instanceof PsiLocalVariable) {
             final PsiLocalVariable variable = (PsiLocalVariable)element;
             final String name = variable.getName();
@@ -197,7 +197,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitCodeBlock(this);
     }
@@ -212,7 +212,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
 
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     if (lastParent == null) {
       // Parent element should not see our vars

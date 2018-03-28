@@ -23,8 +23,8 @@ import static com.intellij.patterns.PsiJavaPatterns.psiJavaElement;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -66,7 +66,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 	private static final ElementPattern<PsiElement> IN_EXTENDS_IMPLEMENTS = psiElement().inside(psiElement(PsiReferenceList.class).withParent(psiClass()));
 
 	@Override
-	public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull final CompletionResultSet _result)
+	public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull final CompletionResultSet _result)
 	{
 		if(parameters.getCompletionType() == CompletionType.CLASS_NAME || parameters.isExtendedCompletion() && mayContainClassName(parameters))
 		{
@@ -100,7 +100,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 		return false;
 	}
 
-	public static void addAllClasses(@NotNull CompletionParameters parameters, final boolean filterByScope, @NotNull final PrefixMatcher matcher, @NotNull final Consumer<LookupElement> consumer)
+	public static void addAllClasses(@Nonnull CompletionParameters parameters, final boolean filterByScope, @Nonnull final PrefixMatcher matcher, @Nonnull final Consumer<LookupElement> consumer)
 	{
 		final PsiElement insertedElement = parameters.getPosition();
 
@@ -220,7 +220,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	private static MultiMap<String, PsiClass> getAllAnnotationClasses(PsiElement context, PrefixMatcher matcher)
 	{
 		MultiMap<String, PsiClass> map = new MultiMap<>();
@@ -251,8 +251,8 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 		return map;
 	}
 
-	@NotNull
-	private static String getClassNameWithContainers(@NotNull PsiClass psiClass)
+	@Nonnull
+	private static String getClassNameWithContainers(@Nonnull PsiClass psiClass)
 	{
 		String name = ObjectUtils.assertNotNull(psiClass.getName());
 		for(PsiClass parent : JBIterable.generate(psiClass, PsiClass::getContainingClass))
@@ -305,7 +305,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 
 
 	@Override
-	public String handleEmptyLookup(@NotNull final CompletionParameters parameters, final Editor editor)
+	public String handleEmptyLookup(@Nonnull final CompletionParameters parameters, final Editor editor)
 	{
 		if(!(parameters.getOriginalFile() instanceof PsiJavaFile))
 		{

@@ -18,7 +18,6 @@ package com.intellij.application.options;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.editor.SyntaxHighlighterColors;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.codeStyle.PackageEntry;
 import com.intellij.psi.codeStyle.PackageEntryTable;
@@ -26,7 +25,6 @@ import com.intellij.ui.*;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.IconUtil;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -231,7 +229,7 @@ public abstract class ImportLayoutPanel extends JPanel {
         return packageTable.getEntryCount();
       }
 
-      @Nullable
+      @javax.annotation.Nullable
       public Object getValueAt(int row, int col) {
         PackageEntry entry = packageTable.getEntryAt(row);
         if (entry == null || !isCellEditable(row, col)) return null;

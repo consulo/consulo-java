@@ -35,9 +35,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.CompilerEncodingService;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.OutputParser;
@@ -115,10 +115,10 @@ public class BackendCompilerWrapper
 
 	public BackendCompilerWrapper(TranslatingCompiler translatingCompiler,
 			Chunk<Module> chunk,
-			@NotNull final Project project,
-			@NotNull List<VirtualFile> filesToCompile,
-			@NotNull CompileContextEx compileContext,
-			@NotNull BackendCompiler compiler,
+			@Nonnull final Project project,
+			@Nonnull List<VirtualFile> filesToCompile,
+			@Nonnull CompileContextEx compileContext,
+			@Nonnull BackendCompiler compiler,
 			TranslatingCompiler.OutputSink sink)
 	{
 		myTranslatingCompiler = translatingCompiler;
@@ -138,7 +138,7 @@ public class BackendCompilerWrapper
 		myStatistics = stat;
 	}
 
-	public void compile(@NotNull Map<File, FileObject> parsingInfo) throws CompilerException, CacheCorruptedException
+	public void compile(@Nonnull Map<File, FileObject> parsingInfo) throws CompilerException, CacheCorruptedException
 	{
 		Application application = ApplicationManager.getApplication();
 		try
@@ -329,7 +329,7 @@ public class BackendCompilerWrapper
 		});
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private File getOutputDirsToCompileTo(ModuleChunk chunk, final List<OutputDir> dirs) throws IOException
 	{
 		File fileToDelete = null;
@@ -468,7 +468,7 @@ public class BackendCompilerWrapper
 		}
 	}
 
-	private void doCompile(@NotNull final ModuleChunk chunk, @NotNull String outputDir, Map<File, FileObject> parsingInfo) throws IOException
+	private void doCompile(@Nonnull final ModuleChunk chunk, @Nonnull String outputDir, Map<File, FileObject> parsingInfo) throws IOException
 	{
 		myCompileContext.getProgressIndicator().checkCanceled();
 
@@ -812,7 +812,7 @@ public class BackendCompilerWrapper
 			VfsUtilCore.visitChildrenRecursively(from, new VirtualFileVisitor()
 			{
 				@Override
-				public boolean visitFile(@NotNull VirtualFile file)
+				public boolean visitFile(@Nonnull VirtualFile file)
 				{
 					if(!file.isDirectory())
 					{
@@ -956,7 +956,7 @@ public class BackendCompilerWrapper
 		return prefix + VfsUtilCore.getRelativePath(srcFile, sourceRoot, '/');
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private Pair<String, String> moveToRealLocation(String tempOutputDir, String pathToClass, VirtualFile sourceFile, final List<File>
 			filesToRefresh)
 	{

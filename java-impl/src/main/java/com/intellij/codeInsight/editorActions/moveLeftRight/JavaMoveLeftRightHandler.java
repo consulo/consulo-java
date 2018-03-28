@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.editorActions.moveLeftRight;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.psi.PsiAnnotationParameterList;
 import com.intellij.psi.PsiArrayInitializerExpression;
@@ -29,9 +29,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 public class JavaMoveLeftRightHandler implements MoveElementLeftRightHandler
 {
 	@RequiredReadAction
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiElement[] getMovableSubElements(@NotNull PsiElement element)
+	public PsiElement[] getMovableSubElements(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiParameterList)
 		{

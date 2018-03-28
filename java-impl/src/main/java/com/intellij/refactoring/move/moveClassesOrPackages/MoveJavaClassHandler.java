@@ -19,7 +19,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
@@ -36,20 +37,20 @@ public class MoveJavaClassHandler implements MoveClassHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveClassesOrPackages.MoveJavaClassHandler");
 
   @Override
-  public void finishMoveClass(@NotNull PsiClass aClass) {
+  public void finishMoveClass(@Nonnull PsiClass aClass) {
     if (aClass.getContainingFile() instanceof PsiJavaFile) {
       ChangeContextUtil.decodeContextInfo(aClass, null, null);
     }
   }
 
   @Override
-  public void prepareMove(@NotNull PsiClass aClass) {
+  public void prepareMove(@Nonnull PsiClass aClass) {
     if (aClass.getContainingFile() instanceof PsiJavaFile) {
       ChangeContextUtil.encodeContextInfo(aClass, true);
     }
   }
 
-  public PsiClass doMoveClass(@NotNull final PsiClass aClass, @NotNull PsiDirectory moveDestination) throws IncorrectOperationException {
+  public PsiClass doMoveClass(@Nonnull final PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException {
     PsiFile file = aClass.getContainingFile();
     final PsiJavaPackage newPackage = JavaDirectoryService.getInstance().getPackage(moveDestination);
 

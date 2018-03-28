@@ -17,7 +17,7 @@ package com.intellij.debugger;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.requests.ClassPrepareRequestor;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 
@@ -27,6 +27,6 @@ public interface MultiRequestPositionManager extends PositionManager
 	/**
 	 * @see PositionManager#createPrepareRequest
 	 */
-	@NotNull
-	List<ClassPrepareRequest> createPrepareRequests(@NotNull ClassPrepareRequestor requestor, @NotNull SourcePosition position) throws NoDataException;
+	@Nonnull
+	List<ClassPrepareRequest> createPrepareRequests(@Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
 }

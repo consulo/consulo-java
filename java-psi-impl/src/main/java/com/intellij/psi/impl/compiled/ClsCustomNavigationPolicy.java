@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
 
@@ -27,12 +27,12 @@ import com.intellij.psi.PsiElement;
 public interface ClsCustomNavigationPolicy {
   ExtensionPointName<ClsCustomNavigationPolicy> EP_NAME = ExtensionPointName.create("consulo.java.psi.clsCustomNavigationPolicy");
 
-  @Nullable
-  PsiElement getNavigationElement(@NotNull ClsClassImpl clsClass);
+  @javax.annotation.Nullable
+  PsiElement getNavigationElement(@Nonnull ClsClassImpl clsClass);
 
   @Nullable
-  PsiElement getNavigationElement(@NotNull ClsMethodImpl clsMethod);
+  PsiElement getNavigationElement(@Nonnull ClsMethodImpl clsMethod);
 
   @Nullable
-  PsiElement getNavigationElement(@NotNull ClsFieldImpl clsField);
+  PsiElement getNavigationElement(@Nonnull ClsFieldImpl clsField);
 }

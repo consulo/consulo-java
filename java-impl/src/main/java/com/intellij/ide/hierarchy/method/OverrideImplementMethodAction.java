@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.MethodHierarchyBrowserBase;
@@ -53,7 +54,7 @@ abstract class OverrideImplementMethodAction extends AnAction
 
 	@RequiredDispatchThread
 	@Override
-	public final void actionPerformed(@NotNull final AnActionEvent event)
+	public final void actionPerformed(@Nonnull final AnActionEvent event)
 	{
 		final DataContext dataContext = event.getDataContext();
 		final MethodHierarchyBrowser methodHierarchyBrowser = (MethodHierarchyBrowser) dataContext.getData(MethodHierarchyBrowserBase.DATA_KEY);
@@ -136,7 +137,7 @@ abstract class OverrideImplementMethodAction extends AnAction
 
 	@RequiredDispatchThread
 	@Override
-	public final void update(@NotNull final AnActionEvent e)
+	public final void update(@Nonnull final AnActionEvent e)
 	{
 		final Presentation presentation = e.getPresentation();
 		final DataContext dataContext = e.getDataContext();

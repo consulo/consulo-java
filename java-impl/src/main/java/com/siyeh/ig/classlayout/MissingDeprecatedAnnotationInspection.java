@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,18 +27,17 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class MissingDeprecatedAnnotationInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("missing.deprecated.annotation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("missing.deprecated.annotation.problem.descriptor");
   }
@@ -53,7 +54,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
 
   private static class MissingDeprecatedAnnotationFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("missing.deprecated.annotation.add.quickfix");
     }
@@ -83,7 +84,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
   private static class MissingDeprecatedAnnotationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       super.visitClass(aClass);
       if (!PsiUtil.isLanguageLevel5OrHigher(aClass)) {
         return;
@@ -95,7 +96,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
         return;
       }
@@ -109,7 +110,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!PsiUtil.isLanguageLevel5OrHigher(field)) {
         return;
       }

@@ -20,7 +20,7 @@ import com.intellij.codeInspection.ex.GlobalInspectionContextImpl;
 import com.intellij.codeInspection.ex.GlobalInspectionToolWrapper;
 import com.intellij.codeInspection.ex.InspectionToolWrapper;
 import com.intellij.icons.AllIcons;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -28,11 +28,11 @@ import javax.swing.*;
  * @author max
  */
 public class EntryPointsNode extends InspectionNode {
-  public EntryPointsNode(@NotNull GlobalInspectionContextImpl context) {
+  public EntryPointsNode(@Nonnull GlobalInspectionContextImpl context) {
     super(createDummyWrapper(context));
   }
 
-  private static InspectionToolWrapper createDummyWrapper(@NotNull GlobalInspectionContextImpl context) {
+  private static InspectionToolWrapper createDummyWrapper(@Nonnull GlobalInspectionContextImpl context) {
     InspectionToolWrapper toolWrapper = new GlobalInspectionToolWrapper(new DummyEntryPointsEP());
     toolWrapper.initialize(context);
     return toolWrapper;

@@ -22,8 +22,7 @@ import com.intellij.psi.PsiDeclarationStatement;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
@@ -39,7 +38,7 @@ public class SuppressForClassFix extends SuppressFix {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiDocCommentOwner getContainer(final PsiElement element) {
     PsiDocCommentOwner container = super.getContainer(element);
     if (container == null || container instanceof PsiClass){
@@ -56,7 +55,7 @@ public class SuppressForClassFix extends SuppressFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return InspectionsBundle.message("suppress.inspection.class");
   }

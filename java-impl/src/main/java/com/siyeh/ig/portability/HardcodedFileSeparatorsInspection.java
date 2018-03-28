@@ -28,7 +28,7 @@ import com.siyeh.ig.portability.mediatype.*;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -110,18 +110,18 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
    */
   public boolean m_recognizeExampleMediaType = false;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "HardcodedFileSeparator";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "hardcoded.file.separator.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "hardcoded.file.separator.problem.descriptor");
@@ -143,7 +143,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @NotNull PsiLiteralExpression expression) {
+      @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (TypeUtils.isJavaLangString(type)) {

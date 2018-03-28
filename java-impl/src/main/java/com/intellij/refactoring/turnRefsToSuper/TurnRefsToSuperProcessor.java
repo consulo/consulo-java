@@ -32,7 +32,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,8 +43,8 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
 
   private PsiClass mySuper;
   public TurnRefsToSuperProcessor(Project project,
-                                  @NotNull PsiClass aClass,
-                                  @NotNull PsiClass aSuper,
+                                  @Nonnull PsiClass aClass,
+                                  @Nonnull PsiClass aSuper,
                                   boolean replaceInstanceOf) {
     super(project, replaceInstanceOf, aSuper.getName());
     myClass = aClass;
@@ -56,17 +56,17 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
                                      DescriptiveNameUtil.getDescriptiveName(myClass), DescriptiveNameUtil.getDescriptiveName(mySuper));
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new RefsToSuperViewDescriptor(myClass, mySuper);
   }
 
-  private void setClasses(@NotNull final PsiClass aClass, @NotNull final PsiClass aSuper) {
+  private void setClasses(@Nonnull final PsiClass aClass, @Nonnull final PsiClass aSuper) {
     myClass = aClass;
     mySuper = aSuper;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     final PsiReference[] refs = ReferencesSearch.search(myClass, GlobalSearchScope.projectScope(myProject), false).toArray(new PsiReference[0]);
 
@@ -81,7 +81,7 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     setClasses ((PsiClass) elements[0], (PsiClass) elements[1]);
   }
 
-  protected boolean preprocessUsages(@NotNull Ref<UsageInfo[]> refUsages) {
+  protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
     if (!ApplicationManager.getApplication().isUnitTestMode() && refUsages.get().length == 0) {
       String message = RefactoringBundle.message("no.usages.can.be.replaced", myClass.getQualifiedName(), mySuper.getQualifiedName());
       Messages.showInfoMessage(myProject, message, TurnRefsToSuperHandler.REFACTORING_NAME);
@@ -142,8 +142,8 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     return myReplaceInstanceOf;
   }
 
-  @NotNull
-  protected Collection<? extends PsiElement> getElementsToWrite(@NotNull final UsageViewDescriptor descriptor) {
+  @Nonnull
+  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
     return Collections.emptyList(); // neither myClass nor mySuper are subject to change, it's just references that are going to change
   }
 }

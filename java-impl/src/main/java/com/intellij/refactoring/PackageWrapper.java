@@ -15,13 +15,13 @@
  */
 package com.intellij.refactoring;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiJavaPackage;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a package. 
@@ -29,9 +29,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PackageWrapper {
   private final PsiManager myManager;
-  @NotNull private final String myQualifiedName;
+  @Nonnull
+  private final String myQualifiedName;
 
-  public PackageWrapper(PsiManager manager, @NotNull String qualifiedName) {
+  public PackageWrapper(PsiManager manager, @Nonnull String qualifiedName) {
     myManager = manager;
     myQualifiedName = qualifiedName;
   }
@@ -60,7 +61,7 @@ public class PackageWrapper {
     return JavaPsiFacade.getInstance(myManager.getProject()).findPackage(myQualifiedName) != null;
   }
 
-  @NotNull
+  @Nonnull
   public String getQualifiedName() {
     return myQualifiedName;
   }

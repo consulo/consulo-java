@@ -17,7 +17,6 @@ package com.intellij.testIntegration.createTest;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -27,7 +26,7 @@ public interface TestGenerator {
    *
    * @return generated test (i.e. PsiClass)
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiElement generateTest(final Project project, final CreateTestDialog d);
 
   /**

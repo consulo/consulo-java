@@ -18,8 +18,8 @@ package com.intellij.ide;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -40,7 +40,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author yole
  */
 public class JavaFilePasteProvider implements PasteProvider {
-  public void performPaste(@NotNull final DataContext dataContext) {
+  public void performPaste(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     final IdeView ideView = dataContext.getData(LangDataKeys.IDE_VIEW);
     if (project == null || ideView == null) return;
@@ -109,11 +109,11 @@ public class JavaFilePasteProvider implements PasteProvider {
     }
   }
 
-  public boolean isPastePossible(@NotNull final DataContext dataContext) {
+  public boolean isPastePossible(@Nonnull final DataContext dataContext) {
     return true;
   }
 
-  public boolean isPasteEnabled(@NotNull final DataContext dataContext) {
+  public boolean isPasteEnabled(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     final IdeView ideView = dataContext.getData(LangDataKeys.IDE_VIEW);
     if (project == null || ideView == null || ideView.getDirectories().length == 0) {

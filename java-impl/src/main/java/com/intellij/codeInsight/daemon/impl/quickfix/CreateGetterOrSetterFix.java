@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.GetterSetterPrototypeProvider;
@@ -46,7 +46,7 @@ public class CreateGetterOrSetterFix implements IntentionAction, LowPriorityActi
 	private final PsiField myField;
 	private final String myPropertyName;
 
-	public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @NotNull PsiField field)
+	public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field)
 	{
 		myCreateGetter = createGetter;
 		myCreateSetter = createSetter;
@@ -55,7 +55,7 @@ public class CreateGetterOrSetterFix implements IntentionAction, LowPriorityActi
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		@NonNls final String what;
@@ -80,14 +80,14 @@ public class CreateGetterOrSetterFix implements IntentionAction, LowPriorityActi
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("create.accessor.for.unused.field.family");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		if(!myField.isValid())
 		{
@@ -119,23 +119,23 @@ public class CreateGetterOrSetterFix implements IntentionAction, LowPriorityActi
 		return true;
 	}
 
-	private static boolean isFinal(@NotNull PsiField field)
+	private static boolean isFinal(@Nonnull PsiField field)
 	{
 		return field.hasModifierProperty(PsiModifier.FINAL);
 	}
 
-	private static boolean isStatic(@NotNull PsiField field)
+	private static boolean isStatic(@Nonnull PsiField field)
 	{
 		return field.hasModifierProperty(PsiModifier.STATIC);
 	}
 
-	private static boolean isStaticFinal(@NotNull PsiField field)
+	private static boolean isStaticFinal(@Nonnull PsiField field)
 	{
 		return isStatic(field) && isFinal(field);
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		if(!FileModificationService.getInstance().preparePsiElementForWrite(myField))
 		{

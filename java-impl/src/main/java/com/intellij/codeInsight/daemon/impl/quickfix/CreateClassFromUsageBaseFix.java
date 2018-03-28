@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import consulo.java.JavaQuickFixBundle;
@@ -25,8 +27,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ven
@@ -44,7 +44,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
 
   protected abstract String getText(String varName);
 
-  private boolean isAvailableInContext(final @NotNull PsiJavaCodeReferenceElement element) {
+  private boolean isAvailableInContext(final @Nonnull PsiJavaCodeReferenceElement element) {
     PsiElement parent = element.getParent();
 
     if (myKind == CreateClassKind.ANNOTATION) {
@@ -102,7 +102,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     final PsiJavaCodeReferenceElement element = getRefElement();
     if (element == null ||
         !element.getManager().isInProject(element) ||
@@ -130,17 +130,17 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.class.from.usage.family");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected PsiJavaCodeReferenceElement getRefElement() {
     return myRefElement.getElement();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected String getSuperClassName(final PsiJavaCodeReferenceElement element) {
     String superClassName = null;
     PsiElement parent = element.getParent();

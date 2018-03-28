@@ -25,7 +25,7 @@ import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -73,7 +73,7 @@ public class InheritorsTest extends PsiTestCase{
         public void run() {
           ClassInheritorsSearch.search(aClass, scope, deep).forEach(new PsiElementProcessorAdapter<PsiClass>(new PsiElementProcessor<PsiClass>() {
             @Override
-            public boolean execute(@NotNull PsiClass element) {
+            public boolean execute(@Nonnull PsiClass element) {
               inheritorsList.add(element.getQualifiedName());
               return true;
             }

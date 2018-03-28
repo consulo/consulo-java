@@ -22,7 +22,8 @@ import gnu.trove.THashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.patterns.ElementPattern;
@@ -44,7 +45,7 @@ class InstanceofTypeProvider implements CompletionProvider
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 	{
 		final PsiElement position = parameters.getPosition();
 		final PsiType[] leftTypes = InstanceOfLeftPartTypeGetter.getLeftTypes(position);

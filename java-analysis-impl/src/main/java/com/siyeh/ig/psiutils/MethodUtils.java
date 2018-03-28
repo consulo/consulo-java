@@ -18,10 +18,10 @@ package com.siyeh.ig.psiutils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
@@ -42,20 +42,20 @@ public class MethodUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isComparatorCompare(@Nullable PsiMethod method)
+	public static boolean isComparatorCompare(@javax.annotation.Nullable PsiMethod method)
 	{
 		return method != null && methodMatches(method, CommonClassNames.JAVA_UTIL_COMPARATOR, PsiType.INT, "compare", null, null);
 	}
 
 	@Contract("null -> false")
-	public static boolean isCompareTo(@Nullable PsiMethod method)
+	public static boolean isCompareTo(@javax.annotation.Nullable PsiMethod method)
 	{
 		return method != null && methodMatches(method, null, PsiType.INT, HardcodedMethodConstants.COMPARE_TO, PsiType.NULL) && InheritanceUtil.isInheritor(method.getContainingClass(),
 				CommonClassNames.JAVA_LANG_COMPARABLE);
 	}
 
 	@Contract("null -> false")
-	public static boolean isCompareToIgnoreCase(@Nullable PsiMethod method)
+	public static boolean isCompareToIgnoreCase(@javax.annotation.Nullable PsiMethod method)
 	{
 		if(method == null)
 		{
@@ -66,19 +66,19 @@ public class MethodUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isHashCode(@Nullable PsiMethod method)
+	public static boolean isHashCode(@javax.annotation.Nullable PsiMethod method)
 	{
 		return method != null && methodMatches(method, null, PsiType.INT, HardcodedMethodConstants.HASH_CODE);
 	}
 
 	@Contract("null -> false")
-	public static boolean isFinalize(@Nullable PsiMethod method)
+	public static boolean isFinalize(@javax.annotation.Nullable PsiMethod method)
 	{
 		return method != null && methodMatches(method, null, PsiType.VOID, HardcodedMethodConstants.FINALIZE);
 	}
 
 	@Contract("null -> false")
-	public static boolean isToString(@Nullable PsiMethod method)
+	public static boolean isToString(@javax.annotation.Nullable PsiMethod method)
 	{
 		if(method == null)
 		{
@@ -89,7 +89,7 @@ public class MethodUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isEquals(@Nullable PsiMethod method)
+	public static boolean isEquals(@javax.annotation.Nullable PsiMethod method)
 	{
 		if(method == null)
 		{
@@ -100,7 +100,7 @@ public class MethodUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isEqualsIgnoreCase(@Nullable PsiMethod method)
+	public static boolean isEqualsIgnoreCase(@javax.annotation.Nullable PsiMethod method)
 	{
 		if(method == null)
 		{
@@ -122,11 +122,11 @@ public class MethodUtils
 	 * @return true, if the specified method matches the specified constraints,
 	 * false otherwise
 	 */
-	public static boolean methodMatches(@NotNull PsiMethod method,
-			@NonNls @Nullable String containingClassName,
-			@Nullable PsiType returnType,
-			@Nullable Pattern methodNamePattern,
-			@Nullable PsiType... parameterTypes)
+	public static boolean methodMatches(@Nonnull PsiMethod method,
+			@NonNls @javax.annotation.Nullable String containingClassName,
+			@javax.annotation.Nullable PsiType returnType,
+			@javax.annotation.Nullable Pattern methodNamePattern,
+			@javax.annotation.Nullable PsiType... parameterTypes)
 	{
 		if(methodNamePattern != null)
 		{
@@ -152,11 +152,11 @@ public class MethodUtils
 	 * @return true, if the specified method matches the specified constraints,
 	 * false otherwise
 	 */
-	public static boolean methodMatches(@NotNull PsiMethod method,
-			@NonNls @Nullable String containingClassName,
-			@Nullable PsiType returnType,
-			@NonNls @Nullable String methodName,
-			@Nullable PsiType... parameterTypes)
+	public static boolean methodMatches(@Nonnull PsiMethod method,
+			@NonNls @javax.annotation.Nullable String containingClassName,
+			@javax.annotation.Nullable PsiType returnType,
+			@NonNls @javax.annotation.Nullable String methodName,
+			@javax.annotation.Nullable PsiType... parameterTypes)
 	{
 		final String name = method.getName();
 		if(methodName != null && !methodName.equals(name))
@@ -166,7 +166,7 @@ public class MethodUtils
 		return methodMatches(method, containingClassName, returnType, parameterTypes);
 	}
 
-	private static boolean methodMatches(@NotNull PsiMethod method, @NonNls @Nullable String containingClassName, @Nullable PsiType returnType, @Nullable PsiType... parameterTypes)
+	private static boolean methodMatches(@Nonnull PsiMethod method, @NonNls @javax.annotation.Nullable String containingClassName, @javax.annotation.Nullable PsiType returnType, @javax.annotation.Nullable PsiType... parameterTypes)
 	{
 		if(parameterTypes != null)
 		{
@@ -207,11 +207,11 @@ public class MethodUtils
 		return true;
 	}
 
-	public static boolean simpleMethodMatches(@NotNull PsiMethod method,
-			@NonNls @Nullable String containingClassName,
-			@NonNls @Nullable String returnTypeString,
-			@NonNls @Nullable String methodName,
-			@NonNls @Nullable String... parameterTypeStrings)
+	public static boolean simpleMethodMatches(@Nonnull PsiMethod method,
+			@NonNls @javax.annotation.Nullable String containingClassName,
+			@NonNls @javax.annotation.Nullable String returnTypeString,
+			@NonNls @javax.annotation.Nullable String methodName,
+			@NonNls @javax.annotation.Nullable String... parameterTypeStrings)
 	{
 		final Project project = method.getProject();
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -252,13 +252,13 @@ public class MethodUtils
 		}
 	}
 
-	public static boolean hasSuper(@NotNull PsiMethod method)
+	public static boolean hasSuper(@Nonnull PsiMethod method)
 	{
 		return getSuper(method) != null;
 	}
 
-	@Nullable
-	public static PsiMethod getSuper(@NotNull PsiMethod method)
+	@javax.annotation.Nullable
+	public static PsiMethod getSuper(@Nonnull PsiMethod method)
 	{
 		final MethodSignatureBackedByPsiMethod signature = getSuperMethodSignature(method);
 		if(signature == null)
@@ -268,8 +268,8 @@ public class MethodUtils
 		return signature.getMethod();
 	}
 
-	@Nullable
-	public static MethodSignatureBackedByPsiMethod getSuperMethodSignature(@NotNull PsiMethod method)
+	@javax.annotation.Nullable
+	public static MethodSignatureBackedByPsiMethod getSuperMethodSignature(@Nonnull PsiMethod method)
 	{
 		if(method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC) || method.hasModifierProperty(PsiModifier.PRIVATE))
 		{
@@ -399,7 +399,7 @@ public class MethodUtils
 		return true;
 	}
 
-	public static boolean hasInThrows(@NotNull PsiMethod method, @NotNull String... exceptions)
+	public static boolean hasInThrows(@Nonnull PsiMethod method, @Nonnull String... exceptions)
 	{
 		if(exceptions.length == 0)
 		{
@@ -454,7 +454,7 @@ public class MethodUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isStringLength(@Nullable PsiMethod method)
+	public static boolean isStringLength(@javax.annotation.Nullable PsiMethod method)
 	{
 		if(method == null || !method.getName().equals("length") || method.getParameterList().getParametersCount() != 0)
 		{

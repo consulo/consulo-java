@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator;
 import com.intellij.codeInsight.daemon.impl.FileStatusMap;
 import com.intellij.codeInsight.daemon.impl.GlobalUsageHelper;
@@ -90,8 +90,8 @@ class RefCountHolder
 
 	private static final Key<Reference<RefCountHolder>> REF_COUNT_HOLDER_IN_FILE_KEY = Key.create("REF_COUNT_HOLDER_IN_FILE_KEY");
 
-	@NotNull
-	static RefCountHolder get(@NotNull PsiFile file)
+	@Nonnull
+	static RefCountHolder get(@Nonnull PsiFile file)
 	{
 		Reference<RefCountHolder> ref = file.getUserData(REF_COUNT_HOLDER_IN_FILE_KEY);
 		RefCountHolder holder = com.intellij.reference.SoftReference.dereference(ref);
@@ -118,14 +118,14 @@ class RefCountHolder
 		return holder;
 	}
 
-	private RefCountHolder(@NotNull PsiFile file)
+	private RefCountHolder(@Nonnull PsiFile file)
 	{
 		myFile = file;
 		log("c: created for ", file);
 	}
 
-	@NotNull
-	GlobalUsageHelper getGlobalUsageHelper(@NotNull PsiFile file, @Nullable final UnusedDeclarationInspectionBase deadCodeInspection, boolean isUnusedToolEnabled)
+	@Nonnull
+	GlobalUsageHelper getGlobalUsageHelper(@Nonnull PsiFile file, @javax.annotation.Nullable final UnusedDeclarationInspectionBase deadCodeInspection, boolean isUnusedToolEnabled)
 	{
 		final FileViewProvider viewProvider = file.getViewProvider();
 		Project project = file.getProject();
@@ -135,10 +135,10 @@ class RefCountHolder
 		final boolean inLibrary = fileIndex.isInLibraryClasses(virtualFile) || fileIndex.isInLibrarySource(virtualFile);
 
 		final boolean myDeadCodeEnabled = deadCodeInspection != null && isUnusedToolEnabled && deadCodeInspection.isGlobalEnabledInEditor();
-		@NotNull final Predicate<PsiElement> myIsEntryPointPredicate = new Predicate<PsiElement>()
+		@Nonnull final Predicate<PsiElement> myIsEntryPointPredicate = new Predicate<PsiElement>()
 		{
 			@Override
-			public boolean apply(@Nullable PsiElement member)
+			public boolean apply(@javax.annotation.Nullable PsiElement member)
 			{
 				return !myDeadCodeEnabled || deadCodeInspection.isEntryPoint(member);
 			}
@@ -147,7 +147,7 @@ class RefCountHolder
 		return new GlobalUsageHelper()
 		{
 			@Override
-			public boolean shouldCheckUsages(@NotNull PsiMember member)
+			public boolean shouldCheckUsages(@Nonnull PsiMember member)
 			{
 				return !inLibrary && !myIsEntryPointPredicate.apply(member);
 			}
@@ -159,7 +159,7 @@ class RefCountHolder
 			}
 
 			@Override
-			public boolean isLocallyUsed(@NotNull PsiNamedElement member)
+			public boolean isLocallyUsed(@Nonnull PsiNamedElement member)
 			{
 				return isReferenced(member);
 			}
@@ -176,12 +176,12 @@ class RefCountHolder
 		myDclsUsedMap.clear();
 	}
 
-	void registerLocallyReferenced(@NotNull PsiNamedElement result)
+	void registerLocallyReferenced(@Nonnull PsiNamedElement result)
 	{
 		myDclsUsedMap.put(PsiAnchor.create(result), Boolean.TRUE);
 	}
 
-	void registerReference(@NotNull PsiReference ref, @NotNull JavaResolveResult resolveResult)
+	void registerReference(@Nonnull PsiReference ref, @Nonnull JavaResolveResult resolveResult)
 	{
 		PsiElement refElement = resolveResult.getElement();
 		PsiFile psiFile = refElement == null ? null : refElement.getContainingFile();
@@ -201,17 +201,17 @@ class RefCountHolder
 		}
 	}
 
-	private void registerImportStatement(@NotNull PsiReference ref, @NotNull PsiImportStatementBase importStatement)
+	private void registerImportStatement(@Nonnull PsiReference ref, @Nonnull PsiImportStatementBase importStatement)
 	{
 		myImportStatements.put(ref, importStatement);
 	}
 
-	boolean isRedundant(@NotNull PsiImportStatementBase importStatement)
+	boolean isRedundant(@Nonnull PsiImportStatementBase importStatement)
 	{
 		return !myImportStatements.containsValue(importStatement);
 	}
 
-	private void registerLocalRef(@NotNull PsiReference ref, PsiElement refElement)
+	private void registerLocalRef(@Nonnull PsiReference ref, PsiElement refElement)
 	{
 		if(refElement instanceof PsiMethod && PsiTreeUtil.isAncestor(refElement, ref.getElement(), true))
 		{
@@ -259,7 +259,7 @@ class RefCountHolder
 		removeInvalidFrom(myDclsUsedMap.keySet());
 	}
 
-	private static void removeInvalidFrom(@NotNull Collection<? extends PsiAnchor> collection)
+	private static void removeInvalidFrom(@Nonnull Collection<? extends PsiAnchor> collection)
 	{
 		for(Iterator<? extends PsiAnchor> it = collection.iterator(); it.hasNext(); )
 		{
@@ -271,7 +271,7 @@ class RefCountHolder
 		}
 	}
 
-	boolean isReferenced(@NotNull PsiElement element)
+	boolean isReferenced(@Nonnull PsiElement element)
 	{
 		Collection<PsiReference> array;
 		synchronized(myLocalRefsMap)
@@ -287,7 +287,7 @@ class RefCountHolder
 		return usedStatus == Boolean.TRUE;
 	}
 
-	boolean isReferencedByMethodReference(@NotNull PsiMethod method, @NotNull LanguageLevel languageLevel)
+	boolean isReferencedByMethodReference(@Nonnull PsiMethod method, @Nonnull LanguageLevel languageLevel)
 	{
 		if(!languageLevel.isAtLeast(LanguageLevel.JDK_1_8))
 		{
@@ -315,7 +315,7 @@ class RefCountHolder
 		return false;
 	}
 
-	private static boolean isParameterUsedRecursively(@NotNull PsiElement element, @NotNull Collection<PsiReference> array)
+	private static boolean isParameterUsedRecursively(@Nonnull PsiElement element, @Nonnull Collection<PsiReference> array)
 	{
 		if(!(element instanceof PsiParameter))
 		{
@@ -361,7 +361,7 @@ class RefCountHolder
 		return true;
 	}
 
-	boolean isReferencedForRead(@NotNull PsiVariable variable)
+	boolean isReferencedForRead(@Nonnull PsiVariable variable)
 	{
 		Collection<PsiReference> array;
 		synchronized(myLocalRefsMap)
@@ -393,7 +393,7 @@ class RefCountHolder
 		return false;
 	}
 
-	boolean isReferencedForWrite(@NotNull PsiVariable variable)
+	boolean isReferencedForWrite(@Nonnull PsiVariable variable)
 	{
 		Collection<PsiReference> array;
 		synchronized(myLocalRefsMap)
@@ -419,7 +419,7 @@ class RefCountHolder
 		return false;
 	}
 
-	boolean analyze(@NotNull PsiFile file, TextRange dirtyScope, @NotNull ProgressIndicator indicator, @NotNull Runnable analyze)
+	boolean analyze(@Nonnull PsiFile file, TextRange dirtyScope, @Nonnull ProgressIndicator indicator, @Nonnull Runnable analyze)
 	{
 		ProgressIndicator result;
 		if(myState.compareAndSet(EMPTY, indicator))
@@ -468,7 +468,7 @@ class RefCountHolder
 		}
 	}
 
-	private static void log(@NonNls @NotNull Object... info)
+	private static void log(@NonNls @Nonnull Object... info)
 	{
 		FileStatusMap.log(info);
 	}

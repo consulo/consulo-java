@@ -20,10 +20,10 @@ import gnu.trove.THashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.util.Processor;
@@ -41,7 +41,7 @@ public class InheritanceUtil
 	 * @param checkDeep true to check deeper than aClass.super (see {@linkplain PsiClass#isInheritor(com.intellij.psi.PsiClass, boolean)}).
 	 * @return true if aClass is the baseClass or baseClass inheritor
 	 */
-	public static boolean isInheritorOrSelf(@Nullable PsiClass aClass, @Nullable PsiClass baseClass, boolean checkDeep)
+	public static boolean isInheritorOrSelf(@javax.annotation.Nullable PsiClass aClass, @javax.annotation.Nullable PsiClass baseClass, boolean checkDeep)
 	{
 		if(aClass == null || baseClass == null)
 		{
@@ -51,7 +51,7 @@ public class InheritanceUtil
 		return manager.areElementsEquivalent(baseClass, aClass) || aClass.isInheritor(baseClass, checkDeep);
 	}
 
-	public static boolean processSupers(@Nullable PsiClass aClass, boolean includeSelf, @NotNull Processor<PsiClass> superProcessor)
+	public static boolean processSupers(@javax.annotation.Nullable PsiClass aClass, boolean includeSelf, @Nonnull Processor<PsiClass> superProcessor)
 	{
 		if(aClass == null)
 		{
@@ -66,7 +66,7 @@ public class InheritanceUtil
 		return processSupers(aClass, superProcessor, new THashSet<>());
 	}
 
-	private static boolean processSupers(@NotNull PsiClass aClass, @NotNull Processor<PsiClass> superProcessor, @NotNull Set<PsiClass> visited)
+	private static boolean processSupers(@Nonnull PsiClass aClass, @Nonnull Processor<PsiClass> superProcessor, @Nonnull Set<PsiClass> visited)
 	{
 		if(!visited.add(aClass))
 		{
@@ -92,7 +92,7 @@ public class InheritanceUtil
 	}
 
 	@Contract("null, _ -> false")
-	public static boolean isInheritor(@Nullable PsiType type, @NotNull @NonNls final String baseClassName)
+	public static boolean isInheritor(@javax.annotation.Nullable PsiType type, @Nonnull @NonNls final String baseClassName)
 	{
 		if(type instanceof PsiClassType)
 		{
@@ -114,13 +114,13 @@ public class InheritanceUtil
 	}
 
 	@Contract("null, _ -> false")
-	public static boolean isInheritor(@Nullable PsiClass psiClass, @NotNull final String baseClassName)
+	public static boolean isInheritor(@javax.annotation.Nullable PsiClass psiClass, @Nonnull final String baseClassName)
 	{
 		return isInheritor(psiClass, false, baseClassName);
 	}
 
 	@Contract("null, _, _ -> false")
-	public static boolean isInheritor(@Nullable PsiClass psiClass, final boolean strict, @NotNull final String baseClassName)
+	public static boolean isInheritor(@javax.annotation.Nullable PsiClass psiClass, final boolean strict, @Nonnull final String baseClassName)
 	{
 		if(psiClass == null)
 		{
@@ -143,12 +143,12 @@ public class InheritanceUtil
 	 * @param results
 	 * @param includeNonProject
 	 */
-	public static void getSuperClasses(@NotNull PsiClass aClass, @NotNull Set<PsiClass> results, boolean includeNonProject)
+	public static void getSuperClasses(@Nonnull PsiClass aClass, @Nonnull Set<PsiClass> results, boolean includeNonProject)
 	{
 		getSuperClassesOfList(aClass.getSuperTypes(), results, includeNonProject, new THashSet<>(), aClass.getManager());
 	}
 
-	public static LinkedHashSet<PsiClass> getSuperClasses(@NotNull PsiClass aClass)
+	public static LinkedHashSet<PsiClass> getSuperClasses(@Nonnull PsiClass aClass)
 	{
 		LinkedHashSet<PsiClass> result = new LinkedHashSet<>();
 		getSuperClasses(aClass, result, true);
@@ -156,7 +156,7 @@ public class InheritanceUtil
 	}
 
 
-	private static void getSuperClassesOfList(@NotNull PsiClassType[] types, @NotNull Set<PsiClass> results, boolean includeNonProject, @NotNull Set<PsiClass> visited, @NotNull PsiManager manager)
+	private static void getSuperClassesOfList(@Nonnull PsiClassType[] types, @Nonnull Set<PsiClass> results, boolean includeNonProject, @Nonnull Set<PsiClass> visited, @Nonnull PsiManager manager)
 	{
 		for(PsiClassType type : types)
 		{
@@ -217,7 +217,7 @@ public class InheritanceUtil
 		return place == aClass;
 	}
 
-	public static boolean processSuperTypes(@NotNull PsiType type, boolean includeSelf, @NotNull Processor<PsiType> processor)
+	public static boolean processSuperTypes(@Nonnull PsiType type, boolean includeSelf, @Nonnull Processor<PsiType> processor)
 	{
 		if(includeSelf && !processor.process(type))
 		{

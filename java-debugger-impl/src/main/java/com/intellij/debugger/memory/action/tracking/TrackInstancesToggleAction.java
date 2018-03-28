@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.memory.action.tracking;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.memory.component.InstancesTracker;
 import com.intellij.debugger.memory.tracking.TrackingType;
 import com.intellij.debugger.memory.ui.ClassesTable;
@@ -29,7 +29,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 public class TrackInstancesToggleAction extends ToggleAction
 {
 	@Override
-	public void update(@NotNull AnActionEvent e)
+	public void update(@Nonnull AnActionEvent e)
 	{
 		ReferenceType selectedClass = getSelectedClass(e);
 		if(selectedClass instanceof ArrayType)

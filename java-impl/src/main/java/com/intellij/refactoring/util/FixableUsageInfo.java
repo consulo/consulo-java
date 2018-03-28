@@ -18,7 +18,7 @@ package com.intellij.refactoring.util;
 import com.intellij.psi.PsiElement;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 
 @SuppressWarnings({"AbstractClassExtendsConcreteClass"})

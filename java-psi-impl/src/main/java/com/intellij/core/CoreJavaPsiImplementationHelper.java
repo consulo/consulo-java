@@ -15,7 +15,8 @@
  */
 package com.intellij.core;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
@@ -58,7 +59,7 @@ public class CoreJavaPsiImplementationHelper extends JavaPsiImplementationHelper
 	}
 
 	@Override
-	public PsiElement getDefaultMemberAnchor(@NotNull PsiClass psiClass, @NotNull PsiMember firstPsi)
+	public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi)
 	{
 		throw new UnsupportedOperationException("TODO");
 	}

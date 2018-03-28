@@ -20,7 +20,7 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.StackFrameContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -37,7 +37,7 @@ import consulo.internal.com.sun.jdi.Value;
 public class WatchItemDescriptor extends EvaluationDescriptor
 {
 
-	@Nullable
+	@javax.annotation.Nullable
 	private final String myCustomName;
 
 	public WatchItemDescriptor(Project project, TextWithImports text)

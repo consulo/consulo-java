@@ -20,7 +20,7 @@ import com.intellij.psi.PsiTypeParameterListOwner;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author ven

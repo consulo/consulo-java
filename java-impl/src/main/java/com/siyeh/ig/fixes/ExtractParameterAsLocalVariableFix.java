@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -27,12 +29,11 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class ExtractParameterAsLocalVariableFix
   extends InspectionGadgetsFix {
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message(
       "extract.parameter.as.local.variable.quickfix");

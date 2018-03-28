@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source.tree;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
@@ -44,12 +44,12 @@ public class JavaSharedImplUtil
 	{
 	}
 
-	public static PsiType getType(@NotNull PsiTypeElement typeElement, @NotNull PsiElement anchor)
+	public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor)
 	{
 		return getType(typeElement, anchor, null);
 	}
 
-	public static PsiType getType(@NotNull PsiTypeElement typeElement, @NotNull PsiElement anchor, @Nullable PsiAnnotation stopAt)
+	public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor, @javax.annotation.Nullable PsiAnnotation stopAt)
 	{
 		PsiType type = typeElement.getType();
 
@@ -113,8 +113,8 @@ public class JavaSharedImplUtil
 		return !found || stop ? null : annotations;
 	}
 
-	@NotNull
-	public static PsiType applyAnnotations(@NotNull PsiType type, @Nullable PsiModifierList modifierList)
+	@Nonnull
+	public static PsiType applyAnnotations(@Nonnull PsiType type, @Nullable PsiModifierList modifierList)
 	{
 		if(modifierList != null)
 		{
@@ -156,7 +156,7 @@ public class JavaSharedImplUtil
 		return type;
 	}
 
-	public static void normalizeBrackets(@NotNull PsiVariable variable)
+	public static void normalizeBrackets(@Nonnull PsiVariable variable)
 	{
 		CompositeElement variableElement = (CompositeElement) variable.getNode();
 
@@ -262,7 +262,7 @@ public class JavaSharedImplUtil
 			myOriginalProvider = originalProvider;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiAnnotation[] getAnnotations()
 		{

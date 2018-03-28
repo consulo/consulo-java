@@ -18,7 +18,6 @@ package com.intellij.refactoring.changeSignature;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -54,7 +53,7 @@ public class JavaThrownExceptionInfo implements ThrownExceptionInfo {
     myType = CanonicalTypes.createTypeWrapper(type);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException {
     if (myType != null) {
       return myType.getType(context, manager);

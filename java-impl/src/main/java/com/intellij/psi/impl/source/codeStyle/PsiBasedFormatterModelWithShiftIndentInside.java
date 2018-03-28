@@ -20,7 +20,7 @@
 package com.intellij.psi.impl.source.codeStyle;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.formatting.Block;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -47,7 +47,7 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
 	private final Project myProject;
 
 	public PsiBasedFormatterModelWithShiftIndentInside(final PsiFile file,
-			@NotNull final Block rootBlock,
+			@Nonnull final Block rootBlock,
 			final FormattingDocumentModelImpl documentModel)
 	{
 		super(file, rootBlock, documentModel);

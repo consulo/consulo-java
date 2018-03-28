@@ -19,9 +19,10 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.GlobalInspectionTool;
 import com.intellij.codeInspection.InspectionEP;
@@ -129,8 +130,8 @@ public abstract class InspectionTestCase extends PsiTestCase {
   protected GlobalInspectionContextImpl runTool(final String testDir,
                                                 final String jdkName,
                                                 boolean runDeadCodeFirst,
-                                                @NotNull InspectionToolWrapper toolWrapper,
-                                                @NotNull InspectionToolWrapper... additional) {
+                                                @Nonnull InspectionToolWrapper toolWrapper,
+                                                @Nonnull InspectionToolWrapper... additional) {
     final VirtualFile[] sourceDir = new VirtualFile[1];
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
@@ -155,7 +156,7 @@ public abstract class InspectionTestCase extends PsiTestCase {
     return globalContext;
   }
 
-  @NotNull
+  @Nonnull
   protected AnalysisScope createAnalysisScope(VirtualFile sourceDir) {
     PsiManager psiManager = PsiManager.getInstance(myProject);
     return new AnalysisScope(psiManager.findDirectory(sourceDir));
@@ -184,7 +185,7 @@ public abstract class InspectionTestCase extends PsiTestCase {
     super.setUp();
     ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
     myUnusedCodeExtension = new EntryPoint() {
-      @NotNull
+      @Nonnull
       @Override
       public String getDisplayName() {
         return "duh";

@@ -24,7 +24,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ExtractMethodFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -52,14 +52,14 @@ public class OverlyComplexArithmeticExpressionInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "overly.complex.arithmetic.expression.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "overly.complex.arithmetic.expression.problem.descriptor");
@@ -93,14 +93,14 @@ public class OverlyComplexArithmeticExpressionInspection
 
     @Override
     public void visitBinaryExpression(
-      @NotNull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       checkExpression(expression);
     }
 
     @Override
     public void visitPrefixExpression(
-      @NotNull PsiPrefixExpression expression) {
+      @Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       checkExpression(expression);
     }

@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.jdk;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiAnnotation;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class AnnotationInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("annotation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("annotation.problem.descriptor");
   }

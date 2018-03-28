@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents an array initializer expression.
@@ -28,6 +28,6 @@ public interface PsiArrayInitializerExpression extends PsiExpression {
    *
    * @return the array of member initializer expressions.
    */
-  @NotNull
+  @Nonnull
   PsiExpression[] getInitializers();
 }

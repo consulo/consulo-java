@@ -27,8 +27,8 @@ import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.WhitespacesBinders;
@@ -52,7 +52,7 @@ public class StatementParser
 
 	private final JavaParser myParser;
 
-	public StatementParser(@NotNull final JavaParser javaParser)
+	public StatementParser(@Nonnull final JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
@@ -401,7 +401,7 @@ public class StatementParser
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseIfStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -437,7 +437,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseWhileStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -459,7 +459,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseForStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -486,7 +486,7 @@ public class StatementParser
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseForLoopFromInitializer(PsiBuilder builder, PsiBuilder.Marker statement)
 	{
 		PsiBuilder.Marker init = parseStatement(builder);
@@ -590,7 +590,7 @@ public class StatementParser
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseForEachFromColon(PsiBuilder builder, PsiBuilder.Marker statement)
 	{
 		builder.advanceLexer();
@@ -618,7 +618,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseDoWhileStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -648,7 +648,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseSwitchStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -693,7 +693,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private static PsiBuilder.Marker parseBreakStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -704,7 +704,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private static PsiBuilder.Marker parseContinueStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -715,7 +715,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseReturnStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -728,7 +728,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseThrowStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -747,7 +747,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseSynchronizedStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -769,7 +769,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseTryStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -855,7 +855,7 @@ public class StatementParser
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseAssertStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
@@ -885,7 +885,7 @@ public class StatementParser
 		return statement;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseBlockStatement(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();

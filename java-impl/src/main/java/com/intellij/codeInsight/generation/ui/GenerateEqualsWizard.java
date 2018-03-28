@@ -25,13 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.java.codeInsight.JavaCodeInsightBundle;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
@@ -388,7 +388,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 		}
 
 		@Override
-		public int checkForProblems(@NotNull MemberInfo member)
+		public int checkForProblems(@Nonnull MemberInfo member)
 		{
 			if(!(member.getMember() instanceof PsiField))
 			{
@@ -477,7 +477,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 			comboBox.addActionListener(new ActionListener()
 			{
 				@Override
-				public void actionPerformed(@NotNull final ActionEvent M)
+				public void actionPerformed(@Nonnull final ActionEvent M)
 				{
 					manager.setDefaultTemplate((String) comboBox.getSelectedItem());
 				}
@@ -492,7 +492,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 			checkbox.addActionListener(new ActionListener()
 			{
 				@Override
-				public void actionPerformed(@NotNull final ActionEvent M)
+				public void actionPerformed(@Nonnull final ActionEvent M)
 				{
 					JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER = checkbox.isSelected();
 				}
@@ -505,7 +505,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 			gettersCheckbox.addActionListener(new ActionListener()
 			{
 				@Override
-				public void actionPerformed(@NotNull final ActionEvent M)
+				public void actionPerformed(@Nonnull final ActionEvent M)
 				{
 					JavaCodeInsightSettings.getInstance().USE_ACCESSORS_IN_EQUALS_HASHCODE = gettersCheckbox.isSelected();
 				}

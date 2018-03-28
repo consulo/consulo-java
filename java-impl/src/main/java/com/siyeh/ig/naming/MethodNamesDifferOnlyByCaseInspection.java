@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,19 +35,19 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
   public boolean ignoreIfMethodIsOverride = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MethodNamesDifferingOnlyByCase";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.names.differ.only.by.case.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("method.names.differ.only.by.case.problem.descriptor", infos[0]);
   }
@@ -76,7 +76,7 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
   private class MethodNamesDifferOnlyByCaseVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (method.isConstructor()) {
         return;
       }

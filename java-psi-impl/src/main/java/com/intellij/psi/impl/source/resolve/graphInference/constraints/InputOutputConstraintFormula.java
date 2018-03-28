@@ -18,7 +18,6 @@ package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
@@ -116,7 +115,7 @@ public abstract class InputOutputConstraintFormula implements ConstraintFormula
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Set<InferenceVariable> getOutputVariables(Set<InferenceVariable> inputVariables, InferenceSession session)
 	{
 		final HashSet<InferenceVariable> mentionedVariables = new HashSet<InferenceVariable>();

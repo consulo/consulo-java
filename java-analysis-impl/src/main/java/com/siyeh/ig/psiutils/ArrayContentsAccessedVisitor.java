@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.psiutils;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 
@@ -25,13 +26,13 @@ class ArrayContentsAccessedVisitor extends JavaRecursiveElementVisitor {
   private boolean accessed = false;
   private final PsiVariable variable;
 
-  public ArrayContentsAccessedVisitor(@NotNull PsiVariable variable) {
+  public ArrayContentsAccessedVisitor(@Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
   @Override
   public void visitForeachStatement(
-    @NotNull PsiForeachStatement statement) {
+    @Nonnull PsiForeachStatement statement) {
     if (accessed) {
       return;
     }

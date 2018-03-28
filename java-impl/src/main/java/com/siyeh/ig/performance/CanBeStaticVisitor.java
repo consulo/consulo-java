@@ -15,21 +15,22 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 class CanBeStaticVisitor extends JavaRecursiveElementVisitor {
   private boolean canBeStatic = true;
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (canBeStatic) {
       super.visitElement(element);
     }
   }
 
   @Override
-  public void visitReferenceExpression(@NotNull PsiReferenceExpression ref) {
+  public void visitReferenceExpression(@Nonnull PsiReferenceExpression ref) {
     if (!canBeStatic) {
       return;
     }

@@ -43,8 +43,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -55,7 +55,7 @@ import java.util.regex.Pattern;
 public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.rename.RenameJavaClassProcessor");
 
-  public boolean canProcessElement(@NotNull final PsiElement element) {
+  public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiClass;
   }
 
@@ -118,7 +118,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
   }
 
   @Nullable
-  public Pair<String, String> getTextOccurrenceSearchStrings(@NotNull final PsiElement element, @NotNull final String newName) {
+  public Pair<String, String> getTextOccurrenceSearchStrings(@Nonnull final PsiElement element, @Nonnull final String newName) {
     if (element instanceof PsiClass) {
       final PsiClass aClass = (PsiClass)element;
       if (aClass.getParent() instanceof PsiClass) {

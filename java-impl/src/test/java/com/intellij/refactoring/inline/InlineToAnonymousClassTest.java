@@ -5,8 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiCall;
 import com.intellij.psi.PsiClass;
@@ -24,7 +25,7 @@ import consulo.codeInsight.TargetElementUtilEx;
  */
 public class InlineToAnonymousClassTest extends LightRefactoringTestCase
 {
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

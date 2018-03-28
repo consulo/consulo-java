@@ -26,7 +26,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -34,19 +34,19 @@ public class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionToo
   @NonNls public static final String ACCESS_STATIC_VIA_INSTANCE = "AccessStaticViaInstance";
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("access.static.via.instance");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return ACCESS_STATIC_VIA_INSTANCE;
@@ -63,8 +63,8 @@ public class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionToo
   }
 
   @Override
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
     return new JavaElementVisitor() {
       @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
         checkAccessStaticMemberViaInstanceReference(expression, holder, isOnTheFly);

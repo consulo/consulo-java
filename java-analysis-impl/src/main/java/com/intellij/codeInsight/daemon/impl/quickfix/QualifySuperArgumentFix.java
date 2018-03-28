@@ -23,7 +23,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -37,7 +38,7 @@ import com.intellij.refactoring.util.RefactoringChangeUtil;
 
 public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix
 {
-	public QualifySuperArgumentFix(@NotNull PsiExpression expression, @NotNull PsiClass psiClass)
+	public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass)
 	{
 		super(expression, psiClass);
 	}
@@ -54,7 +55,7 @@ public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix
 		return RefactoringChangeUtil.createSuperExpression(manager, myPsiClass);
 	}
 
-	public static void registerQuickFixAction(@NotNull PsiSuperExpression expr, HighlightInfo highlightInfo)
+	public static void registerQuickFixAction(@Nonnull PsiSuperExpression expr, HighlightInfo highlightInfo)
 	{
 		LOG.assertTrue(expr.getQualifier() == null);
 		final PsiClass containingClass = PsiTreeUtil.getParentOfType(expr, PsiClass.class);

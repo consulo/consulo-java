@@ -24,15 +24,15 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
  */
 public class JavaClassReferenceCompletionContributor extends CompletionContributor {
   @Override
-  public void duringCompletion(@NotNull CompletionInitializationContext context) {
+  public void duringCompletion(@Nonnull CompletionInitializationContext context) {
     JavaClassReference reference = findJavaClassReference(context.getFile(), context.getStartOffset());
     if (reference != null && reference.getExtendClassNames() != null) {
       JavaClassReferenceSet set = reference.getJavaClassReferenceSet();

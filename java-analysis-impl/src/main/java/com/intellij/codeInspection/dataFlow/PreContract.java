@@ -19,8 +19,8 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiMethod;
 
@@ -29,10 +29,10 @@ import com.intellij.psi.PsiMethod;
  */
 interface PreContract
 {
-	@NotNull
+	@Nonnull
 	List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body);
 
-	@Nullable
+	@javax.annotation.Nullable
 	default PreContract negate()
 	{
 		return new NegatingContract(this);

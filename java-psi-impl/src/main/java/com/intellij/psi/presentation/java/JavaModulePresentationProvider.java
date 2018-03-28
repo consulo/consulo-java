@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.openapi.module.Module;
@@ -36,7 +36,7 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
 	private static final Pattern JAR_NAME = Pattern.compile(".+/([^/]+\\.jar)!/.*");
 
 	@Override
-	public ItemPresentation getPresentation(@NotNull final PsiJavaModule item)
+	public ItemPresentation getPresentation(@Nonnull final PsiJavaModule item)
 	{
 		return new ItemPresentation()
 		{

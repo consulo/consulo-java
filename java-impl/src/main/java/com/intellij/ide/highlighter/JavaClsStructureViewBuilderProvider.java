@@ -15,8 +15,8 @@
  */
 package com.intellij.ide.highlighter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewBuilderProvider;
 import com.intellij.lang.LanguageStructureViewBuilder;
@@ -34,8 +34,8 @@ import com.intellij.psi.PsiManager;
 public class JavaClsStructureViewBuilderProvider implements StructureViewBuilderProvider
 {
 	@Override
-	@Nullable
-	public StructureViewBuilder getStructureViewBuilder(@NotNull FileType fileType, @NotNull VirtualFile file, @NotNull Project project)
+	@javax.annotation.Nullable
+	public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @Nonnull VirtualFile file, @Nonnull Project project)
 	{
 		if(fileType == JavaClassFileType.INSTANCE)
 		{

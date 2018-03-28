@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
@@ -22,25 +24,23 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final String myMethodName;
   private final boolean myIsSetter;
 
-  public ReplaceInaccessibleFieldWithGetterSetterFix(@NotNull PsiElement element, @NotNull PsiMethod getter, boolean isSetter) {
+  public ReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
     super(element);
     myMethodName = getter.getName();
     myIsSetter = isSetter;
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     PsiReferenceExpression place = (PsiReferenceExpression)startElement;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(place)) return;
     String qualifier = null;
@@ -67,13 +67,13 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return myIsSetter ? "Replace with setter" : "Replace with getter";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return "Replace with getter/setter";

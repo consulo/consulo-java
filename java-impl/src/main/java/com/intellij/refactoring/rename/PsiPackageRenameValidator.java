@@ -15,7 +15,6 @@
  */
 package com.intellij.refactoring.rename;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.ElementPattern;
@@ -30,7 +29,7 @@ import com.intellij.util.ProcessingContext;
  * Date: 3/14/11
  */
 public class PsiPackageRenameValidator implements RenameInputValidatorEx {
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public String getErrorMessage(String newName, Project project) {
     if (FileTypeManager.getInstance().isFileIgnored(newName)) {

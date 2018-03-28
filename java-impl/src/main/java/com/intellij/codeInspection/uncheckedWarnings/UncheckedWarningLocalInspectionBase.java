@@ -19,13 +19,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -68,16 +69,16 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 	public boolean IGNORE_UNCHECKED_CAST;
 	public boolean IGNORE_UNCHECKED_OVERRIDING;
 
-	@NotNull
-	static JCheckBox createSetting(@NotNull String cbText, final boolean option, @NotNull Pass<JCheckBox> pass)
+	@Nonnull
+	static JCheckBox createSetting(@Nonnull String cbText, final boolean option, @Nonnull Pass<JCheckBox> pass)
 	{
 		final JCheckBox uncheckedCb = new JCheckBox(cbText, option);
 		uncheckedCb.addActionListener(e -> pass.pass(uncheckedCb));
 		return uncheckedCb;
 	}
 
-	@NotNull
-	private static LocalQuickFix[] getChangeVariableTypeFixes(@NotNull PsiVariable parameter, @Nullable PsiType itemType, LocalQuickFix[] generifyFixes)
+	@Nonnull
+	private static LocalQuickFix[] getChangeVariableTypeFixes(@Nonnull PsiVariable parameter, @javax.annotation.Nullable PsiType itemType, LocalQuickFix[] generifyFixes)
 	{
 		if(itemType instanceof PsiMethodReferenceType)
 		{
@@ -107,21 +108,21 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return "";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return DISPLAY_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -130,7 +131,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 
 	@Override
 	@Pattern(VALID_ID_PATTERN)
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getID()
 	{
@@ -144,7 +145,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 	}
 
 	@Override
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		if(IGNORE_UNCHECKED_ASSIGNMENT || IGNORE_UNCHECKED_CALL || IGNORE_UNCHECKED_CAST || IGNORE_UNCHECKED_OVERRIDING || IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION)
 		{
@@ -152,9 +153,9 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly, @NotNull LocalInspectionToolSession session)
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, @Nonnull LocalInspectionToolSession session)
 	{
 		LanguageLevel languageLevel = PsiUtil.getLanguageLevel(session.getFile());
 		if(!languageLevel.isAtLeast(LanguageLevel.JDK_1_5))
@@ -165,7 +166,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 		return new UncheckedWarningsVisitor(isOnTheFly, languageLevel)
 		{
 			@Override
-			protected void registerProblem(@NotNull String message, @Nullable PsiElement callExpression, @NotNull PsiElement psiElement, @NotNull LocalQuickFix[] quickFixes)
+			protected void registerProblem(@Nonnull String message, @Nullable PsiElement callExpression, @Nonnull PsiElement psiElement, @Nonnull LocalQuickFix[] quickFixes)
 			{
 				final String rawExpression = isMethodCalledOnRawType(callExpression);
 				if(rawExpression != null)
@@ -178,7 +179,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	protected LocalQuickFix[] createFixes()
 	{
 		return LocalQuickFix.EMPTY_ARRAY;
@@ -207,18 +208,18 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 	private abstract class UncheckedWarningsVisitor extends JavaElementVisitor
 	{
 		private final boolean myOnTheFly;
-		@NotNull
+		@Nonnull
 		private final LanguageLevel myLanguageLevel;
 		private final LocalQuickFix[] myGenerifyFixes;
 
-		UncheckedWarningsVisitor(boolean onTheFly, @NotNull LanguageLevel level)
+		UncheckedWarningsVisitor(boolean onTheFly, @Nonnull LanguageLevel level)
 		{
 			myOnTheFly = onTheFly;
 			myLanguageLevel = level;
 			myGenerifyFixes = onTheFly ? createFixes() : LocalQuickFix.EMPTY_ARRAY;
 		}
 
-		protected abstract void registerProblem(@NotNull String message, PsiElement callExpression, @NotNull PsiElement psiElement, @NotNull LocalQuickFix[] quickFixes);
+		protected abstract void registerProblem(@Nonnull String message, PsiElement callExpression, @Nonnull PsiElement psiElement, @Nonnull LocalQuickFix[] quickFixes);
 
 
 		@Override
@@ -475,12 +476,12 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 			}
 		}
 
-		private void checkRawToGenericsAssignment(@NotNull PsiElement parameter,
+		private void checkRawToGenericsAssignment(@Nonnull PsiElement parameter,
 				PsiExpression expression,
 				PsiType parameterType,
 				PsiType itemType,
 				boolean checkAssignability,
-				@NotNull LocalQuickFix[] quickFixes)
+				@Nonnull LocalQuickFix[] quickFixes)
 		{
 			if(parameterType == null || itemType == null)
 			{

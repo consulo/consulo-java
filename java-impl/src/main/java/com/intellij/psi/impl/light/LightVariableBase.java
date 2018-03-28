@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.light;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.originInfo.OriginInfoAwareElement;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -61,7 +61,7 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
     return new LightModifierList(getManager());
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement getDeclarationScope() {
     return myScope;
   }
@@ -77,19 +77,19 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return StringUtil.notNullize(getNameIdentifier().getText());
   }
 
   @Override
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException{
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException{
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType getType() {
     if (myType == null) {
       myType = computeType();
@@ -97,13 +97,13 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
     return myType;
   }
 
-  @NotNull
+  @Nonnull
   protected PsiType computeType() {
     return PsiType.VOID;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiTypeElement getTypeElement() {
     return JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeElement(myType);
   }
@@ -114,7 +114,7 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  public boolean hasModifierProperty(@NotNull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 

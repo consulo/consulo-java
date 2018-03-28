@@ -23,7 +23,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,19 +41,19 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   private final LocalQuickFix myQuickFixAction;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.VERBOSE_GROUP_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.redundant.type.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "RedundantTypeArguments";
   }
@@ -61,7 +61,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
 
   @Override
-  public ProblemDescriptor[] checkMethod(@NotNull PsiMethod psiMethod, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     final PsiCodeBlock body = psiMethod.getBody();
     if (body != null) {
       return getDescriptions(body, manager, isOnTheFly);
@@ -142,13 +142,13 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
   private static class MyQuickFixAction implements LocalQuickFix {
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.redundant.type.remove.quickfix");
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList)descriptor.getPsiElement();
       try {
         final PsiMethodCallExpression expr =
@@ -161,7 +161,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }

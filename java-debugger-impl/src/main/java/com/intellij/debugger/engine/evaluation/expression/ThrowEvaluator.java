@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -26,10 +27,10 @@ import consulo.internal.com.sun.jdi.ObjectReference;
  */
 public class ThrowEvaluator implements Evaluator
 {
-	@NotNull
+	@Nonnull
 	private final Evaluator myExceptionEvaluator;
 
-	public ThrowEvaluator(@NotNull Evaluator exceptionEvaluator)
+	public ThrowEvaluator(@Nonnull Evaluator exceptionEvaluator)
 	{
 		myExceptionEvaluator = exceptionEvaluator;
 	}

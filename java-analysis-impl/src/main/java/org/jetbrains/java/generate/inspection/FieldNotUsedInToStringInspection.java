@@ -19,8 +19,9 @@ import gnu.trove.THashSet;
 
 import java.util.Collections;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -36,12 +37,12 @@ import com.intellij.psi.util.PropertyUtil;
  */
 public class FieldNotUsedInToStringInspection extends AbstractToStringInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Field not used in 'toString()' method";
   }
 
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "FieldNotUsedInToString";
   }
@@ -51,9 +52,9 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new FieldNotUsedInToStringVisitor(holder);
   }
 

@@ -18,16 +18,16 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 final class Product
 {
-	@NotNull
+	@Nonnull
 	final Value value;
-	@NotNull
+	@Nonnull
 	final Set<Key> ids;
 
-	Product(@NotNull Value value, @NotNull Set<Key> ids)
+	Product(@Nonnull Value value, @Nonnull Set<Key> ids)
 	{
 		this.value = value;
 		this.ids = ids;

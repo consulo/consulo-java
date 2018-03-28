@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
@@ -35,12 +35,12 @@ public class PsiGraphInferenceHelper implements PsiInferenceHelper
 	}
 
 	@Override
-	public PsiType inferTypeForMethodTypeParameter(@NotNull PsiTypeParameter typeParameter,
-			@NotNull PsiParameter[] parameters,
-			@NotNull PsiExpression[] arguments,
-			@NotNull PsiSubstitutor partialSubstitutor,
-			@Nullable PsiElement parent,
-			@NotNull ParameterTypeInferencePolicy policy)
+	public PsiType inferTypeForMethodTypeParameter(@Nonnull PsiTypeParameter typeParameter,
+			@Nonnull PsiParameter[] parameters,
+			@Nonnull PsiExpression[] arguments,
+			@Nonnull PsiSubstitutor partialSubstitutor,
+			@javax.annotation.Nullable PsiElement parent,
+			@Nonnull ParameterTypeInferencePolicy policy)
 	{
 		final PsiSubstitutor substitutor;
 		if(parent != null)
@@ -56,15 +56,15 @@ public class PsiGraphInferenceHelper implements PsiInferenceHelper
 		return substitutor.substitute(typeParameter);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiSubstitutor inferTypeArguments(@NotNull PsiTypeParameter[] typeParameters,
-			@NotNull PsiParameter[] parameters,
-			@NotNull PsiExpression[] arguments,
-			@NotNull PsiSubstitutor partialSubstitutor,
-			@NotNull PsiElement parent,
-			@NotNull ParameterTypeInferencePolicy policy,
-			@NotNull LanguageLevel languageLevel)
+	public PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
+			@Nonnull PsiParameter[] parameters,
+			@Nonnull PsiExpression[] arguments,
+			@Nonnull PsiSubstitutor partialSubstitutor,
+			@Nonnull PsiElement parent,
+			@Nonnull ParameterTypeInferencePolicy policy,
+			@Nonnull LanguageLevel languageLevel)
 	{
 		if(typeParameters.length == 0)
 		{
@@ -74,9 +74,9 @@ public class PsiGraphInferenceHelper implements PsiInferenceHelper
 		return InferenceSessionContainer.infer(typeParameters, parameters, arguments, partialSubstitutor, parent, policy);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiSubstitutor inferTypeArguments(@NotNull PsiTypeParameter[] typeParameters, @NotNull PsiType[] leftTypes, @NotNull PsiType[] rightTypes, @NotNull LanguageLevel languageLevel)
+	public PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters, @Nonnull PsiType[] leftTypes, @Nonnull PsiType[] rightTypes, @Nonnull LanguageLevel languageLevel)
 	{
 		if(typeParameters.length == 0)
 		{

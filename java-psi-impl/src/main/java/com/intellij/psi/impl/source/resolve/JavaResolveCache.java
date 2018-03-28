@@ -23,9 +23,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -69,7 +70,10 @@ public class JavaResolveCache
 
 	private static final Object NULL = Key.create("NULL");
 
-	public JavaResolveCache(@Nullable("can be null in com.intellij.core.JavaCoreApplicationEnvironment.JavaCoreApplicationEnvironment") MessageBus messageBus)
+	/**
+	 * @param messageBus  "can be null in com.intellij.core.JavaCoreApplicationEnvironment.JavaCoreApplicationEnvironment"
+	 */
+	public JavaResolveCache(@Nullable MessageBus messageBus)
 	{
 		if(messageBus != null)
 		{
@@ -95,7 +99,7 @@ public class JavaResolveCache
 	}
 
 	@Nullable
-	public <T extends PsiExpression> PsiType getType(@NotNull T expr, @NotNull Function<T, PsiType> f)
+	public <T extends PsiExpression> PsiType getType(@Nonnull T expr, @Nonnull Function<T, PsiType> f)
 	{
 		final boolean isOverloadCheck = MethodCandidateInfo.isOverloadCheck() || LambdaUtil.isLambdaParameterCheck();
 		final boolean polyExpression = PsiPolyExpressionUtil.isPolyExpression(expr);
@@ -150,8 +154,8 @@ public class JavaResolveCache
 		return type == TypeConversionUtil.NULL_TYPE ? null : type;
 	}
 
-	@Nullable
-	public Object computeConstantValueWithCaching(@NotNull PsiVariable variable, @NotNull ConstValueComputer computer, Set<PsiVariable> visitedVars)
+	@javax.annotation.Nullable
+	public Object computeConstantValueWithCaching(@Nonnull PsiVariable variable, @Nonnull ConstValueComputer computer, Set<PsiVariable> visitedVars)
 	{
 		boolean physical = variable.isPhysical();
 
@@ -173,6 +177,6 @@ public class JavaResolveCache
 
 	public interface ConstValueComputer
 	{
-		Object execute(@NotNull PsiVariable variable, Set<PsiVariable> visitedVars);
+		Object execute(@Nonnull PsiVariable variable, Set<PsiVariable> visitedVars);
 	}
 }

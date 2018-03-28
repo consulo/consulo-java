@@ -15,8 +15,8 @@
  */
 package com.intellij.openapi.externalSystem.service.execution;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RemoteConnection;
@@ -36,7 +36,7 @@ public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner
 {
 	private static final Logger LOG = Logger.getInstance(ExternalSystemTaskDebugRunner.class);
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getRunnerId()
 	{
@@ -44,14 +44,14 @@ public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner
 	}
 
 	@Override
-	public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile)
+	public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile)
 	{
 		return profile instanceof ExternalSystemRunConfiguration && DefaultDebugExecutor.EXECUTOR_ID.equals(executorId);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	protected RunContentDescriptor createContentDescriptor(@NotNull RunProfileState state, @NotNull ExecutionEnvironment environment) throws
+	protected RunContentDescriptor createContentDescriptor(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment environment) throws
 			ExecutionException
 	{
 		if(state instanceof ExternalSystemRunConfiguration.MyRunnableState)

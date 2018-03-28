@@ -24,8 +24,8 @@ import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.NEXT_LINE_SHIFT
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Spacing;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
@@ -343,8 +343,8 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		}
 	}
 
-	@NotNull
-	private Spacing getSpaceBeforeMethodLBrace(@NotNull PsiMethod method)
+	@Nonnull
+	private Spacing getSpaceBeforeMethodLBrace(@Nonnull PsiMethod method)
 	{
 		final int space = mySettings.SPACE_BEFORE_METHOD_LBRACE ? 1 : 0;
 		final int methodBraceStyle = mySettings.METHOD_BRACE_STYLE;
@@ -367,7 +367,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return Spacing.createSpacing(space, space, 1, false, mySettings.KEEP_BLANK_LINES_IN_CODE);
 	}
 
-	private static int getMethodHeaderEndOffset(@NotNull PsiMethod method)
+	private static int getMethodHeaderEndOffset(@Nonnull PsiMethod method)
 	{
 		PsiElement headerEnd = method.getBody() != null ? method.getBody().getPrevSibling() : null;
 		if(headerEnd != null)
@@ -377,8 +377,8 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return method.getTextRange().getEndOffset();
 	}
 
-	@NotNull
-	private Spacing getSpaceBeforeClassLBrace(@NotNull PsiClass aClass)
+	@Nonnull
+	private Spacing getSpaceBeforeClassLBrace(@Nonnull PsiClass aClass)
 	{
 		final int space = mySettings.SPACE_BEFORE_CLASS_LBRACE ? 1 : 0;
 		final int classBraceStyle = mySettings.CLASS_BRACE_STYLE;
@@ -398,7 +398,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return Spacing.createSpacing(space, space, 1, false, mySettings.KEEP_BLANK_LINES_IN_CODE);
 	}
 
-	private Spacing getSpaceBeforeLBrace(@NotNull ASTNode lBraceBlock, boolean spaceBeforeLbrace, @Nullable TextRange nextLineIfWrappedOptionRange)
+	private Spacing getSpaceBeforeLBrace(@Nonnull ASTNode lBraceBlock, boolean spaceBeforeLbrace, @Nullable TextRange nextLineIfWrappedOptionRange)
 	{
 		int space = spaceBeforeLbrace ? 1 : 0;
 
@@ -418,7 +418,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return Spacing.createSpacing(space, space, 1, false, mySettings.KEEP_BLANK_LINES_IN_CODE);
 	}
 
-	private boolean shouldHandleAsSimpleClass(@NotNull PsiClass aClass)
+	private boolean shouldHandleAsSimpleClass(@Nonnull PsiClass aClass)
 	{
 		if(!mySettings.KEEP_SIMPLE_CLASSES_IN_ONE_LINE)
 		{
@@ -445,12 +445,12 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return false;
 	}
 
-	private static boolean isWhiteSpaceWithoutLineFeeds(@Nullable PsiElement betweenBraces)
+	private static boolean isWhiteSpaceWithoutLineFeeds(@javax.annotation.Nullable PsiElement betweenBraces)
 	{
 		return betweenBraces instanceof PsiWhiteSpace && !betweenBraces.textContains('\n');
 	}
 
-	private boolean shouldHandleAsSimpleBlock(@NotNull ASTNode node)
+	private boolean shouldHandleAsSimpleBlock(@Nonnull ASTNode node)
 	{
 		if(!mySettings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE)
 		{
@@ -465,7 +465,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return !node.textContains('\n');
 	}
 
-	private boolean shouldHandleAsSimpleMethod(@NotNull PsiMethod method)
+	private boolean shouldHandleAsSimpleMethod(@Nonnull PsiMethod method)
 	{
 		if(!mySettings.KEEP_SIMPLE_METHODS_IN_ONE_LINE)
 		{
@@ -475,7 +475,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return body != null && !body.textContains('\n');
 	}
 
-	private static int getMethodHeaderStartOffset(@NotNull PsiMethod method)
+	private static int getMethodHeaderStartOffset(@Nonnull PsiMethod method)
 	{
 		PsiTypeParameterList typeParameterList = PsiTreeUtil.findChildOfType(method, PsiTypeParameterList.class);
 		if(typeParameterList != null)
@@ -489,7 +489,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		return method.getTextRange().getStartOffset();
 	}
 
-	private static boolean isEndOfLineCommentAfterLBrace(@NotNull ASTNode node)
+	private static boolean isEndOfLineCommentAfterLBrace(@Nonnull ASTNode node)
 	{
 		if(node.getPsi() instanceof PsiComment)
 		{
@@ -1248,7 +1248,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		}
 	}
 
-	private Spacing createNonLFSpace(int spaces, @Nullable TextRange dependantRange)
+	private Spacing createNonLFSpace(int spaces, @javax.annotation.Nullable TextRange dependantRange)
 	{
 		final ASTNode prev = getPrevElementType(myChild2);
 		if(prev != null && prev.getElementType() == JavaTokenType.END_OF_LINE_COMMENT)
@@ -1577,7 +1577,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		}
 	}
 
-	private void createSpaceWithLinefeedIfListWrapped(@NotNull PsiExpressionList list, boolean space)
+	private void createSpaceWithLinefeedIfListWrapped(@Nonnull PsiExpressionList list, boolean space)
 	{
 		PsiExpression[] expressions = list.getExpressions();
 		int length = expressions.length;
@@ -1785,7 +1785,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static ASTNode findFrom(ASTNode current, final IElementType expected, boolean forward)
 	{
 		while(current != null)

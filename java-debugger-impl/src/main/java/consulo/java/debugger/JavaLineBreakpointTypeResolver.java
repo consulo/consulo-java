@@ -1,7 +1,7 @@
 package consulo.java.debugger;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.ui.breakpoints.JavaFieldBreakpointType;
 import com.intellij.debugger.ui.breakpoints.JavaLineBreakpointType;
 import com.intellij.debugger.ui.breakpoints.JavaLineBreakpointTypeBase;
@@ -25,10 +25,10 @@ import consulo.xdebugger.breakpoints.XLineBreakpointTypeResolver;
  */
 public class JavaLineBreakpointTypeResolver implements XLineBreakpointTypeResolver
 {
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	@Override
-	public XLineBreakpointType<?> resolveBreakpointType(@NotNull Project project, @NotNull VirtualFile virtualFile, final int line)
+	public XLineBreakpointType<?> resolveBreakpointType(@Nonnull Project project, @Nonnull VirtualFile virtualFile, final int line)
 	{
 		PsiFile file = PsiManager.getInstance(project).findFile(virtualFile);
 		if(file == null)

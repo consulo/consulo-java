@@ -17,7 +17,6 @@ package com.intellij.codeInsight.generation;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.Nullable;
 import consulo.java.codeInsight.JavaCodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;
@@ -41,7 +40,7 @@ public class GenerateGetterHandler extends GenerateGetterSetterHandlerBase
 		return super.chooseOriginalMembers(aClass, project);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	protected JComponent getHeaderPanel(final Project project)
 	{

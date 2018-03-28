@@ -2,8 +2,7 @@
 
 package codeInsight.createFieldFromParameterAction.test1;
 
-import java.util.HashMap;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class TestBefore {
 

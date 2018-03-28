@@ -19,11 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
 import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.project.Project;
@@ -88,7 +89,7 @@ public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompi
     return option == Configuration.InstrumentationType.ASSERT || option == Configuration.InstrumentationType.EXCEPTION;
   }
 
-  @NotNull
+  @Nonnull
   protected Instrumenter createInstrumenter(ClassWriter classwriter) {
     synchronized (myAnnotations) {
       final Configuration.InstrumentationType instrumentation = Configuration.getInstance().getAdvancedConfiguration().getInstrumentation();
@@ -100,7 +101,7 @@ public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompi
     return "Inserting @Pattern assertions";
   }
 
-  @NotNull
+  @Nonnull
   public String getDescription() {
     return "Pattern Validation";
   }

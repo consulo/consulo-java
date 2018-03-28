@@ -33,7 +33,7 @@ import com.intellij.codeInspection.ui.InspectionToolPresentation;
 import com.intellij.codeInspection.ui.InspectionTreeNode;
 import com.intellij.codeInspection.ui.RefElementNode;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.tree.TreeNode;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
   private final InspectionToolPresentation myToolPresentation;
   private final HTMLJavaHTMLComposer myComposer;
 
-  public DeadHTMLComposer(@NotNull InspectionToolPresentation presentation) {
+  public DeadHTMLComposer(@Nonnull InspectionToolPresentation presentation) {
     myToolPresentation = presentation;
     myComposer = getExtension(HTMLJavaHTMLComposer.COMPOSER);
   }
@@ -66,7 +66,7 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
         buf.append("<br><br>");
         appendResolution(buf, refElement, DescriptorComposer.quickFixTexts(refElement, myToolPresentation));
         refElement.accept(new RefJavaVisitor() {
-          @Override public void visitClass(@NotNull RefClass aClass) {
+          @Override public void visitClass(@Nonnull RefClass aClass) {
             appendClassInstantiations(buf, aClass);
             myComposer.appendDerivedClasses(buf, aClass);
             myComposer.appendClassExtendsImplements(buf, aClass);
@@ -74,14 +74,14 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
             myComposer.appendTypeReferences(buf, aClass);
           }
 
-          @Override public void visitMethod(@NotNull RefMethod method) {
+          @Override public void visitMethod(@Nonnull RefMethod method) {
             appendElementInReferences(buf, method);
             appendElementOutReferences(buf, method);
             myComposer.appendDerivedMethods(buf, method);
             myComposer.appendSuperMethods(buf, method);
           }
 
-          @Override public void visitField(@NotNull RefField field) {
+          @Override public void visitField(@Nonnull RefField field) {
             appendElementInReferences(buf, field);
             appendElementOutReferences(buf, field);
           }
@@ -95,7 +95,7 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
 
   public static void appendProblemSynopsis(final RefElement refElement, final StringBuffer buf) {
     refElement.accept(new RefJavaVisitor() {
-      @Override public void visitField(@NotNull RefField field) {
+      @Override public void visitField(@Nonnull RefField field) {
         if (field.isUsedForReading() && !field.isUsedForWriting()) {
           buf.append(InspectionsBundle.message("inspection.dead.code.problem.synopsis"));
           return;
@@ -121,7 +121,7 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
         }
       }
 
-      @Override public void visitClass(@NotNull RefClass refClass) {
+      @Override public void visitClass(@Nonnull RefClass refClass) {
         if (refClass.isAnonymous()) {
           buf.append(InspectionsBundle.message("inspection.dead.code.problem.synopsis10"));
         } else if (refClass.isInterface() || refClass.isAbstract()) {
@@ -158,7 +158,7 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
         }
       }
 
-      @Override public void visitMethod(@NotNull RefMethod method) {
+      @Override public void visitMethod(@Nonnull RefMethod method) {
         RefClass refClass = method.getOwnerClass();
         if (method.isExternalOverride()) {
           String classOrInterface = HTMLJavaHTMLComposer.getClassOrInterface(refClass, false);

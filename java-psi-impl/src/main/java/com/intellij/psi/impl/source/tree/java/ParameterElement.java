@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaTokenType;
@@ -23,12 +25,11 @@ import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
 public class ParameterElement extends CompositeElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ParameterElement");
 
-  public ParameterElement(@NotNull IElementType type) {
+  public ParameterElement(@Nonnull IElementType type) {
     super(type);
   }
 

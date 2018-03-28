@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiClass;
@@ -74,7 +75,7 @@ public class MethodElement extends CompositeElement implements Constants
 	}
 
 	@Override
-	public void deleteChildInternal(@NotNull ASTNode child)
+	public void deleteChildInternal(@Nonnull ASTNode child)
 	{
 		if(child.getElementType() == CODE_BLOCK)
 		{

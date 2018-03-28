@@ -19,7 +19,7 @@ import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -72,7 +72,7 @@ public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
     options.USE_RELATIVE_INDENTS = myCbUseRelativeIndent.isSelected();
   }
 
-  public void reset(@NotNull final CodeStyleSettings settings, @NotNull final CommonCodeStyleSettings.IndentOptions options) {
+  public void reset(@Nonnull final CodeStyleSettings settings, @Nonnull final CommonCodeStyleSettings.IndentOptions options) {
     super.reset(settings, options);
     myLabelIndent.setText(Integer.toString(options.LABEL_INDENT_SIZE));
     myLabelIndentAbsolute.setSelected(options.LABEL_INDENT_ABSOLUTE);

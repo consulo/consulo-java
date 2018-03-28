@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -61,7 +61,7 @@ public class TypeEvaluator
 		myProjectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 	}
 
-	public boolean setType(final TypeMigrationUsageInfo usageInfo, @NotNull PsiType type)
+	public boolean setType(final TypeMigrationUsageInfo usageInfo, @Nonnull PsiType type)
 	{
 		final LinkedList<PsiType> t = myTypeMap.get(usageInfo);
 
@@ -100,7 +100,7 @@ public class TypeEvaluator
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiType getType(PsiElement element)
 	{
 		VirtualFile file = element.getContainingFile().getVirtualFile();
@@ -123,7 +123,7 @@ public class TypeEvaluator
 		return getType(new TypeMigrationUsageInfo(element));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiType getType(final TypeMigrationUsageInfo usageInfo)
 	{
 		final LinkedList<PsiType> e = myTypeMap.get(usageInfo);
@@ -305,7 +305,7 @@ public class TypeEvaluator
 		return getType(expr);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiType evaluateReferenceExpressionType(PsiExpression expr)
 	{
 		final PsiReferenceExpression ref = (PsiReferenceExpression) expr;
@@ -532,7 +532,7 @@ public class TypeEvaluator
 		return migrationTtype;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public <T> T getSettings(Class<T> aClass)
 	{
 		return myRules.getConversionSettings(aClass);

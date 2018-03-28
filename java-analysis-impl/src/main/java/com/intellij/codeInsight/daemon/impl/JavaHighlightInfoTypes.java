@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
@@ -58,7 +58,7 @@ public interface JavaHighlightInfoTypes
 	HighlightInfoType IMPLICIT_ANONYMOUS_CLASS_PARAMETER = new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors
 			.IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES);
 
-	static HighlightInfoType createSymbolTypeInfo(@NotNull TextAttributesKey attributesKey)
+	static HighlightInfoType createSymbolTypeInfo(@Nonnull TextAttributesKey attributesKey)
 	{
 		return new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, attributesKey, false);
 	}

@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Header;
@@ -40,7 +40,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
     myHeaderParser = headerParser;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Collection<Object> getItems(String prefix, boolean cached, CompletionParameters parameters) {
     return ApplicationManager.getApplication().runReadAction(new Computable<Collection<Object>>() {
@@ -71,7 +71,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
 
   @Nullable
   @Override
-  protected Icon getIcon(@NotNull Object item) {
+  protected Icon getIcon(@Nonnull Object item) {
     if (item instanceof NavigationItem) {
       ItemPresentation itemPresentation = ItemPresentationProviders.getItemPresentation((NavigationItem)item);
       if (itemPresentation != null) {
@@ -81,9 +81,9 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected String getLookupString(@NotNull Object item) {
+  protected String getLookupString(@Nonnull Object item) {
     if (item instanceof PsiElement) {
       for (QualifiedNameProvider provider : Extensions.getExtensions(QualifiedNameProvider.EP_NAME)) {
         String result = provider.getQualifiedName((PsiElement)item);
@@ -97,13 +97,13 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
 
   @Nullable
   @Override
-  protected String getTailText(@NotNull Object item) {
+  protected String getTailText(@Nonnull Object item) {
     return null;
   }
 
   @Nullable
   @Override
-  protected String getTypeText(@NotNull Object item) {
+  protected String getTypeText(@Nonnull Object item) {
     return null;
   }
 

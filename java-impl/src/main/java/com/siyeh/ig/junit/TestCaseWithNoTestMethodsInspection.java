@@ -17,8 +17,8 @@ package com.siyeh.ig.junit;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -36,20 +36,20 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
   public boolean ignoreSupers = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "JUnitTestCaseWithNoTests";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "test.case.with.no.test.methods.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "test.case.with.no.test.methods.problem.descriptor");
@@ -73,7 +73,7 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface()
           || aClass.isEnum()
           || aClass.isAnnotationType()

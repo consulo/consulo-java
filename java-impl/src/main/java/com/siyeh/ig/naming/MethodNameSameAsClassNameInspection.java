@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.naming;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -27,26 +29,25 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
 
 public class MethodNameSameAsClassNameInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "method.name.same.as.class.name.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "method.name.same.as.class.name.problem.descriptor");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final Boolean onTheFly = (Boolean)infos[0];
     if (onTheFly.booleanValue()) {
@@ -68,7 +69,7 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
   private static class MethodNameSameAsClassNameFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.method.ctr.quickfix");
     }
@@ -100,7 +101,7 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // no call to super, so it doesn't drill down into inner classes
       if (method.isConstructor()) {
         return;

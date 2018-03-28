@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.project.Project;
@@ -39,7 +40,7 @@ public class SPIReferencesSearcher extends QueryExecutorBase<PsiReference, Refer
 	}
 
 	@Override
-	public void processQuery(@NotNull final ReferencesSearch.SearchParameters p, @NotNull final Processor<PsiReference> consumer)
+	public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer)
 	{
 		final PsiElement element = p.getElementToSearch();
 		if(!element.isValid())

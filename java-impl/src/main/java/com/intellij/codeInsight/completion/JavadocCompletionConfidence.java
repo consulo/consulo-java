@@ -17,8 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.JavaDocTokenType;
 import com.intellij.psi.PsiElement;
@@ -35,9 +35,9 @@ import com.intellij.util.ThreeState;
 public class JavadocCompletionConfidence extends CompletionConfidence
 {
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ThreeState shouldSkipAutopopup(@NotNull PsiElement contextElement, @NotNull PsiFile psiFile, int offset)
+	public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset)
 	{
 		if(psiElement().inside(PsiDocTag.class).accepts(contextElement))
 		{
@@ -57,7 +57,7 @@ public class JavadocCompletionConfidence extends CompletionConfidence
 		return super.shouldSkipAutopopup(contextElement, psiFile, offset);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiJavaReference findJavaReference(final PsiFile file, final int offset)
 	{
 		PsiReference reference = file.findReferenceAt(offset);

@@ -15,30 +15,31 @@
  */
 package com.siyeh.ipp.types;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
   private static final Logger LOG = Logger.getInstance("#" + ExpandOneLineLambda2CodeBlockIntention.class.getName());
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new LambdaExpressionPredicate();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Expand lambda expression body to {...}";
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     LOG.assertTrue(lambdaExpression != null);
     final PsiElement body = lambdaExpression.getBody();

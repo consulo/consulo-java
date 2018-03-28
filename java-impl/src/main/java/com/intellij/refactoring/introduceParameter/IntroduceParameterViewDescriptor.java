@@ -28,7 +28,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class IntroduceParameterViewDescriptor extends UsageViewDescriptorAdapter {
 
@@ -41,7 +41,7 @@ class IntroduceParameterViewDescriptor extends UsageViewDescriptorAdapter {
 
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
 //    if(myMethodToReplaceIn.equals(myMethodToSearchFor)) {
 //      return new PsiElement[] {myMethodToReplaceIn};

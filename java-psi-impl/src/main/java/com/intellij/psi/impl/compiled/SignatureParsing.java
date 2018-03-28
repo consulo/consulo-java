@@ -21,8 +21,8 @@ import java.text.CharacterIterator;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.CommonClassNames;
@@ -40,7 +40,7 @@ public class SignatureParsing
 	{
 	}
 
-	@NotNull
+	@Nonnull
 	public static List<Pair<String, String[]>> parseTypeParametersDeclaration(CharacterIterator signature, Function<String, String> mapping) throws ClsFormatException
 	{
 		if(signature.current() != '<')
@@ -264,7 +264,7 @@ public class SignatureParsing
 		return dimensions;
 	}
 
-	@NotNull
+	@Nonnull
 	public static String parseTypeString(CharacterIterator signature, Function<String, String> mapping) throws ClsFormatException
 	{
 		int dimensions = parseDimensions(signature);

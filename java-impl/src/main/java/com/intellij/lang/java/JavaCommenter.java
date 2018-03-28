@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author max
@@ -57,13 +57,13 @@ public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public IElementType getLineCommentTokenType() {
     return JavaTokenType.END_OF_LINE_COMMENT;
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public IElementType getBlockCommentTokenType() {
     return JavaTokenType.C_STYLE_COMMENT;
   }

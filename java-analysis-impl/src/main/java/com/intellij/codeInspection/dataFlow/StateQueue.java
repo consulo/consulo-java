@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Function;
@@ -49,7 +49,7 @@ public class StateQueue
 		return myQueue.isEmpty();
 	}
 
-	boolean processAll(@NotNull Processor<? super DfaInstructionState> processor)
+	boolean processAll(@Nonnull Processor<? super DfaInstructionState> processor)
 	{
 		for(DfaInstructionState state : myQueue)
 		{
@@ -61,7 +61,7 @@ public class StateQueue
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	List<DfaInstructionState> getNextInstructionStates(Set<Instruction> joinInstructions)
 	{
 		DfaInstructionState state = myQueue.poll();

@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -126,7 +125,7 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
 		mySteppingFilters = steppingFilters != null ? steppingFilters : ClassFilter.EMPTY_ARRAY;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Element getState()
 	{

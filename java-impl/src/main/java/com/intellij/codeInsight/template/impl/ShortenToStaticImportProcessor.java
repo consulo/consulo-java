@@ -30,8 +30,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
   }
 
   @Nullable
-  private static PsiElement getNext(@NotNull PsiElement element) {
+  private static PsiElement getNext(@Nonnull PsiElement element) {
     PsiElement result = element.getNextSibling();
     for (PsiElement current = element; current != null && result == null; current = current.getParent()) {
       result = current.getNextSibling();
@@ -110,13 +110,13 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
   }
   
   private interface StaticImporter {
-    boolean canPerform(@NotNull PsiElement element);
+    boolean canPerform(@Nonnull PsiElement element);
     void perform(Project project, PsiFile file, Editor editor, PsiElement element);
   }
   
   private static class SingleMemberStaticImporter implements StaticImporter {
     @Override
-    public boolean canPerform(@NotNull PsiElement element) {
+    public boolean canPerform(@Nonnull PsiElement element) {
       return AddSingleMemberStaticImportAction.getStaticImportClass(element) != null;
     }
 
@@ -128,7 +128,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
   
   private static class OnDemandStaticImporter implements StaticImporter {
     @Override
-    public boolean canPerform(@NotNull PsiElement element) {
+    public boolean canPerform(@Nonnull PsiElement element) {
       return AddOnDemandStaticImportAction.getClassToPerformStaticImport(element) != null;
     }
 

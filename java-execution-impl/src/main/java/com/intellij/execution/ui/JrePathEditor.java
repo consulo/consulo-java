@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
@@ -79,7 +79,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor
 
 	@Deprecated
 	@DeprecationInfo("Use #setByName()")
-	public void setPathOrName(@Nullable String pathOrName, boolean useAlternativeJre)
+	public void setPathOrName(@javax.annotation.Nullable String pathOrName, boolean useAlternativeJre)
 	{
 		setByName(pathOrName);
 	}

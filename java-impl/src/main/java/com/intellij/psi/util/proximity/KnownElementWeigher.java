@@ -19,9 +19,11 @@ import static com.intellij.psi.CommonClassNames.*;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.util.text.StringUtil;
@@ -43,7 +45,7 @@ public class KnownElementWeigher extends ProximityWeigher
 			JAVA_LANG_THROWABLE, JAVA_LANG_RUNTIME_EXCEPTION, JAVA_UTIL_ARRAY_LIST, JAVA_UTIL_HASH_MAP, JAVA_UTIL_HASH_SET);
 
 	@Override
-	public Comparable weigh(@NotNull final PsiElement element, @NotNull final ProximityLocation location)
+	public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location)
 	{
 		Project project = location.getProject();
 		if(project == null)
@@ -105,8 +107,8 @@ public class KnownElementWeigher extends ProximityWeigher
 		return 0;
 	}
 
-	@Nullable
-	private static Integer getTestFrameworkWeight(@NotNull PsiElement element, @NotNull ProximityLocation location, @NotNull Project project)
+	@javax.annotation.Nullable
+	private static Integer getTestFrameworkWeight(@Nonnull PsiElement element, @Nonnull ProximityLocation location, @Nonnull Project project)
 	{
 		if(element instanceof PsiClass)
 		{

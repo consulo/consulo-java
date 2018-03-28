@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.search.LocalSearchScope;
@@ -31,7 +31,7 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
 		super(JavaElementType.RESOURCE_VARIABLE);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiElement[] getDeclarationScope()
 	{
@@ -44,7 +44,7 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
 		} : new PsiElement[]{resourceList};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiTypeElement getTypeElement()
 	{
@@ -78,7 +78,7 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
 	}
 
 	@Override
-	public void accept(@NotNull final PsiElementVisitor visitor)
+	public void accept(@Nonnull final PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -90,7 +90,7 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SearchScope getUseScope()
 	{

@@ -20,6 +20,8 @@
  */
 package com.intellij.refactoring.inlineSuperClass.usageInfo;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringBundle;
@@ -31,7 +33,6 @@ import com.intellij.refactoring.util.InlineUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
 
 public class InlineSuperCallUsageInfo extends FixableUsageInfo {
   private PsiCodeBlock myConstrBody;
@@ -89,7 +90,7 @@ public class InlineSuperCallUsageInfo extends FixableUsageInfo {
       if (superConstructor != null) {
         InlineMethodProcessor.addInaccessibleMemberConflicts(superConstructor, new UsageInfo[]{new UsageInfo(methodCallExpression.getMethodExpression())}, new ReferencedElementsCollector(){
           @Override
-          protected void checkAddMember(@NotNull PsiMember member) {
+          protected void checkAddMember(@Nonnull PsiMember member) {
             if (!PsiTreeUtil.isAncestor(superConstructor.getContainingClass(), member, false)) {
               super.checkAddMember(member);
             }

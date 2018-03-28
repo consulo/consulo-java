@@ -15,7 +15,8 @@
  */
 package com.intellij.spellchecker;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiMethod;
@@ -29,7 +30,7 @@ import com.intellij.spellchecker.tokenizer.TokenConsumer;
 public class MethodNameTokenizerJava extends NamedElementTokenizer<PsiMethod> {
 
   @Override
-  public void tokenize(@NotNull PsiMethod element, TokenConsumer consumer) {
+  public void tokenize(@Nonnull PsiMethod element, TokenConsumer consumer) {
     final PsiMethod[] methods = (element).findDeepestSuperMethods();
     boolean isInSource = true;
     for (PsiMethod psiMethod : methods) {
@@ -40,7 +41,7 @@ public class MethodNameTokenizerJava extends NamedElementTokenizer<PsiMethod> {
     }
   }
 
-  private static boolean isMethodDeclarationInSource(@NotNull PsiMethod psiMethod) {
+  private static boolean isMethodDeclarationInSource(@Nonnull PsiMethod psiMethod) {
     if (psiMethod.getContainingFile() == null) return false;
     final VirtualFile virtualFile = psiMethod.getContainingFile().getVirtualFile();
     if (virtualFile == null) return false;

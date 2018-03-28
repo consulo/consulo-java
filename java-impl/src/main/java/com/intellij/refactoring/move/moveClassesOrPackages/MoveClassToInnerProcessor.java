@@ -44,7 +44,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.psi.PsiJavaPackage;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -67,7 +67,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
   public MoveClassToInnerProcessor(Project project,
                                    final PsiClass[] classesToMove,
-                                   @NotNull final PsiClass targetClass,
+                                   @Nonnull final PsiClass targetClass,
                                    boolean searchInComments,
                                    boolean searchInNonJavaFiles,
                                    MoveCallback moveCallback) {
@@ -91,12 +91,12 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveMultipleElementsViewDescriptor(myClassesToMove, myTargetClass.getQualifiedName());
   }
 
-  @NotNull
+  @Nonnull
   public UsageInfo[] findUsages() {
     final List<UsageInfo> usages = new ArrayList<UsageInfo>();
     for (PsiClass classToMove : myClassesToMove) {
@@ -234,8 +234,8 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
                                      myTargetClass.getQualifiedName());
   }
 
-  @NotNull
-  protected Collection<? extends PsiElement> getElementsToWrite(@NotNull final UsageViewDescriptor descriptor) {
+  @Nonnull
+  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
     List<PsiElement> result = new ArrayList<PsiElement>();
     result.addAll(super.getElementsToWrite(descriptor));
     result.add(myTargetClass);

@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -38,7 +39,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.diagnostic.Logger;
@@ -88,7 +88,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
   private static final String RECENT_KEYS = "ReplaceConstructorWithBuilder.RECENT_KEYS";
 
 
-  protected ReplaceConstructorWithBuilderDialog(@NotNull Project project, PsiMethod[] constructors) {
+  protected ReplaceConstructorWithBuilderDialog(@Nonnull Project project, PsiMethod[] constructors) {
     super(project, false);
     myConstructors = constructors;
     myParametersMap = new LinkedHashMap<String, ParameterData>();

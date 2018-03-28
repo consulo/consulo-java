@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 class Foo {
   @Nullable volatile Object data;

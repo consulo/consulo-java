@@ -20,7 +20,7 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -68,7 +68,7 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getChildren() {
     final List stubs = getStub().getChildrenStubs();
     PsiElement[] children = new PsiElement[stubs.size()];

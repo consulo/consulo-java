@@ -15,7 +15,8 @@
  */
 package com.siyeh.ipp.constant;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiJavaToken;
@@ -30,7 +31,7 @@ import com.siyeh.ipp.psiutils.HighlightUtil;
 public class ConstantSubexpressionIntention extends MutablyNamedIntention {
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ConstantSubexpressionPredicate();
   }
@@ -55,7 +56,7 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiJavaToken token;
     if (element instanceof PsiJavaToken) {
       token = (PsiJavaToken)element;

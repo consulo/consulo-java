@@ -17,7 +17,6 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
@@ -34,7 +33,7 @@ public class AnonymousTargetClassPreselectionUtil
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass getPreselection(Collection<PsiClass> classes, PsiClass firstClass)
 	{
 		if(firstClass instanceof PsiAnonymousClass && !PropertiesComponent.getInstance().getBoolean(PRESELECT_ANONYMOUS, true))

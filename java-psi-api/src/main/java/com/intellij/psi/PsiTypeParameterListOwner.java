@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmTypeParametersOwner;
 
 /**
@@ -47,7 +47,7 @@ public interface PsiTypeParameterListOwner extends PsiMember, JvmTypeParametersO
 	 *
 	 * @return the array of type parameters, or an empty array if the element has no type parameters.
 	 */
-	@NotNull
+	@Nonnull
 	@Override
 	PsiTypeParameter[] getTypeParameters();
 }

@@ -22,8 +22,8 @@ import gnu.trove.TObjectIntHashMap;
 import java.io.IOException;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.util.text.StringUtil;
@@ -93,7 +93,7 @@ public class TypeInfo
 
 	private final PsiAnnotationStub[] myAnnotationStubs;
 
-	public TypeInfo(String text, byte arrayCount, boolean ellipsis, @NotNull PsiAnnotationStub[] annotationStubs)
+	public TypeInfo(String text, byte arrayCount, boolean ellipsis, @Nonnull PsiAnnotationStub[] annotationStubs)
 	{
 		this.text = text == null ? null : internFrequentType(text);
 		this.arrayCount = arrayCount;
@@ -101,8 +101,8 @@ public class TypeInfo
 		myAnnotationStubs = annotationStubs;
 	}
 
-	@NotNull
-	public TypeInfo applyAnnotations(@NotNull StubBase<?> owner)
+	@Nonnull
+	public TypeInfo applyAnnotations(@Nonnull StubBase<?> owner)
 	{
 		PsiModifierListStub modifierList = (PsiModifierListStub) owner.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
 		if(modifierList == null)
@@ -136,7 +136,7 @@ public class TypeInfo
 		return new TypeInfo(text, arrayCount, isEllipsis, stubArray);
 	}
 
-	@NotNull
+	@Nonnull
 	public String getShortTypeText()
 	{
 		if(text == null)
@@ -160,14 +160,14 @@ public class TypeInfo
 
   /* factories and serialization */
 
-	@NotNull
+	@Nonnull
 	public static TypeInfo createConstructorType()
 	{
 		return NULL;
 	}
 
-	@NotNull
-	public static TypeInfo create(@NotNull LighterAST tree, @NotNull LighterASTNode element, StubElement parentStub)
+	@Nonnull
+	public static TypeInfo create(@Nonnull LighterAST tree, @Nonnull LighterASTNode element, StubElement parentStub)
 	{
 		String text;
 		byte arrayCount = 0;
@@ -227,8 +227,8 @@ public class TypeInfo
 		return new TypeInfo(text, arrayCount, isEllipsis, PsiAnnotationStub.EMPTY_ARRAY);
 	}
 
-	@NotNull
-	public static TypeInfo fromString(@NotNull String typeText, boolean isEllipsis)
+	@Nonnull
+	public static TypeInfo fromString(@Nonnull String typeText, boolean isEllipsis)
 	{
 		assert !typeText.endsWith("...") : typeText;
 
@@ -242,8 +242,8 @@ public class TypeInfo
 		return new TypeInfo(typeText, arrayCount, isEllipsis, PsiAnnotationStub.EMPTY_ARRAY);
 	}
 
-	@NotNull
-	public static TypeInfo fromString(@NotNull String typeText)
+	@Nonnull
+	public static TypeInfo fromString(@Nonnull String typeText)
 	{
 		boolean isEllipsis = false;
 		if(typeText.endsWith("..."))
@@ -255,8 +255,8 @@ public class TypeInfo
 		return fromString(typeText, isEllipsis);
 	}
 
-	@NotNull
-	public static TypeInfo readTYPE(@NotNull StubInputStream record) throws IOException
+	@Nonnull
+	public static TypeInfo readTYPE(@Nonnull StubInputStream record) throws IOException
 	{
 		int flags = 0xFF & record.readByte();
 		if(flags == FREQUENT_INDEX_MASK)
@@ -273,7 +273,7 @@ public class TypeInfo
 		return new TypeInfo(text, arrayCount, hasEllipsis, PsiAnnotationStub.EMPTY_ARRAY);
 	}
 
-	public static void writeTYPE(@NotNull StubOutputStream dataStream, @NotNull TypeInfo typeInfo) throws IOException
+	public static void writeTYPE(@Nonnull StubOutputStream dataStream, @Nonnull TypeInfo typeInfo) throws IOException
 	{
 		if(typeInfo == NULL)
 		{
@@ -299,7 +299,7 @@ public class TypeInfo
 	}
 
 	@Nullable
-	public static String createTypeText(@NotNull TypeInfo typeInfo)
+	public static String createTypeText(@Nonnull TypeInfo typeInfo)
 	{
 		if(typeInfo == NULL || typeInfo.text == null)
 		{
@@ -332,8 +332,8 @@ public class TypeInfo
 		return internFrequentType(buf.toString());
 	}
 
-	@NotNull
-	public static String internFrequentType(@NotNull String type)
+	@Nonnull
+	public static String internFrequentType(@Nonnull String type)
 	{
 		int frequentIndex = ourFrequentTypeIndex.get(type);
 		return frequentIndex == 0 ? type : ourIndexFrequentType[frequentIndex];

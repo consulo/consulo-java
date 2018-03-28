@@ -17,8 +17,8 @@ package com.intellij.execution.junit2;
 
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
@@ -37,7 +37,7 @@ public class PsiMemberParameterizedLocation extends PsiLocation<PsiElement>
 	private final PsiClass myContainingClass;
 	private final String myParamSetName;
 
-	public PsiMemberParameterizedLocation(@NotNull Project project, @NotNull PsiElement psiElement, @Nullable PsiClass containingClass, String paramSetName)
+	public PsiMemberParameterizedLocation(@Nonnull Project project, @Nonnull PsiElement psiElement, @Nullable PsiClass containingClass, String paramSetName)
 	{
 		super(project, psiElement);
 		myContainingClass = containingClass;

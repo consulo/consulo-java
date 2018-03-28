@@ -18,8 +18,8 @@ package com.intellij.testIntegration.createTest;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -55,17 +55,17 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
 
   private static final String CREATE_TEST_IN_THE_SAME_ROOT = "create.test.in.the.same.root";
 
-  @NotNull
+  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.create.test");
   }
 
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!isAvailableForElement(element)) return false;
 
     PsiClass psiClass = getContainingClass(element);
@@ -110,7 +110,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(final @NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(final @Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     final Module srcModule = ModuleUtilCore.findModuleForPsiElement(element);
     final PsiClass srcClass = getContainingClass(element);

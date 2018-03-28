@@ -20,17 +20,17 @@ import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ReplaceSwitchWithIfIntention extends Intention {
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new SwitchPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiJavaToken switchToken = (PsiJavaToken)element;
     final PsiSwitchStatement switchStatement =
@@ -41,7 +41,7 @@ public class ReplaceSwitchWithIfIntention extends Intention {
     ConvertSwitchToIfIntention.doProcessIntention(switchStatement);
   }
 
-  public static boolean canProcess(@NotNull PsiSwitchStatement switchLabelStatement) {
+  public static boolean canProcess(@Nonnull PsiSwitchStatement switchLabelStatement) {
     return SwitchPredicate.checkSwitchStatement(switchLabelStatement);
   }
 }

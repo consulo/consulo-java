@@ -18,7 +18,7 @@ package com.siyeh.ig.imports;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReferenceElement(@NotNull PsiJavaCodeReferenceElement reference) {
+  public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
     followReferenceToImport(reference);
     super.visitReferenceElement(reference);
   }
@@ -136,7 +136,7 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
     return null;
   }
 
-  private void removeAll(@NotNull PsiImportStatementBase importStatement) {
+  private void removeAll(@Nonnull PsiImportStatementBase importStatement) {
     for (int i = importStatements.size() - 1; i >= 0; i--) {
       final PsiImportStatementBase statement = importStatements.get(i);
       final String statementText = statement.getText();

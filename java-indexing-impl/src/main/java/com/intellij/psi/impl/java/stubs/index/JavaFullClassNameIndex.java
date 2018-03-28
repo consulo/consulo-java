@@ -21,7 +21,8 @@ package com.intellij.psi.impl.java.stubs.index;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.impl.search.JavaSourceFilterScope;
@@ -39,7 +40,7 @@ public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass>
 		return ourInstance;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public StubIndexKey<Integer, PsiClass> getKey()
 	{
@@ -47,7 +48,7 @@ public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass>
 	}
 
 	@Override
-	public Collection<PsiClass> get(@NotNull final Integer integer, @NotNull final Project project, @NotNull final GlobalSearchScope scope)
+	public Collection<PsiClass> get(@Nonnull final Integer integer, @Nonnull final Project project, @Nonnull final GlobalSearchScope scope)
 	{
 		return StubIndex.getElements(getKey(), integer, project, new JavaSourceFilterScope(scope), PsiClass.class);
 	}

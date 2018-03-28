@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -495,7 +495,7 @@ public class JavaDocUtil
 		return list == null ? PsiClassType.EMPTY_ARRAY : list.getReferencedTypes();
 	}
 
-	public static boolean isInsidePackageInfo(@Nullable PsiDocComment containingComment)
+	public static boolean isInsidePackageInfo(@javax.annotation.Nullable PsiDocComment containingComment)
 	{
 		return containingComment != null && containingComment.getOwner() == null && containingComment.getParent()
 				instanceof PsiJavaFile;

@@ -1,18 +1,19 @@
 package com.intellij.codeInspection.inheritance.search;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Dmitry Batkovich
  */
 public class InheritorsStatisticsSearchResult {
 
-  @NotNull
+  @Nonnull
   private final PsiClass myClass;
   private final int myPercent;
 
-  InheritorsStatisticsSearchResult(final @NotNull PsiClass aClass, final int percent) {
+  InheritorsStatisticsSearchResult(final @Nonnull PsiClass aClass, final int percent) {
     myClass = aClass;
     myPercent = percent;
   }

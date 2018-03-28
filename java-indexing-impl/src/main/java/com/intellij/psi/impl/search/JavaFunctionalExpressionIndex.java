@@ -24,7 +24,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -50,22 +51,22 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 	private static final String THIS_REF_NAME = "this";
 	private static final String SUPER_REF_NAME = "super";
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ID<String, Collection<IndexHolder>> getName()
 	{
 		return JAVA_FUNCTIONAL_EXPRESSION_INDEX_ID;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DataIndexer<String, Collection<IndexHolder>, FileContent> getIndexer()
 	{
 		return new DataIndexer<String, Collection<IndexHolder>, FileContent>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
-			public Map<String, Collection<IndexHolder>> map(@NotNull FileContent inputData)
+			public Map<String, Collection<IndexHolder>> map(@Nonnull FileContent inputData)
 			{
 				if(!JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(inputData.getFile()))
 				{
@@ -163,21 +164,21 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public KeyDescriptor<String> getKeyDescriptor()
 	{
 		return EnumeratorStringDescriptor.INSTANCE;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DataExternalizer<Collection<IndexHolder>> getValueExternalizer()
 	{
 		return new DataExternalizer<Collection<IndexHolder>>()
 		{
 			@Override
-			public void save(@NotNull DataOutput out, Collection<IndexHolder> holders) throws IOException
+			public void save(@Nonnull DataOutput out, Collection<IndexHolder> holders) throws IOException
 			{
 				DataInputOutputUtil.writeINT(out, holders.size());
 				for(IndexHolder holder : holders)
@@ -189,7 +190,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 			}
 
 			@Override
-			public Collection<IndexHolder> read(@NotNull DataInput in) throws IOException
+			public Collection<IndexHolder> read(@Nonnull DataInput in) throws IOException
 			{
 				int l = DataInputOutputUtil.readINT(in);
 				final Collection<IndexHolder> holders = new HashSet<IndexHolder>(l);
@@ -202,7 +203,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileBasedIndex.InputFilter getInputFilter()
 	{

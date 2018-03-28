@@ -26,7 +26,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,30 +40,30 @@ import java.util.Set;
 public class ConvertSwitchToIfIntention implements IntentionAction {
   private final PsiSwitchStatement mySwitchExpression;
 
-  public ConvertSwitchToIfIntention(@NotNull PsiSwitchStatement switchStatement) {
+  public ConvertSwitchToIfIntention(@Nonnull PsiSwitchStatement switchStatement) {
     mySwitchExpression = switchStatement;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Replace 'switch' with 'if'";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiCodeBlock body = mySwitchExpression.getBody();
     return body != null && body.getStatements().length > 0;
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     doProcessIntention(mySwitchExpression);
   }
 
@@ -72,7 +72,7 @@ public class ConvertSwitchToIfIntention implements IntentionAction {
     return true;
   }
 
-  public static void doProcessIntention(@NotNull PsiSwitchStatement switchStatement) {
+  public static void doProcessIntention(@Nonnull PsiSwitchStatement switchStatement) {
     final PsiExpression switchExpression = switchStatement.getExpression();
     if (switchExpression == null) {
       return;

@@ -28,8 +28,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -74,7 +74,7 @@ public class MetaAnnotationUtil
 		}
 	};
 
-	public static Collection<PsiClass> getAnnotationTypesWithChildren(@NotNull final Module module, final String annotationName, final boolean includeTests)
+	public static Collection<PsiClass> getAnnotationTypesWithChildren(@Nonnull final Module module, final String annotationName, final boolean includeTests)
 	{
 		final Project project = module.getProject();
 
@@ -147,7 +147,7 @@ public class MetaAnnotationUtil
 		}, false);
 	}
 
-	@NotNull
+	@Nonnull
 	private static Collection<PsiClass> getAnnotationTypesWithChildren(PsiClass annotationClass, GlobalSearchScope scope)
 	{
 		final Set<PsiClass> classes = new THashSet<>(HASHING_STRATEGY);
@@ -191,7 +191,7 @@ public class MetaAnnotationUtil
 	/**
 	 * Check if listOwner is annotated with annotations or listOwner's annotations contain given annotations
 	 */
-	public static boolean isMetaAnnotated(@NotNull PsiModifierListOwner listOwner, @NotNull final Collection<String> annotations)
+	public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @Nonnull final Collection<String> annotations)
 	{
 		if(AnnotationUtil.isAnnotated(listOwner, annotations, false))
 		{
@@ -213,7 +213,7 @@ public class MetaAnnotationUtil
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiAnnotation metaAnnotationCached(PsiClass subjectAnnotation, String annotationToFind)
 	{
 		ConcurrentMap<String, PsiAnnotation> cachedValue = CachedValuesManager.getCachedValue(subjectAnnotation, () ->
@@ -224,7 +224,7 @@ public class MetaAnnotationUtil
 		return cachedValue.get(annotationToFind);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiAnnotation findMetaAnnotation(PsiClass aClass, final String annotation, final Set<PsiClass> visited)
 	{
 		PsiAnnotation directAnnotation = AnnotationUtil.findAnnotation(aClass, annotation);
@@ -249,8 +249,8 @@ public class MetaAnnotationUtil
 	}
 
 
-	@NotNull
-	public static Stream<PsiAnnotation> findMetaAnnotations(@NotNull PsiModifierListOwner listOwner, @NotNull final Collection<String> annotations)
+	@Nonnull
+	public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @Nonnull final Collection<String> annotations)
 	{
 		Stream<PsiAnnotation> directAnnotations = Stream.of(AnnotationUtil.findAnnotations(listOwner, annotations));
 

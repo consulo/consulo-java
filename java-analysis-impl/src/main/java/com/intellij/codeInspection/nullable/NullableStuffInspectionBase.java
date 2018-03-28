@@ -23,11 +23,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
@@ -100,7 +101,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.nullable.NullableStuffInspectionBase");
 
 	@Override
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		super.writeSettings(node);
 		for(Element child : new ArrayList<>(node.getChildren()))
@@ -116,8 +117,8 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 	}
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
 	{
 		final PsiFile file = holder.getFile();
 		if(!PsiUtil.isLanguageLevel5OrHigher(file) || nullabilityAnnotationsNotAvailable(file))
@@ -339,7 +340,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 				}
 			}
 
-			private void checkCollectionNullityOnAssignment(@NotNull PsiElement errorElement, @Nullable PsiType expectedType, @Nullable PsiExpression assignedExpression)
+			private void checkCollectionNullityOnAssignment(@Nonnull PsiElement errorElement, @Nullable PsiType expectedType, @javax.annotation.Nullable PsiExpression assignedExpression)
 			{
 				if(assignedExpression == null)
 				{
@@ -349,7 +350,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 				checkCollectionNullityOnAssignment(errorElement, expectedType, assignedExpression.getType());
 			}
 
-			private void checkCollectionNullityOnAssignment(@NotNull PsiElement errorElement, @Nullable PsiType expectedType, @Nullable PsiType assignedType)
+			private void checkCollectionNullityOnAssignment(@Nonnull PsiElement errorElement, @javax.annotation.Nullable PsiType expectedType, @Nullable PsiType assignedType)
 			{
 				if(isNullableNotNullCollectionConflict(errorElement, expectedType, assignedType))
 				{
@@ -358,7 +359,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 				}
 			}
 
-			private boolean isNullableNotNullCollectionConflict(PsiElement place, @Nullable PsiType expectedType, @Nullable PsiType assignedType)
+			private boolean isNullableNotNullCollectionConflict(PsiElement place, @javax.annotation.Nullable PsiType expectedType, @javax.annotation.Nullable PsiType assignedType)
 			{
 
 				if(isNullityConflict(JavaGenericsUtil.getCollectionItemType(expectedType, place.getResolveScope()), JavaGenericsUtil.getCollectionItemType(assignedType, place.getResolveScope())))
@@ -386,7 +387,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		};
 	}
 
-	private void checkMethodReference(PsiMethodReferenceExpression expression, @NotNull ProblemsHolder holder)
+	private void checkMethodReference(PsiMethodReferenceExpression expression, @Nonnull ProblemsHolder holder)
 	{
 		PsiMethod superMethod = LambdaUtil.getFunctionalInterfaceMethod(expression);
 		PsiMethod targetMethod = ObjectUtils.tryCast(expression.resolve(), PsiMethod.class);
@@ -428,7 +429,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 			NullableNotNullManager manager,
 			final String anno,
 			final List<String> annoToRemove,
-			@NotNull ProblemsHolder holder)
+			@Nonnull ProblemsHolder holder)
 	{
 		String propName = JavaCodeStyleManager.getInstance(project).variableNameToPropertyName(field.getName(), VariableKind.FIELD);
 		final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
@@ -484,7 +485,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private static AddAnnotationPsiFix createAddAnnotationFix(String anno, List<String> annoToRemove, PsiParameter parameter)
 	{
 		return new AddAnnotationPsiFix(anno, parameter, PsiNameValuePair.EMPTY_ARRAY, ArrayUtil.toStringArray(annoToRemove));
@@ -496,7 +497,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		LOG.assertTrue(parameter.isPhysical(), setter.getText());
 	}
 
-	private static void checkNotNullFieldsInitialized(PsiField field, NullableNotNullManager manager, @NotNull ProblemsHolder holder)
+	private static void checkNotNullFieldsInitialized(PsiField field, NullableNotNullManager manager, @Nonnull ProblemsHolder holder)
 	{
 		PsiAnnotation annotation = manager.getNotNullAnnotation(field, false);
 		if(annotation == null || HighlightControlFlowUtil.isFieldInitializedAfterObjectConstruction(field))
@@ -510,7 +511,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 				"must be initialized");
 	}
 
-	private void checkConstructorParameters(PsiField field, Annotated annotated, NullableNotNullManager manager, String anno, List<String> annoToRemove, @NotNull ProblemsHolder holder)
+	private void checkConstructorParameters(PsiField field, Annotated annotated, NullableNotNullManager manager, String anno, List<String> annoToRemove, @Nonnull ProblemsHolder holder)
 	{
 		List<PsiExpression> initializers = DfaPsiUtil.findAllConstructorInitializers(field);
 		if(initializers.isEmpty())
@@ -566,13 +567,13 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		}
 	}
 
-	private static boolean isConstructorParameter(@Nullable PsiElement parameter)
+	private static boolean isConstructorParameter(@javax.annotation.Nullable PsiElement parameter)
 	{
 		return parameter instanceof PsiParameter && psiElement(PsiParameterList.class).withParent(psiMethod().constructor(true)).accepts(parameter.getParent());
 	}
 
-	@NotNull
-	private static String getPresentableAnnoName(@NotNull PsiModifierListOwner owner)
+	@Nonnull
+	private static String getPresentableAnnoName(@Nonnull PsiModifierListOwner owner)
 	{
 		NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
 		Set<String> names = ContainerUtil.newHashSet(manager.getNullables());
@@ -588,7 +589,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		return StringUtil.getShortName(anno != null ? anno : StringUtil.notNullize(manager.getNullable(owner), "???"));
 	}
 
-	public static String getPresentableAnnoName(@NotNull PsiAnnotation annotation)
+	public static String getPresentableAnnoName(@Nonnull PsiAnnotation annotation)
 	{
 		return StringUtil.getShortName(StringUtil.notNullize(annotation.getQualifiedName(), "???"));
 	}
@@ -615,7 +616,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		return new Annotated(isDeclaredNotNull != null, isDeclaredNullable != null);
 	}
 
-	private static void checkType(@Nullable PsiModifierListOwner listOwner, ProblemsHolder holder, PsiType type, @Nullable PsiAnnotation notNull, @Nullable PsiAnnotation nullable)
+	private static void checkType(@javax.annotation.Nullable PsiModifierListOwner listOwner, ProblemsHolder holder, PsiType type, @javax.annotation.Nullable PsiAnnotation notNull, @Nullable PsiAnnotation nullable)
 	{
 		if(nullable != null && notNull != null)
 		{
@@ -632,7 +633,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		}
 	}
 
-	private static void checkLoopParameterNullability(ProblemsHolder holder, @Nullable PsiAnnotation notNull, @Nullable PsiAnnotation nullable, Nullness expectedNullability)
+	private static void checkLoopParameterNullability(ProblemsHolder holder, @javax.annotation.Nullable PsiAnnotation notNull, @javax.annotation.Nullable PsiAnnotation nullable, Nullness expectedNullability)
 	{
 		if(notNull != null && expectedNullability == Nullness.NULLABLE)
 		{
@@ -651,21 +652,21 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.nullable.problems.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.BUGS_GROUP_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "NullableProblems";
@@ -819,7 +820,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		}
 	}
 
-	private void checkOverriders(@NotNull PsiMethod method, @NotNull ProblemsHolder holder, @NotNull Annotated annotated, @NotNull NullableNotNullManager nullableManager)
+	private void checkOverriders(@Nonnull PsiMethod method, @Nonnull ProblemsHolder holder, @Nonnull Annotated annotated, @Nonnull NullableNotNullManager nullableManager)
 	{
 		PsiParameter[] parameters = method.getParameterList().getParameters();
 		if(REPORT_ANNOTATION_NOT_PROPAGATED_TO_OVERRIDERS)
@@ -914,7 +915,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		}
 	}
 
-	private static boolean isNotNullNotInferred(@NotNull PsiModifierListOwner owner, boolean checkBases, boolean skipExternal)
+	private static boolean isNotNullNotInferred(@Nonnull PsiModifierListOwner owner, boolean checkBases, boolean skipExternal)
 	{
 		Project project = owner.getProject();
 		NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
@@ -939,7 +940,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		return true;
 	}
 
-	public static boolean isNullableNotInferred(@NotNull PsiModifierListOwner owner, boolean checkBases)
+	public static boolean isNullableNotInferred(@Nonnull PsiModifierListOwner owner, boolean checkBases)
 	{
 		Project project = owner.getProject();
 		NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
@@ -956,7 +957,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 		return !(anno != null && AnnotationUtil.isInferredAnnotation(anno));
 	}
 
-	private static PsiType getMemberType(@NotNull PsiModifierListOwner owner)
+	private static PsiType getMemberType(@Nonnull PsiModifierListOwner owner)
 	{
 		return owner instanceof PsiMethod ? ((PsiMethod) owner).getReturnType() : owner instanceof PsiVariable ? ((PsiVariable) owner).getType() : null;
 	}
@@ -1003,7 +1004,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 			super(defaultNotNull, annotationsToRemove);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		protected String getPreposition()
 		{

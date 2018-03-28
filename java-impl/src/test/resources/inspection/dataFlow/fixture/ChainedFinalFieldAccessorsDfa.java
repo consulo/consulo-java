@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.lang.String;
 
@@ -44,27 +44,27 @@ public class BrokenAlignment {
     @Nullable final String text;
     @Nullable final Data inner;
 
-    Data(@Nullable String text, Data inner) {
+    Data(@javax.annotation.Nullable String text, Data inner) {
       this.text = text;
       this.inner = inner;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public String getText() {
       return text;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public Data getInner() {
       return inner;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public Data getInnerOverridden() {
       return inner;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public String something() {
       return new String();
     }
@@ -75,7 +75,7 @@ public class BrokenAlignment {
       super(text, inner);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     @Override
     public Data getInnerOverridden() {
       return super.getInnerOverridden();

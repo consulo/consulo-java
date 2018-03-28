@@ -26,7 +26,7 @@ import com.intellij.psi.search.scope.ProjectProductionScope;
 import com.intellij.psi.search.scope.TestsScope;
 import com.intellij.psi.search.scope.packageSet.CustomScopesProviderEx;
 import com.intellij.psi.search.scope.packageSet.NamedScope;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +49,7 @@ public class PackagesScopesProvider extends CustomScopesProviderEx {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public List<NamedScope> getCustomScopes() {
     return myScopes;
   }

@@ -18,7 +18,7 @@ package com.intellij.javadoc.actions;
 import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.analysis.BaseAnalysisAction;
 import com.intellij.analysis.BaseAnalysisActionDialog;
@@ -36,7 +36,7 @@ public final class GenerateJavadocAction extends BaseAnalysisAction{
   }
 
   @Override
-  protected void analyze(@NotNull Project project, AnalysisScope scope) {
+  protected void analyze(@Nonnull Project project, AnalysisScope scope) {
     myConfigurable.apply();
     JavadocGenerationManager.getInstance(project).generateJavadoc(scope);
     dispose();

@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -27,7 +29,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements PsiBinaryExpression {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiBinaryExpressionImpl");
@@ -37,12 +38,12 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
   public PsiBinaryExpressionImpl() {
     this(JavaElementType.BINARY_EXPRESSION);
   }
-  protected PsiBinaryExpressionImpl(@NotNull IElementType elementType) {
+  protected PsiBinaryExpressionImpl(@Nonnull IElementType elementType) {
     super(elementType);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiExpression getLOperand() {
     return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.LOPERAND);
   }
@@ -53,19 +54,19 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public IElementType getOperationTokenType() {
     return getOperationSign().getTokenType();
   }
 
   @Override
-  public PsiJavaToken getTokenBeforeOperand(@NotNull PsiExpression operand) {
+  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
     if (operand != getROperand()) return null;
     return getOperationSign();
   }
@@ -134,7 +135,7 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
                     JavaTokenType.PERC);
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitBinaryExpression(this);
     }
@@ -147,7 +148,7 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
     return "PsiBinaryExpression:" + getText();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiExpression[] getOperands() {
     PsiExpression rOperand = getROperand();

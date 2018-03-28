@@ -18,7 +18,8 @@ package com.siyeh.ig.psiutils;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.TypeConversionUtil;
@@ -26,21 +27,21 @@ import com.intellij.psi.util.TypeConversionUtil;
 public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor
 {
 
-	@NotNull
+	@Nonnull
 	private final Collection<PsiVariable> variables;
 	private final boolean recurseIntoClasses;
 	private final boolean checkUnaryExpressions;
 	private boolean assigned = false;
 	private PsiElement excludedElement = null;
 
-	public VariableAssignedVisitor(@NotNull Collection<PsiVariable> variables, boolean recurseIntoClasses)
+	public VariableAssignedVisitor(@Nonnull Collection<PsiVariable> variables, boolean recurseIntoClasses)
 	{
 		this.variables = variables;
 		checkUnaryExpressions = true;
 		this.recurseIntoClasses = recurseIntoClasses;
 	}
 
-	public VariableAssignedVisitor(@NotNull PsiVariable variable, boolean recurseIntoClasses)
+	public VariableAssignedVisitor(@Nonnull PsiVariable variable, boolean recurseIntoClasses)
 	{
 		variables = Collections.singleton(variable);
 		final PsiType type = variable.getType();
@@ -48,7 +49,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor
 		this.recurseIntoClasses = recurseIntoClasses;
 	}
 
-	public VariableAssignedVisitor(@NotNull PsiVariable variable)
+	public VariableAssignedVisitor(@Nonnull PsiVariable variable)
 	{
 		this(variable, true);
 	}
@@ -59,7 +60,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitElement(@NotNull PsiElement element)
+	public void visitElement(@Nonnull PsiElement element)
 	{
 		if(assigned || element == excludedElement)
 		{
@@ -69,7 +70,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitAssignmentExpression(@NotNull PsiAssignmentExpression assignment)
+	public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment)
 	{
 		if(assigned)
 		{
@@ -98,7 +99,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitPrefixExpression(@NotNull PsiPrefixExpression prefixExpression)
+	public void visitPrefixExpression(@Nonnull PsiPrefixExpression prefixExpression)
 	{
 		if(assigned)
 		{
@@ -126,7 +127,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitPostfixExpression(@NotNull PsiPostfixExpression postfixExpression)
+	public void visitPostfixExpression(@Nonnull PsiPostfixExpression postfixExpression)
 	{
 		if(assigned)
 		{

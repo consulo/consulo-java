@@ -23,7 +23,7 @@ package com.intellij.ide.favoritesTreeView;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.reference.RefMethodImpl;
 import com.intellij.ide.favoritesTreeView.smartPointerPsiNodes.MethodSmartPointerNode;
 import com.intellij.ide.projectView.ViewSettings;
@@ -123,7 +123,7 @@ public class PsiMethodFavoriteNodeProvider extends FavoriteNodeProvider
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFavoriteTypeId()
 	{
 		return "method";

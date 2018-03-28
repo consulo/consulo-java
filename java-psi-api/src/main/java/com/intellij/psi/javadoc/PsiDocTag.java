@@ -19,8 +19,8 @@ package com.intellij.psi.javadoc;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface PsiDocTag extends PsiElement, PsiNamedElement{
   PsiDocTag[] EMPTY_ARRAY = new PsiDocTag[0];
@@ -28,7 +28,8 @@ public interface PsiDocTag extends PsiElement, PsiNamedElement{
   PsiDocComment getContainingComment();
   PsiElement getNameElement();
   @Override
-  @NonNls @NotNull String getName();
+  @NonNls @Nonnull
+  String getName();
   PsiElement[] getDataElements();
   @Nullable PsiDocTagValue getValueElement();
 }

@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.osmorc.manifest.lang.ManifestFileType;
 import consulo.java.manifest.lang.headerparser.HeaderParserEP;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -22,7 +21,7 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
     super(null);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Collection<String> getItems(String prefix, boolean cached, CompletionParameters parameters) {
     HeaderParserEP[] extensions = HeaderParserEP.EP_NAME.getExtensions();
@@ -36,27 +35,27 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
     return list;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
-  protected Icon getIcon(@NotNull String item) {
+  protected Icon getIcon(@Nonnull String item) {
     return ManifestFileType.INSTANCE.getIcon();
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected String getLookupString(@NotNull String item) {
+  protected String getLookupString(@Nonnull String item) {
     return item;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
-  protected String getTailText(@NotNull String item) {
+  protected String getTailText(@Nonnull String item) {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
-  protected String getTypeText(@NotNull String item) {
+  protected String getTypeText(@Nonnull String item) {
     return null;
   }
 

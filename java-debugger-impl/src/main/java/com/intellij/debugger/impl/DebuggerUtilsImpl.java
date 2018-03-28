@@ -17,9 +17,11 @@ package com.intellij.debugger.impl;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.apiAdapters.TransportServiceWrapper;
 import com.intellij.debugger.engine.DebugProcess;
@@ -179,7 +181,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 		return PositionUtil.getContextElement(context);
 	}
 
-	@NotNull
+	@Nonnull
 	public static Pair<PsiElement, PsiType> getPsiClassAndType(@Nullable String className, Project project)
 	{
 		PsiElement contextClass = null;
@@ -222,7 +224,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TransportService.ListenKey findAvailableDebugAddress(final int type) throws ExecutionException
 	{
 		final TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(type);
@@ -305,7 +307,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 		return defaultValue;
 	}
 
-	public static <T> T runInReadActionWithWriteActionPriorityWithRetries(@NotNull Computable<T> action)
+	public static <T> T runInReadActionWithWriteActionPriorityWithRetries(@Nonnull Computable<T> action)
 	{
 		if(ApplicationManagerEx.getApplicationEx().holdsReadLock())
 		{

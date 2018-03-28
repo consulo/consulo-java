@@ -17,7 +17,7 @@ package com.siyeh.ig.performance;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -30,14 +30,14 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
 {
 	@Override
 	@Nls
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("to.array.call.with.zero.length.array.argument.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		final PsiExpression argument = (PsiExpression) infos[1];

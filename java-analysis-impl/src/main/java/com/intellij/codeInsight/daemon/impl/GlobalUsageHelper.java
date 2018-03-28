@@ -18,7 +18,8 @@ package com.intellij.codeInsight.daemon.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiNamedElement;
@@ -29,7 +30,7 @@ import com.intellij.psi.PsiNamedElement;
 public abstract class GlobalUsageHelper {
   final Map<PsiClass,Boolean> unusedClassCache = new HashMap<PsiClass, Boolean>();
 
-  public abstract boolean shouldCheckUsages(@NotNull PsiMember member);
-  public abstract boolean isLocallyUsed(@NotNull PsiNamedElement member);
+  public abstract boolean shouldCheckUsages(@Nonnull PsiMember member);
+  public abstract boolean isLocallyUsed(@Nonnull PsiNamedElement member);
   public abstract boolean isCurrentFileAlreadyChecked();
 }

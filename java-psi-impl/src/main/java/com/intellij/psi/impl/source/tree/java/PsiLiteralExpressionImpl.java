@@ -17,9 +17,11 @@ package com.intellij.psi.impl.source.tree.java;
 
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
@@ -54,18 +56,18 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 	public static final TokenSet REAL_LITERALS = TokenSet.create(JavaTokenType.FLOAT_LITERAL, JavaTokenType.DOUBLE_LITERAL);
 	public static final TokenSet NUMERIC_LITERALS = TokenSet.orSet(INTEGER_LITERALS, REAL_LITERALS);
 
-	public PsiLiteralExpressionImpl(@NotNull PsiLiteralStub stub)
+	public PsiLiteralExpressionImpl(@Nonnull PsiLiteralStub stub)
 	{
 		super(stub, JavaStubElementTypes.LITERAL_EXPRESSION);
 	}
 
-	public PsiLiteralExpressionImpl(@NotNull ASTNode node)
+	public PsiLiteralExpressionImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return ((CompositeElement) getNode()).getChildrenAsPsiElements((TokenSet) null, PsiElement.ARRAY_FACTORY);
@@ -281,7 +283,7 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getInnerText()
 	{
 		String text = getCanonicalText();
@@ -333,7 +335,7 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 		return integer;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String internedParseStringCharacters(final String chars)
 	{
 		final StringBuilder outChars = new StringBuilder(chars.length());
@@ -341,13 +343,13 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 		return success ? outChars.toString() : null;
 	}
 
-	public static boolean parseStringCharacters(@NotNull String chars, @NotNull StringBuilder outChars, @Nullable int[] sourceOffsets)
+	public static boolean parseStringCharacters(@Nonnull String chars, @Nonnull StringBuilder outChars, @Nullable int[] sourceOffsets)
 	{
 		return CodeInsightUtilCore.parseStringCharacters(chars, outChars, sourceOffsets);
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -372,7 +374,7 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiReference[] getReferences()
 	{
 		IElementType type = getLiteralElementType();
@@ -384,7 +386,7 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 	}
 
 	@Override
-	public PsiLanguageInjectionHost updateText(@NotNull final String text)
+	public PsiLanguageInjectionHost updateText(@Nonnull final String text)
 	{
 		ASTNode valueNode = getNode().getFirstChildNode();
 		assert valueNode instanceof LeafElement;
@@ -393,7 +395,7 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public LiteralTextEscaper<PsiLiteralExpressionImpl> createLiteralTextEscaper()
 	{
 		return new StringLiteralEscaper<PsiLiteralExpressionImpl>(this);

@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiClass;
@@ -68,13 +68,13 @@ public class JavaCompletionSession
 		myResult.addElement(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(lookupElement));
 	}
 
-	@NotNull
+	@Nonnull
 	PrefixMatcher getMatcher()
 	{
 		return myResult.getPrefixMatcher();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiClass extractClass(LookupElement lookupElement)
 	{
 		final Object object = lookupElement.getObject();
@@ -89,36 +89,36 @@ public class JavaCompletionSession
 		return null;
 	}
 
-	public void registerClass(@NotNull PsiClass psiClass)
+	public void registerClass(@Nonnull PsiClass psiClass)
 	{
 		ContainerUtil.addIfNotNull(myAddedClasses, getClassName(psiClass));
 	}
 
-	@Nullable
-	private static String getClassName(@NotNull PsiClass psiClass)
+	@javax.annotation.Nullable
+	private static String getClassName(@Nonnull PsiClass psiClass)
 	{
 		String name = psiClass.getQualifiedName();
 		return name == null ? psiClass.getName() : name;
 	}
 
-	public boolean alreadyProcessed(@NotNull LookupElement element)
+	public boolean alreadyProcessed(@Nonnull LookupElement element)
 	{
 		final PsiClass psiClass = extractClass(element);
 		return psiClass != null && alreadyProcessed(psiClass);
 	}
 
-	public boolean alreadyProcessed(@NotNull PsiClass object)
+	public boolean alreadyProcessed(@Nonnull PsiClass object)
 	{
 		final String name = getClassName(object);
 		return name == null || myAddedClasses.contains(name);
 	}
 
-	public boolean isKeywordAlreadyProcessed(@NotNull String keyword)
+	public boolean isKeywordAlreadyProcessed(@Nonnull String keyword)
 	{
 		return myKeywords.contains(keyword);
 	}
 
-	void registerKeyword(@NotNull String keyword)
+	void registerKeyword(@Nonnull String keyword)
 	{
 		myKeywords.add(keyword);
 	}

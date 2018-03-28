@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiClass;
@@ -25,14 +27,13 @@ import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
-import org.jetbrains.annotations.NotNull;
 
 public class FieldElement extends CompositeElement{
   public FieldElement() {
     super(Constants.FIELD);
   }
 
-  protected FieldElement(@NotNull IElementType type) {
+  protected FieldElement(@Nonnull IElementType type) {
     super(type);
   }
 
@@ -42,7 +43,7 @@ public class FieldElement extends CompositeElement{
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (getChildRole(child) == ChildRole.INITIALIZER){
       ASTNode eq = findChildByRole(ChildRole.INITIALIZER_EQ);
       if (eq != null){

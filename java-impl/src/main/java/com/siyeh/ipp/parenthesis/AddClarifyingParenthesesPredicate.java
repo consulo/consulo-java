@@ -15,15 +15,15 @@
  */
 package com.siyeh.ipp.parenthesis;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 class AddClarifyingParenthesesPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@NotNull PsiElement element) {
+  public boolean satisfiedBy(@Nonnull PsiElement element) {
     final PsiElement parent = element.getParent();
     if (mightBeConfusingExpression(parent)) {
       return false;
@@ -87,7 +87,7 @@ class AddClarifyingParenthesesPredicate implements PsiElementPredicate {
     return false;
   }
 
-  private static boolean mightBeConfusingExpression(@Nullable PsiElement element) {
+  private static boolean mightBeConfusingExpression(@javax.annotation.Nullable PsiElement element) {
     return element instanceof PsiPolyadicExpression || element instanceof PsiConditionalExpression ||
            element instanceof PsiInstanceOfExpression || element instanceof PsiAssignmentExpression;
   }

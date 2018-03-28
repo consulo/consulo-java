@@ -18,7 +18,8 @@ package com.intellij.openapi.roots;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -37,31 +38,31 @@ import com.intellij.pom.java.LanguageLevel;
  */
 public abstract class JavaProjectModelModificationService
 {
-	public static JavaProjectModelModificationService getInstance(@NotNull Project project)
+	public static JavaProjectModelModificationService getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, JavaProjectModelModificationService.class);
 	}
 
-	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Module to)
+	public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Module to)
 	{
 		return addDependency(from, to, DependencyScope.COMPILE);
 	}
 
-	public abstract AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope);
 
-	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull ExternalLibraryDescriptor libraryDescriptor)
+	public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull ExternalLibraryDescriptor libraryDescriptor)
 	{
 		return addDependency(from, libraryDescriptor, DependencyScope.COMPILE);
 	}
 
-	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull ExternalLibraryDescriptor descriptor, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope)
 	{
 		return addDependency(Collections.singletonList(from), descriptor, scope);
 	}
 
-	public abstract AsyncResult<Void> addDependency(@NotNull Collection<Module> from, @NotNull ExternalLibraryDescriptor libraryDescriptor, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addDependency(@Nonnull Collection<Module> from, @Nonnull ExternalLibraryDescriptor libraryDescriptor, @Nonnull DependencyScope scope);
 
-	public abstract AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope);
 
-	public abstract AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel languageLevel);
+	public abstract AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel languageLevel);
 }

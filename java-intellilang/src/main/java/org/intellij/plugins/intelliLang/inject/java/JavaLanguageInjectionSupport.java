@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.plugins.intelliLang.AdvancedSettingsUI;
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.inject.AbstractLanguageInjectionSupport;
@@ -48,8 +50,8 @@ import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.lang.Language;
 import com.intellij.lang.injection.MultiHostRegistrar;
@@ -91,12 +93,12 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     return PsiUtilEx.isStringOrCharacterLiteral(psiElement);
   }
 
-  @NotNull
+  @Nonnull
   public String getId() {
     return JAVA_SUPPORT_ID;
   }
 
-  @NotNull
+  @Nonnull
   public Class[] getPatternClasses() {
     return new Class[] { PsiJavaPatterns.class };
   }
@@ -226,7 +228,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
 
   public static boolean doAddLanguageAnnotation(final Project project,
                                                 final PsiModifierListOwner modifierListOwner,
-                                                @NotNull PsiLanguageInjectionHost host,
+                                                @Nonnull PsiLanguageInjectionHost host,
                                                 final String languageId) {
     if (modifierListOwner.getModifierList() == null || !PsiUtil.isLanguageLevel5OrHigher(modifierListOwner)) return false;
     final Configuration.AdvancedConfiguration configuration = Configuration.getProjectInstance(project).getAdvancedConfiguration();
@@ -271,10 +273,10 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     return true;
   }
 
-  public static boolean doInjectInJavaMethod(@NotNull final Project project,
+  public static boolean doInjectInJavaMethod(@Nonnull final Project project,
                                              @Nullable final PsiMethod psiMethod,
                                              final int parameterIndex,
-                                             @NotNull PsiLanguageInjectionHost host, @NotNull final String languageId) {
+                                             @Nonnull PsiLanguageInjectionHost host, @Nonnull final String languageId) {
     if (psiMethod == null) return false;
     if (parameterIndex < -1) return false;
     if (parameterIndex >= psiMethod.getParameterList().getParametersCount()) return false;
@@ -555,7 +557,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
   }
 
   @Override
-  public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {
+  public void getLanguagesToInject(@Nonnull MultiHostRegistrar registrar, @Nonnull PsiElement context) {
 
   }
 

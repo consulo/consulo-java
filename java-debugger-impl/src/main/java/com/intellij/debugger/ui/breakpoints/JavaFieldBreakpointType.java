@@ -15,11 +15,11 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaFieldBreakpointProperties;
 import com.intellij.CommonBundle;
 import com.intellij.debugger.DebuggerBundle;
@@ -48,7 +48,7 @@ import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
  */
 public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFieldBreakpointProperties> implements JavaBreakpointType
 {
-	@NotNull
+	@Nonnull
 	public static JavaFieldBreakpointType getInstance()
 	{
 		return EXTENSION_POINT_NAME.findExtension(JavaFieldBreakpointType.class);
@@ -65,14 +65,14 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getEnabledIcon()
 	{
 		return AllIcons.Debugger.Db_field_breakpoint;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getDisabledIcon()
 	{
@@ -115,21 +115,21 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
 		return new FieldBreakpointPropertiesPanel();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JavaFieldBreakpointProperties createProperties()
 	{
 		return new JavaFieldBreakpointProperties();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public JavaFieldBreakpointProperties createBreakpointProperties(@NotNull VirtualFile file, int line)
+	public JavaFieldBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line)
 	{
 		return new JavaFieldBreakpointProperties();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XLineBreakpoint<JavaFieldBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent)
 	{

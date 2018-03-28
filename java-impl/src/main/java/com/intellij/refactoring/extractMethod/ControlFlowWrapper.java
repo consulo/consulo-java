@@ -24,7 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -189,13 +190,13 @@ public class ControlFlowWrapper
 	}
 
 
-	@NotNull
+	@Nonnull
 	public PsiVariable[] getOutputVariables()
 	{
 		return getOutputVariables(myGenerateConditionalExit);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiVariable[] getOutputVariables(boolean collectVariablesAtExitPoints)
 	{
 		PsiVariable[] myOutputVariables = ControlFlowUtil.getOutputVariables(myControlFlow, myFlowStart, myFlowEnd, myExitPoints.toArray());

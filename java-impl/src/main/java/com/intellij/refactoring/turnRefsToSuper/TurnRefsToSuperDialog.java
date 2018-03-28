@@ -27,8 +27,7 @@ import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,13 +38,14 @@ import java.util.List;
  * Date: 06.06.2002
  */
 public class TurnRefsToSuperDialog extends RefactoringDialog {
-  @NotNull private final PsiClass mySubClass;
+  @Nonnull
+  private final PsiClass mySubClass;
   private final List mySuperClasses;
 
   private JList mySuperClassesList = null;
   private final JCheckBox myCbReplaceInstanceOf = new JCheckBox();
 
-  TurnRefsToSuperDialog(Project project, @NotNull PsiClass subClass, List superClasses) {
+  TurnRefsToSuperDialog(Project project, @Nonnull PsiClass subClass, List superClasses) {
     super(project, true);
 
     mySubClass = subClass;
@@ -55,7 +55,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
     init();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiClass getSuperClass() {
     if(mySuperClassesList != null) {
       return (PsiClass) mySuperClassesList.getSelectedValue();

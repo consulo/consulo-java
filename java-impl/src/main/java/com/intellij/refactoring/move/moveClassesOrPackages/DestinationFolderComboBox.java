@@ -33,7 +33,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.MoveDestination;
 import com.intellij.refactoring.PackageWrapper;
 import com.intellij.ui.*;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -263,7 +263,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static DirectoryChooser.ItemWrapper chooseSelection(final VirtualFile initialTargetDirectorySourceRoot,
                                                               final ProjectFileIndex fileIndex,
                                                               final ArrayList<DirectoryChooser.ItemWrapper> items,

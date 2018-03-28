@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiExpression;
@@ -32,7 +32,7 @@ public class PsiResourceExpressionImpl extends CompositePsiElement implements Ps
 		super(JavaElementType.RESOURCE_EXPRESSION);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiExpression getExpression()
 	{
@@ -47,7 +47,7 @@ public class PsiResourceExpressionImpl extends CompositePsiElement implements Ps
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

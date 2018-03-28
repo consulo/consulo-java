@@ -17,7 +17,7 @@ package com.siyeh.ipp.integer;
 
 import com.intellij.psi.PsiType;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.math.BigDecimal;
 
@@ -33,7 +33,7 @@ public class ConvertToPlainIntention extends ConvertNumberIntentionBase {
     return text;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertToPlainPredicate();

@@ -1,6 +1,7 @@
 package com.intellij.psi.impl.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.util.Computable;
@@ -19,7 +20,7 @@ import com.intellij.util.Processor;
 public class ConstructorReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>
 {
 	@Override
-	public void processQuery(@NotNull final ReferencesSearch.SearchParameters p, @NotNull Processor<PsiReference> consumer)
+	public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull Processor<PsiReference> consumer)
 	{
 		final PsiElement element = p.getElementToSearch();
 		if(!(element instanceof PsiMethod))

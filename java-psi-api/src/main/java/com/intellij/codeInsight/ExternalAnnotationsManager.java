@@ -17,8 +17,8 @@ package com.intellij.codeInsight;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
@@ -48,36 +48,36 @@ public abstract class ExternalAnnotationsManager
 
 	private static final NotNullLazyKey<ExternalAnnotationsManager, Project> INSTANCE_KEY = ServiceManager.createLazyKey(ExternalAnnotationsManager.class);
 
-	public static ExternalAnnotationsManager getInstance(@NotNull Project project)
+	public static ExternalAnnotationsManager getInstance(@Nonnull Project project)
 	{
 		return INSTANCE_KEY.getValue(project);
 	}
 
-	public abstract boolean isExternalAnnotation(@NotNull PsiAnnotation annotation);
+	public abstract boolean isExternalAnnotation(@Nonnull PsiAnnotation annotation);
 
-	@Nullable
-	public abstract PsiAnnotation findExternalAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
+	@javax.annotation.Nullable
+	public abstract PsiAnnotation findExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
 	// Method used in Kotlin plugin
-	public abstract boolean isExternalAnnotationWritable(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
+	public abstract boolean isExternalAnnotationWritable(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
-	@Nullable
-	public abstract PsiAnnotation[] findExternalAnnotations(@NotNull PsiModifierListOwner listOwner);
+	@javax.annotation.Nullable
+	public abstract PsiAnnotation[] findExternalAnnotations(@Nonnull PsiModifierListOwner listOwner);
 
-	public abstract void annotateExternally(@NotNull PsiModifierListOwner listOwner,
-			@NotNull String annotationFQName,
-			@NotNull PsiFile fromFile,
-			@Nullable PsiNameValuePair[] value) throws CanceledConfigurationException;
+	public abstract void annotateExternally(@Nonnull PsiModifierListOwner listOwner,
+			@Nonnull String annotationFQName,
+			@Nonnull PsiFile fromFile,
+			@javax.annotation.Nullable PsiNameValuePair[] value) throws CanceledConfigurationException;
 
-	public abstract boolean deannotate(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
+	public abstract boolean deannotate(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
 	// Method used in Kotlin plugin when it is necessary to leave external annotation, but modify its arguments
-	public abstract boolean editExternalAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN, @Nullable PsiNameValuePair[] value);
+	public abstract boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN, @javax.annotation.Nullable PsiNameValuePair[] value);
 
-	public abstract AnnotationPlace chooseAnnotationsPlace(@NotNull PsiElement element);
+	public abstract AnnotationPlace chooseAnnotationsPlace(@Nonnull PsiElement element);
 
-	@Nullable
-	public abstract List<PsiFile> findExternalAnnotationsFiles(@NotNull PsiModifierListOwner listOwner);
+	@javax.annotation.Nullable
+	public abstract List<PsiFile> findExternalAnnotationsFiles(@Nonnull PsiModifierListOwner listOwner);
 
 	public static class CanceledConfigurationException extends RuntimeException
 	{

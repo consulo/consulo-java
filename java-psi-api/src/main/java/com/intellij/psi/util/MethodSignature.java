@@ -15,10 +15,11 @@
  */
 package com.intellij.psi.util;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author cdr
@@ -26,19 +27,19 @@ import org.jetbrains.annotations.NotNull;
 public interface MethodSignature {
   MethodSignature[] EMPTY_ARRAY = new MethodSignature[0];
 
-  @NotNull
+  @Nonnull
   PsiSubstitutor getSubstitutor();
 
-  @NotNull
+  @Nonnull
   String getName();
 
   /**
    * @return array of parameter types (already substituted)
    */
-  @NotNull
+  @Nonnull
   PsiType[] getParameterTypes();
 
-  @NotNull
+  @Nonnull
   PsiTypeParameter[] getTypeParameters();
 
   boolean isRaw();

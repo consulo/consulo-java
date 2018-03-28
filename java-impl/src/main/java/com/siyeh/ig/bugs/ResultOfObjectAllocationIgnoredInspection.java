@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionStatement;
 import com.intellij.psi.PsiNewExpression;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ResultOfObjectAllocationIgnoredInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("result.of.object.allocation.ignored.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("result.of.object.allocation.ignored.problem.descriptor");
   }
@@ -42,7 +43,7 @@ public class ResultOfObjectAllocationIgnoredInspection extends BaseInspection {
   private static class ResultOfObjectAllocationIgnoredVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitExpressionStatement(@NotNull PsiExpressionStatement statement) {
+    public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
       super.visitExpressionStatement(statement);
       final PsiExpression expression = statement.getExpression();
       if (!(expression instanceof PsiNewExpression)) {

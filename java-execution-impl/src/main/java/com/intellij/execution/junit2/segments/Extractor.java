@@ -25,7 +25,7 @@ import com.intellij.rt.execution.junit.segments.PacketProcessor;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.update.MergingUpdateQueue;
 import com.intellij.util.ui.update.Update;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -43,7 +43,7 @@ public class Extractor implements Disposable {
   private final MergingUpdateQueue myQueue = new MergingUpdateQueue("Test Extractor", 20, true, MergingUpdateQueue.ANY_COMPONENT);
   private AtomicInteger myOrder = new AtomicInteger(-1);
 
-  public Extractor(@NotNull InputStream stream, @NotNull Charset charset) {
+  public Extractor(@Nonnull InputStream stream, @Nonnull Charset charset) {
     myStream = new SegmentedInputStream(stream, charset);
     myQueue.setPassThrough(false);//should be updated in awt thread
   }

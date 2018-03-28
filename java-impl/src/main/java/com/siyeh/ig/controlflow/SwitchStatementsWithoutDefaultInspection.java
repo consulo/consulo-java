@@ -20,7 +20,7 @@ import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -29,17 +29,17 @@ public class SwitchStatementsWithoutDefaultInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public boolean m_ignoreFullyCoveredEnums = true;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("switch.statements.without.default.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "SwitchStatementWithoutDefaultBranch";
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("switch.statements.without.default.problem.descriptor");
   }
@@ -56,7 +56,7 @@ public class SwitchStatementsWithoutDefaultInspection extends BaseInspection {
   private class SwitchStatementsWithoutDefaultVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSwitchStatement(@NotNull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       if (switchStatementHasDefault(statement)) {
         return;

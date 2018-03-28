@@ -5,7 +5,8 @@ import static com.intellij.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -32,21 +33,21 @@ public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extend
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getID()
 	{
 		return "BeforeOrAfterWithIncorrectSignature";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("before.class.or.after.class.is.public.static.void.no.arg.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("before.class.or.after.class.is.public.static.void.no.arg.problem.descriptor", infos[1]);
@@ -62,7 +63,7 @@ public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extend
 	{
 
 		@Override
-		public void visitMethod(@NotNull PsiMethod method)
+		public void visitMethod(@Nonnull PsiMethod method)
 		{
 			//note: no call to super;
 			String annotation = Arrays.stream(STATIC_CONFIGS).filter(anno -> AnnotationUtil.isAnnotated(method, anno, CHECK_HIERARCHY)).findFirst().orElse(null);

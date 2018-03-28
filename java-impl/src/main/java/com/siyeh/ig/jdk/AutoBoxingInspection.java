@@ -28,8 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -67,7 +66,7 @@ public class AutoBoxingInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("auto.boxing.display.name");
   }
@@ -78,13 +77,13 @@ public class AutoBoxingInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("auto.boxing.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("auto.boxing.ignore.added.to.collection.option"), this,
                                           "ignoreAddedToCollection");
@@ -102,7 +101,7 @@ public class AutoBoxingInspection extends BaseInspection {
 
   private static class AutoBoxingFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("auto.boxing.make.boxing.explicit.quickfix");
     }
@@ -289,7 +288,7 @@ public class AutoBoxingInspection extends BaseInspection {
       checkExpression(expression);
     }
 
-    private void checkExpression(@NotNull PsiExpression expression) {
+    private void checkExpression(@Nonnull PsiExpression expression) {
       if (expression.getParent() instanceof PsiParenthesizedExpression) {
         return;
       }

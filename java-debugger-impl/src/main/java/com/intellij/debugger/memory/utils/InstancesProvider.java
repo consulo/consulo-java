@@ -17,12 +17,12 @@ package com.intellij.debugger.memory.utils;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 @FunctionalInterface
 public interface InstancesProvider
 {
-	@NotNull
+	@Nonnull
 	List<ObjectReference> getInstances(int limit);
 }

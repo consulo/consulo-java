@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.dataFlow.instructions.FlushVariableInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 import com.intellij.codeInspection.dataFlow.instructions.PushInstruction;
@@ -83,7 +82,7 @@ public class ControlFlow
 		myInstructions.add(instruction);
 	}
 
-	public void removeVariable(@Nullable PsiVariable variable)
+	public void removeVariable(@javax.annotation.Nullable PsiVariable variable)
 	{
 		if(variable == null)
 		{

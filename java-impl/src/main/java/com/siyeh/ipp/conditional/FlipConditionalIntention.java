@@ -21,12 +21,12 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class FlipConditionalIntention extends Intention {
 
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new FlipConditionalPredicate();
   }

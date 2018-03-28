@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.psi.PsiAnonymousClass;
@@ -37,14 +37,14 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
   public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.serializable.field.in.serializable.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.serializable.field.in.serializable.class.problem.descriptor");
@@ -56,7 +56,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
       ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"))};
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiField field = (PsiField)infos[0];
@@ -71,7 +71,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
   private class NonSerializableFieldInSerializableClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (field.hasModifierProperty(PsiModifier.TRANSIENT) || field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

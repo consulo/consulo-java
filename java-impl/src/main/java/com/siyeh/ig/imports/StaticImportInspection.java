@@ -19,10 +19,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiImportStaticStatement;
 import com.intellij.util.SmartList;
@@ -37,7 +37,7 @@ import com.siyeh.ig.ui.UiUtils;
 public class StaticImportInspection extends StaticImportInspectionBase
 {
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected InspectionGadgetsFix[] buildFixes(Object... infos)
 	{

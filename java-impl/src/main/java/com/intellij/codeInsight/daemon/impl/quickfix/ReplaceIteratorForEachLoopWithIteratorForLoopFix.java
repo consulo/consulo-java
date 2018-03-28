@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -34,13 +35,13 @@ public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements Intenti
 {
 	private final PsiForeachStatement myStatement;
 
-	public ReplaceIteratorForEachLoopWithIteratorForLoopFix(@NotNull PsiForeachStatement statement)
+	public ReplaceIteratorForEachLoopWithIteratorForLoopFix(@Nonnull PsiForeachStatement statement)
 	{
 		myStatement = statement;
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -48,7 +49,7 @@ public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements Intenti
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -62,13 +63,13 @@ public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements Intenti
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return myStatement.isValid() && myStatement.getManager().isInProject(myStatement);
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		final PsiExpression iteratedValue = myStatement.getIteratedValue();
 		if(iteratedValue == null)

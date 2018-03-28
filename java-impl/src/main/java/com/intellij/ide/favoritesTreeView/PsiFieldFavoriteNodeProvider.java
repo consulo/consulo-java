@@ -23,7 +23,7 @@ package com.intellij.ide.favoritesTreeView;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.favoritesTreeView.smartPointerPsiNodes.FieldSmartPointerNode;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
@@ -123,7 +123,7 @@ public class PsiFieldFavoriteNodeProvider extends FavoriteNodeProvider
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFavoriteTypeId()
 	{
 		return "field";

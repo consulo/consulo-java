@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 
@@ -32,7 +32,7 @@ public class VariableAccessUtils
 	{
 	}
 
-	public static boolean variableIsAssignedFrom(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableIsAssignedFrom(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -43,7 +43,7 @@ public class VariableAccessUtils
 		return visitor.isAssignedFrom();
 	}
 
-	public static boolean variableIsPassedAsMethodArgument(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableIsPassedAsMethodArgument(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -54,12 +54,12 @@ public class VariableAccessUtils
 		return visitor.isPassed();
 	}
 
-	public static boolean variableIsPassedAsMethodArgument(@NotNull PsiVariable variable, Set<String> excludes, @Nullable PsiElement context)
+	public static boolean variableIsPassedAsMethodArgument(@Nonnull PsiVariable variable, Set<String> excludes, @Nullable PsiElement context)
 	{
 		return variableIsPassedAsMethodArgument(variable, excludes, context, false);
 	}
 
-	public static boolean variableIsPassedAsMethodArgument(@NotNull PsiVariable variable, Set<String> excludes, @Nullable PsiElement context,
+	public static boolean variableIsPassedAsMethodArgument(@Nonnull PsiVariable variable, Set<String> excludes, @javax.annotation.Nullable PsiElement context,
 			boolean builderPattern)
 	{
 		if(context == null)
@@ -71,7 +71,7 @@ public class VariableAccessUtils
 		return visitor.isPassed();
 	}
 
-	public static boolean variableIsUsedInArrayInitializer(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableIsUsedInArrayInitializer(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -82,7 +82,7 @@ public class VariableAccessUtils
 		return visitor.isPassed();
 	}
 
-	public static boolean variableIsAssigned(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableIsAssigned(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -93,7 +93,7 @@ public class VariableAccessUtils
 		return visitor.isAssigned();
 	}
 
-	public static boolean variableIsAssigned(@NotNull PsiVariable variable, @Nullable PsiElement context, boolean recurseIntoClasses)
+	public static boolean variableIsAssigned(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context, boolean recurseIntoClasses)
 	{
 		if(context == null)
 		{
@@ -104,12 +104,12 @@ public class VariableAccessUtils
 		return visitor.isAssigned();
 	}
 
-	public static boolean variableIsReturned(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableIsReturned(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		return variableIsReturned(variable, context, false);
 	}
 
-	public static boolean variableIsReturned(@NotNull PsiVariable variable, @Nullable PsiElement context, boolean builderPattern)
+	public static boolean variableIsReturned(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context, boolean builderPattern)
 	{
 		if(context == null)
 		{
@@ -120,7 +120,7 @@ public class VariableAccessUtils
 		return visitor.isReturned();
 	}
 
-	public static boolean variableValueIsUsed(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableValueIsUsed(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -131,7 +131,7 @@ public class VariableAccessUtils
 		return visitor.isVariableValueUsed();
 	}
 
-	public static boolean arrayContentsAreAccessed(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean arrayContentsAreAccessed(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -142,7 +142,7 @@ public class VariableAccessUtils
 		return visitor.isAccessed();
 	}
 
-	public static boolean arrayContentsAreAssigned(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean arrayContentsAreAssigned(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -153,7 +153,7 @@ public class VariableAccessUtils
 		return visitor.isAssigned();
 	}
 
-	public static boolean variableIsUsedInInnerClass(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableIsUsedInInnerClass(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -164,12 +164,12 @@ public class VariableAccessUtils
 		return visitor.isUsedInInnerClass();
 	}
 
-	public static boolean mayEvaluateToVariable(@Nullable PsiExpression expression, @NotNull PsiVariable variable)
+	public static boolean mayEvaluateToVariable(@javax.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable)
 	{
 		return mayEvaluateToVariable(expression, variable, false);
 	}
 
-	public static boolean mayEvaluateToVariable(@Nullable PsiExpression expression, @NotNull PsiVariable variable, boolean builderPattern)
+	public static boolean mayEvaluateToVariable(@javax.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable, boolean builderPattern)
 	{
 		if(expression == null)
 		{
@@ -245,7 +245,7 @@ public class VariableAccessUtils
 		return evaluatesToVariable(expression, variable);
 	}
 
-	public static boolean evaluatesToVariable(@Nullable PsiExpression expression, @NotNull PsiVariable variable)
+	public static boolean evaluatesToVariable(@Nullable PsiExpression expression, @Nonnull PsiVariable variable)
 	{
 		expression = ParenthesesUtils.stripParentheses(expression);
 		if(!(expression instanceof PsiReferenceExpression))
@@ -257,7 +257,7 @@ public class VariableAccessUtils
 		return variable.equals(target);
 	}
 
-	public static boolean variableIsUsed(@NotNull PsiVariable variable, @Nullable PsiElement context)
+	public static boolean variableIsUsed(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -268,7 +268,7 @@ public class VariableAccessUtils
 		return visitor.isUsed();
 	}
 
-	public static boolean variableIsDecremented(@NotNull PsiVariable variable, @Nullable PsiStatement statement)
+	public static boolean variableIsDecremented(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiStatement statement)
 	{
 		if(!(statement instanceof PsiExpressionStatement))
 		{
@@ -350,7 +350,7 @@ public class VariableAccessUtils
 		return false;
 	}
 
-	public static boolean variableIsIncremented(@NotNull PsiVariable variable, @Nullable PsiStatement statement)
+	public static boolean variableIsIncremented(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiStatement statement)
 	{
 		if(!(statement instanceof PsiExpressionStatement))
 		{
@@ -432,7 +432,7 @@ public class VariableAccessUtils
 		return false;
 	}
 
-	public static boolean variableIsAssignedBeforeReference(@NotNull PsiReferenceExpression referenceExpression, @Nullable PsiElement context)
+	public static boolean variableIsAssignedBeforeReference(@Nonnull PsiReferenceExpression referenceExpression, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{
@@ -447,7 +447,7 @@ public class VariableAccessUtils
 		return variableIsAssignedAtPoint(variable, context, referenceExpression);
 	}
 
-	public static boolean variableIsAssignedAtPoint(@NotNull PsiVariable variable, @Nullable PsiElement context, @NotNull PsiElement point)
+	public static boolean variableIsAssignedAtPoint(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiElement context, @Nonnull PsiElement point)
 	{
 		if(context == null)
 		{
@@ -473,8 +473,8 @@ public class VariableAccessUtils
 		return false;
 	}
 
-	@Nullable
-	private static PsiElement getDirectChildWhichContainsElement(@NotNull PsiElement ancestor, @NotNull PsiElement descendant)
+	@javax.annotation.Nullable
+	private static PsiElement getDirectChildWhichContainsElement(@Nonnull PsiElement ancestor, @Nonnull PsiElement descendant)
 	{
 		if(ancestor == descendant)
 		{
@@ -505,7 +505,7 @@ public class VariableAccessUtils
 		return visitor.getUsedVariables();
 	}
 
-	public static boolean isAnyVariableAssigned(@NotNull Collection<PsiVariable> variables, @Nullable PsiElement context)
+	public static boolean isAnyVariableAssigned(@Nonnull Collection<PsiVariable> variables, @javax.annotation.Nullable PsiElement context)
 	{
 		if(context == null)
 		{

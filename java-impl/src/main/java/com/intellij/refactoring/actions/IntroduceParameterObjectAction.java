@@ -15,13 +15,14 @@
  */
 package com.intellij.refactoring.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.introduceparameterobject.IntroduceParameterObjectHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class IntroduceParameterObjectAction extends BaseRefactoringAction {
 
@@ -29,11 +30,11 @@ public class IntroduceParameterObjectAction extends BaseRefactoringAction {
     return false;
   }
 
-  protected boolean isEnabledOnElements(@NotNull final PsiElement[] elements) {
+  protected boolean isEnabledOnElements(@Nonnull final PsiElement[] elements) {
     return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiMethod.class, false) != null;
   }
 
-  protected RefactoringActionHandler getHandler(@NotNull DataContext context) {
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
     return new IntroduceParameterObjectHandler();
   }
 }

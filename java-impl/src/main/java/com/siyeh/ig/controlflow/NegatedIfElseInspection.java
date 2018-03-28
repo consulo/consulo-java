@@ -28,7 +28,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -38,19 +38,19 @@ public class NegatedIfElseInspection extends BaseInspection {
   @SuppressWarnings("PublicField") public boolean m_ignoreNegatedZeroComparison = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "IfStatementWithNegatedCondition";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("negated.if.else.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "negated.if.else.problem.descriptor");
@@ -77,7 +77,7 @@ public class NegatedIfElseInspection extends BaseInspection {
   private static class NegatedIfElseFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("negated.if.else.invert.quickfix");
     }
@@ -117,7 +117,7 @@ public class NegatedIfElseInspection extends BaseInspection {
   private class NegatedIfElseVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@NotNull PsiIfStatement statement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiStatement thenBranch = statement.getThenBranch();
       if (thenBranch == null) {

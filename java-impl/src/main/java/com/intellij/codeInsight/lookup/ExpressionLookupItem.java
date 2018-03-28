@@ -18,10 +18,10 @@ package com.intellij.codeInsight.lookup;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -47,7 +47,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 		this(expression, getExpressionIcon(expression), expression.getText(), expression.getText());
 	}
 
-	public ExpressionLookupItem(final PsiExpression expression, @Nullable Icon icon, String presentableText, String... lookupStrings)
+	public ExpressionLookupItem(final PsiExpression expression, @javax.annotation.Nullable Icon icon, String presentableText, String... lookupStrings)
 	{
 		myExpression = expression;
 		myPresentableText = presentableText;
@@ -57,7 +57,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 	}
 
 	@Nullable
-	private static Icon getExpressionIcon(@NotNull PsiExpression expression)
+	private static Icon getExpressionIcon(@Nonnull PsiExpression expression)
 	{
 		if(expression instanceof PsiReferenceExpression)
 		{
@@ -74,7 +74,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiExpression getObject()
 	{
@@ -108,7 +108,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 		return myLookupString.hashCode();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getLookupString()
 	{

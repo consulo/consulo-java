@@ -15,8 +15,9 @@
  */
 package com.intellij.testFramework.fixtures;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.impl.JavaPsiFacadeEx;
@@ -27,11 +28,11 @@ import com.intellij.psi.impl.JavaPsiFacadeEx;
 public interface JavaCodeInsightTestFixture extends CodeInsightTestFixture {
   JavaPsiFacadeEx getJavaFacade();
 
-  PsiClass addClass(@NotNull @NonNls final String classText);
+  PsiClass addClass(@Nonnull @NonNls final String classText);
 
-  @NotNull
-  PsiClass findClass(@NotNull @NonNls String name);
+  @Nonnull
+  PsiClass findClass(@Nonnull @NonNls String name);
 
-  @NotNull
-  PsiJavaPackage findPackage(@NotNull @NonNls String name);
+  @Nonnull
+  PsiJavaPackage findPackage(@Nonnull @NonNls String name);
 }

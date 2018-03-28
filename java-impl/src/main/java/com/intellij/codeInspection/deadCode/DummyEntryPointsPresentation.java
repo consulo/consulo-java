@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection.deadCode;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ex.EntryPointsManager;
@@ -35,8 +36,8 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation
 	private static final RefEntryPointFilter myFilter = new RefEntryPointFilter();
 	private QuickFixAction[] myQuickFixActions;
 
-	public DummyEntryPointsPresentation(@NotNull InspectionToolWrapper toolWrapper,
-			@NotNull GlobalInspectionContextImpl context)
+	public DummyEntryPointsPresentation(@Nonnull InspectionToolWrapper toolWrapper,
+			@Nonnull GlobalInspectionContextImpl context)
 	{
 		super(toolWrapper, context);
 	}
@@ -48,7 +49,7 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation
 	}
 
 	@Override
-	public QuickFixAction[] getQuickFixes(@NotNull final RefEntity[] refElements)
+	public QuickFixAction[] getQuickFixes(@Nonnull final RefEntity[] refElements)
 	{
 		if(myQuickFixActions == null)
 		{
@@ -65,14 +66,14 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation
 
 	private class MoveEntriesToSuspicious extends QuickFixAction
 	{
-		private MoveEntriesToSuspicious(@NotNull InspectionToolWrapper toolWrapper)
+		private MoveEntriesToSuspicious(@Nonnull InspectionToolWrapper toolWrapper)
 		{
 			super(InspectionsBundle.message("inspection.dead.code.remove.from.entry.point.quickfix"), null, null,
 					toolWrapper);
 		}
 
 		@Override
-		protected boolean applyFix(@NotNull RefEntity[] refElements)
+		protected boolean applyFix(@Nonnull RefEntity[] refElements)
 		{
 			final EntryPointsManager entryPointsManager = getContext().getExtension(GlobalJavaInspectionContext
 					.CONTEXT).getEntryPointsManager(getContext().getRefManager());
@@ -88,19 +89,19 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public InspectionNode createToolNode(@NotNull GlobalInspectionContextImpl context,
-			@NotNull InspectionNode node,
-			@NotNull InspectionRVContentProvider provider,
-			@NotNull InspectionTreeNode parentNode,
+	public InspectionNode createToolNode(@Nonnull GlobalInspectionContextImpl context,
+			@Nonnull InspectionNode node,
+			@Nonnull InspectionRVContentProvider provider,
+			@Nonnull InspectionTreeNode parentNode,
 			boolean showStructure)
 	{
 		return node;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public HTMLComposerImpl getComposer()
 	{
 		return new DeadHTMLComposer(this);

@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.lookup;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.JavaClassNameCompletionContributor;
 import com.intellij.codeInsight.completion.JavaMethodCallElement;
@@ -46,7 +47,7 @@ public class LookupItemUtil
 	 * @see LookupElementBuilder
 	 * @deprecated
 	 */
-	@NotNull
+	@Nonnull
 	public static LookupElement objectToLookupItem(Object object)
 	{
 		if(object instanceof LookupElement)

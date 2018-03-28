@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.org.objectweb.asm.Attribute;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.ClassVisitor;
@@ -164,7 +164,7 @@ public class MethodBytecodeUtil
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private static Attribute createAttribute(String name, ThrowableConsumer<DataOutputStream, IOException> generator) throws IOException
 	{
 		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(bos))
@@ -231,7 +231,7 @@ public class MethodBytecodeUtil
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	private static Attribute createCode(ClassWriter cw, Method method, byte[] bytecodes, boolean withLineNumbers) throws IOException
 	{
 		return createAttribute("Code", dos ->
@@ -317,7 +317,7 @@ public class MethodBytecodeUtil
 		return methodRef.get();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static Method getBridgeTargetMethod(Method method, VirtualMachineProxy vm)
 	{
 		Ref<Method> methodRef = Ref.create();

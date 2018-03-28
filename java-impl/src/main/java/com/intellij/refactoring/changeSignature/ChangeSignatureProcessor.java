@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -58,7 +58,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.ChangeSignatureProcessor");
 
 	public ChangeSignatureProcessor(Project project, PsiMethod method, final boolean generateDelegate,
-			@PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, @NotNull ParameterInfoImpl[] parameterInfo)
+			@PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, @Nonnull ParameterInfoImpl[] parameterInfo)
 	{
 		this(project, method, generateDelegate, newVisibility, newName, newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
 				parameterInfo, null, null, null);
@@ -73,7 +73,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 	}
 
 	public ChangeSignatureProcessor(Project project, PsiMethod method, boolean generateDelegate, @PsiModifier.ModifierConstant String newVisibility,
-			String newName, CanonicalTypes.Type newType, @NotNull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
+			String newName, CanonicalTypes.Type newType, @Nonnull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
 			Set<PsiMethod> propagateParametersMethods, Set<PsiMethod> propagateExceptionsMethods)
 	{
 		this(project, generateChangeInfo(method, generateDelegate, newVisibility, newName, newType, parameterInfo, thrownExceptions,
@@ -87,7 +87,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 	}
 
 	private static JavaChangeInfo generateChangeInfo(PsiMethod method, boolean generateDelegate, @PsiModifier.ModifierConstant String newVisibility,
-			String newName, CanonicalTypes.Type newType, @NotNull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
+			String newName, CanonicalTypes.Type newType, @Nonnull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
 			Set<PsiMethod> propagateParametersMethods, Set<PsiMethod> propagateExceptionsMethods)
 	{
 		Set<PsiMethod> myPropagateParametersMethods = propagateParametersMethods != null ? propagateParametersMethods : new HashSet<PsiMethod>();
@@ -104,7 +104,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages)
 	{
 		return new ChangeSignatureViewDescriptor(getChangeInfo().getMethod());
@@ -257,7 +257,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 		PsiUtil.setModifierProperty(delegate, PsiModifier.ABSTRACT, false);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiCallExpression addDelegatingCallTemplate(final PsiMethod delegate, final String newName) throws IncorrectOperationException
 	{
 		Project project = delegate.getProject();

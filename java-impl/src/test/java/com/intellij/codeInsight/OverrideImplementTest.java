@@ -31,7 +31,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.FunctionUtil;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -147,7 +147,7 @@ public class OverrideImplementTest extends LightCodeInsightTestCase {
     doTest(copyJavadoc, toImplement);
   }
 
-  private void doTest(boolean copyJavadoc, @Nullable Boolean toImplement) {
+  private void doTest(boolean copyJavadoc, @javax.annotation.Nullable Boolean toImplement) {
     String name = getTestName(false);
     configureByFile(BASE_DIR + "before" + name + ".java");
     int offset = getEditor().getCaretModel().getOffset();

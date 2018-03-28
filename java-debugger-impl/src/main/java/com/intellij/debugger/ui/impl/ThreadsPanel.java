@@ -20,7 +20,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.actions.DebuggerActions;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -85,7 +85,7 @@ public class ThreadsPanel extends DebuggerTreePanel
 		stateManager.addListener(new DebuggerContextListener()
 		{
 			@Override
-			public void changeEvent(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event)
+			public void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
 				if(DebuggerSession.Event.ATTACHED == event || DebuggerSession.Event.RESUME == event)
 				{

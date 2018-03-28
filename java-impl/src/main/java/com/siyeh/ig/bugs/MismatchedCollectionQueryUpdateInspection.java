@@ -30,8 +30,8 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.ig.ui.UiUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,19 +50,19 @@ public class MismatchedCollectionQueryUpdateInspection
   public MismatchedCollectionQueryUpdateInspection() {}
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MismatchedQueryAndUpdateOfCollection";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("mismatched.update.collection.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean updated = ((Boolean)infos[0]).booleanValue();
     if (updated) {
@@ -130,7 +130,7 @@ public class MismatchedCollectionQueryUpdateInspection
   private class MismatchedCollectionQueryUpdateVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;
@@ -148,7 +148,7 @@ public class MismatchedCollectionQueryUpdateInspection
     }
 
     @Override
-    public void visitLocalVariable(@NotNull PsiLocalVariable variable) {
+    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
       if (!checkVariable(variable, codeBlock)) {
@@ -230,7 +230,7 @@ public class MismatchedCollectionQueryUpdateInspection
     }
   }
 
-  private static boolean collectionQueriedByAssignment(@NotNull PsiVariable variable, @NotNull PsiElement context) {
+  private static boolean collectionQueriedByAssignment(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
     final CollectionQueriedByAssignmentVisitor visitor = new CollectionQueriedByAssignmentVisitor(variable);
     context.accept(visitor);
     return visitor.mayBeQueried();
@@ -239,14 +239,15 @@ public class MismatchedCollectionQueryUpdateInspection
   private static class CollectionQueriedByAssignmentVisitor extends JavaRecursiveElementVisitor {
 
     private boolean mayBeQueried = false;
-    @NotNull private final PsiVariable variable;
+    @Nonnull
+	private final PsiVariable variable;
 
-    CollectionQueriedByAssignmentVisitor(@NotNull PsiVariable variable) {
+    CollectionQueriedByAssignmentVisitor(@Nonnull PsiVariable variable) {
       this.variable = variable;
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (mayBeQueried) {
         return;
       }
@@ -280,7 +281,7 @@ public class MismatchedCollectionQueryUpdateInspection
     }
 
     @Override
-    public void visitAssignmentExpression(@NotNull PsiAssignmentExpression assignment) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
       if (mayBeQueried) {
         return;
       }

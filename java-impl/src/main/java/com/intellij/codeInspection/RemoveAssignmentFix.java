@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.codeInsight.JavaInspectionsBundle;
 import com.intellij.openapi.project.Project;
@@ -30,7 +31,7 @@ import com.intellij.psi.util.PsiUtil;
 
 public class RemoveAssignmentFix extends RemoveInitializerFix
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -38,7 +39,7 @@ public class RemoveAssignmentFix extends RemoveInitializerFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement element = descriptor.getPsiElement();
 		final PsiElement parent;

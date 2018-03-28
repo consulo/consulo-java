@@ -1,8 +1,8 @@
 // "Annotate method as '@NotNull'" "true"
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class X {
-    @NotNull
+    @Nonnull
     String annotateBase() {
         return "X";
     }

@@ -17,8 +17,8 @@ package com.intellij.codeInsight.daemon.impl.analysis;
 
 import java.util.Iterator;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -92,9 +92,9 @@ public class JavaGenericsUtil
 		return false;
 	}
 
-	public static boolean isUncheckedWarning(@NotNull PsiJavaCodeReferenceElement expression,
-			@NotNull JavaResolveResult resolveResult,
-			@NotNull LanguageLevel languageLevel)
+	public static boolean isUncheckedWarning(@Nonnull PsiJavaCodeReferenceElement expression,
+			@Nonnull JavaResolveResult resolveResult,
+			@Nonnull LanguageLevel languageLevel)
 	{
 		final PsiElement resolve = resolveResult.getElement();
 		if(resolve instanceof PsiMethod)
@@ -356,7 +356,7 @@ public class JavaGenericsUtil
 	}
 
 	@Nullable
-	public static PsiType getCollectionItemType(@NotNull PsiExpression expression)
+	public static PsiType getCollectionItemType(@Nonnull PsiExpression expression)
 	{
 		final PsiType type = expression.getType();
 		if(type == null)
@@ -366,7 +366,7 @@ public class JavaGenericsUtil
 		return getCollectionItemType(type, expression.getResolveScope());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getCollectionItemType(final PsiType type, final GlobalSearchScope scope)
 	{
 		if(type instanceof PsiArrayType)
@@ -436,7 +436,7 @@ public class JavaGenericsUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiTypeParameter getIterableTypeParameter(final JavaPsiFacade facade, final PsiClass context)
 	{
 		PsiClass iterable = facade.findClass("java.lang.Iterable", context.getResolveScope());

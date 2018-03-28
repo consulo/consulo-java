@@ -15,11 +15,13 @@
  */
 package com.intellij.codeInspection.unusedSymbol;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
@@ -148,21 +150,21 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return DISPLAY_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -171,7 +173,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 
 	@Override
 	@Pattern(VALID_ID_PATTERN)
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getID()
 	{
@@ -191,7 +193,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 	}
 
 	@Override
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		writeVisibility(node, myClassVisibility, "klass");
 		writeVisibility(node, myInnerClassVisibility, "inner_class");
@@ -228,7 +230,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 	}
 
 	@Override
-	public void readSettings(@NotNull Element node) throws InvalidDataException
+	public void readSettings(@Nonnull Element node) throws InvalidDataException
 	{
 		super.readSettings(node);
 		myClassVisibility = readVisibility(node, "klass");
@@ -242,12 +244,12 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 		INNER_CLASS = innerClassEnabled == null || Boolean.parseBoolean(innerClassEnabled);
 	}
 
-	private static String readVisibility(@NotNull Element node, final String type)
+	private static String readVisibility(@Nonnull Element node, final String type)
 	{
 		return readVisibility(node, type, PsiModifier.PUBLIC);
 	}
 
-	private static String readVisibility(@NotNull Element node, final String type, final String defaultVisibility)
+	private static String readVisibility(@Nonnull Element node, final String type, final String defaultVisibility)
 	{
 		final String visibility = node.getAttributeValue(type);
 		if(visibility == null)

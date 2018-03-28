@@ -21,13 +21,12 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.view.GenerateTemplateConfigurable;
 import com.intellij.codeInsight.generation.EqualsHashCodeTemplatesManager;
@@ -97,7 +96,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
 			return Couple.of(copyOf(couple.first), copyOf(couple.second));
 		}
 
-		@NotNull
+		@Nonnull
 		private TemplateResource copyOf(TemplateResource resource)
 		{
 			TemplateResource result = new TemplateResource();
@@ -144,7 +143,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	@NonNls
 	public String getHelpTopic()
 	{
@@ -170,7 +169,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
 		final GenerateTemplateConfigurable hashCodeConfigurable = new GenerateTemplateConfigurable(item.second, GenerateEqualsHelper.getHashCodeImplicitVars(), myProject);
 		return new UnnamedConfigurable()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public JComponent createComponent()
 			{

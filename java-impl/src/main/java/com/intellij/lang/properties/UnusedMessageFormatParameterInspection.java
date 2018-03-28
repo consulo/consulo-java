@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.quickfix.RenameElementFix;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -41,24 +41,24 @@ import com.intellij.psi.PsiFile;
  */
 public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionTool {
   public static final String REGEXP = "regexp";
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return PropertiesBundle.message("properties.files.inspection.group.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return PropertiesBundle.message("unused.message.format.parameter.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "UnusedMessageFormatParameter";
   }
 
   @Nullable
-  public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     if (!(file instanceof PropertiesFile)) return null;
     PropertiesFile propertiesFile = (PropertiesFile)file;
     final List<IProperty> properties = propertiesFile.getProperties();

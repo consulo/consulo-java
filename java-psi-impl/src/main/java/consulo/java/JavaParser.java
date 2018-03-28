@@ -1,6 +1,7 @@
 package consulo.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
@@ -13,9 +14,9 @@ import consulo.lang.LanguageVersion;
  */
 public class JavaParser implements PsiParser
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder, @NotNull LanguageVersion languageVersion)
+	public ASTNode parse(@Nonnull IElementType root, @Nonnull PsiBuilder builder, @Nonnull LanguageVersion languageVersion)
 	{
 		final PsiBuilder.Marker marker = builder.mark();
 		com.intellij.lang.java.parser.JavaParser.INSTANCE.getFileParser().parse(builder);

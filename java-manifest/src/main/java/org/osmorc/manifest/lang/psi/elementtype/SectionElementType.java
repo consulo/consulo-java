@@ -30,7 +30,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Section;
 import org.osmorc.manifest.lang.psi.impl.SectionImpl;
 import org.osmorc.manifest.lang.psi.stub.SectionStub;
@@ -48,7 +48,7 @@ public class SectionElementType extends AbstractManifestStubElementType<SectionS
 
 
   @Override
-  public Section createPsi(@NotNull SectionStub stub) {
+  public Section createPsi(@Nonnull SectionStub stub) {
     return new SectionImpl(stub, this);
   }
 
@@ -58,18 +58,18 @@ public class SectionElementType extends AbstractManifestStubElementType<SectionS
   }
 
   @Override
-  public SectionStub createStub(@NotNull Section psi, StubElement parentStub) {
+  public SectionStub createStub(@Nonnull Section psi, StubElement parentStub) {
     return new SectionStubImpl(parentStub);
   }
 
-  public void serialize(@NotNull SectionStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull SectionStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
   }
 
-  @NotNull
-  public SectionStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  @Nonnull
+  public SectionStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new SectionStubImpl(parentStub);
   }
 
-  public void indexStub(@NotNull SectionStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull SectionStub stub, @Nonnull IndexSink sink) {
   }
 }

@@ -1,7 +1,7 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.*;
 
 class Test {
-  void bar(@Nullable String str) {
+  void bar(@javax.annotation.Nullable String str) {
     if (str == null) {
       foo(str);
     }
@@ -11,20 +11,20 @@ class Test {
     return str;
   }
 
-  @Nullable
-  String foo1(@Nullable String str) {
+  @javax.annotation.Nullable
+  String foo1(@javax.annotation.Nullable String str) {
     if (str == null);
     return (str);
   }
 
-  @NotNull
-  String foo2(@Nullable String str) {
+  @Nonnull
+  String foo2(@javax.annotation.Nullable String str) {
     if (str == null);
     return ((String)str);
   }
 
-  @NotNull
-  String fram(@Nullable String str, boolean b) {
+  @Nonnull
+  String fram(@javax.annotation.Nullable String str, boolean b) {
     if (str != null) {
       return b ? str : "not null strimg";
     }

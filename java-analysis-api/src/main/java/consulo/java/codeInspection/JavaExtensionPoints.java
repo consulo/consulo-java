@@ -15,7 +15,8 @@
  */
 package consulo.java.codeInspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.reference.EntryPoint;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.util.Condition;
@@ -27,9 +28,9 @@ import com.intellij.psi.PsiElement;
  */
 public interface JavaExtensionPoints
 {
-	@NotNull
+	@Nonnull
 	ExtensionPointName<EntryPoint> DEAD_CODE_EP_NAME = ExtensionPointName.create("consulo.java.deadCode");
 
-	@NotNull
+	@Nonnull
 	ExtensionPointName<Condition<PsiElement>> CANT_BE_STATIC_EP_NAME = ExtensionPointName.create("consulo.java.cantBeStatic");
 }

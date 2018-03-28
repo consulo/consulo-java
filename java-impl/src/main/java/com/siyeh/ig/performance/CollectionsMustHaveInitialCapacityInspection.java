@@ -19,13 +19,14 @@ import java.awt.BorderLayout;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizer;
@@ -56,14 +57,14 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
 	public boolean myIgnoreFields;
 
 	@Override
-	public void readSettings(@NotNull Element node) throws InvalidDataException
+	public void readSettings(@Nonnull Element node) throws InvalidDataException
 	{
 		mySettings.readSettings(node);
 		myIgnoreFields = JDOMExternalizer.readBoolean(node, "ignoreFields");
 	}
 
 	@Override
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		mySettings.writeSettings(node);
 		if(myIgnoreFields)
@@ -84,21 +85,21 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
 
 	@Pattern(VALID_ID_PATTERN)
 	@Override
-	@NotNull
+	@Nonnull
 	public String getID()
 	{
 		return "CollectionWithoutInitialCapacity";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("collections.must.have.initial.capacity.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("collections.must.have.initial.capacity.problem.descriptor");
@@ -114,7 +115,7 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitNewExpression(@NotNull PsiNewExpression expression)
+		public void visitNewExpression(@Nonnull PsiNewExpression expression)
 		{
 			super.visitNewExpression(expression);
 			if(myIgnoreFields && expression.getParent() instanceof PsiField)

@@ -32,7 +32,7 @@ import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -60,7 +60,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
     return ChangeClassSignatureDialog.REFACTORING_NAME;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new ChangeClassSigntaureViewDescriptor(myClass);
   }
@@ -82,7 +82,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
     return showConflicts(conflicts, refUsages.get());
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     GlobalSearchScope projectScope = GlobalSearchScope.projectScope(myProject);
     List<UsageInfo> result = new ArrayList<UsageInfo>();

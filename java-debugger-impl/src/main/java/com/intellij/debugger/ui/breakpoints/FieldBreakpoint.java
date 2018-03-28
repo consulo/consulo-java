@@ -16,11 +16,11 @@
 
 package com.intellij.debugger.ui.breakpoints;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaFieldBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -81,7 +81,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 		super(project, breakpoint);
 	}
 
-	private FieldBreakpoint(Project project, @NotNull String fieldName, XBreakpoint breakpoint)
+	private FieldBreakpoint(Project project, @Nonnull String fieldName, XBreakpoint breakpoint)
 	{
 		super(project, breakpoint);
 		setFieldName(fieldName);
@@ -312,7 +312,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 		return className != null && !className.isEmpty() ? className + "." + getFieldName() : getFieldName();
 	}
 
-	public static FieldBreakpoint create(@NotNull Project project, String fieldName, XBreakpoint xBreakpoint)
+	public static FieldBreakpoint create(@Nonnull Project project, String fieldName, XBreakpoint xBreakpoint)
 	{
 		FieldBreakpoint breakpoint = new FieldBreakpoint(project, fieldName, xBreakpoint);
 		return (FieldBreakpoint) breakpoint.init();
@@ -330,7 +330,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 	}
 
 	@Override
-	public boolean isAt(@NotNull Document document, int offset)
+	public boolean isAt(@Nonnull Document document, int offset)
 	{
 		PsiField field = findField(myProject, document, offset);
 		return field == getPsiField();
@@ -409,7 +409,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 	}
 
 	@Override
-	public void readExternal(@NotNull Element breakpointNode) throws InvalidDataException
+	public void readExternal(@Nonnull Element breakpointNode) throws InvalidDataException
 	{
 		super.readExternal(breakpointNode);
 		//noinspection HardCodedStringLiteral

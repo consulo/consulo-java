@@ -18,8 +18,8 @@ package com.intellij.refactoring.util.duplicates;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.folding.CodeFoldingManager;
 import com.intellij.codeInsight.highlighting.HighlightManager;
@@ -62,12 +62,12 @@ public class DuplicatesImpl
 	{
 	}
 
-	public static void invoke(@NotNull final Project project, @NotNull Editor editor, @NotNull MatchProvider provider)
+	public static void invoke(@Nonnull final Project project, @Nonnull Editor editor, @Nonnull MatchProvider provider)
 	{
 		invoke(project, editor, provider, true);
 	}
 
-	public static void invoke(@NotNull final Project project, @NotNull Editor editor, @NotNull MatchProvider provider, boolean skipPromptWhenOne)
+	public static void invoke(@Nonnull final Project project, @Nonnull Editor editor, @Nonnull MatchProvider provider, boolean skipPromptWhenOne)
 	{
 		final List<Match> duplicates = provider.getDuplicates();
 		int idx = 0;
@@ -135,7 +135,7 @@ public class DuplicatesImpl
 	private static boolean replaceMatch(final Project project,
 			final MatchProvider provider,
 			final Match match,
-			@NotNull final Editor editor,
+			@Nonnull final Editor editor,
 			final int idx,
 			final int size,
 			Ref<Boolean> showAll,
@@ -189,7 +189,7 @@ public class DuplicatesImpl
 		new WriteCommandAction(project, MethodDuplicatesHandler.REFACTORING_NAME, MethodDuplicatesHandler.REFACTORING_NAME)
 		{
 			@Override
-			protected void run(@NotNull Result result) throws Throwable
+			protected void run(@Nonnull Result result) throws Throwable
 			{
 				try
 				{
@@ -253,7 +253,7 @@ public class DuplicatesImpl
 		HighlightManager.getInstance(project).addRangeHighlight(editor, match.getTextRange().getStartOffset(), match.getTextRange().getEndOffset(), attributes, true, highlighters);
 	}
 
-	public static void processDuplicates(@NotNull MatchProvider provider, @NotNull Project project, @NotNull Editor editor)
+	public static void processDuplicates(@Nonnull MatchProvider provider, @Nonnull Project project, @Nonnull Editor editor)
 	{
 		Boolean hasDuplicates = provider.hasDuplicates();
 		if(hasDuplicates == null || hasDuplicates.booleanValue())

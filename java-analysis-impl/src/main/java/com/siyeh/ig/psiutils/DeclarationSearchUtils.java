@@ -18,8 +18,8 @@ package com.siyeh.ig.psiutils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -36,7 +36,7 @@ public class DeclarationSearchUtils
 	{
 	}
 
-	public static boolean variableNameResolvesToTarget(@NotNull String variableName, @NotNull PsiVariable target, @NotNull PsiElement context)
+	public static boolean variableNameResolvesToTarget(@Nonnull String variableName, @Nonnull PsiVariable target, @Nonnull PsiElement context)
 	{
 
 		final Project project = context.getProject();
@@ -112,7 +112,7 @@ public class DeclarationSearchUtils
 		}
 	}
 
-	public static PsiExpression findDefinition(@NotNull PsiReferenceExpression referenceExpression, @Nullable PsiVariable variable)
+	public static PsiExpression findDefinition(@Nonnull PsiReferenceExpression referenceExpression, @Nullable PsiVariable variable)
 	{
 		if(variable == null)
 		{

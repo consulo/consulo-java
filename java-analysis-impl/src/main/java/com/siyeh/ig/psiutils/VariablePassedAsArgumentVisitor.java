@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -26,24 +27,24 @@ import com.intellij.psi.PsiVariable;
 
 class VariablePassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
 
-  @NotNull
+  @Nonnull
   private final PsiVariable variable;
   private boolean passed = false;
 
-  public VariablePassedAsArgumentVisitor(@NotNull PsiVariable variable) {
+  public VariablePassedAsArgumentVisitor(@Nonnull PsiVariable variable) {
     super();
     this.variable = variable;
   }
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!passed) {
       super.visitElement(element);
     }
   }
 
   @Override
-  public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+  public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
     if (passed) {
       return;
     }
@@ -59,7 +60,7 @@ class VariablePassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitNewExpression(@NotNull PsiNewExpression newExpression) {
+  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

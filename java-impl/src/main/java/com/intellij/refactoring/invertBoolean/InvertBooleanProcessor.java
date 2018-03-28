@@ -33,7 +33,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Query;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,7 +62,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InvertBooleanUsageViewDescriptor(myElement);
   }
@@ -77,7 +77,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     final List<SmartPsiElementPointer> toInvert = new ArrayList<SmartPsiElementPointer>();
 

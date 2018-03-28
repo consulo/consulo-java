@@ -30,8 +30,8 @@ import com.intellij.psi.meta.PsiPresentableMetaData;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -52,7 +52,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
     return PropertyUtil.getPropertyType(myMethod);
   }
 
-  @NotNull
+  @Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
@@ -79,7 +79,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return myName;
   }
@@ -106,7 +106,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiMetaData getMetaData() {
     return this;
   }
@@ -117,7 +117,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public Icon getIcon() {
     return IconDescriptorUpdaters.getIcon(this, 0);
   }

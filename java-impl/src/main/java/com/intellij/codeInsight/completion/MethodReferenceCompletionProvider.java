@@ -17,7 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
@@ -38,7 +39,7 @@ public class MethodReferenceCompletionProvider implements CompletionProvider
 	private static final Logger LOG = Logger.getInstance("#" + MethodReferenceCompletionProvider.class.getName());
 
 	@Override
-	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result)
 	{
 		if(!PsiUtil.isLanguageLevel8OrHigher(parameters.getOriginalFile()))
 		{

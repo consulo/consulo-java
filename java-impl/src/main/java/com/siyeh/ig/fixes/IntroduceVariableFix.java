@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -45,7 +45,7 @@ public class IntroduceVariableFix extends InspectionGadgetsFix
 		myMayChangeSemantics = mayChangeSemantics;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a Java module declaration.
@@ -30,25 +30,25 @@ public interface PsiJavaModule extends NavigatablePsiElement, PsiNameIdentifierO
 	String JAVA_BASE = "java.base";
 
 	@Override
-	@NotNull
+	@Nonnull
 	PsiJavaModuleReferenceElement getNameIdentifier();
 
 	@Override
-	@NotNull
+	@Nonnull
 	String getName();
 
-	@NotNull
+	@Nonnull
 	Iterable<PsiRequiresStatement> getRequires();
 
-	@NotNull
+	@Nonnull
 	Iterable<PsiPackageAccessibilityStatement> getExports();
 
-	@NotNull
+	@Nonnull
 	Iterable<PsiPackageAccessibilityStatement> getOpens();
 
-	@NotNull
+	@Nonnull
 	Iterable<PsiUsesStatement> getUses();
 
-	@NotNull
+	@Nonnull
 	Iterable<PsiProvidesStatement> getProvides();
 }

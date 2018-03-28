@@ -28,7 +28,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.GlobalInspectionContext;
@@ -129,7 +130,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-  public static boolean isInspectionsEnabled(final boolean online, @NotNull Project project) {
+  public static boolean isInspectionsEnabled(final boolean online, @Nonnull Project project) {
     final Module[] modules = ModuleManager.getInstance(project).getModules();
     if (online) {
       if (modules.length == 0) {
@@ -230,7 +231,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
       }
 
       @Override
-      public boolean isSearchInModuleContent(@NotNull Module aModule) {
+      public boolean isSearchInModuleContent(@Nonnull Module aModule) {
         return true;
       }
 
@@ -353,7 +354,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
                                                                                                                                    final AnalysisScope scope) {
     return new PsiElementProcessorAdapter<Member>(new PsiElementProcessor<Member>() {
       @Override
-      public boolean execute(@NotNull Member member) {
+      public boolean execute(@Nonnull Member member) {
         if (scope.contains(member)) return true;
         final List<P> processorsArrayed = new ArrayList<P>(processors);
         for (P processor : processorsArrayed) {
@@ -415,7 +416,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
     return result;
   }
 
-  private static PsiReferenceProcessor createReferenceProcessor(@NotNull final List<UsagesProcessor> processors,
+  private static PsiReferenceProcessor createReferenceProcessor(@Nonnull final List<UsagesProcessor> processors,
                                                                 final GlobalInspectionContext context) {
     return new PsiReferenceProcessor() {
       @Override
@@ -441,9 +442,9 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
   }
 
   @Override
-  public void performPreRunActivities(@NotNull final List<Tools> globalTools,
-                                      @NotNull final List<Tools> localTools,
-                                      @NotNull final GlobalInspectionContext context) {
+  public void performPreRunActivities(@Nonnull final List<Tools> globalTools,
+                                      @Nonnull final List<Tools> localTools,
+                                      @Nonnull final GlobalInspectionContext context) {
     getEntryPointsManager(context.getRefManager()).resolveEntryPoints(context.getRefManager());
     // UnusedDeclarationInspection should run first
     for (int i = 0; i < globalTools.size(); i++) {
@@ -458,7 +459,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 
   @Override
-  public void performPostRunActivities(@NotNull List<InspectionToolWrapper> needRepeatSearchRequest, @NotNull final GlobalInspectionContext context) {
+  public void performPostRunActivities(@Nonnull List<InspectionToolWrapper> needRepeatSearchRequest, @Nonnull final GlobalInspectionContext context) {
     JobDescriptor progress = context.getStdJobDescriptors().FIND_EXTERNAL_USAGES;
     progress.setTotalAmount(getRequestCount());
 

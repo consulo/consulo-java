@@ -15,7 +15,7 @@
  */
 package com.intellij.application.options;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
@@ -27,7 +27,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
  * @author yole
  */
 public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
-  @NotNull
+  @Nonnull
   public Configurable createSettingsPage(final CodeStyleSettings settings, final CodeStyleSettings originalSettings) {
     return new CodeStyleGenerationConfigurable(settings);
   }

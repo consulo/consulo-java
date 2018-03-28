@@ -18,7 +18,6 @@ package com.intellij.codeInsight.highlighting;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.featureStatistics.FeatureUsageTracker;
@@ -49,7 +48,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static HighlightUsagesHandlerBase createHighlightTryHandler(final Editor editor,
                                                                       final PsiFile file,
                                                                       final PsiElement target,
@@ -62,7 +61,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return new HighlightExceptionsHandler(editor, file, target, psiClassTypes.toArray(new PsiClassType[psiClassTypes.size()]), tryBlock, Condition.TRUE);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static HighlightUsagesHandlerBase createHighlightCatchHandler(final Editor editor,
                                                                  final PsiFile file,
                                                                  final PsiElement target,
@@ -104,7 +103,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
                                           tryStatement.getTryBlock(), filter);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static HighlightUsagesHandlerBase createThrowsHandler(final Editor editor, final PsiFile file, final PsiElement target) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.throws");
     PsiElement grand = target.getParent().getParent();

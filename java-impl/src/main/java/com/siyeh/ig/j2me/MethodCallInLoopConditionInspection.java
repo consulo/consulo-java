@@ -15,25 +15,25 @@
  */
 package com.siyeh.ig.j2me;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.IntroduceVariableFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class MethodCallInLoopConditionInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.call.in.loop.condition.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("method.call.in.loop.condition.problem.descriptor");
   }
@@ -43,7 +43,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new IntroduceVariableFix(true);
@@ -57,7 +57,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
   private static class MethodCallInLoopConditionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@NotNull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -67,7 +67,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
     }
 
     @Override
-    public void visitWhileStatement(@NotNull PsiWhileStatement statement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -77,7 +77,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
     }
 
     @Override
-    public void visitDoWhileStatement(@NotNull PsiDoWhileStatement statement) {
+    public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
       super.visitDoWhileStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -91,7 +91,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
 
           @Override
           public void visitMethodCallExpression(
-            @NotNull PsiMethodCallExpression expression) {
+            @Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             registerMethodCallError(expression);
           }

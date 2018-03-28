@@ -15,9 +15,9 @@
  */
 package com.intellij.lang.jvm;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 
 public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
@@ -27,7 +27,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @return the name, or {@code null} if the class is anonymous
 	 * @see Class#getSimpleName
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	@NonNls
 	@Override
 	String getName();
@@ -36,11 +36,11 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @return the qualified name, of {@code null} if the class is anonymous or local
 	 * @see Class#getCanonicalName
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	@NonNls
 	String getQualifiedName();
 
-	@NotNull
+	@Nonnull
 	JvmClassKind getClassKind();
 
 	/**
@@ -49,7 +49,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getGenericSuperclass
 	 * @see Class#getAnnotatedSuperclass
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	JvmReferenceType getSuperClassType();
 
 	/**
@@ -58,7 +58,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getAnnotatedInterfaces
 	 * @see Class#getGenericInterfaces
 	 */
-	@NotNull
+	@Nonnull
 	JvmReferenceType[] getInterfaceTypes();
 
 	//
@@ -68,20 +68,20 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getDeclaredMethods
 	 * @see Class#getDeclaredConstructors
 	 */
-	@NotNull
+	@Nonnull
 	JvmMethod[] getMethods();
 
 	/**
 	 * @return all (static, private, etc) fields declared by this class but excluding inherited ones
 	 * @see Class#getDeclaredFields
 	 */
-	@NotNull
+	@Nonnull
 	JvmField[] getFields();
 
 	/**
 	 * @return all (static, private, etc) inner classes declared by this class but excluding inherited ones
 	 * @see Class#getDeclaredClasses
 	 */
-	@NotNull
+	@Nonnull
 	JvmClass[] getInnerClasses();
 }

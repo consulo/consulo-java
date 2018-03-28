@@ -17,7 +17,8 @@ package com.intellij.psi.scope.processor;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.infos.CandidateInfo;
@@ -36,18 +37,18 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 {
 	protected boolean myHasAccessibleStaticCorrectCandidate;
 
-	public MethodCandidatesProcessor(@NotNull PsiElement place, PsiFile placeFile, @NotNull PsiConflictResolver[] resolvers, @NotNull List<CandidateInfo> container)
+	public MethodCandidatesProcessor(@Nonnull PsiElement place, PsiFile placeFile, @Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container)
 	{
 		super(resolvers, container, place, placeFile);
 	}
 
-	public MethodCandidatesProcessor(@NotNull PsiElement place, PsiFile placeFile)
+	public MethodCandidatesProcessor(@Nonnull PsiElement place, PsiFile placeFile)
 	{
 		super(new PsiConflictResolver[]{DuplicateConflictResolver.INSTANCE}, new SmartList<CandidateInfo>(), place, placeFile);
 	}
 
 	@Override
-	public void add(@NotNull PsiElement element, @NotNull PsiSubstitutor substitutor)
+	public void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor)
 	{
 		if(element instanceof PsiMethod)
 		{
@@ -56,7 +57,7 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 		}
 	}
 
-	public void addMethod(@NotNull PsiMethod method, final PsiSubstitutor substitutor, boolean staticProblem)
+	public void addMethod(@Nonnull PsiMethod method, final PsiSubstitutor substitutor, boolean staticProblem)
 	{
 		final boolean isAccessible = JavaResolveUtil.isAccessible(method, getContainingClass(method), method.getModifierList(), myPlace, myAccessClass, myCurrentFileContext, myPlaceFile) &&
 				!isShadowed(method);
@@ -105,7 +106,7 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 		return false;
 	}
 
-	protected MethodCandidateInfo createCandidateInfo(@NotNull PsiMethod method, @NotNull PsiSubstitutor substitutor, final boolean staticProblem, final boolean accessible, final boolean varargs)
+	protected MethodCandidateInfo createCandidateInfo(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor, final boolean staticProblem, final boolean accessible, final boolean varargs)
 	{
 		final PsiExpressionList argumentList = getArgumentList();
 		return new MethodCandidateInfo(method, substitutor, !accessible, staticProblem, argumentList, myCurrentFileContext, null, getTypeArguments(), getLanguageLevel())

@@ -34,8 +34,8 @@ import com.intellij.psi.xml.XmlEntityDecl;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.xml.util.XmlUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,7 +48,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.ConvertToBasicLatinAction");
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
     final Pair<PsiElement, Handler> pair = findHandler(element);
     if (pair == null) return false;
@@ -61,20 +61,20 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
     return false;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.convert.to.basic.latin");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return getFamilyName();
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final Pair<PsiElement, Handler> pair = findHandler(element);
     if (pair == null) return;
     final PsiElement workElement = pair.first;
@@ -85,7 +85,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
     workElement.replace(newElement);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static Pair<PsiElement, Handler> findHandler(final PsiElement element) {
     for (final Handler handler : ourHandlers) {
       final PsiElement applicable = handler.findApplicable(element);
@@ -202,7 +202,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
       final Pattern pattern = Pattern.compile("&#(\\d+);");
       XmlUtil.processXmlElements(file, new PsiElementProcessor() {
         @Override
-        public boolean execute(@NotNull PsiElement element) {
+        public boolean execute(@Nonnull PsiElement element) {
           if (element instanceof XmlEntityDecl) {
             final XmlEntityDecl entity = (XmlEntityDecl)element;
             final Matcher m = pattern.matcher(entity.getValueElement().getValue());

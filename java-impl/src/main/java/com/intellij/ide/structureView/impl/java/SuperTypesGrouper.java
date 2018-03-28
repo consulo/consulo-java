@@ -26,7 +26,7 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.util.ArrayUtil;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -37,7 +37,7 @@ public class SuperTypesGrouper implements Grouper{
   public static final Key<WeakReference<PsiMethod>> SUPER_METHOD_KEY = Key.create("StructureTreeBuilder.SUPER_METHOD_KEY");
   @NonNls public static final String ID = "SHOW_INTERFACES";
 
-  @NotNull
+  @Nonnull
   public Collection<Group> group(final AbstractTreeNode parent, Collection<TreeElement> children) {
     if (isParentGrouped(parent)) return Collections.emptyList();
     Map<Group, SuperTypeGroup> groups = new THashMap<Group, SuperTypeGroup>();
@@ -112,13 +112,13 @@ public class SuperTypesGrouper implements Grouper{
 
   }
 
-  @NotNull
+  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.structureview.group.methods.by.defining.type"), null,
                                       AllIcons.General.ImplementingMethod);
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return ID;
   }

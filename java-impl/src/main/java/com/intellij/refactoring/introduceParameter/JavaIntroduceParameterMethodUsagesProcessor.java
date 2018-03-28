@@ -18,8 +18,8 @@ package com.intellij.refactoring.introduceParameter;
 import gnu.trove.TIntArrayList;
 import gnu.trove.TIntProcedure;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -129,7 +129,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
                                                      JavaPsiFacade.getElementFactory(project));
   }
 
-  private static void removeParametersFromCall(@NotNull final PsiExpressionList argList, TIntArrayList parametersToRemove) {
+  private static void removeParametersFromCall(@Nonnull final PsiExpressionList argList, TIntArrayList parametersToRemove) {
     final PsiExpression[] exprs = argList.getExpressions();
     parametersToRemove.forEachDescending(new TIntProcedure() {
       public boolean execute(final int paramNum) {

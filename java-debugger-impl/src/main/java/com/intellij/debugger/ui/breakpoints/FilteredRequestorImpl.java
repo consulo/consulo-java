@@ -23,10 +23,10 @@ package com.intellij.debugger.ui.breakpoints;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.InstanceFilter;
 import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -80,7 +80,7 @@ public class FilteredRequestorImpl implements JDOMExternalizable, FilteredReques
 	private static final String CONDITION_OPTION_NAME = "CONDITION";
 	protected final Project myProject;
 
-	public FilteredRequestorImpl(@NotNull Project project)
+	public FilteredRequestorImpl(@Nonnull Project project)
 	{
 		myProject = project;
 		myCondition = new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "");
@@ -226,7 +226,7 @@ public class FilteredRequestorImpl implements JDOMExternalizable, FilteredReques
 		return event.location().declaringType().name();
 	}
 
-	private boolean typeMatchesClassFilters(@Nullable String typeName)
+	private boolean typeMatchesClassFilters(@javax.annotation.Nullable String typeName)
 	{
 		if(typeName == null)
 		{

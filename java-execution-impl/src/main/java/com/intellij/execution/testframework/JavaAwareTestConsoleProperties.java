@@ -19,10 +19,10 @@ package com.intellij.execution.testframework;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
@@ -35,7 +35,6 @@ import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.stacktrace.StackTraceLine;
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties;
 import com.intellij.openapi.diff.LineTokenizer;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -75,14 +74,14 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
 
 	@Nullable
 	@Override
-	public Navigatable getErrorNavigatable(@NotNull Location<?> location, @NotNull String stacktrace)
+	public Navigatable getErrorNavigatable(@Nonnull Location<?> location, @Nonnull String stacktrace)
 	{
 		//navigate to the first stack trace
 		return getStackTraceErrorNavigatable(location, stacktrace);
 	}
 
-	@Nullable
-	public static Navigatable getStackTraceErrorNavigatable(@NotNull Location<?> location, @NotNull String stacktrace)
+	@javax.annotation.Nullable
+	public static Navigatable getStackTraceErrorNavigatable(@Nonnull Location<?> location, @Nonnull String stacktrace)
 	{
 		final PsiLocation<?> psiLocation = location.toPsiLocation();
 		final PsiClass containingClass = psiLocation.getParentElement(PsiClass.class);
@@ -122,7 +121,7 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
 		return lastLine != null ? lastLine.getOpenFileDescriptor(containingClass.getContainingFile().getVirtualFile()) : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public DebuggerSession getDebugSession()
 	{
 		final DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(getProject());

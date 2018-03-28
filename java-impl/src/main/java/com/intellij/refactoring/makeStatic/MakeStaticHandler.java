@@ -24,8 +24,8 @@
 */
 package com.intellij.refactoring.makeStatic;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -51,7 +51,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.makeMethodStatic.MakeMethodStaticHandler");
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -83,7 +83,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, @NotNull PsiElement[] elements, DataContext dataContext)
+	public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		if(elements.length != 1 || !(elements[0] instanceof PsiTypeParameterListOwner))
 		{

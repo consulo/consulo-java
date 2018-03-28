@@ -1,9 +1,11 @@
 // "Add constructor parameter" "true"
-import org.jetbrains.annotations.*;
-class A {
-  @NotNull private final Object field;
+import javax.annotation.Nonnull;
 
-  A(@NotNull Object field, String... strs) {
+class A {
+  @Nonnull
+  private final Object field;
+
+  A(@Nonnull Object field, String... strs) {
       this.field = field;<caret>
   }
 

@@ -1,9 +1,8 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 abstract class P2 {
-    @NotNull
-    String foo(@NotNull P p) {
+    @Nonnull
+    String foo(@Nonnull P p) {
         return "";
     }
 }
@@ -22,7 +21,7 @@ class PPP2 extends P2 {
 
 ///////  in library
 interface Foo {
-    @NotNull
+    @Nonnull
     String getTitle();
 }
 class FooImpl extends java.awt.Frame implements Foo {
@@ -33,12 +32,12 @@ class FooImpl extends java.awt.Frame implements Foo {
 
 
 interface I1 {
-  @Nullable
+  @javax.annotation.Nullable
   Object foo();
 }
 
 interface I2 extends I1 {
-  @NotNull
+  @Nonnull
   Object foo();
 }
 

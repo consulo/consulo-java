@@ -18,7 +18,8 @@ package com.intellij.codeInsight.template.postfix.templates;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.intention.impl.TypeExpression;
 import com.intellij.codeInsight.template.Template;
@@ -50,7 +51,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement element, @NotNull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement element, @Nonnull Document copyDocument, int newOffset) {
     if (!PsiUtil.isLanguageLevel7OrHigher(element)) return false;
 
     PsiExpression initializer = JavaPostfixTemplatesUtils.getTopmostExpression(element);
@@ -69,7 +70,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public void expand(@NotNull PsiElement context, @NotNull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     assert expression != null;
 
@@ -105,8 +106,8 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
     manager.startTemplate(editor, template);
   }
 
-  @NotNull
-  private static Collection<PsiClassType> getUnhandled(@NotNull PsiExpression expression) {
+  @Nonnull
+  private static Collection<PsiClassType> getUnhandled(@Nonnull PsiExpression expression) {
     assert expression.getType() != null;
     PsiMethod methodCloser = PsiUtil.getResourceCloserMethodForType((PsiClassType)expression.getType());
     PsiSubstitutor substitutor = PsiUtil.resolveGenericsClassInType(expression.getType()).getSubstitutor();

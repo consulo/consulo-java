@@ -15,8 +15,9 @@
  */
 package com.intellij.lang.java;
 
+import javax.annotation.Nonnull;
+
 import consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.find.impl.HelpID;
 import com.intellij.ide.TypePresentationService;
 import com.intellij.lang.LangBundle;
@@ -40,7 +41,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider
 	public static final String DEFAULT_PACKAGE_NAME = UsageViewBundle.message("default.package.presentable.name");
 
 	@Override
-	public boolean canFindUsagesFor(@NotNull PsiElement element)
+	public boolean canFindUsagesFor(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiDirectory)
 		{
@@ -58,7 +59,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider
 	}
 
 	@Override
-	public String getHelpId(@NotNull PsiElement element)
+	public String getHelpId(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiPackage)
 		{
@@ -80,8 +81,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider
 	}
 
 	@Override
-	@NotNull
-	public String getType(@NotNull PsiElement element)
+	@Nonnull
+	public String getType(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiDirectory)
 		{
@@ -159,8 +160,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider
 	}
 
 	@Override
-	@NotNull
-	public String getDescriptiveName(@NotNull final PsiElement element)
+	@Nonnull
+	public String getDescriptiveName(@Nonnull final PsiElement element)
 	{
 		if(ThrowSearchUtil.isSearchable(element))
 		{
@@ -259,8 +260,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider
 	}
 
 	@Override
-	@NotNull
-	public String getNodeText(@NotNull PsiElement element, boolean useFullName)
+	@Nonnull
+	public String getNodeText(@Nonnull PsiElement element, boolean useFullName)
 	{
 		if(element instanceof PsiDirectory)
 		{

@@ -31,7 +31,7 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase> implements PsiImportStatementStub {
   private final byte myFlags;
@@ -75,7 +75,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiJavaCodeReferenceElement getReference() {
     PsiJavaCodeReferenceElement ref = myReference != null ? myReference.get() : null;
     if (ref == null) {
@@ -96,7 +96,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
     return flags;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiJavaCodeReferenceElement getStaticReference() {
     final PsiJavaCodeReferenceElement refElement = createReference();
     if (refElement == null) return null;
@@ -106,7 +106,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
     return refElement;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiJavaCodeReferenceElement getRegularReference() {
     final PsiJavaCodeReferenceElement refElement = createReference();
     if (refElement == null) return null;

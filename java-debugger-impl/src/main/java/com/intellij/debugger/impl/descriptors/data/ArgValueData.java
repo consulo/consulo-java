@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.impl.descriptors.data;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.jdi.DecompiledLocalVariable;
 import com.intellij.debugger.ui.impl.watch.ArgumentValueDescriptorImpl;
 import com.intellij.openapi.project.Project;
@@ -33,7 +33,7 @@ public class ArgValueData extends DescriptorData<ArgumentValueDescriptorImpl>
 	}
 
 	@Override
-	protected ArgumentValueDescriptorImpl createDescriptorImpl(@NotNull Project project)
+	protected ArgumentValueDescriptorImpl createDescriptorImpl(@Nonnull Project project)
 	{
 		return new ArgumentValueDescriptorImpl(project, myVariable, myValue);
 	}

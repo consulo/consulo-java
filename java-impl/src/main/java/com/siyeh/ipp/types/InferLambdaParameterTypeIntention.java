@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.types;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -22,27 +24,27 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class InferLambdaParameterTypeIntention extends Intention {
   private static final Logger LOG = Logger.getInstance("#" + InferLambdaParameterTypeIntention.class.getName());
   private String myInferredTypesText;
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new LambdaParametersPredicate();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Expand lambda to " + myInferredTypesText + " -> {...}";
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     LOG.assertTrue(lambdaExpression != null);
     final PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();

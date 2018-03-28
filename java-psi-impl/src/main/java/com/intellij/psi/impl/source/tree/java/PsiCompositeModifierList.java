@@ -24,7 +24,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     List<PsiAnnotation> annotations = new ArrayList<PsiAnnotation>();
     for (PsiModifierList list : mySublists) {
@@ -48,7 +48,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@NotNull final String qualifiedName) {
+  public PsiAnnotation findAnnotation(@Nonnull final String qualifiedName) {
     for (PsiModifierList sublist : mySublists) {
       final PsiAnnotation annotation = sublist.findAnnotation(qualifiedName);
       if (annotation != null) return annotation;
@@ -58,7 +58,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  public boolean hasModifierProperty(@NotNull final String name) {
+  public boolean hasModifierProperty(@Nonnull final String name) {
     for (PsiModifierList sublist : mySublists) {
       if (sublist.hasModifierProperty(name)) return true;
     }
@@ -66,7 +66,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  public boolean hasExplicitModifier(@NotNull final String name) {
+  public boolean hasExplicitModifier(@Nonnull final String name) {
     for (PsiModifierList sublist : mySublists) {
       if (sublist.hasExplicitModifier(name)) return true;
     }

@@ -16,8 +16,8 @@
 package com.siyeh.ig.psiutils;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
@@ -28,7 +28,7 @@ public class SwitchUtils {
 
   private SwitchUtils() {}
 
-  public static int calculateBranchCount(@NotNull PsiSwitchStatement statement) {
+  public static int calculateBranchCount(@Nonnull PsiSwitchStatement statement) {
     final PsiCodeBlock body = statement.getBody();
     int branches = 0;
     if (body == null) {
@@ -43,7 +43,7 @@ public class SwitchUtils {
     return branches;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiExpression getSwitchExpression(PsiIfStatement statement, int minimumBranches) {
     final PsiExpression condition = statement.getCondition();
     final LanguageLevel languageLevel = PsiUtil.getLanguageLevel(statement);

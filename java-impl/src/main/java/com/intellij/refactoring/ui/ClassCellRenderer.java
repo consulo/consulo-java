@@ -20,7 +20,7 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiClass;
 import com.intellij.refactoring.RefactoringBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -54,7 +54,7 @@ public class ClassCellRenderer extends ListCellRendererWrapper<PsiClass> {
     }
   }
 
-  private static String getClassText(@NotNull PsiClass aClass) {
+  private static String getClassText(@Nonnull PsiClass aClass) {
     String qualifiedName = aClass.getQualifiedName();
     if (qualifiedName != null) {
       return qualifiedName;

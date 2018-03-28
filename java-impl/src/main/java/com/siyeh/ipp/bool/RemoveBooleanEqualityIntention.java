@@ -21,7 +21,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.IntentionPowerPackBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 public class RemoveBooleanEqualityIntention extends MutablyNamedIntention {
@@ -34,7 +34,7 @@ public class RemoveBooleanEqualityIntention extends MutablyNamedIntention {
       "remove.boolean.equality.intention.name", sign.getText());
   }
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new BooleanLiteralEqualityPredicate();
   }

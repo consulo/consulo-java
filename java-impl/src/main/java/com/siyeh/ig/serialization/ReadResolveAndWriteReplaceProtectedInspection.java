@@ -24,18 +24,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ReadResolveAndWriteReplaceProtectedInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "readresolve.writereplace.protected.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "readresolve.writereplace.protected.problem.descriptor");
@@ -53,7 +53,7 @@ public class ReadResolveAndWriteReplaceProtectedInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // no call to super, so it doesn't drill down
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {

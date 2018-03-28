@@ -15,17 +15,16 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * Base interface for methods and lambdas
  */
 public interface PsiParameterListOwner extends PsiElement
 {
-	@NotNull
+	@Nonnull
 	PsiParameterList getParameterList();
 
-	@Nullable
+	@javax.annotation.Nullable
 	PsiElement getBody();
 }

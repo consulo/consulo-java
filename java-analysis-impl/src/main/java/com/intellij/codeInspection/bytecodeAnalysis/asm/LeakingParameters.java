@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
 import org.jetbrains.org.objectweb.asm.tree.InsnList;
 import org.jetbrains.org.objectweb.asm.tree.MethodNode;
@@ -38,7 +39,7 @@ public class LeakingParameters {
     this.nullableParameters = nullableParameters;
   }
 
-  @NotNull
+  @Nonnull
   public static LeakingParameters build(String className, MethodNode methodNode, boolean jsr) throws AnalyzerException {
     Frame<ParamsValue>[] frames = jsr ?
                                   new Analyzer<ParamsValue>(new ParametersUsage(methodNode)).analyze(className, methodNode) :
@@ -67,7 +68,7 @@ public class LeakingParameters {
     return new LeakingParameters((Frame<Value>[])(Frame<?>[])frames, notNullParameters, nullableParameters);
   }
 
-  @NotNull
+  @Nonnull
   public static LeakingParameters buildFast(String className, MethodNode methodNode, boolean jsr) throws AnalyzerException {
     IParametersUsage parametersUsage = new IParametersUsage(methodNode);
     Frame<?>[] frames = jsr ?

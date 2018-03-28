@@ -19,21 +19,22 @@
  */
 package com.intellij.openapi.projectRoots;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class JavaVersionService {
   public static JavaVersionService getInstance() {
     return ServiceManager.getService(JavaVersionService.class);
   }
 
-  public boolean isAtLeast(@NotNull PsiElement element, @NotNull JavaSdkVersion version) {
+  public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
     return PsiUtil.getLanguageLevel(element).isAtLeast(version.getMaxLanguageLevel());
   }
 
-  public JavaSdkVersion getJavaSdkVersion(@NotNull PsiElement element) {
+  public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
     return JavaSdkVersion.fromLanguageLevel(PsiUtil.getLanguageLevel(element));
   }
 }

@@ -29,7 +29,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.java.generate.element.ClassElement;
 import org.jetbrains.java.generate.element.FieldElement;
 import org.jetbrains.java.generate.element.GenerationHelper;
@@ -138,7 +138,7 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable
 		new WriteCommandAction(null)
 		{
 			@Override
-			protected void run(@NotNull Result result) throws Throwable
+			protected void run(@Nonnull Result result) throws Throwable
 			{
 				myEditor.getDocument().setText(template.getTemplate());
 			}

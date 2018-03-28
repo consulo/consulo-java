@@ -17,7 +17,7 @@ package com.siyeh.ig.style;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.CleanupLocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -51,14 +51,14 @@ public class UnnecessarilyQualifiedStaticUsageInspection extends BaseInspection 
 	public boolean m_ignoreStaticAccessFromStaticContext = false;
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("unnecessarily.qualified.static.usage.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String buildErrorString(Object... infos)
 	{
 		final PsiJavaCodeReferenceElement element = (PsiJavaCodeReferenceElement) infos[0];
@@ -93,7 +93,7 @@ public class UnnecessarilyQualifiedStaticUsageInspection extends BaseInspection 
 	{
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("unnecessary.qualifier.for.this.remove.quickfix");
@@ -139,7 +139,7 @@ public class UnnecessarilyQualifiedStaticUsageInspection extends BaseInspection 
 		}
 	}
 
-	public static boolean isUnnecessarilyQualifiedAccess(@NotNull PsiJavaCodeReferenceElement referenceElement,
+	public static boolean isUnnecessarilyQualifiedAccess(@Nonnull PsiJavaCodeReferenceElement referenceElement,
 			boolean ignoreStaticAccessFromStaticContext,
 			boolean ignoreStaticFieldAccesses,
 			boolean ignoreStaticMethodCalls)

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a Java postfix increment or decrement expression.
@@ -27,7 +27,7 @@ public interface PsiPostfixExpression extends PsiUnaryExpression
 	 *
 	 * @return the operand expression.
 	 */
-	@NotNull
+	@Nonnull
 	PsiExpression getOperand();
 
 	/**
@@ -36,6 +36,6 @@ public interface PsiPostfixExpression extends PsiUnaryExpression
 	 *
 	 * @return the token for the operation performed.
 	 */
-	@NotNull
+	@Nonnull
 	PsiJavaToken getOperationSign();
 }

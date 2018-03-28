@@ -17,10 +17,10 @@ package com.intellij.debugger.ui.impl.watch;
 
 import java.awt.Color;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.ContextUtil;
 import com.intellij.debugger.engine.DebugProcess;
@@ -70,7 +70,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 
 	private Icon myIcon = AllIcons.Debugger.StackFrame;
 
-	public StackFrameDescriptorImpl(@NotNull StackFrameProxyImpl frame, @NotNull MethodsTracker tracker)
+	public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker)
 	{
 		myFrame = frame;
 
@@ -139,13 +139,13 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public StackFrameProxyImpl getFrameProxy()
 	{
 		return myFrame;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DebugProcess getDebugProcess()
 	{
@@ -158,7 +158,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myBackgroundColor;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Method getMethod()
 	{
 		return myMethodOccurrence.getMethod();
@@ -174,7 +174,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myMethodOccurrence.isRecursive();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public ValueMarkup getValueMarkup()
 	{
 		if(myThisObject != null)
@@ -329,7 +329,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return mySourcePosition;
 	}
 
-	@NotNull
+	@Nonnull
 	private Icon calcIcon()
 	{
 		try

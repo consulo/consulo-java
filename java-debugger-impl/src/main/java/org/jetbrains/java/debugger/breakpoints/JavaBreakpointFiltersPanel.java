@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -30,7 +31,6 @@ import javax.swing.JTextField;
 import javax.swing.JToolTip;
 import javax.swing.ToolTipManager;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.InstanceFilter;
 import com.intellij.debugger.ui.breakpoints.EditClassFiltersDialog;
@@ -139,7 +139,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 		DebuggerUIUtil.focusEditorOnCheck(myClassFiltersCheckBox, myClassFiltersField.getTextField());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -147,7 +147,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public boolean isVisibleOnPopup(@NotNull B breakpoint)
+	public boolean isVisibleOnPopup(@Nonnull B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties != null)
@@ -158,7 +158,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public void saveTo(@NotNull B breakpoint)
+	public void saveTo(@Nonnull B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties == null)
@@ -206,7 +206,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public void loadFrom(@NotNull B breakpoint)
+	public void loadFrom(@Nonnull B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties != null)

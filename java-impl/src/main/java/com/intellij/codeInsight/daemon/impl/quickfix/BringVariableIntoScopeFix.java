@@ -19,7 +19,7 @@ import gnu.trove.THashMap;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
@@ -49,7 +49,7 @@ public class BringVariableIntoScopeFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     PsiLocalVariable variable = myOutOfScopeVariable;
 
@@ -59,13 +59,13 @@ public class BringVariableIntoScopeFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("bring.variable.to.scope.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     if (myUnresolvedReference.isQualified()) return false;
     final String referenceName = myUnresolvedReference.getReferenceName();
@@ -102,7 +102,7 @@ public class BringVariableIntoScopeFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     LOG.assertTrue(myOutOfScopeVariable != null);
     PsiManager manager = file.getManager();
     myOutOfScopeVariable.normalizeDeclaration();

@@ -17,7 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -30,21 +30,21 @@ import com.intellij.psi.PsiVariable;
 
 class VariablePassedAsArgumentExcludedVisitor extends JavaRecursiveElementVisitor {
 
-  @NotNull
+  @Nonnull
   private final PsiVariable variable;
   private final Set<String> excludes;
   private final boolean myBuilderPattern;
 
   private boolean passed = false;
 
-  public VariablePassedAsArgumentExcludedVisitor(@NotNull PsiVariable variable, @NotNull Set<String> excludes, boolean builderPattern) {
+  public VariablePassedAsArgumentExcludedVisitor(@Nonnull PsiVariable variable, @Nonnull Set<String> excludes, boolean builderPattern) {
     this.variable = variable;
     this.excludes = excludes;
     myBuilderPattern = builderPattern;
   }
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (passed) {
       return;
     }
@@ -52,7 +52,7 @@ class VariablePassedAsArgumentExcludedVisitor extends JavaRecursiveElementVisito
   }
 
   @Override
-  public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+  public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
     if (passed) {
       return;
     }
@@ -78,7 +78,7 @@ class VariablePassedAsArgumentExcludedVisitor extends JavaRecursiveElementVisito
   }
 
   @Override
-  public void visitNewExpression(@NotNull PsiNewExpression newExpression) {
+  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

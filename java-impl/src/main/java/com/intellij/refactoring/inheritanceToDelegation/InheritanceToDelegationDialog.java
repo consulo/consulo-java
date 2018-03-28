@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -31,8 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -100,12 +99,12 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
     super.dispose();
   }
 
-  @NotNull
+  @Nonnull
   public String getFieldName() {
     return myFieldNameField.getEnteredName();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String getInnerClassName() {
     if (myInnerClassNameField != null) {
       return myInnerClassNameField.getEnteredName();
@@ -331,7 +330,7 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
       return null;
     }
 
-    public int checkForProblems(@NotNull MemberInfo member) {
+    public int checkForProblems(@Nonnull MemberInfo member) {
       return OK;
     }
 

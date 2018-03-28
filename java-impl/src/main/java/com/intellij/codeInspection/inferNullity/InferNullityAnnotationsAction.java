@@ -21,13 +21,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.analysis.BaseAnalysisAction;
@@ -102,7 +103,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 	}
 
 	@Override
-	protected void analyze(@NotNull final Project project, @NotNull final AnalysisScope scope)
+	protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope)
 	{
 		PropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, myAnnotateLocalVariablesCb.isSelected());
 
@@ -174,7 +175,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 		processUsages(project, scope, usageInfos);
 	}
 
-	protected void processUsages(@NotNull Project project, @NotNull AnalysisScope scope, @NotNull UsageInfo[] usageInfos)
+	protected void processUsages(@Nonnull Project project, @Nonnull AnalysisScope scope, @Nonnull UsageInfo[] usageInfos)
 	{
 		if(usageInfos.length < 5)
 		{
@@ -186,7 +187,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 		}
 	}
 
-	public static boolean addAnnotationsDependency(@NotNull final Project project, @NotNull final Set<Module> modulesWithoutAnnotations, @NotNull String annoFQN, final String title)
+	public static boolean addAnnotationsDependency(@Nonnull final Project project, @Nonnull final Set<Module> modulesWithoutAnnotations, @Nonnull String annoFQN, final String title)
 	{
 		final Library annotationsLib = LibraryUtil.findLibraryByClass(annoFQN, project);
 		if(annotationsLib != null)
@@ -223,7 +224,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 	}
 
 	@Nullable
-	protected UsageInfo[] findUsages(@NotNull final Project project, @NotNull final AnalysisScope scope, final int fileCount)
+	protected UsageInfo[] findUsages(@Nonnull final Project project, @Nonnull final AnalysisScope scope, final int fileCount)
 	{
 		final NullityInferrer inferrer = new NullityInferrer(isAnnotateLocalVariables(), project);
 		final PsiManager psiManager = PsiManager.getInstance(project);
@@ -286,7 +287,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 				new WriteCommandAction(project, INFER_NULLITY_ANNOTATIONS)
 				{
 					@Override
-					protected void run(@NotNull Result result) throws Throwable
+					protected void run(@Nonnull Result result) throws Throwable
 					{
 						final UsageInfo[] infos = computable.compute();
 						if(infos.length > 0)
@@ -342,7 +343,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 		}));
 	}
 
-	private void showUsageView(@NotNull Project project, final UsageInfo[] usageInfos, @NotNull AnalysisScope scope)
+	private void showUsageView(@Nonnull Project project, final UsageInfo[] usageInfos, @Nonnull AnalysisScope scope)
 	{
 		final UsageTarget[] targets = UsageTarget.EMPTY_ARRAY;
 		final Ref<Usage[]> convertUsagesRef = new Ref<>();
@@ -378,12 +379,12 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 		usageView.addPerformOperationAction(refactoringRunnable, INFER_NULLITY_ANNOTATIONS, canNotMakeString, INFER_NULLITY_ANNOTATIONS, false);
 	}
 
-	@NotNull
-	private Factory<UsageSearcher> rerunFactory(@NotNull final Project project, @NotNull final AnalysisScope scope)
+	@Nonnull
+	private Factory<UsageSearcher> rerunFactory(@Nonnull final Project project, @Nonnull final AnalysisScope scope)
 	{
 		return () -> new UsageInfoSearcherAdapter()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected UsageInfo[] findUsages()
 			{
@@ -391,7 +392,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 			}
 
 			@Override
-			public void generate(@NotNull Processor<Usage> processor)
+			public void generate(@Nonnull Processor<Usage> processor)
 			{
 				processUsages(processor, project);
 			}

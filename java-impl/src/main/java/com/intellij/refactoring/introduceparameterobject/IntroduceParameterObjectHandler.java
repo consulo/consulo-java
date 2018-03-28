@@ -15,7 +15,8 @@
  */
 package com.intellij.refactoring.introduceparameterobject;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -42,7 +43,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 public class IntroduceParameterObjectHandler implements RefactoringActionHandler {
   private static final String REFACTORING_NAME = RefactorJBundle.message("introduce.parameter.object");
 
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     final ScrollingModel scrollingModel = editor.getScrollingModel();
     scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
     final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
@@ -77,7 +78,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     invoke(project, selectedMethod, editor);
   }
 
-  public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
     }

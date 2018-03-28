@@ -18,7 +18,7 @@ package com.intellij.codeInsight.template.postfix.templates;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AssertStatementPostfixTemplate extends JavaStatementWrapPostfixTemplate {
 
@@ -26,7 +26,7 @@ public class AssertStatementPostfixTemplate extends JavaStatementWrapPostfixTemp
     super("assert", "assert expr;", JAVA_PSI_INFO, IS_BOOLEAN);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getHead() {
     return "assert ";

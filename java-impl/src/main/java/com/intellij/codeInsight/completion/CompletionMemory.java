@@ -18,7 +18,6 @@ package com.intellij.codeInsight.completion;
 
 import java.util.LinkedList;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.Key;
@@ -87,7 +86,7 @@ public class CompletionMemory
 		return marker;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	private static TextRange getAnchorRange(PsiCall call)
 	{
@@ -117,7 +116,7 @@ public class CompletionMemory
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	public static PsiMethod getChosenMethod(PsiCall call)
 	{

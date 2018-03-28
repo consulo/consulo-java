@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow.inliner;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.psi.LambdaUtil;
@@ -36,7 +37,7 @@ import one.util.streamex.EntryStream;
 public class LambdaInliner implements CallInliner
 {
 	@Override
-	public boolean tryInlineCall(@NotNull CFGBuilder builder, @NotNull PsiMethodCallExpression call)
+	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
 	{
 		PsiMethod method = call.resolveMethod();
 		if(method == null || method != LambdaUtil.getFunctionalInterfaceMethod(method.getContainingClass()))

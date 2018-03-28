@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -42,26 +42,26 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField>
 {
 	private final SmartPsiElementPointer<PsiJavaCodeReferenceElement> myRef;
 
-	public StaticImportConstantFix(@NotNull PsiJavaCodeReferenceElement referenceElement)
+	public StaticImportConstantFix(@Nonnull PsiJavaCodeReferenceElement referenceElement)
 	{
 		myRef = SmartPointerManager.getInstance(referenceElement.getProject()).createSmartPsiElementPointer(referenceElement);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getBaseText()
 	{
 		return "Import static constant";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getMemberPresentableText(PsiField field)
 	{
 		return PsiFormatUtil.formatVariable(field, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_FQ_NAME, PsiSubstitutor.EMPTY);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected List<PsiField> getMembersToImport(boolean applicableOnly)
 	{
@@ -90,12 +90,12 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField>
 		return processor.getMembersToImport(applicableOnly);
 	}
 
-	@NotNull
-	protected StaticImportMethodQuestionAction<PsiField> createQuestionAction(List<PsiField> methodsToImport, @NotNull Project project, Editor editor)
+	@Nonnull
+	protected StaticImportMethodQuestionAction<PsiField> createQuestionAction(List<PsiField> methodsToImport, @Nonnull Project project, Editor editor)
 	{
 		return new StaticImportMethodQuestionAction<PsiField>(project, editor, methodsToImport, myRef)
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected String getPopupTitle()
 			{
@@ -111,7 +111,7 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField>
 		return myRef.getElement();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	protected PsiElement getQualifierExpression()
 	{
@@ -119,7 +119,7 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField>
 		return element != null ? element.getQualifier() : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	protected PsiElement resolveRef()
 	{

@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -20,5 +20,6 @@ class Test {
       obj = <warning descr="'null' is assigned to a variable that is annotated with @NotNull">null</warning>;
     }
 
-    @NotNull private volatile Object obj;
+    @Nonnull
+	private volatile Object obj;
 }

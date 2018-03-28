@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
@@ -27,7 +29,6 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaJspElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * There is a possible case that the project is configured to keep fields in columns:
@@ -49,9 +50,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
 
-  @NotNull
+  @Nonnull
   @Override
-  public TextRange process(@NotNull ASTNode element, @NotNull TextRange range) {
+  public TextRange process(@Nonnull ASTNode element, @Nonnull TextRange range) {
     //region Checking that everything is ready to expand the range for the 'fields in columns'.
     final PsiElement psi = element.getPsi();
     if (psi == null || !psi.isValid()) {

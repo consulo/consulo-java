@@ -17,7 +17,7 @@ package com.intellij.refactoring.tempWithQuery;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -64,7 +64,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler
 	private static final String REFACTORING_NAME = RefactoringBundle.message("replace.temp.with.query.title");
 
 	@RequiredDispatchThread
-	public void invoke(@NotNull final Project project, final Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = TargetElementUtil.findTargetElement(editor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED,
 				TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED, TargetElementUtilEx.LOOKUP_ITEM_ACCEPTED));
@@ -204,7 +204,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler
 		WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
 	}
 
-	public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext)
+	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		if(elements.length == 1 && elements[0] instanceof PsiLocalVariable)
 		{

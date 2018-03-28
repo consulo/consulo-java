@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,25 +27,24 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class TypeParameterExtendsObjectInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.parameter.extends.object.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "TypeParameterExplicitlyExtendsObject";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer type = (Integer)infos[0];
     if (type.intValue() == 1) {
@@ -68,14 +69,14 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
 
   private static class ExtendsObjectFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "extends.object.remove.quickfix");
     }
 
     @Override
-    public void doFix(@NotNull Project project,
+    public void doFix(@Nonnull Project project,
                       ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement identifier = descriptor.getPsiElement();

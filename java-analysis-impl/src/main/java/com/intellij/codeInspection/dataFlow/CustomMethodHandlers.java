@@ -28,7 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
@@ -167,7 +168,7 @@ public class CustomMethodHandlers
 		return Collections.singletonList(state);
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<DfaMemoryState> applyCondition(DfaMemoryState memState, DfaValue trueCondition, DfaValue trueResult, DfaValue falseCondition, DfaValue falseResult)
 	{
 		DfaMemoryState falseState = memState.createCopy();

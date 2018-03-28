@@ -17,8 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.guess.GuessManager;
 import com.intellij.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.codeInsight.lookup.KeywordLookupItem;
@@ -116,7 +116,7 @@ public class BasicExpressionCompletionContributor
 		PsiScopesUtil.treeWalkUp(new BaseScopeProcessor()
 		{
 			@Override
-			public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+			public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 			{
 				if(element instanceof PsiLocalVariable)
 				{
@@ -155,8 +155,8 @@ public class BasicExpressionCompletionContributor
 		}
 	}
 
-	@NotNull
-	private static LookupElement expressionToLookupElement(@NotNull PsiExpression expression)
+	@Nonnull
+	private static LookupElement expressionToLookupElement(@Nonnull PsiExpression expression)
 	{
 		if(expression instanceof PsiReferenceExpression)
 		{

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,18 +28,16 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ClassMayBeInterfaceInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.may.be.interface.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "class.may.be.interface.problem.descriptor");
@@ -49,7 +49,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
   private static class ClassMayBeInterfaceFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "class.may.be.interface.convert.quickfix");
@@ -128,9 +128,9 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     }
 
     private static void moveReference(
-      @NotNull PsiReferenceList source,
-      @Nullable PsiReferenceList target,
-      @NotNull PsiJavaCodeReferenceElement reference)
+      @Nonnull PsiReferenceList source,
+      @javax.annotation.Nullable PsiReferenceList target,
+      @Nonnull PsiJavaCodeReferenceElement reference)
       throws IncorrectOperationException {
       final PsiJavaCodeReferenceElement[] sourceReferences =
         source.getReferenceElements();
@@ -157,7 +157,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (aClass.isInterface() || aClass.isAnnotationType() ||
           aClass.isEnum()) {

@@ -15,7 +15,7 @@
  */
 package org.jetbrains.java.generate;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.java.generate.config.Config;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
@@ -36,7 +36,7 @@ import com.intellij.openapi.components.StoragePathMacros;
 )
 public class GenerateToStringContext implements PersistentStateComponent<Config>
 {
-	@NotNull
+	@Nonnull
 	public static GenerateToStringContext getInstance()
 	{
 		return ServiceManager.getService(GenerateToStringContext.class);

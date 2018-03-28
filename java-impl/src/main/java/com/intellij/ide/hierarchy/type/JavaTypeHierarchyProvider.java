@@ -15,7 +15,7 @@
  */
 package com.intellij.ide.hierarchy.type;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.hierarchy.HierarchyBrowser;
 import com.intellij.ide.hierarchy.HierarchyProvider;
 import com.intellij.ide.hierarchy.TypeHierarchyBrowserBase;
@@ -44,7 +44,7 @@ public class JavaTypeHierarchyProvider implements HierarchyProvider
 {
 	@Override
 	@RequiredDispatchThread
-	public PsiElement getTarget(@NotNull final DataContext dataContext)
+	public PsiElement getTarget(@Nonnull final DataContext dataContext)
 	{
 		final Project project = dataContext.getData(CommonDataKeys.PROJECT);
 		if(project == null)
@@ -98,14 +98,14 @@ public class JavaTypeHierarchyProvider implements HierarchyProvider
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public HierarchyBrowser createHierarchyBrowser(final PsiElement target)
 	{
 		return new TypeHierarchyBrowser(target.getProject(), (PsiClass) target);
 	}
 
 	@Override
-	public void browserActivated(@NotNull final HierarchyBrowser hierarchyBrowser)
+	public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser)
 	{
 		final TypeHierarchyBrowser browser = (TypeHierarchyBrowser) hierarchyBrowser;
 		final String typeName = browser.isInterface() ? TypeHierarchyBrowserBase.SUBTYPES_HIERARCHY_TYPE : TypeHierarchyBrowserBase

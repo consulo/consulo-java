@@ -15,8 +15,8 @@
 */
 package com.intellij.psi.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lexer.JavaLexer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
@@ -34,17 +34,17 @@ public class PsiNameHelperImpl extends PsiNameHelper {
   }
 
   @Override
-  public boolean isIdentifier(@Nullable String text, @NotNull LanguageLevel languageLevel) {
+  public boolean isIdentifier(@Nullable String text, @Nonnull LanguageLevel languageLevel) {
     return text != null && StringUtil.isJavaIdentifier(text) && !JavaLexer.isKeyword(text, languageLevel);
   }
 
   @Override
-  public boolean isKeyword(@Nullable String text) {
+  public boolean isKeyword(@javax.annotation.Nullable String text) {
     return text != null && JavaLexer.isKeyword(text, getLanguageLevel());
   }
 
   @Override
-  public boolean isQualifiedName(@Nullable String text) {
+  public boolean isQualifiedName(@javax.annotation.Nullable String text) {
     if (text == null) return false;
     int index = 0;
     while (true) {

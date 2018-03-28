@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.jvm.JvmField;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.IncorrectOperationException;
@@ -41,15 +41,15 @@ public interface PsiField extends PsiMember, PsiVariable, PsiDocCommentOwner, Jv
 	 * @throws IncorrectOperationException if the modifications fails for some reason.
 	 * @since 5.0.2
 	 */
-	void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException;
+	void setInitializer(@javax.annotation.Nullable PsiExpression initializer) throws IncorrectOperationException;
 
 	@Override
-	@NotNull
+	@Nonnull
 	PsiIdentifier getNameIdentifier();
 
 	/* This explicit declaration is required to force javac generate bridge method 'JvmType getType()'; without it calling
 	JvmField#getType() method on instances which weren't recompiled against the new API will cause AbstractMethodError. */
-	@NotNull
+	@Nonnull
 	@Override
 	PsiType getType();
 }

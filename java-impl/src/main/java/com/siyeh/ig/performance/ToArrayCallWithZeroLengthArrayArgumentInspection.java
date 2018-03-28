@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -32,7 +32,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
 {
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	protected InspectionGadgetsFix buildFix(Object... infos)
 	{
 		return new ToArrayCallWithZeroLengthArrayArgumentFix();
@@ -42,7 +42,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
 	{
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("to.array.call.with.zero.length.array.argument.quickfix");

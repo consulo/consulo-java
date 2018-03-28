@@ -24,8 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -46,12 +45,12 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public boolean m_ignoreForAbstractMethods = false;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ParameterHidesMemberVariable";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("parameter.hides.member.variable.display.name");
   }
@@ -64,7 +63,7 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsBundle.message("parameter.hides.member.variable.problem.descriptor", aClass.getName());
@@ -92,7 +91,7 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
   private class ParameterHidingMemberVariableVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitParameter(@NotNull PsiParameter variable) {
+    public void visitParameter(@Nonnull PsiParameter variable) {
       super.visitParameter(variable);
       final PsiElement declarationScope = variable.getDeclarationScope();
       if (!(declarationScope instanceof PsiMethod)) {
@@ -125,7 +124,7 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
       registerVariableError(variable, aClass);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiClass checkFieldName(PsiVariable variable, PsiMethod method) {
       final String variableName = variable.getName();
       if (variableName == null) {

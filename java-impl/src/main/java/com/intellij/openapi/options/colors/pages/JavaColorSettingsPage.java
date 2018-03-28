@@ -17,10 +17,10 @@ package com.intellij.openapi.options.colors.pages;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.colors.InspectionColorSettingsPage;
 import com.intellij.codeHighlighting.RainbowHighlighter;
 import com.intellij.ide.highlighter.JavaFileHighlighter;
@@ -132,7 +132,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return OptionsBundle.message("options.java.display.name");
@@ -145,28 +145,28 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public AttributesDescriptor[] getAttributeDescriptors()
 	{
 		return ourDescriptors;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ColorDescriptor[] getColorDescriptors()
 	{
 		return ColorDescriptor.EMPTY_ARRAY;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public SyntaxHighlighter getHighlighter()
 	{
 		return new JavaFileHighlighter(LanguageLevel.HIGHEST.toLangVersion());
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDemoText()
 	{
 		return "/* Block comment */\n" +

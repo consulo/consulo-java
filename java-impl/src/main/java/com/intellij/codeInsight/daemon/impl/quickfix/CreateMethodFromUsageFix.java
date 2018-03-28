@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.codeInsight.ExpectedTypeInfo;
@@ -55,7 +55,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
   private final SmartPsiElementPointer myMethodCall;
 
-  public CreateMethodFromUsageFix(@NotNull PsiMethodCallExpression methodCall) {
+  public CreateMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall) {
     myMethodCall = SmartPointerManager.getInstance(methodCall.getProject()).createSmartPsiElementPointer(methodCall);
   }
 
@@ -113,7 +113,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     List<PsiClass> targets = super.getTargetClasses(element);
     ArrayList<PsiClass> result = new ArrayList<PsiClass>();
@@ -213,7 +213,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
   public static void doCreate(PsiClass targetClass, PsiMethod method, List<Pair<PsiExpression, PsiType>> arguments, PsiSubstitutor substitutor,
-                              ExpectedTypeInfo[] expectedTypes, @Nullable PsiElement context) {
+                              ExpectedTypeInfo[] expectedTypes, @javax.annotation.Nullable PsiElement context) {
     doCreate(targetClass, method, shouldBeAbstractImpl(null, targetClass), arguments, substitutor, expectedTypes, context);
   }
 
@@ -358,7 +358,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.method.from.usage.family");
   }

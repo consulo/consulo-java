@@ -18,17 +18,18 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a lattice product of a constant {@link #value} and all {@link #ids}.
  */
 final class HComponent {
-  @NotNull
+  @Nonnull
   Value value;
-  @NotNull final HKey[] ids;
+  @Nonnull
+  final HKey[] ids;
 
-  HComponent(@NotNull Value value, @NotNull HKey[] ids) {
+  HComponent(@Nonnull Value value, @Nonnull HKey[] ids) {
     this.value = value;
     this.ids = ids;
   }
@@ -53,7 +54,7 @@ final class HComponent {
     return result;
   }
 
-  public boolean remove(@NotNull HKey id) {
+  public boolean remove(@Nonnull HKey id) {
     return HUtils.remove(ids, id);
   }
 
@@ -61,7 +62,7 @@ final class HComponent {
     return HUtils.isEmpty(ids);
   }
 
-  @NotNull
+  @Nonnull
   public HComponent copy() {
     return new HComponent(value, ids.clone());
   }

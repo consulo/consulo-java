@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInsight;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.NullableComputable;
 import com.intellij.openapi.util.NullableLazyValue;
 import com.intellij.openapi.util.VolatileNullableLazyValue;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 {
@@ -34,17 +34,17 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 			return null;
 		}
 	};
-	@NotNull
+	@Nonnull
 	private final PsiType type;
-	@NotNull
+	@Nonnull
 	private final PsiType defaultType;
 	private final int kind;
-	@NotNull
+	@Nonnull
 	private final TailType myTailType;
 	private final PsiMethod myCalledMethod;
-	@NotNull
+	@Nonnull
 	private final NullableComputable<String> expectedNameComputable;
-	@NotNull
+	@Nonnull
 	private final NullableLazyValue<String> expectedNameLazyValue;
 
 	@Override
@@ -53,19 +53,19 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 		return kind;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public TailType getTailType()
 	{
 		return myTailType;
 	}
 
-	public ExpectedTypeInfoImpl(@NotNull PsiType type,
+	public ExpectedTypeInfoImpl(@Nonnull PsiType type,
 			@Type int kind,
-			@NotNull PsiType defaultType,
-			@NotNull TailType myTailType,
+			@Nonnull PsiType defaultType,
+			@Nonnull TailType myTailType,
 			PsiMethod calledMethod,
-			@NotNull NullableComputable<String> expectedName)
+			@Nonnull NullableComputable<String> expectedName)
 	{
 		this.type = type;
 		this.kind = kind;
@@ -76,7 +76,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 		this.expectedNameComputable = expectedName;
 		expectedNameLazyValue = new VolatileNullableLazyValue<String>()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			protected String compute()
 			{
@@ -88,7 +88,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 		PsiUtil.ensureValidType(defaultType);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getExpectedName()
 	{
 		return expectedNameLazyValue.getValue();
@@ -101,14 +101,14 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType getType()
 	{
 		return type;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType getDefaultType()
 	{
 		return defaultType;
@@ -156,9 +156,9 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 		return "ExpectedTypeInfo[type='" + type + "' kind='" + kind + "']";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ExpectedTypeInfo[] intersect(@NotNull ExpectedTypeInfo info)
+	public ExpectedTypeInfo[] intersect(@Nonnull ExpectedTypeInfo info)
 	{
 		ExpectedTypeInfoImpl info1 = (ExpectedTypeInfoImpl) info;
 

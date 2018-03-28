@@ -25,7 +25,7 @@ import com.intellij.psi.impl.search.JavaSourceFilterScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StringStubIndexExtension;
 import com.intellij.psi.stubs.StubIndexKey;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -36,13 +36,13 @@ public class JavaStaticMemberTypeIndex extends StringStubIndexExtension<PsiMembe
     return ourInstance;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public StubIndexKey<String, PsiMember> getKey() {
     return JavaStubIndexKeys.JVM_STATIC_MEMBERS_TYPES;
   }
 
-  public Collection<PsiMember> getStaticMembers(@NotNull final String shortTypeText, final Project project, @NotNull final GlobalSearchScope scope) {
+  public Collection<PsiMember> getStaticMembers(@Nonnull final String shortTypeText, final Project project, @Nonnull final GlobalSearchScope scope) {
     return super.get(shortTypeText, project, new JavaSourceFilterScope(scope));
   }
 }

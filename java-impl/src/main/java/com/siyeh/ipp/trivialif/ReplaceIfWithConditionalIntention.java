@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.trivialif;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -29,13 +29,13 @@ import com.siyeh.ipp.psiutils.EquivalenceChecker;
 public class ReplaceIfWithConditionalIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ReplaceIfWithConditionalPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiIfStatement ifStatement = (PsiIfStatement)element.getParent();
     if (ifStatement == null) {

@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 
 
@@ -48,7 +49,7 @@ public class EventQueue<E>
 		}
 	}
 
-	public boolean pushBack(@NotNull E event, int priority)
+	public boolean pushBack(@Nonnull E event, int priority)
 	{
 		if(LOG.isDebugEnabled())
 		{
@@ -72,7 +73,7 @@ public class EventQueue<E>
 		return true;
 	}
 
-	public boolean put(@NotNull E event, int priority)
+	public boolean put(@Nonnull E event, int priority)
 	{
 		if(LOG.isDebugEnabled())
 		{
@@ -166,7 +167,7 @@ public class EventQueue<E>
 		return myCurrentEvent;
 	}
 
-	@NotNull
+	@Nonnull
 	public List<E> clearQueue()
 	{
 		final List<E> allEvents = new ArrayList<E>();

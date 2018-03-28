@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.InlineVariableFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -43,7 +43,7 @@ public class UnnecessaryLocalVariableInspection extends BaseInspection {
   public boolean m_ignoreAnnotatedVariables = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("redundant.local.variable.display.name");
   }
@@ -64,7 +64,7 @@ public class UnnecessaryLocalVariableInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.local.variable.problem.descriptor");
   }
@@ -88,7 +88,7 @@ public class UnnecessaryLocalVariableInspection extends BaseInspection {
 
     @SuppressWarnings({"IfStatementWithIdenticalBranches"})
     @Override
-    public void visitLocalVariable(@NotNull PsiLocalVariable variable) {
+    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       if (m_ignoreAnnotatedVariables) {
         final PsiModifierList list = variable.getModifierList();

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.FileStructureNodeProvider;
@@ -40,9 +40,9 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
 	public static final String ID = "SHOW_LAMBDA";
 	public static final String JAVA_LAMBDA_PROPERTY_NAME = "java.lambda.provider";
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<JavaLambdaTreeElement> provideNodes(@NotNull TreeElement node)
+	public List<JavaLambdaTreeElement> provideNodes(@Nonnull TreeElement node)
 	{
 		if(node instanceof PsiMethodTreeElement ||
 				node instanceof PsiFieldTreeElement ||
@@ -74,35 +74,35 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCheckBoxText()
 	{
 		return "Show Lambdas";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Shortcut[] getShortcut()
 	{
 		return new Shortcut[]{KeyboardShortcut.fromString(SystemInfo.isMac ? "meta L" : "control L")};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ActionPresentation getPresentation()
 	{
 		return new ActionPresentationData(getCheckBoxText(), null, AllIcons.Nodes.Function);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
 		return ID;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPropertyName()
 	{

@@ -21,7 +21,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.featureStatistics.FeatureUsageTracker;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author ven
@@ -44,7 +44,7 @@ public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
   };
 
   @Override
-  @NotNull
+  @Nonnull
   public Surrounder[] getSurrounders() {
     return SURROUNDERS;
   }
@@ -55,7 +55,7 @@ public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
     final PsiElement[] statements = CodeInsightUtil.findStatementsInRange(file, startOffset, endOffset);
     if (statements.length == 0) return PsiElement.EMPTY_ARRAY;

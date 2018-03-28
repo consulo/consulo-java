@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
@@ -47,7 +47,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 {
 	private final PsiElement myWrongElement;
 
-	public AddExceptionToThrowsFix(@NotNull PsiElement wrongElement)
+	public AddExceptionToThrowsFix(@Nonnull PsiElement wrongElement)
 	{
 		myWrongElement = wrongElement;
 	}
@@ -59,7 +59,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, Editor editor, PsiFile file)
+	public void invoke(@Nonnull final Project project, Editor editor, PsiFile file)
 	{
 		if(!FileModificationService.getInstance().prepareFileForWrite(file))
 		{
@@ -80,7 +80,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 		addExceptionsToThrowsList(project, targetMethod, unhandledExceptions);
 	}
 
-	static void addExceptionsToThrowsList(@NotNull final Project project, @NotNull final PsiMethod targetMethod, @NotNull final Set<PsiClassType> unhandledExceptions)
+	static void addExceptionsToThrowsList(@Nonnull final Project project, @Nonnull final PsiMethod targetMethod, @Nonnull final Set<PsiClassType> unhandledExceptions)
 	{
 		final PsiMethod[] superMethods = getSuperMethods(targetMethod);
 
@@ -134,15 +134,15 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 		});
 	}
 
-	@NotNull
-	private static PsiMethod[] getSuperMethods(@NotNull PsiMethod targetMethod)
+	@Nonnull
+	private static PsiMethod[] getSuperMethods(@Nonnull PsiMethod targetMethod)
 	{
 		List<PsiMethod> result = new ArrayList<>();
 		collectSuperMethods(targetMethod, result);
 		return result.toArray(new PsiMethod[result.size()]);
 	}
 
-	private static void collectSuperMethods(@NotNull PsiMethod method, @NotNull List<PsiMethod> result)
+	private static void collectSuperMethods(@Nonnull PsiMethod method, @Nonnull List<PsiMethod> result)
 	{
 		PsiMethod[] superMethods = method.findSuperMethods();
 		for(PsiMethod superMethod : superMethods)
@@ -152,7 +152,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 		}
 	}
 
-	private static boolean hasSuperMethodsWithoutExceptions(@NotNull PsiMethod[] superMethods, @NotNull Set<PsiClassType> unhandledExceptions)
+	private static boolean hasSuperMethodsWithoutExceptions(@Nonnull PsiMethod[] superMethods, @Nonnull Set<PsiClassType> unhandledExceptions)
 	{
 		for(PsiMethod superMethod : superMethods)
 		{
@@ -179,7 +179,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 		return false;
 	}
 
-	private static void processMethod(@NotNull Project project, @NotNull PsiMethod targetMethod, @NotNull Set<PsiClassType> unhandledExceptions) throws IncorrectOperationException
+	private static void processMethod(@Nonnull Project project, @Nonnull PsiMethod targetMethod, @Nonnull Set<PsiClassType> unhandledExceptions) throws IncorrectOperationException
 	{
 		for(PsiClassType unhandledException : unhandledExceptions)
 		{
@@ -194,7 +194,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		if(!(file instanceof PsiJavaFile))
 		{
@@ -215,7 +215,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 		return true;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiMethod collectExceptions(List<PsiClassType> unhandled)
 	{
 		PsiElement targetElement = null;
@@ -248,7 +248,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("add.exception.to.throws.family");
@@ -273,8 +273,8 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 		return getUnhandledExceptions(element.getParent(), topElement, targetMethod);
 	}
 
-	@NotNull
-	private static Set<PsiClassType> filterInProjectExceptions(@Nullable PsiMethod targetMethod, @NotNull List<PsiClassType> unhandledExceptions)
+	@Nonnull
+	private static Set<PsiClassType> filterInProjectExceptions(@Nullable PsiMethod targetMethod, @Nonnull List<PsiClassType> unhandledExceptions)
 	{
 		if(targetMethod == null)
 		{

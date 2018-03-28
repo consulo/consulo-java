@@ -17,8 +17,9 @@ package com.intellij.openapi.roots.impl;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.internal.statistic.AbstractApplicationUsagesCollector;
 import com.intellij.internal.statistic.beans.GroupDescriptor;
 import com.intellij.internal.statistic.beans.UsageDescriptor;
@@ -34,7 +35,7 @@ public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesColle
 {
 	public static final String GROUP_ID = "language-level";
 
-	@NotNull
+	@Nonnull
 	@Override
 	public GroupDescriptor getGroupId()
 	{
@@ -42,8 +43,8 @@ public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesColle
 	}
 
 
-	@NotNull
-	public Set<UsageDescriptor> getProjectUsages(@NotNull Project project)
+	@Nonnull
+	public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project)
 	{
 
 		final Set<String> languageLevels = new HashSet<String>();

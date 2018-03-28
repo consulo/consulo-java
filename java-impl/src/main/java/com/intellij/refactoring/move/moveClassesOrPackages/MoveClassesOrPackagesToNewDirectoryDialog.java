@@ -41,8 +41,8 @@ import com.intellij.refactoring.move.MoveHandler;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -61,12 +61,12 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
   private final PsiElement[] myElementsToMove;
   private final MoveCallback myMoveCallback;
 
-  public MoveClassesOrPackagesToNewDirectoryDialog(@NotNull final PsiDirectory directory, PsiElement[] elementsToMove,
+  public MoveClassesOrPackagesToNewDirectoryDialog(@Nonnull final PsiDirectory directory, PsiElement[] elementsToMove,
                                                    final MoveCallback moveCallback) {
     this(directory, elementsToMove, true, moveCallback);
   }
 
-  public MoveClassesOrPackagesToNewDirectoryDialog(@NotNull final PsiDirectory directory, PsiElement[] elementsToMove,
+  public MoveClassesOrPackagesToNewDirectoryDialog(@Nonnull final PsiDirectory directory, PsiElement[] elementsToMove,
                                                    boolean canShowPreserveSourceRoots,
                                                    final MoveCallback moveCallback) {
     super(false);

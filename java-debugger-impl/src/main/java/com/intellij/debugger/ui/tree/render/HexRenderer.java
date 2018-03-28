@@ -15,8 +15,9 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
@@ -94,7 +95,7 @@ public class HexRenderer extends NodeRendererImpl
 		}
 	}
 
-	static void appendHexValue(@NotNull PrimitiveValue value, StringBuilder buf)
+	static void appendHexValue(@Nonnull PrimitiveValue value, StringBuilder buf)
 	{
 		if(value instanceof CharValue)
 		{

@@ -22,10 +22,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.DaemonBundle;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
@@ -80,10 +82,10 @@ public class HighlightMethodUtil
 				HighlightUtil.formatClass(method2.getContainingClass()));
 	}
 
-	static HighlightInfo checkMethodWeakerPrivileges(@NotNull MethodSignatureBackedByPsiMethod methodSignature,
-			@NotNull List<HierarchicalMethodSignature> superMethodSignatures,
+	static HighlightInfo checkMethodWeakerPrivileges(@Nonnull MethodSignatureBackedByPsiMethod methodSignature,
+			@Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
 			boolean includeRealPositionInfo,
-			@NotNull PsiFile containingFile)
+			@Nonnull PsiFile containingFile)
 	{
 		PsiMethod method = methodSignature.getMethod();
 		PsiModifierList modifierList = method.getModifierList();
@@ -155,15 +157,15 @@ public class HighlightMethodUtil
 	}
 
 
-	static HighlightInfo checkMethodIncompatibleReturnType(@NotNull MethodSignatureBackedByPsiMethod methodSignature,
-			@NotNull List<HierarchicalMethodSignature> superMethodSignatures,
+	static HighlightInfo checkMethodIncompatibleReturnType(@Nonnull MethodSignatureBackedByPsiMethod methodSignature,
+			@Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
 			boolean includeRealPositionInfo)
 	{
 		return checkMethodIncompatibleReturnType(methodSignature, superMethodSignatures, includeRealPositionInfo, null);
 	}
 
-	static HighlightInfo checkMethodIncompatibleReturnType(@NotNull MethodSignatureBackedByPsiMethod methodSignature,
-			@NotNull List<HierarchicalMethodSignature> superMethodSignatures,
+	static HighlightInfo checkMethodIncompatibleReturnType(@Nonnull MethodSignatureBackedByPsiMethod methodSignature,
+			@Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
 			boolean includeRealPositionInfo,
 			@Nullable TextRange textRange)
 	{
@@ -204,15 +206,15 @@ public class HighlightMethodUtil
 		return null;
 	}
 
-	private static HighlightInfo checkSuperMethodSignature(@NotNull PsiMethod superMethod,
-			@NotNull MethodSignatureBackedByPsiMethod superMethodSignature,
+	private static HighlightInfo checkSuperMethodSignature(@Nonnull PsiMethod superMethod,
+			@Nonnull MethodSignatureBackedByPsiMethod superMethodSignature,
 			PsiType superReturnType,
-			@NotNull PsiMethod method,
-			@NotNull MethodSignatureBackedByPsiMethod methodSignature,
-			@NotNull PsiType returnType,
-			@NotNull String detailMessage,
-			@NotNull TextRange range,
-			@NotNull LanguageLevel languageLevel)
+			@Nonnull PsiMethod method,
+			@Nonnull MethodSignatureBackedByPsiMethod methodSignature,
+			@Nonnull PsiType returnType,
+			@Nonnull String detailMessage,
+			@Nonnull TextRange range,
+			@Nonnull LanguageLevel languageLevel)
 	{
 		if(superReturnType == null)
 		{
@@ -255,12 +257,12 @@ public class HighlightMethodUtil
 		return createIncompatibleReturnTypeMessage(method, superMethod, substitutedSuperReturnType, returnType, detailMessage, range);
 	}
 
-	private static HighlightInfo createIncompatibleReturnTypeMessage(@NotNull PsiMethod method,
-			@NotNull PsiMethod superMethod,
-			@NotNull PsiType substitutedSuperReturnType,
-			@NotNull PsiType returnType,
-			@NotNull String detailMessage,
-			@NotNull TextRange textRange)
+	private static HighlightInfo createIncompatibleReturnTypeMessage(@Nonnull PsiMethod method,
+			@Nonnull PsiMethod superMethod,
+			@Nonnull PsiType substitutedSuperReturnType,
+			@Nonnull PsiType returnType,
+			@Nonnull String detailMessage,
+			@Nonnull TextRange textRange)
 	{
 		String description = MessageFormat.format("{0}; {1}", createClashMethodMessage(method, superMethod, true), detailMessage);
 		HighlightInfo errorResult = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(textRange).descriptionAndTooltip(description).create();
@@ -425,11 +427,11 @@ public class HighlightMethodUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkMethodCall(@NotNull PsiMethodCallExpression methodCall,
-			@NotNull PsiResolveHelper resolveHelper,
-			@NotNull LanguageLevel languageLevel,
-			@NotNull JavaSdkVersion javaSdkVersion,
-			@NotNull PsiFile file)
+	static HighlightInfo checkMethodCall(@Nonnull PsiMethodCallExpression methodCall,
+			@Nonnull PsiResolveHelper resolveHelper,
+			@Nonnull LanguageLevel languageLevel,
+			@Nonnull JavaSdkVersion javaSdkVersion,
+			@Nonnull PsiFile file)
 	{
 		PsiExpressionList list = methodCall.getArgumentList();
 		PsiReferenceExpression referenceToMethod = methodCall.getMethodExpression();
@@ -589,7 +591,7 @@ public class HighlightMethodUtil
 		return highlightInfo;
 	}
 
-	private static void registerTargetTypeFixesBasedOnApplicabilityInference(@NotNull PsiMethodCallExpression methodCall,
+	private static void registerTargetTypeFixesBasedOnApplicabilityInference(@Nonnull PsiMethodCallExpression methodCall,
 			MethodCandidateInfo resolveResult,
 			PsiMethod resolved,
 			HighlightInfo highlightInfo)
@@ -687,7 +689,7 @@ public class HighlightMethodUtil
 		}
 	}
 
-	private static String buildOneLineMismatchDescription(@NotNull PsiExpressionList list, @NotNull MethodCandidateInfo candidateInfo, @NotNull Ref<PsiElement> elementToHighlight)
+	private static String buildOneLineMismatchDescription(@Nonnull PsiExpressionList list, @Nonnull MethodCandidateInfo candidateInfo, @Nonnull Ref<PsiElement> elementToHighlight)
 	{
 		final PsiExpression[] expressions = list.getExpressions();
 		final PsiMethod resolvedMethod = candidateInfo.getElement();
@@ -760,15 +762,15 @@ public class HighlightMethodUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkAmbiguousMethodCallIdentifier(@NotNull PsiReferenceExpression referenceToMethod,
-			@NotNull JavaResolveResult[] resolveResults,
-			@NotNull PsiExpressionList list,
+	static HighlightInfo checkAmbiguousMethodCallIdentifier(@Nonnull PsiReferenceExpression referenceToMethod,
+			@Nonnull JavaResolveResult[] resolveResults,
+			@Nonnull PsiExpressionList list,
 			final PsiElement element,
-			@NotNull JavaResolveResult resolveResult,
-			@NotNull PsiMethodCallExpression methodCall,
-			@NotNull PsiResolveHelper resolveHelper,
-			@NotNull LanguageLevel languageLevel,
-			@NotNull PsiFile file)
+			@Nonnull JavaResolveResult resolveResult,
+			@Nonnull PsiMethodCallExpression methodCall,
+			@Nonnull PsiResolveHelper resolveHelper,
+			@Nonnull LanguageLevel languageLevel,
+			@Nonnull PsiFile file)
 	{
 		MethodCandidateInfo methodCandidate1 = null;
 		MethodCandidateInfo methodCandidate2 = null;
@@ -865,14 +867,14 @@ public class HighlightMethodUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkAmbiguousMethodCallArguments(@NotNull PsiReferenceExpression referenceToMethod,
-			@NotNull JavaResolveResult[] resolveResults,
-			@NotNull PsiExpressionList list,
+	static HighlightInfo checkAmbiguousMethodCallArguments(@Nonnull PsiReferenceExpression referenceToMethod,
+			@Nonnull JavaResolveResult[] resolveResults,
+			@Nonnull PsiExpressionList list,
 			final PsiElement element,
-			@NotNull JavaResolveResult resolveResult,
-			@NotNull PsiMethodCallExpression methodCall,
-			@NotNull PsiResolveHelper resolveHelper,
-			@NotNull PsiElement elementToHighlight)
+			@Nonnull JavaResolveResult resolveResult,
+			@Nonnull PsiMethodCallExpression methodCall,
+			@Nonnull PsiResolveHelper resolveHelper,
+			@Nonnull PsiElement elementToHighlight)
 	{
 		MethodCandidateInfo methodCandidate1 = null;
 		MethodCandidateInfo methodCandidate2 = null;
@@ -972,8 +974,8 @@ public class HighlightMethodUtil
 		return info;
 	}
 
-	@NotNull
-	private static MethodCandidateInfo[] toMethodCandidates(@NotNull JavaResolveResult[] resolveResults)
+	@Nonnull
+	private static MethodCandidateInfo[] toMethodCandidates(@Nonnull JavaResolveResult[] resolveResults)
 	{
 		List<MethodCandidateInfo> candidateList = new ArrayList<>(resolveResults.length);
 
@@ -1054,7 +1056,7 @@ public class HighlightMethodUtil
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private static String createAmbiguousMethodHtmlTooltip(MethodCandidateInfo[] methodCandidates)
 	{
 		return JavaErrorMessages.message("ambiguous.method.html.tooltip", methodCandidates[0].getElement().getParameterList().getParametersCount() + 2, createAmbiguousMethodHtmlTooltipMethodRow
@@ -1100,7 +1102,7 @@ public class HighlightMethodUtil
 	}
 
 	private static String createShortMismatchedArgumentsHtmlTooltip(PsiExpressionList list,
-			@Nullable MethodCandidateInfo info,
+			@javax.annotation.Nullable MethodCandidateInfo info,
 			PsiParameter[] parameters,
 			String methodName,
 			PsiSubstitutor substitutor,
@@ -1116,7 +1118,7 @@ public class HighlightMethodUtil
 						!= null ? "<br/>reason: " + XmlStringUtil.escapeString(errorMessage).replaceAll("\n", "<br/>") : "");
 	}
 
-	private static String esctrim(@NotNull String s)
+	private static String esctrim(@Nonnull String s)
 	{
 		return XmlStringUtil.escapeString(trimNicely(s));
 	}
@@ -1344,8 +1346,8 @@ public class HighlightMethodUtil
 		return errorResult;
 	}
 
-	@Nullable
-	static HighlightInfo checkDuplicateMethod(PsiClass aClass, @NotNull PsiMethod method, @NotNull MostlySingularMultiMap<MethodSignature, PsiMethod> duplicateMethods)
+	@javax.annotation.Nullable
+	static HighlightInfo checkDuplicateMethod(PsiClass aClass, @Nonnull PsiMethod method, @Nonnull MostlySingularMultiMap<MethodSignature, PsiMethod> duplicateMethods)
 	{
 		if(aClass == null || method instanceof ExternallyDefinedPsiElement)
 		{
@@ -1374,8 +1376,8 @@ public class HighlightMethodUtil
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkMethodCanHaveBody(@NotNull PsiMethod method, @NotNull LanguageLevel languageLevel)
+	@javax.annotation.Nullable
+	static HighlightInfo checkMethodCanHaveBody(@Nonnull PsiMethod method, @Nonnull LanguageLevel languageLevel)
 	{
 		PsiClass aClass = method.getContainingClass();
 		boolean hasNoBody = method.getBody() == null;
@@ -1451,8 +1453,8 @@ public class HighlightMethodUtil
 		return info;
 	}
 
-	@Nullable
-	static HighlightInfo checkConstructorCallMustBeFirstStatement(@NotNull PsiMethodCallExpression methodCall)
+	@javax.annotation.Nullable
+	static HighlightInfo checkConstructorCallMustBeFirstStatement(@Nonnull PsiMethodCallExpression methodCall)
 	{
 		if(!RefactoringChangeUtil.isSuperOrThisMethodCall(methodCall))
 		{
@@ -1481,7 +1483,7 @@ public class HighlightMethodUtil
 	}
 
 
-	static HighlightInfo checkSuperAbstractMethodDirectCall(@NotNull PsiMethodCallExpression methodCallExpression)
+	static HighlightInfo checkSuperAbstractMethodDirectCall(@Nonnull PsiMethodCallExpression methodCallExpression)
 	{
 		PsiReferenceExpression expression = methodCallExpression.getMethodExpression();
 		if(!(expression.getQualifierExpression() instanceof PsiSuperExpression))
@@ -1542,7 +1544,7 @@ public class HighlightMethodUtil
 	 * @return error if static method overrides instance method or
 	 * instance method overrides static. see JLS 8.4.6.1, 8.4.6.2
 	 */
-	static HighlightInfo checkStaticMethodOverride(@NotNull PsiMethod method, @NotNull PsiFile containingFile)
+	static HighlightInfo checkStaticMethodOverride(@Nonnull PsiMethod method, @Nonnull PsiFile containingFile)
 	{
 		// constructors are not members and therefor don't override class methods
 		if(method.isConstructor())
@@ -1580,7 +1582,7 @@ public class HighlightMethodUtil
 		return null;
 	}
 
-	private static HighlightInfo checkStaticMethodOverride(PsiClass aClass, PsiMethod method, boolean isMethodStatic, PsiClass superClass, PsiMethod superMethod, @NotNull PsiFile containingFile)
+	private static HighlightInfo checkStaticMethodOverride(PsiClass aClass, PsiMethod method, boolean isMethodStatic, PsiClass superClass, PsiMethod superMethod, @Nonnull PsiFile containingFile)
 	{
 		if(superMethod == null)
 		{
@@ -1640,7 +1642,7 @@ public class HighlightMethodUtil
 		return null;
 	}
 
-	private static HighlightInfo checkInterfaceInheritedMethodsReturnTypes(@NotNull List<? extends MethodSignatureBackedByPsiMethod> superMethodSignatures, @NotNull LanguageLevel languageLevel)
+	private static HighlightInfo checkInterfaceInheritedMethodsReturnTypes(@Nonnull List<? extends MethodSignatureBackedByPsiMethod> superMethodSignatures, @Nonnull LanguageLevel languageLevel)
 	{
 		if(superMethodSignatures.size() < 2)
 		{
@@ -1702,7 +1704,7 @@ public class HighlightMethodUtil
 		return null;
 	}
 
-	static HighlightInfo checkOverrideEquivalentInheritedMethods(PsiClass aClass, PsiFile containingFile, @NotNull LanguageLevel languageLevel)
+	static HighlightInfo checkOverrideEquivalentInheritedMethods(PsiClass aClass, PsiFile containingFile, @Nonnull LanguageLevel languageLevel)
 	{
 		String description = null;
 		boolean appendImplementMethodFix = true;
@@ -1832,7 +1834,7 @@ public class HighlightMethodUtil
 	}
 
 
-	static HighlightInfo checkRecursiveConstructorInvocation(@NotNull PsiMethod method)
+	static HighlightInfo checkRecursiveConstructorInvocation(@Nonnull PsiMethod method)
 	{
 		if(HighlightControlFlowUtil.isRecursivelyCalledConstructor(method))
 		{
@@ -1843,8 +1845,8 @@ public class HighlightMethodUtil
 		return null;
 	}
 
-	@NotNull
-	public static TextRange getFixRange(@NotNull PsiElement element)
+	@Nonnull
+	public static TextRange getFixRange(@Nonnull PsiElement element)
 	{
 		TextRange range = element.getTextRange();
 		int start = range.getStartOffset();
@@ -1859,7 +1861,7 @@ public class HighlightMethodUtil
 	}
 
 
-	static void checkNewExpression(@NotNull PsiNewExpression expression, PsiType type, @NotNull HighlightInfoHolder holder, @NotNull JavaSdkVersion javaSdkVersion)
+	static void checkNewExpression(@Nonnull PsiNewExpression expression, PsiType type, @Nonnull HighlightInfoHolder holder, @Nonnull JavaSdkVersion javaSdkVersion)
 	{
 		if(!(type instanceof PsiClassType))
 		{
@@ -1887,12 +1889,12 @@ public class HighlightMethodUtil
 	}
 
 
-	static void checkConstructorCall(@NotNull PsiClassType.ClassResolveResult typeResolveResult,
-			@NotNull PsiConstructorCall constructorCall,
-			@NotNull PsiType type,
+	static void checkConstructorCall(@Nonnull PsiClassType.ClassResolveResult typeResolveResult,
+			@Nonnull PsiConstructorCall constructorCall,
+			@Nonnull PsiType type,
 			PsiJavaCodeReferenceElement classReference,
-			@NotNull HighlightInfoHolder holder,
-			@NotNull JavaSdkVersion javaSdkVersion)
+			@Nonnull HighlightInfoHolder holder,
+			@Nonnull JavaSdkVersion javaSdkVersion)
 	{
 		PsiExpressionList list = constructorCall.getArgumentList();
 		if(list == null)
@@ -2083,7 +2085,7 @@ public class HighlightMethodUtil
 			PsiMethod[] constructors,
 			JavaResolveResult[] results,
 			PsiElement infoElement,
-			@NotNull final HighlightInfo info)
+			@Nonnull final HighlightInfo info)
 	{
 		QuickFixAction.registerQuickFixAction(info, constructorCall.getTextRange(), QUICK_FIX_FACTORY.createCreateConstructorFromCallFix(constructorCall));
 		if(classReference != null)
@@ -2099,7 +2101,7 @@ public class HighlightMethodUtil
 		ChangeStringLiteralToCharInMethodCallFix.registerFixes(constructors, constructorCall, info);
 	}
 
-	private static HighlightInfo buildAccessProblem(@NotNull PsiJavaCodeReferenceElement classReference, JavaResolveResult result, PsiMember elementToFix)
+	private static HighlightInfo buildAccessProblem(@Nonnull PsiJavaCodeReferenceElement classReference, JavaResolveResult result, PsiMember elementToFix)
 	{
 		String description = HighlightUtil.buildProblemWithAccessDescription(classReference, result);
 		HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(classReference).descriptionAndTooltip(description).navigationShift(+1).create();
@@ -2157,7 +2159,7 @@ public class HighlightMethodUtil
 		return builder.toString();
 	}
 
-	private static void registerChangeParameterClassFix(@NotNull PsiCall methodCall, @NotNull PsiExpressionList list, HighlightInfo highlightInfo)
+	private static void registerChangeParameterClassFix(@Nonnull PsiCall methodCall, @Nonnull PsiExpressionList list, HighlightInfo highlightInfo)
 	{
 		final JavaResolveResult result = methodCall.resolveMethodGenerics();
 		PsiMethod method = (PsiMethod) result.getElement();
@@ -2208,8 +2210,8 @@ public class HighlightMethodUtil
 		}
 	}
 
-	private static void registerChangeMethodSignatureFromUsageIntentions(@NotNull JavaResolveResult[] candidates,
-			@NotNull PsiExpressionList list,
+	private static void registerChangeMethodSignatureFromUsageIntentions(@Nonnull JavaResolveResult[] candidates,
+			@Nonnull PsiExpressionList list,
 			@Nullable HighlightInfo highlightInfo,
 			TextRange fixRange)
 	{
@@ -2224,11 +2226,11 @@ public class HighlightMethodUtil
 		}
 	}
 
-	private static void registerChangeMethodSignatureFromUsageIntention(@NotNull PsiExpression[] expressions,
+	private static void registerChangeMethodSignatureFromUsageIntention(@Nonnull PsiExpression[] expressions,
 			@Nullable HighlightInfo highlightInfo,
 			TextRange fixRange,
-			@NotNull JavaResolveResult candidate,
-			@NotNull PsiElement context)
+			@Nonnull JavaResolveResult candidate,
+			@Nonnull PsiElement context)
 	{
 		if(!candidate.isStaticsScopeCorrect())
 		{

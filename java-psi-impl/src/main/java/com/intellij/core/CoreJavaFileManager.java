@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
@@ -92,7 +92,7 @@ public class CoreJavaFileManager implements JavaFileManager
   }   */
 
 	@Override
-	public PsiClass findClass(@NotNull String qName, @NotNull GlobalSearchScope scope)
+	public PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope)
 	{
 		for(VirtualFile root : roots())
 		{
@@ -205,7 +205,7 @@ public class CoreJavaFileManager implements JavaFileManager
 	}
 
 	@Override
-	public PsiClass[] findClasses(@NotNull String qName, @NotNull GlobalSearchScope scope)
+	public PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope)
 	{
 		List<PsiClass> result = new ArrayList<PsiClass>();
 		for(VirtualFile file : roots())
@@ -225,9 +225,9 @@ public class CoreJavaFileManager implements JavaFileManager
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Collection<PsiJavaModule> findModules(@NotNull String moduleName, @NotNull GlobalSearchScope scope)
+	public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope)
 	{
 		return Collections.emptySet();
 	}

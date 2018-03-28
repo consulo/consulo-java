@@ -28,8 +28,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.psi.*;
@@ -54,7 +54,7 @@ public class HardcodedContracts
 			.singleConditionContract(ContractValue.argument(2), RelationType.GT, ContractValue.argument(0).specialField(SpecialField.ARRAY_LENGTH), THROW_EXCEPTION), MethodContract
 			.singleConditionContract(ContractValue.argument(1), RelationType.GT, ContractValue.argument(2), THROW_EXCEPTION));
 
-	public static List<MethodContract> getHardcodedContracts(@NotNull PsiMethod method, @Nullable PsiMethodCallExpression call)
+	public static List<MethodContract> getHardcodedContracts(@Nonnull PsiMethod method, @javax.annotation.Nullable PsiMethodCallExpression call)
 	{
 		PsiClass owner = method.getContainingClass();
 		if(owner == null || InjectedLanguageManager.getInstance(owner.getProject()).isInjectedFragment(owner.getContainingFile()))
@@ -261,7 +261,7 @@ public class HardcodedContracts
 		return false;
 	}
 
-	private static List<MethodContract> handleTestFrameworks(int paramCount, String className, String methodName, @Nullable PsiMethodCallExpression call)
+	private static List<MethodContract> handleTestFrameworks(int paramCount, String className, String methodName, @javax.annotation.Nullable PsiMethodCallExpression call)
 	{
 		if(("assertThat".equals(methodName) || "assumeThat".equals(methodName) || "that".equals(methodName)) && call != null)
 		{
@@ -308,8 +308,8 @@ public class HardcodedContracts
 		return Collections.emptyList();
 	}
 
-	@NotNull
-	private static List<MethodContract> handleAssertThat(int paramCount, @NotNull PsiMethodCallExpression call)
+	@Nonnull
+	private static List<MethodContract> handleAssertThat(int paramCount, @Nonnull PsiMethodCallExpression call)
 	{
 		PsiExpression[] args = call.getArgumentList().getExpressions();
 		if(args.length == paramCount)
@@ -341,7 +341,7 @@ public class HardcodedContracts
 		return ref instanceof PsiReferenceExpression && "isNotNull".equals(((PsiReferenceExpression) ref).getReferenceName()) && ref.getParent() instanceof PsiMethodCallExpression;
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<MethodContract> failIfNull(int argIndex, int argCount)
 	{
 		MethodContract.ValueConstraint[] constraints = createConstraintArray(argCount);
@@ -383,7 +383,7 @@ public class HardcodedContracts
 		return true;
 	}
 
-	public static boolean hasHardcodedContracts(@Nullable PsiElement element)
+	public static boolean hasHardcodedContracts(@javax.annotation.Nullable PsiElement element)
 	{
 		if(element instanceof PsiMethod)
 		{

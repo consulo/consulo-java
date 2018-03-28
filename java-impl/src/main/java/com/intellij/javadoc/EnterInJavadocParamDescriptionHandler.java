@@ -14,7 +14,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.util.text.CharArrayUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class EnterInJavadocParamDescriptionHandler extends EnterHandlerDelegateA
   private final JavadocHelper myHelper = JavadocHelper.getInstance();
 
   @Override
-  public Result postProcessEnter(@NotNull final PsiFile file, @NotNull Editor editor, @NotNull DataContext dataContext) {
+  public Result postProcessEnter(@Nonnull final PsiFile file, @Nonnull Editor editor, @Nonnull DataContext dataContext) {
     if (!CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER
         || !CodeStyleSettingsManager.getSettings(file.getProject()).JD_ALIGN_PARAM_COMMENTS)
     {

@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -37,7 +37,7 @@ public class JavaNullMethodArgumentUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.JavaNullMethodArgumentUtil");
 
-	public static boolean hasNullArgument(@NotNull PsiMethod method, final int argumentIdx)
+	public static boolean hasNullArgument(@Nonnull PsiMethod method, final int argumentIdx)
 	{
 		final boolean[] result = {false};
 		searchNullArgument(method, argumentIdx, expression ->
@@ -48,7 +48,7 @@ public class JavaNullMethodArgumentUtil
 		return result[0];
 	}
 
-	public static void searchNullArgument(@NotNull PsiMethod method, final int argumentIdx, @NotNull Processor<PsiExpression> nullArgumentProcessor)
+	public static void searchNullArgument(@Nonnull PsiMethod method, final int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor)
 	{
 		final PsiParameter parameter = method.getParameterList().getParameters()[argumentIdx];
 		if(parameter.getType() instanceof PsiEllipsisType)
@@ -68,7 +68,7 @@ public class JavaNullMethodArgumentUtil
 		}
 	}
 
-	private static void processCallsWithNullArguments(@NotNull PsiMethod method, int argumentIdx, @NotNull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles)
+	private static void processCallsWithNullArguments(@Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles)
 	{
 		if(candidateFiles.isEmpty())
 		{
@@ -110,8 +110,8 @@ public class JavaNullMethodArgumentUtil
 		return null;
 	}
 
-	@NotNull
-	private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(@NotNull PsiMethod method, int parameterIndex)
+	@Nonnull
+	private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(@Nonnull PsiMethod method, int parameterIndex)
 	{
 		final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
 		final CommonProcessors.CollectProcessor<VirtualFile> collector = new CommonProcessors.CollectProcessor<>(new ArrayList<>());

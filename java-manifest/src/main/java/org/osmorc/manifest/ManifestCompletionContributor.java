@@ -25,7 +25,8 @@
 
 package org.osmorc.manifest;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import consulo.java.manifest.lang.headerparser.HeaderParserEP;
@@ -50,9 +51,9 @@ public class ManifestCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC, PlatformPatterns.psiElement(ManifestTokenType.HEADER_NAME).withLanguage(ManifestLanguage.INSTANCE),
            new CompletionProvider() {
 
-             public void addCompletions(@NotNull CompletionParameters completionparameters,
+             public void addCompletions(@Nonnull CompletionParameters completionparameters,
                                         ProcessingContext processingcontext,
-                                        @NotNull CompletionResultSet completionresultset) {
+                                        @Nonnull CompletionResultSet completionresultset) {
                for (HeaderParserEP ep : HeaderParserEP.EP_NAME.getExtensions()) {
                  if(ep.key.isEmpty()) {  //dont show default ep
                    continue;

@@ -15,20 +15,22 @@
  */
 package com.intellij.codeInsight.daemon.impl.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.JavaSuppressionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author yole
  */
 public class SuppressByJavaCommentFix extends SuppressByCommentFix {
-  public SuppressByJavaCommentFix(@NotNull HighlightDisplayKey key) {
+  public SuppressByJavaCommentFix(@Nonnull HighlightDisplayKey key) {
     super(key, PsiStatement.class);
   }
 
@@ -49,9 +51,9 @@ public class SuppressByJavaCommentFix extends SuppressByCommentFix {
   }
 
   @Override
-  protected void createSuppression(@NotNull final Project project,
-                                   @NotNull final PsiElement element,
-                                   @NotNull final PsiElement container) throws IncorrectOperationException {
+  protected void createSuppression(@Nonnull final Project project,
+                                   @Nonnull final PsiElement element,
+                                   @Nonnull final PsiElement container) throws IncorrectOperationException {
     PsiElement declaredElement = JavaSuppressionUtil.getElementToAnnotate(element, container);
     if (declaredElement == null) {
       suppressWithComment(project, element, container);

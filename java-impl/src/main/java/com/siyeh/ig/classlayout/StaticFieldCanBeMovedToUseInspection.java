@@ -23,8 +23,7 @@ import com.intellij.codeInspection.reference.*;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiType;
 import com.siyeh.ig.BaseGlobalInspection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,7 +31,7 @@ import java.util.Set;
 
 public class StaticFieldCanBeMovedToUseInspection extends BaseGlobalInspection {
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return null;
@@ -40,7 +39,7 @@ public class StaticFieldCanBeMovedToUseInspection extends BaseGlobalInspection {
     //        "static.field.can.be.moved.to.use.display.name");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity, AnalysisScope analysisScope,
     InspectionManager inspectionManager,

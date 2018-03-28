@@ -1,7 +1,7 @@
 package consulo.java.codeInsight;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -21,7 +21,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 		})
 public class JavaCodeInsightSettings implements PersistentStateComponent<JavaCodeInsightSettings>
 {
-	@NotNull
+	@Nonnull
 	public static JavaCodeInsightSettings getInstance()
 	{
 		return ServiceManager.getService(JavaCodeInsightSettings.class);

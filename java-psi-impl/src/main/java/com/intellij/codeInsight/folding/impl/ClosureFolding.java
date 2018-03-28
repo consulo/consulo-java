@@ -18,8 +18,8 @@ package com.intellij.codeInsight.folding.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.lang.folding.NamedFoldingDescriptor;
@@ -37,27 +37,27 @@ import com.intellij.util.text.CharArrayUtil;
  */
 class ClosureFolding
 {
-	@NotNull
+	@Nonnull
 	private final PsiAnonymousClass myAnonymousClass;
-	@NotNull
+	@Nonnull
 	private final PsiNewExpression myNewExpression;
-	@Nullable
+	@javax.annotation.Nullable
 	private final PsiClass myBaseClass;
-	@NotNull
+	@Nonnull
 	private final JavaFoldingBuilderBase myBuilder;
-	@NotNull
+	@Nonnull
 	private final PsiMethod myMethod;
-	@NotNull
+	@Nonnull
 	final PsiCodeBlock methodBody;
 	private final boolean myQuick;
 
-	private ClosureFolding(@NotNull PsiAnonymousClass anonymousClass,
-			@NotNull PsiNewExpression newExpression,
+	private ClosureFolding(@Nonnull PsiAnonymousClass anonymousClass,
+			@Nonnull PsiNewExpression newExpression,
 			boolean quick,
-			@Nullable PsiClass baseClass,
-			@NotNull JavaFoldingBuilderBase builder,
-			@NotNull PsiMethod method,
-			@NotNull PsiCodeBlock methodBody)
+			@javax.annotation.Nullable PsiClass baseClass,
+			@Nonnull JavaFoldingBuilderBase builder,
+			@Nonnull PsiMethod method,
+			@Nonnull PsiCodeBlock methodBody)
 	{
 		myAnonymousClass = anonymousClass;
 		myNewExpression = newExpression;
@@ -68,7 +68,7 @@ class ClosureFolding
 		this.methodBody = methodBody;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	List<NamedFoldingDescriptor> process(Document document)
 	{
 		PsiJavaToken lbrace = methodBody.getLBrace();
@@ -139,7 +139,7 @@ class ClosureFolding
 		return myNewExpression.getTextRange().getStartOffset();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private List<NamedFoldingDescriptor> createDescriptors(PsiElement classRBrace, int rangeStart, int rangeEnd, String header, String footer)
 	{
 		if(rangeStart >= rangeEnd)
@@ -157,7 +157,7 @@ class ClosureFolding
 		return foldElements;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String getClosureContents(int rangeStart, int rangeEnd, CharSequence seq)
 	{
 		int firstLineStart = CharArrayUtil.shiftForward(seq, rangeStart, " \t");
@@ -186,7 +186,7 @@ class ClosureFolding
 		return type + methodName + "(" + params + ") " + myBuilder.rightArrow() + " {";
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static ClosureFolding prepare(PsiAnonymousClass anonymousClass, boolean quick, JavaFoldingBuilderBase builder)
 	{
 		PsiElement parent = anonymousClass.getParent();
@@ -212,7 +212,7 @@ class ClosureFolding
 		return argumentList != null && argumentList.getExpressions().length == 0;
 	}
 
-	private static boolean hasOnlyOneLambdaMethod(@NotNull PsiAnonymousClass anonymousClass, boolean checkResolve)
+	private static boolean hasOnlyOneLambdaMethod(@Nonnull PsiAnonymousClass anonymousClass, boolean checkResolve)
 	{
 		PsiField[] fields = anonymousClass.getFields();
 		if(fields.length != 0)
@@ -251,7 +251,7 @@ class ClosureFolding
 		return true;
 	}
 
-	static boolean seemsLikeLambda(@Nullable PsiClass baseClass, @NotNull PsiElement context)
+	static boolean seemsLikeLambda(@Nullable PsiClass baseClass, @Nonnull PsiElement context)
 	{
 		if(baseClass == null || !PsiUtil.hasDefaultConstructor(baseClass, true))
 		{

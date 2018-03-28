@@ -24,24 +24,24 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.regex.Pattern;
 
 public class FallthruInSwitchStatementInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("fallthru.in.switch.statement.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "fallthrough";
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("fallthru.in.switch.statement.problem.descriptor");
   }
@@ -57,7 +57,7 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
 
   private static class FallthruInSwitchStatementFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("fallthru.in.switch.statement.quickfix");
     }
@@ -77,7 +77,7 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
     private static final Pattern commentPattern = Pattern.compile("(?i)falls?\\s*thro?u");
 
     @Override
-    public void visitSwitchStatement(@NotNull PsiSwitchStatement switchStatement) {
+    public void visitSwitchStatement(@Nonnull PsiSwitchStatement switchStatement) {
       super.visitSwitchStatement(switchStatement);
       final PsiCodeBlock body = switchStatement.getBody();
       if (body == null) {

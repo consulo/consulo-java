@@ -15,15 +15,16 @@
  */
 package com.siyeh.ipp.braces;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiArrayInitializerExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNewExpression;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 class ArrayCreationExpressionPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@NotNull PsiElement element) {
+  public boolean satisfiedBy(@Nonnull PsiElement element) {
     if (!(element instanceof PsiArrayInitializerExpression)) {
       return false;
     }

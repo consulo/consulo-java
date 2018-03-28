@@ -31,8 +31,8 @@ import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -62,13 +62,13 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.suppression.action.family");
   }
 
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     try {
       if (element instanceof PsiIdentifier) {
@@ -109,7 +109,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return JavaQuickFixBundle.message("remove.suppression.action.name", myID);
   }

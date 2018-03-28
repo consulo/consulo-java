@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 import java.util.Set;
@@ -34,20 +34,20 @@ public class FieldRepeatedlyAccessedInspection extends BaseInspection {
   public boolean m_ignoreFinalFields = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "FieldRepeatedlyAccessedInMethod";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.repeatedly.accessed.in.method.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... arg) {
     final String fieldName = ((PsiNamedElement)arg[0]).getName();
     return InspectionGadgetsBundle.message(
@@ -70,7 +70,7 @@ public class FieldRepeatedlyAccessedInspection extends BaseInspection {
   private class FieldRepeatedlyAccessedVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiIdentifier nameIdentifier = method.getNameIdentifier();
       if (nameIdentifier == null) {
         return;

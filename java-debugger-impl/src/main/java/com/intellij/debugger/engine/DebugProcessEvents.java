@@ -18,7 +18,6 @@ package com.intellij.debugger.engine;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.DebuggerManager;
@@ -631,7 +630,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.breakpoint.skipped", event.location()), MessageType.INFO).notify(getProject());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static LocatableEvent getLocatableEvent(EventSet eventSet)
 	{
 		return (LocatableEvent) eventSet.stream().filter(event -> event instanceof LocatableEvent).findFirst().orElse(null);

@@ -15,7 +15,7 @@
  */
 package com.intellij.execution.jar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.application.BaseJavaApplicationCommandLineState;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -28,7 +28,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
  */
 public class JarApplicationCommandLineState extends BaseJavaApplicationCommandLineState<JarApplicationConfiguration>
 {
-	public JarApplicationCommandLineState(@NotNull final JarApplicationConfiguration configuration, final ExecutionEnvironment environment)
+	public JarApplicationCommandLineState(@Nonnull final JarApplicationConfiguration configuration, final ExecutionEnvironment environment)
 	{
 		super(environment, configuration);
 	}

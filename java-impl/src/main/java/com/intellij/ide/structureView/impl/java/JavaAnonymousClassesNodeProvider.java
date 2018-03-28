@@ -31,7 +31,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.hash.HashSet;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,19 +73,19 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
     return new Shortcut[]{KeyboardShortcut.fromString(SystemInfo.isMac ? "meta I" : "control I")};
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(getCheckBoxText(), null, PlatformIcons.ANONYMOUS_CLASS_ICON);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return ID;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getPropertyName() {
     return JAVA_ANONYMOUS_PROPERTY_NAME;

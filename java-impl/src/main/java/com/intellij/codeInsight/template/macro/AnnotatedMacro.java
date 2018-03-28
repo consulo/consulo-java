@@ -28,8 +28,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.AnnotatedMembersSearch;
 import com.intellij.util.Query;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -67,7 +67,7 @@ public class AnnotatedMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] expressions, ExpressionContext expressionContext) {
+  public Result calculateResult(@Nonnull Expression[] expressions, ExpressionContext expressionContext) {
     final Query<PsiMember> psiMembers = findAnnotated(expressionContext, expressions);
 
     if (psiMembers != null) {
@@ -81,12 +81,12 @@ public class AnnotatedMacro extends Macro {
   }
 
   @Override
-  public Result calculateQuickResult(@NotNull Expression[] expressions, ExpressionContext expressionContext) {
+  public Result calculateQuickResult(@Nonnull Expression[] expressions, ExpressionContext expressionContext) {
     return calculateResult(expressions, expressionContext);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@NotNull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
     final Query<PsiMember> query = findAnnotated(context, params);
 
     if (query != null) {

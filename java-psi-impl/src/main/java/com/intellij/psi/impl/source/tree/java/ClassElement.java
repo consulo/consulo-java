@@ -28,8 +28,8 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.CharTable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ClassElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ClassElement");
@@ -180,7 +180,7 @@ public class ClassElement extends CompositeElement implements Constants {
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (isEnum()) {
       if (child.getElementType() == ENUM_CONSTANT) {
         ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());

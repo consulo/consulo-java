@@ -1,21 +1,21 @@
 // "Annotate overridden method parameters as '@NotNull'" "true"
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 abstract class P2 {
-    @NotNull
-    String foo(@NotNull<caret> P p) {
+    @Nonnull
+    String foo(@Nonnull<caret> P p) {
         return "";
     }
 }
 
 class PPP extends P2 {
-    String foo(@NotNull P p) {
+    String foo(@Nonnull P p) {
         return super.foo(p);
     }
 }
 class PPP2 extends P2 {
 
-    String foo(@NotNull P p) {
+    String foo(@Nonnull P p) {
         return super.foo(p);
     }
 }

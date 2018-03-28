@@ -22,7 +22,7 @@ import com.intellij.psi.PsiModifier;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class SerializableInnerClassHasSerialVersionUIDFieldVisitor
   extends BaseInspectionVisitor {
@@ -35,7 +35,7 @@ class SerializableInnerClassHasSerialVersionUIDFieldVisitor
   }
 
   @Override
-  public void visitClass(@NotNull PsiClass aClass) {
+  public void visitClass(@Nonnull PsiClass aClass) {
     // no call to super, so it doesn't drill down
     if (aClass.isInterface() || aClass.isAnnotationType() ||
         aClass.isEnum()) {

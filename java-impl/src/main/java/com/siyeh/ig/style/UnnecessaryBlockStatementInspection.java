@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.VariableSearchUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,20 +36,20 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
   public boolean ignoreSwitchBranches = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UnnecessaryCodeBlock";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.code.block.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.block.statement.problem.descriptor");
@@ -74,7 +74,7 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
 
   private static class UnnecessaryBlockFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.code.block.unwrap.quickfix");

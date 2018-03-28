@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.event.HyperlinkEvent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
@@ -152,7 +152,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		resetIgnoreStepFiltersFlag();
 	}
 
-	@NotNull
+	@Nonnull
 	public GlobalSearchScope getSearchScope()
 	{
 		return mySearchScope;
@@ -193,7 +193,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 			myDebuggerContext = SESSION_EMPTY_CONTEXT;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public DebuggerContextImpl getContext()
 		{
@@ -209,7 +209,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		 * since the thread was resumed
 		 */
 		@Override
-		public void setState(@NotNull final DebuggerContextImpl context, final State state, final Event event, final String description)
+		public void setState(@Nonnull final DebuggerContextImpl context, final State state, final Event event, final String description)
 		{
 			ApplicationManager.getApplication().assertIsDispatchThread();
 			final DebuggerSession session = context.getDebuggerSession();
@@ -254,7 +254,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		}
 	}
 
-	static DebuggerSession create(String sessionName, @NotNull final DebugProcessImpl debugProcess, DebugEnvironment environment) throws ExecutionException
+	static DebuggerSession create(String sessionName, @Nonnull final DebugProcessImpl debugProcess, DebugEnvironment environment) throws ExecutionException
 	{
 		DebuggerSession session = new DebuggerSession(sessionName, debugProcess, environment);
 		try
@@ -269,7 +269,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		return session;
 	}
 
-	private DebuggerSession(String sessionName, @NotNull final DebugProcessImpl debugProcess, DebugEnvironment environment)
+	private DebuggerSession(String sessionName, @Nonnull final DebugProcessImpl debugProcess, DebugEnvironment environment)
 	{
 		mySessionName = sessionName;
 		myDebugProcess = debugProcess;
@@ -284,7 +284,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		myRunJre = environment.getRunJre();
 	}
 
-	@NotNull
+	@Nonnull
 	public DebuggerStateManager getContextManager()
 	{
 		return myContextManager;
@@ -300,7 +300,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		return mySessionName;
 	}
 
-	@NotNull
+	@Nonnull
 	public DebugProcessImpl getProcess()
 	{
 		return myDebugProcess;
@@ -409,7 +409,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		stepOver(ignoreBreakpoints, StepRequest.STEP_LINE);
 	}
 
-	public void stepInto(final boolean ignoreFilters, final @Nullable MethodFilter smartStepFilter, int stepSize)
+	public void stepInto(final boolean ignoreFilters, final @javax.annotation.Nullable MethodFilter smartStepFilter, int stepSize)
 	{
 		final SuspendContextImpl suspendContext = getSuspendContext();
 		DebugProcessImpl.ResumeCommand cmd = null;
@@ -429,12 +429,12 @@ public class DebuggerSession implements AbstractDebuggerSession
 		resumeAction(cmd, Event.STEP);
 	}
 
-	public void stepInto(final boolean ignoreFilters, final @Nullable MethodFilter smartStepFilter)
+	public void stepInto(final boolean ignoreFilters, final @javax.annotation.Nullable MethodFilter smartStepFilter)
 	{
 		stepInto(ignoreFilters, smartStepFilter, StepRequest.STEP_LINE);
 	}
 
-	public void runToCursor(@NotNull XSourcePosition position, final boolean ignoreBreakpoints)
+	public void runToCursor(@Nonnull XSourcePosition position, final boolean ignoreBreakpoints)
 	{
 		try
 		{
@@ -606,7 +606,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 								".breakpoint.reached.in.thread.switch"), NotificationType.INFORMATION, new NotificationListener()
 						{
 							@Override
-							public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event)
+							public void hyperlinkUpdate(@Nonnull Notification notification, @Nonnull HyperlinkEvent event)
 							{
 								if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
 								{
@@ -958,7 +958,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public XDebugSession getXDebugSession()
 	{
 		JavaDebugProcess process = myDebugProcess.getXdebugProcess();

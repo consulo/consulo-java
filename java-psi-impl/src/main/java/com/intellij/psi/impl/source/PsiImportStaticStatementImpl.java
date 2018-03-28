@@ -15,18 +15,18 @@
  */
 package com.intellij.psi.impl.source;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.util.ArrayFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl implements PsiImportStaticStatement {
   public static final PsiImportStaticStatementImpl[] EMPTY_ARRAY = new PsiImportStaticStatementImpl[0];
   public static final ArrayFactory<PsiImportStaticStatementImpl> ARRAY_FACTORY = new ArrayFactory<PsiImportStaticStatementImpl>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiImportStaticStatementImpl[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportStaticStatementImpl[count];
@@ -66,7 +66,7 @@ public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl imp
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiImportStaticReferenceElement getMemberReference() {
     if (isOnDemand()) {
       return null;
@@ -76,7 +76,7 @@ public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl imp
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiJavaCodeReferenceElement getClassReference() {
     if (isOnDemand()) {
       return getImportReference();
@@ -93,7 +93,7 @@ public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl imp
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitImportStaticStatement(this);
     }

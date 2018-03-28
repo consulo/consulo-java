@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.GlobalInspectionTool;
 
 /**
@@ -32,7 +33,7 @@ public abstract class BaseSharedLocalInspection<T extends GlobalInspectionTool> 
 		mySettingsDelegate = settingsDelegate;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public final String getShortName()
 	{
@@ -40,7 +41,7 @@ public abstract class BaseSharedLocalInspection<T extends GlobalInspectionTool> 
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public final String getDisplayName()
 	{

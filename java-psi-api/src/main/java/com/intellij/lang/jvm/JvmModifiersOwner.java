@@ -17,7 +17,7 @@ package com.intellij.lang.jvm;
 
 import static com.intellij.util.ArrayUtil.contains;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents an element which has modifiers and annotations.
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public interface JvmModifiersOwner extends JvmAnnotatedElement
 {
 
-	@NotNull
+	@Nonnull
 	JvmModifier[] getModifiers();
 
 	/**
@@ -34,7 +34,7 @@ public interface JvmModifiersOwner extends JvmAnnotatedElement
 	 * @param modifier the modifier to check
 	 * @return true if the element has the modifier, false otherwise
 	 */
-	default boolean hasModifier(@NotNull JvmModifier modifier)
+	default boolean hasModifier(@Nonnull JvmModifier modifier)
 	{
 		return contains(modifier, getModifiers());
 	}

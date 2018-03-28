@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
@@ -304,7 +304,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 		return psiSubstitutor;
 	}
 
-	public static PsiSubstitutor getParameterizedTypeSubstitutor(PsiClass qContainingClass, @NotNull PsiType pType)
+	public static PsiSubstitutor getParameterizedTypeSubstitutor(PsiClass qContainingClass, @Nonnull PsiType pType)
 	{
 		if(pType instanceof PsiIntersectionType)
 		{

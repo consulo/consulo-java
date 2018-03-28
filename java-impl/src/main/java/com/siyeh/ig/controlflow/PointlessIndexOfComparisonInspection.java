@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.HardcodedMethodConstants;
@@ -23,19 +25,18 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class PointlessIndexOfComparisonInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "pointless.indexof.comparison.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiBinaryExpression expression = (PsiBinaryExpression)infos[0];
     final PsiExpression lhs = expression.getLOperand();
@@ -58,7 +59,7 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
   }
 
   static boolean createContainsExpressionValue(
-    @NotNull PsiJavaToken sign, boolean flipped) {
+    @Nonnull PsiJavaToken sign, boolean flipped) {
     final IElementType tokenType = sign.getTokenType();
     if (tokenType.equals(JavaTokenType.EQEQ)) {
       return false;
@@ -163,7 +164,7 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
     }
 
     private static boolean isIndexOfCall(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();

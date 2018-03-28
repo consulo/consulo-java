@@ -26,8 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ public class ImportUtils {
 
   private ImportUtils() {}
 
-  public static void addImportIfNeeded(@NotNull PsiClass aClass, @NotNull PsiElement context) {
+  public static void addImportIfNeeded(@Nonnull PsiClass aClass, @Nonnull PsiElement context) {
     final PsiFile file = context.getContainingFile();
     if (!(file instanceof PsiJavaFile)) {
       return;
@@ -78,7 +77,7 @@ public class ImportUtils {
     importList.add(importStatement);
   }
 
-  private static boolean nameCanBeStaticallyImported(@NotNull String fqName, @NotNull String memberName, @NotNull PsiElement context) {
+  private static boolean nameCanBeStaticallyImported(@Nonnull String fqName, @Nonnull String memberName, @Nonnull PsiElement context) {
     final PsiClass containingClass = PsiTreeUtil.getParentOfType(context, PsiClass.class);
     if (containingClass == null) {
       return false;
@@ -98,7 +97,7 @@ public class ImportUtils {
            !hasExactImportStaticConflict(fqName, memberName, context);
   }
 
-  public static boolean nameCanBeImported(@NotNull String fqName, @NotNull PsiElement context) {
+  public static boolean nameCanBeImported(@Nonnull String fqName, @Nonnull PsiElement context) {
     final PsiClass containingClass = PsiTreeUtil.getParentOfType(context, PsiClass.class);
     if (containingClass != null) {
       if (fqName.equals(containingClass.getQualifiedName())) {
@@ -148,7 +147,7 @@ public class ImportUtils {
     return !containsConflictingClassName(fqName, file);
   }
 
-  public static boolean inSamePackage(@Nullable PsiElement element1, @Nullable PsiElement element2) {
+  public static boolean inSamePackage(@javax.annotation.Nullable PsiElement element1, @javax.annotation.Nullable PsiElement element2) {
     if (element1 == null || element2 == null) {
       return false;
     }
@@ -239,7 +238,7 @@ public class ImportUtils {
     return false;
   }
 
-  public static boolean hasOnDemandImportConflict(@NotNull String fqName, @NotNull PsiJavaFile file) {
+  public static boolean hasOnDemandImportConflict(@Nonnull String fqName, @Nonnull PsiJavaFile file) {
     return hasOnDemandImportConflict(fqName, file, false);
   }
 
@@ -249,7 +248,7 @@ public class ImportUtils {
    *               on demand import can be overridden with an exact import for the fqName
    *               without breaking stuff.
    */
-  private static boolean hasOnDemandImportConflict(@NotNull String fqName, @NotNull PsiJavaFile file, boolean strict) {
+  private static boolean hasOnDemandImportConflict(@Nonnull String fqName, @Nonnull PsiJavaFile file, boolean strict) {
     final PsiImportList imports = file.getImportList();
     if (imports == null) {
       return false;
@@ -408,7 +407,7 @@ public class ImportUtils {
     return false;
   }
 
-  public static boolean addStaticImport(@NotNull String qualifierClass, @NonNls @NotNull String memberName, @NotNull PsiElement context) {
+  public static boolean addStaticImport(@Nonnull String qualifierClass, @NonNls @Nonnull String memberName, @Nonnull PsiElement context) {
     if (!nameCanBeStaticallyImported(qualifierClass, memberName, context)) {
       return false;
     }
@@ -459,7 +458,7 @@ public class ImportUtils {
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiImportStaticStatement findOnDemandImportStaticStatement(PsiImportList importList, String qualifierClass) {
     final PsiImportStaticStatement[] importStaticStatements = importList.getImportStaticStatements();
     for (PsiImportStaticStatement importStaticStatement : importStaticStatements) {
@@ -478,7 +477,7 @@ public class ImportUtils {
     return null;
   }
 
-  private static List<PsiImportStaticStatement> getMatchingImports(@NotNull PsiImportList importList, @NotNull String className) {
+  private static List<PsiImportStaticStatement> getMatchingImports(@Nonnull PsiImportList importList, @Nonnull String className) {
     final List<PsiImportStaticStatement> imports = new ArrayList();
     for (PsiImportStaticStatement staticStatement : importList.getImportStaticStatements()) {
       final PsiClass psiClass = staticStatement.resolveTargetClass();
@@ -493,7 +492,7 @@ public class ImportUtils {
     return imports;
   }
 
-  public static boolean isStaticallyImported(@NotNull PsiMember member, @NotNull PsiElement context) {
+  public static boolean isStaticallyImported(@Nonnull PsiMember member, @Nonnull PsiElement context) {
     final PsiClass memberClass = member.getContainingClass();
     if (memberClass == null) {
       return false;

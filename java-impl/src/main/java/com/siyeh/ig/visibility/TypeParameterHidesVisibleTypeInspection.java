@@ -21,11 +21,11 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.parameter.hides.visible.type.display.name");
@@ -39,7 +39,7 @@ public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsBundle.message(

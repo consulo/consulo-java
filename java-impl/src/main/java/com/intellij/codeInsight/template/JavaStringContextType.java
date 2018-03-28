@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.template;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
@@ -32,7 +32,7 @@ public class JavaStringContextType extends TemplateContextType {
   }
 
   @Override
-  public boolean isInContext(@NotNull final PsiFile file, final int offset) {
+  public boolean isInContext(@Nonnull final PsiFile file, final int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
       return isStringLiteral(file.findElementAt(offset));
     }

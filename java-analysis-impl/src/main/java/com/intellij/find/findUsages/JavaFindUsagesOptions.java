@@ -2,7 +2,7 @@ package com.intellij.find.findUsages;
 
 import java.util.LinkedHashSet;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.find.FindBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -13,7 +13,7 @@ import com.intellij.openapi.util.text.StringUtil;
 public abstract class JavaFindUsagesOptions extends FindUsagesOptions {
   public boolean isSkipImportStatements = false;
 
-  public JavaFindUsagesOptions(@NotNull Project project) {
+  public JavaFindUsagesOptions(@Nonnull Project project) {
     super(project, null);
 
     isUsages = true;

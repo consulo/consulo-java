@@ -19,10 +19,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.ClassMember;
 import com.intellij.codeInsight.hint.HintManager;
@@ -61,7 +61,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -75,7 +75,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element)
 	{
 		if(!JavaLanguage.INSTANCE.equals(element.getLanguage()))
 		{
@@ -102,7 +102,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, @NotNull PsiElement element) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		final PsiParameter[] parameters = getParams(element);
 		if(parameters == null || parameters.length == 0)
@@ -191,7 +191,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
 		}
 	}
 
-	public static void startTemplate(@NotNull Project project, Editor editor, PsiExpression[] argsToBeDelegated, PsiMethod delegateMethod)
+	public static void startTemplate(@Nonnull Project project, Editor editor, PsiExpression[] argsToBeDelegated, PsiMethod delegateMethod)
 	{
 		TemplateBuilderImpl builder = new TemplateBuilderImpl(delegateMethod);
 		RangeMarker rangeMarker = editor.getDocument().createRangeMarker(delegateMethod.getTextRange());

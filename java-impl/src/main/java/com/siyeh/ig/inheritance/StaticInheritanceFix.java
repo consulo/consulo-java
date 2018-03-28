@@ -38,7 +38,7 @@ import com.intellij.util.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -53,7 +53,7 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
     myReplaceInWholeProject = replaceInWholeProject;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     String scope =
       myReplaceInWholeProject ? InspectionGadgetsBundle.message("the.whole.project") : InspectionGadgetsBundle.message("this.class");
@@ -81,7 +81,7 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
 
     ProgressManager.getInstance().run(new Task.Modal(project, "Replacing usages of " + iface.getName(), false) {
 
-      public void run(@NotNull ProgressIndicator indicator) {
+      public void run(@Nonnull ProgressIndicator indicator) {
         for (final PsiField field : allFields) {
           final Query<PsiReference> search = ReferencesSearch.search(field, implementingClass.getUseScope(), false);
           for (PsiReference reference : search) {

@@ -24,8 +24,8 @@ import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
 
 import java.util.function.Predicate;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.util.Pair;
@@ -43,17 +43,17 @@ public class FileParser
 
 	private final JavaParser myParser;
 
-	public FileParser(@NotNull JavaParser javaParser)
+	public FileParser(@Nonnull JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
-	public void parse(@NotNull PsiBuilder builder)
+	public void parse(@Nonnull PsiBuilder builder)
 	{
 		parseFile(builder, FileParser::stopImportListParsing, "expected.class.or.interface");
 	}
 
-	public void parseFile(@NotNull PsiBuilder builder, @NotNull Predicate<PsiBuilder> importListStopper, @NotNull String errorMessageKey)
+	public void parseFile(@Nonnull PsiBuilder builder, @Nonnull Predicate<PsiBuilder> importListStopper, @Nonnull String errorMessageKey)
 	{
 		parsePackageStatement(builder);
 
@@ -139,7 +139,7 @@ public class FileParser
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected PsiBuilder.Marker parseInitial(PsiBuilder builder)
 	{
 		return myParser.getDeclarationParser().parse(builder, DeclarationParser.Context.FILE);
@@ -173,7 +173,7 @@ public class FileParser
 		done(statement, JavaElementType.PACKAGE_STATEMENT);
 	}
 
-	@NotNull
+	@Nonnull
 	private Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<PsiBuilder> stopper)
 	{
 		PsiBuilder.Marker list = builder.mark();
@@ -223,7 +223,7 @@ public class FileParser
 		return Pair.create(list, isEmpty);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseImportStatement(PsiBuilder builder)
 	{
 		if(builder.getTokenType() != JavaTokenType.IMPORT_KEYWORD)
@@ -247,7 +247,7 @@ public class FileParser
 		return statement;
 	}
 
-	private static String error(@NotNull String errorMessageKey)
+	private static String error(@Nonnull String errorMessageKey)
 	{
 		return JavaErrorMessages.message(errorMessageKey);
 	}

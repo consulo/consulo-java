@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection.reference;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiParameter;
 
 /**
@@ -54,7 +54,7 @@ public interface RefParameter extends RefJavaElement
 	 *
 	 * @return the parameter value or null if it's different or impossible to determine.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	String getActualValueIfSame();
 
 	/**

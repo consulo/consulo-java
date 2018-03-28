@@ -19,7 +19,8 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -48,7 +49,7 @@ class LabelReferenceCompletion implements CompletionProvider
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
+	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result)
 	{
 		PsiReference ref = parameters.getPosition().getContainingFile().findReferenceAt(parameters.getOffset());
 		if(ref instanceof PsiLabelReference)

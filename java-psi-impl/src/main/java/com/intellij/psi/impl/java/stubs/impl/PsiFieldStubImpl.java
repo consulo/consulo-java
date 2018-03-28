@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -42,7 +42,7 @@ public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub
 
 	public PsiFieldStubImpl(StubElement parent,
 			String name,
-			@NotNull TypeInfo type,
+			@Nonnull TypeInfo type,
 			@Nullable String initializer,
 			byte flags)
 	{
@@ -51,7 +51,7 @@ public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub
 
 	public PsiFieldStubImpl(StubElement parent,
 			StringRef name,
-			@NotNull TypeInfo type,
+			@Nonnull TypeInfo type,
 			@Nullable StringRef initializer,
 			byte flags)
 	{
@@ -63,7 +63,7 @@ public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TypeInfo getType(boolean doResolve)
 	{
 		return doResolve ? myType.applyAnnotations(this) : myType;

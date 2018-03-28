@@ -17,7 +17,7 @@ package com.intellij.psi;
 
 import static com.intellij.psi.compiled.ClassFileDecompilers.Full;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.Language;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.compiled.ClassFileDecompilers;
@@ -27,9 +27,9 @@ import com.intellij.psi.compiled.ClassFileDecompilers;
  */
 public class ClassFileViewProviderFactory implements FileViewProviderFactory
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public FileViewProvider createFileViewProvider(@NotNull VirtualFile file, Language language, @NotNull PsiManager manager, boolean eventSystemEnabled)
+	public FileViewProvider createFileViewProvider(@Nonnull VirtualFile file, Language language, @Nonnull PsiManager manager, boolean eventSystemEnabled)
 	{
 		ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
 		if(decompiler instanceof Full)

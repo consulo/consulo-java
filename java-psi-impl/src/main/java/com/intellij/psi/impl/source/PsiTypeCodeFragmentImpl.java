@@ -17,8 +17,9 @@ package com.intellij.psi.impl.source;
 
 import static com.intellij.util.BitUtil.isSet;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaCodeFragmentFactory;
@@ -62,7 +63,7 @@ public class PsiTypeCodeFragmentImpl extends PsiCodeFragmentImpl implements PsiT
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType getType() throws TypeSyntaxException, NoTypeException
 	{
 		class MyTypeSyntaxException extends RuntimeException

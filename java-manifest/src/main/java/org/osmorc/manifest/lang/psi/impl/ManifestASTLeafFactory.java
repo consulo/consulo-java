@@ -25,8 +25,8 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.tree.IElementType;
@@ -38,9 +38,9 @@ import consulo.psi.tree.ASTLeafFactory;
  */
 public class ManifestASTLeafFactory implements ASTLeafFactory
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public LeafElement createLeaf(@NotNull IElementType type, @NotNull LanguageVersion languageVersion, @NotNull CharSequence text)
+	public LeafElement createLeaf(@Nonnull IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull CharSequence text)
 	{
 		return new ManifestTokenImpl((ManifestTokenType) type, text);
 	}

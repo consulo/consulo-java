@@ -24,7 +24,8 @@
  */
 package org.osmorc.manifest.lang;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
@@ -48,8 +49,8 @@ public class ManifestParser implements PsiParser {
   private PsiBuilder.Marker assignmentMarker;
   private IElementType assignmentMarkerType;
 
-  @NotNull
-  public ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder, @NotNull LanguageVersion languageVersion) {
+  @Nonnull
+  public ASTNode parse(@Nonnull IElementType root, @Nonnull PsiBuilder builder, @Nonnull LanguageVersion languageVersion) {
     builder.setDebugMode(ApplicationProperties.isInSandbox());
     final PsiBuilder.Marker rootMarker = builder.mark();
 

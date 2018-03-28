@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,21 +27,19 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "new.string.buffer.with.char.argument.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "new.string.buffer.with.char.argument.problem.descriptor");
@@ -51,7 +51,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiExpression argument = (PsiExpression)infos[0];
     if (!(argument instanceof PsiLiteralExpression)) {
@@ -63,7 +63,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
   private static class NewStringBufferWithCharArgumentFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "new.string.buffer.with.char.argument.quickfix");

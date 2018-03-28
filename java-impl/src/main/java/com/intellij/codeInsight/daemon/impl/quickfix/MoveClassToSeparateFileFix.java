@@ -29,8 +29,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.file.JavaDirectoryServiceImpl;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class MoveClassToSeparateFileFix implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(MoveClassToSeparateFileFix.class);
@@ -42,19 +41,19 @@ public class MoveClassToSeparateFileFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("move.class.to.separate.file.text", myClass.getName());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("move.class.to.separate.file.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, @Nullable Editor editor, @NotNull PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, @javax.annotation.Nullable Editor editor, @Nonnull PsiFile file) {
     if  (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) return false;
     PsiDirectory dir = file.getContainingDirectory();
     if (dir == null) return false;
@@ -69,7 +68,7 @@ public class MoveClassToSeparateFileFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, @Nullable Editor editor, @NotNull PsiFile file) {
+  public void invoke(@Nonnull Project project, @javax.annotation.Nullable Editor editor, @Nonnull PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
 
     PsiDirectory dir = file.getContainingDirectory();

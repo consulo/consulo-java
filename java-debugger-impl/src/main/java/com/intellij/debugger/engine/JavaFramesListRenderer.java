@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
@@ -35,7 +36,7 @@ class JavaFramesListRenderer /*extends ColoredListCellRenderer*/
 		myColorScheme = EditorColorsManager.getInstance().getGlobalScheme();
 	}
 
-	public void customizePresentation(StackFrameDescriptorImpl descriptor, @NotNull ColoredTextContainer component, StackFrameDescriptorImpl selectedDescriptor)
+	public void customizePresentation(StackFrameDescriptorImpl descriptor, @Nonnull ColoredTextContainer component, StackFrameDescriptorImpl selectedDescriptor)
 	{
 		component.setIcon(descriptor.getIcon());
 		//final Object selectedValue = list.getSelectedValue();

@@ -15,9 +15,11 @@
  */
 package com.siyeh.ig;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
@@ -36,7 +38,7 @@ public class PsiReplacementUtil
 {
 	private static final Logger LOG = Logger.getInstance(PsiReplacementUtil.class);
 
-	public static void replaceExpression(@NotNull PsiExpression expression, @NotNull @NonNls String newExpressionText)
+	public static void replaceExpression(@Nonnull PsiExpression expression, @Nonnull @NonNls String newExpressionText)
 	{
 		final Project project = expression.getProject();
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -47,7 +49,7 @@ public class PsiReplacementUtil
 		styleManager.reformat(replacementExpression);
 	}
 
-	public static PsiElement replaceExpressionAndShorten(@NotNull PsiExpression expression, @NotNull @NonNls String newExpressionText)
+	public static PsiElement replaceExpressionAndShorten(@Nonnull PsiExpression expression, @Nonnull @NonNls String newExpressionText)
 	{
 		final Project project = expression.getProject();
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -60,7 +62,7 @@ public class PsiReplacementUtil
 		return styleManager.reformat(replacementExp);
 	}
 
-	public static PsiElement replaceStatement(@NotNull PsiStatement statement, @NotNull @NonNls String newStatementText)
+	public static PsiElement replaceStatement(@Nonnull PsiStatement statement, @Nonnull @NonNls String newStatementText)
 	{
 		final Project project = statement.getProject();
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -71,7 +73,7 @@ public class PsiReplacementUtil
 		return styleManager.reformat(replacementExp);
 	}
 
-	public static void replaceStatementAndShortenClassNames(@NotNull PsiStatement statement, @NotNull @NonNls String newStatementText)
+	public static void replaceStatementAndShortenClassNames(@Nonnull PsiStatement statement, @Nonnull @NonNls String newStatementText)
 	{
 		final Project project = statement.getProject();
 		final CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
@@ -130,7 +132,7 @@ public class PsiReplacementUtil
 		}
 	}
 
-	public static void replaceExpressionWithReferenceTo(@NotNull PsiExpression expression, @NotNull PsiMember target)
+	public static void replaceExpressionWithReferenceTo(@Nonnull PsiExpression expression, @Nonnull PsiMember target)
 	{
 		final Project project = expression.getProject();
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -142,15 +144,15 @@ public class PsiReplacementUtil
 		styleManager.shortenClassReferences(element);
 	}
 
-	@NotNull
-	public static String getElementText(@NotNull PsiElement element, @Nullable PsiElement elementToReplace, @Nullable String replacement)
+	@Nonnull
+	public static String getElementText(@Nonnull PsiElement element, @Nullable PsiElement elementToReplace, @Nullable String replacement)
 	{
 		final StringBuilder out = new StringBuilder();
 		getElementText(element, elementToReplace, replacement, out);
 		return out.toString();
 	}
 
-	private static void getElementText(@NotNull PsiElement element, @Nullable PsiElement elementToReplace, @Nullable String replacement, @NotNull StringBuilder out)
+	private static void getElementText(@Nonnull PsiElement element, @Nullable PsiElement elementToReplace, @Nullable String replacement, @Nonnull StringBuilder out)
 	{
 		if(element.equals(elementToReplace))
 		{
@@ -169,7 +171,7 @@ public class PsiReplacementUtil
 		}
 	}
 
-	public static void replaceOperatorAssignmentWithAssignmentExpression(@NotNull PsiAssignmentExpression assignmentExpression)
+	public static void replaceOperatorAssignmentWithAssignmentExpression(@Nonnull PsiAssignmentExpression assignmentExpression)
 	{
 		final PsiJavaToken sign = assignmentExpression.getOperationSign();
 		final PsiExpression lhs = assignmentExpression.getLExpression();

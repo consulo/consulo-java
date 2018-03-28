@@ -18,9 +18,11 @@ package com.intellij.psi.impl.source;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.openapi.command.undo.BasicUndoableAction;
@@ -66,7 +68,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Language getLanguage()
 	{
 		return getContentElementType().getLanguage();
@@ -89,7 +91,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	private FileViewProvider myViewProvider;
 
 	@Override
-	@NotNull
+	@Nonnull
 	public FileViewProvider getViewProvider()
 	{
 		if(myViewProvider != null)
@@ -100,7 +102,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public FileType getFileType()
 	{
 		return JavaFileType.INSTANCE;
@@ -173,7 +175,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -186,7 +188,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
 
@@ -312,7 +314,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public void setIntentionActionsFilter(@NotNull final IntentionActionsFilter filter)
+	public void setIntentionActionsFilter(@Nonnull final IntentionActionsFilter filter)
 	{
 		myIntentionActionsFilter = filter;
 	}
@@ -336,7 +338,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public GlobalSearchScope getResolveScope()
 	{
 		if(myResolveScope != null)

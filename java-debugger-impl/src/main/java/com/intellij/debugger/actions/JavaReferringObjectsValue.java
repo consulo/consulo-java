@@ -17,10 +17,10 @@ package com.intellij.debugger.actions;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.JavaValue;
@@ -51,8 +51,8 @@ public class JavaReferringObjectsValue extends JavaValue
 	private final boolean myIsField;
 
 	private JavaReferringObjectsValue(@Nullable JavaValue parent,
-			@NotNull ValueDescriptorImpl valueDescriptor,
-			@NotNull EvaluationContextImpl evaluationContext,
+			@Nonnull ValueDescriptorImpl valueDescriptor,
+			@Nonnull EvaluationContextImpl evaluationContext,
 			NodeManagerImpl nodeManager,
 			boolean isField)
 	{
@@ -60,7 +60,7 @@ public class JavaReferringObjectsValue extends JavaValue
 		myIsField = isField;
 	}
 
-	public JavaReferringObjectsValue(@NotNull JavaValue javaValue, boolean isField)
+	public JavaReferringObjectsValue(@Nonnull JavaValue javaValue, boolean isField)
 	{
 		super(null, javaValue.getDescriptor(), javaValue.getEvaluationContext(), javaValue.getNodeManager(), false);
 		myIsField = isField;
@@ -73,7 +73,7 @@ public class JavaReferringObjectsValue extends JavaValue
 	}
 
 	@Override
-	public void computeChildren(@NotNull final XCompositeNode node)
+	public void computeChildren(@Nonnull final XCompositeNode node)
 	{
 		scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext())
 		{
@@ -84,7 +84,7 @@ public class JavaReferringObjectsValue extends JavaValue
 			}
 
 			@Override
-			public void contextAction(@NotNull SuspendContextImpl suspendContext) throws Exception
+			public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
 			{
 				final XValueChildrenList children = new XValueChildrenList();
 
@@ -151,7 +151,7 @@ public class JavaReferringObjectsValue extends JavaValue
 	}
 
 	@Override
-	public void computePresentation(@NotNull final XValueNode node, @NotNull final XValuePlace place)
+	public void computePresentation(@Nonnull final XValueNode node, @Nonnull final XValuePlace place)
 	{
 		if(!myIsField)
 		{
@@ -162,18 +162,18 @@ public class JavaReferringObjectsValue extends JavaValue
 			super.computePresentation(new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl()
 			{
 				@Override
-				public void applyPresentation(@Nullable Icon icon, @NotNull final XValuePresentation valuePresenter, boolean hasChildren)
+				public void applyPresentation(@Nullable Icon icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren)
 				{
 					node.setPresentation(icon, new XValuePresentation()
 					{
-						@NotNull
+						@Nonnull
 						@Override
 						public String getSeparator()
 						{
 							return " in ";
 						}
 
-						@Nullable
+						@javax.annotation.Nullable
 						@Override
 						public String getType()
 						{
@@ -181,7 +181,7 @@ public class JavaReferringObjectsValue extends JavaValue
 						}
 
 						@Override
-						public void renderValue(@NotNull XValueTextRenderer renderer)
+						public void renderValue(@Nonnull XValueTextRenderer renderer)
 						{
 							valuePresenter.renderValue(renderer);
 						}
@@ -189,7 +189,7 @@ public class JavaReferringObjectsValue extends JavaValue
 				}
 
 				@Override
-				public void setFullValueEvaluator(@NotNull XFullValueEvaluator fullValueEvaluator)
+				public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator)
 				{
 				}
 
@@ -214,7 +214,7 @@ public class JavaReferringObjectsValue extends JavaValue
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XValueModifier getModifier()
 	{

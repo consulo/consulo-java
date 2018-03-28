@@ -1,7 +1,7 @@
 package com.intellij.refactoring.introduceParameter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.intention.impl.TypeExpression;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.template.Expression;
@@ -109,7 +109,7 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
   }
 
   @Override
-  protected void saveSettings(@NotNull PsiVariable psiVariable) {
+  protected void saveSettings(@Nonnull PsiVariable psiVariable) {
     TypeSelectorManagerImpl.typeSelected(psiVariable.getType(), getType());//myDefaultType.getType());
     myTypeSelectorManager = null;
   }
@@ -128,7 +128,7 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
     return names;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiExpression restoreExpression(PsiFile containingFile,
                                                 PsiVariable psiVariable,
                                                 PsiElementFactory elementFactory,

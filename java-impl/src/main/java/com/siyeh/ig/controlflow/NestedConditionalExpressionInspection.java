@@ -15,23 +15,24 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiConditionalExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class NestedConditionalExpressionInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "nested.conditional.expression.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "nested.conditional.expression.problem.descriptor");

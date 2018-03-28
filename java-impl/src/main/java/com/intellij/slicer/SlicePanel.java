@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,8 +39,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
@@ -102,11 +102,11 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 	private boolean isDisposed;
 	private final ToolWindow myToolWindow;
 
-	public SlicePanel(@NotNull final Project project,
+	public SlicePanel(@Nonnull final Project project,
 			boolean dataFlowToThis,
-			@NotNull SliceNode rootNode,
+			@Nonnull SliceNode rootNode,
 			boolean splitByLeafExpressions,
-			@NotNull final ToolWindow toolWindow)
+			@Nonnull final ToolWindow toolWindow)
 	{
 		super(new BorderLayout());
 		myToolWindow = toolWindow;
@@ -115,7 +115,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 			ToolWindowAnchor myAnchor = toolWindow.getAnchor();
 
 			@Override
-			public void toolWindowRegistered(@NotNull String id)
+			public void toolWindowRegistered(@Nonnull String id)
 			{
 			}
 
@@ -230,7 +230,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 		ToolTipManager.sharedInstance().unregisterComponent(myTree);
 	}
 
-	@NotNull
+	@Nonnull
 	private JTree createTree()
 	{
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
@@ -395,7 +395,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private List<Navigatable> getNavigatables()
 	{
 		TreePath[] paths = myTree.getSelectionPaths();
@@ -424,7 +424,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 		return navigatables;
 	}
 
-	@NotNull
+	@Nonnull
 	private ActionToolbar createToolbar()
 	{
 		final DefaultActionGroup actionGroup = new DefaultActionGroup();

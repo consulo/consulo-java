@@ -26,8 +26,8 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,13 +35,13 @@ import java.util.List;
 public class AbstractMethodWithMissingImplementationsInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "abstract.method.with.missing.implementations.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "abstract.method.with.missing.implementations.problem.descriptor");
@@ -82,8 +82,8 @@ public class AbstractMethodWithMissingImplementationsInspection
     }
 
     private static boolean hasMatchingImplementation(
-      @NotNull PsiClass aClass,
-      @NotNull PsiMethod method) {
+      @Nonnull PsiClass aClass,
+      @Nonnull PsiMethod method) {
       final PsiMethod overridingMethod =
         findOverridingMethod(aClass, method);
       if (overridingMethod == null ||
@@ -107,7 +107,7 @@ public class AbstractMethodWithMissingImplementationsInspection
      */
     @Nullable
     private static PsiMethod findOverridingMethod(
-      PsiClass aClass, @NotNull PsiMethod method) {
+      PsiClass aClass, @Nonnull PsiMethod method) {
       final PsiClass superClass = method.getContainingClass();
       if (aClass.equals(superClass)) {
         return null;

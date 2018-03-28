@@ -15,13 +15,14 @@
  */
 package com.siyeh.ipp.integer;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiType;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class ConvertIntegerToBinaryIntention extends ConvertNumberIntentionBase {
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ConvertIntegerToBinaryPredicate();
   }

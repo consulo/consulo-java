@@ -12,8 +12,7 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.descriptors.ConfigFile;
 import com.intellij.util.descriptors.ConfigFileInfo;
 import com.intellij.util.descriptors.ConfigFileMetaData;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
@@ -22,24 +21,25 @@ import java.lang.ref.SoftReference;
  * @author nik
  */
 public class ConfigFileImpl implements ConfigFile {
-  @NotNull private ConfigFileInfo myInfo;
+  @Nonnull
+  private ConfigFileInfo myInfo;
   private final VirtualFilePointer myFilePointer;
   private volatile Reference<PsiFile> myPsiFile;
   private final ConfigFileContainerImpl myContainer;
   private final Project myProject;
   private long myModificationCount;
 
-  public ConfigFileImpl(@NotNull final ConfigFileContainerImpl container, @NotNull final ConfigFileInfo configuration) {
+  public ConfigFileImpl(@Nonnull final ConfigFileContainerImpl container, @Nonnull final ConfigFileInfo configuration) {
     myContainer = container;
     myInfo = configuration;
     final VirtualFilePointerManager pointerManager = VirtualFilePointerManager.getInstance();
     myFilePointer = pointerManager.create(configuration.getUrl(), this, new VirtualFilePointerListener() {
       @Override
-      public void beforeValidityChanged(@NotNull final VirtualFilePointer[] pointers) {
+      public void beforeValidityChanged(@Nonnull final VirtualFilePointer[] pointers) {
       }
 
       @Override
-      public void validityChanged(@NotNull final VirtualFilePointer[] pointers) {
+      public void validityChanged(@Nonnull final VirtualFilePointer[] pointers) {
         myPsiFile = null;
         onChange();
       }
@@ -58,18 +58,18 @@ public class ConfigFileImpl implements ConfigFile {
     return myFilePointer.getUrl();
   }
 
-  public void setInfo(@NotNull final ConfigFileInfo info) {
+  public void setInfo(@Nonnull final ConfigFileInfo info) {
     myInfo = info;
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public VirtualFile getVirtualFile() {
     return myFilePointer.isValid() ? myFilePointer.getFile() : null;
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiFile getPsiFile() {
     Reference<PsiFile> ref = myPsiFile;
     PsiFile psiFile = ref == null ? null : ref.get();
@@ -89,7 +89,7 @@ public class ConfigFileImpl implements ConfigFile {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public XmlFile getXmlFile() {
     final PsiFile file = getPsiFile();
     return file instanceof XmlFile ? (XmlFile)file : null;
@@ -100,7 +100,7 @@ public class ConfigFileImpl implements ConfigFile {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public ConfigFileInfo getInfo() {
     return myInfo;
   }
@@ -120,7 +120,7 @@ public class ConfigFileImpl implements ConfigFile {
 
 
   @Override
-  @NotNull
+  @Nonnull
   public ConfigFileMetaData getMetaData() {
     return myInfo.getMetaData();
   }

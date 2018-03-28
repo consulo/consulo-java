@@ -31,8 +31,7 @@ import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.HighlightUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -44,26 +43,26 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   public boolean ignorePrivateMethods = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ReturnOfCollectionOrArrayField";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.of.collection.array.field.display.name");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("return.of.collection.array.field.option"),
                                           this, "ignorePrivateMethods");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     final PsiType type = field.getType();
@@ -76,7 +75,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[1];
     final String text = referenceExpression.getText();
@@ -116,7 +115,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
       myQualifiedClassName = qualifiedClassName;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "return.of.collection.field.quickfix", myReplacementText);
@@ -186,7 +185,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   private class ReturnOfCollectionFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReturnStatement(@NotNull PsiReturnStatement statement) {
+    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       final PsiExpression returnValue = statement.getReturnValue();
       if (returnValue == null) {

@@ -17,7 +17,7 @@ package com.intellij.refactoring.changeSignature;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -42,21 +42,21 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
 {
 	private static final Logger LOG = Logger.getInstance(JavaChangeSignatureDetector.class);
 
-	@NotNull
+	@Nonnull
 	@Override
-	public DetectedJavaChangeInfo createInitialChangeInfo(final @NotNull PsiElement element)
+	public DetectedJavaChangeInfo createInitialChangeInfo(final @Nonnull PsiElement element)
 	{
 		return DetectedJavaChangeInfo.createFromMethod(PsiTreeUtil.getParentOfType(element, PsiMethod.class), false);
 	}
 
 	@Override
-	public void performChange(final DetectedJavaChangeInfo changeInfo, Editor editor, @NotNull final String oldText)
+	public void performChange(final DetectedJavaChangeInfo changeInfo, Editor editor, @Nonnull final String oldText)
 	{
 		changeInfo.perform(oldText, editor, true);
 	}
 
 	@Override
-	public boolean isChangeSignatureAvailableOnElement(@NotNull PsiElement element, DetectedJavaChangeInfo currentInfo)
+	public boolean isChangeSignatureAvailableOnElement(@Nonnull PsiElement element, DetectedJavaChangeInfo currentInfo)
 	{
 		final PsiMethod method = currentInfo.getMethod();
 		TextRange range = method.getTextRange();
@@ -79,7 +79,7 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
 	}
 
 	@Override
-	public TextRange getHighlightingRange(@NotNull DetectedJavaChangeInfo changeInfo)
+	public TextRange getHighlightingRange(@Nonnull DetectedJavaChangeInfo changeInfo)
 	{
 		PsiElement method = changeInfo.getMethod();
 		return method != null ? getSignatureRange((PsiMethod) method) : null;
@@ -172,7 +172,7 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
 	}
 
 	@Override
-	public DetectedJavaChangeInfo createNextChangeInfo(String signature, @NotNull final DetectedJavaChangeInfo currentInfo, boolean delegate)
+	public DetectedJavaChangeInfo createNextChangeInfo(String signature, @Nonnull final DetectedJavaChangeInfo currentInfo, boolean delegate)
 	{
 		final PsiElement currentInfoMethod = currentInfo.getMethod();
 		if(currentInfoMethod == null)

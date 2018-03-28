@@ -21,7 +21,7 @@ import static com.intellij.codeInspection.bytecodeAnalysis.Direction.InOut;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.org.objectweb.asm.Opcodes;
 import org.jetbrains.org.objectweb.asm.Type;
 import org.jetbrains.org.objectweb.asm.tree.MethodNode;
@@ -87,7 +87,7 @@ abstract class Analysis<Res> {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   protected abstract Equation analyze() throws AnalyzerException;
 
   final Frame<BasicValue> createStartFrame() {

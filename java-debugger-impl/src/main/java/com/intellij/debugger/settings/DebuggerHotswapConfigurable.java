@@ -17,7 +17,7 @@ package com.intellij.debugger.settings;
 
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.openapi.options.SearchableConfigurable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -83,7 +83,7 @@ public class DebuggerHotswapConfigurable implements SearchableConfigurable {
     return "reference.idesettings.debugger.hotswap";
   }
 
-  @NotNull
+  @Nonnull
   public String getId() {
     return getHelpTopic();
   }

@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -23,7 +25,6 @@ import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
-import org.jetbrains.annotations.NotNull;
 
 /**
  *  @author dsl
@@ -36,13 +37,13 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiTypeElement[] getTypeParameterElements() {
     return getChildrenAsPsiElements(JavaElementType.TYPE, PsiTypeElement.ARRAY_FACTORY);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getTypeArguments() {
     return PsiImplUtil.typesByReferenceParameterList(this);
   }
@@ -147,7 +148,7 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (child.getElementType() == JavaElementType.TYPE){
       ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
       if (next != null && next.getElementType() == JavaTokenType.COMMA){
@@ -177,7 +178,7 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceParameterList(this);
     }

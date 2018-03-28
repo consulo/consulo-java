@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.ig.ui.UiUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -63,13 +63,13 @@ public class BadExceptionThrownInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ProhibitedExceptionThrown";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "bad.exception.thrown.display.name");
@@ -82,7 +82,7 @@ public class BadExceptionThrownInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String exceptionName = type.getPresentableText();

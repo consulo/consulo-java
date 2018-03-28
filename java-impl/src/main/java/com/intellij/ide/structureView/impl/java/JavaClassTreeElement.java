@@ -19,7 +19,7 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.light.LightElement;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -35,7 +35,7 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass> {
     myParents.add(cls);
   }
 
-  @NotNull
+  @Nonnull
   public Collection<StructureViewTreeElement> getChildrenBase() {
     return getClassChildren();
   }

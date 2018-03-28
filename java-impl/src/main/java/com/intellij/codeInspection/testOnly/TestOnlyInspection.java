@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection.testOnly;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
@@ -25,31 +27,31 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.test.only.problems.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "TestOnlyProblems";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GENERAL_GROUP_NAME;
   }
 
   @Override
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder h, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder h, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       @Override public void visitCallExpression(PsiCallExpression e) {
         validate(e, h);

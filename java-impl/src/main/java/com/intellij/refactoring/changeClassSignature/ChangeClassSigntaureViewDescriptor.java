@@ -15,12 +15,13 @@
  */
 package com.intellij.refactoring.changeClassSignature;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -33,7 +34,7 @@ public class ChangeClassSigntaureViewDescriptor extends UsageViewDescriptorAdapt
     myClass = aClass;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[]{myClass};
   }

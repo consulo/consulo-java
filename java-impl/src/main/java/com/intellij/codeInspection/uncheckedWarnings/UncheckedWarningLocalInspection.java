@@ -24,7 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.daemon.impl.quickfix.GenerifyFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.openapi.util.Pass;
@@ -32,7 +32,7 @@ import com.intellij.util.ui.JBUI;
 
 public class UncheckedWarningLocalInspection extends UncheckedWarningLocalInspectionBase
 {
-	@NotNull
+	@Nonnull
 	@Override
 	protected LocalQuickFix[] createFixes()
 	{

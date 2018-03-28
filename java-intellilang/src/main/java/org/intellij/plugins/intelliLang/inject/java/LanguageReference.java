@@ -15,6 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.inject.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.Language;
@@ -26,8 +28,6 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.EmptyIcon;
 import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
 import org.intellij.plugins.intelliLang.util.StringLiteralReference;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides completion for available Language-IDs in
@@ -39,7 +39,7 @@ final class LanguageReference extends StringLiteralReference {
     super(value);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiElement resolve() {
     return InjectedLanguage.findLanguageById(getValue()) != null ? myValue : null;
   }
@@ -48,7 +48,7 @@ final class LanguageReference extends StringLiteralReference {
     return false;
   }
 
-  @NotNull
+  @Nonnull
   public Object[] getVariants() {
     final String[] ids = InjectedLanguage.getAvailableLanguageIDs();
     return ContainerUtil.map2Array(ids, LookupElement.class, new Function<String, LookupElement>() {

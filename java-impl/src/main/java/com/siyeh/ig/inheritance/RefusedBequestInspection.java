@@ -15,10 +15,9 @@
  */
 package com.siyeh.ig.inheritance;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.psi.*;
 import com.intellij.xml.util.XmlStringUtil;
@@ -33,13 +32,13 @@ public class RefusedBequestInspection extends BaseInspection {
   @SuppressWarnings("PublicField") public boolean ignoreEmptySuperMethods = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("refused.bequest.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("refused.bequest.problem.descriptor");
   }
@@ -60,7 +59,7 @@ public class RefusedBequestInspection extends BaseInspection {
   private class RefusedBequestVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       final PsiCodeBlock body = method.getBody();
       if (body == null) {
@@ -119,7 +118,7 @@ public class RefusedBequestInspection extends BaseInspection {
       return false;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiMethod getLeastConcreteSuperMethod(PsiMethod method) {
       final PsiMethod[] superMethods = method.findSuperMethods(true);
       for (final PsiMethod superMethod : superMethods) {
@@ -131,7 +130,7 @@ public class RefusedBequestInspection extends BaseInspection {
       return null;
     }
 
-    private boolean containsSuperCall(@NotNull PsiElement context, @NotNull PsiMethod method) {
+    private boolean containsSuperCall(@Nonnull PsiElement context, @Nonnull PsiMethod method) {
       final SuperCallVisitor visitor = new SuperCallVisitor(method);
       context.accept(visitor);
       return visitor.hasSuperCall();
@@ -148,7 +147,7 @@ public class RefusedBequestInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (hasSuperCall) {
         return;
       }
@@ -157,7 +156,7 @@ public class RefusedBequestInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       if (hasSuperCall) {
         return;
       }

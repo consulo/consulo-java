@@ -17,8 +17,8 @@ package com.intellij.debugger.engine.evaluation.expression;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -29,13 +29,13 @@ import consulo.internal.com.sun.jdi.ObjectReference;
  */
 public class TryEvaluator implements Evaluator
 {
-	@NotNull
+	@Nonnull
 	private final Evaluator myBodyEvaluator;
 	private final List<CatchEvaluator> myCatchBlockEvaluators;
-	@Nullable
+	@javax.annotation.Nullable
 	private final Evaluator myFinallyEvaluator;
 
-	public TryEvaluator(@NotNull Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @Nullable Evaluator finallyEvaluator)
+	public TryEvaluator(@Nonnull Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @javax.annotation.Nullable Evaluator finallyEvaluator)
 	{
 		myBodyEvaluator = bodyEvaluator;
 		myCatchBlockEvaluators = catchBlockEvaluators;

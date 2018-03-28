@@ -22,7 +22,7 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -31,18 +31,18 @@ public class FinalizeInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public boolean ignoreTrivialFinalizers = true;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "FinalizeDeclaration";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "finalize.declaration.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "finalize.declaration.problem.descriptor");
@@ -62,7 +62,7 @@ public class FinalizeInspection extends BaseInspection {
   private class FinalizeDeclaredVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       final String methodName = method.getName();
       if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {

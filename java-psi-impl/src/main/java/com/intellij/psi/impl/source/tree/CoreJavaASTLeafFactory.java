@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.javadoc.PsiDocTokenImpl;
 import com.intellij.psi.impl.source.tree.java.PsiIdentifierImpl;
@@ -34,8 +34,8 @@ import consulo.psi.tree.ASTLeafFactory;
 public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory
 {
 	@Override
-	@NotNull
-	public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion languageVersion, @NotNull final CharSequence text)
+	@Nonnull
+	public LeafElement createLeaf(@Nonnull final IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text)
 	{
 		if(type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT)
 		{

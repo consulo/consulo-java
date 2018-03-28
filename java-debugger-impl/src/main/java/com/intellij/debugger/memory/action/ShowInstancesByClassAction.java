@@ -18,7 +18,8 @@ package com.intellij.debugger.memory.action;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.memory.ui.InstancesWindow;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -32,7 +33,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 public class ShowInstancesByClassAction extends DebuggerTreeAction
 {
 	@Override
-	protected boolean isEnabled(@NotNull XValueNodeImpl node, @NotNull AnActionEvent e)
+	protected boolean isEnabled(@Nonnull XValueNodeImpl node, @Nonnull AnActionEvent e)
 	{
 		final ObjectReference ref = getObjectReference(node);
 		final boolean enabled = ref != null && ref.virtualMachine().canGetInstanceInfo();
@@ -46,7 +47,7 @@ public class ShowInstancesByClassAction extends DebuggerTreeAction
 	}
 
 	@Override
-	protected void perform(XValueNodeImpl node, @NotNull String nodeName, AnActionEvent e)
+	protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e)
 	{
 		final Project project = e.getProject();
 		if(project != null)

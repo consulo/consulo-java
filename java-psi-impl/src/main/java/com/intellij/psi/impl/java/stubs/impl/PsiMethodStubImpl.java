@@ -17,8 +17,8 @@ package com.intellij.psi.impl.java.stubs.impl;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -46,7 +46,7 @@ public class PsiMethodStubImpl extends StubBase<PsiMethod> implements PsiMethodS
 	private static final int DEPRECATED_ANNOTATION = 0x10;
 	private static final int HAS_DOC_COMMENT = 0x20;
 
-	public PsiMethodStubImpl(StubElement parent, String name, @NotNull TypeInfo returnType, byte flags, @Nullable String defaultValueText)
+	public PsiMethodStubImpl(StubElement parent, String name, @Nonnull TypeInfo returnType, byte flags, @javax.annotation.Nullable String defaultValueText)
 	{
 		super(parent, isAnnotationMethod(flags) ? JavaStubElementTypes.ANNOTATION_METHOD : JavaStubElementTypes.METHOD);
 		myReturnType = returnType;
@@ -85,7 +85,7 @@ public class PsiMethodStubImpl extends StubBase<PsiMethod> implements PsiMethodS
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TypeInfo getReturnTypeText(boolean doResolve)
 	{
 		return doResolve ? myReturnType.applyAnnotations(this) : myReturnType;

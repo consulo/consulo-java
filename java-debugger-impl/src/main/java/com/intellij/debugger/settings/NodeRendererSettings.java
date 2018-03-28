@@ -19,12 +19,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
@@ -241,7 +242,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 		return myCustomRenderers;
 	}
 
-	public void setCustomRenderers(@NotNull final RendererConfiguration customRenderers)
+	public void setCustomRenderers(@Nonnull final RendererConfiguration customRenderers)
 	{
 		RendererConfiguration oldConfig = myCustomRenderers;
 		myCustomRenderers = customRenderers;
@@ -595,7 +596,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 	private static class DescriptorUpdater implements DescriptorLabelListener
 	{
 		private final ValueDescriptor myTargetDescriptor;
-		@Nullable
+		@javax.annotation.Nullable
 		private ValueDescriptorImpl myKeyDescriptor;
 		@Nullable
 		private ValueDescriptorImpl myValueDescriptor;

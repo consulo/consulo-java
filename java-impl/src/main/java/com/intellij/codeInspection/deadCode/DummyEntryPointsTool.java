@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInspection.deadCode;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.GlobalInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
@@ -34,14 +34,14 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection
 	}
 
 	@Override
-	public void runInspection(@NotNull AnalysisScope scope,
-			@NotNull InspectionManager manager,
-			@NotNull GlobalInspectionContext globalContext,
-			@NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor)
+	public void runInspection(@Nonnull AnalysisScope scope,
+			@Nonnull InspectionManager manager,
+			@Nonnull GlobalInspectionContext globalContext,
+			@Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor)
 	{
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JobDescriptor[] getAdditionalJobs()
 	{
@@ -49,21 +49,21 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return "";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		//noinspection InspectionDescriptionNotFoundInspection

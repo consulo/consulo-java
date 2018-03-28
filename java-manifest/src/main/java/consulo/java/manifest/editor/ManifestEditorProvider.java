@@ -1,7 +1,8 @@
 package consulo.java.manifest.editor;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestFileType;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
@@ -19,38 +20,38 @@ public class ManifestEditorProvider implements FileEditorProvider {
   public static final String EDITOR_ID = ManifestEditorProvider.class.getName();
 
   @Override
-  public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
+  public boolean accept(@Nonnull Project project, @Nonnull VirtualFile file) {
     return file.getFileType() instanceof ManifestFileType;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
+  public FileEditor createEditor(@Nonnull Project project, @Nonnull VirtualFile file) {
     return new ManifestEditor(project, file);
   }
 
   @Override
-  public void disposeEditor(@NotNull FileEditor editor) {
+  public void disposeEditor(@Nonnull FileEditor editor) {
     Disposer.dispose(editor);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
+  public FileEditorState readState(@Nonnull Element sourceElement, @Nonnull Project project, @Nonnull VirtualFile file) {
     return FileEditorState.INSTANCE;
   }
 
   @Override
-  public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
+  public void writeState(@Nonnull FileEditorState state, @Nonnull Project project, @Nonnull Element targetElement) {
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getEditorTypeId() {
     return EDITOR_ID;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public FileEditorPolicy getPolicy() {
     return FileEditorPolicy.PLACE_BEFORE_DEFAULT_EDITOR;

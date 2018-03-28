@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.memory.component;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.memory.event.MemoryViewManagerListener;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -37,7 +38,7 @@ public class MemoryViewManager implements PersistentStateComponent<MemoryViewMan
 		return ServiceManager.getService(MemoryViewManager.class);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MemoryViewManagerState getState()
 	{
@@ -98,7 +99,7 @@ public class MemoryViewManager implements PersistentStateComponent<MemoryViewMan
 		return myState.isShowTrackedOnly;
 	}
 
-	public void addMemoryViewManagerListener(MemoryViewManagerListener listener, @NotNull Disposable parentDisposable)
+	public void addMemoryViewManagerListener(MemoryViewManagerListener listener, @Nonnull Disposable parentDisposable)
 	{
 		myDispatcher.addListener(listener, parentDisposable);
 	}

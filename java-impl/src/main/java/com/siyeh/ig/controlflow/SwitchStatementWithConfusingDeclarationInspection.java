@@ -19,24 +19,24 @@ import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "LocalVariableUsedAndDeclaredInDifferentSwitchBranches";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("switch.statement.with.confusing.declaration.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("switch.statement.with.confusing.declaration.problem.descriptor");
   }
@@ -48,7 +48,7 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
   private static class SwitchStatementWithConfusingDeclarationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSwitchStatement(@NotNull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {
         return;
@@ -85,7 +85,7 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
       }
 
       @Override
-      public void visitReferenceExpression(@NotNull PsiReferenceExpression referenceExpression) {
+      public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression) {
         super.visitReferenceExpression(referenceExpression);
         final PsiExpression qualifier = referenceExpression.getQualifierExpression();
         if (qualifier != null) {

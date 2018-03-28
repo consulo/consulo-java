@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.presentation.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 
@@ -25,7 +26,7 @@ public class ClassPresentationUtil
 	{
 	}
 
-	public static String getNameForClass(@NotNull PsiClass aClass, boolean qualified)
+	public static String getNameForClass(@Nonnull PsiClass aClass, boolean qualified)
 	{
 		if(aClass instanceof PsiAnonymousClass)
 		{
@@ -51,7 +52,7 @@ public class ClassPresentationUtil
 		return contextName != null ? PsiBundle.message("class.context.display", className, contextName) : className;
 	}
 
-	private static String getNameForElement(@NotNull PsiElement element, boolean qualified)
+	private static String getNameForElement(@Nonnull PsiElement element, boolean qualified)
 	{
 		if(element instanceof PsiClass)
 		{
@@ -81,7 +82,7 @@ public class ClassPresentationUtil
 		}
 	}
 
-	public static String getContextName(@NotNull PsiElement element, boolean qualified)
+	public static String getContextName(@Nonnull PsiElement element, boolean qualified)
 	{
 		PsiElement parent = PsiTreeUtil.getStubOrPsiParentOfType(element, PsiMember.class);
 		if(parent == null)

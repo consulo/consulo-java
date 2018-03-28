@@ -17,7 +17,7 @@ package com.intellij.psi.formatter.java;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.formatting.alignment.AlignmentStrategy;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
@@ -43,7 +43,7 @@ public class SubsequentVariablesAligner extends ChildAlignmentStrategyProvider
 	}
 
 	@Override
-	public AlignmentStrategy getNextChildStrategy(@NotNull ASTNode child)
+	public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
 	{
 		IElementType childType = child.getElementType();
 		if(childType != JavaElementType.DECLARATION_STATEMENT || StringUtil.countNewLines(child.getChars()) > 0)

@@ -15,9 +15,11 @@
  */
 package com.siyeh.ig.j2me;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -38,7 +40,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 public class SimplifiableIfStatementInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("simplifiable.if.statement.display.name");
   }
@@ -54,14 +56,14 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiIfStatement statement = (PsiIfStatement)infos[0];
     return InspectionGadgetsBundle.message("simplifiable.if.statement.problem.descriptor", 
                                            StringUtil.escapeXml(calculateReplacementStatement(statement)));
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @NonNls
   static String calculateReplacementStatement(PsiIfStatement statement) {
     final PsiStatement thenBranch = ControlFlowUtils.stripBraces(statement.getThenBranch());
@@ -178,7 +180,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
     return builder.toString();
   }
 
-  private static void getPresentableText(@Nullable PsiElement element, StringBuilder builder) {
+  private static void getPresentableText(@javax.annotation.Nullable PsiElement element, StringBuilder builder) {
     if (element == null) {
       return;
     }
@@ -206,7 +208,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   }
 
 
-  public static String buildNegatedExpressionText(@Nullable PsiExpression expression, int precedence) {
+  public static String buildNegatedExpressionText(@javax.annotation.Nullable PsiExpression expression, int precedence) {
     while (expression instanceof PsiParenthesizedExpression) {
       final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
       expression = parenthesizedExpression.getExpression();
@@ -270,7 +272,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   private static class SimplifiableIfStatementFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
     }

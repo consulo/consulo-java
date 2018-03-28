@@ -17,8 +17,9 @@ package com.intellij.lang.java.parser;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
@@ -60,9 +61,9 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 		myLanguageLevel = LanguageLevel.JDK_1_6;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public LanguageVersion resolveLanguageVersion(@NotNull FileType fileType)
+	public LanguageVersion resolveLanguageVersion(@Nonnull FileType fileType)
 	{
 		return myLanguageLevel.toLangVersion();
 	}
@@ -109,7 +110,7 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 		final FileViewProvider viewProvider = new SingleRootFileViewProvider(PsiManager.getInstance(myProject), virtualFile, true);
 		return new PsiJavaFileImpl(viewProvider)
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected FileElement createFileElement(final CharSequence text)
 			{

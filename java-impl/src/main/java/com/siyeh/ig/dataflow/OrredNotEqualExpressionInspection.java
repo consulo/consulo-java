@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.dataflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Pair;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -26,21 +28,21 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class OrredNotEqualExpressionInspection extends BaseInspection {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "orred.not.equal.expression.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "orred.not.equal.expression.problem.descriptor");
@@ -59,7 +61,7 @@ public class OrredNotEqualExpressionInspection extends BaseInspection {
   private static class OrredNotEqualExpressionFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "orred.not.equal.expression.quickfix");

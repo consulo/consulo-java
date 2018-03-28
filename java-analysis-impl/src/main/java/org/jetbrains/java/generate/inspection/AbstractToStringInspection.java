@@ -15,7 +15,7 @@
  */
 package org.jetbrains.java.generate.inspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.openapi.diagnostic.Logger;
 
@@ -26,7 +26,7 @@ public abstract class AbstractToStringInspection extends LocalInspectionTool
 {
 	protected static final Logger log = Logger.getInstance("#org.jetbrains.generate.tostring.inspection.AbstractToStringInspection");
 
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return "toString() issues";

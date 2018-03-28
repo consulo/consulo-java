@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -23,16 +25,15 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.removemiddleman.RemoveMiddlemanHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class RemoveMiddlemanAction extends BaseRefactoringAction{
 
-  protected RefactoringActionHandler getHandler(@NotNull DataContext context) {
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
     return new RemoveMiddlemanHandler();
   }
 
   @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@NotNull PsiElement element, @NotNull Editor editor, @NotNull PsiFile file, @NotNull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     return element instanceof PsiField;
   }
 
@@ -40,7 +41,7 @@ public class RemoveMiddlemanAction extends BaseRefactoringAction{
     return false;
   }
 
-  public boolean isEnabledOnElements(@NotNull PsiElement[] elements) {
+  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiField.class, false) != null;
   }
 }

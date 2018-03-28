@@ -1,15 +1,15 @@
 // "Annotate overridden methods as '@NotNull'" "true"
 
-import org.jetbrains.annotations.*;
+import javax.annotation.Nonnull;
 
- public class XEM {
-     <caret>@NotNull
+public class XEM {
+     <caret>@Nonnull
      String f(){
          return "";
      }
  }
  class XC extends XEM {
-     @NotNull
+     @Nonnull
      String f() {
          return "";
      }

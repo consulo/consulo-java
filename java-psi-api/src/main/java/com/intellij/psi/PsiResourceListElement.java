@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Common interface for {@link PsiResourceVariable} and {@link PsiResourceExpression}.
  *
@@ -24,6 +22,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface PsiResourceListElement extends PsiElement
 {
-	@Nullable
+	@javax.annotation.Nullable
 	PsiType getType();
 }

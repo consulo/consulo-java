@@ -30,7 +30,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.module.extension.JavaModuleExtension;
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.openapi.application.AccessToken;
@@ -84,7 +85,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 	public static final int SMART_SEARCH_THRESHOLD = 5;
 
 	@Override
-	public void processQuery(@NotNull FunctionalExpressionSearch.SearchParameters queryParameters, @NotNull Processor<PsiFunctionalExpression> consumer)
+	public void processQuery(@Nonnull FunctionalExpressionSearch.SearchParameters queryParameters, @Nonnull Processor<PsiFunctionalExpression> consumer)
 	{
 		final GlobalSearchScope useScope;
 		final PsiClass aClass;
@@ -175,7 +176,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 		searchInFiles(aClass, consumer, filesToProcess, expectedFunExprParamsCount);
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	private static Set<Module> getJava8Modules(Project project)
 	{
@@ -252,7 +253,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	private static GlobalSearchScope combineResolveScopes(Project project, Set<VirtualFile> candidateFiles)
 	{
 		final PsiManager psiManager = PsiManager.getInstance(project);
@@ -268,7 +269,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 		return GlobalSearchScope.union(resolveScopes.toArray(new GlobalSearchScope[resolveScopes.size()]));
 	}
 
-	@NotNull
+	@Nonnull
 	private static Set<VirtualFile> getFilesWithFunctionalExpressionsScope(Project project, GlobalSearchScope useScope)
 	{
 		final Set<VirtualFile> files = newLinkedHashSet();
@@ -279,7 +280,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 		return files;
 	}
 
-	@NotNull
+	@Nonnull
 	private static GlobalSearchScope convertToGlobalScope(Project project, SearchScope useScope)
 	{
 		final GlobalSearchScope scope;

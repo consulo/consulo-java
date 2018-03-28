@@ -20,20 +20,20 @@ import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import static com.intellij.psi.PsiAnnotation.TargetType;
 
 public class SplitMultiCatchIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new MulticatchPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiElement parent = element.getParent();
     if (!(parent instanceof PsiCatchSection)) {
       return;

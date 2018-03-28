@@ -16,9 +16,10 @@
 
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author peter
@@ -28,9 +29,9 @@ public class PsiExpressionPattern<T extends PsiExpression, Self extends PsiExpre
     super(aClass);
   }
 
-  public Self ofType(@NotNull final ElementPattern pattern) {
+  public Self ofType(@Nonnull final ElementPattern pattern) {
     return with(new PatternCondition<T>("ofType") {
-      public boolean accepts(@NotNull final T t, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
         return pattern.getCondition().accepts(t.getType(), context);
       }
     });
@@ -38,7 +39,7 @@ public class PsiExpressionPattern<T extends PsiExpression, Self extends PsiExpre
 
   public PsiMethodCallPattern methodCall(final ElementPattern<? extends PsiMethod> method) {
     return new PsiMethodCallPattern().and(this).with(new PatternCondition<PsiMethodCallExpression>("methodCall") {
-      public boolean accepts(@NotNull PsiMethodCallExpression callExpression, ProcessingContext context) {
+      public boolean accepts(@Nonnull PsiMethodCallExpression callExpression, ProcessingContext context) {
         final JavaResolveResult[] results = callExpression.getMethodExpression().multiResolve(true);
         for (JavaResolveResult result : results) {
           if (method.getCondition().accepts(result.getElement(), context)) {
@@ -53,7 +54,7 @@ public class PsiExpressionPattern<T extends PsiExpression, Self extends PsiExpre
   public Self skipParentheses(final ElementPattern<? extends PsiExpression> expressionPattern) {
     return with(new PatternCondition<T>("skipParentheses") {
       @Override
-      public boolean accepts(@NotNull T t, ProcessingContext context) {
+      public boolean accepts(@Nonnull T t, ProcessingContext context) {
         PsiExpression expression = t;
         while (expression instanceof PsiParenthesizedExpression) {
           expression = ((PsiParenthesizedExpression)expression).getExpression();

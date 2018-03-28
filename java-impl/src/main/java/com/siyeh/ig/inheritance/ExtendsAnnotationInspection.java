@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.inheritance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
@@ -23,16 +25,15 @@ import com.intellij.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ExtendsAnnotationInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ClassExplicitlyAnnotation";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "extends.annotation.display.name");
@@ -42,7 +43,7 @@ public class ExtendsAnnotationInspection extends BaseInspection {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass containingClass = (PsiClass)infos[0];
     return InspectionGadgetsBundle.message(
@@ -58,7 +59,7 @@ public class ExtendsAnnotationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!PsiUtil.isLanguageLevel5OrHigher(aClass)) {
         return;
       }

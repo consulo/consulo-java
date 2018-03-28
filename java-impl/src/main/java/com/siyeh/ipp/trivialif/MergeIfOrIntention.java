@@ -16,7 +16,7 @@
 package com.siyeh.ipp.trivialif;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiIfStatement;
@@ -31,7 +31,7 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class MergeIfOrIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new MergeIfOrPredicate();
   }

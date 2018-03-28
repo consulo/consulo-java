@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -74,35 +74,35 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 			"not matchable anon class argument list");
 	private static final ArrangementSettingsToken ANONYMOUS_CLASS_BODY = new ArrangementSettingsToken("Dummy", "not matchable anonymous class body");
 
-	@NotNull
+	@Nonnull
 	private final Stack<JavaElementArrangementEntry> myStack = new Stack<JavaElementArrangementEntry>();
-	@NotNull
+	@Nonnull
 	private final Map<PsiElement, JavaElementArrangementEntry> myEntries = new HashMap<PsiElement, JavaElementArrangementEntry>();
 
-	@NotNull
+	@Nonnull
 	private final JavaArrangementParseInfo myInfo;
-	@NotNull
+	@Nonnull
 	private final Collection<TextRange> myRanges;
-	@NotNull
+	@Nonnull
 	private final Set<ArrangementSettingsToken> myGroupingRules;
-	@NotNull
+	@Nonnull
 	private final MethodBodyProcessor myMethodBodyProcessor;
-	@NotNull
+	@Nonnull
 	private final ArrangementSectionDetector mySectionDetector;
 	@Nullable
 	private final Document myDocument;
 
-	@NotNull
+	@Nonnull
 	private HashMap<PsiClass, Set<PsiField>> myCachedClassFields = ContainerUtil.newHashMap();
 
-	@NotNull
+	@Nonnull
 	private Set<PsiComment> myProcessedSectionsComments = ContainerUtil.newHashSet();
 
 	public JavaArrangementVisitor(
-			@NotNull JavaArrangementParseInfo infoHolder,
+			@Nonnull JavaArrangementParseInfo infoHolder,
 			@Nullable Document document,
-			@NotNull Collection<TextRange> ranges,
-			@NotNull ArrangementSettings settings)
+			@Nonnull Collection<TextRange> ranges,
+			@Nonnull ArrangementSettings settings)
 	{
 		myInfo = infoHolder;
 		myDocument = document;
@@ -132,8 +132,8 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		mySectionDetector.processComment(comment);
 	}
 
-	@NotNull
-	private static Set<ArrangementSettingsToken> getGroupingRules(@NotNull ArrangementSettings settings)
+	@Nonnull
+	private static Set<ArrangementSettingsToken> getGroupingRules(@Nonnull ArrangementSettings settings)
 	{
 		Set<ArrangementSettingsToken> groupingRules = ContainerUtilRt.newHashSet();
 		for(ArrangementGroupingRule rule : settings.getGroupings())
@@ -143,7 +143,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		return groupingRules;
 	}
 
-	public void createAndProcessAnonymousClassBodyEntry(@NotNull PsiAnonymousClass aClass)
+	public void createAndProcessAnonymousClassBodyEntry(@Nonnull PsiAnonymousClass aClass)
 	{
 		final PsiElement lBrace = aClass.getLBrace();
 		final PsiElement rBrace = aClass.getRBrace();
@@ -319,8 +319,8 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		}
 	}
 
-	@NotNull
-	private List<PsiField> getReferencedFields(@NotNull PsiField field)
+	@Nonnull
+	private List<PsiField> getReferencedFields(@Nonnull PsiField field)
 	{
 		final List<PsiField> referencedElements = new ArrayList<PsiField>();
 
@@ -375,7 +375,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		return null;
 	}
 
-	private int expandToCommentIfPossible(@NotNull PsiElement element)
+	private int expandToCommentIfPossible(@Nonnull PsiElement element)
 	{
 		if(myDocument == null)
 		{
@@ -407,7 +407,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		return element.getTextRange().getEndOffset();
 	}
 
-	private static boolean hasLineBreak(@NotNull CharSequence text, @NotNull TextRange range)
+	private static boolean hasLineBreak(@Nonnull CharSequence text, @Nonnull TextRange range)
 	{
 		for(int i = range.getStartOffset(), end = range.getEndOffset(); i < end; i++)
 		{
@@ -461,8 +461,8 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		}
 	}
 
-	@NotNull
-	public static TextRange getElementRangeWithoutComments(@NotNull PsiElement element)
+	@Nonnull
+	public static TextRange getElementRangeWithoutComments(@Nonnull PsiElement element)
 	{
 		PsiElement[] children = element.getChildren();
 		assert (children.length > 1 && children[0] instanceof PsiComment);
@@ -477,8 +477,8 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		return new TextRange(child.getTextRange().getStartOffset(), element.getTextRange().getEndOffset());
 	}
 
-	@NotNull
-	public static List<PsiComment> getComments(@NotNull PsiElement element)
+	@Nonnull
+	public static List<PsiComment> getComments(@Nonnull PsiElement element)
 	{
 		PsiElement[] children = element.getChildren();
 		List<PsiComment> comments = ContainerUtil.newArrayList();
@@ -533,7 +533,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		}
 	}
 
-	private boolean registerSectionComments(@NotNull PsiElement element)
+	private boolean registerSectionComments(@Nonnull PsiElement element)
 	{
 		List<PsiComment> comments = getComments(element);
 		boolean isSectionCommentsDetected = false;
@@ -599,7 +599,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 	}
 
 	private void processEntry(
-			@Nullable JavaElementArrangementEntry entry, @Nullable PsiModifierListOwner modifier, @Nullable final PsiElement nextPsiRoot)
+			@javax.annotation.Nullable JavaElementArrangementEntry entry, @javax.annotation.Nullable PsiModifierListOwner modifier, @Nullable final PsiElement nextPsiRoot)
 	{
 		if(entry == null)
 		{
@@ -623,7 +623,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		});
 	}
 
-	private void processChildrenWithinEntryScope(@NotNull JavaElementArrangementEntry entry, @NotNull Runnable childrenProcessing)
+	private void processChildrenWithinEntryScope(@Nonnull JavaElementArrangementEntry entry, @Nonnull Runnable childrenProcessing)
 	{
 		myStack.push(entry);
 		try
@@ -636,7 +636,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		}
 	}
 
-	private void registerEntry(@NotNull PsiElement element, @NotNull JavaElementArrangementEntry entry)
+	private void registerEntry(@Nonnull PsiElement element, @Nonnull JavaElementArrangementEntry entry)
 	{
 		myEntries.put(element, entry);
 		DefaultArrangementEntry current = getCurrent();
@@ -650,9 +650,9 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private JavaElementArrangementEntry createNewEntry(
-			@NotNull PsiElement element, @NotNull TextRange range, @NotNull ArrangementSettingsToken type, @Nullable String name, boolean canArrange)
+			@Nonnull PsiElement element, @Nonnull TextRange range, @Nonnull ArrangementSettingsToken type, @javax.annotation.Nullable String name, boolean canArrange)
 	{
 		if(!isWithinBounds(range))
 		{
@@ -674,7 +674,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 		return entry;
 	}
 
-	private boolean isWithinBounds(@NotNull TextRange range)
+	private boolean isWithinBounds(@Nonnull TextRange range)
 	{
 		for(TextRange textRange : myRanges)
 		{
@@ -693,7 +693,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 	}
 
 	@SuppressWarnings("MagicConstant")
-	private static void parseModifiers(@Nullable PsiModifierList modifierList, @NotNull JavaElementArrangementEntry entry)
+	private static void parseModifiers(@javax.annotation.Nullable PsiModifierList modifierList, @Nonnull JavaElementArrangementEntry entry)
 	{
 		if(modifierList == null)
 		{
@@ -719,12 +719,12 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 	private static class MethodBodyProcessor extends JavaRecursiveElementVisitor
 	{
 
-		@NotNull
+		@Nonnull
 		private final JavaArrangementParseInfo myInfo;
-		@Nullable
+		@javax.annotation.Nullable
 		private PsiMethod myBaseMethod;
 
-		MethodBodyProcessor(@NotNull JavaArrangementParseInfo info)
+		MethodBodyProcessor(@Nonnull JavaArrangementParseInfo info)
 		{
 			myInfo = info;
 		}

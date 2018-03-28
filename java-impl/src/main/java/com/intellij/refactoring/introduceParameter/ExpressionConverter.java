@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.project.Project;

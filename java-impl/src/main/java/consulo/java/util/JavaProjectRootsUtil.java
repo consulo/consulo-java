@@ -1,7 +1,7 @@
 package consulo.java.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.openapi.fileTypes.FileTypeManager;
@@ -25,7 +25,7 @@ import consulo.roots.impl.TestResourceContentFolderTypeProvider;
  */
 public class JavaProjectRootsUtil extends ProjectRootsUtil
 {
-	public static boolean isJavaSourceFile(@NotNull Project project, @NotNull VirtualFile file, boolean withLibrary)
+	public static boolean isJavaSourceFile(@Nonnull Project project, @Nonnull VirtualFile file, boolean withLibrary)
 	{
 		FileTypeManager fileTypeManager = FileTypeManager.getInstance();
 		if(file.isDirectory())

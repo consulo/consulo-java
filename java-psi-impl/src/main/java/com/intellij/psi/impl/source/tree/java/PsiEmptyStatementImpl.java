@@ -20,7 +20,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiEmptyStatement;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class PsiEmptyStatementImpl extends CompositePsiElement implements PsiEmptyStatement {
   public PsiEmptyStatementImpl() {
@@ -28,7 +28,7 @@ public class PsiEmptyStatementImpl extends CompositePsiElement implements PsiEmp
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitEmptyStatement(this);
     }

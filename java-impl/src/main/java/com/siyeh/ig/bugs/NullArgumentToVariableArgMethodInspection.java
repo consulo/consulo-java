@@ -15,24 +15,25 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class NullArgumentToVariableArgMethodInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "null.argument.to.var.arg.method.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "null.argument.to.var.arg.method.problem.descriptor");
@@ -51,7 +52,7 @@ public class NullArgumentToVariableArgMethodInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
 
       if (!PsiUtil.isLanguageLevel5OrHigher(call)) {

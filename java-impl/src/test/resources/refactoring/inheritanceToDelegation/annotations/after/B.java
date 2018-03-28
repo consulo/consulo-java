@@ -1,11 +1,10 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 class B {
     public final A myDelegate = new A();
 
-    @Nullable
-    public Object methodFromA(@NotNull String s) {
+    @javax.annotation.Nullable
+    public Object methodFromA(@Nonnull String s) {
         return myDelegate.methodFromA(s);
     }
 }

@@ -18,10 +18,12 @@ package com.siyeh.ig.psiutils;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -50,12 +52,12 @@ public class TypeUtils
 	}
 
 	@Contract("_, null -> false")
-	public static boolean typeEquals(@NonNls @NotNull String typeName, @Nullable PsiType targetType)
+	public static boolean typeEquals(@NonNls @Nonnull String typeName, @javax.annotation.Nullable PsiType targetType)
 	{
 		return targetType != null && targetType.equalsToText(typeName);
 	}
 
-	public static PsiClassType getType(@NotNull String fqName, @NotNull PsiElement context)
+	public static PsiClassType getType(@Nonnull String fqName, @Nonnull PsiElement context)
 	{
 		final Project project = context.getProject();
 		final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
@@ -63,17 +65,17 @@ public class TypeUtils
 		return factory.createTypeByFQClassName(fqName, scope);
 	}
 
-	public static PsiClassType getType(@NotNull PsiClass aClass)
+	public static PsiClassType getType(@Nonnull PsiClass aClass)
 	{
 		return JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createType(aClass);
 	}
 
-	public static PsiClassType getObjectType(@NotNull PsiElement context)
+	public static PsiClassType getObjectType(@Nonnull PsiElement context)
 	{
 		return getType(CommonClassNames.JAVA_LANG_OBJECT, context);
 	}
 
-	public static PsiClassType getStringType(@NotNull PsiElement context)
+	public static PsiClassType getStringType(@Nonnull PsiElement context)
 	{
 		return getType(CommonClassNames.JAVA_LANG_STRING, context);
 	}
@@ -81,7 +83,7 @@ public class TypeUtils
 	/**
 	 * JLS 5.1.3. Narrowing Primitive Conversion
 	 */
-	public static boolean isNarrowingConversion(@Nullable PsiType sourceType, @Nullable PsiType targetType)
+	public static boolean isNarrowingConversion(@javax.annotation.Nullable PsiType sourceType, @Nullable PsiType targetType)
 	{
 		final Integer sourcePrecision = typePrecisions.get(sourceType);
 		final Integer targetPrecision = typePrecisions.get(targetType);
@@ -117,7 +119,7 @@ public class TypeUtils
 				".OptionalLong").equals(qualifiedName) || "com.google.common.base.Optional".equals(qualifiedName);
 	}
 
-	public static boolean isExpressionTypeAssignableWith(@NotNull PsiExpression expression, @NotNull Iterable<String> rhsTypeTexts)
+	public static boolean isExpressionTypeAssignableWith(@Nonnull PsiExpression expression, @Nonnull Iterable<String> rhsTypeTexts)
 	{
 		final PsiType type = expression.getType();
 		if(type == null)
@@ -136,13 +138,13 @@ public class TypeUtils
 		return false;
 	}
 
-	public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @NotNull String typeName)
+	public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull String typeName)
 	{
 		return expressionHasTypeOrSubtype(expression, new String[]{typeName}) != null;
 	}
 
 	//getTypeIfOneOfOrSubtype
-	public static String expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @NotNull String... typeNames)
+	public static String expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull String... typeNames)
 	{
 		if(expression == null)
 		{
@@ -173,7 +175,7 @@ public class TypeUtils
 		return null;
 	}
 
-	public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @NotNull Iterable<String> typeNames)
+	public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull Iterable<String> typeNames)
 	{
 		if(expression == null)
 		{
@@ -204,7 +206,7 @@ public class TypeUtils
 		return false;
 	}
 
-	public static boolean variableHasTypeOrSubtype(@Nullable PsiVariable variable, @NonNls @NotNull String... typeNames)
+	public static boolean variableHasTypeOrSubtype(@Nullable PsiVariable variable, @NonNls @Nonnull String... typeNames)
 	{
 		if(variable == null)
 		{
@@ -231,7 +233,7 @@ public class TypeUtils
 		return false;
 	}
 
-	public static boolean hasFloatingPointType(@Nullable PsiExpression expression)
+	public static boolean hasFloatingPointType(@javax.annotation.Nullable PsiExpression expression)
 	{
 		if(expression == null)
 		{

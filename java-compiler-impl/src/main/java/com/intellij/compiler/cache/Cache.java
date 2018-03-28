@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.compiler.classParsing.AnnotationConstantValue;
 import com.intellij.compiler.classParsing.ClassFileReader;
 import com.intellij.compiler.classParsing.ClassInfo;
@@ -503,7 +503,7 @@ public class Cache
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public MethodInfo findMethod(final int classQName, final int name, final int descriptor) throws CacheCorruptedException
 	{
 		try

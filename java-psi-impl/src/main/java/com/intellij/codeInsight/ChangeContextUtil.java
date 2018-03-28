@@ -23,8 +23,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class ChangeContextUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.ChangeContextUtil");
@@ -112,9 +111,9 @@ public class ChangeContextUtil {
     }
   }
 
-  public static PsiElement decodeContextInfo(@NotNull PsiElement scope,
-                                             @Nullable PsiClass thisClass,
-                                             @Nullable PsiExpression thisAccessExpr) throws IncorrectOperationException {
+  public static PsiElement decodeContextInfo(@Nonnull PsiElement scope,
+                                             @javax.annotation.Nullable PsiClass thisClass,
+                                             @javax.annotation.Nullable PsiExpression thisAccessExpr) throws IncorrectOperationException {
     if (scope.getCopyableUserData(ENCODED_KEY) != null) {
       scope.putCopyableUserData(ENCODED_KEY, null);
 
@@ -186,7 +185,7 @@ public class ChangeContextUtil {
     return thisExpr;
   }
 
-  private static PsiReferenceExpression decodeReferenceExpression(@NotNull PsiReferenceExpression refExpr,
+  private static PsiReferenceExpression decodeReferenceExpression(@Nonnull PsiReferenceExpression refExpr,
                                                                   PsiExpression thisAccessExpr,
                                                                   PsiClass thisClass) throws IncorrectOperationException {
     PsiManager manager = refExpr.getManager();

@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -96,17 +96,17 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 			XDebuggerUIConstants.INFORMATION_MESSAGE_ICON);
 
 	private final DebugProcessImpl myDebugProcess;
-	@Nullable
+	@javax.annotation.Nullable
 	private final XSourcePosition myXSourcePosition;
 	private final NodeManagerImpl myNodeManager;
-	@NotNull
+	@Nonnull
 	private final StackFrameDescriptorImpl myDescriptor;
 	private static final JavaFramesListRenderer FRAME_RENDERER = new JavaFramesListRenderer();
 	private JavaDebuggerEvaluator myEvaluator = null;
 	private final String myEqualityObject;
 	private CapturePoint myInsertCapturePoint;
 
-	public JavaStackFrame(@NotNull StackFrameDescriptorImpl descriptor, boolean update)
+	public JavaStackFrame(@Nonnull StackFrameDescriptorImpl descriptor, boolean update)
 	{
 		myDescriptor = descriptor;
 		if(update)
@@ -120,7 +120,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		myXSourcePosition = DebuggerUtilsEx.toXSourcePosition(myDescriptor.getSourcePosition());
 	}
 
-	@NotNull
+	@Nonnull
 	public StackFrameDescriptorImpl getDescriptor()
 	{
 		return myDescriptor;
@@ -137,7 +137,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		return myEvaluator;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XSourcePosition getSourcePosition()
 	{
@@ -145,7 +145,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 	}
 
 	@Override
-	public void customizePresentation(@NotNull ColoredTextContainer component)
+	public void customizePresentation(@Nonnull ColoredTextContainer component)
 	{
 		StackFrameDescriptorImpl selectedDescriptor = null;
 		DebuggerSession session = myDebugProcess.getSession();
@@ -169,7 +169,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 	}
 
 	@Override
-	public void computeChildren(@NotNull final XCompositeNode node)
+	public void computeChildren(@Nonnull final XCompositeNode node)
 	{
 		if(node.isObsolete())
 		{
@@ -320,7 +320,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 	// copied from FrameVariablesTree
 	private void buildVariables(DebuggerContextImpl debuggerContext,
 			final EvaluationContextImpl evaluationContext,
-			@NotNull DebugProcessImpl debugProcess,
+			@Nonnull DebugProcessImpl debugProcess,
 			XValueChildrenList children,
 			ObjectReference thisObjectReference,
 			Location location) throws EvaluateException
@@ -424,7 +424,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		}
 	}
 
-	private static Set<TextWithImports> computeExtraVars(Pair<Set<String>, Set<TextWithImports>> usedVars, @NotNull SourcePosition sourcePosition, @NotNull EvaluationContextImpl evalContext)
+	private static Set<TextWithImports> computeExtraVars(Pair<Set<String>, Set<TextWithImports>> usedVars, @Nonnull SourcePosition sourcePosition, @Nonnull EvaluationContextImpl evalContext)
 	{
 		Set<String> alreadyCollected = new HashSet<>(usedVars.first);
 		usedVars.second.stream().map(TextWithImports::getText).forEach(alreadyCollected::add);
@@ -466,11 +466,11 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		}
 
 		@Override
-		public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place)
+		public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place)
 		{
 			node.setPresentation(myIcon, new XValuePresentation()
 			{
-				@NotNull
+				@Nonnull
 				@Override
 				public String getSeparator()
 				{
@@ -478,7 +478,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 				}
 
 				@Override
-				public void renderValue(@NotNull XValueTextRenderer renderer)
+				public void renderValue(@Nonnull XValueTextRenderer renderer)
 				{
 					renderer.renderValue(myMessage);
 				}
@@ -500,13 +500,13 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public StackFrameProxyImpl getStackFrameProxy()
 	{
 		return myDescriptor.getFrameProxy();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Object getEqualityObject()
 	{
@@ -725,7 +725,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		return true;
 	}
 
-	private static Pair<Set<String>, Set<TextWithImports>> findReferencedVars(Set<String> visibleVars, @NotNull SourcePosition position)
+	private static Pair<Set<String>, Set<TextWithImports>> findReferencedVars(Set<String> visibleVars, @Nonnull SourcePosition position)
 	{
 		final int line = position.getLine();
 		if(line < 0)

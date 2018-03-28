@@ -15,22 +15,23 @@
  */
 package com.siyeh.ipp.asserttoif;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class IfToAssertionIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new IfStatementPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiElement parent = element.getParent();
     if (!(parent instanceof PsiIfStatement)) {

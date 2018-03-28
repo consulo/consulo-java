@@ -16,8 +16,8 @@
 
 package com.intellij.codeInsight.generation.actions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.actions.CodeInsightAction;
 import com.intellij.lang.ContextAwareActionHandler;
@@ -45,7 +45,7 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
 	}
 
 	@Override
-	protected void update(@NotNull Presentation presentation, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, @NotNull DataContext dataContext, @Nullable String actionPlace)
+	protected void update(@Nonnull Presentation presentation, @Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext, @Nullable String actionPlace)
 	{
 		super.update(presentation, project, editor, file, dataContext, actionPlace);
 		if(myHandler instanceof ContextAwareActionHandler && presentation.isEnabled())
@@ -61,7 +61,7 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected final CodeInsightActionHandler getHandler()
 	{
@@ -82,7 +82,7 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
 	}
 
 	@Override
-	protected boolean isValidForFile(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file)
+	protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file)
 	{
 		if(!(file instanceof PsiJavaFile))
 		{

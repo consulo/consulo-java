@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.augment;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
@@ -37,7 +37,7 @@ public abstract class TypeAnnotationModifier
 	 *                              and annotations on target type
 	 * @return provider based on modified annotations or null if no applicable annotations found
 	 */
-	@Nullable
-	public abstract TypeAnnotationProvider modifyAnnotations(@NotNull PsiType inferenceVariableType, @NotNull PsiClassType boundType);
+	@javax.annotation.Nullable
+	public abstract TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType);
 
 }

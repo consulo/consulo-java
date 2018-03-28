@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,17 +30,17 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
 
   private static final Pattern newlines = Pattern.compile("\\\\n|\\\\r|\\\\0{0,1}12|\\\\0{0,1}15");
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("hardcoded.line.separator.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "HardcodedLineSeparator";
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("hardcoded.line.separator.problem.descriptor");
   }
@@ -52,7 +52,7 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
   private static class HardcodedLineSeparatorsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLiteralExpression(@NotNull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null || !TypeUtils.isJavaLangString(type) && !type.equals(PsiType.CHAR)) {

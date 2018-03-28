@@ -15,7 +15,8 @@
  */
 package com.intellij.ide;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.application.options.IndentOptionsEditor;
 import com.intellij.application.options.JavaIndentOptionsEditor;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -38,7 +39,7 @@ import com.intellij.util.LocalTimeCounter;
  */
 public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public Language getLanguage()
 	{
@@ -46,7 +47,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 	}
 
 	@Override
-	public String getCodeSample(@NotNull SettingsType settingsType)
+	public String getCodeSample(@Nonnull SettingsType settingsType)
 	{
 		if(settingsType == SettingsType.SPACING_SETTINGS)
 		{
@@ -65,7 +66,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 	}
 
 	@Override
-	public int getRightMargin(@NotNull SettingsType settingsType)
+	public int getRightMargin(@Nonnull SettingsType settingsType)
 	{
 		if(settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS)
 		{
@@ -75,7 +76,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 	}
 
 	@Override
-	public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType)
+	public void customizeSettings(@Nonnull CodeStyleSettingsCustomizable consumer, @Nonnull SettingsType settingsType)
 	{
 		if(settingsType == SettingsType.SPACING_SETTINGS)
 		{

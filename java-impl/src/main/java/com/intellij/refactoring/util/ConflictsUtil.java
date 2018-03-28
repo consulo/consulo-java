@@ -29,14 +29,14 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ConflictsUtil {
   private ConflictsUtil() {
   }
 
-  @NotNull
+  @Nonnull
   public static PsiElement getContainer(PsiElement place) {
     PsiElement parent = place;
     while (true) {

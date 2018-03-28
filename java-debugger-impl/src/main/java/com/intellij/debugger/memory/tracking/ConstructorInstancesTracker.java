@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.engine.DebugProcess;
@@ -59,16 +59,16 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 	private final Project myProject;
 	private final MyConstructorBreakpoints myBreakpoint;
 
-	@Nullable
+	@javax.annotation.Nullable
 	private HashSet<ObjectReference> myNewObjects = null;
 
-	@NotNull
+	@Nonnull
 	private HashSet<ObjectReference> myTrackedObjects = new HashSet<>();
 
 	private volatile boolean myIsBackgroundMode;
 	private volatile boolean myIsBackgroundTrackingEnabled;
 
-	public ConstructorInstancesTracker(@NotNull ReferenceType ref, @NotNull XDebugSession debugSession, @NotNull InstancesTracker instancesTracker)
+	public ConstructorInstancesTracker(@Nonnull ReferenceType ref, @Nonnull XDebugSession debugSession, @Nonnull InstancesTracker instancesTracker)
 	{
 		myProject = debugSession.getProject();
 		myIsBackgroundTrackingEnabled = instancesTracker.isBackgroundTrackingEnabled();
@@ -143,7 +143,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 		myTrackedObjects = new HashSet<>();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<ObjectReference> getNewInstances()
 	{
@@ -285,7 +285,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 			}
 		}
 
-		private void handleEvent(@NotNull SuspendContextCommandImpl action, @NotNull LocatableEvent event)
+		private void handleEvent(@Nonnull SuspendContextCommandImpl action, @Nonnull LocatableEvent event)
 		{
 			try
 			{

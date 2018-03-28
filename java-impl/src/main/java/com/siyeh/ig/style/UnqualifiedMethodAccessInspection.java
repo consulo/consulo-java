@@ -21,12 +21,12 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.AddThisQualifierFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class UnqualifiedMethodAccessInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unqualified.method.access.display.name");
   }
@@ -37,7 +37,7 @@ public class UnqualifiedMethodAccessInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unqualified.method.access.problem.descriptor");
   }
@@ -50,7 +50,7 @@ public class UnqualifiedMethodAccessInspection extends BaseInspection {
   private static class UnqualifiedMethodAccessVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@NotNull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       final PsiExpression qualifierExpression = expression.getQualifierExpression();
       if (qualifierExpression != null) {

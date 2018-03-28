@@ -24,12 +24,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.ui.IdeBorderFactory;
@@ -51,7 +51,7 @@ public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropert
 	//  return null;
 	//}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -111,14 +111,14 @@ public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropert
 	//}
 
 	@Override
-	public void loadFrom(@NotNull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	public void loadFrom(@Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
 	{
 		myNotifyCaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_CAUGHT);
 		myNotifyUncaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_UNCAUGHT);
 	}
 
 	@Override
-	public void saveTo(@NotNull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	public void saveTo(@Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
 	{
 		breakpoint.getProperties().NOTIFY_CAUGHT = myNotifyCaughtCheckBox.isSelected();
 		breakpoint.getProperties().NOTIFY_UNCAUGHT = myNotifyUncaughtCheckBox.isSelected();

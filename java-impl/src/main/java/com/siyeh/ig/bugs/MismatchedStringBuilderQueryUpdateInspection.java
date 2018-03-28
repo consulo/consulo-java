@@ -27,7 +27,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,20 +48,20 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MismatchedQueryAndUpdateOfStringBuilder";
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "mismatched.string.builder.query.update.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final boolean updated = ((Boolean)infos[0]).booleanValue();
@@ -285,7 +285,7 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (queried) {
         return;
       }

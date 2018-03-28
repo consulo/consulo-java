@@ -15,18 +15,16 @@
  */
 package consulo.java.module.extension;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import consulo.java.module.extension.JavaModuleExtensionImpl;
+import javax.annotation.Nullable;
+
 import consulo.java.module.extension.ui.JavaModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.annotations.RequiredDispatchThread;
-import consulo.java.module.extension.JavaMutableModuleExtension;
-import consulo.java.module.extension.SpecialDirLocation;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
 import consulo.roots.ModuleRootLayer;
 
@@ -36,7 +34,7 @@ import consulo.roots.ModuleRootLayer;
  */
 public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>
 {
-	public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer moduleRootLayer)
+	public JavaMutableModuleExtensionImpl(@Nonnull String id, @Nonnull ModuleRootLayer moduleRootLayer)
 	{
 		super(id, moduleRootLayer);
 	}
@@ -56,7 +54,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel()
 	{
 		return myLanguageLevel;
@@ -69,13 +67,13 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 	}
 
 	@Override
-	public void setSpecialDirLocation(@NotNull SpecialDirLocation specialDirLocation)
+	public void setSpecialDirLocation(@Nonnull SpecialDirLocation specialDirLocation)
 	{
 		mySpecialDirLocation = specialDirLocation;
 	}
 
 	@Override
-	public boolean isModified(@NotNull JavaModuleExtensionImpl javaModuleExtension)
+	public boolean isModified(@Nonnull JavaModuleExtensionImpl javaModuleExtension)
 	{
 		if(isModifiedImpl(javaModuleExtension))
 		{
@@ -99,7 +97,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk()
 	{

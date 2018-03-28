@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
@@ -33,13 +33,13 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiThisExpression getIdentifier()
 	{
 		return PsiTreeUtil.getRequiredChildOfType(this, PsiThisExpression.class);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiModifierList getModifierList()
 	{
@@ -47,20 +47,20 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
 	}
 
 	@Override
-	public boolean hasModifierProperty(@PsiModifier.ModifierConstant @NotNull String name)
+	public boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name)
 	{
 		PsiModifierList modifierList = getModifierList();
 		return modifierList != null && modifierList.hasModifierProperty(name);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType getType()
 	{
 		return JavaSharedImplUtil.getType(getTypeElement(), getIdentifier());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiTypeElement getTypeElement()
 	{
@@ -88,7 +88,7 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
 	}
 
 	@Override
-	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
 	{
 		throw new IncorrectOperationException("Cannot rename receiver parameter");
 	}
@@ -106,7 +106,7 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

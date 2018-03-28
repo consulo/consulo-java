@@ -17,7 +17,8 @@ package com.intellij.debugger.engine;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
@@ -47,7 +48,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 	private volatile boolean myDisposed;
 
-	DebuggerManagerThreadImpl(@NotNull Disposable parent, Project project)
+	DebuggerManagerThreadImpl(@Nonnull Disposable parent, Project project)
 	{
 		super(project);
 		Disposer.register(parent, this);
@@ -60,7 +61,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 	}
 
 	@TestOnly
-	public static DebuggerManagerThreadImpl createTestInstance(@NotNull Disposable parent, Project project)
+	public static DebuggerManagerThreadImpl createTestInstance(@Nonnull Disposable parent, Project project)
 	{
 		return new DebuggerManagerThreadImpl(parent, project);
 	}
@@ -159,7 +160,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 	}
 
 	@Override
-	public void processEvent(@NotNull DebuggerCommandImpl managerCommand)
+	public void processEvent(@Nonnull DebuggerCommandImpl managerCommand)
 	{
 		assertIsManagerThread();
 		try

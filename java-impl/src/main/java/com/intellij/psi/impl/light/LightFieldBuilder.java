@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.light;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -37,16 +37,16 @@ public class LightFieldBuilder extends LightVariableBuilder<LightFieldBuilder> i
   private PsiDocComment myDocComment = null;
   private boolean myIsDeprecated = false;
 
-  public LightFieldBuilder(@NotNull String name, @NotNull String type, @NotNull PsiElement navigationElement) {
+  public LightFieldBuilder(@Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
     super(name, JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type, navigationElement),
           navigationElement);
   }
 
-  public LightFieldBuilder(@NotNull String name, @NotNull PsiType type, @NotNull PsiElement navigationElement) {
+  public LightFieldBuilder(@Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement navigationElement) {
     super(name, type, navigationElement);
   }
 
-  public LightFieldBuilder(PsiManager manager, @NotNull String name, @NotNull PsiType type) {
+  public LightFieldBuilder(PsiManager manager, @Nonnull String name, @Nonnull PsiType type) {
     super(manager, name, type, JavaLanguage.INSTANCE);
   }
 
@@ -56,7 +56,7 @@ public class LightFieldBuilder extends LightVariableBuilder<LightFieldBuilder> i
   }
 
   @Override
-  public void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException {
+  public void setInitializer(@javax.annotation.Nullable PsiExpression initializer) throws IncorrectOperationException {
     myInitializer = initializer;
   }
 

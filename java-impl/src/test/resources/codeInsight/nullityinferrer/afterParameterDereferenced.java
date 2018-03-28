@@ -1,14 +1,14 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.Nonnull;
 
 class Test {
-  void foo(@NotNull String s) {
+  void foo(@Nonnull String s) {
     s.substring(0);
   }
 
   /**
    * @param str
    */
-  void bar(@NotNull String str) {
+  void bar(@Nonnull String str) {
     if (str.substring(0) == null) {
     }
   }
@@ -16,7 +16,7 @@ class Test {
   /**
    * @param str
    */
-  void bar(@NotNull String str) {
+  void bar(@Nonnull String str) {
     if ((str).substring(0) == null) {
     }
   }

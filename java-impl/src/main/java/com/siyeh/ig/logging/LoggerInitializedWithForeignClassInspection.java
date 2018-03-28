@@ -31,8 +31,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -55,13 +54,13 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   private final List<String> loggerFactoryMethodNames = new ArrayList();
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("logger.initialized.with.foreign.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("logger.initialized.with.foreign.class.problem.descriptor");
   }
@@ -76,7 +75,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new LoggerInitializedWithForeignClassFix((String)infos[0]);
   }
@@ -90,7 +89,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "logger.initialized.with.foreign.class.quickfix",
@@ -197,7 +196,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   }
 
   @Override
-  public void readSettings(@NotNull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerClassName, loggerFactoryClassNames);
     parseString(loggerFactoryMethodName, loggerFactoryMethodNames);
@@ -208,7 +207,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   }
 
   @Override
-  public void writeSettings(@NotNull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     loggerClassName = formatString(loggerFactoryClassNames);
     loggerFactoryMethodName = formatString(loggerFactoryMethodNames);
     super.writeSettings(element);

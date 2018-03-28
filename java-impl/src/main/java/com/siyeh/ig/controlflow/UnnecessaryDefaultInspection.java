@@ -15,24 +15,24 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.InitializationUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class UnnecessaryDefaultInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.default.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.default.problem.descriptor");
@@ -47,7 +47,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @NotNull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       final PsiSwitchLabelStatement defaultStatement =
         retrieveUnnecessaryDefault(statement);
@@ -99,7 +99,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
         switchStatement, variable, true);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiSwitchLabelStatement retrieveUnnecessaryDefault(
       PsiSwitchStatement statement) {
       final PsiExpression expression = statement.getExpression();

@@ -15,11 +15,13 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiExpression;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class ForDescendingPostfixTemplate extends ForIndexedPostfixTemplate {
   public ForDescendingPostfixTemplate() {
@@ -27,20 +29,20 @@ public class ForDescendingPostfixTemplate extends ForIndexedPostfixTemplate {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String getOperator() {
     return "--";
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected String getComparativeSign(@NotNull PsiExpression expr) {
+  protected String getComparativeSign(@Nonnull PsiExpression expr) {
     return JavaPostfixTemplatesUtils.isNumber(expr.getType()) ? ">" : ">=";
   }
 
   @Nullable
   @Override
-  protected Pair<String, String> calculateBounds(@NotNull PsiExpression expression) {
+  protected Pair<String, String> calculateBounds(@Nonnull PsiExpression expression) {
     String bound = getExpressionBound(expression);
     if (bound == null) {
       return null;

@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -29,8 +30,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.JavaProjectCodeInsightSettings;
 import com.intellij.execution.util.ListTableWithButtons;
@@ -54,14 +54,14 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 	private static final Pattern ourPackagePattern = Pattern.compile("([\\w*]+\\.)*[\\w*]+");
 	private static final ColumnInfo<Item, String> NAME_COLUMN = new ColumnInfo<Item, String>("Class/package/member qualified name mask")
 	{
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public String valueOf(Item pair)
 		{
 			return pair.exclude;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public TableCellEditor getEditor(Item pair)
 		{
@@ -77,13 +77,13 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			return new DefaultCellEditor(field);
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public TableCellRenderer getRenderer(Item pair)
 		{
 			return new DefaultTableCellRenderer()
 			{
-				@NotNull
+				@Nonnull
 				@Override
 				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 				{
@@ -118,14 +118,14 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			return pair.scope;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public TableCellRenderer getRenderer(Item pair)
 		{
 			return new ComboBoxTableRenderer<>(ExclusionScope.values());
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public TableCellEditor getEditor(Item pair)
 		{
@@ -144,7 +144,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			pair.scope = value;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public String getMaxStringValue()
 		{
@@ -153,7 +153,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 	};
 	private final Project myProject;
 
-	public ExcludeTable(@NotNull Project project)
+	public ExcludeTable(@Nonnull Project project)
 	{
 		myProject = project;
 		getTableView().getEmptyText().setText(ApplicationBundle.message("exclude.from.imports.no.exclusions"));
@@ -267,7 +267,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 		String exclude;
 		ExclusionScope scope;
 
-		Item(@NotNull String exclude, ExclusionScope scope)
+		Item(@Nonnull String exclude, ExclusionScope scope)
 		{
 			this.exclude = exclude;
 			this.scope = scope;

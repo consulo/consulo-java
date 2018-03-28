@@ -28,7 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.CommonBundle;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.ModuleCompilerUtil;
@@ -71,7 +72,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDescription()
 	{
 		return CompilerBundle.message("annotation.processing.compiler.description");
@@ -153,14 +154,14 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileType[] getInputFileTypes()
 	{
 		return new FileType[]{JavaFileType.INSTANCE};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileType[] getOutputFileTypes()
 	{

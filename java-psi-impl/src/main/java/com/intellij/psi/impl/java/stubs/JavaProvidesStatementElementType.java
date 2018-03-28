@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -41,7 +42,7 @@ public class JavaProvidesStatementElementType extends JavaStubElementType<PsiPro
 		super("PROVIDES_STATEMENT");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -49,13 +50,13 @@ public class JavaProvidesStatementElementType extends JavaStubElementType<PsiPro
 	}
 
 	@Override
-	public PsiProvidesStatement createPsi(@NotNull PsiProvidesStatementStub stub)
+	public PsiProvidesStatement createPsi(@Nonnull PsiProvidesStatementStub stub)
 	{
 		return getPsiFactory(stub).createProvidesStatement(stub);
 	}
 
 	@Override
-	public PsiProvidesStatement createPsi(@NotNull ASTNode node)
+	public PsiProvidesStatement createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiProvidesStatementImpl(node);
 	}
@@ -69,20 +70,20 @@ public class JavaProvidesStatementElementType extends JavaStubElementType<PsiPro
 	}
 
 	@Override
-	public void serialize(@NotNull PsiProvidesStatementStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiProvidesStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getInterface());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiProvidesStatementStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiProvidesStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new PsiProvidesStatementStubImpl(parentStub, StringRef.toString(dataStream.readName()));
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiProvidesStatementStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiProvidesStatementStub stub, @Nonnull IndexSink sink)
 	{
 	}
 }

@@ -15,7 +15,6 @@
  */
 package com.intellij.debugger.actions;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.InstanceFilter;
@@ -150,7 +149,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 		presentation.setVisible(toEnable);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static SourcePosition getPlace(AnActionEvent event)
 	{
 		final DataContext dataContext = event.getDataContext();

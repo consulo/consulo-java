@@ -17,9 +17,11 @@ package com.intellij.psi.impl;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -52,7 +54,7 @@ class TypeCorrector extends PsiTypeMapper
 	}
 
 	@Nullable
-	public <T extends PsiType> T correctType(@NotNull T type)
+	public <T extends PsiType> T correctType(@Nonnull T type)
 	{
 		if(type instanceof PsiClassType)
 		{
@@ -105,7 +107,7 @@ class TypeCorrector extends PsiTypeMapper
 		return mappedType;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiSubstitutor mapSubstitutor(PsiClass originalClass, PsiClass mappedClass, PsiSubstitutor substitutor)
 	{
 		PsiTypeParameter[] typeParameters = mappedClass.getTypeParameters();
@@ -183,7 +185,7 @@ class TypeCorrector extends PsiTypeMapper
 			myResolveResult = resolveResult;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiClass resolve()
 		{
@@ -196,7 +198,7 @@ class TypeCorrector extends PsiTypeMapper
 			return myDelegate.getClassName();
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiType[] getParameters()
 		{
@@ -221,14 +223,14 @@ class TypeCorrector extends PsiTypeMapper
 			return myDelegate.getParameters().length;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public ClassResolveResult resolveGenerics()
 		{
 			return myResolveResult;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiClassType rawType()
 		{
@@ -237,42 +239,42 @@ class TypeCorrector extends PsiTypeMapper
 			return factory.createType(psiClass, factory.createRawSubstitutor(psiClass));
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public GlobalSearchScope getResolveScope()
 		{
 			return myResolveScope;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public LanguageLevel getLanguageLevel()
 		{
 			return myLanguageLevel;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public PsiClassType setLanguageLevel(@NotNull LanguageLevel languageLevel)
+		public PsiClassType setLanguageLevel(@Nonnull LanguageLevel languageLevel)
 		{
 			return new PsiCorrectedClassType(languageLevel, myDelegate, myResolveResult);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getPresentableText(boolean annotated)
 		{
 			return myDelegate.getPresentableText(annotated);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getCanonicalText(boolean annotated)
 		{
 			return myDelegate.getCanonicalText(annotated);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getInternalCanonicalText()
 		{
@@ -286,7 +288,7 @@ class TypeCorrector extends PsiTypeMapper
 		}
 
 		@Override
-		public boolean equalsToText(@NotNull @NonNls String text)
+		public boolean equalsToText(@Nonnull @NonNls String text)
 		{
 			return myDelegate.equalsToText(text);
 		}
@@ -308,7 +310,7 @@ class TypeCorrector extends PsiTypeMapper
 			myClassResolveResult = classResolveResult;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiSubstitutor getSubstitutor()
 		{

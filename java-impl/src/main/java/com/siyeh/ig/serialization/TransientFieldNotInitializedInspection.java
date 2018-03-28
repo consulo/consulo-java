@@ -21,17 +21,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.InitializationUtils;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class TransientFieldNotInitializedInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "transient.field.not.initialized.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "transient.field.not.initialized.problem.descriptor");
@@ -67,7 +67,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
     }
 
     private static boolean isInitializedInConstructors(
-      @NotNull PsiField field, @NotNull PsiClass aClass) {
+      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
       final PsiMethod[] constructors = aClass.getConstructors();
       if (constructors.length == 0) {
         return false;
@@ -82,7 +82,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
     }
 
     private static boolean isInitializedInInitializer(
-      @NotNull PsiField field, @NotNull PsiClass aClass) {
+      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
       final PsiClassInitializer[] initializers = aClass.getInitializers();
       for (final PsiClassInitializer initializer : initializers) {
         if (initializer.hasModifierProperty(PsiModifier.STATIC)) {

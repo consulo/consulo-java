@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a list of expressions separated by commas.
@@ -29,7 +29,9 @@ public interface PsiExpressionList extends PsiElement {
    *
    * @return the array of expressions contained in the list.
    */
-  @NotNull PsiExpression[] getExpressions();
+  @Nonnull
+  PsiExpression[] getExpressions();
 
-  @NotNull PsiType[] getExpressionTypes();
+  @Nonnull
+  PsiType[] getExpressionTypes();
 }

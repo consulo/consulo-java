@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.codeInspection.dataFlow.value.DfaBoxedValue;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
@@ -73,7 +73,7 @@ public abstract class DfaFactType<T> extends Key<T>
 
 		@Nullable
 		@Override
-		Boolean calcFromVariable(@NotNull DfaVariableValue value)
+		Boolean calcFromVariable(@Nonnull DfaVariableValue value)
 		{
 			return NullnessUtil.calcCanBeNull(value);
 		}
@@ -107,7 +107,7 @@ public abstract class DfaFactType<T> extends Key<T>
 	public static final DfaFactType<LongRangeSet> RANGE = new DfaFactType<LongRangeSet>("Range")
 	{
 		@Override
-		boolean isSuper(@NotNull LongRangeSet superFact, @NotNull LongRangeSet subFact)
+		boolean isSuper(@Nonnull LongRangeSet superFact, @Nonnull LongRangeSet subFact)
 		{
 			return superFact.contains(subFact);
 		}
@@ -125,7 +125,7 @@ public abstract class DfaFactType<T> extends Key<T>
 
 		@Nullable
 		@Override
-		LongRangeSet calcFromVariable(@NotNull DfaVariableValue var)
+		LongRangeSet calcFromVariable(@Nonnull DfaVariableValue var)
 		{
 			if(var.getQualifier() != null)
 			{
@@ -142,7 +142,7 @@ public abstract class DfaFactType<T> extends Key<T>
 
 		@Nullable
 		@Override
-		LongRangeSet intersectFacts(@NotNull LongRangeSet left, @NotNull LongRangeSet right)
+		LongRangeSet intersectFacts(@Nonnull LongRangeSet left, @Nonnull LongRangeSet right)
 		{
 			LongRangeSet intersection = left.intersect(right);
 			return intersection.isEmpty() ? null : intersection;
@@ -170,12 +170,12 @@ public abstract class DfaFactType<T> extends Key<T>
 
 	// Could be expensive
 	@Nullable
-	T calcFromVariable(@NotNull DfaVariableValue value)
+	T calcFromVariable(@Nonnull DfaVariableValue value)
 	{
 		return null;
 	}
 
-	boolean isSuper(@NotNull T superFact, @NotNull T subFact)
+	boolean isSuper(@Nonnull T superFact, @Nonnull T subFact)
 	{
 		return false;
 	}
@@ -187,8 +187,8 @@ public abstract class DfaFactType<T> extends Key<T>
 	 * @param right right fact
 	 * @return intersection fact or null if facts are incompatible
 	 */
-	@Nullable
-	T intersectFacts(@NotNull T left, @NotNull T right)
+	@javax.annotation.Nullable
+	T intersectFacts(@Nonnull T left, @Nonnull T right)
 	{
 		return left.equals(right) ? left : null;
 	}

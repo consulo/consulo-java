@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
@@ -71,13 +71,13 @@ public class GenericsHighlightUtil
 	{
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkInferredTypeArguments(PsiTypeParameterListOwner listOwner, PsiElement call, PsiSubstitutor substitutor)
 	{
 		return checkInferredTypeArguments(listOwner.getTypeParameters(), call, substitutor);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static HighlightInfo checkInferredTypeArguments(PsiTypeParameter[] typeParameters, PsiElement call, PsiSubstitutor substitutor)
 	{
 		final Pair<PsiTypeParameter, PsiType> inferredTypeArgument = GenericsUtil.findTypeParameterWithBoundError(typeParameters, substitutor, call, false);
@@ -98,11 +98,11 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkParameterizedReferenceTypeArguments(final PsiElement resolved,
 			final PsiJavaCodeReferenceElement referenceElement,
 			final PsiSubstitutor substitutor,
-			@NotNull JavaSdkVersion javaSdkVersion)
+			@Nonnull JavaSdkVersion javaSdkVersion)
 	{
 		if(!(resolved instanceof PsiTypeParameterListOwner))
 		{
@@ -112,12 +112,12 @@ public class GenericsHighlightUtil
 		return checkReferenceTypeArgumentList(typeParameterListOwner, referenceElement.getParameterList(), substitutor, true, javaSdkVersion);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkReferenceTypeArgumentList(final PsiTypeParameterListOwner typeParameterListOwner,
 			final PsiReferenceParameterList referenceParameterList,
 			final PsiSubstitutor substitutor,
 			boolean registerIntentions,
-			@NotNull JavaSdkVersion javaSdkVersion)
+			@Nonnull JavaSdkVersion javaSdkVersion)
 	{
 		PsiDiamondType.DiamondInferenceResult inferenceResult = null;
 		PsiTypeElement[] referenceElements = null;
@@ -288,7 +288,7 @@ public class GenericsHighlightUtil
 		return expectedType;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static HighlightInfo checkTypeParameterWithinItsBound(PsiTypeParameter classParameter,
 			final PsiSubstitutor substitutor,
 			final PsiType type,
@@ -365,11 +365,11 @@ public class GenericsHighlightUtil
 		}
 	}
 
-	@Nullable
-	static HighlightInfo checkElementInTypeParameterExtendsList(@NotNull PsiReferenceList referenceList,
-			@NotNull PsiClass aClass,
-			@NotNull JavaResolveResult resolveResult,
-			@NotNull PsiElement element)
+	@javax.annotation.Nullable
+	static HighlightInfo checkElementInTypeParameterExtendsList(@Nonnull PsiReferenceList referenceList,
+			@Nonnull PsiClass aClass,
+			@Nonnull JavaResolveResult resolveResult,
+			@Nonnull PsiElement element)
 	{
 		final PsiJavaCodeReferenceElement[] referenceElements = referenceList.getReferenceElements();
 		PsiClass extendFrom = (PsiClass) resolveResult.getElement();
@@ -455,7 +455,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	static Collection<HighlightInfo> checkOverrideEquivalentMethods(@NotNull PsiClass aClass)
+	static Collection<HighlightInfo> checkOverrideEquivalentMethods(@Nonnull PsiClass aClass)
 	{
 		List<HighlightInfo> result = new ArrayList<>();
 		final Collection<HierarchicalMethodSignature> signaturesWithSupers = aClass.getVisibleSignatures();
@@ -483,10 +483,10 @@ public class GenericsHighlightUtil
 		return result.isEmpty() ? null : result;
 	}
 
-	static HighlightInfo checkDefaultMethodOverrideEquivalentToObjectNonPrivate(@NotNull LanguageLevel languageLevel,
-			@NotNull PsiClass aClass,
-			@NotNull PsiMethod method,
-			@NotNull PsiElement methodIdentifier)
+	static HighlightInfo checkDefaultMethodOverrideEquivalentToObjectNonPrivate(@Nonnull LanguageLevel languageLevel,
+			@Nonnull PsiClass aClass,
+			@Nonnull PsiMethod method,
+			@Nonnull PsiElement methodIdentifier)
 	{
 		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_8) && aClass.isInterface() && method.hasModifierProperty(PsiModifier.DEFAULT))
 		{
@@ -505,7 +505,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	static HighlightInfo checkUnrelatedDefaultMethods(@NotNull PsiClass aClass, @NotNull PsiIdentifier classIdentifier)
+	static HighlightInfo checkUnrelatedDefaultMethods(@Nonnull PsiClass aClass, @Nonnull PsiIdentifier classIdentifier)
 	{
 		final Map<? extends MethodSignature, Set<PsiMethod>> overrideEquivalent = PsiSuperMethodUtil.collectOverrideEquivalents(aClass);
 
@@ -597,12 +597,12 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	private static boolean belongToOneHierarchy(@NotNull PsiClass defaultMethodContainingClass, @NotNull PsiClass unrelatedMethodContainingClass)
+	private static boolean belongToOneHierarchy(@Nonnull PsiClass defaultMethodContainingClass, @Nonnull PsiClass unrelatedMethodContainingClass)
 	{
 		return defaultMethodContainingClass.isInheritor(unrelatedMethodContainingClass, true) || unrelatedMethodContainingClass.isInheritor(defaultMethodContainingClass, true);
 	}
 
-	private static boolean hasNotOverriddenAbstract(List<PsiClass> defaultContainingClasses, @NotNull PsiClass abstractMethodContainingClass)
+	private static boolean hasNotOverriddenAbstract(List<PsiClass> defaultContainingClasses, @Nonnull PsiClass abstractMethodContainingClass)
 	{
 		return defaultContainingClasses.stream().noneMatch(containingClass -> belongToOneHierarchy(containingClass, abstractMethodContainingClass));
 	}
@@ -627,7 +627,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	static HighlightInfo checkUnrelatedConcrete(@NotNull PsiClass psiClass, @NotNull PsiIdentifier classIdentifier)
+	static HighlightInfo checkUnrelatedConcrete(@Nonnull PsiClass psiClass, @Nonnull PsiIdentifier classIdentifier)
 	{
 		final PsiClass superClass = psiClass.getSuperClass();
 		if(superClass != null && superClass.hasTypeParameters())
@@ -680,11 +680,11 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
-	private static HighlightInfo checkSameErasureNotSubSignatureInner(@NotNull HierarchicalMethodSignature signature,
-			@NotNull PsiManager manager,
-			@NotNull PsiClass aClass,
-			@NotNull Map<MethodSignature, MethodSignatureBackedByPsiMethod> sameErasureMethods)
+	@javax.annotation.Nullable
+	private static HighlightInfo checkSameErasureNotSubSignatureInner(@Nonnull HierarchicalMethodSignature signature,
+			@Nonnull PsiManager manager,
+			@Nonnull PsiClass aClass,
+			@Nonnull Map<MethodSignature, MethodSignatureBackedByPsiMethod> sameErasureMethods)
 	{
 		PsiMethod method = signature.getMethod();
 		JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
@@ -739,7 +739,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static HighlightInfo checkSameErasureNotSubSignatureOrSameClass(final MethodSignatureBackedByPsiMethod signatureToCheck,
 			final HierarchicalMethodSignature superSignature,
 			final PsiClass aClass,
@@ -834,7 +834,7 @@ public class GenericsHighlightUtil
 		}
 	}
 
-	private static HighlightInfo getSameErasureMessage(final boolean sameClass, @NotNull PsiMethod method, @NotNull PsiMethod superMethod, TextRange textRange)
+	private static HighlightInfo getSameErasureMessage(final boolean sameClass, @Nonnull PsiMethod method, @Nonnull PsiMethod superMethod, TextRange textRange)
 	{
 		@NonNls final String key = sameClass ? "generics.methods.have.same.erasure" : method.hasModifierProperty(PsiModifier.STATIC) ? "generics.methods.have.same.erasure.hide" : "generics.methods" +
 				".have.same.erasure.override";
@@ -959,7 +959,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	static HighlightInfo checkForEachParameterType(@NotNull PsiForeachStatement statement, @NotNull PsiParameter parameter)
+	static HighlightInfo checkForEachParameterType(@Nonnull PsiForeachStatement statement, @Nonnull PsiParameter parameter)
 	{
 		final PsiExpression expression = statement.getIteratedValue();
 		final PsiType itemType = expression == null ? null : JavaGenericsUtil.getCollectionItemType(expression);
@@ -979,8 +979,8 @@ public class GenericsHighlightUtil
 	}
 
 	//http://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2
-	@Nullable
-	static HighlightInfo checkAccessStaticFieldFromEnumConstructor(@NotNull PsiReferenceExpression expr, @NotNull JavaResolveResult result)
+	@javax.annotation.Nullable
+	static HighlightInfo checkAccessStaticFieldFromEnumConstructor(@Nonnull PsiReferenceExpression expr, @Nonnull JavaResolveResult result)
 	{
 		final PsiElement resolved = result.getElement();
 
@@ -1044,7 +1044,7 @@ public class GenericsHighlightUtil
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expr).descriptionAndTooltip(description).create();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkEnumInstantiation(PsiElement expression, PsiClass aClass)
 	{
 		if(aClass != null && aClass.isEnum() &&
@@ -1056,7 +1056,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkGenericArrayCreation(PsiElement element, PsiType type)
 	{
 		if(type instanceof PsiArrayType)
@@ -1084,8 +1084,8 @@ public class GenericsHighlightUtil
 		return valueOfMethod.equals(methodSignature);
 	}
 
-	@Nullable
-	static HighlightInfo checkTypeParametersList(PsiTypeParameterList list, PsiTypeParameter[] parameters, @NotNull LanguageLevel level)
+	@javax.annotation.Nullable
+	static HighlightInfo checkTypeParametersList(PsiTypeParameterList list, PsiTypeParameter[] parameters, @Nonnull LanguageLevel level)
 	{
 		final PsiElement parent = list.getParent();
 		if(parent instanceof PsiClass && ((PsiClass) parent).isEnum())
@@ -1138,7 +1138,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static Collection<HighlightInfo> checkCatchParameterIsClass(PsiParameter parameter)
 	{
 		if(!(parameter.getDeclarationScope() instanceof PsiCatchSection))
@@ -1212,7 +1212,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static HighlightInfo canSelectFrom(PsiClassType type, PsiTypeElement operand)
 	{
 		PsiClass aClass = type.resolve();
@@ -1228,8 +1228,8 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkOverrideAnnotation(@NotNull PsiMethod method, @NotNull PsiAnnotation overrideAnnotation, @NotNull LanguageLevel languageLevel)
+	@javax.annotation.Nullable
+	static HighlightInfo checkOverrideAnnotation(@Nonnull PsiMethod method, @Nonnull PsiAnnotation overrideAnnotation, @Nonnull LanguageLevel languageLevel)
 	{
 		try
 		{
@@ -1270,7 +1270,7 @@ public class GenericsHighlightUtil
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkSafeVarargsAnnotation(PsiMethod method, LanguageLevel languageLevel)
 	{
 		PsiModifierList list = method.getModifierList();
@@ -1327,7 +1327,7 @@ public class GenericsHighlightUtil
 				method.hasModifierProperty(PsiModifier.PRIVATE) && languageLevel.isAtLeast(LanguageLevel.JDK_1_9);
 	}
 
-	static void checkEnumConstantForConstructorProblems(@NotNull PsiEnumConstant enumConstant, @NotNull HighlightInfoHolder holder, @NotNull JavaSdkVersion javaSdkVersion)
+	static void checkEnumConstantForConstructorProblems(@Nonnull PsiEnumConstant enumConstant, @Nonnull HighlightInfoHolder holder, @Nonnull JavaSdkVersion javaSdkVersion)
 	{
 		PsiClass containingClass = enumConstant.getContainingClass();
 		if(enumConstant.getInitializingClass() == null)
@@ -1351,7 +1351,7 @@ public class GenericsHighlightUtil
 		HighlightMethodUtil.checkConstructorCall(type.resolveGenerics(), enumConstant, type, null, holder, javaSdkVersion);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkEnumSuperConstructorCall(PsiMethodCallExpression expr)
 	{
 		PsiReferenceExpression methodExpression = expr.getMethodExpression();
@@ -1372,8 +1372,8 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkVarArgParameterIsLast(@NotNull PsiParameter parameter)
+	@javax.annotation.Nullable
+	static HighlightInfo checkVarArgParameterIsLast(@Nonnull PsiParameter parameter)
 	{
 		PsiElement declarationScope = parameter.getDeclarationScope();
 		if(declarationScope instanceof PsiMethod)
@@ -1390,7 +1390,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static List<HighlightInfo> checkEnumConstantModifierList(PsiModifierList modifierList)
 	{
 		List<HighlightInfo> list = null;
@@ -1410,7 +1410,7 @@ public class GenericsHighlightUtil
 		return list;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkParametersAllowed(PsiReferenceParameterList refParamList)
 	{
 		final PsiElement parent = refParamList.getParent();
@@ -1427,7 +1427,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkParametersOnRaw(PsiReferenceParameterList refParamList)
 	{
 		JavaResolveResult resolveResult = null;
@@ -1639,7 +1639,7 @@ public class GenericsHighlightUtil
 	/**
 	 * http://docs.oracle.com/javase/specs/jls/se7/html/jls-4.html#jls-4.8
 	 */
-	static HighlightInfo checkRawOnParameterizedType(@NotNull PsiJavaCodeReferenceElement parent, PsiElement resolved)
+	static HighlightInfo checkRawOnParameterizedType(@Nonnull PsiJavaCodeReferenceElement parent, PsiElement resolved)
 	{
 		PsiReferenceParameterList list = parent.getParameterList();
 		if(list == null || list.getTypeArguments().length > 0)
@@ -1726,10 +1726,10 @@ public class GenericsHighlightUtil
 		return false;
 	}
 
-	private static void registerVariableParameterizedTypeFixes(@Nullable HighlightInfo highlightInfo,
-			@NotNull PsiVariable variable,
-			@NotNull PsiReferenceParameterList parameterList,
-			@NotNull JavaSdkVersion version)
+	private static void registerVariableParameterizedTypeFixes(@javax.annotation.Nullable HighlightInfo highlightInfo,
+			@Nonnull PsiVariable variable,
+			@Nonnull PsiReferenceParameterList parameterList,
+			@Nonnull JavaSdkVersion version)
 	{
 		PsiType type = variable.getType();
 		if(!(type instanceof PsiClassType) || highlightInfo == null)
@@ -1787,12 +1787,12 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	static HighlightInfo areSupersAccessible(@NotNull PsiClass aClass)
+	static HighlightInfo areSupersAccessible(@Nonnull PsiClass aClass)
 	{
 		return areSupersAccessible(aClass, aClass.getResolveScope(), HighlightNamesUtil.getClassDeclarationTextRange(aClass), true);
 	}
 
-	static HighlightInfo areSupersAccessible(@NotNull PsiClass aClass, PsiReferenceExpression ref)
+	static HighlightInfo areSupersAccessible(@Nonnull PsiClass aClass, PsiReferenceExpression ref)
 	{
 		final GlobalSearchScope resolveScope = ref.getResolveScope();
 		final HighlightInfo info = areSupersAccessible(aClass, resolveScope, ref.getTextRange(), false);
@@ -1846,7 +1846,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	private static HighlightInfo areSupersAccessible(@NotNull PsiClass aClass, GlobalSearchScope resolveScope, TextRange range, boolean checkParameters)
+	private static HighlightInfo areSupersAccessible(@Nonnull PsiClass aClass, GlobalSearchScope resolveScope, TextRange range, boolean checkParameters)
 	{
 		final JavaPsiFacade factory = JavaPsiFacade.getInstance(aClass.getProject());
 		for(PsiClassType superType : aClass.getSuperTypes())
@@ -1860,7 +1860,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String isSuperTypeAccessible(PsiType superType, HashSet<PsiClass> classes, boolean checkParameters, GlobalSearchScope resolveScope, JavaPsiFacade factory)
 	{
 		final PsiClass aClass = PsiUtil.resolveClassInType(superType);

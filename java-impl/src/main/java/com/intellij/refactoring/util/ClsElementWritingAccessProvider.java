@@ -18,7 +18,7 @@ package com.intellij.refactoring.util;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.WritingAccessProvider;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -28,14 +28,14 @@ import java.util.Collections;
  */
 public class ClsElementWritingAccessProvider extends WritingAccessProvider {
 
-  @NotNull
+  @Nonnull
   @Override
   public Collection<VirtualFile> requestWriting(final VirtualFile... files) {
     return Collections.emptyList();
   }
 
   @Override
-  public boolean isPotentiallyWritable(@NotNull final VirtualFile file) {
+  public boolean isPotentiallyWritable(@Nonnull final VirtualFile file) {
     // TODO make library class files readonly not by their file type but by location in library roots
     return file.getFileType() != JavaClassFileType.INSTANCE;
   }

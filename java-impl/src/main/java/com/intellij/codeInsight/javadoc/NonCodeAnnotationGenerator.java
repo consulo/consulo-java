@@ -20,7 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiNamedElement;
@@ -33,7 +34,7 @@ public class NonCodeAnnotationGenerator
 	private final PsiModifierListOwner myOwner;
 	private final StringBuilder myOutput;
 
-	NonCodeAnnotationGenerator(@NotNull PsiModifierListOwner owner, StringBuilder output)
+	NonCodeAnnotationGenerator(@Nonnull PsiModifierListOwner owner, StringBuilder output)
 	{
 		myOwner = owner;
 		myOutput = output;
@@ -73,7 +74,7 @@ public class NonCodeAnnotationGenerator
 		myOutput.append("</ul>\n");
 	}
 
-	@NotNull
+	@Nonnull
 	public static MultiMap<PsiModifierListOwner, AnnotationDocGenerator> getSignatureNonCodeAnnotations(PsiModifierListOwner owner)
 	{
 		MultiMap<PsiModifierListOwner, AnnotationDocGenerator> generators = MultiMap.createLinked();
@@ -88,7 +89,7 @@ public class NonCodeAnnotationGenerator
 		return generators;
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<PsiModifierListOwner> getSignatureOwners(PsiModifierListOwner owner)
 	{
 		List<PsiModifierListOwner> allOwners = new ArrayList<>();
@@ -100,7 +101,7 @@ public class NonCodeAnnotationGenerator
 		return allOwners;
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getNonCodeHeader(Collection<? extends AnnotationDocGenerator> values)
 	{
 		boolean hasExternal = values.stream().anyMatch(AnnotationDocGenerator::isExternal);

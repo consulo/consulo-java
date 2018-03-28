@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Visitor which can be used to visit Java types.
@@ -42,7 +42,7 @@ public class PsiTypeVisitor<A>
 		return visitType(arrayType);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public A visitClassType(PsiClassType classType)
 	{
 		return visitType(classType);
@@ -85,7 +85,7 @@ public class PsiTypeVisitor<A>
 		return visitType(diamondType);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public A visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType)
 	{
 		final PsiLambdaExpression lambdaExpression = lambdaExpressionType.getExpression();

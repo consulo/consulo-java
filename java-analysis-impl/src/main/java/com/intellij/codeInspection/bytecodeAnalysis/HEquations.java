@@ -18,14 +18,14 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class HEquations {
-  @NotNull
+  @Nonnull
   final List<DirectionResultPair> results;
   final boolean stable;
 
-  HEquations(@NotNull List<DirectionResultPair> results, boolean stable) {
+  HEquations(@Nonnull List<DirectionResultPair> results, boolean stable) {
     this.results = results;
     this.stable = stable;
   }

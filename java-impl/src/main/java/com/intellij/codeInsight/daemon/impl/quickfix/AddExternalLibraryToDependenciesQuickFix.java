@@ -15,9 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -42,10 +42,10 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	private final ExternalLibraryDescriptor myLibraryDescriptor;
 	private final String myQualifiedClassName;
 
-	public AddExternalLibraryToDependenciesQuickFix(@NotNull Module currentModule,
-			@NotNull ExternalLibraryDescriptor libraryDescriptor,
-			@NotNull PsiReference reference,
-			@Nullable String qualifiedClassName)
+	public AddExternalLibraryToDependenciesQuickFix(@Nonnull Module currentModule,
+			@Nonnull ExternalLibraryDescriptor libraryDescriptor,
+			@Nonnull PsiReference reference,
+			@javax.annotation.Nullable String qualifiedClassName)
 	{
 		super(reference);
 		myCurrentModule = currentModule;
@@ -54,7 +54,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -62,7 +62,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -70,18 +70,18 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return !project.isDisposed() && !myCurrentModule.isDisposed();
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, final Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, final Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
 		JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibraryDescriptor, scope).doWhenDone(aVoid -> new WriteAction()
 		{
-			protected void run(@NotNull final Result result)
+			protected void run(@Nonnull final Result result)
 			{
 				try
 				{

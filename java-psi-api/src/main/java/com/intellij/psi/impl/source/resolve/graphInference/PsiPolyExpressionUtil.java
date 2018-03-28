@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.PsiUtil;
@@ -114,7 +114,7 @@ public class PsiPolyExpressionUtil
 		}
 		return returnType.accept(new PsiTypeVisitor<Boolean>()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitType(PsiType type)
 			{
@@ -133,7 +133,7 @@ public class PsiPolyExpressionUtil
 				return false;
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitClassType(PsiClassType classType)
 			{
@@ -148,7 +148,7 @@ public class PsiPolyExpressionUtil
 				return psiClass instanceof PsiTypeParameter && typeParameters.contains(psiClass);
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitArrayType(PsiArrayType arrayType)
 			{

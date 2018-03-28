@@ -20,13 +20,13 @@ import java.awt.BorderLayout;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.ide.DataManager;
@@ -149,24 +149,24 @@ public class SpecialAnnotationsUtil {
                                                                                  final String qualifiedName) {
     return new IntentionAction() {
       @Override
-      @NotNull
+      @Nonnull
       public String getText() {
         return text;
       }
 
       @Override
-      @NotNull
+      @Nonnull
       public String getFamilyName() {
         return family;
       }
 
       @Override
-      public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+      public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         return true;
       }
 
       @Override
-      public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+      public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         SpecialAnnotationsUtilBase.doQuickFixInternal(project, targetList, qualifiedName);
       }
 

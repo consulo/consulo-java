@@ -26,21 +26,21 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "private.member.access.between.outer.and.inner.classes.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsBundle.message(
@@ -83,7 +83,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       if (constructor) {
         return InspectionGadgetsBundle.message(
@@ -212,7 +212,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression expression) {
+      @Nonnull PsiReferenceExpression expression) {
     /*  if (JspPsiUtil.isInJspFile(expression)) {
         // disable for jsp files IDEADEV-12957
         return;

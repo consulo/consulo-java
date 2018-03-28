@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiCallExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -48,9 +48,9 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
 			"org.slf4j.Logger.*"
 	};
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<InlayInfo> getParameterHints(@NotNull PsiElement element)
+	public List<InlayInfo> getParameterHints(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiCallExpression)
 		{
@@ -61,7 +61,7 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
 
 	@Nullable
 	@Override
-	public MethodInfo getMethodInfo(@NotNull PsiElement element)
+	public MethodInfo getMethodInfo(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiCallExpression)
 		{
@@ -74,7 +74,7 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Set<String> getDefaultBlackList()
 	{

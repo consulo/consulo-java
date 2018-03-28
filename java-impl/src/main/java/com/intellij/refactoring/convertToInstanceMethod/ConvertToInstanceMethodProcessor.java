@@ -40,8 +40,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -81,7 +81,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
     return myTargetClass;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveInstanceMethodViewDescriptor(myMethod, myTargetParameter, myTargetClass);
   }
@@ -93,7 +93,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
     myTargetClass = (PsiClass)elements[2];
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     LOG.assertTrue(myTargetParameter.getDeclarationScope() == myMethod);
     final Project project = myMethod.getProject();

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -59,7 +59,7 @@ abstract class StaticMembersProcessor<T extends PsiMember & PsiDocCommentOwner> 
 
 	protected abstract boolean isApplicable(T member, PsiElement place);
 
-	@NotNull
+	@Nonnull
 	public List<T> getMembersToImport(boolean applicableOnly)
 	{
 		final List<T> list = new ArrayList<>();

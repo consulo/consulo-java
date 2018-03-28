@@ -22,27 +22,26 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class WaitNotInSynchronizedContextInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "WaitWhileNotSynced";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "wait.not.in.synchronized.context.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     @NonNls final String text;
     if (infos.length > 0) {
@@ -66,7 +65,7 @@ public class WaitNotInSynchronizedContextInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
@@ -108,8 +107,8 @@ public class WaitNotInSynchronizedContextInspection
       }
     }
 
-    private static boolean isSynchronizedOn(@NotNull PsiElement element,
-                                            @Nullable PsiElement target) {
+    private static boolean isSynchronizedOn(@Nonnull PsiElement element,
+                                            @javax.annotation.Nullable PsiElement target) {
       if (target == null) {
         return false;
       }
@@ -134,7 +133,7 @@ public class WaitNotInSynchronizedContextInspection
     }
 
     private static boolean isSynchronizedOnThis(
-      @NotNull PsiElement element) {
+      @Nonnull PsiElement element) {
       final PsiElement context =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class,
                                     PsiSynchronizedStatement.class);

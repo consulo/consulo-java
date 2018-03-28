@@ -16,7 +16,8 @@
 
 package consulo.java.debugger.settings;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.settings.ThreadsViewSettings;
 import com.intellij.openapi.options.Configurable;
@@ -34,7 +35,7 @@ import consulo.ui.VerticalLayout;
 public class ThreadsViewConfigurable extends SimpleConfigurableByProperties implements Configurable
 {
 	@RequiredUIAccess
-	@NotNull
+	@Nonnull
 	@Override
 	protected Component createLayout(PropertyBuilder propertyBuilder)
 	{

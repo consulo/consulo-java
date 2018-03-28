@@ -23,8 +23,8 @@ import static com.intellij.psi.CommonClassNames.JAVA_UTIL_LIST;
 import static com.intellij.psi.CommonClassNames.JAVA_UTIL_MAP;
 import static com.intellij.psi.CommonClassNames.JAVA_UTIL_SET;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
@@ -393,7 +393,7 @@ public class PsiAdapter
 	 * @return the classname, null if the field is a primitive.
 	 * @see #getTypeQualifiedClassName(com.intellij.psi.PsiType) for the qualified version.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static String getTypeClassName(PsiType type)
 	{
 		String name = getTypeQualifiedClassName(type);
@@ -414,7 +414,7 @@ public class PsiAdapter
 	 * @param clazz the class.
 	 * @return the method if it exists, null if not.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiMethod findPublicStaticVoidMainMethod(PsiClass clazz)
 	{
 		PsiMethod[] methods = clazz.findMethodsByName("main", false);
@@ -556,7 +556,7 @@ public class PsiAdapter
 	 * @return the fieldname if this is a getter method.
 	 * @see #isGetterMethod(com.intellij.psi.PsiMethod) for the getter check
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static String getGetterFieldName(PsiMethod method)
 	{
 		// must be a getter
@@ -656,7 +656,7 @@ public class PsiAdapter
 	 * @param clazz the class.
 	 * @return the method if it exists, null if not.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiMethod findHashCodeMethod(PsiClass clazz)
 	{
 		PsiMethod[] methods = clazz.findMethodsByName("hashCode", false);
@@ -764,7 +764,7 @@ public class PsiAdapter
 		return type instanceof PsiPrimitiveType;
 	}
 
-	public static int getJavaVersion(@NotNull PsiElement element)
+	public static int getJavaVersion(@Nonnull PsiElement element)
 	{
 		JavaSdkVersion sdkVersion = JavaVersionService.getInstance().getJavaSdkVersion(element);
 		if(sdkVersion == null)

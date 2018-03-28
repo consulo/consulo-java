@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
@@ -43,7 +43,7 @@ import com.intellij.util.containers.ContainerUtil;
 		})
 public class EqualsHashCodeTemplatesManager extends TemplatesManager
 {
-	@NotNull
+	@Nonnull
 	public static EqualsHashCodeTemplatesManager getInstance()
 	{
 		return ServiceManager.getService(EqualsHashCodeTemplatesManager.class);
@@ -137,7 +137,7 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager
 		return ArrayUtil.toStringArray(names);
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getTemplateBaseName(TemplateResource resource)
 	{
 		return StringUtil.trimEnd(StringUtil.trimEnd(resource.getFileName(), EQUALS_SUFFIX), HASH_CODE_SUFFIX).trim();

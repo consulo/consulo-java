@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.psiutils.SerializationUtils;
 import com.siyeh.ig.ui.UiUtils;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,13 +78,13 @@ public abstract class SerializableInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@NotNull Element node) throws InvalidDataException {
+  public void readSettings(@Nonnull Element node) throws InvalidDataException {
     super.readSettings(node);
     parseString(superClassString, superClassList);
   }
 
   @Override
-  public void writeSettings(@NotNull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     superClassString = formatString(superClassList);
     super.writeSettings(node);
   }

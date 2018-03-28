@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.generation.GetterSetterPrototypeProvider;
 import com.intellij.codeInsight.intention.impl.SplitDeclarationAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -698,7 +698,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor
 		}
 	}
 
-	private void tryToRemoveLocalVariableAssignment(@NotNull PsiLocalVariable variable, @NotNull PsiExpression valueExpression, @NotNull PsiType migrationType)
+	private void tryToRemoveLocalVariableAssignment(@Nonnull PsiLocalVariable variable, @Nonnull PsiExpression valueExpression, @Nonnull PsiType migrationType)
 	{
 		final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
 		final PsiElement[] refs = DefUseUtil.getRefs(codeBlock, variable, valueExpression);
@@ -707,7 +707,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor
 			myLabeler.setConversionMapping(valueExpression, new TypeConversionDescriptorBase()
 			{
 				@Override
-				public PsiExpression replace(PsiExpression expression, @NotNull TypeEvaluator evaluator) throws IncorrectOperationException
+				public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException
 				{
 					final PsiElement parent = expression.getParent();
 					if(parent instanceof PsiLocalVariable)
@@ -747,7 +747,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor
 	}
 
 
-	private static boolean canBeVariableType(@NotNull PsiType type)
+	private static boolean canBeVariableType(@Nonnull PsiType type)
 	{
 		return !type.getDeepComponentType().equals(PsiType.VOID);
 	}
@@ -796,7 +796,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor
 		final PsiType myType;
 		final boolean myChanged;
 
-		public TypeView(@NotNull PsiExpression expr)
+		public TypeView(@Nonnull PsiExpression expr)
 		{
 			PsiType exprType = expr.getType();
 			exprType = exprType instanceof PsiEllipsisType ? ((PsiEllipsisType) exprType).toArrayType() : exprType;

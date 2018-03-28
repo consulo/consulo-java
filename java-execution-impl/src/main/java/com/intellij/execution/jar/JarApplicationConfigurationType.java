@@ -3,7 +3,8 @@
  */
 package com.intellij.execution.jar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
@@ -19,7 +20,7 @@ import consulo.module.extension.ModuleExtensionHelper;
 
 public class JarApplicationConfigurationType extends ConfigurationTypeBase implements ConfigurationType
 {
-	@NotNull
+	@Nonnull
 	public static JarApplicationConfigurationType getInstance()
 	{
 		return ConfigurationTypeUtil.findConfigurationType(JarApplicationConfigurationType.class);
@@ -31,7 +32,7 @@ public class JarApplicationConfigurationType extends ConfigurationTypeBase imple
 		addFactory(new ConfigurationFactoryEx(this)
 		{
 			@Override
-			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration)
+			public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration)
 			{
 				JarApplicationConfiguration jarApplicationConfiguration = (JarApplicationConfiguration) configuration;
 				if(StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory()))
@@ -42,14 +43,14 @@ public class JarApplicationConfigurationType extends ConfigurationTypeBase imple
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public RunConfiguration createTemplateConfiguration(Project project)
 			{
 				return new JarApplicationConfiguration(project, this, "");
 			}
 
 			@Override
-			public boolean isApplicable(@NotNull Project project)
+			public boolean isApplicable(@Nonnull Project project)
 			{
 				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
 			}

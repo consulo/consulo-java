@@ -26,7 +26,7 @@ import java.util.Collections;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
 import org.jetbrains.java.generate.template.toString.ToStringTemplatesManager;

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -37,8 +38,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
@@ -178,7 +178,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected List<Pair<String, JPanel>> createAdditionalPanels()
 	{
 		final PsiMethod method = myMethod.getMethod();
@@ -379,8 +379,8 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 				{
 
 					@Override
-					protected void addCompletionVariants(@NotNull String text, int offset, @NotNull String prefix,
-							@NotNull CompletionResultSet result)
+					protected void addCompletionVariants(@Nonnull String text, int offset, @Nonnull String prefix,
+							@Nonnull CompletionResultSet result)
 					{
 						final PsiCodeFragment fragment = item.typeCodeFragment;
 						if(fragment instanceof PsiTypeCodeFragment)

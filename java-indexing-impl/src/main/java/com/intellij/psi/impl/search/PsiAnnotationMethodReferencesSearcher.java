@@ -1,5 +1,7 @@
 package com.intellij.psi.impl.search;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtil;
@@ -7,14 +9,13 @@ import com.intellij.util.Processor;
 import com.intellij.util.Query;
 import com.intellij.util.QueryExecutor;
 import com.intellij.openapi.application.ReadActionProcessor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
  */
 public class PsiAnnotationMethodReferencesSearcher implements QueryExecutor<PsiReference, ReferencesSearch.SearchParameters> {
   @Override
-  public boolean execute(@NotNull final ReferencesSearch.SearchParameters p, @NotNull final Processor<PsiReference> consumer) {
+  public boolean execute(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer) {
     final PsiElement refElement = p.getElementToSearch();
     if (PsiUtil.isAnnotationMethod(refElement)) {
       PsiMethod method = (PsiMethod)refElement;

@@ -18,8 +18,7 @@ package com.intellij.compiler.impl.javaCompiler.annotationProcessing.impl;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -90,13 +89,13 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getProcessorPath() {
     return myProcessorPath;
   }
 
   @Override
-  public void setProcessorPath(@Nullable String processorPath) {
+  public void setProcessorPath(@javax.annotation.Nullable String processorPath) {
     myProcessorPath = processorPath != null? processorPath : "";
   }
 
@@ -111,13 +110,13 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGeneratedSourcesDirectoryName(boolean forTests) {
     return forTests? myGeneratedTestsDirectoryName : myGeneratedProductionDirectoryName;
   }
 
   @Override
-  public void setGeneratedSourcesDirectoryName(@Nullable String name, boolean forTests) {
+  public void setGeneratedSourcesDirectoryName(@javax.annotation.Nullable String name, boolean forTests) {
     if (forTests) {
       myGeneratedTestsDirectoryName = name != null? name.trim() : DEFAULT_TESTS_DIR_NAME;
     }
@@ -137,7 +136,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Set<String> getModuleNames() {
     return myModuleNames;
   }
@@ -183,13 +182,13 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Set<String> getProcessors() {
     return Collections.unmodifiableSet(myProcessors);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Map<String, String> getProcessorOptions() {
     return Collections.unmodifiableMap(myProcessorOptions);
   }
@@ -200,7 +199,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public String getOption(String key) {
     return myProcessorOptions.get(key);
   }

@@ -15,13 +15,14 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.util.FileStructureFilter;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentationData;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.util.PlatformIcons;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Konstantin Bulenkov
@@ -50,13 +51,13 @@ public class JavaAnonymousMembersFilter implements FileStructureFilter {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(getCheckBoxText(), null, PlatformIcons.ANONYMOUS_CLASS_ICON);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return ID;

@@ -25,10 +25,12 @@
 
 package org.osmorc.manifest.lang.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.psi.stub.HeaderValuePartStub;
 
 /**
@@ -47,10 +49,10 @@ public interface HeaderValuePart extends PsiElement, StubBasedPsiElement<HeaderV
    *
    * @return The unwrapped text.
    */
-  @NotNull
+  @Nonnull
   String getUnwrappedText();
 
-  void setText(@NotNull String text);
+  void setText(@Nonnull String text);
 
   /**
    * Returns the converted value of this header (.e.g if the header represents a version statement, this will return a {@link org.osmorc.valueobject.Version} object.

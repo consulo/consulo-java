@@ -20,9 +20,9 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -68,8 +68,8 @@ public class FieldEvaluator implements Evaluator
 		myTargetClassFilter = filter;
 	}
 
-	@NotNull
-	public static TargetClassFilter createClassFilter(@Nullable PsiType psiType)
+	@Nonnull
+	public static TargetClassFilter createClassFilter(@javax.annotation.Nullable PsiType psiType)
 	{
 		if(psiType == null || psiType instanceof PsiArrayType)
 		{
@@ -97,8 +97,8 @@ public class FieldEvaluator implements Evaluator
 		return name != null ? new FQNameClassFilter(name) : TargetClassFilter.ALL;
 	}
 
-	@Nullable
-	private Field findField(@Nullable Type t)
+	@javax.annotation.Nullable
+	private Field findField(@javax.annotation.Nullable Type t)
 	{
 		if(t instanceof ClassType)
 		{

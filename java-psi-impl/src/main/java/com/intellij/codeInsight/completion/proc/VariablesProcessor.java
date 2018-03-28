@@ -26,7 +26,7 @@ package com.intellij.codeInsight.completion.proc;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifier;
@@ -66,7 +66,7 @@ public class VariablesProcessor
 
   /** Always return true since we wanna get all vars in scope */
   @Override
-  public boolean execute(@NotNull PsiElement pe, ResolveState state){
+  public boolean execute(@Nonnull PsiElement pe, ResolveState state){
     if(pe instanceof PsiVariable){
       final PsiVariable pvar = (PsiVariable)pe;
       final String pvar_name = pvar.getName();
@@ -94,7 +94,7 @@ public class VariablesProcessor
   }
 
   @Override
-  public <T> T getHint(@NotNull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       return (T)this;
     }

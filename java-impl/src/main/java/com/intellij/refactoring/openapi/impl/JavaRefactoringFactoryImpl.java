@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.openapi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -23,7 +25,6 @@ import com.intellij.refactoring.*;
 import com.intellij.refactoring.move.moveClassesOrPackages.AutocreatingSingleSourceRootMoveDestination;
 import com.intellij.refactoring.move.moveClassesOrPackages.MultipleRootsMoveDestination;
 import com.intellij.refactoring.move.moveInner.MoveInnerImpl;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -51,15 +52,15 @@ public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
     return new MoveInnerRefactoringImpl(myProject, innerClass, newName, passOuterClass, parameterName, targetContainer);
   }
 
-  public MoveDestination createSourceFolderPreservingMoveDestination(@NotNull String targetPackage) {
+  public MoveDestination createSourceFolderPreservingMoveDestination(@Nonnull String targetPackage) {
     return new MultipleRootsMoveDestination(createPackageWrapper(targetPackage));
   }
 
-  private PackageWrapper createPackageWrapper(@NotNull String targetPackage) {
+  private PackageWrapper createPackageWrapper(@Nonnull String targetPackage) {
     return new PackageWrapper(PsiManager.getInstance(myProject), targetPackage);
   }
 
-  public MoveDestination createSourceRootMoveDestination(@NotNull String targetPackageQualifiedName, @NotNull VirtualFile sourceRoot) {
+  public MoveDestination createSourceRootMoveDestination(@Nonnull String targetPackageQualifiedName, @Nonnull VirtualFile sourceRoot) {
     final PsiDirectory directory = PsiManager.getInstance(myProject).findDirectory(sourceRoot);
     LOG.assertTrue(directory != null && JavaDirectoryService.getInstance().isSourceRoot(directory), "Should pass source root");
     return new AutocreatingSingleSourceRootMoveDestination(createPackageWrapper(targetPackageQualifiedName),

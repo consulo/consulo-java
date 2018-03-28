@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.psi.impl.source.tree.ElementType;
@@ -38,7 +39,7 @@ public class ExpressionPsiElement extends CompositePsiElement
 	}
 
 	@Override
-	public void replaceChildInternal(@NotNull ASTNode child, @NotNull TreeElement newElement)
+	public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
 	{
 		if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) && ElementType.EXPRESSION_BIT_SET.contains(newElement.getElementType()))
 		{

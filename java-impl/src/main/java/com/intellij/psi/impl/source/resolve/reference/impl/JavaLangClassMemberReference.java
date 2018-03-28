@@ -24,8 +24,8 @@ import java.util.Comparator;
 import java.util.Set;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
@@ -50,14 +50,14 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 {
 	private final PsiExpression myContext;
 
-	public JavaLangClassMemberReference(@NotNull PsiLiteralExpression literal, @NotNull PsiExpression context)
+	public JavaLangClassMemberReference(@Nonnull PsiLiteralExpression literal, @Nonnull PsiExpression context)
 	{
 		super(literal);
 		myContext = context;
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		return element;
 	}
@@ -113,13 +113,13 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiClass getPsiClass()
 	{
 		return getReflectiveClass(myContext);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Object[] getVariants()
 	{
@@ -169,7 +169,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 		return member != null && (member.getContainingClass() == psiClass || isPublic(member));
 	}
 
-	@NotNull
+	@Nonnull
 	private LookupElement lookupMethod(PsiMethod method)
 	{
 		return JavaLookupElementBuilder.forMethod(method, PsiSubstitutor.EMPTY).withInsertHandler(this);

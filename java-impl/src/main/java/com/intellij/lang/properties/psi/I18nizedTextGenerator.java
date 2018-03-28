@@ -17,14 +17,14 @@
 package com.intellij.lang.properties.psi;
 
 import com.intellij.psi.PsiLiteralExpression;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author nik
  */
 public abstract class I18nizedTextGenerator {
 
-  public abstract String getI18nizedText(String propertyKey, final @Nullable PropertiesFile propertiesFile,
+  public abstract String getI18nizedText(String propertyKey, final @javax.annotation.Nullable PropertiesFile propertiesFile,
                                          final PsiLiteralExpression context);
 
   public abstract String getI18nizedConcatenationText(String propertyKey, String parametersString,

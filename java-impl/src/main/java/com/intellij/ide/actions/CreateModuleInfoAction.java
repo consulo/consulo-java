@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.IdeView;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
@@ -56,7 +56,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 	}
 
 	@Override
-	public void update(@NotNull AnActionEvent e)
+	public void update(@Nonnull AnActionEvent e)
 	{
 		if(!e.getPresentation().isVisible())
 		{
@@ -68,7 +68,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 		e.getPresentation().setEnabledAndVisible(available);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	protected PsiDirectory getTargetDirectory(DataContext ctx, IdeView view)
 	{
@@ -88,19 +88,19 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 	}
 
 	@Override
-	protected FileTemplate getTemplate(@NotNull Project project, @NotNull PsiDirectory dir)
+	protected FileTemplate getTemplate(@Nonnull Project project, @Nonnull PsiDirectory dir)
 	{
 		return FileTemplateManager.getInstance(project).getInternalTemplate(INTERNAL_MODULE_INFO_TEMPLATE_NAME);
 	}
 
 	@Override
-	protected AttributesDefaults getAttributesDefaults(@NotNull DataContext ctx)
+	protected AttributesDefaults getAttributesDefaults(@Nonnull DataContext ctx)
 	{
 		return new AttributesDefaults(MODULE_INFO_CLASS).withFixedName(true);
 	}
 
 	@Override
-	protected Map<String, String> getLiveTemplateDefaults(@NotNull DataContext ctx, @NotNull PsiFile file)
+	protected Map<String, String> getLiveTemplateDefaults(@Nonnull DataContext ctx, @Nonnull PsiFile file)
 	{
 		Module module = ctx.getData(LangDataKeys.MODULE);
 		return Collections.singletonMap("MODULE_NAME", module != null ? LightJavaModule.moduleName(module.getName()) : "module_name");

@@ -21,12 +21,12 @@ import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiDocumentManager;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
 public class DebuggerInvocationUtil {
-  public static void swingInvokeLater(final Project project, @NotNull final Runnable runnable) {
+  public static void swingInvokeLater(final Project project, @Nonnull final Runnable runnable) {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         if (project != null && !project.isDisposed()) {
@@ -35,7 +35,7 @@ public class DebuggerInvocationUtil {
       }
     });
   }
-  public static void invokeLater(final Project project, @NotNull final Runnable runnable) {
+  public static void invokeLater(final Project project, @Nonnull final Runnable runnable) {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       public void run() {
         if (project != null && !project.isDisposed()) {
@@ -45,7 +45,7 @@ public class DebuggerInvocationUtil {
     });
   }
 
-  public static void invokeLater(final Project project, @NotNull final Runnable runnable, ModalityState state) {
+  public static void invokeLater(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       public void run() {
         if(project == null || project.isDisposed()) return;
@@ -55,7 +55,7 @@ public class DebuggerInvocationUtil {
     }, state);
   }
 
-  public static void invokeAndWait(final Project project, @NotNull final Runnable runnable, ModalityState state) {
+  public static void invokeAndWait(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
     ApplicationManager.getApplication().invokeAndWait(new Runnable() {
       public void run() {
         if(project == null || project.isDisposed()) return;

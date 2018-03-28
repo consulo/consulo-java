@@ -18,7 +18,8 @@ package com.siyeh.ig.psiutils;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.codeInsight.template.Expression;
@@ -57,7 +58,7 @@ public class HighlightUtils {
   }
 
   public static void highlightElements(
-    @NotNull final Collection<? extends PsiElement> elementCollection) {
+    @Nonnull final Collection<? extends PsiElement> elementCollection) {
     if (elementCollection.isEmpty()) {
       return;
     }

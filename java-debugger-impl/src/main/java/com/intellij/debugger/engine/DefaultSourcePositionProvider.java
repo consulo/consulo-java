@@ -18,8 +18,8 @@ package com.intellij.debugger.engine;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerContextUtil;
@@ -45,9 +45,9 @@ import consulo.internal.com.sun.jdi.*;
 
 public class DefaultSourcePositionProvider extends SourcePositionProvider
 {
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	protected SourcePosition computeSourcePosition(@NotNull NodeDescriptor descriptor, @NotNull Project project, @NotNull DebuggerContextImpl context, boolean nearest)
+	protected SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest)
 	{
 		StackFrameProxyImpl frame = context.getFrameProxy();
 		if(frame == null)
@@ -83,7 +83,7 @@ public class DefaultSourcePositionProvider extends SourcePositionProvider
 	}
 
 	@Nullable
-	private SourcePosition getSourcePositionForField(@NotNull FieldDescriptor descriptor, @NotNull Project project, @NotNull DebuggerContextImpl context, boolean nearest)
+	private SourcePosition getSourcePositionForField(@Nonnull FieldDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest)
 	{
 		final ReferenceType type = descriptor.getField().declaringType();
 		final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
@@ -168,7 +168,7 @@ public class DefaultSourcePositionProvider extends SourcePositionProvider
 	}
 
 	@Nullable
-	private SourcePosition getSourcePositionForLocalVariable(String name, @NotNull Project project, @NotNull DebuggerContextImpl context, boolean nearest)
+	private SourcePosition getSourcePositionForLocalVariable(String name, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest)
 	{
 		PsiElement place = PositionUtil.getContextElement(context);
 		if(place == null)

@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MoveClassFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,12 +35,12 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
    */
   public boolean m_ignoreInnerInterfaces = false;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "InnerClassOfInterface";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "inner.class.on.interface.display.name");
@@ -52,7 +52,7 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
                                           this, "m_ignoreInnerInterfaces");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass parentInterface = (PsiClass)infos[0];
     final String interfaceName = parentInterface.getName();
@@ -75,7 +75,7 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
   private class InnerClassOnInterfaceVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (!aClass.isInterface() || aClass.isAnnotationType()) {
         return;

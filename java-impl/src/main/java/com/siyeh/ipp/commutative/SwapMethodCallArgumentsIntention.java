@@ -15,18 +15,19 @@
  */
 package com.siyeh.ipp.commutative;
 
+import javax.annotation.Nonnull;
+
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.openapi.util.text.StringUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.NonNls;
 
 public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new SwapMethodCallArgumentsPredicate();
   }
@@ -41,7 +42,7 @@ public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
       StringUtil.first(firstExpression.getText(), 20, true), StringUtil.first(secondExpression.getText(), 20, true));
   }
 
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiExpressionList argumentList = (PsiExpressionList)element;
     final PsiExpression[] arguments = argumentList.getExpressions();

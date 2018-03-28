@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.actions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.DataManager;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -46,7 +46,7 @@ public class TypeCookAction extends BaseRefactoringAction
 	}
 
 	@Override
-	public boolean isEnabledOnElements(@NotNull PsiElement[] elements)
+	public boolean isEnabledOnElements(@Nonnull PsiElement[] elements)
 	{
 		Project project = DataManager.getInstance().getDataContext().getData(CommonDataKeys.PROJECT);
 
@@ -69,7 +69,7 @@ public class TypeCookAction extends BaseRefactoringAction
 	}
 
 	@Override
-	public RefactoringActionHandler getHandler(@NotNull DataContext dataContext)
+	public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext)
 	{
 		return getHandler();
 	}

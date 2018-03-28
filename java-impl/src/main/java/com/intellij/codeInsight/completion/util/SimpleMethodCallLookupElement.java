@@ -24,7 +24,7 @@ import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.openapi.util.Iconable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
@@ -37,7 +37,7 @@ public class SimpleMethodCallLookupElement extends LookupElement {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getLookupString() {
     return myMethod.getName();
   }

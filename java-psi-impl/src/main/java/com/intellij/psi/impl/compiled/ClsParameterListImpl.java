@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiParameter;
@@ -24,15 +26,14 @@ import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiParameterListStub;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import org.jetbrains.annotations.NotNull;
 
 public class ClsParameterListImpl extends ClsRepositoryPsiElement<PsiParameterListStub> implements PsiParameterList {
-  public ClsParameterListImpl(@NotNull PsiParameterListStub stub) {
+  public ClsParameterListImpl(@Nonnull PsiParameterListStub stub) {
     super(stub);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiParameter[] getParameters() {
     return getStub().getChildrenByType(JavaStubElementTypes.PARAMETER, PsiParameter.ARRAY_FACTORY);
   }
@@ -49,7 +50,7 @@ public class ClsParameterListImpl extends ClsRepositoryPsiElement<PsiParameterLi
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     buffer.append('(');
     PsiParameter[] parameters = getParameters();
     for (int i = 0; i < parameters.length; i++) {
@@ -60,13 +61,13 @@ public class ClsParameterListImpl extends ClsRepositoryPsiElement<PsiParameterLi
   }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getParameters(), SourceTreeToPsiMap.<PsiParameterList>treeToPsiNotNull(element).getParameters());
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParameterList(this);
     }

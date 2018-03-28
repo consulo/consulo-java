@@ -15,13 +15,14 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class RemoveModifierFix extends InspectionGadgetsFix {
 
@@ -31,7 +32,7 @@ public class RemoveModifierFix extends InspectionGadgetsFix {
     this.modifierText = modifierText;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("remove.modifier.quickfix",
                                            modifierText);

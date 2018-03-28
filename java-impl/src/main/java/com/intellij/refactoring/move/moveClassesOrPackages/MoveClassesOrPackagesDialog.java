@@ -27,8 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -337,7 +337,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiClass findTargetClass() {
     String name = myInnerClassChooser.getText().trim();
     return JavaPsiFacade.getInstance(myManager.getProject()).findClass(name, ProjectScope.getProjectScope(myProject));
@@ -471,7 +471,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   //for scala plugin
-  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, @NotNull PsiClass[] classesToMove, @Nullable final MoveCallback callback) {
+  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, @Nonnull PsiClass[] classesToMove, @javax.annotation.Nullable final MoveCallback callback) {
     return new MoveClassToInnerProcessor(getProject(), classesToMove, destination, isSearchInComments(), isSearchInNonJavaFiles(), callback);
   }
 
@@ -479,7 +479,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     return myCbSearchTextOccurences.isSelected();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private MoveDestination selectDestination() {
     final String packageName = getTargetPackage().trim();
     if (packageName.length() > 0 && !PsiNameHelper.getInstance(myManager.getProject()).isQualifiedName(packageName)) {

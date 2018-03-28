@@ -16,11 +16,12 @@
 
 package com.intellij.pom.java.events;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.pom.PomModel;
 import com.intellij.pom.PomModelAspect;
 import com.intellij.pom.event.PomChangeSet;
 import com.intellij.pom.java.PomJavaAspect;
-import org.jetbrains.annotations.NotNull;
 
 public class PomJavaAspectChangeSet implements PomChangeSet{
   private final PomModel myModel;
@@ -29,11 +30,11 @@ public class PomJavaAspectChangeSet implements PomChangeSet{
     myModel = model;
   }
 
-  @NotNull
+  @Nonnull
   public PomModelAspect getAspect() {
     return myModel.getModelAspect(PomJavaAspect.class);
   }
 
-  public void merge(@NotNull PomChangeSet blocked) {
+  public void merge(@Nonnull PomChangeSet blocked) {
   }
 }

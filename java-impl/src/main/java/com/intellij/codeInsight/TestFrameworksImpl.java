@@ -20,7 +20,7 @@
  */
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -62,7 +62,7 @@ public class TestFrameworksImpl extends TestFrameworks
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiMethod findOrCreateSetUpMethod(final PsiClass psiClass)
 	{
 		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
@@ -88,7 +88,7 @@ public class TestFrameworksImpl extends TestFrameworks
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiMethod findSetUpMethod(final PsiClass psiClass)
 	{
 		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);

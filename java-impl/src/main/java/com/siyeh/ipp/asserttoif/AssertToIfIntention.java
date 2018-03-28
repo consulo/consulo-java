@@ -23,18 +23,18 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ig.psiutils.BoolUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AssertToIfIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new AssertStatementPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiAssertStatement assertStatement = (PsiAssertStatement)element;
     final PsiExpression condition = assertStatement.getAssertCondition();

@@ -17,7 +17,8 @@ package com.intellij.debugger.engine;
 
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.EvaluatingComputable;
@@ -122,10 +123,10 @@ public abstract class JavaValueModifier extends XValueModifier
 		//node.setState(context);
 	}
 
-	protected abstract void setValueImpl(@NotNull String expression, @NotNull XModificationCallback callback);
+	protected abstract void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback);
 
 	@Override
-	public void setValue(@NotNull String expression, @NotNull XModificationCallback callback)
+	public void setValue(@Nonnull String expression, @Nonnull XModificationCallback callback)
 	{
 		final NodeDescriptorImpl descriptor = myJavaValue.getDescriptor();
 		if(!((ValueDescriptorImpl) descriptor).canSetValue())
@@ -236,7 +237,7 @@ public abstract class JavaValueModifier extends XValueModifier
 		}
 	}
 
-	protected void set(@NotNull final String expression, final XModificationCallback callback, final DebuggerContextImpl debuggerContext, final SetValueRunnable setValueRunnable)
+	protected void set(@Nonnull final String expression, final XModificationCallback callback, final DebuggerContextImpl debuggerContext, final SetValueRunnable setValueRunnable)
 	{
 		final ProgressWindow progressWindow = new ProgressWindow(true, debuggerContext.getProject());
 		final EvaluationContextImpl evaluationContext = myJavaValue.getEvaluationContext();
@@ -248,7 +249,7 @@ public abstract class JavaValueModifier extends XValueModifier
 				return Priority.HIGH;
 			}
 
-			public void threadAction(@NotNull SuspendContextImpl suspendContext)
+			public void threadAction(@Nonnull SuspendContextImpl suspendContext)
 			{
 				ExpressionEvaluator evaluator;
 				try

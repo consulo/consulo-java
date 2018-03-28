@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.FullValueEvaluatorProvider;
 import com.intellij.debugger.engine.JavaValue;
@@ -65,7 +65,7 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider
 		return new XFullValueEvaluator(text)
 		{
 			@Override
-			public void startEvaluation(@NotNull XFullValueEvaluationCallback callback)
+			public void startEvaluation(@Nonnull XFullValueEvaluationCallback callback)
 			{
 				if(callback instanceof HeadlessValueEvaluationCallback)
 				{

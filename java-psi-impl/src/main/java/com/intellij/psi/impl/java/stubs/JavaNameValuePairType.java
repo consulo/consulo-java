@@ -31,7 +31,7 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,11 +47,11 @@ public class JavaNameValuePairType extends JavaStubElementType<PsiNameValuePairS
   }
 
   @Override
-  public PsiNameValuePair createPsi(@NotNull ASTNode node) {
+  public PsiNameValuePair createPsi(@Nonnull ASTNode node) {
     return new PsiNameValuePairImpl(node);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new NameValuePairElement();
@@ -75,24 +75,24 @@ public class JavaNameValuePairType extends JavaStubElementType<PsiNameValuePairS
   }
 
   @Override
-  public PsiNameValuePair createPsi(@NotNull PsiNameValuePairStub stub) {
+  public PsiNameValuePair createPsi(@Nonnull PsiNameValuePairStub stub) {
     return getPsiFactory(stub).createNameValuePair(stub);
   }
 
   @Override
-  public void serialize(@NotNull PsiNameValuePairStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull PsiNameValuePairStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeName(stub.getValue());
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiNameValuePairStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiNameValuePairStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     StringRef name = dataStream.readName();
     return new PsiNameValuePairStubImpl(parentStub, name, dataStream.readName());
   }
 
   @Override
-  public void indexStub(@NotNull PsiNameValuePairStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull PsiNameValuePairStub stub, @Nonnull IndexSink sink) {
   }
 }

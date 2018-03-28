@@ -16,7 +16,7 @@
 package com.intellij.patterns;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiStatement;
@@ -33,7 +33,7 @@ public class PsiStatementPattern<T extends PsiStatement, Self extends PsiStateme
 
   public Self insideMethod(final PsiMethodPattern pattern) {
     return with(new PatternCondition<T>("insideMethod") {
-      public boolean accepts(@NotNull final T t, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
         PsiMethod method = PsiTreeUtil.getParentOfType(t, PsiMethod.class, false, PsiMember.class);
         return method != null && pattern.accepts(method, context);
       }
@@ -44,7 +44,7 @@ public class PsiStatementPattern<T extends PsiStatement, Self extends PsiStateme
     return insideMethod(PsiJavaPatterns.psiMethod().withName(methodName).definedInClass(qualifiedClassName));
   }
 
-  public Self insideMethod(@NotNull @NonNls String methodName, @NotNull @NonNls String qualifiedClassName) {
+  public Self insideMethod(@Nonnull @NonNls String methodName, @Nonnull @NonNls String qualifiedClassName) {
     return insideMethod(StandardPatterns.string().equalTo(methodName), qualifiedClassName);
   }
 

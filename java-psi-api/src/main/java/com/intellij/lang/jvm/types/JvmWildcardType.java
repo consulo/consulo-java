@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.jvm.types;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents wildcard type, for example {@code ? extends Number} in {@code List<? extends Number>}.
@@ -38,7 +38,7 @@ public interface JvmWildcardType extends JvmType
 	 * @return an upper bound
 	 * @see java.lang.reflect.WildcardType#getUpperBounds
 	 */
-	@NotNull
+	@Nonnull
 	JvmType upperBound();
 
 	/**
@@ -53,6 +53,6 @@ public interface JvmWildcardType extends JvmType
 	 * @return a lower bound
 	 * @see java.lang.reflect.WildcardType#getLowerBounds()
 	 */
-	@NotNull
+	@Nonnull
 	JvmType lowerBound();
 }

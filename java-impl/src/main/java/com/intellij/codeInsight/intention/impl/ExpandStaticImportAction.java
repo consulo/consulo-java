@@ -29,7 +29,7 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -41,13 +41,13 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   private static final String REPLACE_ALL_AND_DELETE_IMPORT = "Replace all and delete the import";
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return "Expand Static Import";
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return false;
     final PsiElement parent = element.getParent();
     if (!(element instanceof PsiIdentifier) || !(parent instanceof PsiJavaCodeReferenceElement)) {
@@ -105,7 +105,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     invoke(project, element.getContainingFile(), editor, element);
   }
 }

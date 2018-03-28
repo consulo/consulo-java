@@ -1,10 +1,10 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
 public class Bar3 {
 
-  @NotNull
+  @Nonnull
   Object getObj() {
     return new Object();
   }

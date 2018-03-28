@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.TailType;
@@ -102,7 +102,7 @@ public class JavaCompletionContributor extends CompletionContributor
 																																																	  PatternCondition<PsiSwitchStatement>("enumExpressionType")
 	{
 		@Override
-		public boolean accepts(@NotNull PsiSwitchStatement psiSwitchStatement, ProcessingContext context)
+		public boolean accepts(@Nonnull PsiSwitchStatement psiSwitchStatement, ProcessingContext context)
 		{
 			final PsiExpression expression = psiSwitchStatement.getExpression();
 			if(expression == null)
@@ -119,7 +119,7 @@ public class JavaCompletionContributor extends CompletionContributor
 	private static final ElementPattern<PsiElement> CATCH_OR_FINALLY = psiElement().afterLeaf(psiElement().withText("}").withParent(psiElement(PsiCodeBlock.class).afterLeaf(PsiKeyword.TRY)));
 	private static final ElementPattern<PsiElement> INSIDE_CONSTRUCTOR = psiElement().inside(psiMethod().constructor(true));
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static ElementFilter getReferenceFilter(PsiElement position)
 	{
 		// Completion after extends in interface, type parameter and implements in class
@@ -228,7 +228,7 @@ public class JavaCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public void fillCompletionVariants(@NotNull final CompletionParameters parameters, @NotNull final CompletionResultSet _result)
+	public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet _result)
 	{
 		if(parameters.getCompletionType() != CompletionType.BASIC)
 		{
@@ -318,7 +318,7 @@ public class JavaCompletionContributor extends CompletionContributor
 		result.stopHere();
 	}
 
-	private static void addIdentifierVariants(@NotNull CompletionParameters parameters, PsiElement position, CompletionResultSet result, JavaCompletionSession session, PrefixMatcher matcher)
+	private static void addIdentifierVariants(@Nonnull CompletionParameters parameters, PsiElement position, CompletionResultSet result, JavaCompletionSession session, PrefixMatcher matcher)
 	{
 		session.registerBatchItems(result, getFastIdentifierVariants(parameters, position, matcher, position.getParent(), session));
 
@@ -344,11 +344,11 @@ public class JavaCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static List<LookupElement> getFastIdentifierVariants(@NotNull CompletionParameters parameters,
+	private static List<LookupElement> getFastIdentifierVariants(@Nonnull CompletionParameters parameters,
 			PsiElement position,
 			PrefixMatcher matcher,
 			PsiElement parent,
-			@NotNull JavaCompletionSession session)
+			@Nonnull JavaCompletionSession session)
 	{
 		List<LookupElement> items = new ArrayList<>();
 		if(TypeArgumentCompletionProvider.IN_TYPE_ARGS.accepts(position))
@@ -402,7 +402,7 @@ public class JavaCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static void addExpressionVariants(@NotNull CompletionParameters parameters, PsiElement position, Consumer<LookupElement> result)
+	private static void addExpressionVariants(@Nonnull CompletionParameters parameters, PsiElement position, Consumer<LookupElement> result)
 	{
 		if(JavaSmartCompletionContributor.INSIDE_EXPRESSION.accepts(position) && !JavaKeywordCompletion.AFTER_DOT.accepts(position) && !SmartCastProvider.shouldSuggestCast(parameters))
 		{
@@ -698,7 +698,7 @@ public class JavaCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public String advertise(@NotNull final CompletionParameters parameters)
+	public String advertise(@Nonnull final CompletionParameters parameters)
 	{
 		if(!(parameters.getOriginalFile() instanceof PsiJavaFile))
 		{
@@ -786,7 +786,7 @@ public class JavaCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public String handleEmptyLookup(@NotNull final CompletionParameters parameters, final Editor editor)
+	public String handleEmptyLookup(@Nonnull final CompletionParameters parameters, final Editor editor)
 	{
 		if(!(parameters.getOriginalFile() instanceof PsiJavaFile))
 		{
@@ -844,7 +844,7 @@ public class JavaCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar)
+	public boolean invokeAutoPopup(@Nonnull PsiElement position, char typeChar)
 	{
 		return typeChar == ':' && JavaTokenType.COLON == position.getNode().getElementType();
 	}
@@ -884,7 +884,7 @@ public class JavaCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public void beforeCompletion(@NotNull final CompletionInitializationContext context)
+	public void beforeCompletion(@Nonnull final CompletionInitializationContext context)
 	{
 		final PsiFile file = context.getFile();
 
@@ -1016,7 +1016,7 @@ public class JavaCompletionContributor extends CompletionContributor
 		return iterator.getTokenType() == JavaTokenType.EQ; // <caret> foo = something, we don't want the reference to be treated as a type
 	}
 
-	private static void autoImport(@NotNull final PsiFile file, int offset, @NotNull final Editor editor)
+	private static void autoImport(@Nonnull final PsiFile file, int offset, @Nonnull final Editor editor)
 	{
 		final CharSequence text = editor.getDocument().getCharsSequence();
 		while(offset > 0 && Character.isJavaIdentifierPart(text.charAt(offset)))
@@ -1051,7 +1051,7 @@ public class JavaCompletionContributor extends CompletionContributor
 		autoImportReference(file, editor, extractReference(PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiExpression.class, false)));
 	}
 
-	private static void autoImportReference(@NotNull PsiFile file, @NotNull Editor editor, @Nullable PsiJavaCodeReferenceElement element)
+	private static void autoImportReference(@Nonnull PsiFile file, @Nonnull Editor editor, @Nullable PsiJavaCodeReferenceElement element)
 	{
 		if(element == null)
 		{
@@ -1075,7 +1075,7 @@ public class JavaCompletionContributor extends CompletionContributor
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiJavaCodeReferenceElement extractReference(@Nullable PsiElement expression)
 	{
 		if(expression instanceof PsiJavaCodeReferenceElement)

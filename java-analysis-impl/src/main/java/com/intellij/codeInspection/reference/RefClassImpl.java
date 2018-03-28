@@ -31,8 +31,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.application.ApplicationManager;
@@ -343,7 +343,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Set<RefClass> getBaseClasses()
 	{
 		if(myBases == null)
@@ -369,7 +369,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Set<RefClass> getSubClasses()
 	{
 		if(mySubClasses == null)
@@ -379,7 +379,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 		return mySubClasses;
 	}
 
-	private void addSubClass(@NotNull RefClass refClass)
+	private void addSubClass(@Nonnull RefClass refClass)
 	{
 		if(mySubClasses == null)
 		{
@@ -411,7 +411,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<RefMethod> getConstructors()
 	{
 		if(myConstructors == null)
@@ -422,7 +422,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Set<RefElement> getInTypeReferences()
 	{
 		if(myInTypeReferences == null)
@@ -447,7 +447,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Set<RefElement> getInstanceReferences()
 	{
 		if(myInstanceReferences == null)
@@ -491,7 +491,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<RefMethod> getLibraryMethods()
 	{
 		if(myOverridingMethods == null)
@@ -539,7 +539,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static RefClass classFromExternalName(RefManager manager, String externalName)
 	{
 		return (RefClass) manager.getReference(ClassUtil.findPsiClass(PsiManager.getInstance(manager.getProject()), externalName));
@@ -714,7 +714,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public RefElement getContainingEntry()
 	{
 		RefElement defaultConstructor = getDefaultConstructor();

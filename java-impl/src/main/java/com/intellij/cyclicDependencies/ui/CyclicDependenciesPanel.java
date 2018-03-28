@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -34,8 +35,8 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Key;
 import consulo.java.JavaIcons;
 import com.intellij.CommonBundle;
@@ -539,7 +540,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
   }
 
   private static class MyTree extends Tree implements DataProvider {
-    public Object getData(@NotNull Key<?> dataId) {
+    public Object getData(@Nonnull Key<?> dataId) {
       PackageDependenciesNode node = getSelectedNode();
       if (PlatformDataKeys.NAVIGATABLE == dataId) {
         return node;

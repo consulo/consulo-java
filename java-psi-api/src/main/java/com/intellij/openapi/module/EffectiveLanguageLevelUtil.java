@@ -15,7 +15,8 @@
  */
 package com.intellij.openapi.module;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.pom.java.LanguageLevel;
@@ -23,9 +24,9 @@ import consulo.annotations.RequiredReadAction;
 
 public class EffectiveLanguageLevelUtil
 {
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
-	public static LanguageLevel getEffectiveLanguageLevel(@NotNull final Module module)
+	public static LanguageLevel getEffectiveLanguageLevel(@Nonnull final Module module)
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
 		final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);

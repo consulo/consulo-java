@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -29,19 +31,19 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class UseOfObsoleteAssertInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("usage.of.obsolete.assert.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("use.of.obsolete.assert.problem.descriptor");
   }
@@ -220,7 +222,7 @@ public class UseOfObsoleteAssertInspection extends BaseInspection {
       return null;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("use.of.obsolete.assert.quickfix");

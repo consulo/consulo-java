@@ -13,10 +13,10 @@
 // limitations under the License.
 package com.intellij.execution;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JdkUtil;
 import consulo.java.projectRoots.OwnJdkUtil;
 
 /**
@@ -79,7 +79,7 @@ public enum ShortenCommandLine
 		return CLASSPATH_FILE;
 	}
 
-	public static ShortenCommandLine readShortenClasspathMethod(@NotNull Element element)
+	public static ShortenCommandLine readShortenClasspathMethod(@Nonnull Element element)
 	{
 		Element mode = element.getChild("shortenClasspath");
 		if(mode != null)
@@ -89,7 +89,7 @@ public enum ShortenCommandLine
 		return null;
 	}
 
-	public static void writeShortenClasspathMethod(@NotNull Element element, ShortenCommandLine shortenCommandLine)
+	public static void writeShortenClasspathMethod(@Nonnull Element element, ShortenCommandLine shortenCommandLine)
 	{
 		if(shortenCommandLine != null)
 		{

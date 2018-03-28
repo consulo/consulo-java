@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
@@ -29,28 +29,28 @@ import com.intellij.psi.util.PsiUtil;
  */
 public class PsiCapturedWildcardType extends PsiType.Stub
 {
-	@NotNull
+	@Nonnull
 	private final PsiWildcardType myExistential;
-	@NotNull
+	@Nonnull
 	private final PsiElement myContext;
 	@Nullable
 	private final PsiTypeParameter myParameter;
 
 	private PsiType myUpperBound;
 
-	@NotNull
-	public static PsiCapturedWildcardType create(@NotNull PsiWildcardType existential, @NotNull PsiElement context)
+	@Nonnull
+	public static PsiCapturedWildcardType create(@Nonnull PsiWildcardType existential, @Nonnull PsiElement context)
 	{
 		return create(existential, context, null);
 	}
 
-	@NotNull
-	public static PsiCapturedWildcardType create(@NotNull PsiWildcardType existential, @NotNull PsiElement context, @Nullable PsiTypeParameter parameter)
+	@Nonnull
+	public static PsiCapturedWildcardType create(@Nonnull PsiWildcardType existential, @Nonnull PsiElement context, @javax.annotation.Nullable PsiTypeParameter parameter)
 	{
 		return new PsiCapturedWildcardType(existential, context, parameter);
 	}
 
-	private PsiCapturedWildcardType(@NotNull PsiWildcardType existential, @NotNull PsiElement context, @Nullable PsiTypeParameter parameter)
+	private PsiCapturedWildcardType(@Nonnull PsiWildcardType existential, @Nonnull PsiElement context, @javax.annotation.Nullable PsiTypeParameter parameter)
 	{
 		super(TypeAnnotationProvider.EMPTY);
 		myExistential = existential;
@@ -66,8 +66,8 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 		return guard.currentStack().isEmpty();
 	}
 
-	@Nullable
-	public static PsiType captureUpperBound(@NotNull PsiTypeParameter typeParameter, @NotNull PsiWildcardType wildcardType, @NotNull PsiSubstitutor captureSubstitutor)
+	@javax.annotation.Nullable
+	public static PsiType captureUpperBound(@Nonnull PsiTypeParameter typeParameter, @Nonnull PsiWildcardType wildcardType, @Nonnull PsiSubstitutor captureSubstitutor)
 	{
 		final PsiType[] boundTypes = typeParameter.getExtendsListTypes();
 		PsiType originalBound = !wildcardType.isSuper() ? wildcardType.getBound() : null;
@@ -147,21 +147,21 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 		return myUpperBound.hashCode() + 31 * myContext.hashCode();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableText(boolean annotated)
 	{
 		return "capture of " + myExistential.getPresentableText(annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText(boolean annotated)
 	{
 		return myExistential.getCanonicalText(annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
@@ -175,18 +175,18 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 	}
 
 	@Override
-	public boolean equalsToText(@NotNull String text)
+	public boolean equalsToText(@Nonnull String text)
 	{
 		return false;
 	}
 
 	@Override
-	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitCapturedWildcardType(this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public GlobalSearchScope getResolveScope()
 	{
@@ -194,7 +194,7 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getSuperTypes()
 	{
 		return myExistential.getSuperTypes();
@@ -205,13 +205,13 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 		return myExistential.isSuper() ? myExistential.getBound() : NULL;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiType getUpperBound()
 	{
 		return getUpperBound(true);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiType getUpperBound(boolean capture)
 	{
 		final PsiType bound = myExistential.getBound();
@@ -226,18 +226,18 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 		}
 	}
 
-	public void setUpperBound(@NotNull PsiType upperBound)
+	public void setUpperBound(@Nonnull PsiType upperBound)
 	{
 		myUpperBound = upperBound;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiWildcardType getWildcard()
 	{
 		return myExistential;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiElement getContext()
 	{
 		return myContext;

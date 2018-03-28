@@ -15,20 +15,21 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.openapi.util.TextRange;
-import org.jetbrains.annotations.NotNull;
 
 public class ImportPostFormatProcessor implements PostFormatProcessor {
   @Override
-  public PsiElement processElement(@NotNull PsiElement source, @NotNull CodeStyleSettings settings) {
+  public PsiElement processElement(@Nonnull PsiElement source, @Nonnull CodeStyleSettings settings) {
     return new ImportsFormatter(settings, source.getContainingFile()).process(source);
   }
 
   @Override
-  public TextRange processText(@NotNull PsiFile source, @NotNull TextRange rangeToReformat, @NotNull CodeStyleSettings settings) {
+  public TextRange processText(@Nonnull PsiFile source, @Nonnull TextRange rangeToReformat, @Nonnull CodeStyleSettings settings) {
     return new ImportsFormatter(settings, source.getContainingFile()).processText(source, rangeToReformat);
   }
 }

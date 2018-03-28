@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.psi.PsiFunctionalExpression;
@@ -35,20 +36,20 @@ public abstract class FunctionalExpressionElementType<T extends PsiFunctionalExp
 	}
 
 	@Override
-	public void serialize(@NotNull FunctionalExpressionStub<T> stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull FunctionalExpressionStub<T> stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getPresentableText());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public FunctionalExpressionStub<T> deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public FunctionalExpressionStub<T> deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new FunctionalExpressionStub<T>(parentStub, this, StringRef.toString(dataStream.readName()));
 	}
 
 	@Override
-	public void indexStub(@NotNull FunctionalExpressionStub<T> stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull FunctionalExpressionStub<T> stub, @Nonnull IndexSink sink)
 	{
 	}
 
@@ -58,6 +59,6 @@ public abstract class FunctionalExpressionElementType<T extends PsiFunctionalExp
 		return new FunctionalExpressionStub<T>(parentStub, this, getPresentableText(tree, funExpr));
 	}
 
-	@NotNull
-	protected abstract String getPresentableText(@NotNull LighterAST tree, @NotNull LighterASTNode funExpr);
+	@Nonnull
+	protected abstract String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr);
 }

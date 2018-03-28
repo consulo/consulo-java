@@ -17,8 +17,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -54,14 +54,14 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
 	private final PsiType myReturnType;
 	protected final String myName;
 
-	public VariableTypeFix(@NotNull PsiVariable variable, PsiType toReturn)
+	public VariableTypeFix(@Nonnull PsiVariable variable, PsiType toReturn)
 	{
 		super(variable);
 		myReturnType = GenericsUtil.getVariableTypeByExpressionType(toReturn);
 		myName = variable.getName();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -69,7 +69,7 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("fix.variable.type.family");
@@ -82,7 +82,7 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		final PsiVariable myVariable = (PsiVariable) startElement;
 		return myVariable.isValid() && myVariable.getTypeElement() != null && myVariable.getManager().isInProject(myVariable) && getReturnType() != null && getReturnType().isValid() &&
@@ -90,11 +90,11 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project,
-			@NotNull final PsiFile file,
-			@Nullable("is null when called from inspection") Editor editor,
-			@NotNull PsiElement startElement,
-			@NotNull PsiElement endElement)
+	public void invoke(@Nonnull final Project project,
+			@Nonnull final PsiFile file,
+			@Nullable Editor editor,
+			@Nonnull PsiElement startElement,
+			@Nonnull PsiElement endElement)
 	{
 		final PsiVariable myVariable = (PsiVariable) startElement;
 		if(changeMethodSignatureIfNeeded(myVariable))

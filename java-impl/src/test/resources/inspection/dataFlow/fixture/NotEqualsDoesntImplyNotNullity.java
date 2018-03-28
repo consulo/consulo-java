@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 class TestIDEAWarn {
   void test(java.util.Map<Object, Object> values) {
     boolean condition = false;

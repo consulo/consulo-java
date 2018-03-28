@@ -34,7 +34,7 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,25 +61,25 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("non.boolean.method.name.must.not.start.with.question.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("non.boolean.method.name.must.not.start.with.question.problem.descriptor");
   }
 
   @Override
-  public void readSettings(@NotNull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(questionString, questionList);
   }
 
   @Override
-  public void writeSettings(@NotNull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     questionString = formatString(questionList);
     super.writeSettings(element);
   }
@@ -120,7 +120,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       final PsiType returnType = method.getReturnType();
       if (returnType == null || returnType.equals(PsiType.BOOLEAN)) {

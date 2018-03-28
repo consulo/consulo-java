@@ -20,9 +20,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
@@ -47,7 +49,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 	boolean methodReferenceMatches(PsiMethodReferenceExpression methodRef);
 
 	@Contract("null -> false")
-	boolean test(@Nullable PsiMethodCallExpression call);
+	boolean test(@javax.annotation.Nullable PsiMethodCallExpression call);
 
 	/**
 	 * Returns true if the supplied expression is (possibly parenthesized) method call which matches this matcher
@@ -119,7 +121,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 	 * @param methodNames names of the methods
 	 * @return a new matcher
 	 */
-	static Simple instanceCall(@NotNull String className, String... methodNames)
+	static Simple instanceCall(@Nonnull String className, String... methodNames)
 	{
 		return new Simple(className, ContainerUtil.newTroveSet(methodNames), null, false);
 	}
@@ -131,7 +133,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 	 * @param methodNames names of the methods
 	 * @return a new matcher
 	 */
-	static Simple staticCall(@NotNull String className, String... methodNames)
+	static Simple staticCall(@Nonnull String className, String... methodNames)
 	{
 		return new Simple(className, ContainerUtil.newTroveSet(methodNames), null, true);
 	}
@@ -139,17 +141,17 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 	class Simple implements CallMatcher
 	{
 		private final
-		@NotNull
+		@Nonnull
 		String myClassName;
 		private final
-		@NotNull
+		@Nonnull
 		Set<String> myNames;
 		private final
-		@Nullable
+		@javax.annotation.Nullable
 		String[] myParameters;
 		private final boolean myStatic;
 
-		private Simple(@NotNull String className, @NotNull Set<String> names, @Nullable String[] parameters, boolean aStatic)
+		private Simple(@Nonnull String className, @Nonnull Set<String> names, @javax.annotation.Nullable String[] parameters, boolean aStatic)
 		{
 			myClassName = className;
 			myNames = names;
@@ -187,7 +189,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 		 * @return a new matcher
 		 * @throws IllegalStateException if this matcher is already limited to parameters count or types
 		 */
-		public Simple parameterTypes(@NotNull String... types)
+		public Simple parameterTypes(@Nonnull String... types)
 		{
 			if(myParameters != null)
 			{
@@ -260,7 +262,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 			return parametersMatch(parameterList);
 		}
 
-		private boolean parametersMatch(@NotNull PsiParameterList parameterList)
+		private boolean parametersMatch(@Nonnull PsiParameterList parameterList)
 		{
 			if(myParameters == null)
 			{

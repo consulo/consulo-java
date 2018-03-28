@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.completion;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiVariable;
 import com.intellij.psi.filters.ElementFilter;
@@ -28,13 +28,13 @@ class ExcludeFilter implements ElementFilter
 {
 	private final PsiElement myExcluded;
 
-	public ExcludeFilter(@NotNull PsiVariable excluded)
+	public ExcludeFilter(@Nonnull PsiVariable excluded)
 	{
 		myExcluded = excluded;
 	}
 
 	@Override
-	public boolean isAcceptable(Object element, @Nullable PsiElement context)
+	public boolean isAcceptable(Object element, @javax.annotation.Nullable PsiElement context)
 	{
 		return element != myExcluded;
 	}

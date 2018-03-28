@@ -25,8 +25,7 @@ import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +50,14 @@ public class MethodResolveProcessor implements PsiScopeProcessor, ElementClassHi
     return myMethods.toArray(new PsiMethod[myMethods.size()]);
   }
 
-  public boolean execute(@NotNull PsiElement element, ResolveState state) {
+  public boolean execute(@Nonnull PsiElement element, ResolveState state) {
     if (element instanceof PsiMethod) {
       ContainerUtil.addIfNotNull(myMethods, (PsiMethod)element);
     }
     return true;
   }
 
-  public <T> T getHint(@NotNull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       return (T)this;
     }
@@ -88,7 +87,7 @@ public class MethodResolveProcessor implements PsiScopeProcessor, ElementClassHi
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public String getName(ResolveState state) {
     return myNameHint;

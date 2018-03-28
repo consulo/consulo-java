@@ -23,8 +23,8 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -36,7 +36,7 @@ public class BeanProperty {
 
   private final PsiMethod myMethod;
 
-  protected BeanProperty(@NotNull PsiMethod method) {
+  protected BeanProperty(@Nonnull PsiMethod method) {
     myMethod = method;
   }
 
@@ -49,25 +49,25 @@ public class BeanProperty {
     };
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     final String name = PropertyUtil.getPropertyName(myMethod);
     return name == null ? "" : name;
   }
 
-  @NotNull
+  @Nonnull
   public PsiType getPropertyType() {
     PsiType type = PropertyUtil.getPropertyType(myMethod);
     assert type != null;
     return type;
   }
 
-  @NotNull
+  @Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiMethod getGetter() {
     if (PropertyUtil.isSimplePropertyGetter(myMethod)) {
       return myMethod;
@@ -75,7 +75,7 @@ public class BeanProperty {
     return PropertyUtil.findPropertyGetter(myMethod.getContainingClass(), getName(), false, true);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiMethod getSetter() {
     if (PropertyUtil.isSimplePropertySetter(myMethod)) {
       return myMethod;
@@ -96,13 +96,13 @@ public class BeanProperty {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public Icon getIcon(int flags) {
     return AllIcons.Nodes.Property;
   }
 
   @Nullable
-  public static BeanProperty createBeanProperty(@NotNull PsiMethod method) {
+  public static BeanProperty createBeanProperty(@Nonnull PsiMethod method) {
     return PropertyUtil.isSimplePropertyAccessor(method) ? new BeanProperty(method) : null;
   }
 }

@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.template.macro.MacroUtil;
 import com.intellij.lang.properties.IProperty;
@@ -78,9 +78,9 @@ public class JavaI18nUtil extends I18nUtil {
     return psiElement.getTextRange();
   }
 
-  public static boolean mustBePropertyKey(@NotNull Project project,
-                                          @NotNull PsiLiteralExpression expression,
-                                          @NotNull Map<String, Object> annotationAttributeValues) {
+  public static boolean mustBePropertyKey(@Nonnull Project project,
+                                          @Nonnull PsiLiteralExpression expression,
+                                          @Nonnull Map<String, Object> annotationAttributeValues) {
     final PsiElement parent = expression.getParent();
     if (parent instanceof PsiVariable) {
       final PsiAnnotation annotation = AnnotationUtil.findAnnotation((PsiVariable)parent, AnnotationUtil.PROPERTY_KEY);
@@ -91,11 +91,11 @@ public class JavaI18nUtil extends I18nUtil {
     return isPassedToAnnotatedParam(project, expression, AnnotationUtil.PROPERTY_KEY, annotationAttributeValues, null);
   }
 
-  public static boolean isPassedToAnnotatedParam(@NotNull Project project,
-                                                 @NotNull PsiExpression expression,
+  public static boolean isPassedToAnnotatedParam(@Nonnull Project project,
+                                                 @Nonnull PsiExpression expression,
                                                  final String annFqn,
-                                                 @Nullable Map<String, Object> annotationAttributeValues,
-                                                 @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
+                                                 @javax.annotation.Nullable Map<String, Object> annotationAttributeValues,
+                                                 @javax.annotation.Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
     expression = getToplevelExpression(project, expression);
     final PsiElement parent = expression.getParent();
 
@@ -147,8 +147,8 @@ public class JavaI18nUtil extends I18nUtil {
       }
     };
 
-  @NotNull
-  public static PsiExpression getToplevelExpression(@NotNull final Project project, @NotNull final PsiExpression expression) {
+  @Nonnull
+  public static PsiExpression getToplevelExpression(@Nonnull final Project project, @Nonnull final PsiExpression expression) {
     if (expression instanceof PsiBinaryExpression || expression.getParent() instanceof PsiBinaryExpression) {  //can be large, cache
       return CachedValuesManager.getManager(project).getParameterizedCachedValue(expression, TOP_LEVEL_EXPRESSION, TOP_LEVEL_PROVIDER, true,
                                                                                  Pair.create(project, expression));
@@ -156,8 +156,8 @@ public class JavaI18nUtil extends I18nUtil {
     return getTopLevel(project, expression);
   }
 
-  @NotNull
-  private static PsiExpression getTopLevel(Project project, @NotNull PsiExpression expression) {
+  @Nonnull
+  private static PsiExpression getTopLevel(Project project, @Nonnull PsiExpression expression) {
     int i = 0;
     while (expression.getParent() instanceof PsiExpression) {
       i++;
@@ -181,7 +181,7 @@ public class JavaI18nUtil extends I18nUtil {
                                                        @Nullable Collection<PsiMethod> processed,
                                                        final String annFqn,
                                                        @Nullable Map<String, Object> annotationAttributeValues,
-                                                       @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
+                                                       @javax.annotation.Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
     if (processed != null) {
       if (processed.contains(method)) return false;
     }
@@ -223,7 +223,7 @@ public class JavaI18nUtil extends I18nUtil {
     return false;
   }
 
-  private static boolean processAnnotationAttributes(@Nullable Map<String, Object> annotationAttributeValues, @NotNull PsiAnnotation annotation) {
+  private static boolean processAnnotationAttributes(@javax.annotation.Nullable Map<String, Object> annotationAttributeValues, @Nonnull PsiAnnotation annotation) {
     if (annotationAttributeValues != null) {
       final PsiAnnotationParameterList parameterList = annotation.getParameterList();
       final PsiNameValuePair[] attributes = parameterList.getAttributes();
@@ -237,10 +237,10 @@ public class JavaI18nUtil extends I18nUtil {
     return true;
   }
 
-  public static boolean isValidPropertyReference(@NotNull Project project,
-                                                 @NotNull PsiLiteralExpression expression,
-                                                 @NotNull String key,
-                                                 @NotNull Ref<String> outResourceBundle) {
+  public static boolean isValidPropertyReference(@Nonnull Project project,
+                                                 @Nonnull PsiLiteralExpression expression,
+                                                 @Nonnull String key,
+                                                 @Nonnull Ref<String> outResourceBundle) {
     final HashMap<String, Object> annotationAttributeValues = new HashMap<String, Object>();
     annotationAttributeValues.put(AnnotationUtil.PROPERTY_KEY_RESOURCE_BUNDLE_PARAMETER, null);
     if (mustBePropertyKey(project, expression, annotationAttributeValues)) {
@@ -297,7 +297,7 @@ public class JavaI18nUtil extends I18nUtil {
   private static void addAvailableMethodsOfType(final PsiClassType type, final PsiLiteralExpression context, final Collection<String> result) {
     PsiScopesUtil.treeWalkUp(new PsiScopeProcessor() {
       @Override
-      public boolean execute(@NotNull PsiElement element, ResolveState state) {
+      public boolean execute(@Nonnull PsiElement element, ResolveState state) {
         if (element instanceof PsiMethod) {
           PsiMethod method = (PsiMethod)element;
           PsiType returnType = method.getReturnType();
@@ -310,7 +310,7 @@ public class JavaI18nUtil extends I18nUtil {
       }
 
       @Override
-      public <T> T getHint(@NotNull Key<T> hintKey) {
+      public <T> T getHint(@Nonnull Key<T> hintKey) {
         return null;
       }
 

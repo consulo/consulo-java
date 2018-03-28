@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine.events;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.SuspendManager;
 import com.intellij.debugger.engine.SuspendManagerUtil;
@@ -33,12 +33,12 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 	private final ThreadReferenceProxyImpl myCustomThread; // thread to perform command in
 	private SuspendContextImpl myCustomSuspendContext;
 
-	protected DebuggerContextCommandImpl(@NotNull DebuggerContextImpl debuggerContext)
+	protected DebuggerContextCommandImpl(@Nonnull DebuggerContextImpl debuggerContext)
 	{
 		this(debuggerContext, null);
 	}
 
-	protected DebuggerContextCommandImpl(@NotNull DebuggerContextImpl debuggerContext, @Nullable ThreadReferenceProxyImpl customThread)
+	protected DebuggerContextCommandImpl(@Nonnull DebuggerContextImpl debuggerContext, @javax.annotation.Nullable ThreadReferenceProxyImpl customThread)
 	{
 		super(debuggerContext.getSuspendContext());
 		myDebuggerContext = debuggerContext;
@@ -72,7 +72,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 	}
 
 	@Override
-	public final void contextAction(@NotNull SuspendContextImpl suspendContext) throws Exception
+	public final void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
 	{
 		SuspendManager suspendManager = myDebuggerContext.getDebugProcess().getSuspendManager();
 		boolean isSuspendedByContext;
@@ -118,7 +118,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 		throw new AbstractMethodError();
 	}
 
-	public void threadAction(@NotNull SuspendContextImpl suspendContext)
+	public void threadAction(@Nonnull SuspendContextImpl suspendContext)
 	{
 		//noinspection deprecation
 		threadAction();

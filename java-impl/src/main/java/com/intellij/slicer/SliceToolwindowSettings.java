@@ -18,7 +18,7 @@ package com.intellij.slicer;
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 @State(
     name = "SliceToolwindowSettings",
@@ -28,7 +28,7 @@ public class SliceToolwindowSettings implements PersistentStateComponent<SliceTo
   private boolean isPreview;
   private boolean isAutoScroll;
 
-  public static SliceToolwindowSettings getInstance(@NotNull Project project) {
+  public static SliceToolwindowSettings getInstance(@Nonnull Project project) {
     return ServiceManager.getService(project, SliceToolwindowSettings.class);
   }
   public boolean isPreview() {

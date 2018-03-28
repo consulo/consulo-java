@@ -20,9 +20,11 @@ import static com.intellij.util.containers.ContainerUtil.copyAndClear;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
@@ -59,7 +61,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -72,7 +74,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType getType()
 	{
 		return CachedValuesManager.getCachedValue(this, () -> CachedValueProvider.Result.create(calculateType(), PsiModificationTracker.MODIFICATION_COUNT));
@@ -187,7 +189,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 		return type;
 	}
 
-	@NotNull
+	@Nonnull
 	private Computable<PsiJavaCodeReferenceElement> getReferenceComputable(PsiJavaCodeReferenceElement ref)
 	{
 		final PsiElement parent = getParent();
@@ -199,7 +201,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 		return new Computable.PredefinedValueComputable<>(ref);
 	}
 
-	@NotNull
+	@Nonnull
 	private static Computable<PsiJavaCodeReferenceElement> computeFromTypeOwner(final PsiElement parent, final WeakReference<PsiJavaCodeReferenceElement> ref)
 	{
 		return new Computable<PsiJavaCodeReferenceElement>()
@@ -217,7 +219,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 				return result;
 			}
 
-			@NotNull
+			@Nonnull
 			private PsiTypeElementImpl getParentTypeElement()
 			{
 				PsiTypeElement typeElement = parent instanceof PsiMethod ? ((PsiMethod) parent).getReturnTypeElement() : ((PsiVariable) parent).getTypeElement();
@@ -267,14 +269,14 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 		return true;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotation[] getAnnotations()
 	{
 		PsiAnnotation[] annotations = PsiTreeUtil.getChildrenOfType(this, PsiAnnotation.class);
@@ -282,27 +284,27 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotation[] getApplicableAnnotations()
 	{
 		return getType().getAnnotations();
 	}
 
 	@Override
-	public PsiAnnotation findAnnotation(@NotNull @NonNls String qualifiedName)
+	public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName)
 	{
 		return PsiImplUtil.findAnnotation(this, qualifiedName);
 	}
 
 	@Override
-	@NotNull
-	public PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName)
+	@Nonnull
+	public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName)
 	{
 		throw new UnsupportedOperationException();//todo
 	}
 
 	@Override
-	public PsiElement replace(@NotNull PsiElement newElement) throws IncorrectOperationException
+	public PsiElement replace(@Nonnull PsiElement newElement) throws IncorrectOperationException
 	{
 		// neighbouring type annotations are logical part of this type element and should be dropped
 		PsiImplUtil.markTypeAnnotations(this);

@@ -21,7 +21,7 @@ package com.intellij.psi.controlFlow;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class ControlFlowSubRange implements ControlFlow {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public List<Instruction> getInstructions() {
     if (myInstructions == null) {
       final List<Instruction> list = new ArrayList<Instruction>(myEnd - myStart);
@@ -80,13 +80,13 @@ public class ControlFlowSubRange implements ControlFlow {
   }
 
   @Override
-  public int getStartOffset(@NotNull PsiElement element) {
+  public int getStartOffset(@Nonnull PsiElement element) {
     return patchOffset(myControlFlow.getStartOffset(element));
     //return (myControlFlow.getStartOffset(element));
   }
 
   @Override
-  public int getEndOffset(@NotNull PsiElement element) {
+  public int getEndOffset(@Nonnull PsiElement element) {
     return patchOffset(myControlFlow.getEndOffset(element));
     //return myControlFlow.getEndOffset(element);
   }

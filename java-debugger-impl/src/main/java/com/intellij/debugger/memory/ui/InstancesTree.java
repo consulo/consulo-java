@@ -18,10 +18,10 @@ package com.intellij.debugger.memory.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.tree.TreePath;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorProvider;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
@@ -48,7 +48,7 @@ public class InstancesTree extends XDebuggerTree
 	private final Runnable myOnRootExpandAction;
 	private List<XValueChildrenList> myChildren;
 
-	InstancesTree(@NotNull Project project, @NotNull XDebuggerEditorsProvider editorsProvider, @Nullable XValueMarkers<?, ?> valueMarkers, @NotNull Runnable onRootExpand)
+	InstancesTree(@Nonnull Project project, @Nonnull XDebuggerEditorsProvider editorsProvider, @javax.annotation.Nullable XValueMarkers<?, ?> valueMarkers, @Nonnull Runnable onRootExpand)
 	{
 		super(project, editorsProvider, null, XDebuggerActions.INSPECT_TREE_POPUP_GROUP, valueMarkers);
 		myOnRootExpandAction = onRootExpand;
@@ -61,7 +61,7 @@ public class InstancesTree extends XDebuggerTree
 		expandNodesOnLoad(node -> node == myRoot);
 	}
 
-	void addChildren(@NotNull XValueChildrenList children, boolean last)
+	void addChildren(@Nonnull XValueChildrenList children, boolean last)
 	{
 		if(myChildren == null)
 		{
@@ -72,7 +72,7 @@ public class InstancesTree extends XDebuggerTree
 		myRoot.addChildren(children, last);
 	}
 
-	void rebuildTree(@NotNull RebuildPolicy policy, @NotNull XDebuggerTreeState state)
+	void rebuildTree(@Nonnull RebuildPolicy policy, @Nonnull XDebuggerTreeState state)
 	{
 		if(policy == RebuildPolicy.RELOAD_INSTANCES)
 		{
@@ -82,12 +82,12 @@ public class InstancesTree extends XDebuggerTree
 		rebuildAndRestore(state);
 	}
 
-	void rebuildTree(@NotNull RebuildPolicy policy)
+	void rebuildTree(@Nonnull RebuildPolicy policy)
 	{
 		rebuildTree(policy, XDebuggerTreeState.saveState(this));
 	}
 
-	void setInfoMessage(@SuppressWarnings("SameParameterValue") @NotNull String text)
+	void setInfoMessage(@SuppressWarnings("SameParameterValue") @Nonnull String text)
 	{
 		myChildren = null;
 		myRoot.clearChildren();
@@ -132,7 +132,7 @@ public class InstancesTree extends XDebuggerTree
 	private class MyRootValue extends XValue
 	{
 		@Override
-		public void computeChildren(@NotNull XCompositeNode node)
+		public void computeChildren(@Nonnull XCompositeNode node)
 		{
 			if(myChildren == null)
 			{
@@ -150,7 +150,7 @@ public class InstancesTree extends XDebuggerTree
 		}
 
 		@Override
-		public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place)
+		public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place)
 		{
 			node.setPresentation(null, "", "", true);
 		}

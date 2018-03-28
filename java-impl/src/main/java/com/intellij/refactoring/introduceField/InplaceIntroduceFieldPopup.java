@@ -30,8 +30,8 @@ import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.refactoring.util.occurrences.OccurrenceManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -107,11 +107,11 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
     return suggestFieldName(defaultType, (PsiLocalVariable)getLocalVariable(), myExpr != null && myExpr.isValid() ? myExpr : null, myStatic, myParentClass).names;
   }
 
-  public static SuggestedNameInfo suggestFieldName(@Nullable PsiType defaultType,
-                                                    @Nullable final PsiLocalVariable localVariable,
+  public static SuggestedNameInfo suggestFieldName(@javax.annotation.Nullable PsiType defaultType,
+                                                    @javax.annotation.Nullable final PsiLocalVariable localVariable,
                                                     final PsiExpression initializer,
                                                     final boolean forStatic,
-                                                    @NotNull final PsiClass parentClass) {
+                                                    @Nonnull final PsiClass parentClass) {
     return IntroduceFieldDialog.
       createGenerator(forStatic, localVariable, initializer, localVariable != null, null, parentClass, parentClass.getProject()).
       getSuggestedNameInfo(defaultType);
@@ -159,7 +159,7 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
     }
 
     @Override
-    protected void saveSettings(@NotNull PsiVariable psiVariable) {
+    protected void saveSettings(@Nonnull PsiVariable psiVariable) {
       super.saveSettings(psiVariable);
       JavaRefactoringSettings.getInstance().INTRODUCE_FIELD_VISIBILITY = myIntroduceFieldPanel.getFieldVisibility();
       myIntroduceFieldPanel.saveFinalState();

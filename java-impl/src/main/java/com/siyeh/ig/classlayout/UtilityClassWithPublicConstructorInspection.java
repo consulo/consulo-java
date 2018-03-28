@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,13 +26,12 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.UtilityClassUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class UtilityClassWithPublicConstructorInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "utility.class.with.public.constructor.display.name");
@@ -38,7 +39,7 @@ public class UtilityClassWithPublicConstructorInspection
 
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "utility.class.with.public.constructor.problem.descriptor");
@@ -65,7 +66,7 @@ public class UtilityClassWithPublicConstructorInspection
       m_multipleConstructors = multipleConstructors;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "utility.class.with.public.constructor.make.quickfix",
@@ -98,7 +99,7 @@ public class UtilityClassWithPublicConstructorInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (!UtilityClassUtil.isUtilityClass(aClass)) {
         return;

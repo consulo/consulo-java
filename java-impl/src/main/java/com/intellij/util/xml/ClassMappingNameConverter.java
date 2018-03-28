@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -37,7 +37,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class ClassMappingNameConverter extends ResolvingConverter.StringConverter {
 
-  @NotNull
+  @Nonnull
   @Override
   public Collection<? extends String> getVariants(ConvertContext context) {
     DomElement parent = context.getInvocationElement().getParent();

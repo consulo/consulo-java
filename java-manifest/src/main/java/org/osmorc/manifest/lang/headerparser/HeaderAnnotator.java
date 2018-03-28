@@ -24,18 +24,19 @@
  */
 package org.osmorc.manifest.lang.headerparser;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import consulo.java.manifest.lang.headerparser.HeaderUtil;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class HeaderAnnotator implements Annotator {
-  public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder holder) {
+  public void annotate(@Nonnull PsiElement psiElement, @Nonnull AnnotationHolder holder) {
     if (psiElement instanceof HeaderValuePart) {
       HeaderValuePart headerValue = (HeaderValuePart)psiElement;
       HeaderParser headerParser = HeaderUtil.getHeaderParser(headerValue);

@@ -15,18 +15,19 @@
  */
 package com.intellij.codeInsight.generation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiParameter;
-import org.jetbrains.annotations.NotNull;
 
 /**
 * @author Max Medvedev
 */
 public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBodyGenerator {
   @Override
-  public void generateFieldInitialization(@NotNull StringBuilder buffer,
-                                          @NotNull PsiField[] fields,
-                                          @NotNull PsiParameter[] parameters) {
+  public void generateFieldInitialization(@Nonnull StringBuilder buffer,
+                                          @Nonnull PsiField[] fields,
+                                          @Nonnull PsiParameter[] parameters) {
     for (int i = 0, length = fields.length; i < length; i++) {
       String fieldName = fields[i].getName();
       String paramName = parameters[i].getName();
@@ -41,7 +42,7 @@ public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBod
   }
 
   @Override
-  public void generateSuperCallIfNeeded(@NotNull StringBuilder buffer, @NotNull PsiParameter[] parameters) {
+  public void generateSuperCallIfNeeded(@Nonnull StringBuilder buffer, @Nonnull PsiParameter[] parameters) {
     if (parameters.length > 0) {
       buffer.append("super(");
       for (int j = 0; j < parameters.length; j++) {
@@ -54,7 +55,7 @@ public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBod
   }
 
   @Override
-  public StringBuilder start(StringBuilder buffer, @NotNull String name, @NotNull PsiParameter[] parameters) {
+  public StringBuilder start(StringBuilder buffer, @Nonnull String name, @Nonnull PsiParameter[] parameters) {
     buffer.append("public ").append(name).append("(");
     for (PsiParameter parameter : parameters) {
       buffer.append(parameter.getType().getPresentableText()).append(' ').append(parameter.getName()).append(',');

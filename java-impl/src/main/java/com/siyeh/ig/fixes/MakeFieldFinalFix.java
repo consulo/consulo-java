@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -22,8 +24,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.FinalUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class MakeFieldFinalFix extends InspectionGadgetsFix {
 
@@ -42,12 +44,12 @@ public class MakeFieldFinalFix extends InspectionGadgetsFix {
     return new MakeFieldFinalFix(name);
   }
 
-  @NotNull
+  @Nonnull
   public static InspectionGadgetsFix buildFixUnconditional(PsiField field) {
     return new MakeFieldFinalFix(field.getName());
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("make.field.final.quickfix",
                                            fieldName);

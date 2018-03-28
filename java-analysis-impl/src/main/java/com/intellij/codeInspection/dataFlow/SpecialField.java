@@ -18,8 +18,8 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue;
@@ -56,7 +56,7 @@ public enum SpecialField
 
 				@Nullable
 				@Override
-				public PsiModifierListOwner getCanonicalOwner(@Nullable PsiModifierListOwner qualifier, @Nullable PsiClass psiClass)
+				public PsiModifierListOwner getCanonicalOwner(@Nullable PsiModifierListOwner qualifier, @javax.annotation.Nullable PsiClass psiClass)
 				{
 					if(qualifier == null)
 					{
@@ -69,7 +69,7 @@ public enum SpecialField
 	STRING_LENGTH(CommonClassNames.JAVA_LANG_STRING, "length", true, LongRangeSet.indexRange())
 			{
 				@Override
-				public DfaValue createFromConstant(DfaValueFactory factory, @NotNull Object obj)
+				public DfaValue createFromConstant(DfaValueFactory factory, @Nonnull Object obj)
 				{
 					return obj instanceof String ? factory.getConstFactory().createFromValue(((String) obj).length(), PsiType.INT, null) : null;
 				}
@@ -176,7 +176,7 @@ public enum SpecialField
 		return factory.getRangeFactory().create(myRange);
 	}
 
-	public DfaValue createFromConstant(DfaValueFactory factory, @NotNull Object obj)
+	public DfaValue createFromConstant(DfaValueFactory factory, @Nonnull Object obj)
 	{
 		return null;
 	}

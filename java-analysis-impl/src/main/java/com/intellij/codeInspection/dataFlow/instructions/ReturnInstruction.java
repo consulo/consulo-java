@@ -16,8 +16,8 @@
 
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.ControlTransferInstruction;
 import com.intellij.codeInspection.dataFlow.DfaControlTransferValue;
 import com.intellij.codeInspection.dataFlow.ExceptionTransfer;
@@ -27,13 +27,13 @@ public class ReturnInstruction extends ControlTransferInstruction
 {
 	private final PsiElement myAnchor;
 
-	public ReturnInstruction(@NotNull DfaControlTransferValue transfer, @Nullable PsiElement anchor)
+	public ReturnInstruction(@Nonnull DfaControlTransferValue transfer, @javax.annotation.Nullable PsiElement anchor)
 	{
 		super(transfer);
 		myAnchor = anchor;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiElement getAnchor()
 	{
 		return myAnchor;

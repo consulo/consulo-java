@@ -15,12 +15,13 @@
  */
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author peter
@@ -32,7 +33,7 @@ public class PsiTypePattern extends ObjectPattern<PsiType,PsiTypePattern> {
 
   public PsiTypePattern arrayOf(final ElementPattern pattern) {
     return with(new PatternCondition<PsiType>("arrayOf") {
-      public boolean accepts(@NotNull final PsiType psiType, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiType psiType, final ProcessingContext context) {
         return psiType instanceof PsiArrayType &&
                pattern.getCondition().accepts(((PsiArrayType)psiType).getComponentType(), context);
       }
@@ -41,7 +42,7 @@ public class PsiTypePattern extends ObjectPattern<PsiType,PsiTypePattern> {
 
   public PsiTypePattern classType(final ElementPattern<? extends PsiClass> pattern) {
     return with(new PatternCondition<PsiType>("classType") {
-      public boolean accepts(@NotNull final PsiType psiType, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiType psiType, final ProcessingContext context) {
         return psiType instanceof PsiClassType &&
                pattern.getCondition().accepts(((PsiClassType)psiType).resolve(), context);
       }

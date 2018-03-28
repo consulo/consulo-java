@@ -22,7 +22,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class ChangeToCStyleCommentIntention extends Intention {
     new Class[]{PsiWhiteSpace.class};
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new EndOfLineCommentPredicate();
   }
@@ -123,7 +123,7 @@ public class ChangeToCStyleCommentIntention extends Intention {
     return JavaTokenType.END_OF_LINE_COMMENT.equals(tokenType);
   }
 
-  private static String getCommentContents(@NotNull PsiComment comment) {
+  private static String getCommentContents(@Nonnull PsiComment comment) {
     final String text = comment.getText();
     return StringUtil.replace(text.substring(2), "*/", "* /").trim();
   }

@@ -15,8 +15,8 @@
  */
 package com.intellij.compiler.impl.javaCompiler.annotationProcessing;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -36,13 +36,13 @@ public interface ProcessorConfigProfile extends AnnotationProcessingConfiguratio
 
   void setEnabled(boolean enabled);
 
-  void setProcessorPath(@Nullable String processorPath);
+  void setProcessorPath(@javax.annotation.Nullable String processorPath);
 
   void setObtainProcessorsFromClasspath(boolean value);
 
   void setGeneratedSourcesDirectoryName(@Nullable String generatedSourcesDirectoryName, boolean forTests);
 
-  @NotNull
+  @Nonnull
   Set<String> getModuleNames();
 
   boolean addModuleName(String name);
@@ -63,7 +63,7 @@ public interface ProcessorConfigProfile extends AnnotationProcessingConfiguratio
 
   String setOption(String key, String value);
 
-  @Nullable
+  @javax.annotation.Nullable
   String getOption(String key);
 
   void clearProcessorOptions();

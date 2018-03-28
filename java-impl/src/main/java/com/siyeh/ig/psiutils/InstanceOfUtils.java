@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -49,7 +50,7 @@ public class InstanceOfUtils {
   }
 
   public static boolean hasAgreeingInstanceof(
-    @NotNull PsiTypeCastExpression expression) {
+    @Nonnull PsiTypeCastExpression expression) {
     final PsiType castType = expression.getType();
     final PsiExpression operand = expression.getOperand();
     if (!(operand instanceof PsiReferenceExpression)) {

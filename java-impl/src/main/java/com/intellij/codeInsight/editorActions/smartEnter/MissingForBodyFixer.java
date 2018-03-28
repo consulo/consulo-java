@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiBlockStatement;
@@ -66,7 +65,7 @@ public class MissingForBodyFixer implements Fixer
 		doc.insertString(eltToInsertAfter.getTextRange().getEndOffset(), text);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiForStatement getForStatementParent(PsiElement psiElement)
 	{
 		PsiForStatement statement = PsiTreeUtil.getParentOfType(psiElement, PsiForStatement.class);

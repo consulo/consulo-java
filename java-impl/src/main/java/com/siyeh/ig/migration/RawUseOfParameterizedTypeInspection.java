@@ -23,8 +23,8 @@ import com.intellij.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -37,13 +37,13 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
   @SuppressWarnings("PublicField") public boolean ignoreUncompilable = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("raw.use.of.parameterized.type.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("raw.use.of.parameterized.type.problem.descriptor");
   }
@@ -74,7 +74,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
   private class RawUseOfParameterizedTypeVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@NotNull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       if (!hasNeededLanguageLevel(expression)) {
         return;
       }
@@ -87,7 +87,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
     }
 
     @Override
-    public void visitTypeElement(@NotNull PsiTypeElement typeElement) {
+    public void visitTypeElement(@Nonnull PsiTypeElement typeElement) {
       if (!hasNeededLanguageLevel(typeElement)) {
         return;
       }

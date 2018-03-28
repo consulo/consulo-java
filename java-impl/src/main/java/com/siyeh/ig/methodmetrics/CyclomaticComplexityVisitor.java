@@ -15,37 +15,38 @@
  */
 package com.siyeh.ig.methodmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 class CyclomaticComplexityVisitor extends JavaRecursiveElementVisitor {
   private int m_complexity = 1;
 
   @Override
-  public void visitAnonymousClass(@NotNull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
     // to call to super, to keep this from drilling down
   }
 
   @Override
-  public void visitForStatement(@NotNull PsiForStatement statement) {
+  public void visitForStatement(@Nonnull PsiForStatement statement) {
     super.visitForStatement(statement);
     m_complexity++;
   }
 
   @Override
-  public void visitForeachStatement(@NotNull PsiForeachStatement statement) {
+  public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
     super.visitForeachStatement(statement);
     m_complexity++;
   }
 
   @Override
-  public void visitIfStatement(@NotNull PsiIfStatement statement) {
+  public void visitIfStatement(@Nonnull PsiIfStatement statement) {
     super.visitIfStatement(statement);
     m_complexity++;
   }
 
   @Override
-  public void visitDoWhileStatement(@NotNull PsiDoWhileStatement statement) {
+  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
     super.visitDoWhileStatement(statement);
     m_complexity++;
   }
@@ -57,7 +58,7 @@ class CyclomaticComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitSwitchStatement(@NotNull PsiSwitchStatement statement) {
+  public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
     super.visitSwitchStatement(statement);
     final PsiCodeBlock body = statement.getBody();
     if (body == null) {
@@ -79,7 +80,7 @@ class CyclomaticComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitWhileStatement(@NotNull PsiWhileStatement statement) {
+  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
     super.visitWhileStatement(statement);
     m_complexity++;
   }

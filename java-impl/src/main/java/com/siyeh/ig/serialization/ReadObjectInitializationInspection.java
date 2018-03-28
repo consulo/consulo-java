@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -22,22 +24,21 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.InitializationUtils;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ReadObjectInitializationInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "InstanceVariableMayNotBeInitializedByReadObject";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "readobject.initialization.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "readobject.initialization.problem.descriptor");
@@ -51,7 +52,7 @@ public class ReadObjectInitializationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // no call to super, so it doesn't drill down
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
@@ -87,8 +88,8 @@ public class ReadObjectInitializationInspection extends BaseInspection {
       }
     }
 
-    public static boolean isFieldInitialized(@NotNull PsiField field,
-                                             @NotNull PsiMethod method) {
+    public static boolean isFieldInitialized(@Nonnull PsiField field,
+                                             @Nonnull PsiMethod method) {
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return true;
       }

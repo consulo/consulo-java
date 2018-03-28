@@ -16,7 +16,8 @@
 
 package com.intellij.debugger.ui;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -26,8 +27,8 @@ import com.intellij.openapi.project.Project;
  */
 public abstract class HotSwapUI
 {
-	@NotNull
-	public static HotSwapUI getInstance(@NotNull Project project)
+	@Nonnull
+	public static HotSwapUI getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, HotSwapUI.class);
 	}

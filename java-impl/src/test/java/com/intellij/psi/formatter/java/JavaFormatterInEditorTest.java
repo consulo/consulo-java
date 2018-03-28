@@ -18,7 +18,7 @@ package com.intellij.psi.formatter.java;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -48,7 +48,7 @@ public class JavaFormatterInEditorTest extends LightPlatformCodeInsightTestCase 
     );
   }
   
-  public void doTest(@NotNull String before, @NotNull String after) throws IOException {
+  public void doTest(@Nonnull String before, @Nonnull String after) throws IOException {
     configureFromFileText(getTestName(false) + ".java", before);
     CodeStyleManager.getInstance(getProject()).reformatText(getFile(), 0, getEditor().getDocument().getTextLength());
     checkResultByText(after);

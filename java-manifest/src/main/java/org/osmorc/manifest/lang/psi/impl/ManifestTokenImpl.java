@@ -25,8 +25,9 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.ManifestToken;
 
@@ -44,7 +45,7 @@ public class ManifestTokenImpl extends LeafPsiElement implements ManifestToken {
     return (ManifestTokenType)getElementType();
   }
 
-  public ManifestToken replaceToken(@NotNull String text) {
+  public ManifestToken replaceToken(@Nonnull String text) {
     return (ManifestToken)replaceWithText(text);
   }
 

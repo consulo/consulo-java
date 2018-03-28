@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiDeclarationStatement;
@@ -27,16 +28,16 @@ class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
 
   private boolean assignedFrom = false;
 
-  @NotNull
+  @Nonnull
   private final PsiVariable variable;
 
-  public VariableAssignedFromVisitor(@NotNull PsiVariable variable) {
+  public VariableAssignedFromVisitor(@Nonnull PsiVariable variable) {
     super();
     this.variable = variable;
   }
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!assignedFrom) {
       super.visitElement(element);
     }
@@ -44,7 +45,7 @@ class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssignmentExpression(
-    @NotNull PsiAssignmentExpression assignment) {
+    @Nonnull PsiAssignmentExpression assignment) {
     if (assignedFrom) {
       return;
     }
@@ -57,7 +58,7 @@ class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitDeclarationStatement(
-    @NotNull PsiDeclarationStatement statement) {
+    @Nonnull PsiDeclarationStatement statement) {
     if (assignedFrom) {
       return;
     }
@@ -80,7 +81,7 @@ class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitVariable(@NotNull PsiVariable var) {
+  public void visitVariable(@Nonnull PsiVariable var) {
     if (assignedFrom) {
       return;
     }

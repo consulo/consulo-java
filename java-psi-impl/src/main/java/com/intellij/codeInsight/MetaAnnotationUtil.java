@@ -28,8 +28,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -69,7 +69,7 @@ public class MetaAnnotationUtil
 		}
 	};
 
-	public static Collection<PsiClass> getAnnotationTypesWithChildren(@NotNull Module module, String annotationName, boolean includeTests)
+	public static Collection<PsiClass> getAnnotationTypesWithChildren(@Nonnull Module module, String annotationName, boolean includeTests)
 	{
 		Project project = module.getProject();
 
@@ -95,7 +95,7 @@ public class MetaAnnotationUtil
 		return map.get(pair(annotationName, includeTests));
 	}
 
-	public static Set<PsiClass> getChildren(@NotNull PsiClass psiClass, @NotNull GlobalSearchScope scope)
+	public static Set<PsiClass> getChildren(@Nonnull PsiClass psiClass, @Nonnull GlobalSearchScope scope)
 	{
 		if(AnnotationTargetUtil.findAnnotationTarget(psiClass, PsiAnnotation.TargetType.ANNOTATION_TYPE, PsiAnnotation.TargetType.TYPE) == null)
 		{
@@ -122,7 +122,7 @@ public class MetaAnnotationUtil
 		return result;
 	}
 
-	public static Collection<PsiClass> getAnnotatedTypes(@NotNull Module module, @NotNull Key<CachedValue<Collection<PsiClass>>> key, @NotNull String annotationName)
+	public static Collection<PsiClass> getAnnotatedTypes(@Nonnull Module module, @Nonnull Key<CachedValue<Collection<PsiClass>>> key, @Nonnull String annotationName)
 	{
 		return CachedValuesManager.getManager(module.getProject()).getCachedValue(module, key, () ->
 		{
@@ -142,7 +142,7 @@ public class MetaAnnotationUtil
 		}, false);
 	}
 
-	@NotNull
+	@Nonnull
 	private static Collection<PsiClass> getAnnotationTypesWithChildren(PsiClass annotationClass, GlobalSearchScope scope)
 	{
 		Set<PsiClass> classes = new THashSet<>(HASHING_STRATEGY);
@@ -186,7 +186,7 @@ public class MetaAnnotationUtil
 	/**
 	 * Checks if listOwner is annotated with annotations or listOwner's annotations contain given annotations.
 	 */
-	public static boolean isMetaAnnotated(@NotNull PsiModifierListOwner listOwner, @NotNull Collection<String> annotations)
+	public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations)
 	{
 		if(AnnotationUtil.isAnnotated(listOwner, annotations, 0))
 		{
@@ -208,12 +208,12 @@ public class MetaAnnotationUtil
 		return false;
 	}
 
-	public static boolean isMetaAnnotatedInHierarchy(@NotNull PsiModifierListOwner listOwner, @NotNull Collection<String> annotations)
+	public static boolean isMetaAnnotatedInHierarchy(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations)
 	{
 		return isMetaAnnotatedInHierarchy(listOwner, annotations, new HashSet<>());
 	}
 
-	private static boolean isMetaAnnotatedInHierarchy(@NotNull PsiModifierListOwner listOwner, @NotNull Collection<String> annotations, Set<PsiMember> visited)
+	private static boolean isMetaAnnotatedInHierarchy(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations, Set<PsiMember> visited)
 	{
 		if(isMetaAnnotated(listOwner, annotations))
 		{
@@ -242,7 +242,7 @@ public class MetaAnnotationUtil
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiAnnotation metaAnnotationCached(PsiClass subjectAnnotation, String annotationToFind)
 	{
 		return CachedValuesManager.getCachedValue(subjectAnnotation, () ->
@@ -277,8 +277,8 @@ public class MetaAnnotationUtil
 		return null;
 	}
 
-	@NotNull
-	public static Stream<PsiAnnotation> findMetaAnnotations(@NotNull PsiModifierListOwner listOwner, @NotNull Collection<String> annotations)
+	@Nonnull
+	public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations)
 	{
 		Stream<PsiAnnotation> directAnnotations = Stream.of(AnnotationUtil.findAnnotations(listOwner, annotations));
 

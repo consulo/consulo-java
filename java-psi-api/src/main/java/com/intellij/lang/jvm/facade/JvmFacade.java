@@ -19,9 +19,11 @@ import static com.intellij.util.containers.ContainerUtil.getFirstItem;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.progress.ProgressManager;
@@ -31,8 +33,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 public interface JvmFacade
 {
 
-	@NotNull
-	static JvmFacade getInstance(@NotNull Project project)
+	@Nonnull
+	static JvmFacade getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, JvmFacade.class);
 	}
@@ -46,7 +48,7 @@ public interface JvmFacade
 	 * @return the PSI class, or null if no class with such name is found.
 	 */
 	@Nullable
-	default JvmClass findClass(@NonNls @NotNull String qualifiedName, @NotNull GlobalSearchScope scope)
+	default JvmClass findClass(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope)
 	{
 		ProgressManager.checkCanceled();
 		return getFirstItem(findClasses(qualifiedName, scope));
@@ -60,6 +62,6 @@ public interface JvmFacade
 	 * @param scope         the scope to search.
 	 * @return the array of found classes, or an empty array if no classes are found.
 	 */
-	@NotNull
-	List<? extends JvmClass> findClasses(@NonNls @NotNull String qualifiedName, @NotNull GlobalSearchScope scope);
+	@Nonnull
+	List<? extends JvmClass> findClasses(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 }

@@ -15,9 +15,9 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -64,14 +64,14 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName)
 	{
 		return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
 	}
 
 	@Override
-	public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, @Nullable T value)
+	public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, @javax.annotation.Nullable T value)
 	{
 		@SuppressWarnings("unchecked") T t = (T) PsiImplUtil.setDeclaredAttributeValue(this, attributeName, value, ANNOTATION_CREATOR);
 		return t;
@@ -83,14 +83,14 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotationParameterList getParameterList()
 	{
 		return getRequiredStubOrPsiChild(JavaStubElementTypes.ANNOTATION_PARAMETER_LIST);
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public String getQualifiedName()
 	{
 		final PsiJavaCodeReferenceElement nameRef = getNameReferenceElement();
@@ -102,7 +102,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 	}
 
 	@Override
-	public final void accept(@NotNull PsiElementVisitor visitor)
+	public final void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -120,7 +120,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 		return MetaRegistry.getMetaBase(this);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiAnnotationOwner getOwner()
 	{

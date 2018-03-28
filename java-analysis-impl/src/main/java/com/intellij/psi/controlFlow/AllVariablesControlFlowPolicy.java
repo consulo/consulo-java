@@ -24,7 +24,7 @@
  */
 package com.intellij.psi.controlFlow;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLocalVariable;
 import com.intellij.psi.PsiParameter;
@@ -36,20 +36,20 @@ public class AllVariablesControlFlowPolicy implements ControlFlowPolicy
 	private static final AllVariablesControlFlowPolicy INSTANCE = new AllVariablesControlFlowPolicy();
 
 	@Override
-	public PsiVariable getUsedVariable(@NotNull PsiReferenceExpression refExpr)
+	public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr)
 	{
 		PsiElement resolved = refExpr.resolve();
 		return resolved instanceof PsiVariable ? (PsiVariable) resolved : null;
 	}
 
 	@Override
-	public boolean isParameterAccepted(@NotNull PsiParameter psiParameter)
+	public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter)
 	{
 		return true;
 	}
 
 	@Override
-	public boolean isLocalVariableAccepted(@NotNull PsiLocalVariable psiVariable)
+	public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable)
 	{
 		return true;
 	}

@@ -28,22 +28,22 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.ClassUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
 public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceElement, PsiJavaCodeReferenceElement> {
-  public ImportClassFix(@NotNull PsiJavaCodeReferenceElement element) {
+  public ImportClassFix(@Nonnull PsiJavaCodeReferenceElement element) {
     super(element, element);
   }
 
   @Override
-  protected String getReferenceName(@NotNull PsiJavaCodeReferenceElement reference) {
+  protected String getReferenceName(@Nonnull PsiJavaCodeReferenceElement reference) {
     return reference.getReferenceName();
   }
 
   @Override
-  protected PsiElement getReferenceNameElement(@NotNull PsiJavaCodeReferenceElement reference) {
+  protected PsiElement getReferenceNameElement(@Nonnull PsiJavaCodeReferenceElement reference) {
     return reference.getReferenceNameElement();
   }
 
@@ -58,7 +58,7 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
   }
 
   @Override
-  protected boolean hasTypeParameters(@NotNull PsiJavaCodeReferenceElement reference) {
+  protected boolean hasTypeParameters(@Nonnull PsiJavaCodeReferenceElement reference) {
     final PsiReferenceParameterList refParameters = reference.getParameterList();
     return refParameters != null && refParameters.getTypeParameterElements().length > 0;
   }

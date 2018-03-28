@@ -2,7 +2,7 @@ package com.intellij.find.findUsages;
 
 import java.util.LinkedHashSet;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.find.FindBundle;
 import com.intellij.openapi.project.Project;
 
@@ -14,7 +14,7 @@ public class JavaPackageFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isIncludeSubpackages = true;
   public boolean isSkipPackageStatements = false;
 
-  public JavaPackageFindUsagesOptions(@NotNull Project project) {
+  public JavaPackageFindUsagesOptions(@Nonnull Project project) {
     super(project);
   }
 

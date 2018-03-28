@@ -26,7 +26,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -36,19 +36,19 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
   public boolean m_ignoreUnlessAssigned = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "StringContatenationInLoop";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.in.loops.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.concatenation.in.loops.problem.descriptor");
   }
@@ -101,7 +101,7 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
     }
 
     @Override
-    public void visitAssignmentExpression(@NotNull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (expression.getRExpression() == null) {
         return;

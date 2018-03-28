@@ -30,15 +30,15 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Function;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
-  @NotNull
+  @Nonnull
   @Override
-  public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
+  public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement root, @Nonnull Document document, boolean quick) {
     if (!(root instanceof PsiJavaFile) || quick || !JavaCodeFoldingSettings.getInstance().isCollapseSuppressWarnings()) {
       return FoldingDescriptor.EMPTY;
     }
@@ -59,7 +59,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
   }
 
   @Override
-  public String getPlaceholderText(@NotNull ASTNode node) {
+  public String getPlaceholderText(@Nonnull ASTNode node) {
     final PsiElement element = node.getPsi();
     if (element instanceof PsiAnnotation) {
       return "/" + StringUtil.join(((PsiAnnotation)element).getParameterList().getAttributes(), new Function<PsiNameValuePair, String>() {
@@ -93,7 +93,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
 
 
   @Override
-  public boolean isCollapsedByDefault(@NotNull ASTNode node) {
+  public boolean isCollapsedByDefault(@Nonnull ASTNode node) {
     return JavaCodeFoldingSettings.getInstance().isCollapseSuppressWarnings();
   }
 }

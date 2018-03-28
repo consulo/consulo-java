@@ -17,8 +17,8 @@ package com.intellij.codeInsight.intention;
 
 import java.lang.annotation.RetentionPolicy;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
@@ -43,7 +43,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 	private final PsiNameValuePair[] myPairs; // not used when registering local quick fix
 	protected final String myText;
 
-	public AddAnnotationPsiFix(@NotNull String fqn, @NotNull PsiModifierListOwner modifierListOwner, @NotNull PsiNameValuePair[] values, @NotNull String... annotationsToRemove)
+	public AddAnnotationPsiFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner modifierListOwner, @Nonnull PsiNameValuePair[] values, @Nonnull String... annotationsToRemove)
 	{
 		super(modifierListOwner);
 		myAnnotation = fqn;
@@ -54,7 +54,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 		myText = calcText(modifierListOwner, myAnnotation);
 	}
 
-	public static String calcText(PsiModifierListOwner modifierListOwner, @NotNull String annotation)
+	public static String calcText(PsiModifierListOwner modifierListOwner, @Nonnull String annotation)
 	{
 		final String shortName = annotation.substring(annotation.lastIndexOf('.') + 1);
 		if(modifierListOwner instanceof PsiNamedElement)
@@ -103,26 +103,26 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		return myText;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return CodeInsightBundle.message("intention.add.annotation.family");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		return isAvailable((PsiModifierListOwner) startElement, myAnnotation);
 	}
 
-	public static boolean isAvailable(@NotNull PsiModifierListOwner modifierListOwner, @NotNull String annotationFQN)
+	public static boolean isAvailable(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String annotationFQN)
 	{
 		if(!modifierListOwner.isValid())
 		{
@@ -146,7 +146,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		final PsiModifierListOwner myModifierListOwner = (PsiModifierListOwner) startElement;
 
@@ -212,7 +212,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 		return inserted;
 	}
 
-	public static void removePhysicalAnnotations(@NotNull PsiModifierListOwner owner, @NotNull String... fqns)
+	public static void removePhysicalAnnotations(@Nonnull PsiModifierListOwner owner, @Nonnull String... fqns)
 	{
 		for(String fqn : fqns)
 		{
@@ -224,7 +224,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	protected String[] getAnnotationsToRemove()
 	{
 		return myAnnotationsToRemove;

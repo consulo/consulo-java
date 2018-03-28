@@ -17,8 +17,8 @@ package com.intellij.codeInsight.daemon.impl;
 
 import java.awt.Color;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.editor.ElementColorProvider;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -41,7 +41,7 @@ public class JavaColorProvider implements ElementColorProvider
 {
 	@RequiredReadAction
 	@Override
-	public Color getColorFrom(@NotNull PsiElement element)
+	public Color getColorFrom(@Nonnull PsiElement element)
 	{
 		return getJavaColorFromExpression(element);
 	}
@@ -156,7 +156,7 @@ public class JavaColorProvider implements ElementColorProvider
 
 	@RequiredWriteAction
 	@Override
-	public void setColorTo(@NotNull PsiElement element, @NotNull Color color)
+	public void setColorTo(@Nonnull PsiElement element, @Nonnull Color color)
 	{
 		PsiExpressionList argumentList = ((PsiNewExpression) element).getArgumentList();
 		assert argumentList != null;

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
@@ -36,7 +36,7 @@ public class PsiJavaModuleReferenceElementImpl extends CompositePsiElement imple
 		super(JavaElementType.MODULE_REFERENCE);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getReferenceText()
 	{
@@ -63,7 +63,7 @@ public class PsiJavaModuleReferenceElementImpl extends CompositePsiElement imple
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

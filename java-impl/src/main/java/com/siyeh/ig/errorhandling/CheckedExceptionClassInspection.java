@@ -15,25 +15,26 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class CheckedExceptionClassInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "checked.exception.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "checked.exception.class.problem.descriptor");
@@ -47,7 +48,7 @@ public class CheckedExceptionClassInspection extends BaseInspection {
   private static class CheckedExceptionClassVisitor
     extends BaseInspectionVisitor {
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass,
                                        CommonClassNames.JAVA_LANG_THROWABLE)) {
         return;

@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.openapi.diagnostic.Logger;
@@ -38,13 +38,13 @@ public class LambdaHighlightingUtil
 	private static final Logger LOG = Logger.getInstance("#" + LambdaHighlightingUtil.class.getName());
 
 	@Nullable
-	public static String checkInterfaceFunctional(@NotNull PsiClass psiClass)
+	public static String checkInterfaceFunctional(@Nonnull PsiClass psiClass)
 	{
 		return checkInterfaceFunctional(psiClass, "Target type of a lambda conversion must be an interface");
 	}
 
 	@Nullable
-	static String checkInterfaceFunctional(@NotNull PsiClass psiClass, String interfaceNonFunctionalMessage)
+	static String checkInterfaceFunctional(@Nonnull PsiClass psiClass, String interfaceNonFunctionalMessage)
 	{
 		if(psiClass instanceof PsiTypeParameter)
 		{

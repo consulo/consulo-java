@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -23,7 +25,6 @@ import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements PsiPrefixExpression {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiPrefixExpressionImpl");
@@ -38,13 +39,13 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public IElementType getOperationTokenType() {
     return getOperationSign().getTokenType();
   }
@@ -96,7 +97,7 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitPrefixExpression(this);
     }

@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightClassUtil;
@@ -80,7 +80,7 @@ public class JavaInheritorsGetter implements CompletionProvider
 	}
 
 	@Override
-	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext matchingContext, @NotNull final CompletionResultSet result)
+	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext matchingContext, @Nonnull final CompletionResultSet result)
 	{
 		final ExpectedTypeInfo[] infos = JavaSmartCompletionContributor.getExpectedTypes(parameters);
 
@@ -222,7 +222,7 @@ public class JavaInheritorsGetter implements CompletionProvider
 		return LookupElementDecorator.withInsertHandler(item, myConstructorInsertHandler);
 	}
 
-	private static boolean areInferredTypesApplicable(@NotNull PsiType[] types, PsiElement position)
+	private static boolean areInferredTypesApplicable(@Nonnull PsiType[] types, PsiElement position)
 	{
 		final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(position, PsiNewExpression.class, false);
 		if(!PsiUtil.isLanguageLevel8OrHigher(position))

@@ -20,8 +20,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.application.options.ModuleListCellRenderer;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.compiler.ModuleCompilerUtil;
@@ -109,7 +109,7 @@ class AddModuleDependencyFix extends AddOrderEntryFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		if(myModules.size() == 1)
@@ -125,20 +125,20 @@ class AddModuleDependencyFix extends AddOrderEntryFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("orderEntry.fix.family.add.module.dependency");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return !project.isDisposed() && !myCurrentModule.isDisposed() && !myModules.isEmpty() && myModules.stream().noneMatch(Module::isDisposed);
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @Nullable Editor editor, PsiFile file)
+	public void invoke(@Nonnull Project project, @javax.annotation.Nullable Editor editor, PsiFile file)
 	{
 		if(myModules.size() == 1)
 		{

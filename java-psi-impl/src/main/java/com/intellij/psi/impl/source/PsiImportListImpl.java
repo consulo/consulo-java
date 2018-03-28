@@ -24,7 +24,7 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   private volatile Map<String,PsiImportStatementBase> myNameToSingleImportMap = null;
   private static final PsiImportStatementBase[] EMPTY_ARRAY = new PsiImportStatementBase[0];
   private static final ArrayFactory<PsiImportStatementBase> ARRAY_FACTORY = new ArrayFactory<PsiImportStatementBase>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiImportStatementBase[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportStatementBase[count];
@@ -70,19 +70,19 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   private static final TokenSet IMPORT_STATIC_STATEMENT_BIT_SET = TokenSet.create(JavaElementType.IMPORT_STATIC_STATEMENT);
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiImportStatement[] getImportStatements() {
     return getStubOrPsiChildren(IMPORT_STATEMENT_BIT_SET, PsiImportStatementImpl.ARRAY_FACTORY);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiImportStaticStatement[] getImportStaticStatements() {
     return getStubOrPsiChildren(IMPORT_STATIC_STATEMENT_BIT_SET, PsiImportStaticStatementImpl.ARRAY_FACTORY);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiImportStatementBase[] getAllImportStatements() {
     return getStubOrPsiChildren(ElementType.IMPORT_STATEMENT_BASE_BIT_SET, ARRAY_FACTORY);
   }
@@ -166,7 +166,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitImportList(this);
     }

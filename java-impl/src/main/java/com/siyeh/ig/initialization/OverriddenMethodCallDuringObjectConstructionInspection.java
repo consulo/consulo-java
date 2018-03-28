@@ -24,18 +24,18 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class OverriddenMethodCallDuringObjectConstructionInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overridden.method.call.in.constructor.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("overridden.method.call.in.constructor.problem.descriptor");
   }
@@ -48,7 +48,7 @@ public class OverriddenMethodCallDuringObjectConstructionInspection extends Base
   private static class OverriddenMethodCallInConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
         return;

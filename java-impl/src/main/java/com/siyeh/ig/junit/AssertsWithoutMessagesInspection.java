@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,19 +30,19 @@ import java.util.Set;
 public class AssertsWithoutMessagesInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("asserts.without.messages.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MessageMissingOnJUnitAssertion";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("asserts.without.messages.problem.descriptor");
   }
@@ -70,7 +70,7 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();

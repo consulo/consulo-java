@@ -34,7 +34,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -93,7 +93,7 @@ public class EntryPointsManagerImpl extends EntryPointsManagerBase implements Pe
 		return createConfigureAnnotationsButton();
 	}
 
-	@NotNull
+	@Nonnull
 	public static JButton createConfigureAnnotationsButton()
 	{
 		final JButton configureAnnotations = new JButton("Configure annotations...");

@@ -17,7 +17,7 @@ package com.siyeh.ipp.integer;
 
 import com.intellij.psi.PsiType;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -36,7 +36,7 @@ public class ConvertToScientificNotationIntention extends ConvertNumberIntention
     return PsiType.FLOAT.equals(type) ? text + "f" : text;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertToScientificNotationPredicate();

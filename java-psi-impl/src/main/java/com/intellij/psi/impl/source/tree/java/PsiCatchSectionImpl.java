@@ -30,8 +30,8 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.*;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -68,7 +68,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public List<PsiType> getPreciseCatchTypes() {
     final PsiParameter parameter = getParameter();
     if (parameter == null) return Collections.emptyList();
@@ -141,7 +141,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
     return Collections.singletonList(declaredType);
   }
 
-  private static Collection<PsiClassType> getThrownTypes(@NotNull PsiTryStatement statement) {
+  private static Collection<PsiClassType> getThrownTypes(@Nonnull PsiTryStatement statement) {
     Collection<PsiClassType> types = ContainerUtil.newArrayList();
     PsiCodeBlock tryBlock = statement.getTryBlock();
     if (tryBlock != null) {
@@ -173,13 +173,13 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiTryStatement getTryStatement() {
     return (PsiTryStatement)getParent();
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiJavaToken getLParenth() {
     return (PsiJavaToken)findChildByRole(ChildRole.CATCH_BLOCK_PARAMETER_LPARENTH);
   }
@@ -191,7 +191,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitCatchSection(this);
     }
@@ -247,10 +247,10 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
-                                     @NotNull ResolveState state,
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @NotNull PsiElement place) {
+                                     @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     if (lastParent == null || lastParent.getParent() != this)
       // Parent element should not see our vars

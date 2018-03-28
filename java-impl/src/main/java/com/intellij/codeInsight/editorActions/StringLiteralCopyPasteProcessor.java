@@ -32,8 +32,8 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.intellij.openapi.util.text.StringUtil.unescapeStringCharacters;
 
@@ -113,7 +113,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return textWasChanged ? buffer.toString() : null;
   }
 
-  @NotNull
+  @Nonnull
   protected String unescape(String text, PsiElement token) {
     return unescapeStringCharacters(text);
   }
@@ -186,18 +186,18 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return elementAtSelectionStart;
   }
 
-  protected boolean isCharLiteral(@NotNull PsiElement token) {
+  protected boolean isCharLiteral(@Nonnull PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.CHARACTER_LITERAL;
   }
 
-  protected boolean isStringLiteral(@NotNull PsiElement token) {
+  protected boolean isStringLiteral(@Nonnull PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.STRING_LITERAL;
   }
 
-  @NotNull
-  protected String escapeCharCharacters(@NotNull String s, @NotNull PsiElement token) {
+  @Nonnull
+  protected String escapeCharCharacters(@Nonnull String s, @Nonnull PsiElement token) {
     StringBuilder buffer = new StringBuilder();
     StringUtil.escapeStringCharacters(s.length(), s, isStringLiteral(token) ? "\"" : "\'", buffer);
     return buffer.toString();

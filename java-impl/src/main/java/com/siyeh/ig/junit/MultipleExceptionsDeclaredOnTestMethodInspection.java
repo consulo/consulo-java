@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.junit;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.CommonClassNames;
@@ -41,14 +42,14 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
   extends BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "multiple.exceptions.declared.on.test.method.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
@@ -63,7 +64,7 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
   private static class MultipleExceptionsDeclaredOnTestMethodFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "multiple.exceptions.declared.on.test.method.quickfix");

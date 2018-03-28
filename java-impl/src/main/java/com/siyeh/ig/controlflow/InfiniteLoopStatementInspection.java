@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiDoWhileStatement;
 import com.intellij.psi.PsiForStatement;
 import com.intellij.psi.PsiStatement;
@@ -29,7 +30,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 {
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("infinite.loop.statement.display.name");
@@ -42,7 +43,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("infinite.loop.statement.problem.descriptor");
@@ -58,21 +59,21 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitForStatement(@NotNull PsiForStatement statement)
+		public void visitForStatement(@Nonnull PsiForStatement statement)
 		{
 			super.visitForStatement(statement);
 			checkStatement(statement);
 		}
 
 		@Override
-		public void visitWhileStatement(@NotNull PsiWhileStatement statement)
+		public void visitWhileStatement(@Nonnull PsiWhileStatement statement)
 		{
 			super.visitWhileStatement(statement);
 			checkStatement(statement);
 		}
 
 		@Override
-		public void visitDoWhileStatement(@NotNull PsiDoWhileStatement statement)
+		public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement)
 		{
 			super.visitDoWhileStatement(statement);
 			checkStatement(statement);

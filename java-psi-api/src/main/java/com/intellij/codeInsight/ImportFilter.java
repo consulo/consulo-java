@@ -1,6 +1,7 @@
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiFile;
 
@@ -11,10 +12,10 @@ public abstract class ImportFilter
 {
 	public static final ExtensionPointName<ImportFilter> EP_NAME = new ExtensionPointName<ImportFilter>("consulo.java.importFilter");
 
-	public abstract boolean shouldUseFullyQualifiedName(@NotNull PsiFile targetFile,
-			@NotNull String classQualifiedName);
+	public abstract boolean shouldUseFullyQualifiedName(@Nonnull PsiFile targetFile,
+			@Nonnull String classQualifiedName);
 
-	public static boolean shouldImport(@NotNull PsiFile targetFile, @NotNull String classQualifiedName)
+	public static boolean shouldImport(@Nonnull PsiFile targetFile, @Nonnull String classQualifiedName)
 	{
 		for(ImportFilter filter : EP_NAME.getExtensions())
 		{

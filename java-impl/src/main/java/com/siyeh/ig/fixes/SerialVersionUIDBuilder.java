@@ -24,7 +24,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -375,7 +375,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @NotNull PsiMethodCallExpression methodCallExpression) {
+    @Nonnull PsiMethodCallExpression methodCallExpression) {
     // for navigating the psi tree in the order javac navigates its AST
     final PsiExpressionList argumentList =
       methodCallExpression.getArgumentList();
@@ -418,7 +418,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @NotNull PsiReferenceExpression expression) {
+    @Nonnull PsiReferenceExpression expression) {
     super.visitReferenceExpression(expression);
     final PsiElement element = expression.resolve();
     final PsiElement elementParentClass =

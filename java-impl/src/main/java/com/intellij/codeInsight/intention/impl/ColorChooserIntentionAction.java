@@ -35,7 +35,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColorChooser;
 import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +59,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     return super.isAvailable(project, editor, element) || isInsideDecodeOrGetColorMethod(element);
   }
 
@@ -73,13 +73,13 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 
     final JComponent editorComponent = editor.getComponent();

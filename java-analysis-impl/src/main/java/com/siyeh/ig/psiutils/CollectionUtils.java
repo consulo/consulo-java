@@ -21,10 +21,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 
@@ -160,7 +162,7 @@ public class CollectionUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isConcreteCollectionClass(@Nullable PsiType type)
+	public static boolean isConcreteCollectionClass(@javax.annotation.Nullable PsiType type)
 	{
 		if(!(type instanceof PsiClassType))
 		{
@@ -237,7 +239,7 @@ public class CollectionUtils
 		return false;
 	}
 
-	public static boolean isWeakCollectionClass(@Nullable PsiType type)
+	public static boolean isWeakCollectionClass(@javax.annotation.Nullable PsiType type)
 	{
 		if(!(type instanceof PsiClassType))
 		{
@@ -247,7 +249,7 @@ public class CollectionUtils
 		return "java.util.WeakHashMap".equals(typeText);
 	}
 
-	public static boolean isConstantEmptyArray(@NotNull PsiField field)
+	public static boolean isConstantEmptyArray(@Nonnull PsiField field)
 	{
 		if(!field.hasModifierProperty(PsiModifier.STATIC) || !field.hasModifierProperty(PsiModifier.FINAL))
 		{
@@ -268,7 +270,7 @@ public class CollectionUtils
 		return ConstructionUtils.isEmptyArrayInitializer(initializer);
 	}
 
-	public static boolean isArrayOrCollectionField(@NotNull PsiField field)
+	public static boolean isArrayOrCollectionField(@Nonnull PsiField field)
 	{
 		final PsiType type = field.getType();
 		if(isCollectionClassOrInterface(type))

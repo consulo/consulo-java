@@ -34,8 +34,8 @@ import java.util.Set;
 
 import javax.swing.*;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
@@ -115,8 +115,8 @@ public class CreateTestDialog extends DialogWrapper {
 
   private JRadioButton myDefaultLibraryButton;
 
-  public CreateTestDialog(@NotNull Project project,
-                          @NotNull String title,
+  public CreateTestDialog(@Nonnull Project project,
+                          @Nonnull String title,
                           PsiClass targetClass,
                           PsiJavaPackage targetPackage,
                           Module targetModule) {
@@ -278,7 +278,7 @@ public class CreateTestDialog extends DialogWrapper {
     return getClass().getName();
   }
 
-  @NotNull
+  @Nonnull
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
   }

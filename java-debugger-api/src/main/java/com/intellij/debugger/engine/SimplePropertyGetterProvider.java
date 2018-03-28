@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
 
@@ -23,5 +23,5 @@ public interface SimplePropertyGetterProvider
 {
 	ExtensionPointName<SimplePropertyGetterProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.simplePropertyGetterProvider");
 
-	boolean isInsideSimpleGetter(@NotNull PsiElement element);
+	boolean isInsideSimpleGetter(@Nonnull PsiElement element);
 }

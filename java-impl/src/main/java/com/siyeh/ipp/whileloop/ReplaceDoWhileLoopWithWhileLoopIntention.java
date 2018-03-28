@@ -15,20 +15,21 @@
  */
 package com.siyeh.ipp.whileloop;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class ReplaceDoWhileLoopWithWhileLoopIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new DoWhileLoopPredicate();
   }
 
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiDoWhileStatement doWhileStatement =
       (PsiDoWhileStatement)element.getParent();

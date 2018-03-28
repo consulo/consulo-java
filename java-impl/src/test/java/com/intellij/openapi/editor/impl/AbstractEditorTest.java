@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.FoldRegion;
@@ -81,12 +82,12 @@ public abstract class AbstractEditorTest extends LightPlatformCodeInsightTestCas
 		}
 	}
 
-	protected void initText(@NotNull @NonNls String fileText)  throws IOException
+	protected void initText(@Nonnull @NonNls String fileText)  throws IOException
 	{
 		init(fileText, TestFileType.TEXT);
 	}
 
-	protected void init(@NotNull @NonNls String fileText, @NotNull TestFileType type) throws IOException
+	protected void init(@Nonnull @NonNls String fileText, @Nonnull TestFileType type) throws IOException
 	{
 		configureFromFileText(getFileName(type), fileText);
 	}

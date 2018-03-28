@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -47,7 +48,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements IntentionA
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		if(!myValue.isValid() || !myExpectedType.isValid() || !(myExpectedType instanceof PsiClassType))
 		{
@@ -59,7 +60,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements IntentionA
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		String newText = myValue.getText();
 		newText = StringUtil.stripQuotesAroundValue(newText);
@@ -70,14 +71,14 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements IntentionA
 		editor.getCaretModel().moveToOffset(newElement.getTextOffset() + newElement.getTextLength());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
 		return "Surround annotation parameter value with quotes";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{

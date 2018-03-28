@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class DDD {
   int test(boolean t) {

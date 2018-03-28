@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class HUtils {
 
@@ -27,7 +27,7 @@ class HUtils {
     return true;
   }
 
-  static boolean remove(HKey[] ids, @NotNull HKey id) {
+  static boolean remove(HKey[] ids, @Nonnull HKey id) {
     boolean removed = false;
     for (int i = 0; i < ids.length; i++) {
       if (id.equals(ids[i])) {

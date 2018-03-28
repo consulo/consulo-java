@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -33,7 +34,7 @@ class SimpleDocTagInfo implements JavadocTagInfo
 	private final boolean myInline;
 	private final LanguageLevel myLanguageLevel;
 
-	SimpleDocTagInfo(@NotNull String name, @NotNull LanguageLevel level, boolean isInline, @NotNull Class... contexts)
+	SimpleDocTagInfo(@Nonnull String name, @Nonnull LanguageLevel level, boolean isInline, @Nonnull Class... contexts)
 	{
 		myName = name;
 		myContexts = contexts;

@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Represents a Java type cast expression.
  */
@@ -26,12 +24,14 @@ public interface PsiTypeCastExpression extends PsiExpression {
    *
    * @return the type element for the cast, or null if the expression is incomplete.
    */
-  @Nullable PsiTypeElement getCastType();
+  @javax.annotation.Nullable
+  PsiTypeElement getCastType();
 
   /**
    * Returns the expression which is cast to the specified type.
    *
    * @return the operand of the type cast expression.
    */
-  @Nullable PsiExpression getOperand();
+  @javax.annotation.Nullable
+  PsiExpression getOperand();
 }

@@ -28,10 +28,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.CommonProblemDescriptor;
@@ -89,10 +91,10 @@ public class UnusedLibrariesInspection extends GlobalInspectionTool {
   }
 
   @Override
-  public void runInspection(@NotNull AnalysisScope scope,
-                            @NotNull InspectionManager manager,
-                            @NotNull final GlobalInspectionContext globalContext,
-                            @NotNull ProblemDescriptionsProcessor problemProcessor) {
+  public void runInspection(@Nonnull AnalysisScope scope,
+                            @Nonnull InspectionManager manager,
+                            @Nonnull final GlobalInspectionContext globalContext,
+                            @Nonnull ProblemDescriptionsProcessor problemProcessor) {
     final Project project = manager.getProject();
     final ArrayList<VirtualFile> libraryRoots = new ArrayList<VirtualFile>();
     if (scope.getScopeType() == AnalysisScope.PROJECT) {
@@ -220,20 +222,20 @@ public class UnusedLibrariesInspection extends GlobalInspectionTool {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("unused.library.display.name");
   }
 
   @Override
   @NonNls
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "UnusedLibrary";
   }
@@ -250,19 +252,19 @@ public class UnusedLibrariesInspection extends GlobalInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return myFiles == null ? InspectionsBundle.message("detach.library.quickfix.name") : InspectionsBundle.message("detach.library.roots.quickfix.name");
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull final Project project, @NotNull final CommonProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull final Project project, @Nonnull final CommonProblemDescriptor descriptor) {
       final Module module = myRefModule.getModule();
 
       ApplicationManager.getApplication().runWriteAction(new Runnable() {

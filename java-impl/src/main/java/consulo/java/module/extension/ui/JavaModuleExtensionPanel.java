@@ -18,13 +18,13 @@ package consulo.java.module.extension.ui;
 
 import java.awt.event.ItemEvent;
 
+import javax.annotation.Nonnull;
 import javax.swing.ButtonGroup;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeListener;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.javaCompiler.TargetOptionsComponent;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
@@ -76,7 +76,7 @@ public class JavaModuleExtensionPanel extends JPanel
 		myLanguageLevelComboBox.setRenderer(new ColoredListCellRenderer<Object>()
 		{
 			@Override
-			protected void customizeCellRenderer(@NotNull JList<?> jList, Object value, int i, boolean b, boolean b1)
+			protected void customizeCellRenderer(@Nonnull JList<?> jList, Object value, int i, boolean b, boolean b1)
 			{
 				if(value == ObjectUtil.NULL)
 				{

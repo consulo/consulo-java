@@ -23,7 +23,6 @@
 package com.intellij.execution.util;
 
 import consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.openapi.module.Module;
@@ -63,7 +62,7 @@ public class JreVersionDetector {
     return JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5);
   }
 
-  private static boolean isJre50(final @Nullable String versionString) {
+  private static boolean isJre50(final @javax.annotation.Nullable String versionString) {
     if (versionString == null) return false;
     JavaSdkVersion version = JavaSdk.getInstance().getVersion(versionString);
     return version != null && version.isAtLeast(JavaSdkVersion.JDK_1_5);

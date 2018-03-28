@@ -15,8 +15,8 @@
  */
 package com.intellij;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -56,7 +56,7 @@ public class JavaTestUtil {
   }
 
   @Nullable
-  public static Sdk getSdk(@NotNull Module module) {
+  public static Sdk getSdk(@Nonnull Module module) {
     return ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
   }
 }

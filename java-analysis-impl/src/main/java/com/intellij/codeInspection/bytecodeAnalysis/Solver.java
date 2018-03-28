@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 final class Solver
 {
@@ -184,7 +184,7 @@ final class Solver
 	}
 
 	// substitute id -> value into pending
-	HResult substitute(@NotNull HPending pending, @NotNull HKey id, @NotNull Value value)
+	HResult substitute(@Nonnull HPending pending, @Nonnull HKey id, @Nonnull Value value)
 	{
 		HComponent[] sum = pending.delta;
 		for(HComponent intIdComponent : sum)
@@ -197,8 +197,8 @@ final class Solver
 		return normalize(sum);
 	}
 
-	@NotNull
-	HResult normalize(@NotNull HComponent[] sum)
+	@Nonnull
+	HResult normalize(@Nonnull HComponent[] sum)
 	{
 		Value acc = lattice.bot;
 		boolean computableNow = true;

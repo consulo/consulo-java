@@ -16,10 +16,10 @@
 
 package com.intellij.testIntegration;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.lang.Language;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -31,38 +31,38 @@ public interface TestFramework
 {
 	ExtensionPointName<TestFramework> EXTENSION_NAME = ExtensionPointName.create("consulo.java.testFramework");
 
-	@NotNull
+	@Nonnull
 	String getName();
 
-	@NotNull
+	@Nonnull
 	Icon getIcon();
 
-	boolean isLibraryAttached(@NotNull Module module);
+	boolean isLibraryAttached(@Nonnull Module module);
 
 	@Nullable
 	String getLibraryPath();
 
-	@Nullable
+	@javax.annotation.Nullable
 	String getDefaultSuperClass();
 
-	boolean isTestClass(@NotNull PsiElement clazz);
+	boolean isTestClass(@Nonnull PsiElement clazz);
 
-	boolean isPotentialTestClass(@NotNull PsiElement clazz);
-
-	@Nullable
-	PsiElement findSetUpMethod(@NotNull PsiElement clazz);
+	boolean isPotentialTestClass(@Nonnull PsiElement clazz);
 
 	@Nullable
-	PsiElement findTearDownMethod(@NotNull PsiElement clazz);
+	PsiElement findSetUpMethod(@Nonnull PsiElement clazz);
 
 	@Nullable
-	PsiElement findOrCreateSetUpMethod(@NotNull PsiElement clazz) throws IncorrectOperationException;
+	PsiElement findTearDownMethod(@Nonnull PsiElement clazz);
+
+	@Nullable
+	PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException;
 
 	FileTemplateDescriptor getSetUpMethodFileTemplateDescriptor();
 
 	FileTemplateDescriptor getTearDownMethodFileTemplateDescriptor();
 
-	@NotNull
+	@Nonnull
 	FileTemplateDescriptor getTestMethodFileTemplateDescriptor();
 
 	/**
@@ -80,6 +80,6 @@ public interface TestFramework
 		return isTestMethod(element);
 	}
 
-	@NotNull
+	@Nonnull
 	Language getLanguage();
 }

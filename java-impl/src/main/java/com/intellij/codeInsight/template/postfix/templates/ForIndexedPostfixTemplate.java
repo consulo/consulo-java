@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.MacroCallNode;
@@ -27,16 +29,14 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
-  protected ForIndexedPostfixTemplate(@NotNull String key, @NotNull String example) {
+  protected ForIndexedPostfixTemplate(@Nonnull String key, @Nonnull String example) {
     super(key, example);
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     return expr != null && (JavaPostfixTemplatesUtils.isNumber(expr.getType()) ||
                             JavaPostfixTemplatesUtils.isArray(expr.getType()) ||
@@ -44,7 +44,7 @@ public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public void expand(@NotNull PsiElement context, @NotNull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     if (expr == null) {
       PostfixTemplatesUtils.showErrorHint(context.getProject(), editor);
@@ -82,17 +82,17 @@ public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
     manager.startTemplate(editor, template);
   }
 
-  @NotNull
-  protected abstract String getComparativeSign(@NotNull PsiExpression expr);
+  @Nonnull
+  protected abstract String getComparativeSign(@Nonnull PsiExpression expr);
 
-  @Nullable
-  protected abstract Pair<String, String> calculateBounds(@NotNull PsiExpression expression);
+  @javax.annotation.Nullable
+  protected abstract Pair<String, String> calculateBounds(@Nonnull PsiExpression expression);
 
-  @NotNull
+  @Nonnull
   protected abstract String getOperator();
 
-  @Nullable
-  protected static String getExpressionBound(@NotNull PsiExpression expr) {
+  @javax.annotation.Nullable
+  protected static String getExpressionBound(@Nonnull PsiExpression expr) {
     PsiType type = expr.getType();
     if (JavaPostfixTemplatesUtils.isNumber(type)) {
       return expr.getText();
@@ -106,8 +106,8 @@ public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
     return null;
   }
 
-  @NotNull
-  private static String suggestIndexType(@NotNull PsiExpression expr) {
+  @Nonnull
+  private static String suggestIndexType(@Nonnull PsiExpression expr) {
     PsiType type = expr.getType();
     if (JavaPostfixTemplatesUtils.isNumber(type)) {
       return type.getCanonicalText();

@@ -20,7 +20,7 @@
  */
 package com.intellij.analysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.impl.dataRules.GetDataRule;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -33,7 +33,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 
 public class AnalysisScopeRule implements GetDataRule<AnalysisScope>
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public Key<AnalysisScope> getKey()
 	{
@@ -41,7 +41,7 @@ public class AnalysisScopeRule implements GetDataRule<AnalysisScope>
 	}
 
 	@Override
-	public AnalysisScope getData(@NotNull final DataProvider dataProvider)
+	public AnalysisScope getData(@Nonnull final DataProvider dataProvider)
 	{
 		final Object psiFile = dataProvider.getDataUnchecked(LangDataKeys.PSI_FILE);
 		if(psiFile instanceof PsiJavaFile)

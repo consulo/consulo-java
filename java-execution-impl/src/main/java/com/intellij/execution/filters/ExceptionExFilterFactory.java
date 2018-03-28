@@ -21,8 +21,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -47,9 +47,9 @@ import com.intellij.util.ui.UIUtil;
  */
 public class ExceptionExFilterFactory implements ExceptionFilterFactory
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public Filter create(@NotNull GlobalSearchScope searchScope)
+	public Filter create(@Nonnull GlobalSearchScope searchScope)
 	{
 		return new MyFilter(searchScope);
 	}
@@ -58,7 +58,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory
 	{
 		private final ExceptionInfoCache myCache;
 
-		public MyFilter(@NotNull final GlobalSearchScope scope)
+		public MyFilter(@Nonnull final GlobalSearchScope scope)
 		{
 			myCache = new ExceptionInfoCache(scope);
 		}
@@ -76,7 +76,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory
 		}
 
 		@Override
-		public void applyHeavyFilter(@NotNull final Document copiedFragment, final int startOffset, int startLineNumber, @NotNull final Consumer<AdditionalHighlight> consumer)
+		public void applyHeavyFilter(@Nonnull final Document copiedFragment, final int startOffset, int startLineNumber, @Nonnull final Consumer<AdditionalHighlight> consumer)
 		{
 			Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new THashMap<String, Trinity<TextRange, TextRange, TextRange>>();
 			final Trinity<TextRange, TextRange, TextRange> emptyInfo = Trinity.create(null, null, null);
@@ -152,9 +152,9 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory
 				final Color color = UIUtil.getInactiveTextColor();
 				consumer.consume(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset())
 				{
-					@NotNull
+					@Nonnull
 					@Override
-					public TextAttributes getTextAttributes(@Nullable TextAttributes source)
+					public TextAttributes getTextAttributes(@javax.annotation.Nullable TextAttributes source)
 					{
 						return new TextAttributes(null, null, color, EffectType.BOLD_DOTTED_LINE, Font.PLAIN);
 					}
@@ -162,7 +162,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory
 			}
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getUpdateMessage()
 		{

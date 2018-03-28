@@ -22,7 +22,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.AddAnnotationFix;
@@ -42,19 +43,19 @@ import com.intellij.util.IncorrectOperationException;
 
 public abstract class AddAnnotationIntention extends BaseIntentionAction
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
 		return CodeInsightBundle.message("intention.add.annotation.family");
 	}
 
-	@NotNull
-	public abstract Pair<String, String[]> getAnnotations(@NotNull Project project);
+	@Nonnull
+	public abstract Pair<String, String[]> getAnnotations(@Nonnull Project project);
 
 	// include not in project files
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		final PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
 		if(owner == null || owner.getManager().isInProject(owner) && !CodeStyleSettingsManager.getSettings(project).USE_EXTERNAL_ANNOTATIONS)
@@ -90,7 +91,7 @@ public abstract class AddAnnotationIntention extends BaseIntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
 		if(owner == null || !owner.isValid())

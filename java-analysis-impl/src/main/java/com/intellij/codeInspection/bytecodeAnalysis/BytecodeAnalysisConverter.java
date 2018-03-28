@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.ThreadLocalCachedValue;
 import com.intellij.openapi.util.text.StringUtil;
@@ -75,8 +75,8 @@ public class BytecodeAnalysisConverter {
   /**
    * Converts an equation over asm keys into equation over small hash keys.
    */
-  @NotNull
-  static DirectionResultPair convert(@NotNull Equation equation, @NotNull MessageDigest md) {
+  @Nonnull
+  static DirectionResultPair convert(@Nonnull Equation equation, @Nonnull MessageDigest md) {
     ProgressManager.checkCanceled();
 
     Result rhs = equation.rhs;
@@ -129,8 +129,8 @@ public class BytecodeAnalysisConverter {
   /**
    * Converts an asm method key to a small hash key (HKey)
    */
-  @NotNull
-  public static HKey asmKey(@NotNull Key key, @NotNull MessageDigest md) {
+  @Nonnull
+  public static HKey asmKey(@Nonnull Key key, @Nonnull MessageDigest md) {
     byte[] classDigest = md.digest(key.method.internalClassName.getBytes(CharsetToolkit.UTF8_CHARSET));
     md.update(key.method.methodName.getBytes(CharsetToolkit.UTF8_CHARSET));
     md.update(key.method.methodDesc.getBytes(CharsetToolkit.UTF8_CHARSET));
@@ -146,7 +146,7 @@ public class BytecodeAnalysisConverter {
    * Returns null if conversion is impossible (something is not resolvable).
    */
   @Nullable
-  public static HKey psiKey(@NotNull PsiMethod psiMethod, @NotNull Direction direction, @NotNull MessageDigest md) {
+  public static HKey psiKey(@Nonnull PsiMethod psiMethod, @Nonnull Direction direction, @Nonnull MessageDigest md) {
     final PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class, false);
     if (psiClass == null) {
       return null;
@@ -166,7 +166,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static byte[] psiClassDigest(@NotNull PsiClass psiClass, @NotNull MessageDigest md) {
+  private static byte[] psiClassDigest(@Nonnull PsiClass psiClass, @Nonnull MessageDigest md) {
     String descriptor = descriptor(psiClass, 0, false);
     if (descriptor == null) {
       return null;
@@ -175,7 +175,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static byte[] methodDigest(@NotNull PsiMethod psiMethod, @NotNull MessageDigest md) {
+  private static byte[] methodDigest(@Nonnull PsiMethod psiMethod, @Nonnull MessageDigest md) {
     String descriptor = descriptor(psiMethod);
     if (descriptor == null) {
       return null;
@@ -184,7 +184,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static String descriptor(@NotNull PsiMethod psiMethod) {
+  private static String descriptor(@Nonnull PsiMethod psiMethod) {
     StringBuilder sb = new StringBuilder();
     final PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class, false);
     if (psiClass == null) {
@@ -229,7 +229,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static String descriptor(@NotNull PsiClass psiClass, int dimensions, boolean full) {
+  private static String descriptor(@Nonnull PsiClass psiClass, int dimensions, boolean full) {
     PsiFile containingFile = psiClass.getContainingFile();
     if (!(containingFile instanceof PsiClassOwner)) {
       LOG.debug("containingFile was not resolved for " + psiClass.getQualifiedName());
@@ -266,7 +266,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static String descriptor(@NotNull PsiType psiType) {
+  private static String descriptor(@Nonnull PsiType psiType) {
     int dimensions = 0;
     psiType = TypeConversionUtil.erasure(psiType);
     if (psiType instanceof PsiArrayType) {
@@ -369,7 +369,7 @@ public class BytecodeAnalysisConverter {
    * @return Direction object
    * @see    #mkDirectionKey(Direction)
    */
-  @NotNull
+  @Nonnull
   static Direction extractDirection(int directionKey) {
     if (directionKey == 0) {
       return Out;
@@ -403,8 +403,8 @@ public class BytecodeAnalysisConverter {
    * @param primaryKey primary stable keys
    * @return corresponding (stable!) keys
    */
-  @NotNull
-  public static ArrayList<HKey> mkInOutKeys(@NotNull PsiMethod psiMethod, @NotNull HKey primaryKey) {
+  @Nonnull
+  public static ArrayList<HKey> mkInOutKeys(@Nonnull PsiMethod psiMethod, @Nonnull HKey primaryKey) {
     PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
     ArrayList<HKey> keys = new ArrayList<HKey>(parameters.length * 2 + 2);
     keys.add(primaryKey);
@@ -425,7 +425,7 @@ public class BytecodeAnalysisConverter {
    * @param methodKey a primary key of a method being analyzed. not it is stable
    * @param arity arity of this method (hint for constructing @Contract annotations)
    */
-  public static void addMethodAnnotations(@NotNull Map<HKey, Value> solution, @NotNull MethodAnnotations methodAnnotations, @NotNull HKey methodKey, int arity) {
+  public static void addMethodAnnotations(@Nonnull Map<HKey, Value> solution, @Nonnull MethodAnnotations methodAnnotations, @Nonnull HKey methodKey, int arity) {
     List<String> contractClauses = new ArrayList<String>(arity * 2);
     Set<HKey> notNulls = methodAnnotations.notNulls;
     Set<HKey> pures = methodAnnotations.pures;
@@ -479,7 +479,7 @@ public class BytecodeAnalysisConverter {
     }
   }
 
-  private static String contractValueString(@NotNull Value v) {
+  private static String contractValueString(@Nonnull Value v) {
     switch (v) {
       case False: return "false";
       case True: return "true";

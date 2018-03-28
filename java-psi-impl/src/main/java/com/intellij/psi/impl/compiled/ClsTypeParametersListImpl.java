@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -22,18 +24,17 @@ import com.intellij.psi.impl.java.stubs.PsiTypeParameterListStub;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
  */
 public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypeParameterListStub> implements PsiTypeParameterList {
-  public ClsTypeParametersListImpl(@NotNull PsiTypeParameterListStub stub) {
+  public ClsTypeParametersListImpl(@Nonnull PsiTypeParameterListStub stub) {
     super(stub);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     final PsiTypeParameter[] params = getTypeParameters();
     if (params.length != 0) {
       buffer.append('<');
@@ -46,13 +47,13 @@ public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypePa
   }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getTypeParameters(), SourceTreeToPsiMap.<PsiTypeParameterList>treeToPsiNotNull(element).getTypeParameters());
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitTypeParameterList(this);
     }
@@ -73,10 +74,10 @@ public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypePa
   }
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
-                                     @NotNull ResolveState state,
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @NotNull PsiElement place) {
+                                     @Nonnull PsiElement place) {
     final PsiTypeParameter[] typeParameters = getTypeParameters();
     for (PsiTypeParameter parameter : typeParameters) {
       if (!processor.execute(parameter, state)) return false;

@@ -23,8 +23,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.PackageUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -292,7 +293,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor
 		return RefactorJBundle.message("extracted.class.command.name", newClassName);
 	}
 
-	@NotNull
+	@Nonnull
 	protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos)
 	{
 		return new ExtractClassUsageViewDescriptor(sourceClass);
@@ -580,7 +581,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor
 		return "private";
 	}
 
-	public void findUsages(@NotNull List<FixableUsageInfo> usages)
+	public void findUsages(@Nonnull List<FixableUsageInfo> usages)
 	{
 		for(PsiField field : fields)
 		{

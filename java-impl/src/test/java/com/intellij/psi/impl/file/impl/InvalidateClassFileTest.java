@@ -26,7 +26,7 @@ import com.intellij.psi.PsiTreeChangeAdapter;
 import com.intellij.psi.PsiTreeChangeEvent;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 
@@ -63,12 +63,12 @@ public class InvalidateClassFileTest extends PsiTestCase {
     final boolean[] notified = new boolean[] {false};
     final PsiTreeChangeAdapter listener = new PsiTreeChangeAdapter() {
       @Override
-      public void childRemoved(@NotNull PsiTreeChangeEvent event) {
+      public void childRemoved(@Nonnull PsiTreeChangeEvent event) {
         notified[0] = true;
       }
 
       @Override
-      public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
+      public void childrenChanged(@Nonnull PsiTreeChangeEvent event) {
         notified[0] = true;
       }
     };

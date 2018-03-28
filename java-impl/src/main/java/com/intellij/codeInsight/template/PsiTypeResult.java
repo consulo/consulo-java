@@ -21,7 +21,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author max, dsl
@@ -30,7 +30,7 @@ public class PsiTypeResult implements RecalculatableResult {
   private final SmartTypePointer myTypePointer;
   private final JavaPsiFacade myFacade;
 
-  public PsiTypeResult(@NotNull PsiType type, Project project) {
+  public PsiTypeResult(@Nonnull PsiType type, Project project) {
     final PsiType actualType = PsiUtil.convertAnonymousToBaseType(type);
     myTypePointer = SmartTypePointerManager.getInstance(project).createSmartTypePointer(actualType);
     myFacade = JavaPsiFacade.getInstance(project);

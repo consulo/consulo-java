@@ -22,8 +22,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.util.Comparing;
@@ -55,11 +55,11 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     myDomMethodClass = domMethodClass;
   }
 
-  @NotNull
+  @Nonnull
   protected abstract Collection<PsiClass> getPsiClasses(final ParentType parent, final ConvertContext context);
 
   @Nullable
-  protected abstract AbstractMethodParams getMethodParams(@NotNull ParentType parent);
+  protected abstract AbstractMethodParams getMethodParams(@Nonnull ParentType parent);
 
   public void bindReference(final GenericDomValue<PsiMethod> genericValue, final ConvertContext context, final PsiElement element) {
     assert element instanceof PsiMethod : "PsiMethod expected";
@@ -81,14 +81,14 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
       .message("error.cannot.resolve.0.1", IdeBundle.message("element.method"), getReferenceCanonicalText(s, getMethodParams(parent)));
   }
 
-  @NotNull
+  @Nonnull
   protected final ParentType getParent(final ConvertContext context) {
     ParentType parent = context.getInvocationElement().getParentOfType(myDomMethodClass, true);
     assert parent != null: "Can't get parent of type " + myDomMethodClass + " for " + context.getInvocationElement();
     return parent;
   }
 
-  public boolean isReferenceTo(@NotNull final PsiElement element, final String stringValue, final PsiMethod resolveResult,
+  public boolean isReferenceTo(@Nonnull final PsiElement element, final String stringValue, final PsiMethod resolveResult,
                                final ConvertContext context) {
     if (super.isReferenceTo(element, stringValue, resolveResult, context)) return true;
 
@@ -123,7 +123,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     }
   }
 
-  @NotNull
+  @Nonnull
   public Collection<? extends PsiMethod> getVariants(final ConvertContext context) {
     LinkedHashSet<PsiMethod> methodList = new LinkedHashSet<PsiMethod>();
     Processor<PsiMethod> processor = CommonProcessors.notNullProcessor(new CommonProcessors.CollectProcessor<PsiMethod>(methodList));

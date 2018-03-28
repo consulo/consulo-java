@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -59,12 +59,12 @@ public class JavaProjectCodeInsightSettings implements PersistentStateComponent<
 	@AbstractCollection(surroundWithTag = false, elementTag = "name", elementValueAttribute = "")
 	public List<String> excludedNames = ContainerUtil.newArrayList();
 
-	public static JavaProjectCodeInsightSettings getSettings(@NotNull Project project)
+	public static JavaProjectCodeInsightSettings getSettings(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, JavaProjectCodeInsightSettings.class);
 	}
 
-	public boolean isExcluded(@NotNull String name)
+	public boolean isExcluded(@Nonnull String name)
 	{
 		for(String excluded : excludedNames)
 		{
@@ -84,13 +84,13 @@ public class JavaProjectCodeInsightSettings implements PersistentStateComponent<
 		return false;
 	}
 
-	private static boolean nameMatches(@NotNull String name, String excluded)
+	private static boolean nameMatches(@Nonnull String name, String excluded)
 	{
 		int length = getMatchingLength(name, excluded);
 		return length > 0 && (name.length() == length || name.charAt(length) == '.');
 	}
 
-	private static int getMatchingLength(@NotNull String name, String excluded)
+	private static int getMatchingLength(@Nonnull String name, String excluded)
 	{
 		if(name.startsWith(excluded))
 		{

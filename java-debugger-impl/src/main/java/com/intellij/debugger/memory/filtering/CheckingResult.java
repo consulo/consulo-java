@@ -15,17 +15,17 @@
  */
 package com.intellij.debugger.memory.filtering;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
  */
 public interface CheckingResult
 {
-	@NotNull
+	@Nonnull
 	Result getResult();
 
-	@NotNull
+	@Nonnull
 	String getFailureDescription();
 
 	enum Result

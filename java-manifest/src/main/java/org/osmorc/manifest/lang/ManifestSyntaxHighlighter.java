@@ -27,7 +27,8 @@ package org.osmorc.manifest.lang;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.tree.IElementType;
@@ -62,7 +63,7 @@ public class ManifestSyntaxHighlighter extends LanguageVersionableSyntaxHighligh
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TextAttributesKey[] getTokenHighlights(IElementType tokenType)
 	{
 		return pack(keys.get(tokenType));

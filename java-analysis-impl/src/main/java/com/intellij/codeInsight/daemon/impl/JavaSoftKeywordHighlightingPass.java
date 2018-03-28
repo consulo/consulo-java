@@ -19,8 +19,8 @@ package com.intellij.codeInsight.daemon.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.lexer.JavaLexer;
 import com.intellij.openapi.editor.Document;
@@ -41,7 +41,7 @@ public class JavaSoftKeywordHighlightingPass extends TextEditorHighlightingPass
 	private final PsiJavaFile myFile;
 	private final List<HighlightInfo> myResults = new ArrayList<>();
 
-	public JavaSoftKeywordHighlightingPass(@NotNull PsiJavaFile file, @Nullable Document document)
+	public JavaSoftKeywordHighlightingPass(@Nonnull PsiJavaFile file, @javax.annotation.Nullable Document document)
 	{
 		super(file.getProject(), document);
 		myFile = file;
@@ -49,7 +49,7 @@ public class JavaSoftKeywordHighlightingPass extends TextEditorHighlightingPass
 
 	@RequiredReadAction
 	@Override
-	public void doCollectInformation(@NotNull ProgressIndicator progressIndicator)
+	public void doCollectInformation(@Nonnull ProgressIndicator progressIndicator)
 	{
 		LanguageLevel languageLevel = myFile.getLanguageLevel();
 

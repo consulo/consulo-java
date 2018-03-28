@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.junit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.execution.SingleClassConfiguration;
 import com.intellij.openapi.module.Module;
@@ -138,7 +139,7 @@ public class RefactoringListeners
 			myPath = path;
 		}
 
-		public void elementRenamedOrMoved(@NotNull final PsiElement newElement)
+		public void elementRenamedOrMoved(@Nonnull final PsiElement newElement)
 		{
 			T newElement1 = (T) newElement;
 			String qualifiedName = getQualifiedName(newElement1);
@@ -162,7 +163,7 @@ public class RefactoringListeners
 		protected abstract String getQualifiedName(T element);
 
 		@Override
-		public void undoElementMovedOrRenamed(@NotNull PsiElement newElement, @NotNull String oldQualifiedName)
+		public void undoElementMovedOrRenamed(@Nonnull PsiElement newElement, @Nonnull String oldQualifiedName)
 		{
 			myAccessor.setName(oldQualifiedName);
 		}

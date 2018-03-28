@@ -17,7 +17,7 @@ package com.intellij.refactoring.extractMethod;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
@@ -130,7 +130,7 @@ public class ExtractMethodUtil
 		}
 	}
 
-	public static void addCastsToEnsureResolveTarget(@NotNull final PsiMethod oldTarget, @NotNull final PsiMethodCallExpression call) throws IncorrectOperationException
+	public static void addCastsToEnsureResolveTarget(@Nonnull final PsiMethod oldTarget, @Nonnull final PsiMethodCallExpression call) throws IncorrectOperationException
 	{
 		final PsiMethod newTarget = call.resolveMethod();
 		final PsiManager manager = oldTarget.getManager();

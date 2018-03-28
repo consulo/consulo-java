@@ -18,13 +18,13 @@ package com.intellij.spi.parsing;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.spi.SPILanguage;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
  */
 public class SPIElementType extends IElementType {
-  public SPIElementType(@NotNull @NonNls String debugName) {
+  public SPIElementType(@Nonnull @NonNls String debugName) {
     super(debugName, SPILanguage.INSTANCE);
   }
 }

@@ -17,7 +17,8 @@ package com.intellij.openapi.roots.impl;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.DependencyScope;
@@ -41,7 +42,7 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
 	}
 
 	@Override
-	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
@@ -55,7 +56,7 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
 	}
 
 	@Override
-	public AsyncResult<Void> addDependency(@NotNull Collection<Module> from, @NotNull ExternalLibraryDescriptor libraryDescriptor, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@Nonnull Collection<Module> from, @Nonnull ExternalLibraryDescriptor libraryDescriptor, @Nonnull DependencyScope scope)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
@@ -69,7 +70,7 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
 	}
 
 	@Override
-	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
@@ -83,7 +84,7 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
 	}
 
 	@Override
-	public AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel languageLevel)
+	public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel languageLevel)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
@@ -96,7 +97,7 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
 		return AsyncResult.rejected();
 	}
 
-	@NotNull
+	@Nonnull
 	private JavaProjectModelModifier[] getModelModifiers()
 	{
 		return JavaProjectModelModifier.EP_NAME.getExtensions(myProject);

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -49,7 +49,7 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 	private Boolean myIsPrimitive = null;
 	private final boolean myIsStatic;
 
-	public FieldDescriptorImpl(Project project, ObjectReference objRef, @NotNull Field field)
+	public FieldDescriptorImpl(Project project, ObjectReference objRef, @Nonnull Field field)
 	{
 		super(project);
 		myObject = objRef;
@@ -149,7 +149,7 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getDeclaredType()
 	{
@@ -188,7 +188,7 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@NotNull String expression, @NotNull XModificationCallback callback)
+			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
 			{
 				final DebuggerContextImpl debuggerContext = DebuggerManagerEx.getInstanceEx(getProject()).getContext();
 				FieldDescriptorImpl fieldDescriptor = FieldDescriptorImpl.this;

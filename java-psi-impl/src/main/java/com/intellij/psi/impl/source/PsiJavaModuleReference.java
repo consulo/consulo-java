@@ -20,8 +20,8 @@ import static com.intellij.psi.util.PsiModificationTracker.OUT_OF_CODE_BLOCK_MOD
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
@@ -46,19 +46,19 @@ import com.intellij.util.IncorrectOperationException;
 
 public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleReferenceElement>
 {
-	public PsiJavaModuleReference(@NotNull PsiJavaModuleReferenceElement element)
+	public PsiJavaModuleReference(@Nonnull PsiJavaModuleReferenceElement element)
 	{
 		super(element, new TextRange(0, element.getTextLength()), false);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText()
 	{
 		return getElement().getReferenceText();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ResolveResult[] multiResolve(boolean incompleteCode)
 	{
@@ -66,7 +66,7 @@ public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleR
 	}
 
 	@Override
-	public PsiElement handleElementRename(@NotNull String newName) throws IncorrectOperationException
+	public PsiElement handleElementRename(@Nonnull String newName) throws IncorrectOperationException
 	{
 		PsiJavaModuleReferenceElement element = getElement();
 		if(element instanceof PsiCompiledElement)
@@ -87,9 +87,9 @@ public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleR
 	{
 		private static final ResolveCache.PolyVariantResolver<PsiJavaModuleReference> INSTANCE = new Resolver();
 
-		@NotNull
+		@Nonnull
 		@Override
-		public ResolveResult[] resolve(@NotNull PsiJavaModuleReference reference, boolean incompleteCode)
+		public ResolveResult[] resolve(@Nonnull PsiJavaModuleReference reference, boolean incompleteCode)
 		{
 			PsiFile file = reference.getElement().getContainingFile();
 			String moduleName = reference.getCanonicalText();
@@ -122,14 +122,14 @@ public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleR
 	private static final Key<CachedValue<Collection<PsiJavaModule>>> K_INCOMPLETE = Key.create("java.module.ref.text.resolve.incomplete");
 
 	@Nullable
-	public static PsiJavaModule resolve(@NotNull PsiElement refOwner, String refText, boolean incompleteCode)
+	public static PsiJavaModule resolve(@Nonnull PsiElement refOwner, String refText, boolean incompleteCode)
 	{
 		Collection<PsiJavaModule> modules = multiResolve(refOwner, refText, incompleteCode);
 		return modules.size() == 1 ? modules.iterator().next() : null;
 	}
 
-	@NotNull
-	public static Collection<PsiJavaModule> multiResolve(@NotNull final PsiElement refOwner, final String refText, final boolean incompleteCode)
+	@Nonnull
+	public static Collection<PsiJavaModule> multiResolve(@Nonnull final PsiElement refOwner, final String refText, final boolean incompleteCode)
 	{
 		if(StringUtil.isEmpty(refText))
 		{

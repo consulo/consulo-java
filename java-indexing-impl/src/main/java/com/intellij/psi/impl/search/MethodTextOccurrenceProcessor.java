@@ -17,7 +17,8 @@ package com.intellij.psi.impl.search;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.search.RequestResultProcessor;
 import com.intellij.psi.util.MethodSignature;
@@ -35,7 +36,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor
 	protected final PsiClass myContainingClass;
 	protected final boolean myStrictSignatureSearch;
 
-	public MethodTextOccurrenceProcessor(@NotNull final PsiClass aClass,
+	public MethodTextOccurrenceProcessor(@Nonnull final PsiClass aClass,
 			final boolean strictSignatureSearch,
 			final PsiMethod... methods)
 	{
@@ -46,9 +47,9 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor
 	}
 
 	@Override
-	public final boolean processTextOccurrence(@NotNull PsiElement element,
+	public final boolean processTextOccurrence(@Nonnull PsiElement element,
 			int offsetInElement,
-			@NotNull final Processor<PsiReference> consumer)
+			@Nonnull final Processor<PsiReference> consumer)
 	{
 		for(PsiReference ref : ourReferenceService.getReferences(element, new PsiReferenceService.Hints(myMethods[0],
 				offsetInElement)))

@@ -34,7 +34,6 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.rename.inplace.InplaceRefactoring;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBList;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -96,8 +95,8 @@ public class ReassignVariableUtil {
     return false;
   }
 
-  @Nullable
-  static PsiType getVariableType(@Nullable PsiDeclarationStatement declaration) {
+  @javax.annotation.Nullable
+  static PsiType getVariableType(@javax.annotation.Nullable PsiDeclarationStatement declaration) {
     if (declaration != null) {
       final PsiElement[] declaredElements = declaration.getDeclaredElements();
       if (declaredElements.length > 0 && declaredElements[0] instanceof PsiVariable) {

@@ -22,7 +22,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.Result;
@@ -108,7 +107,7 @@ public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHan
       });
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiFile obtainContainingFile(PsiElement element, PsiElement[] elements) {
     final PsiClass[] classes = ((PsiClassOwner)element.getParent()).getClasses();
     final Set<PsiClass> nonMovedClasses = new HashSet<PsiClass>();

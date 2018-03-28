@@ -30,11 +30,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
@@ -230,13 +232,13 @@ public class JavaDocInfoGenerator
 		};
 	}
 
-	private static PsiDocTag getParamTagByName(@NotNull PsiDocComment comment, String name)
+	private static PsiDocTag getParamTagByName(@Nonnull PsiDocComment comment, String name)
 	{
 		PsiDocTag[] tags = comment.findTagsByName("param");
 		return getTagByName(tags, name);
 	}
 
-	private static PsiDocTag getTagByName(@NotNull PsiDocTag[] tags, String name)
+	private static PsiDocTag getTagByName(@Nonnull PsiDocTag[] tags, String name)
 	{
 		for(PsiDocTag tag : tags)
 		{
@@ -296,8 +298,8 @@ public class JavaDocInfoGenerator
 		return fixupDoc(buffer);
 	}
 
-	@Nullable
-	private String fixupDoc(@NotNull final StringBuilder buffer)
+	@javax.annotation.Nullable
+	private String fixupDoc(@Nonnull final StringBuilder buffer)
 	{
 		String text = buffer.toString();
 		if(text.isEmpty())
@@ -351,7 +353,7 @@ public class JavaDocInfoGenerator
 	 * Converts a relative link into {@link DocumentationManagerProtocol#PSI_ELEMENT_PROTOCOL PSI_ELEMENT_PROTOCOL}-type link if possible
 	 */
 	@Nullable
-	static String createReferenceForRelativeLink(@NotNull String relativeLink, @NotNull PsiElement contextElement)
+	static String createReferenceForRelativeLink(@Nonnull String relativeLink, @Nonnull PsiElement contextElement)
 	{
 		String fragment = null;
 		int hashPosition = relativeLink.indexOf('#');
@@ -540,7 +542,7 @@ public class JavaDocInfoGenerator
 		return buf.toString();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String generateDocInfo(List<String> docURLs)
 	{
 		StringBuilder buffer = new StringBuilder();
@@ -992,7 +994,7 @@ public class JavaDocInfoGenerator
 	 * Finds doc comment immediately preceding package statement
 	 */
 	@Nullable
-	private static ASTNode findRelevantCommentNode(@NotNull ASTNode fileNode)
+	private static ASTNode findRelevantCommentNode(@Nonnull ASTNode fileNode)
 	{
 		ASTNode node = fileNode.findChildByType(JavaElementType.PACKAGE_STATEMENT);
 		if(node == null)
@@ -1081,7 +1083,7 @@ public class JavaDocInfoGenerator
 	}
 
 	public static
-	@Nullable
+	@javax.annotation.Nullable
 	PsiExpression calcInitializerExpression(PsiVariable variable)
 	{
 		PsiExpression initializer = variable.getInitializer();
@@ -1183,7 +1185,7 @@ public class JavaDocInfoGenerator
 		}
 	}
 
-	private static void generateAnnotations(@NotNull StringBuilder buffer, @NotNull PsiModifierListOwner owner, boolean generateLink, boolean splitAnnotations, boolean useShortNames)
+	private static void generateAnnotations(@Nonnull StringBuilder buffer, @Nonnull PsiModifierListOwner owner, boolean generateLink, boolean splitAnnotations, boolean useShortNames)
 	{
 		final PsiModifierList ownerModifierList = owner.getModifierList();
 		if(ownerModifierList == null)
@@ -2120,7 +2122,7 @@ public class JavaDocInfoGenerator
 	}
 
 	private
-	@Nullable
+	@javax.annotation.Nullable
 	ParamInfo findDocTag(PsiDocTag[] localTags, String paramName, PsiMethod method, DocTagLocator<PsiDocTag> tagLocator)
 	{
 		PsiDocTag localTag = getTagByName(localTags, paramName);
@@ -2409,7 +2411,7 @@ public class JavaDocInfoGenerator
 	/**
 	 * @return Length of the generated label.
 	 */
-	public static int generateLink(StringBuilder buffer, String refText, String label, @NotNull PsiElement context, boolean plainLink)
+	public static int generateLink(StringBuilder buffer, String refText, String label, @Nonnull PsiElement context, boolean plainLink)
 	{
 		if(label == null)
 		{
@@ -2793,8 +2795,8 @@ public class JavaDocInfoGenerator
 		});
 	}
 
-	@Nullable
-	private static PsiMethod findDelegateMethod(@NotNull PsiMethod method)
+	@javax.annotation.Nullable
+	private static PsiMethod findDelegateMethod(@Nonnull PsiMethod method)
 	{
 		PsiDocCommentOwner delegate = DocumentationDelegateProvider.findDocumentationDelegate(method);
 		return delegate instanceof PsiMethod ? (PsiMethod) delegate : null;
@@ -2820,7 +2822,7 @@ public class JavaDocInfoGenerator
 			inheritDocTagProvider = provider;
 		}
 
-		private ParamInfo(String paramName, @NotNull Pair<PsiDocTag, InheritDocProvider<PsiDocTag>> tagWithInheritProvider)
+		private ParamInfo(String paramName, @Nonnull Pair<PsiDocTag, InheritDocProvider<PsiDocTag>> tagWithInheritProvider)
 		{
 			this(paramName, tagWithInheritProvider.first, tagWithInheritProvider.second);
 		}
@@ -2839,7 +2841,7 @@ public class JavaDocInfoGenerator
 	{
 		private final StringBuilder myBuffer;
 
-		MyVisitor(@NotNull StringBuilder buffer)
+		MyVisitor(@Nonnull StringBuilder buffer)
 		{
 			myBuffer = buffer;
 		}

@@ -2,8 +2,8 @@ package com.intellij.codeInsight.hints;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiParameter;
 
@@ -16,20 +16,20 @@ class CallInfo
 	private final PsiParameter varArg;
 	private final List<PsiExpression> varArgExpressions;
 
-	CallInfo(@NotNull List<CallArgumentInfo> regularArgs, @Nullable PsiParameter varArg, @NotNull List<PsiExpression> varArgExpressions)
+	CallInfo(@Nonnull List<CallArgumentInfo> regularArgs, @javax.annotation.Nullable PsiParameter varArg, @Nonnull List<PsiExpression> varArgExpressions)
 	{
 		this.regularArgs = regularArgs;
 		this.varArg = varArg;
 		this.varArgExpressions = varArgExpressions;
 	}
 
-	@NotNull
+	@Nonnull
 	public List<CallArgumentInfo> getRegularArgs()
 	{
 		return regularArgs;
 	}
 
-	@NotNull
+	@Nonnull
 	public List<PsiExpression> getVarArgExpressions()
 	{
 		return varArgExpressions;

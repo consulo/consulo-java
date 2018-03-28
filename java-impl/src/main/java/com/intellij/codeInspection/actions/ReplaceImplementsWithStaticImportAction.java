@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.FileModificationService;
 import consulo.codeInsight.TargetElementUtil;
@@ -53,19 +53,19 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
   @NonNls private static final String FIND_CONSTANT_FIELD_USAGES = "Find constant field usages...";
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return "Replace Implements with Static Import";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
 
     final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
@@ -112,7 +112,7 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(file)) return;
 
     final int offset = editor.getCaretModel().getOffset();

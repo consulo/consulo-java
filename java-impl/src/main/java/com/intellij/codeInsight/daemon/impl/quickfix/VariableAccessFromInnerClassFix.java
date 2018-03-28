@@ -35,7 +35,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -49,7 +49,7 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
   private static final int COPY_TO_FINAL = 2;
   private static final Key<Map<PsiVariable,Boolean>>[] VARS = new Key[] {Key.create("VARS_TO_MAKE_FINAL"), Key.create("VARS_TO_TRANSFORM"), Key.create("???")};
 
-  public VariableAccessFromInnerClassFix(@NotNull PsiVariable variable, @NotNull PsiElement element) {
+  public VariableAccessFromInnerClassFix(@Nonnull PsiVariable variable, @Nonnull PsiElement element) {
     myVariable = variable;
     myContext = element;
     myFixType = getQuickFixType(variable);
@@ -59,7 +59,7 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     @NonNls String message;
     switch (myFixType) {
@@ -80,13 +80,13 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("make.final.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myContext.isValid() &&
            myContext.getManager().isInProject(myContext) &&
            myVariable.isValid() &&
@@ -100,7 +100,7 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(myContext, myVariable)) return;
     try {
       switch (myFixType) {
@@ -129,7 +129,7 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
     }
   }
 
-  @NotNull
+  @Nonnull
   private Collection<PsiVariable> getVariablesToFix() {
     Map<PsiVariable, Boolean> vars = myContext.getUserData(VARS[myFixType]);
     if (vars == null) myContext.putUserData(VARS[myFixType], vars = ContainerUtil.createConcurrentWeakMap());
@@ -140,7 +140,7 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
         return finalVars.put(psiVariable, Boolean.TRUE) == null;
       }
 
-      @NotNull
+      @Nonnull
       @Override
       public Iterator<PsiVariable> iterator() {
         return finalVars.keySet().iterator();
@@ -282,7 +282,7 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
     });
   }
 
-  private static int getQuickFixType(@NotNull PsiVariable variable) {
+  private static int getQuickFixType(@Nonnull PsiVariable variable) {
     PsiElement outerCodeBlock = PsiUtil.getVariableCodeBlock(variable, null);
     if (outerCodeBlock == null) return -1;
     List<PsiReferenceExpression> outerReferences = new ArrayList<PsiReferenceExpression>();
@@ -310,7 +310,7 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
     return type;
   }
 
-  private static boolean canBeFinal(@NotNull PsiVariable variable, @NotNull List<PsiReferenceExpression> references) {
+  private static boolean canBeFinal(@Nonnull PsiVariable variable, @Nonnull List<PsiReferenceExpression> references) {
     // if there is at least one assignment to this variable, it cannot be final
     Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems = new THashMap<PsiElement, Collection<PsiReferenceExpression>>();
     Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems = new THashMap<PsiElement, Collection<ControlFlowUtil.VariableInfo>>();

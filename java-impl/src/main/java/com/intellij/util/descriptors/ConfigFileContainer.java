@@ -19,7 +19,6 @@ package com.intellij.util.descriptors;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.ModificationTracker;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author nik
@@ -37,6 +36,6 @@ public interface ConfigFileContainer extends Disposable, ModificationTracker {
 
   ConfigFileInfoSet getConfiguration();
 
-  @Nullable
+  @javax.annotation.Nullable
   ConfigFile getConfigFile(ConfigFileMetaData metaData);
 }

@@ -22,8 +22,9 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
@@ -47,20 +48,20 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
 
   // subExpressionValue == Boolean.TRUE or Boolean.FALSE if subExpression evaluates to boolean constant and needs to be replaced
   //   otherwise subExpressionValue= null and we starting to simplify expression without any further knowledge
-  public SimplifyBooleanExpressionFix(@NotNull PsiExpression subExpression, Boolean subExpressionValue) {
+  public SimplifyBooleanExpressionFix(@Nonnull PsiExpression subExpression, Boolean subExpressionValue) {
     super(subExpression);
     mySubExpressionValue = subExpressionValue;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     PsiExpression expression = getSubExpression();
     return JavaQuickFixBundle.message("simplify.boolean.expression.text", expression.getText(), mySubExpressionValue);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("simplify.boolean.expression.family");
   }
@@ -76,7 +77,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull final Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     if (!isAvailable()) return;
     final PsiExpression expression = getSubExpression();
     LOG.assertTrue(expression.isValid());
@@ -208,7 +209,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
     simplifyIfStatement(newExpression);
   }
 
-  public static boolean canBeSimplified(@NotNull PsiExpression expression) {
+  public static boolean canBeSimplified(@Nonnull PsiExpression expression) {
     if (!(expression instanceof PsiConditionalExpression) && !PsiType.BOOLEAN.equals(expression.getType())) return false;
 
     final ExpressionVisitor expressionVisitor = new ExpressionVisitor(expression.getManager(), false);

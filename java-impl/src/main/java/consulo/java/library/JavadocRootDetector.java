@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.ui.RootDetector;
@@ -34,9 +35,9 @@ public class JavadocRootDetector extends RootDetector
 		super(OrderRootType.DOCUMENTATION, false, "JavaDocs");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Collection<VirtualFile> detectRoots(@NotNull VirtualFile rootCandidate, @NotNull ProgressIndicator progressIndicator)
+	public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile rootCandidate, @Nonnull ProgressIndicator progressIndicator)
 	{
 		List<VirtualFile> result = new ArrayList<VirtualFile>();
 		collectJavadocRoots(rootCandidate, result, progressIndicator);
@@ -48,7 +49,7 @@ public class JavadocRootDetector extends RootDetector
 		VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor()
 		{
 			@Override
-			public boolean visitFile(@NotNull VirtualFile file)
+			public boolean visitFile(@Nonnull VirtualFile file)
 			{
 				progressIndicator.checkCanceled();
 				if(file.isDirectory() && file.findChild("allclasses-frame.html") != null && file.findChild("allclasses-noframe.html") != null)

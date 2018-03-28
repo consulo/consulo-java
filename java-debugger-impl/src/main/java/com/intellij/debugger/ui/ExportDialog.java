@@ -42,7 +42,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ScrollPaneFactory;
 import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,7 +78,7 @@ public class ExportDialog extends DialogWrapper {
     setHorizontalStretch(1.5f);
   }
 
-  @NotNull
+  @Nonnull
   protected Action[] createActions(){
     return new Action[]{getOKAction(), myCopyToClipboardAction, getCancelAction(), getHelpAction()};
   }

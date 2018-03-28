@@ -1,12 +1,12 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.*;
 
 class Test {
-  @Nullable
+  @javax.annotation.Nullable
   String foo1() {
     return null;
   }
 
-  @NotNull
+  @Nonnull
   String foo2() {
     return "";
   }
@@ -15,27 +15,27 @@ class Test {
     return s;
   }
 
-  String foo4(@NotNull String s) {
+  String foo4(@Nonnull String s) {
     return s.substring(0);
   }
 
-  @NotNull
+  @Nonnull
   Integer foo5(Integer i) {
     return i++;
   }
 
-  @NotNull
+  @Nonnull
   Integer foo6(Integer i) {
     if (i == 0) return 1;
     return i * foo6(i--);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   Integer foo7(boolean flag) {
     return flag ? null : 1;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   Integer foo8(boolean flag) {
     if (flag) {
       return null;
@@ -45,36 +45,36 @@ class Test {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   String bar9() {
     return foo3("");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   String foo9() {
     return bar9();
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   String bar10() {
     return foo3("");
   }
 
-  @NotNull
+  @Nonnull
   String bar101() {
     return foo3("");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   String foo10(boolean flag) {
     return flag ? bar10() : bar101();
   }
 
-  @NotNull
+  @Nonnull
   String foo11() {
     class Foo{
-      @Nullable
+      @javax.annotation.Nullable
       String mess() {
         return null;
       }

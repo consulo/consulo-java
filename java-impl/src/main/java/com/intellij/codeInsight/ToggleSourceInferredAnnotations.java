@@ -17,8 +17,9 @@ package com.intellij.codeInsight;
 
 import static com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider.getAnnotationOwner;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.codeInsight.javadoc.AnnotationDocGenerator;
@@ -38,7 +39,7 @@ public class ToggleSourceInferredAnnotations extends BaseIntentionAction
 {
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -46,7 +47,7 @@ public class ToggleSourceInferredAnnotations extends BaseIntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull final Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file)
 	{
 		final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
 		final PsiModifierListOwner owner = getAnnotationOwner(leaf);
@@ -64,7 +65,7 @@ public class ToggleSourceInferredAnnotations extends BaseIntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS = !JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS;
 		DaemonCodeAnalyzer.getInstance(project).restart(file);

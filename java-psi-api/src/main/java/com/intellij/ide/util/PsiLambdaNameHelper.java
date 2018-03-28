@@ -19,8 +19,8 @@ import gnu.trove.THashMap;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.psi.PsiAnonymousClass;
@@ -39,8 +39,8 @@ public class PsiLambdaNameHelper
 {
 	private static final Key<ParameterizedCachedValue<Map<PsiLambdaExpression, String>, PsiClass>> LAMBDA_NAME = Key.create("ANONYMOUS_CLASS_NAME");
 
-	@Nullable
-	public static String getVMName(@NotNull PsiLambdaExpression lambdaExpression)
+	@javax.annotation.Nullable
+	public static String getVMName(@Nonnull PsiLambdaExpression lambdaExpression)
 	{
 		final PsiClass upper = PsiTreeUtil.getParentOfType(lambdaExpression, PsiClass.class);
 		if(upper == null)
@@ -84,7 +84,7 @@ public class PsiLambdaNameHelper
 		return "lambda" + getLambdaPrefix(lambdaExpression) + value.getValue(upper).get(lambdaExpression);
 	}
 
-	public static String getLambdaPrefix(@NotNull PsiLambdaExpression lambdaExpression)
+	public static String getLambdaPrefix(@Nonnull PsiLambdaExpression lambdaExpression)
 	{
 		PsiMember member = PsiTreeUtil.getParentOfType(lambdaExpression, PsiMethod.class, PsiClass.class, PsiField.class);
 		final String methodPrefix;

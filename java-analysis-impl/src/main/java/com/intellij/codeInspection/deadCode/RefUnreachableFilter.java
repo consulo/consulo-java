@@ -29,20 +29,21 @@ import com.intellij.codeInspection.GlobalInspectionTool;
 import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.util.RefFilter;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class RefUnreachableFilter extends RefFilter {
-  @NotNull
+  @Nonnull
   protected GlobalInspectionTool myTool;
-  @NotNull protected final GlobalInspectionContext myContext;
+  @Nonnull
+  protected final GlobalInspectionContext myContext;
 
-  public RefUnreachableFilter(@NotNull GlobalInspectionTool tool, @NotNull GlobalInspectionContext context) {
+  public RefUnreachableFilter(@Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
     myTool = tool;
     myContext = context;
   }
 
   @Override
-  public int getElementProblemCount(@NotNull RefJavaElement refElement) {
+  public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
     if (refElement instanceof RefParameter) return 0;
     if (refElement.isSyntheticJSP()) return 0;
     if (!(refElement instanceof RefMethod || refElement instanceof RefClass || refElement instanceof RefField)) return 0;

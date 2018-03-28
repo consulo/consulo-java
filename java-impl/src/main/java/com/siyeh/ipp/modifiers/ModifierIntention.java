@@ -38,21 +38,21 @@ import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
  */
 abstract class ModifierIntention extends Intention implements LowPriorityAction {
 
-  @NotNull
+  @Nonnull
   @Override
   protected final PsiElementPredicate getElementPredicate() {
     return new ModifierPredicate(getModifier());
   }
 
   @Override
-  protected final void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected final void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiMember member = (PsiMember)element.getParent();
     final PsiModifierList modifierList = member.getModifierList();
     if (modifierList == null) {
@@ -83,7 +83,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
     }
   }
 
-  private MultiMap<PsiElement, String> checkForConflicts(@NotNull final PsiMember member) {
+  private MultiMap<PsiElement, String> checkForConflicts(@Nonnull final PsiMember member) {
     if (member instanceof PsiClass && getModifier().equals(PsiModifier.PUBLIC)) {
       final PsiClass aClass = (PsiClass)member;
       final PsiElement parent = aClass.getParent();

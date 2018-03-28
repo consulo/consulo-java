@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.braces;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiArrayInitializerExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiType;
@@ -22,12 +24,11 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ArrayCreationExpressionPredicate();
   }
@@ -44,7 +45,7 @@ public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiArrayInitializerExpression arrayInitializerExpression =
       (PsiArrayInitializerExpression)element;

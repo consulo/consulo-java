@@ -19,13 +19,13 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.NullableNotNullDialog;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -130,12 +130,12 @@ public class NullableStuffInspection extends NullableStuffInspectionBase
 
 	public static class NavigateToNullLiteralArguments extends LocalQuickFixOnPsiElement
 	{
-		public NavigateToNullLiteralArguments(@NotNull PsiParameter element)
+		public NavigateToNullLiteralArguments(@Nonnull PsiParameter element)
 		{
 			super(element);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getText()
 		{
@@ -143,7 +143,7 @@ public class NullableStuffInspection extends NullableStuffInspectionBase
 		}
 
 		@Nls
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -151,7 +151,7 @@ public class NullableStuffInspection extends NullableStuffInspectionBase
 		}
 
 		@Override
-		public void invoke(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+		public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 		{
 			PsiParameter p = (PsiParameter) startElement;
 			final PsiMethod method = PsiTreeUtil.getParentOfType(p, PsiMethod.class);
@@ -174,7 +174,7 @@ public class NullableStuffInspection extends NullableStuffInspectionBase
 					UsageSearcher()
 			{
 				@Override
-				public void generate(@NotNull final Processor<Usage> processor)
+				public void generate(@Nonnull final Processor<Usage> processor)
 				{
 					ReadAction.run(() -> JavaNullMethodArgumentUtil.searchNullArgument(method, parameterIdx, (arg) -> processor.process(new UsageInfo2UsageAdapter(new UsageInfo(arg)))));
 				}

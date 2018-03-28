@@ -27,8 +27,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -139,7 +139,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 		extend(CompletionType.SMART, psiElement(), new CompletionProvider()
 		{
 			@Override
-			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+			public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 			{
 				if(SmartCastProvider.shouldSuggestCast(parameters))
 				{
@@ -251,7 +251,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 		extend(CompletionType.SMART, psiElement(), new MethodReferenceCompletionProvider());
 	}
 
-	@NotNull
+	@Nonnull
 	private static Consumer<LookupElement> decorateWithoutTypeCheck(final CompletionResultSet result, final Collection<ExpectedTypeInfo> infos)
 	{
 		return lookupElement -> result.addElement(decorate(lookupElement, infos));
@@ -274,7 +274,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result)
+	public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result)
 	{
 		if(parameters.getPosition() instanceof PsiComment)
 		{
@@ -289,13 +289,13 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 		return new SmartCompletionDecorator(lookupElement, infos);
 	}
 
-	@NotNull
+	@Nonnull
 	public static ExpectedTypeInfo[] getExpectedTypes(final CompletionParameters parameters)
 	{
 		return getExpectedTypes(parameters.getPosition(), parameters.getCompletionType() == CompletionType.SMART);
 	}
 
-	@NotNull
+	@Nonnull
 	public static ExpectedTypeInfo[] getExpectedTypes(PsiElement position, boolean voidable)
 	{
 		if(psiElement().withParent(psiElement(PsiReferenceExpression.class).withParent(PsiThrowStatement.class)).accepts(position))
@@ -360,7 +360,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public void beforeCompletion(@NotNull CompletionInitializationContext context)
+	public void beforeCompletion(@Nonnull CompletionInitializationContext context)
 	{
 		if(context.getCompletionType() != CompletionType.SMART)
 		{

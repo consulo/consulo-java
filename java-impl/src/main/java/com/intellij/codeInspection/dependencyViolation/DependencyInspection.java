@@ -20,13 +20,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.annotation.Nonnull;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.InspectionManager;
@@ -60,19 +61,19 @@ public class DependencyInspection extends BaseLocalInspectionTool {
   @NonNls public static final String SHORT_NAME = "Dependency";
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return DependencyInspection.GROUP_DISPLAY_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return DependencyInspection.DISPLAY_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return DependencyInspection.SHORT_NAME;
   }
@@ -96,7 +97,7 @@ public class DependencyInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@NotNull final PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly) {
     if (file == null) return null;
     if (file.getViewProvider().getPsi(JavaLanguage.INSTANCE) == null) return null;
     final DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
@@ -125,7 +126,7 @@ public class DependencyInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
@@ -137,19 +138,19 @@ public class DependencyInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("edit.dependency.rules.text", myRule.getDisplayText());
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return InspectionsBundle.message("edit.dependency.rules.family");
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       ShowSettingsUtil.getInstance().editConfigurable(project, new DependencyConfigurable(project));
     }
 

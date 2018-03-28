@@ -17,8 +17,8 @@ package com.intellij.codeInspection.dataFlow;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
@@ -144,7 +144,7 @@ public class NullnessUtil
 		return result != PsiSearchHelper.SearchCostResult.TOO_MANY_OCCURRENCES;
 	}
 
-	public static Nullness getExpressionNullness(@Nullable PsiExpression expression)
+	public static Nullness getExpressionNullness(@javax.annotation.Nullable PsiExpression expression)
 	{
 		expression = PsiUtil.skipParenthesizedExprDown(expression);
 		if(expression == null)
@@ -199,8 +199,8 @@ public class NullnessUtil
 	 * @param fact TRUE if NULLABLE, FALSE if NOT_NULL, null if UNKNOWN
 	 * @return the corresponding nullness value
 	 */
-	@NotNull
-	public static Nullness fromBoolean(@Nullable Boolean fact)
+	@Nonnull
+	public static Nullness fromBoolean(@javax.annotation.Nullable Boolean fact)
 	{
 		return fact == null ? Nullness.UNKNOWN : fact ? Nullness.NULLABLE : Nullness.NOT_NULL;
 	}
@@ -210,8 +210,8 @@ public class NullnessUtil
 	 *
 	 * @return TRUE if NULLABLE, FALSE if NOT_NULL, null if UNKNOWN
 	 */
-	@Nullable
-	public static Boolean toBoolean(@NotNull Nullness nullness)
+	@javax.annotation.Nullable
+	public static Boolean toBoolean(@Nonnull Nullness nullness)
 	{
 		return nullness == Nullness.UNKNOWN ? null : nullness == Nullness.NULLABLE;
 	}

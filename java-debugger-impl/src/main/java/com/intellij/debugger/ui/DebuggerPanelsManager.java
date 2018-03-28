@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.ui;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebugUIEnvironment;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -58,8 +58,8 @@ public class DebuggerPanelsManager implements ProjectComponent
 		return DebuggerManagerEx.getInstanceEx(myProject).getContextManager();
 	}
 
-	@Nullable
-	public RunContentDescriptor attachVirtualMachine(@NotNull ExecutionEnvironment environment,
+	@javax.annotation.Nullable
+	public RunContentDescriptor attachVirtualMachine(@Nonnull ExecutionEnvironment environment,
 			RunProfileState state,
 			RemoteConnection remoteConnection,
 			boolean pollConnection) throws ExecutionException
@@ -67,7 +67,7 @@ public class DebuggerPanelsManager implements ProjectComponent
 		return attachVirtualMachine(new DefaultDebugUIEnvironment(environment, state, remoteConnection, pollConnection));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public RunContentDescriptor attachVirtualMachine(DebugUIEnvironment environment) throws ExecutionException
 	{
 		final DebugEnvironment modelEnvironment = environment.getEnvironment();
@@ -93,8 +93,8 @@ public class DebuggerPanelsManager implements ProjectComponent
 		XDebugSession debugSession = XDebuggerManager.getInstance(myProject).startSessionAndShowTab(modelEnvironment.getSessionName(), environment.getReuseContent(), new XDebugProcessStarter()
 		{
 			@Override
-			@NotNull
-			public XDebugProcess start(@NotNull XDebugSession session)
+			@Nonnull
+			public XDebugProcess start(@Nonnull XDebugSession session)
 			{
 				return JavaDebugProcess.create(session, debuggerSession);
 			}
@@ -109,7 +109,7 @@ public class DebuggerPanelsManager implements ProjectComponent
 		myProject.getMessageBus().connect(myProject).subscribe(RunContentManager.TOPIC, new RunContentWithExecutorListener()
 		{
 			@Override
-			public void contentSelected(@Nullable RunContentDescriptor descriptor, @NotNull Executor executor)
+			public void contentSelected(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor)
 			{
 				if(executor == DefaultDebugExecutor.getDebugExecutorInstance())
 				{
@@ -126,7 +126,7 @@ public class DebuggerPanelsManager implements ProjectComponent
 			}
 
 			@Override
-			public void contentRemoved(@Nullable RunContentDescriptor descriptor, @NotNull Executor executor)
+			public void contentRemoved(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor)
 			{
 			}
 		});
@@ -138,7 +138,7 @@ public class DebuggerPanelsManager implements ProjectComponent
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getComponentName()
 	{
 		return "DebuggerPanelsManager";

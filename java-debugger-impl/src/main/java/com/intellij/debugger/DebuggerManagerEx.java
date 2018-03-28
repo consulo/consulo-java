@@ -17,8 +17,8 @@ package com.intellij.debugger;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerManagerListener;
@@ -49,6 +49,6 @@ public abstract class DebuggerManagerEx extends DebuggerManager
 
 	public abstract void removeDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
 
-	@Nullable
-	public abstract DebuggerSession attachVirtualMachine(@NotNull DebugEnvironment environment) throws ExecutionException;
+	@javax.annotation.Nullable
+	public abstract DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException;
 }

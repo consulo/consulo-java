@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ProjectTopics;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.highlighter.JavaClassFileType;
@@ -61,7 +62,7 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider<
 		myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, (oldExtension, newExtension) -> notifications.updateAllNotifications());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Key<EditorNotificationPanel> getKey()
 	{
@@ -70,7 +71,7 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider<
 
 	@RequiredReadAction
 	@Override
-	public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor)
+	public EditorNotificationPanel createNotificationPanel(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor)
 	{
 		if(file.getFileType() == JavaClassFileType.INSTANCE)
 		{
@@ -106,8 +107,8 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider<
 		return null;
 	}
 
-	@NotNull
-	private static EditorNotificationPanel createPanel(final @NotNull Project project, final @NotNull PsiFile file)
+	@Nonnull
+	private static EditorNotificationPanel createPanel(final @Nonnull Project project, final @Nonnull PsiFile file)
 	{
 		EditorNotificationPanel panel = new EditorNotificationPanel();
 		panel.setText(JavaCoreBundle.message("module.jdk.not.defined"));

@@ -3,8 +3,8 @@ package com.intellij.coverage;
 import java.io.File;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -22,13 +22,13 @@ public abstract class JavaCoverageEngineExtension
 
 	public abstract boolean isApplicableTo(@Nullable RunConfigurationBase conf);
 
-	public boolean suggestQualifiedName(@NotNull PsiFile sourceFile, PsiClass[] classes, Set<String> names)
+	public boolean suggestQualifiedName(@Nonnull PsiFile sourceFile, PsiClass[] classes, Set<String> names)
 	{
 		return false;
 	}
 
-	public boolean collectOutputFiles(@NotNull final PsiFile srcFile, @Nullable final VirtualFile output, @Nullable final VirtualFile testoutput,
-			@NotNull final CoverageSuitesBundle suite, @NotNull final Set<File> classFiles)
+	public boolean collectOutputFiles(@Nonnull final PsiFile srcFile, @javax.annotation.Nullable final VirtualFile output, @javax.annotation.Nullable final VirtualFile testoutput,
+			@Nonnull final CoverageSuitesBundle suite, @Nonnull final Set<File> classFiles)
 	{
 		return false;
 	}

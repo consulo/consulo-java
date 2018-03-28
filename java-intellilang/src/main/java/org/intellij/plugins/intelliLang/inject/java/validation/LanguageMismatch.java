@@ -26,8 +26,8 @@ import org.intellij.plugins.intelliLang.util.AnnotateFix;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,12 +43,12 @@ public class LanguageMismatch extends LocalInspectionTool {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Language Mismatch";
   }
@@ -68,8 +68,8 @@ public class LanguageMismatch extends LocalInspectionTool {
     return jPanel;
   }
 
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final Pair<String, ? extends Set<String>> annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationPair();
 
@@ -143,7 +143,7 @@ public class LanguageMismatch extends LocalInspectionTool {
               final PsiAnnotation annotation = annotations[annotations.length - 1];
               final String initializer = annotation.getParameterList().getText();
               final AnnotateFix fix = new AnnotateFix(declOwner, annotation.getQualifiedName(), initializer) {
-                @NotNull
+                @Nonnull
                 public String getName() {
                   return initializer == null ? super.getName() : super.getName() + initializer;
                 }
@@ -163,7 +163,7 @@ public class LanguageMismatch extends LocalInspectionTool {
     }
   }
 
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "LanguageMismatch";

@@ -17,7 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -89,8 +89,8 @@ public class StringUtils {
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})
-  @NotNull
-  public static String createSingularFromName(@NotNull String name) {
+  @Nonnull
+  public static String createSingularFromName(@Nonnull String name) {
     final int nameLength = name.length();
     final String singularName;
     if (name.endsWith("ies")) {
@@ -122,7 +122,7 @@ public class StringUtils {
     }
   }
 
-  @NotNull
+  @Nonnull
   private static String prependIndefiniteArticle(
     String singularName) {
     switch (singularName.charAt(0)) {

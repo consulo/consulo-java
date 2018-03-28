@@ -23,7 +23,7 @@ import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,13 +35,13 @@ public class OverlyLargePrimitiveArrayInitializerInspection
    */
   public int m_limit = 64;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "large.initializer.primitive.type.array.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer numElements = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

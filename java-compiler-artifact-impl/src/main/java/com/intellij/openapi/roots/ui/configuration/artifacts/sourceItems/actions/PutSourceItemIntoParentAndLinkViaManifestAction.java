@@ -18,8 +18,8 @@ package com.intellij.openapi.roots.ui.configuration.artifacts.sourceItems.action
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.roots.ui.configuration.artifacts.ArtifactEditorEx;
@@ -76,15 +76,15 @@ public class PutSourceItemIntoParentAndLinkViaManifestAction extends PutIntoDefa
 		presentation.setEnabled(enable);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private ParentElementsInfo findParentAndGrandParent(Artifact artifact)
 	{
 		final Ref<ParentElementsInfo> result = Ref.create(null);
 		ArtifactUtil.processParents(artifact, myArtifactEditor.getContext(), new ParentElementProcessor()
 		{
 			@Override
-			public boolean process(@NotNull CompositePackagingElement<?> element, @NotNull List<Pair<Artifact,
-					CompositePackagingElement<?>>> parents, @NotNull Artifact artifact)
+			public boolean process(@Nonnull CompositePackagingElement<?> element, @Nonnull List<Pair<Artifact,
+					CompositePackagingElement<?>>> parents, @Nonnull Artifact artifact)
 			{
 				if(parents.size() == 1)
 				{

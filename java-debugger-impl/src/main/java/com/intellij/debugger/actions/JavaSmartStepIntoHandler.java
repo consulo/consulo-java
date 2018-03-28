@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.SourcePosition;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
@@ -46,7 +46,7 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<SmartStepTarget> findSmartStepTargets(final SourcePosition position)
 	{
 		final int line = position.getLine();
@@ -101,7 +101,7 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler
 				final Stack<String> myParamNameStack = new Stack<String>();
 				private int myNextLambdaExpressionOrdinal = 0;
 
-				@Nullable
+				@javax.annotation.Nullable
 				private String getCurrentParamName()
 				{
 					return myParamNameStack.isEmpty() ? null : myParamNameStack.peek();

@@ -15,7 +15,6 @@
  */
 package com.intellij.debugger.memory.action;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.memory.ui.ClassesTable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -44,7 +43,7 @@ public abstract class ClassesActionBase extends AnAction
 
 	protected abstract void perform(AnActionEvent e);
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected ReferenceType getSelectedClass(AnActionEvent e)
 	{
 		return e.getData(ClassesTable.SELECTED_CLASS_KEY);

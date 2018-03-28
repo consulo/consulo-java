@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a Java code fragment the contents of which is a reference to a Java type.
@@ -32,7 +32,7 @@ public interface PsiTypeCodeFragment extends JavaCodeFragment
 	 * @throws TypeSyntaxException if the code fragment contains a syntax error.
 	 * @throws NoTypeException     if the contents of the code fragment is not a Java type.
 	 */
-	@NotNull
+	@Nonnull
 	PsiType getType() throws TypeSyntaxException, NoTypeException;
 
 	/**

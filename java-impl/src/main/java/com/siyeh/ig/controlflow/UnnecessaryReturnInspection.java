@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.DeleteUnnecessaryStatementFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -33,19 +33,19 @@ public class UnnecessaryReturnInspection extends BaseInspection {
   public boolean ignoreInThenBranch = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UnnecessaryReturnStatement";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.return.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     if (((Boolean)infos[0]).booleanValue()) {
       return InspectionGadgetsBundle.message("unnecessary.return.constructor.problem.descriptor");
@@ -77,7 +77,7 @@ public class UnnecessaryReturnInspection extends BaseInspection {
 
   private class UnnecessaryReturnVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitReturnStatement(@NotNull PsiReturnStatement statement) {
+    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
     /*  if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

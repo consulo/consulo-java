@@ -18,9 +18,11 @@ package com.intellij.psi.impl.compiled;
 import java.util.Arrays;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
@@ -47,7 +49,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	private final String myQualifiedName;
 	private final PsiReferenceParameterList myRefParameterList;
 
-	public ClsJavaCodeReferenceElementImpl(PsiElement parent, @NotNull String canonicalText)
+	public ClsJavaCodeReferenceElementImpl(PsiElement parent, @Nonnull String canonicalText)
 	{
 		myParent = parent;
 
@@ -61,7 +63,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return PsiElement.EMPTY_ARRAY;
@@ -92,13 +94,13 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getCanonicalText()
 	{
 		return myCanonicalText;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText(boolean annotated, @Nullable PsiAnnotation[] annotations)
 	{
@@ -129,16 +131,16 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	{
 		public static final Resolver INSTANCE = new Resolver();
 
-		@NotNull
+		@Nonnull
 		@Override
-		public JavaResolveResult[] resolve(@NotNull ClsJavaCodeReferenceElementImpl ref, @NotNull PsiFile containingFile, boolean incompleteCode)
+		public JavaResolveResult[] resolve(@Nonnull ClsJavaCodeReferenceElementImpl ref, @Nonnull PsiFile containingFile, boolean incompleteCode)
 		{
 			final JavaResolveResult resolveResult = ref.advancedResolveImpl(containingFile);
 			return resolveResult == null ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{resolveResult};
 		}
 	}
 
-	private JavaResolveResult advancedResolveImpl(@NotNull PsiFile containingFile)
+	private JavaResolveResult advancedResolveImpl(@Nonnull PsiFile containingFile)
 	{
 		PsiTypeElement[] typeElements = myRefParameterList == null ? PsiTypeElement.EMPTY_ARRAY : myRefParameterList.getTypeParameterElements();
 		PsiElement resolve = resolveElement(containingFile);
@@ -188,7 +190,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 		}
 	}
 
-	private void collectOuterClassTypeArgs(@NotNull PsiClass psiClass, final String canonicalText, final Map<PsiTypeParameter, PsiType> substitutionMap)
+	private void collectOuterClassTypeArgs(@Nonnull PsiClass psiClass, final String canonicalText, final Map<PsiTypeParameter, PsiType> substitutionMap)
 	{
 		final PsiClass containingClass = psiClass.getContainingClass();
 		if(containingClass != null)
@@ -218,7 +220,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Contract(pure = true)
 	private static String getOuterClassRef(String ref)
 	{
@@ -246,7 +248,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult advancedResolve(boolean incompleteCode)
 	{
 		final JavaResolveResult[] results = multiResolve(incompleteCode);
@@ -258,7 +260,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult[] multiResolve(boolean incompleteCode)
 	{
 		PsiFile file = getContainingFile();
@@ -278,7 +280,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Nullable
-	private PsiElement resolveElement(@NotNull PsiFile containingFile)
+	private PsiElement resolveElement(@Nonnull PsiFile containingFile)
 	{
 		PsiElement element = getParent();
 		while(element != null && !(element instanceof PsiFile))
@@ -324,7 +326,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	public void processVariants(@NotNull PsiScopeProcessor processor)
+	public void processVariants(@Nonnull PsiScopeProcessor processor)
 	{
 		throw new RuntimeException("Variants are not available for light references");
 	}
@@ -360,7 +362,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		throw cannotModifyException(this);
 	}
@@ -377,7 +379,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Object[] getVariants()
 	{
 		throw new RuntimeException("Variants are not available for references to compiled code");
@@ -390,19 +392,19 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	public void appendMirrorText(final int indentLevel, @NotNull final StringBuilder buffer)
+	public void appendMirrorText(final int indentLevel, @Nonnull final StringBuilder buffer)
 	{
 		buffer.append(getCanonicalText());
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.JAVA_CODE_REFERENCE);
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -427,7 +429,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getTypeParameters()
 	{
 		return myRefParameterList == null ? PsiType.EMPTY_ARRAY : myRefParameterList.getTypeArguments();

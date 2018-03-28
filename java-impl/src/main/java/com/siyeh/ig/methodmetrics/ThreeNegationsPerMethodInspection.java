@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,13 +36,13 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   public boolean ignoreInAssert = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MethodWithMoreThanThreeNegations";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "three.negations.per.method.display.name");
@@ -57,7 +57,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer negationCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -72,7 +72,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   private class ThreeNegationsPerMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

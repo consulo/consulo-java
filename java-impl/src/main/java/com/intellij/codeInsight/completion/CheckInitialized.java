@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.psi.*;
@@ -37,13 +37,13 @@ class CheckInitialized implements ElementFilter
 	private final Set<PsiField> myNonInitializedFields;
 	private final boolean myInsideConstructorCall;
 
-	CheckInitialized(@NotNull PsiElement position)
+	CheckInitialized(@Nonnull PsiElement position)
 	{
 		myNonInitializedFields = getNonInitializedFields(position);
 		myInsideConstructorCall = isInsideConstructorCall(position);
 	}
 
-	static boolean isInsideConstructorCall(@NotNull PsiElement position)
+	static boolean isInsideConstructorCall(@Nonnull PsiElement position)
 	{
 		return ExpressionUtils.isConstructorInvocation(PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class)) && !JavaKeywordCompletion.AFTER_DOT.accepts(position);
 	}
@@ -141,7 +141,7 @@ class CheckInitialized implements ElementFilter
 	}
 
 	@Override
-	public boolean isAcceptable(Object element, @Nullable PsiElement context)
+	public boolean isAcceptable(Object element, @javax.annotation.Nullable PsiElement context)
 	{
 		if(element instanceof CandidateInfo)
 		{

@@ -15,25 +15,26 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SynchronizationUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class CallToNativeMethodWhileLockedInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "call.to.native.method.while.locked.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "call.to.native.method.while.locked.problem.descriptor");
@@ -49,7 +50,7 @@ public class CallToNativeMethodWhileLockedInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;

@@ -15,7 +15,8 @@
  */
 package consulo.java.psi.impl.source.tree;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.impl.source.tree.CoreJavaASTLeafFactory;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.impl.source.tree.PsiCommentImpl;
@@ -29,8 +30,8 @@ import consulo.lang.LanguageVersion;
 public class JavaASTLeafFactory extends CoreJavaASTLeafFactory
 {
 	@Override
-	@NotNull
-	public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion languageVersion, @NotNull final CharSequence text)
+	@Nonnull
+	public LeafElement createLeaf(@Nonnull final IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text)
 	{
 		if(type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT)
 		{

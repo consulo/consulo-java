@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ExtractMethodFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,13 +54,13 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   public boolean m_ignorePureConjunctionsDisjunctions = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overly.complex.boolean.expression.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer termCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message("overly.complex.boolean.expression.problem.descriptor", termCount);
@@ -114,19 +114,19 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   private class OverlyComplexBooleanExpressionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitPolyadicExpression(@NotNull PsiPolyadicExpression expression) {
+    public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
       super.visitPolyadicExpression(expression);
       checkExpression(expression);
     }
 
     @Override
-    public void visitPrefixExpression(@NotNull PsiPrefixExpression expression) {
+    public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       checkExpression(expression);
     }
 
     @Override
-    public void visitParenthesizedExpression(@NotNull PsiParenthesizedExpression expression) {
+    public void visitParenthesizedExpression(@Nonnull PsiParenthesizedExpression expression) {
       super.visitParenthesizedExpression(expression);
       checkExpression(expression);
     }

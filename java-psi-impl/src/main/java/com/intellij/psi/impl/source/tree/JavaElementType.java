@@ -17,9 +17,11 @@ package com.intellij.psi.impl.source.tree;
 
 import java.lang.reflect.Constructor;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.LighterASTNode;
@@ -70,7 +72,7 @@ public interface JavaElementType
 			myConstructor = ReflectionUtil.getDefaultConstructor(nodeClass);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -179,7 +181,7 @@ public interface JavaElementType
 			return new PsiCodeBlockImpl(text);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -252,7 +254,7 @@ public interface JavaElementType
 			}
 		};
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public ASTNode parseContents(final ASTNode chameleon)
 		{
@@ -271,7 +273,7 @@ public interface JavaElementType
 			}
 		};
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public ASTNode parseContents(final ASTNode chameleon)
 		{
@@ -290,7 +292,7 @@ public interface JavaElementType
 			}
 		};
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public ASTNode parseContents(final ASTNode chameleon)
 		{
@@ -335,7 +337,7 @@ public interface JavaElementType
 			super("DUMMY_ELEMENT", JavaLanguage.INSTANCE);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{

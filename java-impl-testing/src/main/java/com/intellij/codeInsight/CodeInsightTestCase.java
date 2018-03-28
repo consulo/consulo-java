@@ -23,8 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.junit.Assert;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandler;
 import com.intellij.ide.DataManager;
@@ -136,7 +136,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		configureByFile(filePath, null);
 	}
 
-	protected VirtualFile configureByFiles(@Nullable String projectRoot, String... files) throws Exception
+	protected VirtualFile configureByFiles(@javax.annotation.Nullable String projectRoot, String... files) throws Exception
 	{
 		final VirtualFile[] vFiles = new VirtualFile[files.length];
 		for(int i = 0; i < files.length; i++)
@@ -254,7 +254,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
 	}
 
-	protected VirtualFile configureByFiles(@Nullable final File rawProjectRoot, final VirtualFile... vFiles) throws IOException
+	protected VirtualFile configureByFiles(@javax.annotation.Nullable final File rawProjectRoot, final VirtualFile... vFiles) throws IOException
 	{
 		myFile = null;
 		myEditor = null;
@@ -852,23 +852,23 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		action.actionPerformed(event);
 	}
 
-	@NotNull
-	protected PsiClass findClass(@NotNull @NonNls final String name)
+	@Nonnull
+	protected PsiClass findClass(@Nonnull @NonNls final String name)
 	{
 		final PsiClass aClass = myJavaFacade.findClass(name, ProjectScope.getProjectScope(getProject()));
 		assertNotNull("Class " + name + " not found", aClass);
 		return aClass;
 	}
 
-	@NotNull
-	protected PsiJavaPackage findPackage(@NotNull @NonNls final String name)
+	@Nonnull
+	protected PsiJavaPackage findPackage(@Nonnull @NonNls final String name)
 	{
 		final PsiJavaPackage aPackage = myJavaFacade.findPackage(name);
 		assertNotNull("Package " + name + " not found", aPackage);
 		return aPackage;
 	}
 
-	protected void delete(@NotNull final Editor editor)
+	protected void delete(@Nonnull final Editor editor)
 	{
 		CommandProcessor.getInstance().executeCommand(getProject(), new Runnable()
 		{

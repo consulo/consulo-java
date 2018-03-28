@@ -16,8 +16,9 @@
 
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.PsiArrayType;
@@ -46,7 +47,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern withParameterCount(@NonNls final int paramCount) {
     return with(new PatternCondition<PsiMethod>("withParameterCount") {
       @Override
-      public boolean accepts(@NotNull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
         return method.getParameterList().getParametersCount() == paramCount;
       }
     });
@@ -62,7 +63,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
     final String[] types = inputTypes.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : inputTypes;
     return with(new PatternCondition<PsiMethod>("withParameters") {
       @Override
-      public boolean accepts(@NotNull final PsiMethod psiMethod, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiMethod psiMethod, final ProcessingContext context) {
         final PsiParameterList parameterList = psiMethod.getParameterList();
         int dotsIndex = -1;
         while (++dotsIndex <types.length) {
@@ -130,7 +131,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern constructor(final boolean isConstructor) {
     return with(new PatternCondition<PsiMethod>("constructor") {
       @Override
-      public boolean accepts(@NotNull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
         return method.isConstructor() == isConstructor;
       }
     });
@@ -140,7 +141,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern withThrowsList(final ElementPattern<?> pattern) {
     return with(new PatternCondition<PsiMethod>("withThrowsList") {
       @Override
-      public boolean accepts(@NotNull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
         return pattern.accepts(method.getThrowsList());
       }
     });

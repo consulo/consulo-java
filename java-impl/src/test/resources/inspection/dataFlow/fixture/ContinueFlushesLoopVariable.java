@@ -1,11 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.Map;
-
 public class Main {
   public static String escapeAndUnescapeSymbols(String s, StringBuilder builder) {
     boolean escaped = false;

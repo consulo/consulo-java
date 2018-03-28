@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.psi.JavaResolveResult;
@@ -60,7 +60,7 @@ class DelegationContract implements PreContract
 		return negated;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body)
 	{

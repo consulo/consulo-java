@@ -22,11 +22,12 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
@@ -202,7 +203,7 @@ public class JavaReflectionReferenceUtil
 
 	@Contract("null,_->null")
 	@Nullable
-	public static <T> T computeConstantExpression(@Nullable PsiExpression expression, @NotNull Class<T> expectedType)
+	public static <T> T computeConstantExpression(@Nullable PsiExpression expression, @Nonnull Class<T> expectedType)
 	{
 		expression = ParenthesesUtils.stripParentheses(expression);
 		final Object computed = JavaConstantExpressionEvaluator.computeConstantExpression(expression, false);
@@ -216,7 +217,7 @@ public class JavaReflectionReferenceUtil
 		return reflectiveType != null ? reflectiveType.myPsiClass : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiExpression findDefinition(@Nullable PsiExpression expression)
 	{
 		int preventEndlessLoop = 5;
@@ -232,14 +233,14 @@ public class JavaReflectionReferenceUtil
 	}
 
 	@Nullable
-	private static PsiExpression findVariableDefinition(@NotNull PsiReferenceExpression referenceExpression)
+	private static PsiExpression findVariableDefinition(@Nonnull PsiReferenceExpression referenceExpression)
 	{
 		final PsiElement resolved = referenceExpression.resolve();
 		return resolved instanceof PsiVariable ? findVariableDefinition(referenceExpression, (PsiVariable) resolved) : null;
 	}
 
 	@Nullable
-	private static PsiExpression findVariableDefinition(@NotNull PsiReferenceExpression referenceExpression, @NotNull PsiVariable variable)
+	private static PsiExpression findVariableDefinition(@Nonnull PsiReferenceExpression referenceExpression, @Nonnull PsiVariable variable)
 	{
 		if(variable.hasModifierProperty(PsiModifier.FINAL))
 		{
@@ -252,7 +253,7 @@ public class JavaReflectionReferenceUtil
 		return DeclarationSearchUtils.findDefinition(referenceExpression, variable);
 	}
 
-	private static PsiClass findClass(@NotNull String qualifiedName, @NotNull PsiElement context)
+	private static PsiClass findClass(@Nonnull String qualifiedName, @Nonnull PsiElement context)
 	{
 		final Project project = context.getProject();
 		return JavaPsiFacade.getInstance(project).findClass(qualifiedName, GlobalSearchScope.allScope(project));
@@ -274,13 +275,13 @@ public class JavaReflectionReferenceUtil
 		return method != null && !method.isConstructor();
 	}
 
-	static boolean isPublic(@NotNull PsiMember member)
+	static boolean isPublic(@Nonnull PsiMember member)
 	{
 		return member.hasModifierProperty(PsiModifier.PUBLIC);
 	}
 
 	@Nullable
-	static String getParameterTypesText(@NotNull PsiMethod method)
+	static String getParameterTypesText(@Nonnull PsiMethod method)
 	{
 		final StringJoiner joiner = new StringJoiner(", ");
 		for(PsiParameter parameter : method.getParameterList().getParameters())
@@ -295,7 +296,7 @@ public class JavaReflectionReferenceUtil
 		return joiner.toString();
 	}
 
-	static void shortenArgumentsClassReferences(@NotNull InsertionContext context)
+	static void shortenArgumentsClassReferences(@Nonnull InsertionContext context)
 	{
 		final PsiElement parameter = PsiUtilCore.getElementAtOffset(context.getFile(), context.getStartOffset());
 		final PsiExpressionList parameterList = PsiTreeUtil.getParentOfType(parameter, PsiExpressionList.class);
@@ -305,37 +306,37 @@ public class JavaReflectionReferenceUtil
 		}
 	}
 
-	@NotNull
-	static LookupElement withPriority(@NotNull LookupElement lookupElement, boolean hasPriority)
+	@Nonnull
+	static LookupElement withPriority(@Nonnull LookupElement lookupElement, boolean hasPriority)
 	{
 		return hasPriority ? lookupElement : PrioritizedLookupElement.withPriority(lookupElement, -1);
 	}
 
-	@NotNull
-	static LookupElement withPriority(@NotNull LookupElement lookupElement, int priority)
+	@Nonnull
+	static LookupElement withPriority(@Nonnull LookupElement lookupElement, int priority)
 	{
 		return priority == 0 ? lookupElement : PrioritizedLookupElement.withPriority(lookupElement, priority);
 	}
 
-	static int getMethodSortOrder(@NotNull PsiMethod method)
+	static int getMethodSortOrder(@Nonnull PsiMethod method)
 	{
 		return isJavaLangObject(method.getContainingClass()) ? 1 : isPublic(method) ? -1 : 0;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static String getMemberType(@Nullable PsiElement element)
 	{
 		final PsiMethodCallExpression methodCall = PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class);
 		return methodCall != null ? methodCall.getMethodExpression().getReferenceName() : null;
 	}
 
-	@NotNull
-	static LookupElement lookupField(@NotNull PsiField field)
+	@Nonnull
+	static LookupElement lookupField(@Nonnull PsiField field)
 	{
 		return JavaLookupElementBuilder.forField(field);
 	}
 
-	static void replaceText(@NotNull InsertionContext context, @NotNull String text)
+	static void replaceText(@Nonnull InsertionContext context, @Nonnull String text)
 	{
 		final PsiElement newElement = PsiUtilCore.getElementAtOffset(context.getFile(), context.getStartOffset());
 		final PsiElement params = newElement.getParent().getParent();
@@ -348,13 +349,13 @@ public class JavaReflectionReferenceUtil
 	}
 
 	@Nullable
-	public static String getTypeText(@Nullable PsiType type, @NotNull PsiElement context)
+	public static String getTypeText(@Nullable PsiType type, @Nonnull PsiElement context)
 	{
 		final ReflectiveType reflectiveType = ReflectiveType.create(type, context);
 		return reflectiveType != null ? reflectiveType.getQualifiedName() : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static String getTypeText(@Nullable PsiExpression argument)
 	{
 		final ReflectiveType reflectiveType = getReflectiveType(argument);
@@ -381,14 +382,14 @@ public class JavaReflectionReferenceUtil
 		return null;
 	}
 
-	@NotNull
-	public static String getMethodTypeExpressionText(@NotNull ReflectiveSignature signature)
+	@Nonnull
+	public static String getMethodTypeExpressionText(@Nonnull ReflectiveSignature signature)
 	{
 		final String types = signature.getText(true, type -> type + ".class");
 		return JAVA_LANG_INVOKE_METHOD_TYPE + "." + METHOD_TYPE + types;
 	}
 
-	public static boolean isCallToMethod(@NotNull PsiMethodCallExpression methodCall, @NotNull String className, @NotNull String methodName)
+	public static boolean isCallToMethod(@Nonnull PsiMethodCallExpression methodCall, @Nonnull String className, @Nonnull String methodName)
 	{
 		return MethodCallUtils.isCallToMethod(methodCall, className, null, methodName, (PsiType[]) null);
 	}
@@ -438,7 +439,7 @@ public class JavaReflectionReferenceUtil
 			return name != null ? name : "null";
 		}
 
-		public boolean isEqualTo(@Nullable PsiType otherType)
+		public boolean isEqualTo(@javax.annotation.Nullable PsiType otherType)
 		{
 			if(otherType == null || myArrayDimensions != otherType.getArrayDimensions())
 			{
@@ -464,7 +465,7 @@ public class JavaReflectionReferenceUtil
 			return false;
 		}
 
-		public boolean isAssignableFrom(@NotNull PsiType type)
+		public boolean isAssignableFrom(@Nonnull PsiType type)
 		{
 			if(type.equals(PsiType.NULL))
 			{
@@ -488,7 +489,7 @@ public class JavaReflectionReferenceUtil
 		}
 
 		@Nullable
-		public static ReflectiveType create(@Nullable PsiType originalType, @NotNull PsiElement context)
+		public static ReflectiveType create(@javax.annotation.Nullable PsiType originalType, @Nonnull PsiElement context)
 		{
 			if(originalType == null)
 			{
@@ -524,19 +525,19 @@ public class JavaReflectionReferenceUtil
 		public static final ReflectiveSignature NO_ARGUMENT_CONSTRUCTOR_SIGNATURE = new ReflectiveSignature(null, PsiKeyword.VOID, ArrayUtil.EMPTY_STRING_ARRAY);
 
 		private final Icon myIcon;
-		@NotNull
+		@Nonnull
 		private final String myReturnType;
-		@NotNull
+		@Nonnull
 		private final String[] myArgumentTypes;
 
 		@Nullable
-		public static ReflectiveSignature create(@NotNull List<String> typeTexts)
+		public static ReflectiveSignature create(@Nonnull List<String> typeTexts)
 		{
 			return create(null, typeTexts);
 		}
 
-		@Nullable
-		public static ReflectiveSignature create(@Nullable Icon icon, @NotNull List<String> typeTexts)
+		@javax.annotation.Nullable
+		public static ReflectiveSignature create(@javax.annotation.Nullable Icon icon, @Nonnull List<String> typeTexts)
 		{
 			if(!typeTexts.isEmpty() && !typeTexts.contains(null))
 			{
@@ -546,14 +547,14 @@ public class JavaReflectionReferenceUtil
 			return null;
 		}
 
-		private ReflectiveSignature(@Nullable Icon icon, @NotNull String returnType, @NotNull String[] argumentTypes)
+		private ReflectiveSignature(@Nullable Icon icon, @Nonnull String returnType, @Nonnull String[] argumentTypes)
 		{
 			myIcon = icon;
 			myReturnType = returnType;
 			myArgumentTypes = argumentTypes;
 		}
 
-		public String getText(boolean withReturnType, @NotNull Function<String, String> transformation)
+		public String getText(boolean withReturnType, @Nonnull Function<String, String> transformation)
 		{
 			final StringJoiner joiner = new StringJoiner(", ", "(", ")");
 			if(withReturnType)
@@ -567,13 +568,13 @@ public class JavaReflectionReferenceUtil
 			return joiner.toString();
 		}
 
-		@NotNull
+		@Nonnull
 		public String getShortReturnType()
 		{
 			return PsiNameHelper.getShortClassName(myReturnType);
 		}
 
-		@NotNull
+		@Nonnull
 		public String getShortArgumentTypes()
 		{
 			return getText(false, PsiNameHelper::getShortClassName);
@@ -586,7 +587,7 @@ public class JavaReflectionReferenceUtil
 		}
 
 		@Override
-		public int compareTo(@NotNull ReflectiveSignature other)
+		public int compareTo(@Nonnull ReflectiveSignature other)
 		{
 			int c = myArgumentTypes.length - other.myArgumentTypes.length;
 			if(c != 0)

@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
 import com.intellij.codeInspection.dataFlow.value.DfaRangeValue;
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue;
@@ -394,7 +394,7 @@ public abstract class LongRangeSet
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static LongRangeSet fromDfaValue(DfaValue value)
 	{
 		if(value instanceof DfaRangeValue)

@@ -15,24 +15,25 @@
  */
 package com.siyeh.ig.classmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiTypeParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ClassNestingDepthInspection
   extends ClassMetricInspection {
 
   private static final int CLASS_NESTING_LIMIT = 1;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "InnerClassTooDeeplyNested";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "inner.class.too.deeply.nested.display.name");
@@ -47,7 +48,7 @@ public class ClassNestingDepthInspection
       "inner.class.too.deeply.nested.nesting.limit.option");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingLevel = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -62,7 +63,7 @@ public class ClassNestingDepthInspection
   private class ClassNestingLevel extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // note: no call to super
       if (aClass instanceof PsiTypeParameter) {
         return;

@@ -21,20 +21,20 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
 public class ConvertCatchToThrowsIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertCatchToThrowsPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiCatchSection catchSection = (PsiCatchSection)element.getParent();
     final PsiMethod method = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class);
     if (method == null) {

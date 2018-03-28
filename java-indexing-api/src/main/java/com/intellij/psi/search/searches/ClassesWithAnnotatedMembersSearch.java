@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.search.searches;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.SearchScope;
@@ -59,7 +59,7 @@ public class ClassesWithAnnotatedMembersSearch extends ExtensibleQueryFactory<Ps
 		super("consulo.java");
 	}
 
-	public static Query<PsiClass> search(@NotNull PsiClass annotationClass, @NotNull SearchScope scope)
+	public static Query<PsiClass> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope)
 	{
 		return INSTANCE.createQuery(new Parameters(annotationClass, scope));
 	}

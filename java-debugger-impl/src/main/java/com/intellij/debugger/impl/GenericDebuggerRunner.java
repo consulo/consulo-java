@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.DefaultDebugEnvironment;
@@ -45,27 +45,27 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings>
 {
 	@Override
-	public boolean canRun(@NotNull final String executorId, @NotNull final RunProfile profile)
+	public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile)
 	{
 		return executorId.equals(DefaultDebugExecutor.EXECUTOR_ID) && profile instanceof GenericDebugRunnerConfiguration;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getRunnerId()
 	{
 		return DebuggingRunnerData.DEBUGGER_RUNNER_ID;
 	}
 
 	@Override
-	protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException
+	protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException
 	{
 		FileDocumentManager.getInstance().saveAllDocuments();
 		return createContentDescriptor(state, env);
 	}
 
 	@Nullable
-	protected RunContentDescriptor createContentDescriptor(@NotNull RunProfileState state, @NotNull ExecutionEnvironment environment) throws ExecutionException
+	protected RunContentDescriptor createContentDescriptor(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment environment) throws ExecutionException
 	{
 		if(state instanceof JavaCommandLine)
 		{
@@ -88,8 +88,8 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 		return null;
 	}
 
-	@Nullable
-	protected RunContentDescriptor attachVirtualMachine(RunProfileState state, @NotNull ExecutionEnvironment env, RemoteConnection connection, boolean pollConnection) throws ExecutionException
+	@javax.annotation.Nullable
+	protected RunContentDescriptor attachVirtualMachine(RunProfileState state, @Nonnull ExecutionEnvironment env, RemoteConnection connection, boolean pollConnection) throws ExecutionException
 	{
 		DebugEnvironment environment = new DefaultDebugEnvironment(env, state, connection, pollConnection);
 		final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(env.getProject()).attachVirtualMachine(environment);

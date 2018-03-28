@@ -15,6 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiMethodMember;
@@ -23,15 +30,16 @@ import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiNewExpression;
+import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
   public ImplementAbstractClassMethodsFix(PsiElement highlightElement) {
@@ -39,10 +47,10 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     if (startElement instanceof PsiNewExpression) {
       final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
       String startElementText = startElement.getText();
@@ -68,11 +76,11 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
   }
 
   @Override
-  public void invoke(@NotNull final Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") final Editor editor,
-                     @NotNull final PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull final Project project,
+                     @Nonnull PsiFile file,
+                     @Nullable final Editor editor,
+                     @Nonnull final PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiFile containingFile = startElement.getContainingFile();
     if (editor == null || !FileModificationService.getInstance().prepareFileForWrite(containingFile)) return;
     PsiJavaCodeReferenceElement classReference = ((PsiNewExpression)startElement).getClassReference();

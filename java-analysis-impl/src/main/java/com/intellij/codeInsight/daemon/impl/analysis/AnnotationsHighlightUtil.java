@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -56,7 +56,7 @@ public class AnnotationsHighlightUtil
 {
 	private static final Logger LOG = Logger.getInstance("com.intellij.codeInsight.daemon.impl.analysis.AnnotationsHighlightUtil");
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkNameValuePair(PsiNameValuePair pair)
 	{
 		PsiReference ref = pair.getReference();
@@ -102,7 +102,7 @@ public class AnnotationsHighlightUtil
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static HighlightInfo checkDuplicateAttribute(PsiNameValuePair pair)
 	{
 		PsiAnnotationParameterList annotation = (PsiAnnotationParameterList) pair.getParent();
@@ -129,8 +129,8 @@ public class AnnotationsHighlightUtil
 		return ref.getCanonicalText();
 	}
 
-	@Nullable
-	static HighlightInfo checkMemberValueType(@Nullable PsiAnnotationMemberValue value, PsiType expectedType)
+	@javax.annotation.Nullable
+	static HighlightInfo checkMemberValueType(@javax.annotation.Nullable PsiAnnotationMemberValue value, PsiType expectedType)
 	{
 		if(value == null)
 		{
@@ -218,7 +218,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	static HighlightInfo checkDuplicateAnnotations(@NotNull PsiAnnotation annotationToCheck, @NotNull LanguageLevel languageLevel)
+	static HighlightInfo checkDuplicateAnnotations(@Nonnull PsiAnnotation annotationToCheck, @Nonnull LanguageLevel languageLevel)
 	{
 		PsiAnnotationOwner owner = annotationToCheck.getOwner();
 		if(owner == null)
@@ -327,7 +327,7 @@ public class AnnotationsHighlightUtil
 		return contained;
 	}
 
-	private static boolean isAnnotationRepeatedTwice(@NotNull PsiAnnotationOwner owner, @Nullable String qualifiedName)
+	private static boolean isAnnotationRepeatedTwice(@Nonnull PsiAnnotationOwner owner, @javax.annotation.Nullable String qualifiedName)
 	{
 		int count = 0;
 		for(PsiAnnotation annotation : owner.getAnnotations())
@@ -350,7 +350,7 @@ public class AnnotationsHighlightUtil
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkMissingAttributes(PsiAnnotation annotation)
 	{
 		PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
@@ -413,7 +413,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkConstantExpression(PsiExpression expression)
 	{
 		final PsiElement parent = expression.getParent();
@@ -429,7 +429,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkValidAnnotationType(PsiType type, final PsiTypeElement typeElement)
 	{
 		if(type != null && type.accept(AnnotationReturnTypeVisitor.INSTANCE).booleanValue())
@@ -444,8 +444,8 @@ public class AnnotationsHighlightUtil
 			(PsiArrayInitializerMemberValue.class, PsiNameValuePair.class), psiElement().withParents(PsiArrayInitializerMemberValue.class, PsiAnnotationMethod.class), psiElement().withParent
 			(PsiAnnotationMethod.class).afterLeaf(PsiKeyword.DEFAULT));
 
-	@Nullable
-	public static HighlightInfo checkApplicability(@NotNull PsiAnnotation annotation, @NotNull LanguageLevel level, @NotNull PsiFile file)
+	@javax.annotation.Nullable
+	public static HighlightInfo checkApplicability(@Nonnull PsiAnnotation annotation, @Nonnull LanguageLevel level, @Nonnull PsiFile file)
 	{
 		if(ANY_ANNOTATION_ALLOWED.accepts(annotation))
 		{
@@ -544,7 +544,7 @@ public class AnnotationsHighlightUtil
 	}
 
 	@Nullable
-	private static HighlightInfo checkReferenceTarget(PsiAnnotation annotation, @Nullable PsiJavaCodeReferenceElement ref)
+	private static HighlightInfo checkReferenceTarget(PsiAnnotation annotation, @javax.annotation.Nullable PsiJavaCodeReferenceElement ref)
 	{
 		if(ref == null)
 		{
@@ -577,8 +577,8 @@ public class AnnotationsHighlightUtil
 		return message != null ? annotationError(annotation, message) : null;
 	}
 
-	@Nullable
-	private static PsiJavaCodeReferenceElement getOutermostReferenceElement(@Nullable PsiJavaCodeReferenceElement ref)
+	@javax.annotation.Nullable
+	private static PsiJavaCodeReferenceElement getOutermostReferenceElement(@javax.annotation.Nullable PsiJavaCodeReferenceElement ref)
 	{
 		if(ref == null)
 		{
@@ -593,7 +593,7 @@ public class AnnotationsHighlightUtil
 		return ref;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkAnnotationType(PsiAnnotation annotation)
 	{
 		PsiJavaCodeReferenceElement nameReferenceElement = annotation.getNameReferenceElement();
@@ -609,7 +609,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkCyclicMemberType(PsiTypeElement typeElement, PsiClass aClass)
 	{
 		LOG.assertTrue(aClass.isAnnotationType());
@@ -623,7 +623,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	private static boolean cyclicDependencies(PsiClass aClass, PsiType type, @NotNull Set<PsiClass> checked, @NotNull PsiManager manager)
+	private static boolean cyclicDependencies(PsiClass aClass, PsiType type, @Nonnull Set<PsiClass> checked, @Nonnull PsiManager manager)
 	{
 		final PsiClass resolvedClass = PsiUtil.resolveClassInType(type);
 		if(resolvedClass != null && resolvedClass.isAnnotationType())
@@ -648,7 +648,7 @@ public class AnnotationsHighlightUtil
 		return false;
 	}
 
-	static HighlightInfo checkClashesWithSuperMethods(@NotNull PsiAnnotationMethod psiMethod)
+	static HighlightInfo checkClashesWithSuperMethods(@Nonnull PsiAnnotationMethod psiMethod)
 	{
 		final PsiIdentifier nameIdentifier = psiMethod.getNameIdentifier();
 		if(nameIdentifier != null)
@@ -671,7 +671,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkAnnotationDeclaration(final PsiElement parent, final PsiReferenceList list)
 	{
 		if(PsiUtil.isAnnotationMethod(parent))
@@ -694,7 +694,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkPackageAnnotationContainingFile(PsiPackageStatement statement, PsiFile file)
 	{
 		PsiModifierList annotationList = statement.getAnnotationList();
@@ -706,7 +706,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkTargetAnnotationDuplicates(PsiAnnotation annotation)
 	{
 		PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
@@ -752,8 +752,8 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkFunctionalInterface(@NotNull PsiAnnotation annotation, @NotNull LanguageLevel languageLevel)
+	@javax.annotation.Nullable
+	static HighlightInfo checkFunctionalInterface(@Nonnull PsiAnnotation annotation, @Nonnull LanguageLevel languageLevel)
 	{
 		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_8) && Comparing.strEqual(annotation.getQualifiedName(), CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE))
 		{
@@ -774,7 +774,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkRepeatableAnnotation(PsiAnnotation annotation)
 	{
 		String qualifiedName = annotation.getQualifiedName();
@@ -796,8 +796,8 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
-	private static String doCheckRepeatableAnnotation(@NotNull PsiAnnotation annotation)
+	@javax.annotation.Nullable
+	private static String doCheckRepeatableAnnotation(@Nonnull PsiAnnotation annotation)
 	{
 		PsiAnnotationOwner owner = annotation.getOwner();
 		if(!(owner instanceof PsiModifierList))
@@ -853,8 +853,8 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
-	private static PsiClass getRepeatableContainer(@NotNull PsiAnnotation annotation)
+	@javax.annotation.Nullable
+	private static PsiClass getRepeatableContainer(@Nonnull PsiAnnotation annotation)
 	{
 		PsiAnnotationMemberValue containerRef = PsiImplUtil.findAttributeValue(annotation, null);
 		if(!(containerRef instanceof PsiClassObjectAccessExpression))
@@ -874,7 +874,7 @@ public class AnnotationsHighlightUtil
 		return container;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkReceiverPlacement(PsiReceiverParameter parameter)
 	{
 		PsiElement owner = parameter.getParent().getParent();
@@ -906,7 +906,7 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkReceiverType(PsiReceiverParameter parameter)
 	{
 		PsiElement owner = parameter.getParent().getParent();
@@ -953,8 +953,8 @@ public class AnnotationsHighlightUtil
 		return modifierList != null && modifierList.hasModifierProperty(PsiModifier.STATIC);
 	}
 
-	@Nullable
-	public static RetentionPolicy getRetentionPolicy(@NotNull PsiClass annotation)
+	@javax.annotation.Nullable
+	public static RetentionPolicy getRetentionPolicy(@Nonnull PsiClass annotation)
 	{
 		PsiModifierList modifierList = annotation.getModifierList();
 		if(modifierList != null)
@@ -1043,14 +1043,14 @@ public class AnnotationsHighlightUtil
 			myAnnotation = annotation;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getText()
 		{
 			return "Remove";
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -1058,13 +1058,13 @@ public class AnnotationsHighlightUtil
 		}
 
 		@Override
-		public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+		public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 		{
 			return true;
 		}
 
 		@Override
-		public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+		public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 		{
 			myAnnotation.delete();
 		}

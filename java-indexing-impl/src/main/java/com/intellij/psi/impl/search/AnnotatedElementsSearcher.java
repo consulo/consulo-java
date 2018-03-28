@@ -18,7 +18,7 @@ package com.intellij.psi.impl.search;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiAnnotation;
@@ -44,7 +44,7 @@ import com.intellij.util.containers.ContainerUtil;
 public class AnnotatedElementsSearcher implements QueryExecutor<PsiModifierListOwner, AnnotatedElementsSearch.Parameters>
 {
 	@Override
-	public boolean execute(@NotNull final AnnotatedElementsSearch.Parameters p, @NotNull final Processor<PsiModifierListOwner> consumer)
+	public boolean execute(@Nonnull final AnnotatedElementsSearch.Parameters p, @Nonnull final Processor<PsiModifierListOwner> consumer)
 	{
 		final PsiClass annClass = p.getAnnotationClass();
 		assert annClass.isAnnotationType() : "Annotation type should be passed to annotated members search";

@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.formatter.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
@@ -38,7 +39,7 @@ public class PartialWhitespaceBlock extends SimpleJavaBlock
 		myRange = range;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public TextRange getTextRange()
 	{

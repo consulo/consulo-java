@@ -27,8 +27,7 @@ import com.intellij.util.Consumer;
 import com.intellij.util.PairConsumer;
 import com.intellij.util.containers.ContainerUtil;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -52,7 +51,7 @@ public abstract class StaticMemberProcessor {
     myPackagedContext = JavaCompletionUtil.inSomePackage(position);
   }
 
-  public void importMembersOf(@Nullable PsiClass psiClass) {
+  public void importMembersOf(@javax.annotation.Nullable PsiClass psiClass) {
     addIfNotNull(myStaticImportedClasses, psiClass);
   }
 
@@ -137,8 +136,8 @@ public abstract class StaticMemberProcessor {
     return myResolveHelper.isAccessible(member, myPosition, null);
   }
 
-  @NotNull
-  protected abstract LookupElement createLookupElement(@NotNull PsiMember member, @NotNull PsiClass containingClass, boolean shouldImport);
+  @Nonnull
+  protected abstract LookupElement createLookupElement(@Nonnull PsiMember member, @Nonnull PsiClass containingClass, boolean shouldImport);
 
-  protected abstract LookupElement createLookupElement(@NotNull List<PsiMethod> overloads, @NotNull PsiClass containingClass, boolean shouldImport);
+  protected abstract LookupElement createLookupElement(@Nonnull List<PsiMethod> overloads, @Nonnull PsiClass containingClass, boolean shouldImport);
 }

@@ -18,8 +18,8 @@ package com.intellij.debugger.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
@@ -114,8 +114,8 @@ public class ViewAsGroup extends ActionGroup implements DumbAware
 		}
 	}
 
-	@NotNull
-	public AnAction[] getChildren(@Nullable final AnActionEvent e)
+	@Nonnull
+	public AnAction[] getChildren(@javax.annotation.Nullable final AnActionEvent e)
 	{
 		return myChildren;
 	}
@@ -218,7 +218,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	public static List<JavaValue> getSelectedValues(AnActionEvent event)
 	{
 		List<XValueNodeImpl> selectedNodes = XDebuggerTreeActionBase.getSelectedNodes(event.getDataContext());

@@ -7,7 +7,8 @@ package com.intellij.refactoring;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.psi.PsiElement;
@@ -20,7 +21,7 @@ import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class FindMethodDuplicatesBaseTest extends LightCodeInsightTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

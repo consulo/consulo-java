@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -32,8 +33,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -204,12 +203,12 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     }
   }
 
-  @NotNull
+  @Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }
 
-  @NotNull
+  @Nonnull
   public String getClassName() {
     return classNameField.getText().trim();
   }
@@ -278,7 +277,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
         @Override
         protected MemberSelectionTable createMemberSelectionTable(final List<MemberInfo> memberInfo, String abstractColumnHeader) {
           return new MemberSelectionTable(memberInfo, abstractColumnHeader) {
-            @Nullable
+            @javax.annotation.Nullable
             @Override
             protected Object getAbstractColumnValue(MemberInfo memberInfo) {
               if (isExtractAsEnum()) {
@@ -310,7 +309,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     table.setMemberInfoModel(new DelegatingMemberInfoModel<PsiMember, MemberInfo>(table.getMemberInfoModel()) {
 
       @Override
-      public int checkForProblems(@NotNull final MemberInfo member) {
+      public int checkForProblems(@Nonnull final MemberInfo member) {
         final PsiMember cause = getCause(member);
         if (member.isChecked() && cause != null) return ERROR;
         if (!member.isChecked() && cause != null) return WARNING;

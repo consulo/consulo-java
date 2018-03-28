@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -66,7 +66,7 @@ public class MissingReturnExpressionFixer implements Fixer
 		}
 	}
 
-	private static boolean fixMethodCallWithoutTrailingSemicolon(@Nullable PsiReturnStatement returnStatement, @NotNull Editor editor, @NotNull JavaSmartEnterProcessor processor)
+	private static boolean fixMethodCallWithoutTrailingSemicolon(@javax.annotation.Nullable PsiReturnStatement returnStatement, @Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor)
 	{
 		if(returnStatement == null)
 		{

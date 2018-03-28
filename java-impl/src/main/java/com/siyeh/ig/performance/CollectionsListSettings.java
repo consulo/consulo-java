@@ -23,11 +23,11 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.openapi.util.InvalidDataException;
@@ -71,7 +71,7 @@ public abstract class CollectionsListSettings
 		myCollectionClassesRequiringCapacity = new SmartList<>(getDefaultSettings());
 	}
 
-	public void readSettings(@NotNull Element node) throws InvalidDataException
+	public void readSettings(@Nonnull Element node) throws InvalidDataException
 	{
 		myCollectionClassesRequiringCapacity.clear();
 		myCollectionClassesRequiringCapacity.addAll(getDefaultSettings());
@@ -89,7 +89,7 @@ public abstract class CollectionsListSettings
 		}
 	}
 
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		final Collection<String> defaultToRemoveSettings = new HashSet<>(getDefaultSettings());
 		defaultToRemoveSettings.removeAll(myCollectionClassesRequiringCapacity);

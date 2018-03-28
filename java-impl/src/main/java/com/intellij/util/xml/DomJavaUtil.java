@@ -15,8 +15,8 @@
  */
 package com.intellij.util.xml;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -35,7 +35,7 @@ public class DomJavaUtil {
   }
 
   @Nullable
-  public static PsiClass findClass(@Nullable String name, @NotNull PsiFile file, @Nullable final Module module, @Nullable final GlobalSearchScope searchScope) {
+  public static PsiClass findClass(@Nullable String name, @Nonnull PsiFile file, @javax.annotation.Nullable final Module module, @Nullable final GlobalSearchScope searchScope) {
     if (name == null) return null;
     if (name.indexOf('$')>=0) name = name.replace('$', '.');
 
@@ -70,7 +70,7 @@ public class DomJavaUtil {
   }
 
   @Nullable
-  public static PsiClass findClass(@Nullable String name, @NotNull DomElement element) {
+  public static PsiClass findClass(@Nullable String name, @Nonnull DomElement element) {
     assert element.isValid();
     XmlElement xmlElement = element.getXmlElement();
     if (xmlElement != null) {

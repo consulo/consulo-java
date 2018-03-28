@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.forloop;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -23,19 +25,19 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new IndexedForEachLoopPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiForeachStatement statement = (PsiForeachStatement)element.getParent();
     if (statement == null) {
       return;
@@ -238,7 +240,7 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
 
   public static String createVariableName(
     @Nullable String baseName,
-    @NotNull PsiExpression assignedExpression) {
+    @Nonnull PsiExpression assignedExpression) {
     final Project project = assignedExpression.getProject();
     final JavaCodeStyleManager codeStyleManager =
       JavaCodeStyleManager.getInstance(project);
@@ -254,8 +256,8 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
   }
 
   public static String createVariableName(@Nullable String baseName,
-                                          @NotNull PsiType type,
-                                          @NotNull PsiElement context) {
+                                          @Nonnull PsiType type,
+                                          @Nonnull PsiElement context) {
     final Project project = context.getProject();
     final JavaCodeStyleManager codeStyleManager =
       JavaCodeStyleManager.getInstance(project);

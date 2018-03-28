@@ -21,8 +21,8 @@ import java.util.Collection;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.intention.AddAnnotationFix;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
@@ -65,19 +65,19 @@ public class StringConcatenationInspection extends BaseInspection {
   public boolean ignoreInToString = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.concatenation.problem.descriptor");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)infos[0];
     final Collection<InspectionGadgetsFix> result = new ArrayList();
@@ -119,7 +119,7 @@ public class StringConcatenationInspection extends BaseInspection {
     return result.toArray(new InspectionGadgetsFix[result.size()]);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiModifierListOwner getAnnotatableElement(PsiExpression expression) {
     if (!(expression instanceof PsiReferenceExpression)) {
       return null;
@@ -133,7 +133,7 @@ public class StringConcatenationInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(InspectionGadgetsBundle.message("string.concatenation.ignore.assert.option"), "ignoreAsserts");
@@ -155,7 +155,7 @@ public class StringConcatenationInspection extends BaseInspection {
   private class StringConcatenationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitPolyadicExpression(@NotNull PsiPolyadicExpression expression) {
+    public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
       super.visitPolyadicExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!JavaTokenType.PLUS.equals(tokenType)) {

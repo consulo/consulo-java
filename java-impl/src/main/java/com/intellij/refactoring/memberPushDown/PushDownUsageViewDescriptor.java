@@ -15,12 +15,13 @@
  */
 package com.intellij.refactoring.memberPushDown;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
 
 class PushDownUsageViewDescriptor implements UsageViewDescriptor {
   private final PsiClass myClass;
@@ -34,7 +35,7 @@ class PushDownUsageViewDescriptor implements UsageViewDescriptor {
     return myProcessedElementsHeader;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[]{myClass};
   }

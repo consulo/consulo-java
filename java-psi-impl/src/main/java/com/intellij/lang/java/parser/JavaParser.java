@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.java.parser;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class JavaParser
 {
@@ -38,37 +38,37 @@ public class JavaParser
 		myReferenceParser = new ReferenceParser(this);
 	}
 
-	@NotNull
+	@Nonnull
 	public FileParser getFileParser()
 	{
 		return myFileParser;
 	}
 
-	@NotNull
+	@Nonnull
 	public ModuleParser getModuleParser()
 	{
 		return myModuleParser;
 	}
 
-	@NotNull
+	@Nonnull
 	public DeclarationParser getDeclarationParser()
 	{
 		return myDeclarationParser;
 	}
 
-	@NotNull
+	@Nonnull
 	public StatementParser getStatementParser()
 	{
 		return myStatementParser;
 	}
 
-	@NotNull
+	@Nonnull
 	public ExpressionParser getExpressionParser()
 	{
 		return myExpressionParser;
 	}
 
-	@NotNull
+	@Nonnull
 	public ReferenceParser getReferenceParser()
 	{
 		return myReferenceParser;

@@ -38,7 +38,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -46,14 +46,14 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.encapsulateFields.EncapsulateFieldsProcessor");
 
   private PsiClass myClass;
-  @NotNull
+  @Nonnull
   private final EncapsulateFieldsDescriptor myDescriptor;
   private final FieldDescriptor[] myFieldDescriptors;
 
   private HashMap<String,PsiMethod> myNameToGetter;
   private HashMap<String,PsiMethod> myNameToSetter;
 
-  public EncapsulateFieldsProcessor(Project project, @NotNull EncapsulateFieldsDescriptor descriptor) {
+  public EncapsulateFieldsProcessor(Project project, @Nonnull EncapsulateFieldsDescriptor descriptor) {
     super(project);
     myDescriptor = descriptor;
     myFieldDescriptors = descriptor.getSelectedFields();
@@ -72,7 +72,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     FieldDescriptor[] fields = new FieldDescriptor[myFieldDescriptors.length];
     System.arraycopy(myFieldDescriptors, 0, fields, 0, myFieldDescriptors.length);
@@ -193,7 +193,8 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @NotNull protected UsageInfo[] findUsages() {
+  @Nonnull
+  protected UsageInfo[] findUsages() {
     ArrayList<EncapsulateFieldUsageInfo> array = ContainerUtil.newArrayList();
     for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
       for (final PsiReference reference : ReferencesSearch.search(fieldDescriptor.getField())) {

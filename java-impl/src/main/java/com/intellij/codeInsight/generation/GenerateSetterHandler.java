@@ -17,7 +17,7 @@ package com.intellij.codeInsight.generation;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import consulo.java.codeInsight.JavaCodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;

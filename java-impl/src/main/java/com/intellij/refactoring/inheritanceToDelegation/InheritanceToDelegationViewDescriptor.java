@@ -15,11 +15,12 @@
  */
 package com.intellij.refactoring.inheritanceToDelegation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -32,7 +33,7 @@ public class InheritanceToDelegationViewDescriptor extends UsageViewDescriptorAd
     myClass = aClass;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] { myClass };
   }

@@ -24,9 +24,10 @@
  */
 package com.intellij.util;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiBundle;
@@ -131,7 +132,7 @@ public class VisibilityUtil
 		return PsiModifier.PACKAGE_LOCAL;
 	}
 
-	@NotNull
+	@Nonnull
 	@NonNls
 	public static String getVisibilityString(@PsiModifier.ModifierConstant String visibilityModifier)
 	{
@@ -143,8 +144,8 @@ public class VisibilityUtil
 	}
 
 	@Nls
-	@NotNull
-	public static String getVisibilityStringToDisplay(@NotNull PsiMember member)
+	@Nonnull
+	public static String getVisibilityStringToDisplay(@Nonnull PsiMember member)
 	{
 		if(member.hasModifierProperty(PsiModifier.PUBLIC))
 		{
@@ -161,8 +162,8 @@ public class VisibilityUtil
 		return toPresentableText(PsiModifier.PACKAGE_LOCAL);
 	}
 
-	@NotNull
-	public static String toPresentableText(@PsiModifier.ModifierConstant @NotNull String modifier)
+	@Nonnull
+	public static String toPresentableText(@PsiModifier.ModifierConstant @Nonnull String modifier)
 	{
 		return PsiBundle.visibilityPresentation(modifier);
 	}

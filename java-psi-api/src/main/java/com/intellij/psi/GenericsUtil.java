@@ -23,9 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Couple;
@@ -60,7 +62,7 @@ public class GenericsUtil
 		return PsiIntersectionType.createIntersection(type1, type2);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getLeastUpperBound(PsiType type1, PsiType type2, PsiManager manager)
 	{
 		if(TypeConversionUtil.isPrimitiveAndNotNull(type1) || TypeConversionUtil.isPrimitiveAndNotNull(type2))
@@ -82,7 +84,7 @@ public class GenericsUtil
 		return getLeastUpperBound(type1, type2, new LinkedHashSet<>(), manager);
 	}
 
-	@NotNull
+	@Nonnull
 	private static PsiType getLeastUpperBound(PsiType type1, PsiType type2, Set<Couple<PsiType>> compared, PsiManager manager)
 	{
 		if(type1 instanceof PsiCapturedWildcardType)
@@ -259,7 +261,7 @@ public class GenericsUtil
 		return PsiWildcardType.createExtends(manager, getLeastUpperBound(type1, type2, compared, manager));
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiClass[] getLeastUpperClasses(PsiClass aClass, PsiClass bClass)
 	{
 		if(InheritanceUtil.isInheritorOrSelf(aClass, bClass, true))
@@ -366,7 +368,7 @@ public class GenericsUtil
 		return null;
 	}
 
-	public static boolean isFromExternalTypeLanguage(@NotNull PsiType type)
+	public static boolean isFromExternalTypeLanguage(@Nonnull PsiType type)
 	{
 		return type.getInternalCanonicalText().equals(type.getCanonicalText());
 	}

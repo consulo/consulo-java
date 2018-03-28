@@ -27,8 +27,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.util.InlineUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
 
   private static class MyQuickFix implements LocalQuickFix {
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiNewExpression arrayCreation = (PsiNewExpression) descriptor.getPsiElement();
       if (arrayCreation == null || !arrayCreation.isValid()) return;
       if (!FileModificationService.getInstance().prepareFileForWrite(arrayCreation.getContainingFile())) return;
@@ -50,13 +49,13 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.redundant.array.creation.quickfix");
     }
@@ -164,7 +163,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
     return problems.toArray(new ProblemDescriptor[problems.size()]);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiExpression[] getInitializers(final PsiNewExpression newExpression) {
     PsiArrayInitializerExpression initializer = newExpression.getArrayInitializer();
     if (initializer != null) {
@@ -182,19 +181,19 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.VERBOSE_GROUP_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.redundant.array.creation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "RedundantArrayCreation";

@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.junit;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -32,20 +33,20 @@ import com.siyeh.ig.psiutils.TestUtils;
 public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "test.method.is.public.void.no.arg.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "TestMethodWithIncorrectSignature";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean isStatic = ((Boolean)infos[1]).booleanValue();
     if (isStatic) {
@@ -72,7 +73,7 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!methodName.startsWith("test") &&

@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ClassUtil;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
@@ -62,7 +62,7 @@ public class HighlightClassUtil
 	 * new ref(...) or new ref(..) { ... } where ref is abstract class
 	 */
 	@Nullable
-	static HighlightInfo checkAbstractInstantiation(@NotNull PsiJavaCodeReferenceElement ref)
+	static HighlightInfo checkAbstractInstantiation(@Nonnull PsiJavaCodeReferenceElement ref)
 	{
 		PsiElement parent = ref.getParent();
 		HighlightInfo highlightInfo = null;
@@ -145,7 +145,7 @@ public class HighlightClassUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkInstantiationOfAbstractClass(PsiClass aClass, @NotNull PsiElement highlightElement)
+	static HighlightInfo checkInstantiationOfAbstractClass(PsiClass aClass, @Nonnull PsiElement highlightElement)
 	{
 		HighlightInfo errorResult = null;
 		if(aClass != null && aClass.hasModifierProperty(PsiModifier.ABSTRACT) && (!(highlightElement instanceof
@@ -350,7 +350,7 @@ public class HighlightClassUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkClassAndPackageConflict(@NotNull PsiClass aClass)
+	static HighlightInfo checkClassAndPackageConflict(@Nonnull PsiClass aClass)
 	{
 		String name = aClass.getQualifiedName();
 
@@ -384,7 +384,7 @@ public class HighlightClassUtil
 	}
 
 	@Nullable
-	private static HighlightInfo checkStaticFieldDeclarationInInnerClass(@NotNull PsiKeyword keyword)
+	private static HighlightInfo checkStaticFieldDeclarationInInnerClass(@Nonnull PsiKeyword keyword)
 	{
 		if(getEnclosingStaticClass(keyword, PsiField.class) == null)
 		{
@@ -459,7 +459,7 @@ public class HighlightClassUtil
 		return result;
 	}
 
-	private static PsiElement getEnclosingStaticClass(@NotNull PsiKeyword keyword, @NotNull Class<?> parentClass)
+	private static PsiElement getEnclosingStaticClass(@Nonnull PsiKeyword keyword, @Nonnull Class<?> parentClass)
 	{
 		return new PsiMatcherImpl(keyword).dot(PsiMatchers.hasText(PsiModifier.STATIC)).parent(PsiMatchers.hasClass
 				(PsiModifierList.class)).parent(PsiMatchers.hasClass(parentClass)).parent(PsiMatchers.hasClass
@@ -654,7 +654,7 @@ public class HighlightClassUtil
 
 	@Nullable
 	private static String checkDefaultConstructorThrowsException(PsiMethod constructor,
-			@NotNull PsiClassType[] handledExceptions)
+			@Nonnull PsiClassType[] handledExceptions)
 	{
 		PsiClassType[] referencedTypes = constructor.getThrowsList().getReferencedTypes();
 		List<PsiClassType> exceptions = new ArrayList<PsiClassType>();
@@ -674,9 +674,9 @@ public class HighlightClassUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkClassDoesNotCallSuperConstructorOrHandleExceptions(@NotNull PsiClass aClass,
+	static HighlightInfo checkClassDoesNotCallSuperConstructorOrHandleExceptions(@Nonnull PsiClass aClass,
 			RefCountHolder refCountHolder,
-			@NotNull PsiResolveHelper resolveHelper)
+			@Nonnull PsiResolveHelper resolveHelper)
 	{
 		if(aClass.isEnum())
 		{
@@ -693,11 +693,11 @@ public class HighlightClassUtil
 				PsiClassType.EMPTY_ARRAY);
 	}
 
-	static HighlightInfo checkBaseClassDefaultConstructorProblem(@NotNull PsiClass aClass,
+	static HighlightInfo checkBaseClassDefaultConstructorProblem(@Nonnull PsiClass aClass,
 			RefCountHolder refCountHolder,
-			@NotNull PsiResolveHelper resolveHelper,
-			@NotNull TextRange range,
-			@NotNull PsiClassType[] handledExceptions)
+			@Nonnull PsiResolveHelper resolveHelper,
+			@Nonnull TextRange range,
+			@Nonnull PsiClassType[] handledExceptions)
 	{
 		if(aClass instanceof PsiAnonymousClass)
 		{
@@ -763,7 +763,7 @@ public class HighlightClassUtil
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static HighlightInfo checkCyclicInheritance(PsiClass aClass)
 	{
 		PsiClass circularClass = getCircularClass(aClass, new HashSet<PsiClass>());
@@ -816,7 +816,7 @@ public class HighlightClassUtil
 	@Nullable
 	static HighlightInfo checkExtendsDuplicate(PsiJavaCodeReferenceElement element,
 			PsiElement resolved,
-			@NotNull PsiFile containingFile)
+			@Nonnull PsiFile containingFile)
 	{
 		if(!(element.getParent() instanceof PsiReferenceList))
 		{
@@ -1193,7 +1193,7 @@ public class HighlightClassUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkSuperQualifierType(@NotNull Project project, @NotNull PsiMethodCallExpression superCall)
+	static HighlightInfo checkSuperQualifierType(@Nonnull Project project, @Nonnull PsiMethodCallExpression superCall)
 	{
 		if(!RefactoringChangeUtil.isSuperMethodCall(superCall))
 		{

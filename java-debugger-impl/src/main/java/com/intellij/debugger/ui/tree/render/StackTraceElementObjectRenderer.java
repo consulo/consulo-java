@@ -17,8 +17,8 @@ package com.intellij.debugger.ui.tree.render;
 
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.FullValueEvaluatorProvider;
 import com.intellij.debugger.engine.JavaValue;
@@ -56,7 +56,7 @@ class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements F
 		return new JavaValue.JavaFullValueEvaluator(DebuggerBundle.message("message.node.navigate"), evaluationContext)
 		{
 			@Override
-			public void evaluate(@NotNull XFullValueEvaluationCallback callback)
+			public void evaluate(@Nonnull XFullValueEvaluationCallback callback)
 			{
 				Value value = valueDescriptor.getValue();
 				ClassType type = ((ClassType) value.type());

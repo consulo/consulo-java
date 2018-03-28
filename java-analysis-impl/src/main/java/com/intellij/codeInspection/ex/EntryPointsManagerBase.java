@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.reference.*;
@@ -110,13 +110,13 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 		point.addExtensionPointListener(new ExtensionPointListener<EntryPoint>()
 		{
 			@Override
-			public void extensionAdded(@NotNull EntryPoint extension, @Nullable PluginDescriptor pluginDescriptor)
+			public void extensionAdded(@Nonnull EntryPoint extension, @javax.annotation.Nullable PluginDescriptor pluginDescriptor)
 			{
 				extensionRemoved(extension, pluginDescriptor);
 			}
 
 			@Override
-			public void extensionRemoved(@NotNull EntryPoint extension, @Nullable PluginDescriptor pluginDescriptor)
+			public void extensionRemoved(@Nonnull EntryPoint extension, @javax.annotation.Nullable PluginDescriptor pluginDescriptor)
 			{
 				if(ADDITIONAL_ANNOS != null)
 				{
@@ -208,7 +208,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 	}
 
 	@Override
-	public void resolveEntryPoints(@NotNull final RefManager manager)
+	public void resolveEntryPoints(@Nonnull final RefManager manager)
 	{
 		if(!myResolved)
 		{
@@ -246,7 +246,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 	}
 
 	@Override
-	public void addEntryPoint(@NotNull RefElement newEntryPoint, boolean isPersistent)
+	public void addEntryPoint(@Nonnull RefElement newEntryPoint, boolean isPersistent)
 	{
 		if(!newEntryPoint.isValid())
 		{
@@ -306,7 +306,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 	}
 
 	@Override
-	public void removeEntryPoint(@NotNull RefElement anEntryPoint)
+	public void removeEntryPoint(@Nonnull RefElement anEntryPoint)
 	{
 		if(anEntryPoint instanceof RefClass)
 		{
@@ -353,7 +353,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public RefElement[] getEntryPoints()
 	{
@@ -490,7 +490,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 	}
 
 	@Override
-	public boolean isEntryPoint(@NotNull PsiElement element)
+	public boolean isEntryPoint(@Nonnull PsiElement element)
 	{
 		if(!(element instanceof PsiModifierListOwner))
 		{
@@ -515,27 +515,27 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getText()
 		{
 			return JavaQuickFixBundle.message("fix.unused.symbol.injection.text", "fields", myQualifiedName);
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return JavaQuickFixBundle.message("fix.unused.symbol.injection.family");
 		}
 
 		@Override
-		public boolean isAvailable(@NotNull Project project1, Editor editor, PsiFile file)
+		public boolean isAvailable(@Nonnull Project project1, Editor editor, PsiFile file)
 		{
 			return true;
 		}
 
 		@Override
-		public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+		public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 		{
 			//TODO [VISTALL]
 			//myWriteAnnotations.add(myQualifiedName);

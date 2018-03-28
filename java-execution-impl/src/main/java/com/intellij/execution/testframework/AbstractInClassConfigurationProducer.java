@@ -18,7 +18,8 @@ package com.intellij.execution.testframework;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.JavaTestConfigurationBase;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
@@ -51,7 +52,7 @@ public abstract class AbstractInClassConfigurationProducer<T extends JavaTestCon
 	}
 
 	@Override
-	public void onFirstRun(@NotNull final ConfigurationFromContext configuration, @NotNull final ConfigurationContext fromContext, @NotNull Runnable performRunnable)
+	public void onFirstRun(@Nonnull final ConfigurationFromContext configuration, @Nonnull final ConfigurationContext fromContext, @Nonnull Runnable performRunnable)
 	{
 		final PsiElement psiElement = configuration.getSourceElement();
 		if(psiElement instanceof PsiMethod || psiElement instanceof PsiClass)

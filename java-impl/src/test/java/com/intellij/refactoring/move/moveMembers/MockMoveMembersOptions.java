@@ -17,7 +17,7 @@ package com.intellij.refactoring.move.moveMembers;
 
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiModifier;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 

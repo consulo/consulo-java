@@ -27,7 +27,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
@@ -52,7 +53,7 @@ import com.intellij.util.indexing.IdFilter;
 public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClassesSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final AllClassesSearch.SearchParameters queryParameters, @NotNull final Processor<PsiClass> consumer)
+	public boolean execute(@Nonnull final AllClassesSearch.SearchParameters queryParameters, @Nonnull final Processor<PsiClass> consumer)
 	{
 		SearchScope scope = queryParameters.getScope();
 
@@ -72,7 +73,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 		return true;
 	}
 
-	private static boolean processAllClassesInGlobalScope(@NotNull final GlobalSearchScope scope, @NotNull final AllClassesSearch.SearchParameters parameters, @NotNull Processor<PsiClass> processor)
+	private static boolean processAllClassesInGlobalScope(@Nonnull final GlobalSearchScope scope, @Nonnull final AllClassesSearch.SearchParameters parameters, @Nonnull Processor<PsiClass> processor)
 	{
 		final Set<String> names = new THashSet<String>(10000);
 		processClassNames(parameters.getProject(), scope, new Consumer<String>()
@@ -154,7 +155,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 		return project;
 	}
 
-	private static boolean processScopeRootForAllClasses(@NotNull final PsiElement scopeRoot, @NotNull final Processor<PsiClass> processor)
+	private static boolean processScopeRootForAllClasses(@Nonnull final PsiElement scopeRoot, @Nonnull final Processor<PsiClass> processor)
 	{
 		final boolean[] stopped = {false};
 

@@ -29,8 +29,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jetbrains.annotations.Debugger;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.jdi.DecompiledLocalVariable;
@@ -88,14 +88,14 @@ public class CaptureConfigurable implements SearchableConfigurable
 	private MyTableModel myTableModel;
 	private JCheckBox myCaptureVariables;
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getId()
 	{
 		return "reference.idesettings.debugger.capture";
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JComponent createComponent()
 	{
@@ -150,7 +150,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@NotNull AnActionEvent e)
+			public void actionPerformed(@Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c ->
 				{
@@ -176,7 +176,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@NotNull AnActionEvent e)
+			public void actionPerformed(@Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = true);
 				table.repaint();
@@ -191,7 +191,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@NotNull AnActionEvent e)
+			public void actionPerformed(@Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = false);
 				table.repaint();
@@ -201,13 +201,13 @@ public class CaptureConfigurable implements SearchableConfigurable
 		new DumbAwareAction("Toggle")
 		{
 			@Override
-			public void update(@NotNull AnActionEvent e)
+			public void update(@Nonnull AnActionEvent e)
 			{
 				e.getPresentation().setEnabled(table.getSelectedRowCount() == 1);
 			}
 
 			@Override
-			public void actionPerformed(@NotNull final AnActionEvent e)
+			public void actionPerformed(@Nonnull final AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = !c.myEnabled);
 				table.repaint();
@@ -217,7 +217,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 		decorator.addExtraAction(new DumbAwareActionButton("Import", "Import", AllIcons.Actions.Install)
 		{
 			@Override
-			public void actionPerformed(@NotNull final AnActionEvent e)
+			public void actionPerformed(@Nonnull final AnActionEvent e)
 			{
 				FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, true, false, true, true)
 				{
@@ -267,7 +267,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 		decorator.addExtraAction(new DumbAwareActionButton("Export", "Export", AllIcons.Actions.Export)
 		{
 			@Override
-			public void actionPerformed(@NotNull final AnActionEvent e)
+			public void actionPerformed(@Nonnull final AnActionEvent e)
 			{
 				VirtualFileWrapper wrapper = FileChooserFactory.getInstance().createSaveFileDialog(new FileSaverDescriptor("Export Selected Capture Points to File...", "", "xml"), e.getProject())
 						.save(null, null);

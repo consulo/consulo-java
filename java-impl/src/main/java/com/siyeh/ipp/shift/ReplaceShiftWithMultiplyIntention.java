@@ -15,7 +15,8 @@
  */
 package com.siyeh.ipp.shift;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiBinaryExpression;
@@ -68,7 +69,7 @@ public class ReplaceShiftWithMultiplyIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ShiftByLiteralPredicate();
   }

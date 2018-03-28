@@ -30,7 +30,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
   private final Project myProject;
   private final Collection<TreeElement> myChildren = new ArrayList<TreeElement>();
 
-  private PropertyGroup(String propertyName, PsiType propertyType, boolean isStatic, @NotNull Project project) {
+  private PropertyGroup(String propertyName, PsiType propertyType, boolean isStatic, @Nonnull Project project) {
     myPropertyName = propertyName;
     myPropertyType = propertyType;
     myIsStatic = isStatic;

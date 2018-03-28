@@ -22,7 +22,7 @@ import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -38,7 +38,7 @@ public class IfStatementWithTooManyBranchesInspection
    */
   public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "if.statement.with.too.many.branches.display.name");
@@ -51,7 +51,7 @@ public class IfStatementWithTooManyBranchesInspection
       this, "m_limit");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -67,7 +67,7 @@ public class IfStatementWithTooManyBranchesInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@NotNull PsiIfStatement statement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {

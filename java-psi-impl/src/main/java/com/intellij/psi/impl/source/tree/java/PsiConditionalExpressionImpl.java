@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -39,7 +40,7 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiExpression getCondition()
 	{
 		return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.CONDITION);
@@ -255,7 +256,7 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

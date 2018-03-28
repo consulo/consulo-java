@@ -17,8 +17,9 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -32,7 +33,7 @@ public class MoveFileFix implements IntentionAction
 	private final VirtualFile myTarget;
 	private final String myMessage;
 
-	public MoveFileFix(@NotNull VirtualFile file, @NotNull VirtualFile target, @NotNull @Nls String message)
+	public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull @Nls String message)
 	{
 		myFile = file;
 		myTarget = target;
@@ -40,7 +41,7 @@ public class MoveFileFix implements IntentionAction
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -48,7 +49,7 @@ public class MoveFileFix implements IntentionAction
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -56,13 +57,13 @@ public class MoveFileFix implements IntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return true;
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		if(myFile.isValid() && myTarget.isValid())
 		{

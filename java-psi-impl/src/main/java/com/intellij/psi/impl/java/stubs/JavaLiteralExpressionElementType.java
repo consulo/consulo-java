@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -42,7 +43,7 @@ public class JavaLiteralExpressionElementType extends JavaStubElementType<PsiLit
 	}
 
 	@Override
-	public PsiLiteralExpression createPsi(@NotNull ASTNode node)
+	public PsiLiteralExpression createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiLiteralExpressionImpl(node);
 	}
@@ -54,30 +55,30 @@ public class JavaLiteralExpressionElementType extends JavaStubElementType<PsiLit
 	}
 
 	@Override
-	public PsiLiteralExpression createPsi(@NotNull PsiLiteralStub stub)
+	public PsiLiteralExpression createPsi(@Nonnull PsiLiteralStub stub)
 	{
 		return new PsiLiteralExpressionImpl(stub);
 	}
 
 	@Override
-	public void serialize(@NotNull PsiLiteralStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiLiteralStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeUTFFast(stub.getLiteralText());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiLiteralStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiLiteralStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new PsiLiteralStub(parentStub, dataStream.readUTFFast());
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiLiteralStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiLiteralStub stub, @Nonnull IndexSink sink)
 	{
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{

@@ -24,8 +24,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Iterator;
 
@@ -34,10 +33,11 @@ import java.util.Iterator;
 public class MethodLocation extends Location<PsiMethod> {
   private static final Logger LOG = Logger.getInstance("#com.intellij.execution.junit2.info.MethodLocation");
   private final Project myProject;
-  @NotNull private final PsiMethod myMethod;
+  @Nonnull
+  private final PsiMethod myMethod;
   private final Location<PsiClass> myClassLocation;
 
-  public MethodLocation(@NotNull final Project project, @NotNull final PsiMethod method, @NotNull final Location<PsiClass> classLocation) {
+  public MethodLocation(@Nonnull final Project project, @Nonnull final PsiMethod method, @Nonnull final Location<PsiClass> classLocation) {
     myProject = project;
     myMethod = method;
     myClassLocation = classLocation;
@@ -48,17 +48,17 @@ public class MethodLocation extends Location<PsiMethod> {
     return new MethodLocation(classLocation.getProject(), psiElement, classLocation);
   }
 
-  @NotNull
+  @Nonnull
   public PsiMethod getPsiElement() {
     return myMethod;
   }
 
-  @NotNull
+  @Nonnull
   public Project getProject() {
     return myProject;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public Module getModule() {
     return ModuleUtil.findModuleForPsiElement(myMethod);
@@ -68,7 +68,7 @@ public class MethodLocation extends Location<PsiMethod> {
     return myClassLocation.getPsiElement();
   }
 
-  @NotNull
+  @Nonnull
   public <T extends PsiElement> Iterator<Location<T>> getAncestors(final Class<T> ancestorClass, final boolean strict) {
     final Iterator<Location<T>> fromClass = myClassLocation.getAncestors(ancestorClass, false);
     if (strict) return fromClass;

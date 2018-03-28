@@ -17,7 +17,8 @@ package com.intellij.refactoring.migration;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.openapi.application.ApplicationManager;
@@ -64,8 +65,8 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@NotNull
-	protected UsageViewDescriptor createUsageViewDescriptor(@NotNull UsageInfo[] usages)
+	@Nonnull
+	protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages)
 	{
 		return new MigrationUsagesViewDescriptor(myMigrationMap, false);
 	}
@@ -94,13 +95,13 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void refreshElements(@NotNull PsiElement[] elements)
+	protected void refreshElements(@Nonnull PsiElement[] elements)
 	{
 		myPsiMigration = startMigration(myProject);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		ArrayList<UsageInfo> usagesVector = new ArrayList<>();
@@ -148,7 +149,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected boolean preprocessUsages(@NotNull Ref<UsageInfo[]> refUsages)
+	protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages)
 	{
 		if(refUsages.get().length == 0)
 		{
@@ -160,7 +161,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void performRefactoring(@NotNull UsageInfo[] usages)
+	protected void performRefactoring(@Nonnull UsageInfo[] usages)
 	{
 		finishFindMigration();
 		final PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
@@ -210,7 +211,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String getCommandName()
 	{
 		return REFACTORING_NAME;

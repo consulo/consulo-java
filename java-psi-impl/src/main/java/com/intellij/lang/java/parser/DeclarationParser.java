@@ -24,8 +24,8 @@ import static com.intellij.lang.java.parser.JavaParserUtil.expectOrError;
 import static com.intellij.lang.java.parser.JavaParserUtil.exprType;
 import static com.intellij.lang.java.parser.JavaParserUtil.stoppingBuilder;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
@@ -61,7 +61,7 @@ public class DeclarationParser
 
 	private final JavaParser myParser;
 
-	public DeclarationParser(@NotNull final JavaParser javaParser)
+	public DeclarationParser(@Nonnull final JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
@@ -81,7 +81,7 @@ public class DeclarationParser
 		expectOrError(builder, JavaTokenType.RBRACE, "expected.rbrace");
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseClassFromKeyword(PsiBuilder builder, PsiBuilder.Marker declaration, boolean isAnnotation, Context context)
 	{
 		final IElementType keywordTokenType = builder.getTokenType();
@@ -183,7 +183,7 @@ public class DeclarationParser
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseEnumConstant(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker constant = builder.mark();
@@ -463,13 +463,13 @@ public class DeclarationParser
 		return parseFieldOrLocalVariable(builder, declaration, declarationStart, context);
 	}
 
-	@NotNull
+	@Nonnull
 	public Pair<PsiBuilder.Marker, Boolean> parseModifierList(final PsiBuilder builder)
 	{
 		return parseModifierList(builder, ElementType.MODIFIER_BIT_SET);
 	}
 
-	@NotNull
+	@Nonnull
 	public Pair<PsiBuilder.Marker, Boolean> parseModifierList(final PsiBuilder builder, final TokenSet modifiers)
 	{
 		final PsiBuilder.Marker modList = builder.mark();
@@ -560,19 +560,19 @@ public class DeclarationParser
 		return declaration;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiBuilder.Marker parseParameterList(PsiBuilder builder)
 	{
 		return parseElementList(builder, ListType.METHOD);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiBuilder.Marker parseResourceList(PsiBuilder builder)
 	{
 		return parseElementList(builder, ListType.RESOURCE);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiBuilder.Marker parseLambdaParameterList(PsiBuilder builder, boolean typed)
 	{
 		return parseElementList(builder, typed ? ListType.LAMBDA_TYPED : ListType.LAMBDA_UNTYPED);
@@ -586,7 +586,7 @@ public class DeclarationParser
 		LAMBDA_UNTYPED
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseElementList(PsiBuilder builder, ListType type)
 	{
 		final boolean lambda = (type == ListType.LAMBDA_TYPED || type == ListType.LAMBDA_UNTYPED);
@@ -708,13 +708,13 @@ public class DeclarationParser
 		return elementList;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseParameter(PsiBuilder builder, boolean ellipsis, boolean disjunctiveType)
 	{
 		return parseListElement(builder, true, ellipsis, disjunctiveType, false);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseResource(PsiBuilder builder)
 	{
 		PsiBuilder.Marker marker = builder.mark();
@@ -731,13 +731,13 @@ public class DeclarationParser
 		return parseListElement(builder, true, false, false, true);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseLambdaParameter(PsiBuilder builder, boolean typed)
 	{
 		return parseListElement(builder, typed, true, false, false);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseListElement(PsiBuilder builder, boolean typed, boolean ellipsis, boolean disjunctiveType, boolean resource)
 	{
 		PsiBuilder.Marker param = builder.mark();
@@ -820,7 +820,7 @@ public class DeclarationParser
 		return param;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseFieldOrLocalVariable(PsiBuilder builder, PsiBuilder.Marker declaration, int declarationStart, Context context)
 	{
 		final IElementType varType;
@@ -924,7 +924,7 @@ public class DeclarationParser
 		return declaration;
 	}
 
-	private boolean eatBrackets(PsiBuilder builder, @Nullable @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String errorKey)
+	private boolean eatBrackets(PsiBuilder builder, @javax.annotation.Nullable @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String errorKey)
 	{
 		IElementType tokenType = builder.getTokenType();
 		if(tokenType != JavaTokenType.LBRACKET && tokenType != JavaTokenType.AT)
@@ -974,7 +974,7 @@ public class DeclarationParser
 		return paired;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseAnnotations(final PsiBuilder builder)
 	{
 		PsiBuilder.Marker firstAnno = null;
@@ -991,7 +991,7 @@ public class DeclarationParser
 		return firstAnno;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiBuilder.Marker parseAnnotation(final PsiBuilder builder)
 	{
 		assert builder.getTokenType() == JavaTokenType.AT : builder.getTokenType();
@@ -1014,7 +1014,7 @@ public class DeclarationParser
 		return anno;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseAnnotationParameterList(final PsiBuilder builder)
 	{
 		PsiBuilder.Marker list = builder.mark();
@@ -1109,7 +1109,7 @@ public class DeclarationParser
 		return hasName;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiBuilder.Marker parseAnnotationValue(PsiBuilder builder)
 	{
 		PsiBuilder.Marker result = doParseAnnotationValue(builder);
@@ -1123,7 +1123,7 @@ public class DeclarationParser
 		return result;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker doParseAnnotationValue(PsiBuilder builder)
 	{
 		PsiBuilder.Marker result;
@@ -1145,7 +1145,7 @@ public class DeclarationParser
 		return result;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parseAnnotationArrayInitializer(PsiBuilder builder)
 	{
 		return myParser.getExpressionParser().parseArrayInitializer(builder, JavaElementType.ANNOTATION_ARRAY_INITIALIZER, builder1 -> doParseAnnotationValue(builder1) != null, "expected.value");

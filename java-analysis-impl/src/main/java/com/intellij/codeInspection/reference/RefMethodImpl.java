@@ -21,9 +21,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Comparing;
@@ -68,7 +68,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 	private String myReturnValueTemplate;
 	protected final RefClass myOwnerClass;
 
-	RefMethodImpl(@NotNull RefClass ownerClass, PsiMethod method, RefManager manager)
+	RefMethodImpl(@Nonnull RefClass ownerClass, PsiMethod method, RefManager manager)
 	{
 		super(method, manager);
 
@@ -222,7 +222,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<RefMethod> getSuperMethods()
 	{
 		if(mySuperMethods == null)
@@ -237,7 +237,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<RefMethod> getDerivedMethods()
 	{
 		if(myDerivedMethods == null)
@@ -310,7 +310,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public RefParameter[] getParameters()
 	{
 		if(myParameters == null)
@@ -373,7 +373,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 		getRefManager().fireBuildReferences(this);
 	}
 
-	private void collectUncaughtExceptions(@NotNull PsiMethod method)
+	private void collectUncaughtExceptions(@Nonnull PsiMethod method)
 	{
 		if(isExternalOverride())
 		{
@@ -610,13 +610,13 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 		return result[0];
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static RefMethod methodFromExternalName(RefManager manager, String externalName)
 	{
 		return (RefMethod) manager.getReference(findPsiMethod(PsiManager.getInstance(manager.getProject()), externalName));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiMethod findPsiMethod(PsiManager manager, String externalName)
 	{
 		final int spaceIdx = externalName.indexOf(' ');
@@ -837,7 +837,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiClass[] getUnThrownExceptions()
 	{
 		if(myUnThrownExceptions == null)

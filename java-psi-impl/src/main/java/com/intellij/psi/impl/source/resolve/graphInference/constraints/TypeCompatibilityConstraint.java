@@ -17,7 +17,7 @@ package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -37,7 +37,7 @@ public class TypeCompatibilityConstraint implements ConstraintFormula
 	private PsiType myT;
 	private PsiType myS;
 
-	public TypeCompatibilityConstraint(@NotNull PsiType t, @NotNull PsiType s)
+	public TypeCompatibilityConstraint(@Nonnull PsiType t, @Nonnull PsiType s)
 	{
 		myT = t;
 		myS = s;

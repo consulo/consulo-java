@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.pom.java.LanguageLevel;
 import consulo.annotations.RequiredReadAction;
 
@@ -30,7 +30,7 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 *
 	 * @return the package statement, or null if one is missing.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiPackageStatement getPackageStatement();
 
 	/**
@@ -40,7 +40,7 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 * file which has no package statement.
 	 */
 	@Override
-	@NotNull
+	@Nonnull
 	String getPackageName();
 
 	/**
@@ -48,7 +48,7 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 *
 	 * @return the import list, or null if this element represents a compiled class.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	PsiImportList getImportList();
 
@@ -60,7 +60,7 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 * @param checkIncludes   deprecated, no longer used
 	 * @return the list of PsiClass or PsiPackage elements for the imports.
 	 */
-	@NotNull
+	@Nonnull
 	PsiElement[] getOnDemandImports(boolean includeImplicit, @Deprecated boolean checkIncludes);
 
 	/**
@@ -70,7 +70,7 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 * @param checkIncludes deprecated, no longer used.
 	 * @return the list of PsiClass elements for the import.
 	 */
-	@NotNull
+	@Nonnull
 	PsiClass[] getSingleClassImports(@Deprecated boolean checkIncludes);
 
 	/**
@@ -79,7 +79,7 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 *
 	 * @return the list of implicitly imported package names.
 	 */
-	@NotNull
+	@Nonnull
 	String[] getImplicitlyImportedPackages();
 
 	/**
@@ -88,7 +88,7 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 *
 	 * @return the list of implicitly imported package reference elements.
 	 */
-	@NotNull
+	@Nonnull
 	PsiJavaCodeReferenceElement[] getImplicitlyImportedPackageReferences();
 
 	/**
@@ -98,16 +98,16 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner
 	 * @param aClass the class to return the import statement for.
 	 * @return the Java code reference under the import statement, or null if there is no such statement.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiJavaCodeReferenceElement findImportReferenceTo(PsiClass aClass);
 
-	@NotNull
+	@Nonnull
 	LanguageLevel getLanguageLevel();
 
 	/**
 	 * Returns a Java module declaration element, or {@code null} if the file is not a module-info one.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	PsiJavaModule getModuleDeclaration();
 }

@@ -26,12 +26,11 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class JavaNameSuggestionProvider implements NameSuggestionProvider {
-  @Nullable
+  @javax.annotation.Nullable
   public SuggestedNameInfo getSuggestedNames(final PsiElement element, final PsiElement nameSuggestionContext, Set<String> result) {
     String initialName = UsageViewUtil.getShortName(element);
     SuggestedNameInfo info = suggestNamesForElement(element, nameSuggestionContext);
@@ -79,7 +78,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return info;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getSuperMethodName(final PsiParameter psiParameter, final PsiMethod method) {
     final int index = method.getParameterList().getParameterIndex(psiParameter);
     final PsiMethod[] superMethods = method.findSuperMethods();
@@ -92,7 +91,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String[] suggestProperlyCasedName(PsiElement psiElement) {
     if (!(psiElement instanceof PsiNamedElement)) return null;
     String name = ((PsiNamedElement)psiElement).getName();
@@ -141,7 +140,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return buffer.toString();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static SuggestedNameInfo suggestNamesForElement(final PsiElement element, PsiElement nameSuggestionContext) {
     PsiVariable var = null;
     if (element instanceof PsiVariable) {

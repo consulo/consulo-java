@@ -2,7 +2,7 @@ package com.intellij.refactoring;
 
 import static org.junit.Assert.assertTrue;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
@@ -15,7 +15,7 @@ import consulo.codeInsight.TargetElementUtilEx;
  * @author ven
  */
 public class InvertBooleanTest extends LightRefactoringTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

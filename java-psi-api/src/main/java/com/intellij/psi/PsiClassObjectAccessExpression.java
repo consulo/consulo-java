@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a class literal expression (for example, <code>String.class</code>).
@@ -26,6 +26,6 @@ public interface PsiClassObjectAccessExpression extends PsiExpression {
    *
    * @return the type element instance.
    */
-  @NotNull
+  @Nonnull
   PsiTypeElement getOperand();
 }

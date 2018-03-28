@@ -28,7 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.Clause;
@@ -50,12 +51,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 public class ManifestFileImpl extends PsiFileBase implements ManifestFile {
   private final FileType myFileType;
 
-  public ManifestFileImpl(@NotNull FileViewProvider viewProvider, @NotNull Language language, @NotNull FileType fileType) {
+  public ManifestFileImpl(@Nonnull FileViewProvider viewProvider, @Nonnull Language language, @Nonnull FileType fileType) {
     super(viewProvider, language);
     myFileType = fileType;
   }
 
-  @NotNull
+  @Nonnull
   public FileType getFileType() {
     return myFileType;
   }
@@ -65,7 +66,7 @@ public class ManifestFileImpl extends PsiFileBase implements ManifestFile {
     return "ManifestFile:" + getName();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Header[] getHeaders() {
     Header[] childrenOfType = PsiTreeUtil.getChildrenOfType(getFirstChild(), Header.class);
@@ -73,7 +74,7 @@ public class ManifestFileImpl extends PsiFileBase implements ManifestFile {
   }
 
   @Override
-  public Header getHeaderByName(@NotNull String name) {
+  public Header getHeaderByName(@Nonnull String name) {
 
     Header childOfType = PsiTreeUtil.findChildOfType(getFirstChild(), Header.class);
     while (childOfType != null) {
@@ -86,7 +87,7 @@ public class ManifestFileImpl extends PsiFileBase implements ManifestFile {
   }
 
   @Override
-  public Object getValueByKey(@NotNull String key) {
+  public Object getValueByKey(@Nonnull String key) {
     Header header = getHeaderByName(key);
     if (header == null) {
       return null;
@@ -95,7 +96,7 @@ public class ManifestFileImpl extends PsiFileBase implements ManifestFile {
   }
 
   @Override
-  public String getStringValueByKey(@NotNull String key) {
+  public String getStringValueByKey(@Nonnull String key) {
     Header header = getHeaderByName(key);
     if (header == null) {
       return null;
@@ -104,9 +105,9 @@ public class ManifestFileImpl extends PsiFileBase implements ManifestFile {
     return value instanceof String ? (String)value : null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public List<String> getValuesByKey(@NotNull String key) {
+  public List<String> getValuesByKey(@Nonnull String key) {
     Header header = getHeaderByName(key);
     if (header == null) {
       return Collections.emptyList();
@@ -123,7 +124,7 @@ public class ManifestFileImpl extends PsiFileBase implements ManifestFile {
   }
 
   @Override
-  public void setHeaderValue(@NotNull String key, @NotNull String value) {
+  public void setHeaderValue(@Nonnull String key, @Nonnull String value) {
     PsiFile fromText = PsiFileFactory.getInstance(getProject())
       .createFileFromText("DUMMY.MF", ManifestFileType.INSTANCE, String.format("%s: %s\n", key, value));
 

@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
@@ -39,7 +39,7 @@ public class PsiWildcardType extends PsiType.Stub
 	private final boolean myIsExtending;
 	private final PsiType myBound;
 
-	private PsiWildcardType(@NotNull PsiManager manager, boolean isExtending, @Nullable PsiType bound)
+	private PsiWildcardType(@Nonnull PsiManager manager, boolean isExtending, @Nullable PsiType bound)
 	{
 		super(TypeAnnotationProvider.EMPTY);
 		myManager = manager;
@@ -47,7 +47,7 @@ public class PsiWildcardType extends PsiType.Stub
 		myBound = bound;
 	}
 
-	private PsiWildcardType(@NotNull PsiWildcardType type, @NotNull TypeAnnotationProvider provider)
+	private PsiWildcardType(@Nonnull PsiWildcardType type, @Nonnull TypeAnnotationProvider provider)
 	{
 		super(provider);
 		myManager = type.myManager;
@@ -55,8 +55,8 @@ public class PsiWildcardType extends PsiType.Stub
 		myBound = type.myBound;
 	}
 
-	@NotNull
-	public static PsiWildcardType createUnbounded(@NotNull PsiManager manager)
+	@Nonnull
+	public static PsiWildcardType createUnbounded(@Nonnull PsiManager manager)
 	{
 		PsiWildcardType unboundedWildcard = manager.getUserData(UNBOUNDED_WILDCARD);
 		if(unboundedWildcard == null)
@@ -66,16 +66,16 @@ public class PsiWildcardType extends PsiType.Stub
 		return unboundedWildcard;
 	}
 
-	@NotNull
-	public static PsiWildcardType createExtends(@NotNull PsiManager manager, @NotNull PsiType bound)
+	@Nonnull
+	public static PsiWildcardType createExtends(@Nonnull PsiManager manager, @Nonnull PsiType bound)
 	{
 		LOG.assertTrue(!(bound instanceof PsiWildcardType));
 		LOG.assertTrue(bound != PsiType.NULL);
 		return new PsiWildcardType(manager, true, bound);
 	}
 
-	@NotNull
-	public static PsiWildcardType createSuper(@NotNull PsiManager manager, @NotNull PsiType bound)
+	@Nonnull
+	public static PsiWildcardType createSuper(@Nonnull PsiManager manager, @Nonnull PsiType bound)
 	{
 		LOG.assertTrue(!(bound instanceof PsiWildcardType));
 		LOG.assertTrue(bound != PsiType.NULL);
@@ -85,12 +85,12 @@ public class PsiWildcardType extends PsiType.Stub
 	/**
 	 * @deprecated use {@link #annotate(TypeAnnotationProvider)} (to be removed in IDEA 18)
 	 */
-	public PsiWildcardType annotate(@NotNull final PsiAnnotation[] annotations)
+	public PsiWildcardType annotate(@Nonnull final PsiAnnotation[] annotations)
 	{
 		return annotations.length == 0 ? this : new PsiWildcardType(this, TypeAnnotationProvider.Static.create(annotations));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableText(boolean annotated)
 	{
@@ -98,13 +98,13 @@ public class PsiWildcardType extends PsiType.Stub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getCanonicalText(boolean annotated)
 	{
 		return getText(true, annotated, myBound == null ? null : myBound.getCanonicalText(annotated));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
@@ -137,7 +137,7 @@ public class PsiWildcardType extends PsiType.Stub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public GlobalSearchScope getResolveScope()
 	{
 		if(myBound != null)
@@ -152,14 +152,14 @@ public class PsiWildcardType extends PsiType.Stub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getSuperTypes()
 	{
 		return new PsiType[]{getExtendsBound()};
 	}
 
 	@Override
-	public boolean equalsToText(@NotNull String text)
+	public boolean equalsToText(@Nonnull String text)
 	{
 		if(myBound == null)
 		{
@@ -175,7 +175,7 @@ public class PsiWildcardType extends PsiType.Stub
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiManager getManager()
 	{
 		return myManager;
@@ -210,14 +210,14 @@ public class PsiWildcardType extends PsiType.Stub
 	 *
 	 * @return {@code null} if unbounded, a bound otherwise.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiType getBound()
 	{
 		return myBound;
 	}
 
 	@Override
-	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitWildcardType(this);
 	}
@@ -269,7 +269,7 @@ public class PsiWildcardType extends PsiType.Stub
 	 *
 	 * @return {@code PsiType} representing a lower bound. Never returns {@code null}.
 	 */
-	@NotNull
+	@Nonnull
 	public PsiType getExtendsBound()
 	{
 		if(myBound == null || !myIsExtending)
@@ -290,7 +290,7 @@ public class PsiWildcardType extends PsiType.Stub
 	 *
 	 * @return {@code PsiType} representing an upper bound. Never returns {@code null}.
 	 */
-	@NotNull
+	@Nonnull
 	public PsiType getSuperBound()
 	{
 		return myBound == null || myIsExtending ? NULL : myBound;

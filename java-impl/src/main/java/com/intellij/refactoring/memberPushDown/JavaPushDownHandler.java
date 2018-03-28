@@ -28,7 +28,7 @@ import com.intellij.refactoring.lang.ElementsHandler;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.classMembers.MemberInfoStorage;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ import java.util.List;
 public class JavaPushDownHandler implements RefactoringActionHandler, ElementsHandler {
   public static final String REFACTORING_NAME = RefactoringBundle.message("push.members.down.title");
 
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = file.findElementAt(offset);
@@ -63,7 +63,7 @@ public class JavaPushDownHandler implements RefactoringActionHandler, ElementsHa
     }
   }
 
-  public void invoke(@NotNull final Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     PsiElement element = elements[0];

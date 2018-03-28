@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents the call of a Java method or constructor or a Java enum constant..
@@ -44,6 +44,6 @@ public interface PsiCall extends PsiElement {
    *
    * @return the resolve result, or {@link JavaResolveResult#EMPTY} if unresolved
    */
-  @NotNull
+  @Nonnull
   JavaResolveResult resolveMethodGenerics();
 }

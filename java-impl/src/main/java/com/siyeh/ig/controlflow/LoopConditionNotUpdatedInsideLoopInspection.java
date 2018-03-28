@@ -26,8 +26,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.IteratorUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -38,19 +37,19 @@ public class LoopConditionNotUpdatedInsideLoopInspection
   @SuppressWarnings({"PublicField"})
   public boolean ignoreIterators = false;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "loop.condition.not.updated.inside.loop.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "loop.condition.not.updated.inside.loop.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
       InspectionGadgetsBundle.message("ignore.iterator.loop.variables"),
@@ -107,8 +106,8 @@ public class LoopConditionNotUpdatedInsideLoopInspection
       }
     }
 
-    private boolean checkCondition(@Nullable PsiExpression condition,
-                                   @NotNull PsiStatement context,
+    private boolean checkCondition(@javax.annotation.Nullable PsiExpression condition,
+                                   @Nonnull PsiStatement context,
                                    List<PsiExpression> notUpdated) {
       if (condition == null) {
         return false;

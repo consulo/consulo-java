@@ -15,8 +15,8 @@
  */
 package com.intellij.application.options;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.options.Configurable;
@@ -30,7 +30,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
  */
 public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings)
 	{
@@ -56,14 +56,14 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider
 		return "Java";
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Language getLanguage()
 	{
 		return JavaLanguage.INSTANCE;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings)
 	{

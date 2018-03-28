@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -39,7 +39,7 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
 		myReference = myParent instanceof PsiJavaModule ? null : new PsiJavaModuleReference(this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiElement[] getChildren()
 	{
@@ -53,18 +53,18 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		buffer.append(getReferenceText());
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.MODULE_REFERENCE);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getReferenceText()
 	{
@@ -90,7 +90,7 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

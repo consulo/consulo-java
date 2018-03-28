@@ -22,15 +22,16 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class AddDeprecationAnnotationIntention extends AddAnnotationIntention {
-  @NotNull
+  @Nonnull
   @Override
-  public Pair<String, String[]> getAnnotations(@NotNull Project project) {
+  public Pair<String, String[]> getAnnotations(@Nonnull Project project) {
     return new Pair<String, String[]>("java.lang.annotation.Deprecated", ArrayUtil.EMPTY_STRING_ARRAY);
   }
 }

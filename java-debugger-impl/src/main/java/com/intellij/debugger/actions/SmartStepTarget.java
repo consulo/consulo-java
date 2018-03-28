@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.actions;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.Range;
 
@@ -31,7 +31,7 @@ public abstract class SmartStepTarget
 	private final Range<Integer> myExpressionLines;
 
 	protected SmartStepTarget(
-			@Nullable String label,
+			@javax.annotation.Nullable String label,
 			@Nullable PsiElement highlightElement,
 			boolean needBreakpointRequest,
 			Range<Integer> expressionLines)
@@ -42,13 +42,13 @@ public abstract class SmartStepTarget
 		myExpressionLines = expressionLines;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiElement getHighlightElement()
 	{
 		return myHighlightElement;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getLabel()
 	{
 		return myLabel;

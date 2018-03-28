@@ -1,5 +1,5 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class BrokenAlignment {
 
@@ -8,7 +8,7 @@ public class BrokenAlignment {
     output2(object);
   }
 
-  public static void output2(@NotNull Object value) {
+  public static void output2(@Nonnull Object value) {
     System.out.println(value);
   }
 }

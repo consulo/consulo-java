@@ -19,9 +19,11 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.PsiJavaPatterns.psiJavaElement;
 import static com.intellij.patterns.StandardPatterns.instanceOf;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.JavaKeywordCompletion;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.ide.highlighter.JavaFileHighlighter;
@@ -37,13 +39,13 @@ import com.intellij.util.ProcessingContext;
 public abstract class JavaCodeContextType extends TemplateContextType
 {
 
-	protected JavaCodeContextType(@NotNull @NonNls String id, @NotNull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType)
+	protected JavaCodeContextType(@Nonnull @NonNls String id, @Nonnull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType)
 	{
 		super(id, presentableName, baseContextType);
 	}
 
 	@Override
-	public boolean isInContext(@NotNull final PsiFile file, final int offset)
+	public boolean isInContext(@Nonnull final PsiFile file, final int offset)
 	{
 		if(PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE))
 		{
@@ -58,9 +60,9 @@ public abstract class JavaCodeContextType extends TemplateContextType
 		return false;
 	}
 
-	protected abstract boolean isInContext(@NotNull PsiElement element);
+	protected abstract boolean isInContext(@Nonnull PsiElement element);
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SyntaxHighlighter createHighlighter()
 	{
@@ -89,7 +91,7 @@ public abstract class JavaCodeContextType extends TemplateContextType
 		}
 
 		@Override
-		protected boolean isInContext(@NotNull PsiElement element)
+		protected boolean isInContext(@Nonnull PsiElement element)
 		{
 			return true;
 		}
@@ -103,7 +105,7 @@ public abstract class JavaCodeContextType extends TemplateContextType
 		}
 
 		@Override
-		protected boolean isInContext(@NotNull PsiElement element)
+		protected boolean isInContext(@Nonnull PsiElement element)
 		{
 			return isStatementContext(element);
 		}
@@ -137,7 +139,7 @@ public abstract class JavaCodeContextType extends TemplateContextType
 		}
 
 		@Override
-		protected boolean isInContext(@NotNull PsiElement element)
+		protected boolean isInContext(@Nonnull PsiElement element)
 		{
 			return isExpressionContext(element);
 		}
@@ -195,7 +197,7 @@ public abstract class JavaCodeContextType extends TemplateContextType
 		}
 
 		@Override
-		protected boolean isInContext(@NotNull PsiElement element)
+		protected boolean isInContext(@Nonnull PsiElement element)
 		{
 			if(Statement.isStatementContext(element) || Expression.isExpressionContext(element))
 			{

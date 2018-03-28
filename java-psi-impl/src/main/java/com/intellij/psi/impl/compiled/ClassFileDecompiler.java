@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.fileTypes.BinaryFileDecompiler;
 import com.intellij.openapi.project.DefaultProjectFactory;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,8 +29,8 @@ import com.intellij.psi.compiled.ClassFileDecompilers;
 public class ClassFileDecompiler implements BinaryFileDecompiler
 {
 	@Override
-	@NotNull
-	public CharSequence decompile(@NotNull VirtualFile file)
+	@Nonnull
+	public CharSequence decompile(@Nonnull VirtualFile file)
 	{
 		ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
 		if(decompiler instanceof ClassFileDecompilers.Full)
@@ -41,8 +42,8 @@ public class ClassFileDecompiler implements BinaryFileDecompiler
 		return decompileText(file);
 	}
 
-	@NotNull
-	public static CharSequence decompileText(@NotNull VirtualFile file)
+	@Nonnull
+	public static CharSequence decompileText(@Nonnull VirtualFile file)
 	{
 		ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
 		if(decompiler instanceof ClassFileDecompilers.Light)

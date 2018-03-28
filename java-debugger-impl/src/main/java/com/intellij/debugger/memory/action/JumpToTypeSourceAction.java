@@ -17,8 +17,8 @@ package com.intellij.debugger.memory.action;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -50,7 +50,7 @@ public class JumpToTypeSourceAction extends ClassesActionBase
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiClass getPsiClass(AnActionEvent e)
 	{
 		final ReferenceType selectedClass = getSelectedClass(e);
@@ -69,8 +69,8 @@ public class JumpToTypeSourceAction extends ClassesActionBase
 		return null;
 	}
 
-	@Nullable
-	private static ReferenceType getObjectType(@NotNull ReferenceType ref)
+	@javax.annotation.Nullable
+	private static ReferenceType getObjectType(@Nonnull ReferenceType ref)
 	{
 		if(!(ref instanceof ArrayType))
 		{

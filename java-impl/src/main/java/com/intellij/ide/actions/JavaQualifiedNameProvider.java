@@ -35,7 +35,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.LogicalRoot;
 import com.intellij.util.LogicalRootsManager;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -254,7 +254,7 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
     return aClass == targetElement.getContainingClass();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiElement getMember(final PsiElement element) {
     if (element instanceof PsiMember) return element;
     if (element instanceof PsiReference) {

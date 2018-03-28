@@ -16,7 +16,6 @@
 package com.intellij.debugger.engine;
 
 import com.intellij.debugger.engine.jdi.StackFrameProxy;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  * To change this template use Options | File Templates.
  */
 public interface StackFrameContext {
-  @Nullable
+  @javax.annotation.Nullable
   StackFrameProxy  getFrameProxy();
   DebugProcess     getDebugProcess();
 }

@@ -21,7 +21,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 
@@ -66,7 +66,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public void showParameterInfo(@NotNull final PsiReferenceParameterList element, final CreateParameterInfoContext context) {
+  public void showParameterInfo(@Nonnull final PsiReferenceParameterList element, final CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset() + 1, this);
   }
 
@@ -76,7 +76,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public void updateParameterInfo(@NotNull final PsiReferenceParameterList o, final UpdateParameterInfoContext context) {
+  public void updateParameterInfo(@Nonnull final PsiReferenceParameterList o, final UpdateParameterInfoContext context) {
     int index = ParameterInfoUtils.getCurrentParameterIndex(o.getNode(), context.getOffset(), JavaTokenType.COMMA);
     context.setCurrentParameter(index);
     final Object[] objectsToView = context.getObjectsToView();
@@ -84,7 +84,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getParameterCloseChars() {
     return ",>";
   }

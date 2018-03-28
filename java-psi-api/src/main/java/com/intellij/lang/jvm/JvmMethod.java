@@ -15,8 +15,8 @@
  */
 package com.intellij.lang.jvm;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
 
@@ -38,7 +38,7 @@ public interface JvmMethod extends JvmTypeParametersOwner
 	/**
 	 * @see java.lang.reflect.Executable#getName
 	 */
-	@NotNull
+	@Nonnull
 	@Override
 	String getName();
 
@@ -53,7 +53,7 @@ public interface JvmMethod extends JvmTypeParametersOwner
 	/**
 	 * @see java.lang.reflect.Executable#getParameters
 	 */
-	@NotNull
+	@Nonnull
 	JvmParameter[] getParameters();
 
 	/**
@@ -65,6 +65,6 @@ public interface JvmMethod extends JvmTypeParametersOwner
 	 * @see java.lang.reflect.Method#getGenericExceptionTypes
 	 * @see java.lang.reflect.Method#getAnnotatedExceptionTypes
 	 */
-	@NotNull
+	@Nonnull
 	JvmReferenceType[] getThrowsTypes();
 }

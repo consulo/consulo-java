@@ -18,13 +18,13 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 final class HEffects implements HResult {
-  @NotNull
+  @Nonnull
   final Set<HEffectQuantum> effects;
 
-  HEffects(@NotNull Set<HEffectQuantum> effects) {
+  HEffects(@Nonnull Set<HEffectQuantum> effects) {
     this.effects = effects;
   }
 

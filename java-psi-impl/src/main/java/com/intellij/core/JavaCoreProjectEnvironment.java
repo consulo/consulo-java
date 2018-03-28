@@ -17,7 +17,7 @@ package com.intellij.core;
 
 import java.io.File;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.mock.MockFileIndexFacade;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
@@ -25,7 +25,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiElementFinder;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiResolveHelper;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
@@ -90,7 +89,7 @@ public class JavaCoreProjectEnvironment  extends CoreProjectEnvironment {
     addSourcesToClasspath(root);
   }
 
-  public void addSourcesToClasspath(@NotNull VirtualFile root) {
+  public void addSourcesToClasspath(@Nonnull VirtualFile root) {
     assert root.isDirectory();
     ((CoreJavaFileManager)myFileManager).addToClasspath(root);
  //  ((CorePackageIndex)myPackageIndex).addToClasspath(root);

@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.openapi.editor.Editor;
@@ -43,7 +44,7 @@ public class InsertMethodCallFix implements IntentionAction, LowPriorityAction
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -51,7 +52,7 @@ public class InsertMethodCallFix implements IntentionAction, LowPriorityAction
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -59,13 +60,13 @@ public class InsertMethodCallFix implements IntentionAction, LowPriorityAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return myCall.isValid() && PsiManager.getInstance(project).isInProject(myCall);
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		PsiExpression methodExpression = myCall.getMethodExpression();
 		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();

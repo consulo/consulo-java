@@ -1,6 +1,7 @@
 package com.intellij.codeInsight.completion;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.PsiElement;
@@ -40,8 +41,8 @@ public class WordCompletionTest extends CompletionTestCase {
   public void testNoWordCompletionForNonSoftReference() throws Throwable {
     final PsiReferenceProvider softProvider = new PsiReferenceProvider() {
       @Override
-      @NotNull
-      public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context) {
+      @Nonnull
+      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element, true) {
           @Override
           public PsiElement resolve() {
@@ -49,7 +50,7 @@ public class WordCompletionTest extends CompletionTestCase {
           }
 
           @Override
-          @NotNull
+          @Nonnull
           public Object[] getVariants() {
             return new Object[]{"MySoftVariant"};
           }
@@ -58,8 +59,8 @@ public class WordCompletionTest extends CompletionTestCase {
     };
     final PsiReferenceProvider hardProvider = new PsiReferenceProvider() {
       @Override
-      @NotNull
-      public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context) {
+      @Nonnull
+      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element, false) {
           @Override
           public PsiElement resolve() {
@@ -67,7 +68,7 @@ public class WordCompletionTest extends CompletionTestCase {
           }
 
           @Override
-          @NotNull
+          @Nonnull
           public Object[] getVariants() {
             return new Object[]{"MyHardVariant"};
           }

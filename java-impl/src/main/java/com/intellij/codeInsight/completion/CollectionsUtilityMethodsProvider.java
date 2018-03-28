@@ -21,7 +21,7 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
 import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import static com.intellij.psi.CommonClassNames.*;
 
@@ -33,11 +33,12 @@ class CollectionsUtilityMethodsProvider {
   private final PsiElement myElement;
   private final PsiType myExpectedType;
   private final PsiType myDefaultType;
-  @NotNull private final Consumer<LookupElement> myResult;
+  @Nonnull
+  private final Consumer<LookupElement> myResult;
 
   CollectionsUtilityMethodsProvider(PsiElement position,
                                     PsiType expectedType,
-                                    PsiType defaultType, @NotNull final Consumer<LookupElement> result) {
+                                    PsiType defaultType, @Nonnull final Consumer<LookupElement> result) {
     myResult = result;
     myElement = position;
     myExpectedType = expectedType;
@@ -77,7 +78,7 @@ class CollectionsUtilityMethodsProvider {
   }
 
   private void addCollectionMethod(final String baseClassName,
-                                   @NonNls final String method, @NotNull final PsiClass collectionsClass) {
+                                   @NonNls final String method, @Nonnull final PsiClass collectionsClass) {
     if (isClassType(myExpectedType, baseClassName) || isClassType(myExpectedType, JAVA_UTIL_COLLECTION)) {
       addMethodItem(myExpectedType, method, collectionsClass);
     } else if (isClassType(myDefaultType, baseClassName) || isClassType(myDefaultType, JAVA_UTIL_COLLECTION)) {

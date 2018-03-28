@@ -18,9 +18,9 @@ package com.intellij.ide.structureView.impl.java;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.PsiLambdaNameHelper;
@@ -93,7 +93,7 @@ public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExp
 		return super.toString() + (myFunctionalName == null ? "" : " (" + getLocationString() + ")");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Collection<StructureViewTreeElement> getChildrenBase()
 	{

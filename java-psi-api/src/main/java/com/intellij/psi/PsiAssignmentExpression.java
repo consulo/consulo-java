@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.tree.IElementType;
 
 /**
@@ -28,7 +28,7 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the left side expression.
    */
-  @NotNull
+  @Nonnull
   PsiExpression getLExpression();
 
   /**
@@ -46,7 +46,7 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the assignment operation token.
    */
-  @NotNull
+  @Nonnull
   PsiJavaToken getOperationSign();
 
   /**
@@ -54,6 +54,6 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the token type.
    */
-  @NotNull
+  @Nonnull
   IElementType getOperationTokenType();
 }

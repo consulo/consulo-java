@@ -19,8 +19,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.template.*;
 import com.intellij.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,11 +28,11 @@ import java.util.Set;
  * @author ven
  */
 public abstract class VariableTypeMacroBase extends Macro {
-  @Nullable
+  @javax.annotation.Nullable
   protected abstract PsiElement[] getVariables(Expression[] params, final ExpressionContext context);
 
   @Override
-  public LookupElement[] calculateLookupItems(@NotNull Expression[] params, final ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, final ExpressionContext context) {
     final PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length < 2) return null;
     Set<LookupElement> set = new LinkedHashSet<LookupElement>();
@@ -44,14 +43,14 @@ public abstract class VariableTypeMacroBase extends Macro {
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     final PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length == 0) return null;
     return new JavaPsiElementResult(vars[0]);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultValue() {
     return "a";
   }

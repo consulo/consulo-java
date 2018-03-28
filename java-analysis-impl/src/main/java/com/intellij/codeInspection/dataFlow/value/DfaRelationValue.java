@@ -18,9 +18,9 @@ package com.intellij.codeInspection.dataFlow.value;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.Trinity;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
@@ -65,7 +65,7 @@ public class DfaRelationValue extends DfaValue
 			myName = name;
 		}
 
-		@NotNull
+		@Nonnull
 		public RelationType getNegated()
 		{
 			switch(this)
@@ -90,7 +90,7 @@ public class DfaRelationValue extends DfaValue
 			throw new InternalError("Unexpected enum value: " + this);
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		public RelationType getFlipped()
 		{
 			switch(this)
@@ -117,7 +117,7 @@ public class DfaRelationValue extends DfaValue
 			return myName;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		public static RelationType fromElementType(IElementType type)
 		{
 			if(JavaTokenType.EQEQ.equals(type))
@@ -213,8 +213,8 @@ public class DfaRelationValue extends DfaValue
 			return null;
 		}
 
-		@NotNull
-		private DfaRelationValue createCanonicalRelation(@NotNull final DfaValue dfaLeft, @NotNull RelationType relationType, @NotNull final DfaValue dfaRight)
+		@Nonnull
+		private DfaRelationValue createCanonicalRelation(@Nonnull final DfaValue dfaLeft, @Nonnull RelationType relationType, @Nonnull final DfaValue dfaRight)
 		{
 			return myValues.computeIfAbsent(Trinity.create(dfaLeft, dfaRight, relationType), k -> new DfaRelationValue(dfaLeft, dfaRight, relationType, myFactory));
 		}
@@ -230,7 +230,7 @@ public class DfaRelationValue extends DfaValue
 		return myRelation == RelationType.NE || myRelation == RelationType.GT || myRelation == RelationType.LT;
 	}
 
-	@NotNull
+	@Nonnull
 	public RelationType getRelation()
 	{
 		return myRelation;

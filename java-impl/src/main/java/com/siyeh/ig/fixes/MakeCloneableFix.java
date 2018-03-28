@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -23,7 +25,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class MakeCloneableFix extends InspectionGadgetsFix {
 
@@ -33,7 +34,7 @@ public class MakeCloneableFix extends InspectionGadgetsFix {
     this.isInterface = isInterface;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     if (isInterface) {
       return InspectionGadgetsBundle.message(

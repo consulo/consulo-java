@@ -21,7 +21,7 @@ import com.intellij.psi.PsiField;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
   private final PsiField[] myFields;
@@ -37,7 +37,7 @@ class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
     return RefactoringBundle.message("encapsulate.fields.fields.to.be.encapsulated");
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return myFields;
   }

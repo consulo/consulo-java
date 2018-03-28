@@ -16,7 +16,7 @@
 
 package consulo.java.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.lang.LanguageVersion;
@@ -35,7 +35,7 @@ public class JavaLanguageVersion extends LanguageVersion
 		myLanguageLevel = languageLevel;
 	}
 
-	@NotNull
+	@Nonnull
 	public LanguageLevel getLanguageLevel()
 	{
 		return myLanguageLevel;

@@ -18,7 +18,7 @@ package com.intellij.openapi.roots.libraries;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -37,6 +37,6 @@ public abstract class LibrariesHelper {
   @Nullable
   public abstract VirtualFile findJarByClass(final Library library, @NonNls String fqn);
 
-  @Nullable
+  @javax.annotation.Nullable
   public abstract VirtualFile findRootByClass(List<VirtualFile> roots, String fqn);
 }

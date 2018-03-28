@@ -15,13 +15,13 @@
  */
 package com.intellij.lang.jvm.types;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmTypeParameter;
 
 public interface JvmSubstitutor
 {
 
 	@Nullable
-	JvmType substitute(@NotNull JvmTypeParameter typeParameter);
+	JvmType substitute(@Nonnull JvmTypeParameter typeParameter);
 }

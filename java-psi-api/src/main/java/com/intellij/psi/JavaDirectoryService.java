@@ -22,8 +22,7 @@ package com.intellij.psi;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -37,16 +36,16 @@ public abstract class JavaDirectoryService {
    *
    * @return the package instance, or null if the directory does not correspond to any package.
    */
-  @Nullable
-  public abstract PsiJavaPackage getPackage(@NotNull PsiDirectory dir);
+  @javax.annotation.Nullable
+  public abstract PsiJavaPackage getPackage(@Nonnull PsiDirectory dir);
 
   /**
    * Returns the list of Java classes contained in the directory.
    *
    * @return the array of classes.
    */
-  @NotNull
-  public abstract PsiClass[] getClasses(@NotNull PsiDirectory dir);
+  @Nonnull
+  public abstract PsiClass[] getClasses(@Nonnull PsiDirectory dir);
 
   /**
    * Creates a class with the specified name in the directory.
@@ -55,8 +54,8 @@ public abstract class JavaDirectoryService {
    * @return the created class instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @NotNull
-  public abstract PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException;
+  @Nonnull
+  public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
 
   /**
    * Creates a class with the specified name in the directory.
@@ -67,24 +66,24 @@ public abstract class JavaDirectoryService {
    * @throws IncorrectOperationException if the operation failed for some reason.
    * @since 5.1
    */
-  @NotNull
-  public abstract PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String templateName) throws IncorrectOperationException;
+  @Nonnull
+  public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName) throws IncorrectOperationException;
 
   /**
    * @param askForUndefinedVariables
    *  true show dialog asking for undefined variables
    *  false leave them blank
    */
-  public abstract PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String templateName, boolean askForUndefinedVariables) throws IncorrectOperationException;
+  public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName, boolean askForUndefinedVariables) throws IncorrectOperationException;
 
   /**
    * @param additionalProperties additional properties to be substituted in the template
    */
-  public abstract PsiClass createClass(@NotNull PsiDirectory dir,
-                                       @NotNull String name,
-                                       @NotNull String templateName,
+  public abstract PsiClass createClass(@Nonnull PsiDirectory dir,
+                                       @Nonnull String name,
+                                       @Nonnull String templateName,
                                        boolean askForUndefinedVariables,
-                                       @NotNull final Map<String, String> additionalProperties) throws IncorrectOperationException;
+                                       @Nonnull final Map<String, String> additionalProperties) throws IncorrectOperationException;
 
   /**
    * Checks if it's possible to create a class with the specified name in the directory,
@@ -94,7 +93,7 @@ public abstract class JavaDirectoryService {
    * @param name the name of the class to check creation possibility (not including the file extension).
    * @throws IncorrectOperationException if the creation is not possible.
    */
-  public abstract void checkCreateClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException;
+  public abstract void checkCreateClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
 
   /**
    * Creates an interface class with the specified name in the directory.
@@ -103,8 +102,8 @@ public abstract class JavaDirectoryService {
    * @return the created interface instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @NotNull
-  public abstract PsiClass createInterface(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException;
+  @Nonnull
+  public abstract PsiClass createInterface(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
 
   /**
    * Creates an enumeration class with the specified name in the directory.
@@ -113,8 +112,8 @@ public abstract class JavaDirectoryService {
    * @return the created class instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @NotNull
-  public abstract PsiClass createEnum(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException;
+  @Nonnull
+  public abstract PsiClass createEnum(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
 
   /**
    * Creates an annotation class with the specified name in the directory.
@@ -123,8 +122,8 @@ public abstract class JavaDirectoryService {
    * @return the created class instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @NotNull
-  public abstract PsiClass createAnnotationType(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException;
+  @Nonnull
+  public abstract PsiClass createAnnotationType(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
 
 
   /**
@@ -132,7 +131,7 @@ public abstract class JavaDirectoryService {
    *
    * @return true if the directory is a source root, false otherwise
    */
-  public abstract boolean isSourceRoot(@NotNull PsiDirectory dir);
+  public abstract boolean isSourceRoot(@Nonnull PsiDirectory dir);
 
-  public abstract LanguageLevel getLanguageLevel(@NotNull PsiDirectory dir);
+  public abstract LanguageLevel getLanguageLevel(@Nonnull PsiDirectory dir);
 }

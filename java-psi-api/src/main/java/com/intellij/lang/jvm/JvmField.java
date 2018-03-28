@@ -15,7 +15,8 @@
  */
 package com.intellij.lang.jvm;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.jvm.types.JvmType;
 
 /**
@@ -29,7 +30,7 @@ public interface JvmField extends JvmMember
 	/**
 	 * @see java.lang.reflect.Field#getName
 	 */
-	@NotNull
+	@Nonnull
 	@Override
 	String getName();
 
@@ -37,6 +38,6 @@ public interface JvmField extends JvmMember
 	 * @see java.lang.reflect.Field#getGenericType
 	 * @see java.lang.reflect.Field#getAnnotatedType
 	 */
-	@NotNull
+	@Nonnull
 	JvmType getType();
 }

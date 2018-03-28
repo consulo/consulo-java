@@ -1,7 +1,7 @@
 package consulo.java.application.options;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -26,7 +26,7 @@ public class JavaSmartKeysSettings implements PersistentStateComponent<Element>
 {
 	private static final Logger LOGGER = Logger.getInstance(JavaSmartKeysSettings.class);
 
-	@NotNull
+	@Nonnull
 	public static JavaSmartKeysSettings getInstance()
 	{
 		return ServiceManager.getService(JavaSmartKeysSettings.class);

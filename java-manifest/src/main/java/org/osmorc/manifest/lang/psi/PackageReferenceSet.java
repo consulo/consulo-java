@@ -24,21 +24,22 @@
  */
 package org.osmorc.manifest.lang.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.ReferenceSetBase;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class PackageReferenceSet extends ReferenceSetBase<PackageReference> {
 
-  public PackageReferenceSet(@NotNull final String str, @NotNull final PsiElement element, final int startInElement) {
+  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement) {
     super(str, element, startInElement, '.');
   }
 
-  @NotNull
+  @Nonnull
   protected PackageReference createReference(final TextRange range, final int index) {
     return new PackageReference(this, range, index);
   }

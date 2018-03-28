@@ -17,9 +17,9 @@ package com.intellij.debugger.actions;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.unwrap.ScopeHighlighter;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.icons.AllIcons;
@@ -57,14 +57,14 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget>
 		myStepRunnable = stepRunnable;
 	}
 
-	@NotNull
+	@Nonnull
 	public ScopeHighlighter getScopeHighlighter()
 	{
 		return myScopeHighlighter;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<SmartStepTarget> getValues()
 	{
 		return myTargets;
@@ -91,7 +91,7 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getTextFor(SmartStepTarget value)
 	{
 		final String label = value.getLabel();

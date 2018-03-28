@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.application;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.JavaRunConfigurationExtensionManager;
@@ -38,7 +39,7 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
 {
 	protected final T myConfiguration;
 
-	public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @NotNull final T configuration)
+	public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @Nonnull final T configuration)
 	{
 		super(environment);
 		myConfiguration = configuration;
@@ -54,7 +55,7 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected OSProcessHandler startProcess() throws ExecutionException
 	{

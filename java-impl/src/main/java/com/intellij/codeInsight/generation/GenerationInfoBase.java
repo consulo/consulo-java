@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.generation;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiClass;
@@ -42,7 +42,7 @@ public abstract class GenerationInfoBase implements GenerationInfo
 	 */
 	@Override
 	@Nullable
-	public PsiElement findInsertionAnchor(@NotNull PsiClass aClass, @NotNull PsiElement leaf)
+	public PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf)
 	{
 		PsiElement element = leaf;
 		while(element.getParent() != aClass)

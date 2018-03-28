@@ -25,7 +25,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.RecursionManager;
@@ -47,8 +48,8 @@ public class ContractInference
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.ContractInferenceInterpreter");
 	public static final int MAX_CONTRACT_COUNT = 10;
 
-	@NotNull
-	public static List<StandardMethodContract> inferContracts(@NotNull PsiMethodImpl method)
+	@Nonnull
+	public static List<StandardMethodContract> inferContracts(@Nonnull PsiMethodImpl method)
 	{
 		if(!InferenceFromSourceUtil.shouldInferFromSource(method))
 		{
@@ -68,8 +69,8 @@ public class ContractInference
 		});
 	}
 
-	@NotNull
-	private static List<StandardMethodContract> postProcessContracts(@NotNull PsiMethodImpl method, MethodData data, List<PreContract> rawContracts)
+	@Nonnull
+	private static List<StandardMethodContract> postProcessContracts(@Nonnull PsiMethodImpl method, MethodData data, List<PreContract> rawContracts)
 	{
 		List<StandardMethodContract> contracts = ContainerUtil.concat(rawContracts, c -> c.toContracts(method, data.methodBody(method)));
 		if(contracts.isEmpty())
@@ -91,7 +92,7 @@ public class ContractInference
 		return compatible;
 	}
 
-	private static boolean isContractCompatibleWithMethod(@NotNull PsiMethod method, PsiType returnType, StandardMethodContract contract)
+	private static boolean isContractCompatibleWithMethod(@Nonnull PsiMethod method, PsiType returnType, StandardMethodContract contract)
 	{
 		if(hasContradictoryExplicitParameterNullity(method, contract))
 		{
@@ -108,7 +109,7 @@ public class ContractInference
 		return InferenceFromSourceUtil.isReturnTypeCompatible(returnType, contract.returnValue);
 	}
 
-	private static boolean hasContradictoryExplicitParameterNullity(@NotNull PsiMethod method, StandardMethodContract contract)
+	private static boolean hasContradictoryExplicitParameterNullity(@Nonnull PsiMethod method, StandardMethodContract contract)
 	{
 		for(int i = 0; i < contract.arguments.length; i++)
 		{
@@ -120,13 +121,13 @@ public class ContractInference
 		return false;
 	}
 
-	private static boolean isContradictingExplicitNullableReturn(@NotNull PsiMethod method, StandardMethodContract contract)
+	private static boolean isContradictingExplicitNullableReturn(@Nonnull PsiMethod method, StandardMethodContract contract)
 	{
 		return contract.returnValue == NOT_NULL_VALUE && Arrays.stream(contract.arguments).allMatch(c -> c == ANY_VALUE) && NullableNotNullManager.getInstance(method.getProject()).isNullable(method,
 				false);
 	}
 
-	private static boolean isReturnNullitySpecifiedExplicitly(@NotNull PsiMethod method, StandardMethodContract contract)
+	private static boolean isReturnNullitySpecifiedExplicitly(@Nonnull PsiMethod method, StandardMethodContract contract)
 	{
 		if(contract.returnValue != NOT_NULL_VALUE && contract.returnValue != NULL_VALUE)
 		{
@@ -135,7 +136,7 @@ public class ContractInference
 		return NullableNotNullManager.getInstance(method.getProject()).isNotNull(method, false);
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<StandardMethodContract> boxReturnValues(List<StandardMethodContract> contracts)
 	{
 		return ContainerUtil.mapNotNull(contracts, contract ->

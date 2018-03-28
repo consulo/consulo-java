@@ -20,9 +20,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -65,21 +65,21 @@ public class AutoUnboxingInspection extends BaseInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("auto.unboxing.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("auto.unboxing.problem.descriptor");
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public InspectionGadgetsFix buildFix(Object... infos)
 	{
 		if(infos.length == 0 || !isFixApplicable((PsiExpression) infos[0]))
@@ -136,7 +136,7 @@ public class AutoUnboxingInspection extends BaseInspection
 	{
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("auto.unboxing.make.unboxing.explicit.quickfix");

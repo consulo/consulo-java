@@ -16,8 +16,8 @@
 package com.intellij.psi;
 
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a Java local variable.
@@ -37,6 +37,6 @@ public interface PsiLocalVariable extends PsiVariable {
    * {@inheritDoc}
    */
   @Override
-  @NotNull
+  @Nonnull
   PsiTypeElement getTypeElement();
 }

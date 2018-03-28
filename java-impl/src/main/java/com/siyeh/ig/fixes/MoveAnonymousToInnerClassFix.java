@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -26,7 +28,6 @@ import com.intellij.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
 
@@ -41,12 +42,12 @@ public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
       "move.anonymous.to.inner.quickfix");
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return name;
   }
 
-  public void doFix(@NotNull final Project project, ProblemDescriptor descriptor) {
+  public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiAnonymousClass aClass =
       (PsiAnonymousClass)nameElement.getParent();

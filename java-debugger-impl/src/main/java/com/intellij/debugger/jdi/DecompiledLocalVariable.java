@@ -17,8 +17,8 @@ package com.intellij.debugger.jdi;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 
 /**
@@ -34,7 +34,7 @@ public class DecompiledLocalVariable
 	private final boolean myIsParam;
 	private final Collection<String> myMatchedNames;
 
-	public DecompiledLocalVariable(int slot, boolean isParam, @Nullable String signature, @NotNull Collection<String> names)
+	public DecompiledLocalVariable(int slot, boolean isParam, @javax.annotation.Nullable String signature, @Nonnull Collection<String> names)
 	{
 		mySlot = slot;
 		myIsParam = isParam;
@@ -47,7 +47,7 @@ public class DecompiledLocalVariable
 		return mySlot;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getSignature()
 	{
 		return mySignature;
@@ -58,7 +58,7 @@ public class DecompiledLocalVariable
 		return myIsParam;
 	}
 
-	@NotNull
+	@Nonnull
 	public String getDefaultName()
 	{
 		return (myIsParam ? PARAM_PREFIX : SLOT_PREFIX) + mySlot;
@@ -78,7 +78,7 @@ public class DecompiledLocalVariable
 		return getDefaultName();
 	}
 
-	@NotNull
+	@Nonnull
 	public Collection<String> getMatchedNames()
 	{
 		return myMatchedNames;
@@ -90,7 +90,7 @@ public class DecompiledLocalVariable
 		return getDisplayName() + " (slot " + mySlot + ", " + mySignature + ")";
 	}
 
-	public static int getParamId(@Nullable String name)
+	public static int getParamId(@javax.annotation.Nullable String name)
 	{
 		if(!StringUtil.isEmpty(name))
 		{

@@ -29,28 +29,27 @@ import gnu.trove.THashMap;
 import org.intellij.plugins.intelliLang.inject.java.JavaLanguageInjectionSupport;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
 public class MethodParameterInjection extends BaseInjection {
-  @NotNull
+  @Nonnull
   private String myClassName = "";
 
-  @NotNull
+  @Nonnull
   private final Map<String, MethodInfo> myParameterMap = new THashMap<String, MethodInfo>();
 
   public MethodParameterInjection() {
     super(JavaLanguageInjectionSupport.JAVA_SUPPORT_ID);
   }
 
-  @NotNull
+  @Nonnull
   public String getClassName() {
     return myClassName;
   }
 
-  public void setClassName(@NotNull String className) {
+  public void setClassName(@Nonnull String className) {
     myClassName = className;
   }
 
@@ -65,7 +64,7 @@ public class MethodParameterInjection extends BaseInjection {
     return myParameterMap.values();
   }
 
-  public MethodParameterInjection copyFrom(@NotNull BaseInjection o) {
+  public MethodParameterInjection copyFrom(@Nonnull BaseInjection o) {
     super.copyFrom(o);
     if (o instanceof MethodParameterInjection) {
       final MethodParameterInjection other = (MethodParameterInjection)o;
@@ -148,7 +147,7 @@ public class MethodParameterInjection extends BaseInjection {
     return result;
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     final String className = getClassName();
     if (StringUtil.isEmpty(className)) return "<unnamed>";
@@ -200,8 +199,8 @@ public class MethodParameterInjection extends BaseInjection {
     return sb.toString();
   }
 
-  @NotNull
-  private static String buildSignature(@NotNull PsiMethod method) {
+  @Nonnull
+  private static String buildSignature(@Nonnull PsiMethod method) {
     return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS,
                                       PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.SHOW_FQ_CLASS_NAMES | PsiFormatUtil.SHOW_RAW_TYPE);
   }
@@ -211,7 +210,7 @@ public class MethodParameterInjection extends BaseInjection {
     return new MethodInfo(signature, new boolean[method.getParameterList().getParametersCount()], false);
   }
 
-  public static boolean isInjectable(@Nullable final PsiType type, final Project project) {
+  public static boolean isInjectable(@javax.annotation.Nullable final PsiType type, final Project project) {
     if (type == null) return false;
     if (type instanceof PsiPrimitiveType) return false;
     if (project.isDefault()) {
@@ -224,7 +223,7 @@ public class MethodParameterInjection extends BaseInjection {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiMethod makeMethod(final Project project, final String signature) {
     if (StringUtil.isEmpty(signature)) return null;
     try {
@@ -277,23 +276,23 @@ public class MethodParameterInjection extends BaseInjection {
   }
 
   public static class MethodInfo {
-    @NotNull
+    @Nonnull
     final String methodSignature;
-    @NotNull
+    @Nonnull
     final String methodName;
-    @NotNull
+    @Nonnull
     final boolean[] paramFlags;
 
     boolean returnFlag;
 
-    public MethodInfo(@NotNull final String methodSignature, @NotNull final boolean[] paramFlags, final boolean returnFlag) {
+    public MethodInfo(@Nonnull final String methodSignature, @Nonnull final boolean[] paramFlags, final boolean returnFlag) {
       this.methodSignature = methodSignature;
       this.paramFlags = paramFlags;
       this.returnFlag = returnFlag;
       methodName = calcMethodName(methodSignature);
     }
 
-    public MethodInfo(@NotNull final String methodSignature, @NotNull final String paramFlags) {
+    public MethodInfo(@Nonnull final String methodSignature, @Nonnull final String paramFlags) {
       this.methodSignature = methodSignature;
       final Pair<boolean[], Boolean> flags = parseFlags(paramFlags);
       returnFlag = flags.second.booleanValue();
@@ -301,17 +300,17 @@ public class MethodParameterInjection extends BaseInjection {
       methodName = calcMethodName(methodSignature);
     }
 
-    @NotNull
+    @Nonnull
     public String getMethodSignature() {
       return methodSignature;
     }
 
-    @NotNull
+    @Nonnull
     public String getMethodName() {
       return methodName;
     }
 
-    @NotNull
+    @Nonnull
     public boolean[] getParamFlags() {
       return paramFlags;
     }

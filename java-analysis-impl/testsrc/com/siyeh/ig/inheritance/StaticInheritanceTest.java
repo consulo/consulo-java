@@ -15,16 +15,17 @@
  */
 package com.siyeh.ig.inheritance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.openapi.application.PluginPathManager;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * User: cdr
  */
 public class StaticInheritanceTest extends LightQuickFixTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new StaticInheritanceInspection()};
@@ -39,7 +40,7 @@ public class StaticInheritanceTest extends LightQuickFixTestCase {
     return "/com/siyeh/igtest/inheritance/staticInheritance/";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return PluginPathManager.getPluginHomePath("InspectionGadgets") + "/test";

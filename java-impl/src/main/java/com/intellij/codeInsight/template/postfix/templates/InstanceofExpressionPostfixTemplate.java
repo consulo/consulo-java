@@ -29,7 +29,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,18 +45,18 @@ public class InstanceofExpressionPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
     return JavaPostfixTemplatesUtils.isNotPrimitiveTypeExpression(JavaPostfixTemplatesUtils.getTopmostExpression(context));
   }
 
   @Override
-  public void expand(@NotNull PsiElement context, @NotNull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     if (!JavaPostfixTemplatesUtils.isNotPrimitiveTypeExpression(expression)) return;
     surroundExpression(context.getProject(), editor, expression);
   }
 
-  private static void surroundExpression(@NotNull Project project, @NotNull Editor editor, @NotNull PsiExpression expr)
+  private static void surroundExpression(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiExpression expr)
     throws IncorrectOperationException {
     assert expr.isValid();
     PsiType[] types = GuessManager.getInstance(project).guessTypeToCast(expr);

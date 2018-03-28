@@ -6,8 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
@@ -52,7 +52,7 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 	public static final String SUPER_ACCEPTED = "super accepted";
 
 	@Override
-	public void collectAllAccepted(@NotNull Set<String> set)
+	public void collectAllAccepted(@Nonnull Set<String> set)
 	{
 		set.add(NEW_AS_CONSTRUCTOR);
 		set.add(THIS_ACCEPTED);
@@ -60,14 +60,14 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 	}
 
 	@Override
-	public void collectDefinitionSearchFlags(@NotNull Set<String> set)
+	public void collectDefinitionSearchFlags(@Nonnull Set<String> set)
 	{
 		set.add(THIS_ACCEPTED);
 		set.add(SUPER_ACCEPTED);
 	}
 
 	@Override
-	public void collectReferenceSearchFlags(@NotNull Set<String> set)
+	public void collectReferenceSearchFlags(@Nonnull Set<String> set)
 	{
 		set.add(NEW_AS_CONSTRUCTOR);
 	}
@@ -149,7 +149,7 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 
 	@Override
 	@CompositeExtensionPointName.BooleanBreakResult(breakValue = false)
-	public boolean includeSelfInGotoImplementation(@NotNull PsiElement element)
+	public boolean includeSelfInGotoImplementation(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiModifierListOwner && ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.ABSTRACT))
 		{
@@ -181,7 +181,7 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 
 	@Nullable
 	@Override
-	public Collection<PsiElement> getTargetCandidates(@NotNull PsiReference reference)
+	public Collection<PsiElement> getTargetCandidates(@Nonnull PsiReference reference)
 	{
 		PsiElement parent = reference.getElement().getParent();
 		if(parent instanceof PsiCallExpression)
@@ -230,9 +230,9 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 	@Nullable
 	@Override
 	public PsiElement modifyReferenceOrReferencedElement(@Nullable PsiElement refElement,
-			@NotNull PsiFile file,
-			@NotNull Editor editor,
-			@NotNull Set<String> flags,
+			@Nonnull PsiFile file,
+			@Nonnull Editor editor,
+			@Nonnull Set<String> flags,
 			int offset)
 	{
 		PsiReference ref = null;
@@ -299,7 +299,7 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 
 	@Nullable
 	@Override
-	public PsiElement modifyTargetElement(@NotNull PsiElement element, @NotNull Set<String> flags)
+	public PsiElement modifyTargetElement(@Nonnull PsiElement element, @Nonnull Set<String> flags)
 	{
 		if(element instanceof PsiKeyword)
 		{
@@ -364,7 +364,7 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 
 	@Nullable
 	@Override
-	public PsiElement adjustReference(@NotNull PsiReference ref)
+	public PsiElement adjustReference(@Nonnull PsiReference ref)
 	{
 		final PsiElement parent = ref.getElement().getParent();
 		if(parent instanceof PsiMethodCallExpression)
@@ -376,7 +376,7 @@ public class JavaTargetElementUtilEx extends TargetElementUtilEx.Adapter
 
 	@Nullable
 	@Override
-	public PsiElement getNamedElement(@NotNull PsiElement element)
+	public PsiElement getNamedElement(@Nonnull PsiElement element)
 	{
 		PsiElement parent = element.getParent();
 		if(element instanceof PsiIdentifier)

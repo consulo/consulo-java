@@ -23,7 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,13 +34,13 @@ public class StaticCollectionInspection extends BaseInspection {
    */
   public boolean m_ignoreWeakCollections = false;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "static.collection.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.collection.problem.descriptor");
@@ -59,7 +59,7 @@ public class StaticCollectionInspection extends BaseInspection {
   private class StaticCollectionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

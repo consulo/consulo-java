@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection.i18n;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -28,7 +30,6 @@ import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * User: cdr
@@ -41,7 +42,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     element = findJavaCodeUpThere(element);
     PsiFile file = element.getContainingFile();
@@ -72,7 +73,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!element.isValid()) {
       return false;
     }
@@ -89,12 +90,12 @@ class SuppressByCommentOutAction extends SuppressIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return InspectionsBundle.message("suppress.inspection.family");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Suppress with '" + nonNlsCommentPattern + "' comment";

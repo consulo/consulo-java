@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class StaticInnerClass {
   public StaticInnerClass() {
@@ -6,7 +6,7 @@ public class StaticInnerClass {
   }
 
   public static class Inner {
-    public Inner(@NotNull String s) {
+    public Inner(@Nonnull String s) {
     }
   }
 }

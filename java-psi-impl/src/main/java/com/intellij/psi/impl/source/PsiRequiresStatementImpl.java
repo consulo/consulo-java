@@ -17,7 +17,8 @@ package com.intellij.psi.impl.source;
 
 import static com.intellij.openapi.util.text.StringUtil.nullize;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
@@ -30,12 +31,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStatementStub> implements PsiRequiresStatement
 {
-	public PsiRequiresStatementImpl(@NotNull PsiRequiresStatementStub stub)
+	public PsiRequiresStatementImpl(@Nonnull PsiRequiresStatementStub stub)
 	{
 		super(stub, JavaStubElementTypes.REQUIRES_STATEMENT);
 	}
 
-	public PsiRequiresStatementImpl(@NotNull ASTNode node)
+	public PsiRequiresStatementImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
@@ -68,14 +69,14 @@ public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStat
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		PsiModifierList modifierList = getModifierList();
 		return modifierList != null && modifierList.hasModifierProperty(name);
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

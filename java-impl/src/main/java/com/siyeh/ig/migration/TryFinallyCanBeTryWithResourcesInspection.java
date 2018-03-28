@@ -30,8 +30,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -46,13 +45,13 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.problem.descriptor");
@@ -67,7 +66,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
 
     public TryFinallyCanBeTryWithResourcesFix() {}
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.quickfix");
     }
@@ -367,7 +366,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
     return variables;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   static PsiLocalVariable findAutoCloseableVariable(PsiStatement statement) {
     if (statement instanceof PsiIfStatement) {
       final PsiIfStatement ifStatement = (PsiIfStatement)statement;
@@ -507,16 +506,17 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
   static class VariableUsedOutsideContextVisitor extends JavaRecursiveElementVisitor {
 
     private boolean used = false;
-    @NotNull private final PsiVariable variable;
+    @Nonnull
+	private final PsiVariable variable;
     private final PsiElement skipContext;
 
-    public VariableUsedOutsideContextVisitor(@NotNull PsiVariable variable, PsiElement skipContext) {
+    public VariableUsedOutsideContextVisitor(@Nonnull PsiVariable variable, PsiElement skipContext) {
       this.variable = variable;
       this.skipContext = skipContext;
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (element.equals(skipContext)) {
         return;
       }
@@ -527,7 +527,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
     }
 
     @Override
-    public void visitReferenceExpression(@NotNull PsiReferenceExpression referenceExpression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression) {
       if (used) {
         return;
       }

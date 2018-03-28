@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.generation;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.LanguageExtension;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiParameter;
@@ -26,11 +27,11 @@ import com.intellij.psi.PsiParameter;
 public interface ConstructorBodyGenerator {
   LanguageExtension<ConstructorBodyGenerator> INSTANCE = new LanguageExtension<ConstructorBodyGenerator>("consulo.java.constructorBodyGenerator");
 
-  void generateFieldInitialization(@NotNull StringBuilder buffer, @NotNull PsiField[] fields, @NotNull PsiParameter[] parameters);
+  void generateFieldInitialization(@Nonnull StringBuilder buffer, @Nonnull PsiField[] fields, @Nonnull PsiParameter[] parameters);
 
-  void generateSuperCallIfNeeded(@NotNull StringBuilder buffer, @NotNull PsiParameter[] parameters);
+  void generateSuperCallIfNeeded(@Nonnull StringBuilder buffer, @Nonnull PsiParameter[] parameters);
 
-  StringBuilder start(StringBuilder buffer, @NotNull String name, @NotNull PsiParameter[] parameters);
+  StringBuilder start(StringBuilder buffer, @Nonnull String name, @Nonnull PsiParameter[] parameters);
 
   void finish(StringBuilder builder);
 }

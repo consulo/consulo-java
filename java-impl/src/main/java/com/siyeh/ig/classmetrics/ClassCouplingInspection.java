@@ -20,7 +20,7 @@ import com.intellij.util.ui.CheckBox;
 import com.intellij.util.ui.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,20 +39,20 @@ public class ClassCouplingInspection
   public boolean m_includeLibraryClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyCoupledClass";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "overly.coupled.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer totalDependencies = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -123,7 +123,7 @@ public class ClassCouplingInspection
   private class ClassCouplingVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // note: no call to super
       final int totalDependencies = calculateTotalDependencies(aClass);
       if (totalDependencies <= getLimit()) {

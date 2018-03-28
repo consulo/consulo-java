@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,20 +61,20 @@ public class IOResourceInspection extends ResourceInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "IOResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "i.o.resource.opened.not.closed.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -99,13 +99,13 @@ public class IOResourceInspection extends ResourceInspection {
   }
 
   @Override
-  public void readSettings(@NotNull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(ignoredTypesString, ignoredTypes);
   }
 
   @Override
-  public void writeSettings(@NotNull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     ignoredTypesString = formatString(ignoredTypes);
     super.writeSettings(element);
   }
@@ -121,7 +121,7 @@ public class IOResourceInspection extends ResourceInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       if (!isIOResourceFactoryMethodCall(expression)) {
         return;
       }
@@ -129,7 +129,7 @@ public class IOResourceInspection extends ResourceInspection {
     }
 
     @Override
-    public void visitNewExpression(@NotNull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!isIOResource(expression)) {
         return;
@@ -210,7 +210,7 @@ public class IOResourceInspection extends ResourceInspection {
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       if (usedAsArgToResourceCreation) {
         return;
       }

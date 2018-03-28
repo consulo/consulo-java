@@ -26,25 +26,25 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class TeardownCallsSuperTeardownInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "TearDownDoesntCallSuperTearDown";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "teardown.calls.super.teardown.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "teardown.calls.super.teardown.problem.descriptor");
@@ -57,7 +57,7 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
 
   private static class AddSuperTearDownCall extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "teardown.calls.super.teardown.add.quickfix");
@@ -96,7 +96,7 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!"tearDown".equals(methodName)) {

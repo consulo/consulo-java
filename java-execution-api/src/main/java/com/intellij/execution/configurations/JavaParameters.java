@@ -17,7 +17,6 @@ package com.intellij.execution.configurations;
 
 import java.nio.charset.Charset;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.openapi.module.Module;
@@ -89,7 +88,7 @@ public class JavaParameters extends SimpleJavaParameters
 		addNoJdkModFiles(configureEnumerator(OrderEnumerator.orderEntries(module).runtimeOnly().recursively(), classPathType, jdk), getClassPath());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static NotNullFunction<OrderEntry, VirtualFile[]> computeRootProvider(int classPathType, final Sdk jdk)
 	{
 		return (classPathType & JDK_ONLY) == 0 ? null : orderEntry ->
@@ -191,7 +190,7 @@ public class JavaParameters extends SimpleJavaParameters
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getModuleName()
 	{
 		return null; //FIXME [VISTALL] for now it's null

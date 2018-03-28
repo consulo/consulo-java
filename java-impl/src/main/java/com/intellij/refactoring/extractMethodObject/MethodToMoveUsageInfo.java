@@ -22,12 +22,12 @@ package com.intellij.refactoring.extractMethodObject;
 
 import com.intellij.psi.PsiMethod;
 import com.intellij.usageView.UsageInfo;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class MethodToMoveUsageInfo extends UsageInfo {
   private boolean myMove = true;
 
-  public MethodToMoveUsageInfo(@NotNull PsiMethod element) {
+  public MethodToMoveUsageInfo(@Nonnull PsiMethod element) {
     super(element);
   }
 

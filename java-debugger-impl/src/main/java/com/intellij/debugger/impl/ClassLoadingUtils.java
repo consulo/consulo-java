@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -77,7 +76,7 @@ public class ClassLoadingUtils
 	 * Finds and if necessary defines helper class
 	 * May modify class loader in evaluationContext
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static ClassType getHelperClass(String name, EvaluationContext evaluationContext, DebugProcess process) throws EvaluateException
 	{
 		// TODO [egor]: cache and load in boostrap class loader

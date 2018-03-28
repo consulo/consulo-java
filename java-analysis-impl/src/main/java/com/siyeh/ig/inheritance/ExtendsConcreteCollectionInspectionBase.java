@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.inheritance;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -32,21 +32,21 @@ import com.siyeh.ig.psiutils.TypeUtils;
 public class ExtendsConcreteCollectionInspectionBase extends BaseInspection
 {
 	@Override
-	@NotNull
+	@Nonnull
 	public String getID()
 	{
 		return "ClassExtendsConcreteCollection";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("extends.concrete.collection.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String buildErrorString(Object... infos)
 	{
 		final PsiClass superClass = (PsiClass) infos[0];
@@ -71,7 +71,7 @@ public class ExtendsConcreteCollectionInspectionBase extends BaseInspection
 	{
 
 		@Override
-		public void visitClass(@NotNull PsiClass aClass)
+		public void visitClass(@Nonnull PsiClass aClass)
 		{
 			if(aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum())
 			{

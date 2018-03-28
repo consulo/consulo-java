@@ -15,9 +15,10 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 
@@ -123,7 +124,7 @@ public final class BasicRendererProperties implements Cloneable
 		}
 	}
 
-	public void writeExternal(@NotNull Element element)
+	public void writeExternal(@Nonnull Element element)
 	{
 		if(myName != null)
 		{

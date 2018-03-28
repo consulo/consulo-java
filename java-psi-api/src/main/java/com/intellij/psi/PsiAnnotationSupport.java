@@ -15,15 +15,15 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Serega.Vasiliev
  */
 public interface PsiAnnotationSupport {
 
-  @NotNull
-  PsiLiteral createLiteralValue(@NotNull String value, @NotNull PsiElement context);
+  @Nonnull
+  PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context);
 
   /*@NotNull
   PsiArrayInitializerMemberValue createArrayMemberValue(@Nullable PsiElement context);

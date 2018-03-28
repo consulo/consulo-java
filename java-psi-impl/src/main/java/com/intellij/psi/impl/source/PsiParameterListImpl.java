@@ -26,21 +26,21 @@ import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiParameterListStub;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStub> implements PsiParameterList {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiParameterListImpl");
 
-  public PsiParameterListImpl(@NotNull PsiParameterListStub stub) {
+  public PsiParameterListImpl(@Nonnull PsiParameterListStub stub) {
     super(stub, JavaStubElementTypes.PARAMETER_LIST);
   }
 
-  public PsiParameterListImpl(@NotNull ASTNode node) {
+  public PsiParameterListImpl(@Nonnull ASTNode node) {
     super(node);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiParameter[] getParameters() {
     return getStubOrPsiChildren(JavaStubElementTypes.PARAMETER, PsiParameter.ARRAY_FACTORY);
   }
@@ -52,7 +52,7 @@ public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStu
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public CompositeElement getNode() {
     return (CompositeElement)super.getNode();
   }
@@ -68,7 +68,7 @@ public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStu
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParameterList(this);
     }

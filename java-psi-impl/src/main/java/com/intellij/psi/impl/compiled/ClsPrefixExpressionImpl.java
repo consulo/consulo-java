@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElement;
@@ -41,21 +42,21 @@ class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpress
 		myOperand = ClsParsingUtil.psiToClsExpression(operand, this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiExpression getOperand()
 	{
 		return myOperand;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiJavaToken getOperationSign()
 	{
 		return myOperator;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public IElementType getOperationTokenType()
 	{
@@ -74,7 +75,7 @@ class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpress
 		return myParent;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiElement[] getChildren()
 	{
@@ -91,19 +92,19 @@ class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpress
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		buffer.append(getText());
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.PREFIX_EXPRESSION);
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

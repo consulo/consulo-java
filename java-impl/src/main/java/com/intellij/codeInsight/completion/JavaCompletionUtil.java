@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtilCore;
@@ -85,7 +85,6 @@ import com.intellij.util.NullableFunction;
 import com.intellij.util.PairFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
-import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.java.codeInsight.completion.JavaCompletionUtilCore;
 
 public class JavaCompletionUtil extends JavaCompletionUtilCore
@@ -97,7 +96,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 	static final NullableLazyKey<ExpectedTypeInfo[], CompletionLocation> EXPECTED_TYPES = NullableLazyKey.create("expectedTypes", new NullableFunction<CompletionLocation, ExpectedTypeInfo[]>()
 	{
 		@Override
-		@Nullable
+		@javax.annotation.Nullable
 		public ExpectedTypeInfo[] fun(final CompletionLocation location)
 		{
 			if(PsiJavaPatterns.psiElement().beforeLeaf(PsiJavaPatterns.psiElement().withText(".")).accepts(location.getCompletionParameters().getPosition()))
@@ -111,7 +110,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 
 	public static final Key<Boolean> SUPER_METHOD_PARAMETERS = Key.create("SUPER_METHOD_PARAMETERS");
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static Set<PsiType> getExpectedTypes(final CompletionParameters parameters)
 	{
 		final PsiExpression expr = PsiTreeUtil.getContextOfType(parameters.getPosition(), PsiExpression.class, true);
@@ -161,7 +160,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return JavaMemberNameCompletionContributor.completeVariableNameForRefactoring(codeStyleManager, new CamelHumpMatcher(""), varType, varKind, suggestedNameInfo, true, false);
 	}
 
-	public static boolean isInExcludedPackage(@NotNull final PsiMember member, boolean allowInstanceInnerClasses)
+	public static boolean isInExcludedPackage(@Nonnull final PsiMember member, boolean allowInstanceInnerClasses)
 	{
 		final String name = PsiUtil.getMemberQualifiedName(member);
 		if(name == null)
@@ -185,8 +184,8 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 	}
 
 	@SuppressWarnings({"unchecked"})
-	@NotNull
-	public static <T extends PsiType> T originalize(@NotNull T type)
+	@Nonnull
+	public static <T extends PsiType> T originalize(@Nonnull T type)
 	{
 		if(!type.isValid())
 		{
@@ -241,7 +240,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return result;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static List<? extends PsiElement> getAllPsiElements(final LookupElement item)
 	{
 		List<PsiMethod> allMethods = getAllMethods(item);
@@ -256,7 +255,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getLookupElementType(final LookupElement element)
 	{
 		TypedLookupItem typed = element.as(TypedLookupItem.CLASS_CONDITION_KEY);
@@ -264,13 +263,13 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 	}
 
 	@Nullable
-	public static PsiType getQualifiedMemberReferenceType(@Nullable PsiType qualifierType, @NotNull final PsiMember member)
+	public static PsiType getQualifiedMemberReferenceType(@javax.annotation.Nullable PsiType qualifierType, @Nonnull final PsiMember member)
 	{
 		final Ref<PsiSubstitutor> subst = Ref.create(PsiSubstitutor.EMPTY);
 		class MyProcessor extends BaseScopeProcessor implements NameHint, ElementClassHint
 		{
 			@Override
-			public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+			public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 			{
 				if(element == member)
 				{
@@ -280,7 +279,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 			}
 
 			@Override
-			public String getName(@NotNull ResolveState state)
+			public String getName(@Nonnull ResolveState state)
 			{
 				return member.getName();
 			}
@@ -292,7 +291,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 			}
 
 			@Override
-			public <T> T getHint(@NotNull Key<T> hintKey)
+			public <T> T getHint(@Nonnull Key<T> hintKey)
 			{
 				return hintKey == NameHint.KEY || hintKey == ElementClassHint.KEY ? (T) this : null;
 			}
@@ -435,13 +434,13 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return set;
 	}
 
-	@NotNull
-	static PsiReferenceExpression createReference(@NotNull String text, @NotNull PsiElement context)
+	@Nonnull
+	static PsiReferenceExpression createReference(@Nonnull String text, @Nonnull PsiElement context)
 	{
 		return (PsiReferenceExpression) JavaPsiFacade.getElementFactory(context.getProject()).createExpressionFromText(text, context);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiType getQualifierCastType(PsiJavaReference javaReference, CompletionParameters parameters)
 	{
 		if(javaReference instanceof PsiReferenceExpression)
@@ -467,8 +466,8 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return null;
 	}
 
-	@NotNull
-	private static LookupElement castQualifier(@NotNull LookupElement item, @Nullable final PsiTypeLookupItem castTypeItem, @Nullable PsiType plainQualifier, JavaCompletionProcessor processor)
+	@Nonnull
+	private static LookupElement castQualifier(@Nonnull LookupElement item, @javax.annotation.Nullable final PsiTypeLookupItem castTypeItem, @javax.annotation.Nullable PsiType plainQualifier, JavaCompletionProcessor processor)
 	{
 		if(castTypeItem == null)
 		{
@@ -552,13 +551,13 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 	}
 
 	@Nullable
-	private static PsiType toRaw(@Nullable PsiType type)
+	private static PsiType toRaw(@javax.annotation.Nullable PsiType type)
 	{
 		return type instanceof PsiClassType ? ((PsiClassType) type).rawType() : type;
 	}
 
-	@NotNull
-	public static LookupElement highlightIfNeeded(@Nullable PsiType qualifierType, @NotNull LookupElement item, @NotNull Object object, @NotNull PsiElement place)
+	@Nonnull
+	public static LookupElement highlightIfNeeded(@javax.annotation.Nullable PsiType qualifierType, @Nonnull LookupElement item, @Nonnull Object object, @Nonnull PsiElement place)
 	{
 		if(shouldMarkRed(object, place))
 		{
@@ -588,7 +587,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return item;
 	}
 
-	private static boolean shouldMarkRed(@NotNull Object object, @NotNull PsiElement place)
+	private static boolean shouldMarkRed(@Nonnull Object object, @Nonnull PsiElement place)
 	{
 		if(!(object instanceof PsiMember))
 		{
@@ -610,7 +609,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return false;
 	}
 
-	public static boolean containsMember(@Nullable PsiType qualifierType, @NotNull Object object)
+	public static boolean containsMember(@javax.annotation.Nullable PsiType qualifierType, @Nonnull Object object)
 	{
 		if(qualifierType instanceof PsiArrayType && object instanceof PsiMember)
 		{ //length and clone()
@@ -705,12 +704,12 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return methods.length == 0 || Arrays.stream(methods).anyMatch(JavaCompletionUtil::isConstructorCompletable);
 	}
 
-	private static boolean isConstructorCompletable(@NotNull PsiMethod constructor)
+	private static boolean isConstructorCompletable(@Nonnull PsiMethod constructor)
 	{
 		return !(constructor instanceof PsiCompiledElement) || !constructor.hasModifierProperty(PsiModifier.PRIVATE);
 	}
 
-	public static LinkedHashSet<String> getAllLookupStrings(@NotNull PsiMember member)
+	public static LinkedHashSet<String> getAllLookupStrings(@Nonnull PsiMember member)
 	{
 		LinkedHashSet<String> allLookupStrings = ContainerUtil.newLinkedHashSet();
 		String name = member.getName();
@@ -735,7 +734,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return allLookupStrings;
 	}
 
-	public static void insertClassReference(@NotNull PsiClass psiClass, @NotNull PsiFile file, int offset)
+	public static void insertClassReference(@Nonnull PsiClass psiClass, @Nonnull PsiFile file, int offset)
 	{
 		insertClassReference(psiClass, file, offset, offset);
 	}
@@ -838,7 +837,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return newEndOffset;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static PsiElement resolveReference(final PsiReference psiReference)
 	{
 		if(psiReference instanceof PsiPolyVariantReference)
@@ -920,7 +919,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 				}
 
 				@Override
-				protected PsiElement findExistingLeftParenthesis(@NotNull InsertionContext context)
+				protected PsiElement findExistingLeftParenthesis(@Nonnull InsertionContext context)
 				{
 					PsiElement token = super.findExistingLeftParenthesis(context);
 					return isPartOfLambda(token) ? null : token;
@@ -1079,12 +1078,12 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return true;
 	}
 
-	public static FakePsiElement createContextWithXxxVariable(@NotNull PsiElement place, @NotNull PsiType varType)
+	public static FakePsiElement createContextWithXxxVariable(@Nonnull PsiElement place, @Nonnull PsiType varType)
 	{
 		return new FakePsiElement()
 		{
 			@Override
-			public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+			public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 			{
 				return processor.execute(new LightVariableBuilder("xxx", varType, place), ResolveState.initial());
 			}
@@ -1125,7 +1124,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 		return false;
 	}
 
-	public static int findQualifiedNameStart(@NotNull InsertionContext context)
+	public static int findQualifiedNameStart(@Nonnull InsertionContext context)
 	{
 		int start = context.getTailOffset() - 1;
 		while(start >= 0)

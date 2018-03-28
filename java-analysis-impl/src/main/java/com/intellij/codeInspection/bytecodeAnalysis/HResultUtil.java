@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.ArrayUtil;
 
@@ -25,7 +25,7 @@ class HResultUtil
 	private static final HKey[] EMPTY_PRODUCT = new HKey[0];
 	private static final ArrayFactory<HComponent> HCOMPONENT_ARRAY_FACTORY = new ArrayFactory<HComponent>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public HComponent[] create(int count)
 		{

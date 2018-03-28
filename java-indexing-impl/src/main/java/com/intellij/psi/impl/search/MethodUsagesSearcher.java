@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.project.DumbService;
@@ -44,7 +45,7 @@ import com.intellij.util.Processor;
 public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters>
 {
 	@Override
-	public void processQuery(@NotNull final MethodReferencesSearch.SearchParameters p, @NotNull final Processor<PsiReference> consumer)
+	public void processQuery(@Nonnull final MethodReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer)
 	{
 		final PsiMethod method = p.getMethod();
 		final boolean[] isConstructor = new boolean[1];
@@ -142,7 +143,7 @@ public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, Method
 		});
 	}
 
-	static <T> T resolveInReadAction(@NotNull Project p, @NotNull Computable<T> computable)
+	static <T> T resolveInReadAction(@Nonnull Project p, @Nonnull Computable<T> computable)
 	{
 		return ApplicationManager.getApplication().isReadAccessAllowed() ? computable.compute() : DumbService.getInstance(p).runReadActionInSmartMode(computable);
 	}

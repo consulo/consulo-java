@@ -18,7 +18,7 @@ package com.siyeh.ipp.modifiers;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -28,7 +28,7 @@ class ModifierPredicate implements PsiElementPredicate {
   @PsiModifier.ModifierConstant
   private final String myModifier;
 
-  public ModifierPredicate(@NotNull @PsiModifier.ModifierConstant String modifier) {
+  public ModifierPredicate(@Nonnull @PsiModifier.ModifierConstant String modifier) {
     myModifier = modifier;
   }
 

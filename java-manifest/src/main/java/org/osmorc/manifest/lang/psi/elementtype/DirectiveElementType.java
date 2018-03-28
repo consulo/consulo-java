@@ -30,7 +30,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Directive;
 import org.osmorc.manifest.lang.psi.impl.DirectiveImpl;
 import org.osmorc.manifest.lang.psi.stub.DirectiveStub;
@@ -47,7 +47,7 @@ public class DirectiveElementType extends AbstractManifestStubElementType<Direct
   }
 
   @Override
-  public Directive createPsi(@NotNull DirectiveStub stub) {
+  public Directive createPsi(@Nonnull DirectiveStub stub) {
     return new DirectiveImpl(stub, this);
   }
 
@@ -57,20 +57,20 @@ public class DirectiveElementType extends AbstractManifestStubElementType<Direct
   }
 
   @Override
-  public DirectiveStub createStub(@NotNull Directive psi, StubElement parentStub) {
+  public DirectiveStub createStub(@Nonnull Directive psi, StubElement parentStub) {
     return new DirectiveStubImpl(parentStub, psi.getName(), psi.getValue());
   }
 
-  public void serialize(@NotNull DirectiveStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull DirectiveStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeUTFFast(stub.getValue());
   }
 
-  @NotNull
-  public DirectiveStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  @Nonnull
+  public DirectiveStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new DirectiveStubImpl(parentStub, dataStream.readName().toString(), dataStream.readUTFFast());
   }
 
-  public void indexStub(@NotNull DirectiveStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull DirectiveStub stub, @Nonnull IndexSink sink) {
   }
 }

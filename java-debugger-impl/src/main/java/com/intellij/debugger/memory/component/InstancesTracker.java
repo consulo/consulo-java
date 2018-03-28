@@ -18,8 +18,8 @@ package com.intellij.debugger.memory.component;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.memory.event.InstancesTrackerListener;
 import com.intellij.debugger.memory.tracking.TrackingType;
 import com.intellij.openapi.Disposable;
@@ -39,12 +39,12 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
 	private final EventDispatcher<InstancesTrackerListener> myDispatcher = EventDispatcher.create(InstancesTrackerListener.class);
 	private MyState myState = new MyState();
 
-	public static InstancesTracker getInstance(@NotNull Project project)
+	public static InstancesTracker getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, InstancesTracker.class);
 	}
 
-	public boolean isTracked(@NotNull String className)
+	public boolean isTracked(@Nonnull String className)
 	{
 		return myState.classes.containsKey(className);
 	}
@@ -54,19 +54,19 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
 		return myState.isBackgroundTrackingEnabled;
 	}
 
-	@Nullable
-	public TrackingType getTrackingType(@NotNull String className)
+	@javax.annotation.Nullable
+	public TrackingType getTrackingType(@Nonnull String className)
 	{
 		return myState.classes.getOrDefault(className, null);
 	}
 
-	@NotNull
+	@Nonnull
 	public Map<String, TrackingType> getTrackedClasses()
 	{
 		return new HashMap<>(myState.classes);
 	}
 
-	public void add(@NotNull String name, @NotNull TrackingType type)
+	public void add(@Nonnull String name, @Nonnull TrackingType type)
 	{
 		if(type.equals(myState.classes.getOrDefault(name, null)))
 		{
@@ -77,7 +77,7 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
 		myDispatcher.getMulticaster().classChanged(name, type);
 	}
 
-	public void remove(@NotNull String name)
+	public void remove(@Nonnull String name)
 	{
 		TrackingType removed = myState.classes.remove(name);
 		if(removed != null)
@@ -86,17 +86,17 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
 		}
 	}
 
-	public void addTrackerListener(@NotNull InstancesTrackerListener listener)
+	public void addTrackerListener(@Nonnull InstancesTrackerListener listener)
 	{
 		myDispatcher.addListener(listener);
 	}
 
-	public void addTrackerListener(@NotNull InstancesTrackerListener listener, @NotNull Disposable parentDisposable)
+	public void addTrackerListener(@Nonnull InstancesTrackerListener listener, @Nonnull Disposable parentDisposable)
 	{
 		myDispatcher.addListener(listener, parentDisposable);
 	}
 
-	public void removeTrackerListener(@NotNull InstancesTrackerListener listener)
+	public void removeTrackerListener(@Nonnull InstancesTrackerListener listener)
 	{
 		myDispatcher.removeListener(listener);
 	}
@@ -135,7 +135,7 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
 		{
 		}
 
-		MyState(@NotNull MyState state)
+		MyState(@Nonnull MyState state)
 		{
 			isBackgroundTrackingEnabled = state.isBackgroundTrackingEnabled;
 			for(Map.Entry<String, TrackingType> classState : state.classes.entrySet())

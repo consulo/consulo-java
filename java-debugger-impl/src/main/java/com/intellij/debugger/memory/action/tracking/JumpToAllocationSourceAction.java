@@ -17,8 +17,8 @@ package com.intellij.debugger.memory.action.tracking;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.memory.action.DebuggerTreeAction;
@@ -41,7 +41,7 @@ public class JumpToAllocationSourceAction extends DebuggerTreeAction
 	}
 
 	@Override
-	protected void perform(XValueNodeImpl node, @NotNull String nodeName, AnActionEvent e)
+	protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e)
 	{
 		final Project project = e.getProject();
 		final List<StackFrameItem> stack = getStack(e);
@@ -56,7 +56,7 @@ public class JumpToAllocationSourceAction extends DebuggerTreeAction
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private List<StackFrameItem> getStack(AnActionEvent e)
 	{
 		final Project project = e.getProject();

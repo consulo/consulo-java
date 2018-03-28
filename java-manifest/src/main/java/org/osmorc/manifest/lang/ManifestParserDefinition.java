@@ -24,7 +24,8 @@
  */
 package org.osmorc.manifest.lang;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestStubElementTypes;
 import org.osmorc.manifest.lang.psi.elementtype.AbstractManifestStubElementType;
@@ -43,14 +44,14 @@ import consulo.lang.LanguageVersionableParserDefinition;
  */
 public class ManifestParserDefinition extends LanguageVersionableParserDefinition
 {
-  @NotNull
+  @Nonnull
   @Override
   public IFileElementType getFileNodeType() {
     return ManifestStubElementTypes.FILE;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement createElement(ASTNode node) {
     final IElementType type = node.getElementType();
     if (type instanceof AbstractManifestStubElementType) {

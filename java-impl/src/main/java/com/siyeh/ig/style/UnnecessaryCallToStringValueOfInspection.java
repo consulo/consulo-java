@@ -26,27 +26,26 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final String text = (String)infos[0];
     return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.problem.descriptor", text);
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final String text = (String)infos[0];
     return new UnnecessaryCallToStringValueOfFix(text);
@@ -72,7 +71,7 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
       this.replacementText = replacementText;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.quickfix", replacementText);
     }

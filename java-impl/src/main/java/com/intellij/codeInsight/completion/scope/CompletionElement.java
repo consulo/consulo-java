@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.completion.scope;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiClass;
@@ -47,7 +47,7 @@ public class CompletionElement
 		this(element, substitutor, "");
 	}
 
-	public CompletionElement(Object element, PsiSubstitutor substitutor, @NotNull String qualifierText)
+	public CompletionElement(Object element, PsiSubstitutor substitutor, @Nonnull String qualifierText)
 	{
 		myElement = element;
 		mySubstitutor = substitutor;
@@ -55,7 +55,7 @@ public class CompletionElement
 		myEqualityObject = getUniqueId();
 	}
 
-	@NotNull
+	@Nonnull
 	public String getQualifierText()
 	{
 		return myQualifierText;
@@ -125,7 +125,7 @@ public class CompletionElement
 		return myEqualityObject != null ? myEqualityObject.hashCode() : 0;
 	}
 
-	public boolean isMoreSpecificThan(@NotNull CompletionElement prev)
+	public boolean isMoreSpecificThan(@Nonnull CompletionElement prev)
 	{
 		Object prevElement = prev.getElement();
 		if(!(prevElement instanceof PsiMethod && myElement instanceof PsiMethod))

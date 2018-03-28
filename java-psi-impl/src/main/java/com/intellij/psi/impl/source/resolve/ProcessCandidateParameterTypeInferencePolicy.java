@@ -18,7 +18,8 @@ package com.intellij.psi.impl.source.resolve;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.pom.java.LanguageLevel;
@@ -42,7 +43,7 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 	@Override
 	public Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall,
 			PsiExpressionList expressionList,
-			@NotNull PsiCallExpression contextCall,
+			@Nonnull PsiCallExpression contextCall,
 			PsiTypeParameter typeParameter)
 	{
 		PsiExpression[] expressions = expressionList.getExpressions();
@@ -150,8 +151,8 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 		return null;
 	}
 
-	@NotNull
-	protected JavaResolveResult[] getResults(@NotNull PsiCallExpression contextCall, final int exprIdx) throws MethodProcessorSetupFailedException
+	@Nonnull
+	protected JavaResolveResult[] getResults(@Nonnull PsiCallExpression contextCall, final int exprIdx) throws MethodProcessorSetupFailedException
 	{
 		PsiFile containingFile = contextCall.getContainingFile();
 		final MethodCandidatesProcessor processor = new MethodCandidatesProcessor(contextCall, containingFile);

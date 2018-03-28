@@ -17,7 +17,6 @@ package com.intellij.compiler.cache;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.openapi.diagnostic.Logger;
@@ -54,7 +53,7 @@ public class JavaCacheUtils
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
 	private static
-	@Nullable
+	@javax.annotation.Nullable
 	String parseParameterSignature(String signature)
 	{
 		if(StringUtil.startsWithChar(signature, 'B'))

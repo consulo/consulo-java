@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.junit;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -24,7 +26,6 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ipp.psiutils.ImportUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class FlipAssertLiteralIntention extends MutablyNamedIntention {
 
@@ -46,13 +47,13 @@ public class FlipAssertLiteralIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new AssertTrueOrFalsePredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) {
+  public void processIntention(@Nonnull PsiElement element) {
     final PsiMethodCallExpression call = (PsiMethodCallExpression)element;
     final PsiReferenceExpression methodExpression = call.getMethodExpression();
     @NonNls final String fromMethodName = methodExpression.getReferenceName();

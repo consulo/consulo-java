@@ -29,7 +29,8 @@ import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflection
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -81,7 +82,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result)
+	public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result)
 	{
 		if(parameters.getCompletionType() != CompletionType.BASIC)
 		{
@@ -122,7 +123,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static void addAnnotationClasses(@NotNull PsiClass psiClass, boolean isDeclared, @NotNull CompletionResultSet result)
+	private static void addAnnotationClasses(@Nonnull PsiClass psiClass, boolean isDeclared, @Nonnull CompletionResultSet result)
 	{
 		Set<PsiAnnotation> declaredAnnotations = isDeclared ? ContainerUtil.set(AnnotationUtil.getAllAnnotations(psiClass, false, null, false)) : null;
 
@@ -152,7 +153,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static void addConstructorParameterTypes(@NotNull PsiClass psiClass, boolean isDeclared, @NotNull CompletionResultSet result)
+	private static void addConstructorParameterTypes(@Nonnull PsiClass psiClass, boolean isDeclared, @Nonnull CompletionResultSet result)
 	{
 		PsiMethod[] constructors = psiClass.getConstructors();
 		for(PsiMethod constructor : constructors)
@@ -167,7 +168,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static void handleAnnotationClassInsertion(@NotNull InsertionContext context, @NotNull LookupElement item)
+	private static void handleAnnotationClassInsertion(@Nonnull InsertionContext context, @Nonnull LookupElement item)
 	{
 		Object object = item.getObject();
 		if(object instanceof PsiClass)
@@ -180,7 +181,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static void handleConstructorSignatureInsertion(@NotNull InsertionContext context, @NotNull LookupElement item)
+	private static void handleConstructorSignatureInsertion(@Nonnull InsertionContext context, @Nonnull LookupElement item)
 	{
 		Object object = item.getObject();
 		if(object instanceof PsiMethod)
@@ -193,7 +194,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static void handleParametersInsertion(@NotNull InsertionContext context, @NotNull String text)
+	private static void handleParametersInsertion(@Nonnull InsertionContext context, @Nonnull String text)
 	{
 		PsiElement newElement = PsiUtilCore.getElementAtOffset(context.getFile(), context.getStartOffset());
 		PsiExpressionList parameterList = PsiTreeUtil.getParentOfType(newElement, PsiExpressionList.class);
@@ -210,14 +211,14 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 	{
 		private final String myInterfaceName;
 
-		public MethodDefinedInInterfacePatternCondition(@NotNull String interfaceName)
+		public MethodDefinedInInterfacePatternCondition(@Nonnull String interfaceName)
 		{
 			super("definedInInterface");
 			myInterfaceName = interfaceName;
 		}
 
 		@Override
-		public boolean accepts(@NotNull PsiMethod method, ProcessingContext context)
+		public boolean accepts(@Nonnull PsiMethod method, ProcessingContext context)
 		{
 			PsiClass containingClass = method.getContainingClass();
 			return InheritanceUtil.isInheritor(containingClass, false, myInterfaceName);

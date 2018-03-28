@@ -27,16 +27,16 @@ import com.intellij.refactoring.RefactoringActionHandlerFactory;
 import com.intellij.ide.DataManager;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class MoveClassFix extends InspectionGadgetsFix {
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("move.class.quickfix");
   }
 
-  public void doFix(@NotNull final Project project,
+  public void doFix(@Nonnull final Project project,
                     ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiClass aClass = (PsiClass)nameElement.getParent();

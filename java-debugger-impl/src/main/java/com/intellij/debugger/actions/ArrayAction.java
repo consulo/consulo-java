@@ -17,8 +17,8 @@ package com.intellij.debugger.actions;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -46,7 +46,7 @@ public abstract class ArrayAction extends DebuggerAction
 {
 	@RequiredDispatchThread
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e)
+	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
 		DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
 
@@ -77,12 +77,12 @@ public abstract class ArrayAction extends DebuggerAction
 		createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(newRenderer, node, debuggerContext));
 	}
 
-	@NotNull
-	protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title);
+	@Nonnull
+	protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
 
 	@RequiredDispatchThread
 	@Override
-	public void update(@NotNull AnActionEvent e)
+	public void update(@Nonnull AnActionEvent e)
 	{
 		boolean enable = false;
 		List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
@@ -120,7 +120,7 @@ public abstract class ArrayAction extends DebuggerAction
 		return null;
 	}
 
-	public static void setArrayRenderer(ArrayRenderer newRenderer, @NotNull XValueNodeImpl node, @NotNull DebuggerContextImpl debuggerContext)
+	public static void setArrayRenderer(ArrayRenderer newRenderer, @Nonnull XValueNodeImpl node, @Nonnull DebuggerContextImpl debuggerContext)
 	{
 		XValue container = node.getValueContainer();
 
@@ -138,7 +138,7 @@ public abstract class ArrayAction extends DebuggerAction
 			debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext())
 			{
 				@Override
-				public void contextAction(@NotNull SuspendContextImpl suspendContext) throws Exception
+				public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
 				{
 					final Renderer lastRenderer = descriptor.getLastRenderer();
 					if(lastRenderer instanceof ArrayRenderer)
@@ -203,9 +203,9 @@ public abstract class ArrayAction extends DebuggerAction
 
 	public static class AdjustArrayRangeAction extends ArrayAction
 	{
-		@NotNull
+		@Nonnull
 		@Override
-		protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title)
+		protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title)
 		{
 			ArrayRenderer clonedRenderer = original.clone();
 			clonedRenderer.setForced(true);
@@ -219,9 +219,9 @@ public abstract class ArrayAction extends DebuggerAction
 
 	public static class FilterArrayAction extends ArrayAction
 	{
-		@NotNull
+		@Nonnull
 		@Override
-		protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title)
+		protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title)
 		{
 			//TODO [VISTALL] ArrayFilterInplaceEditor.editParent(node);
 			return AsyncResult.rejected();

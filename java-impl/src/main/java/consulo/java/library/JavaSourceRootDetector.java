@@ -17,7 +17,7 @@ package consulo.java.library;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.ui.RootDetector;
@@ -31,9 +31,9 @@ public class JavaSourceRootDetector extends RootDetector
 		super(OrderRootType.SOURCES, false, "java sources");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Collection<VirtualFile> detectRoots(@NotNull VirtualFile virtualFile, @NotNull ProgressIndicator progressIndicator)
+	public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile virtualFile, @Nonnull ProgressIndicator progressIndicator)
 	{
 		return JavaVfsSourceRootDetectionUtil.suggestRoots(virtualFile, progressIndicator);
 	}

@@ -17,7 +17,8 @@ package com.intellij.openapi.vfs.impl.jar;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import consulo.vfs.impl.archive.ArchiveFile;
 import consulo.vfs.impl.archive.ArchiveFileSystemBase;
@@ -30,9 +31,9 @@ public class JarFileSystemImpl extends ArchiveFileSystemBase
 		super(JarArchiveFileType.PROTOCOL);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ArchiveFile createArchiveFile(@NotNull String filePath) throws IOException
+	public ArchiveFile createArchiveFile(@Nonnull String filePath) throws IOException
 	{
 		return new ZipArchiveFile(filePath);
 	}

@@ -1,14 +1,14 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class Test {
-  @NotNull
-  public String noNull(@NotNull String text) {
+  @Nonnull
+  public String noNull(@Nonnull String text) {
     assert text != null;
     return "";
   }
 
   private void foo() {
-    @NotNull String str = "";
+    @Nonnull String str = "";
     assert str != null;
   }
 }

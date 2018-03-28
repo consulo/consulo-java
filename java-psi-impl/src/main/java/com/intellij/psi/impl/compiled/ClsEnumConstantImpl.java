@@ -15,30 +15,31 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.PsiFieldStub;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
  */
 public class ClsEnumConstantImpl extends ClsFieldImpl implements PsiEnumConstant {
-  public ClsEnumConstantImpl(@NotNull PsiFieldStub stub) {
+  public ClsEnumConstantImpl(@Nonnull PsiFieldStub stub) {
     super(stub);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
     appendText(getModifierList(), indentLevel, buffer, "");
     appendText(getNameIdentifier(), indentLevel, buffer);
   }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiField mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -58,7 +59,7 @@ public class ClsEnumConstantImpl extends ClsFieldImpl implements PsiEnumConstant
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult resolveMethodGenerics() {
     return JavaResolveResult.EMPTY;
   }
@@ -68,7 +69,7 @@ public class ClsEnumConstantImpl extends ClsFieldImpl implements PsiEnumConstant
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiEnumConstantInitializer getOrCreateInitializingClass() {
     throw new IncorrectOperationException("cannot create initializing class in cls enum constant");
@@ -80,7 +81,7 @@ public class ClsEnumConstantImpl extends ClsFieldImpl implements PsiEnumConstant
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType getType() {
     return JavaPsiFacade.getInstance(getProject()).getElementFactory().createType(getContainingClass());
   }
@@ -101,7 +102,7 @@ public class ClsEnumConstantImpl extends ClsFieldImpl implements PsiEnumConstant
   }
 
   @Override
-  public boolean hasModifierProperty(@NotNull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return PsiModifier.PUBLIC.equals(name) || PsiModifier.STATIC.equals(name) || PsiModifier.FINAL.equals(name);
   }
 }

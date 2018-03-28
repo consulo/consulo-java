@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -43,13 +43,13 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     new HashSet<String>(Arrays.asList(PsiModifier.PUBLIC, PsiModifier.ABSTRACT));
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.interface.modifier.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiModifierList modifierList = (PsiModifierList)infos[1];
     final PsiElement parent = modifierList.getParent();
@@ -94,7 +94,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
       this.modifiersText = modifiersText;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("smth.unnecessary.remove.quickfix", modifiersText);
     }
@@ -141,7 +141,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
   private static class UnnecessaryInterfaceModifierVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       final PsiClass parent = ClassUtils.getContainingClass(aClass);
       if (parent != null && parent.isInterface()) {
         final PsiModifierList modifiers = aClass.getModifierList();
@@ -159,7 +159,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       // don't call super, to keep this from drilling in
       final PsiClass containingClass = field.getContainingClass();
       if (containingClass == null) {
@@ -173,7 +173,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // don't call super, to keep this from drilling in
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {

@@ -16,7 +16,7 @@
 package com.intellij.codeInsight;
 
 import com.intellij.psi.PsiModifierListOwner;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.EventListener;
 
@@ -33,7 +33,7 @@ public interface ExternalAnnotationsListener extends EventListener {
    * @param annotationFQName annotation class FQ name
    * @param successful if annotation modification was successful
    */
-  void afterExternalAnnotationChanging(@NotNull PsiModifierListOwner owner, @NotNull String annotationFQName, boolean successful);
+  void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful);
 
   /**
    * Invoked when external annotations files were modified
@@ -42,7 +42,7 @@ public interface ExternalAnnotationsListener extends EventListener {
 
   abstract class Adapter implements ExternalAnnotationsListener {
     @Override
-    public void afterExternalAnnotationChanging(@NotNull PsiModifierListOwner owner, @NotNull String annotationFQName, boolean successful) {
+    public void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful) {
     }
 
     @Override

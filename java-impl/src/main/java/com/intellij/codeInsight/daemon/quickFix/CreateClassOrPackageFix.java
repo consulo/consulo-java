@@ -15,7 +15,15 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import consulo.java.JavaQuickFixBundle;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateClassKind;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -30,15 +38,18 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassKind;
 import com.intellij.psi.util.CreateClassUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
+import consulo.java.JavaQuickFixBundle;
 
 /**
  * @author peter
@@ -49,16 +60,18 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
   private final String myPresentation;
 
   @Nullable private final ClassKind myClassKind;
-  @Nullable private final String mySuperClass;
+  @javax.annotation.Nullable
+  private final String mySuperClass;
   private final String myRedPart;
-  @Nullable private final String myTemplateName;
+  @javax.annotation.Nullable
+  private final String myTemplateName;
 
   @Nullable
-  public static CreateClassOrPackageFix createFix(@NotNull final String qualifiedName,
-                                                  @NotNull final GlobalSearchScope scope,
-                                                  @NotNull final PsiElement context,
+  public static CreateClassOrPackageFix createFix(@Nonnull final String qualifiedName,
+                                                  @Nonnull final GlobalSearchScope scope,
+                                                  @Nonnull final PsiElement context,
                                                   @Nullable final PsiJavaPackage basePackage,
-                                                  @Nullable ClassKind kind,
+                                                  @javax.annotation.Nullable ClassKind kind,
                                                   @Nullable String superClass,
                                                   @Nullable String templateName) {
     final List<PsiDirectory> directories = getWritableDirectoryListDefault(basePackage, scope, context.getManager());
@@ -83,17 +96,17 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
                                                                       templateName);
   }
 
-  @Nullable
-  public static CreateClassOrPackageFix createFix(@NotNull final String qualifiedName,
-                                                  @NotNull final PsiElement context,
+  @javax.annotation.Nullable
+  public static CreateClassOrPackageFix createFix(@Nonnull final String qualifiedName,
+                                                  @Nonnull final PsiElement context,
                                                   @Nullable ClassKind kind, final String superClass) {
     return createFix(qualifiedName, context.getResolveScope(), context, null, kind, superClass, null);
   }
 
-  private CreateClassOrPackageFix(@NotNull List<PsiDirectory> writableDirectoryList,
-                                  @NotNull PsiElement context,
-                                  @NotNull String presentation,
-                                  @NotNull String redPart,
+  private CreateClassOrPackageFix(@Nonnull List<PsiDirectory> writableDirectoryList,
+                                  @Nonnull PsiElement context,
+                                  @Nonnull String presentation,
+                                  @Nonnull String redPart,
                                   @Nullable ClassKind kind,
                                   @Nullable String superClass,
                                   @Nullable final String templateName) {
@@ -107,7 +120,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message(
       myClassKind == ClassKind.INTERFACE ? "create.interface.text" : myClassKind != null ? "create.class.text" : "create.package.text",
@@ -115,17 +128,17 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public void invoke(@NotNull final Project project,
-                     @NotNull final PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull final PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull final Project project,
+                     @Nonnull final PsiFile file,
+                     @Nullable Editor editor,
+                     @Nonnull final PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     if (isAvailable(project, null, file)) {
       new WriteCommandAction(project) {
         @Override

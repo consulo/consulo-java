@@ -24,7 +24,6 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.Nullable;
 
 public class ModifierListElement extends CompositeElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ModifierListElement");
@@ -68,7 +67,7 @@ public class ModifierListElement extends CompositeElement {
     ourModifierToOrderMap.put(PsiModifier.STRICTFP, 6);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static ASTNode getDefaultAnchor(PsiModifierList modifierList, PsiKeyword modifier) {
     Integer order = ourModifierToOrderMap.get(modifier.getText());
     if (order == null) return null;

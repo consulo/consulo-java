@@ -20,8 +20,8 @@ import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CharTailType;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -58,7 +58,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 	@Nullable
 	private final JavaCompletionSession mySession;
 
-	TypeArgumentCompletionProvider(boolean smart, @Nullable JavaCompletionSession session)
+	TypeArgumentCompletionProvider(boolean smart, @javax.annotation.Nullable JavaCompletionSession session)
 	{
 		mySmart = smart;
 		mySession = session;
@@ -66,7 +66,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext processingContext, @NotNull final CompletionResultSet resultSet)
+	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext processingContext, @Nonnull final CompletionResultSet resultSet)
 	{
 		addTypeArgumentVariants(parameters, resultSet, resultSet.getPrefixMatcher());
 	}
@@ -113,7 +113,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<PsiType> getExpectedTypeArgs(PsiElement context, PsiTypeParameterListOwner paramOwner, JBIterable<PsiTypeParameter> typeParams, PsiClassType expectedType)
 	{
 		if(paramOwner instanceof PsiClass)
@@ -166,7 +166,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 		return paramOwner instanceof PsiClass && ConstructorInsertHandler.hasConstructorParameters((PsiClass) paramOwner, context);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiType getExpectedTypeArg(PsiElement context, PsiClassType.ClassResolveResult expectedType, PsiSubstitutor currentSubstitutor, PsiTypeParameter typeParam)
 	{
 		PsiClass expectedClass = expectedType.getElement();
@@ -205,7 +205,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 		return last ? new CharTailType('>') : TailType.COMMA;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static Pair<PsiTypeParameterListOwner, Integer> getTypeParameterInfo(PsiElement context)
 	{
 		final PsiReferenceParameterList parameterList = PsiTreeUtil.getContextOfType(context, PsiReferenceParameterList.class, true);
@@ -274,7 +274,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 			myLookupString = StringUtil.join(myTypeItems, item -> item.getType().getPresentableText(), ", ");
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public Object getObject()
 		{
@@ -295,7 +295,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 			}
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getLookupString()
 		{

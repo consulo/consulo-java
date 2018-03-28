@@ -15,7 +15,8 @@
  */
 package com.intellij.refactoring.typeMigration.usageInfo;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.usageView.UsageInfo;
 
@@ -27,7 +28,7 @@ public class TypeMigrationUsageInfo extends UsageInfo
 	private boolean myExcluded;
 	private TypeMigrationUsageInfo myOwnerRoot;
 
-	public TypeMigrationUsageInfo(@NotNull PsiElement element)
+	public TypeMigrationUsageInfo(@Nonnull PsiElement element)
 	{
 		super(element);
 	}

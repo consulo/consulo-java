@@ -22,9 +22,9 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.xml.util.XmlUtil;
 import com.intellij.lang.properties.references.PropertyReference;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -42,7 +42,7 @@ public class PrefixBasedPropertyReference extends PropertyReference {
     super(key, element, bundleName, soft);
   }
 
-  @NotNull
+  @Nonnull
   protected String getKeyText() {
     String keyText = super.getKeyText();
     final String keyPrefix = getKeyPrefix();

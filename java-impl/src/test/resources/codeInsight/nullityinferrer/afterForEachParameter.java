@@ -1,9 +1,9 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 class Test {
-   void foo(@NotNull List requests){
-        for (@NotNull Object request : requests) {
+   void foo(@Nonnull List requests){
+        for (@Nonnull Object request : requests) {
           System.out.println(request.toString());
         }
     }

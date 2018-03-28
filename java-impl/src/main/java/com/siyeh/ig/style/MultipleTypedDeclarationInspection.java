@@ -22,25 +22,25 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.NormalizeDeclarationFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleTypedDeclarationInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "multiple.typed.declaration.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "VariablesOfDifferentTypesInDeclaration";
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "multiple.typed.declaration.problem.descriptor");
@@ -83,7 +83,7 @@ public class MultipleTypedDeclarationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (!childrenContainTypeElement(field)) {
         return;

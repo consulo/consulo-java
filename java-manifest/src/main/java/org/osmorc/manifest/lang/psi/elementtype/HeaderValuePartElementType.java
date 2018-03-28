@@ -30,7 +30,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.psi.impl.HeaderValuePartImpl;
 import org.osmorc.manifest.lang.psi.stub.HeaderValuePartStub;
@@ -47,7 +47,7 @@ public class HeaderValuePartElementType extends AbstractManifestStubElementType<
   }
 
   @Override
-  public HeaderValuePart createPsi(@NotNull HeaderValuePartStub stub) {
+  public HeaderValuePart createPsi(@Nonnull HeaderValuePartStub stub) {
     return new HeaderValuePartImpl(stub, this);
   }
 
@@ -57,19 +57,19 @@ public class HeaderValuePartElementType extends AbstractManifestStubElementType<
   }
 
   @Override
-  public HeaderValuePartStub createStub(@NotNull HeaderValuePart psi, StubElement parentStub) {
+  public HeaderValuePartStub createStub(@Nonnull HeaderValuePart psi, StubElement parentStub) {
     return new HeaderValuePartStubImpl(parentStub, psi.getUnwrappedText());
   }
 
-  public void serialize(@NotNull HeaderValuePartStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull HeaderValuePartStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeUTFFast(stub.getUnwrappedText());
   }
 
-  @NotNull
-  public HeaderValuePartStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  @Nonnull
+  public HeaderValuePartStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new HeaderValuePartStubImpl(parentStub, dataStream.readUTFFast());
   }
 
-  public void indexStub(@NotNull HeaderValuePartStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull HeaderValuePartStub stub, @Nonnull IndexSink sink) {
   }
 }

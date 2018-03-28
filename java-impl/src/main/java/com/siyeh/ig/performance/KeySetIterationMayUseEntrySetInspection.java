@@ -31,8 +31,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +40,7 @@ import java.util.List;
 public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   @Nls
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
@@ -49,7 +48,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "key.set.iteration.may.use.entry.set.problem.descriptor");
@@ -63,7 +62,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
   private static class KeySetIterationMapUseEntrySetFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "key.set.iteration.may.use.entry.set.quickfix");
@@ -195,7 +194,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
     }
 
     private static String createNewVariableName(
-      @NotNull PsiElement scope, @NotNull PsiType type) {
+      @Nonnull PsiElement scope, @Nonnull PsiType type) {
       final Project project = scope.getProject();
       final JavaCodeStyleManager codeStyleManager =
         JavaCodeStyleManager.getInstance(project);
@@ -341,7 +340,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
       registerError(iteratedValue);
     }
 
-    private static boolean isMapKeySetIteration(PsiExpression iteratedExpression, PsiVariable key, @Nullable PsiElement context) {
+    private static boolean isMapKeySetIteration(PsiExpression iteratedExpression, PsiVariable key, @javax.annotation.Nullable PsiElement context) {
       if (context == null) {
         return false;
       }
@@ -390,7 +389,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
     private boolean getValueFromMap = false;
     private boolean tainted = false;
 
-    GetValueFromMapChecker(@NotNull PsiVariable map, @NotNull PsiVariable key) {
+    GetValueFromMapChecker(@Nonnull PsiVariable map, @Nonnull PsiVariable key) {
       this.map = map;
       this.key = key;
     }

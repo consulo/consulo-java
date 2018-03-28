@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -46,7 +47,7 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 		super("PARAMETER");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -54,13 +55,13 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 	}
 
 	@Override
-	public PsiParameter createPsi(@NotNull PsiParameterStub stub)
+	public PsiParameter createPsi(@Nonnull PsiParameterStub stub)
 	{
 		return getPsiFactory(stub).createParameter(stub);
 	}
 
 	@Override
-	public PsiParameter createPsi(@NotNull ASTNode node)
+	public PsiParameter createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiParameterImpl(node);
 	}
@@ -75,16 +76,16 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 	}
 
 	@Override
-	public void serialize(@NotNull PsiParameterStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiParameterStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getName());
 		TypeInfo.writeTYPE(dataStream, stub.getType(false));
 		dataStream.writeByte(((PsiParameterStubImpl) stub).getFlags());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiParameterStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiParameterStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		StringRef name = dataStream.readName();
 		if(name == null)
@@ -97,7 +98,7 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiParameterStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiParameterStub stub, @Nonnull IndexSink sink)
 	{
 	}
 }

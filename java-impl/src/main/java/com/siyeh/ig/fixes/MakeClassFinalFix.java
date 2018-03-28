@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.WriteAction;
@@ -33,7 +35,6 @@ import com.intellij.util.Query;
 import com.intellij.util.containers.MultiMap;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 /**
 * @author Bas Leijdekkers
@@ -47,7 +48,7 @@ public class MakeClassFinalFix extends InspectionGadgetsFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message(
       "make.class.final.fix.name", className);

@@ -19,8 +19,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -49,13 +49,13 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 	}
 
 	@Override
-	public void initExtra(@NotNull Project project, @NotNull MessageBus bus, @NotNull Engine languageLevelUpdater)
+	public void initExtra(@Nonnull Project project, @Nonnull MessageBus bus, @Nonnull Engine languageLevelUpdater)
 	{
 		// nothing
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Key<LanguageLevel> getFileDataKey()
 	{
 		return LanguageLevel.KEY;
@@ -68,14 +68,14 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public LanguageLevel getDefaultValue()
 	{
 		return LanguageLevel.HIGHEST;
 	}
 
 	@Override
-	public LanguageLevel getImmediateValue(@NotNull Project project, VirtualFile file)
+	public LanguageLevel getImmediateValue(@Nonnull Project project, VirtualFile file)
 	{
 		if(file == null)
 		{
@@ -90,7 +90,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 	}
 
 	@Override
-	public LanguageLevel getImmediateValue(@NotNull Module module)
+	public LanguageLevel getImmediateValue(@Nonnull Module module)
 	{
 		ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
@@ -99,13 +99,13 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 	}
 
 	@Override
-	public boolean acceptsFile(@NotNull VirtualFile file)
+	public boolean acceptsFile(@Nonnull VirtualFile file)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean acceptsDirectory(@NotNull VirtualFile file, @NotNull Project project)
+	public boolean acceptsDirectory(@Nonnull VirtualFile file, @Nonnull Project project)
 	{
 		return ProjectFileIndex.SERVICE.getInstance(project).isInSourceContent(file);
 	}
@@ -113,7 +113,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 	private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
 
 	@Override
-	public void persistAttribute(@NotNull Project project, @NotNull VirtualFile fileOrDir, @NotNull LanguageLevel level) throws IOException
+	public void persistAttribute(@Nonnull Project project, @Nonnull VirtualFile fileOrDir, @Nonnull LanguageLevel level) throws IOException
 	{
 		final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
 		if(iStream != null)
@@ -146,12 +146,12 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 	}
 
 	@Override
-	public void afterRootsChanged(@NotNull Project project)
+	public void afterRootsChanged(@Nonnull Project project)
 	{
 	}
 
 	@Nullable
-	public String getInconsistencyLanguageLevelMessage(@NotNull String message, @NotNull PsiElement element, @NotNull LanguageLevel level, @NotNull PsiFile file)
+	public String getInconsistencyLanguageLevelMessage(@Nonnull String message, @Nonnull PsiElement element, @Nonnull LanguageLevel level, @Nonnull PsiFile file)
 	{
 		return null;
 	}

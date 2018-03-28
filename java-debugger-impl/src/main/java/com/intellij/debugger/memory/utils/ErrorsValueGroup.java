@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.frame.XCompositeNode;
@@ -39,7 +39,7 @@ public class ErrorsValueGroup extends XValueGroup
 		super("Errors");
 	}
 
-	public void addErrorValue(@NotNull String message, @NotNull XNamedValue value)
+	public void addErrorValue(@Nonnull String message, @Nonnull XNamedValue value)
 	{
 		List<XNamedValue> lst;
 		if(!myErrorMessage2ValueMap.containsKey(message))
@@ -64,7 +64,7 @@ public class ErrorsValueGroup extends XValueGroup
 	}
 
 	@Override
-	public void computeChildren(@NotNull XCompositeNode node)
+	public void computeChildren(@Nonnull XCompositeNode node)
 	{
 		XValueChildrenList lst = new XValueChildrenList();
 		myErrorMessage2ValueMap.keySet().forEach(s -> lst.addTopGroup(new MyErrorsValueGroup(s)));
@@ -75,7 +75,7 @@ public class ErrorsValueGroup extends XValueGroup
 	{
 
 		@Override
-		public void computeChildren(@NotNull XCompositeNode node)
+		public void computeChildren(@Nonnull XCompositeNode node)
 		{
 			XValueChildrenList lst = new XValueChildrenList();
 			String name = getName();
@@ -83,7 +83,7 @@ public class ErrorsValueGroup extends XValueGroup
 			node.addChildren(lst, true);
 		}
 
-		MyErrorsValueGroup(@NotNull String name)
+		MyErrorsValueGroup(@Nonnull String name)
 		{
 			super(name);
 		}

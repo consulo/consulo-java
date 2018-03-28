@@ -20,12 +20,13 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.dataFlow.DataFlowInspection;
-import org.jetbrains.annotations.NotNull;
 
 public class SurroundWithIfFixTest extends LightQuickFixTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new DataFlowInspection()};

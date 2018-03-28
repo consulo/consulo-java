@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,20 +37,20 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
   public boolean m_ignoreLoopsWithoutConditions = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "for.loop.replaceable.by.while.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ForLoopReplaceableByWhile";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "for.loop.replaceable.by.while.problem.descriptor");
@@ -70,7 +70,7 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
 
   private static class ReplaceForByWhileFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "for.loop.replaceable.by.while.replace.quickfix");
@@ -114,7 +114,7 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @NotNull PsiForStatement statement) {
+      @Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiStatement initialization = statement.getInitialization();
       if (initialization != null &&

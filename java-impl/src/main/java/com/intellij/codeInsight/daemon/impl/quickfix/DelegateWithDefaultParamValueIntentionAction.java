@@ -20,8 +20,8 @@ import java.util.HashSet;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -49,7 +49,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction {
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     if (parameter != null) {
       if (!parameter.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
@@ -90,7 +90,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiParameter[] parameters = getParams(element);
     if (parameters == null || parameters.length == 0) return;
     final PsiMethod method = (PsiMethod)parameters[0].getDeclarationScope();
@@ -163,18 +163,18 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected PsiParameter[] getParams(PsiElement element) {
     return new PsiParameter[]{PsiTreeUtil.getParentOfType(element, PsiParameter.class)};
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Generate delegated method with default parameter value";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();

@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -101,7 +102,7 @@ public class ForStatementFixer implements Fixer
 	 * @param lastValidForPart last valid element of the target 'for' loop
 	 * @param forStatement     PSI element for the target 'for' loop
 	 */
-	private static void registerErrorOffset(@NotNull Editor editor, @NotNull JavaSmartEnterProcessor processor, @NotNull PsiElement lastValidForPart, @NotNull PsiForStatement forStatement)
+	private static void registerErrorOffset(@Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor, @Nonnull PsiElement lastValidForPart, @Nonnull PsiForStatement forStatement)
 	{
 		final Project project = editor.getProject();
 		int offset = lastValidForPart.getTextRange().getEndOffset();

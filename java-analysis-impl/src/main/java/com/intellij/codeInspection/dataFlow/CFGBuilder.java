@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.inliner.CallInliner;
 import com.intellij.codeInspection.dataFlow.instructions.*;
 import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
@@ -462,7 +462,7 @@ public class CFGBuilder
 	 * @param functionalExpression a functional expression to evaluate
 	 * @return this builder
 	 */
-	public CFGBuilder evaluateFunction(@Nullable PsiExpression functionalExpression)
+	public CFGBuilder evaluateFunction(@javax.annotation.Nullable PsiExpression functionalExpression)
 	{
 		PsiExpression stripped = PsiUtil.deparenthesizeExpression(functionalExpression);
 		if(stripped == null || stripped instanceof PsiLambdaExpression)
@@ -493,7 +493,7 @@ public class CFGBuilder
 	 * @param functionalExpression a functional expression to invoke
 	 * @return this builder
 	 */
-	public CFGBuilder invokeFunction(int argCount, @Nullable PsiExpression functionalExpression)
+	public CFGBuilder invokeFunction(int argCount, @javax.annotation.Nullable PsiExpression functionalExpression)
 	{
 		return invokeFunction(argCount, functionalExpression, Nullness.UNKNOWN);
 	}
@@ -508,7 +508,7 @@ public class CFGBuilder
 	 * @param resultNullness       an expected nullness of the lambda result
 	 * @return this builder
 	 */
-	public CFGBuilder invokeFunction(int argCount, @Nullable PsiExpression functionalExpression, Nullness resultNullness)
+	public CFGBuilder invokeFunction(int argCount, @javax.annotation.Nullable PsiExpression functionalExpression, Nullness resultNullness)
 	{
 		PsiExpression stripped = PsiUtil.deparenthesizeExpression(functionalExpression);
 		if(stripped instanceof PsiLambdaExpression)
@@ -619,8 +619,8 @@ public class CFGBuilder
 	 * @param type a type of variable to create
 	 * @return newly created variable
 	 */
-	@NotNull
-	public PsiVariable createTempVariable(@Nullable PsiType type)
+	@Nonnull
+	public PsiVariable createTempVariable(@javax.annotation.Nullable PsiType type)
 	{
 		if(type == null)
 		{
@@ -654,7 +654,7 @@ public class CFGBuilder
 
 	private static class TempVariable extends LightVariableBuilder<TempVariable>
 	{
-		TempVariable(int index, @NotNull PsiType type, @NotNull PsiElement navigationElement)
+		TempVariable(int index, @Nonnull PsiType type, @Nonnull PsiElement navigationElement)
 		{
 			super("tmp$" + index, type, navigationElement);
 		}

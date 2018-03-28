@@ -29,7 +29,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final PsiJavaCodeReferenceElement element = getRefElement();
     assert element != null;
     final String superClassName = getSuperClassName(element);
@@ -68,11 +68,11 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix {
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return super.isAvailable(project, editor, file) && getPossibleTargets(getRefElement()).length > 0;
   }
 
-  @NotNull
+  @Nonnull
   private static PsiClass[] getPossibleTargets(final PsiJavaCodeReferenceElement element) {
     List<PsiClass> result = new ArrayList<PsiClass>();
     PsiElement run = element;

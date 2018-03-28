@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.scope.JavaCompletionProcessor;
 import com.intellij.codeInsight.editorActions.wordSelection.DocTagSelectioner;
@@ -120,7 +120,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		extend(CompletionType.BASIC, PsiJavaPatterns.psiElement().inside(PsiDocComment.class), new CompletionProvider()
 		{
 			@Override
-			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+			public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 			{
 				final PsiElement position = parameters.getPosition();
 				boolean isArg = PsiJavaPatterns.psiElement().afterLeaf("(").accepts(position);
@@ -169,7 +169,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		extend(CompletionType.SMART, psiElement().inside(psiElement(PsiDocTag.class).withName(string().oneOf(PsiKeyword.THROWS, "exception"))), new CompletionProvider()
 		{
 			@Override
-			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+			public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 			{
 				final PsiElement element = parameters.getPosition();
 				final Set<PsiClass> throwsSet = new HashSet<>();
@@ -189,7 +189,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	private List<LookupElement> completeJavadocReference(PsiElement position, PsiJavaReference ref)
 	{
 		JavaCompletionProcessor processor = new JavaCompletionProcessor(position, TrueFilter.INSTANCE, JavaCompletionProcessor.Options.CHECK_NOTHING, Conditions.alwaysTrue());
@@ -244,7 +244,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 	}
 
 	@Override
-	public void fillCompletionVariants(@NotNull final CompletionParameters parameters, @NotNull final CompletionResultSet result)
+	public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result)
 	{
 		PsiElement position = parameters.getPosition();
 		if(PsiJavaPatterns.psiElement(JavaDocTokenType.DOC_COMMENT_DATA).accepts(position))
@@ -273,7 +273,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		super.fillCompletionVariants(parameters, result);
 	}
 
-	private void suggestLinkWrappingVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result, PsiElement position)
+	private void suggestLinkWrappingVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result, PsiElement position)
 	{
 		PrefixMatcher matcher = result.getPrefixMatcher();
 		int prefixStart = parameters.getOffset() - matcher.getPrefix().length() - position.getTextRange().getStartOffset();
@@ -296,7 +296,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private static <T extends LookupElement> InsertHandler<T> wrapIntoLinkTag(InsertHandler<T> delegate)
 	{
 		return (context, item) ->
@@ -360,7 +360,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 	{
 
 		@Override
-		public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+		public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 		{
 			final List<String> ret = new ArrayList<>();
 			final PsiElement position = parameters.getPosition();

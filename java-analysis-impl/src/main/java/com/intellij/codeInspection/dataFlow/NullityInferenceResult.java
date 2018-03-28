@@ -19,7 +19,8 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiMethod;
@@ -45,7 +46,7 @@ interface NullityInferenceResult
 			return value;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public Nullness getNullness(PsiMethod method, Supplier<PsiCodeBlock> body)
 		{
@@ -71,7 +72,7 @@ interface NullityInferenceResult
 			return delegateCalls;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public Nullness getNullness(PsiMethod method, Supplier<PsiCodeBlock> func)
 		{
@@ -98,6 +99,6 @@ interface NullityInferenceResult
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	Nullness getNullness(PsiMethod method, Supplier<PsiCodeBlock> body);
 }

@@ -15,7 +15,8 @@
  */
 package com.siyeh.ipp.expression;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -48,13 +49,13 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ExpressionPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) {
+  public void processIntention(@Nonnull PsiElement element) {
     final PsiJavaToken token = (PsiJavaToken)element;
     final PsiElement parent = token.getParent();
     if (!(parent instanceof PsiPolyadicExpression)) {
@@ -81,7 +82,7 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(Editor editor, @NotNull PsiElement element) {
+  protected void processIntention(Editor editor, @Nonnull PsiElement element) {
     final CaretModel caretModel = editor.getCaretModel();
     final int offset = caretModel.getOffset();
     super.processIntention(editor, element);

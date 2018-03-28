@@ -15,27 +15,28 @@
  */
 package com.siyeh.ig.maturity;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ThreadDumpStackInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToThreadDumpStack";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("dumpstack.call.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "dumpstack.call.problem.descriptor");
@@ -49,7 +50,7 @@ public class ThreadDumpStackInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final String methodName = MethodCallUtils.getMethodName(expression);
       if (!HardcodedMethodConstants.DUMP_STACKTRACE.equals(methodName)) {

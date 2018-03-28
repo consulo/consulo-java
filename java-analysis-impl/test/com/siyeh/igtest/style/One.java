@@ -2,7 +2,7 @@ package com.siyeh.igtest.style;
 
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class One extends BaseInspection {
 
@@ -14,7 +14,7 @@ public class One extends BaseInspection {
         return null;
     }
 
-    @NotNull
+    @Nonnull
     protected String buildErrorString(Object... infos) {
         return null;
     }

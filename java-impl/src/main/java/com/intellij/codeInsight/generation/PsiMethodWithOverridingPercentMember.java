@@ -23,10 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JTree;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiArrayType;
@@ -103,8 +102,8 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember
 		}
 	};
 
-	@NotNull
-	public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@NotNull final Collection<CandidateInfo> candidateInfos)
+	@Nonnull
+	public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@Nonnull final Collection<CandidateInfo> candidateInfos)
 	{
 		final List<PsiMethodWithOverridingPercentMember> result = new ArrayList<PsiMethodWithOverridingPercentMember>(candidateInfos.size());
 		final Map<String, Collection<PsiClass>> classShortNames2Inheritors = new HashMap<String, Collection<PsiClass>>();
@@ -167,7 +166,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember
 		return counter;
 	}
 
-	private static boolean maybeSuper(@NotNull final PsiMethod superMethod, @NotNull final PsiMethod method)
+	private static boolean maybeSuper(@Nonnull final PsiMethod superMethod, @Nonnull final PsiMethod method)
 	{
 		if(!superMethod.getName().equals(method.getName()))
 		{
@@ -191,8 +190,8 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember
 		return true;
 	}
 
-	@Nullable
-	private static String getTypeShortName(@NotNull final PsiType type)
+	@javax.annotation.Nullable
+	private static String getTypeShortName(@Nonnull final PsiType type)
 	{
 		if(type instanceof PsiPrimitiveType)
 		{

@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.memory.tracking;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public enum TrackingType
 {
@@ -23,12 +23,12 @@ public enum TrackingType
 
 	private final String myDescription;
 
-	TrackingType(@SuppressWarnings("SameParameterValue") @NotNull String description)
+	TrackingType(@SuppressWarnings("SameParameterValue") @Nonnull String description)
 	{
 		myDescription = description;
 	}
 
-	@NotNull
+	@Nonnull
 	public String description()
 	{
 		return myDescription;

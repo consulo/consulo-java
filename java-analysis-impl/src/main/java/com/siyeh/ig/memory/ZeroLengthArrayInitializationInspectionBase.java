@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.memory;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiArrayInitializerExpression;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiNewExpression;
@@ -30,21 +31,21 @@ public class ZeroLengthArrayInitializationInspectionBase extends BaseInspection
 {
 	@Pattern(VALID_ID_PATTERN)
 	@Override
-	@NotNull
+	@Nonnull
 	public String getID()
 	{
 		return "ZeroLengthArrayAllocation";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("array.allocation.zero.length.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("array.allocation.zero.length.problem.descriptor");
@@ -66,7 +67,7 @@ public class ZeroLengthArrayInitializationInspectionBase extends BaseInspection
 	{
 
 		@Override
-		public void visitNewExpression(@NotNull PsiNewExpression expression)
+		public void visitNewExpression(@Nonnull PsiNewExpression expression)
 		{
 			super.visitNewExpression(expression);
 			if(!ConstructionUtils.isEmptyArrayInitializer(expression))

@@ -1,11 +1,10 @@
 // "Bind Constructor Parameters to Fields" "true"
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class TestBefore {
 
-    public TestBefore(@NotNull String name<caret>, @NotNull String name2) {
+    public TestBefore(@Nonnull String name<caret>, @Nonnull String name2) {
         super();
     }
 }

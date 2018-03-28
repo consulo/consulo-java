@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ASD {
   static void foo(Object any) {
@@ -14,7 +14,7 @@ public class ASD {
     }
   }
 
-  @NotNull
+  @Nonnull
   static Object bar() {
     return new Object();
   }

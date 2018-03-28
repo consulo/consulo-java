@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.TreeStructureProvider;
@@ -34,7 +34,7 @@ class ClassNameConvertor implements TreeStructureProvider {
         final String name = ((PsiFile)o).getName();
         ProjectViewNode viewNode = new ProjectViewNode<PsiFile>(myProject, (PsiFile)o, settings) {
           @Override
-          @NotNull
+          @Nonnull
           public Collection<AbstractTreeNode> getChildren() {
             return Collections.emptyList();
           }
@@ -50,7 +50,7 @@ class ClassNameConvertor implements TreeStructureProvider {
           }
 
           @Override
-          public boolean contains(@NotNull VirtualFile file) {
+          public boolean contains(@Nonnull VirtualFile file) {
             return false;
           }
 

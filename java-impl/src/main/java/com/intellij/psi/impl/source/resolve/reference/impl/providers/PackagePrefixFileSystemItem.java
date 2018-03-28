@@ -27,8 +27,7 @@ import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -55,13 +54,13 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return StringUtil.notNullize(myPackages[myIndex].getName());
   }
 
   @Override
-  public PsiElement setName(@NonNls @NotNull final String name) throws IncorrectOperationException {
+  public PsiElement setName(@NonNls @Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -101,7 +100,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiElement findElementAt(final int offset) {
     return null;
   }
@@ -118,23 +117,23 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public char[] textToCharArray() {
     return ArrayUtil.EMPTY_CHAR_ARRAY;
   }
 
   @Override
-  public boolean textMatches(@NotNull @NonNls final CharSequence text) {
+  public boolean textMatches(@Nonnull @NonNls final CharSequence text) {
     return false;
   }
 
   @Override
-  public boolean textMatches(@NotNull final PsiElement element) {
+  public boolean textMatches(@Nonnull final PsiElement element) {
     return false;
   }
 
   @Override
-  public void accept(@NotNull final PsiElementVisitor visitor) {
+  public void accept(@Nonnull final PsiElementVisitor visitor) {
   }
 
   @Override
@@ -143,22 +142,22 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement add(@NotNull final PsiElement element) throws IncorrectOperationException {
+  public PsiElement add(@Nonnull final PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addBefore(@NotNull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addBefore(@Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addAfter(@NotNull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addAfter(@Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public void checkAdd(@NotNull final PsiElement element) throws IncorrectOperationException {
+  public void checkAdd(@Nonnull final PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -173,7 +172,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement replace(@NotNull final PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(@Nonnull final PsiElement newElement) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -195,7 +194,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public ASTNode getNode() {
     return null;
   }
@@ -211,7 +210,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Language getLanguage() {
     return Language.ANY;
   }
@@ -222,7 +221,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getChildren() {
     return myIndex == myPackages.length -1? myDirectory.getChildren() : new PsiElement[] {new PackagePrefixFileSystemItem(myDirectory, myIndex + 1, myPackages)};
   }

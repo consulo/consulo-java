@@ -21,14 +21,14 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.name.same.as.ancestor.name.display.name");
@@ -38,7 +38,7 @@ public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
     return new RenameFix();
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "class.name.same.as.ancestor.name.problem.descriptor");
@@ -56,7 +56,7 @@ public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       final String className = aClass.getName();
       if (className == null) {

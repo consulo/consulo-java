@@ -24,10 +24,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.coverage.CoverageRunner;
 import com.intellij.coverage.JavaCoverageEngine;
@@ -182,7 +181,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
     configuration.setTrackTestFolders(myTrackTestSourcesCb.isSelected());
   }
 
-  @NotNull
+  @Nonnull
   protected JComponent createEditor() {
     JPanel result = new JPanel(new GridBagLayout());
 
@@ -270,7 +269,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
     return result;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private CoverageRunner getSelectedRunner() {
     final CoverageRunnerItem runnerItem = (CoverageRunnerItem)myCoverageRunnerCb.getSelectedItem();
     if (runnerItem == null) {
@@ -288,9 +287,10 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
 
   private static class CoverageRunnerItem {
     private CoverageRunner myRunner;
-    private @NotNull String myRunnerId;
+    private @Nonnull
+	String myRunnerId;
 
-    private CoverageRunnerItem(@NotNull CoverageRunner runner) {
+    private CoverageRunnerItem(@Nonnull CoverageRunner runner) {
       myRunner = runner;
       myRunnerId = runner.getId();
     }

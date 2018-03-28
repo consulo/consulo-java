@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.project.Project;
@@ -24,23 +26,22 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class UnnecessarySuperConstructorInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UnnecessaryCallToSuper";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.super.constructor.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.super.constructor.problem.descriptor");
@@ -53,7 +54,7 @@ public class UnnecessarySuperConstructorInspection
   private static class UnnecessarySuperConstructorFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.super.constructor.remove.quickfix");
@@ -77,7 +78,7 @@ public class UnnecessarySuperConstructorInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiReferenceExpression methodExpression =
         call.getMethodExpression();

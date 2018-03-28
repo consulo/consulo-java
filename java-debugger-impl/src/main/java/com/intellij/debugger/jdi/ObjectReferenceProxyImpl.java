@@ -21,7 +21,7 @@ package com.intellij.debugger.jdi;
 
 import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class ObjectReferenceProxyImpl extends JdiProxy {
   private Type myType;
   private Boolean myIsCollected = null;
 
-  public ObjectReferenceProxyImpl(VirtualMachineProxyImpl virtualMachineProxy, @NotNull ObjectReference objectReference) {
+  public ObjectReferenceProxyImpl(VirtualMachineProxyImpl virtualMachineProxy, @Nonnull ObjectReference objectReference) {
     super(virtualMachineProxy);
     myObjectReference = objectReference;
   }

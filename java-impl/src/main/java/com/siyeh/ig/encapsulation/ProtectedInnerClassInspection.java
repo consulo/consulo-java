@@ -24,8 +24,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MoveClassFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -38,14 +38,14 @@ public class ProtectedInnerClassInspection extends BaseInspection {
   public boolean ignoreInterfaces = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "protected.inner.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "protected.inner.class.problem.descriptor");
@@ -78,7 +78,7 @@ public class ProtectedInnerClassInspection extends BaseInspection {
   private class ProtectedInnerClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!aClass.hasModifierProperty(PsiModifier.PROTECTED)) {
         return;
       }

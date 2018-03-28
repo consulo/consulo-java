@@ -22,9 +22,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.OptionsBundle;
@@ -47,9 +47,9 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element>
 		super("java");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Collection<? extends Configurable> createConfigurables(@NotNull DebuggerSettingsCategory category)
+	public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category)
 	{
 		Getter<DebuggerSettings> settingsGetter = new Getter<DebuggerSettings>()
 		{
@@ -78,7 +78,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element>
 	}
 
 	@SuppressWarnings("SpellCheckingInspection")
-	@NotNull
+	@Nonnull
 	public static List<Configurable> createDataViewsConfigurable()
 	{
 		return Arrays.<Configurable>asList(new DebuggerDataViewsConfigurable(null), SimpleConfigurable.create("reference.idesettings.debugger" +
@@ -94,7 +94,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element>
 	}
 
 	@Override
-	public void generalApplied(@NotNull DebuggerSettingsCategory category)
+	public void generalApplied(@Nonnull DebuggerSettingsCategory category)
 	{
 		if(category == DebuggerSettingsCategory.DATA_VIEWS)
 		{
@@ -102,7 +102,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element>
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Element getState()
 	{

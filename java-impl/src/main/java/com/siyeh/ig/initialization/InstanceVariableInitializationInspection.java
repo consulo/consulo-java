@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.initialization;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.extensions.Extensions;
@@ -47,18 +47,18 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
    */
   public boolean m_ignorePrimitives = false;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "InstanceVariableMayNotBeInitialized";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instance.variable.may.not.be.initialized.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Boolean junitTestCase = (Boolean)infos[0];
     if (junitTestCase.booleanValue()) {
@@ -87,7 +87,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (field.hasModifierProperty(PsiModifier.STATIC) ||
           field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
@@ -155,7 +155,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
     }
 
     @Nullable
-    private PsiMethod getSetupMethod(@NotNull PsiClass aClass) {
+    private PsiMethod getSetupMethod(@Nonnull PsiClass aClass) {
       final PsiMethod[] methods =
         aClass.findMethodsByName("setUp", false);
       for (PsiMethod method : methods) {
@@ -174,7 +174,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
       return null;
     }
 
-    private boolean isInitializedInInitializer(@NotNull PsiField field) {
+    private boolean isInitializedInInitializer(@Nonnull PsiField field) {
       final PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return false;

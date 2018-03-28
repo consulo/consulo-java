@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.file;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
@@ -33,7 +34,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy
 
 
 	@Override
-	public boolean checkCreateFile(@NotNull PsiDirectory psiDirectory,  @NotNull final String name) throws IncorrectOperationException
+	public boolean checkCreateFile(@Nonnull PsiDirectory psiDirectory,  @Nonnull final String name) throws IncorrectOperationException
 	{
 		final FileType type = FileTypeManager.getInstance().getFileTypeByFileName(name);
 		if(type == JavaClassFileType.INSTANCE)
@@ -45,7 +46,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy
 	}
 
 	@Override
-	public PsiElement add(@NotNull PsiDirectory psiDirectory,  @NotNull final PsiElement element) throws IncorrectOperationException
+	public PsiElement add(@Nonnull PsiDirectory psiDirectory,  @Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		if(element instanceof PsiClass)
 		{
@@ -66,7 +67,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy
 	}
 
 	@Override
-	public boolean checkAdd(@NotNull PsiDirectory psiDirectory,  @NotNull final PsiElement element) throws IncorrectOperationException
+	public boolean checkAdd(@Nonnull PsiDirectory psiDirectory,  @Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		if(element instanceof PsiClass)
 		{

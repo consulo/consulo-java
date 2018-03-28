@@ -31,8 +31,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import gnu.trove.TIntArrayList;
 import gnu.trove.TIntProcedure;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.AddOnDemandStaticImportAction");
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.add.on.demand.static.import.family");
   }
@@ -54,8 +53,8 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
    * @param element     element to check
    * @return            target class that may be statically imported if any; <code>null</code> otherwise
    */
-  @Nullable
-  public static PsiClass getClassToPerformStaticImport(@NotNull PsiElement element) {
+  @javax.annotation.Nullable
+  public static PsiClass getClassToPerformStaticImport(@Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return null;
     if (!(element instanceof PsiIdentifier) || !(element.getParent() instanceof PsiJavaCodeReferenceElement)) {
       return null;
@@ -86,7 +85,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     PsiClass classToImport = getClassToPerformStaticImport(element);
     if (classToImport != null) {
       String text = CodeInsightBundle.message("intention.add.on.demand.static.import.text", classToImport.getQualifiedName());
@@ -165,7 +164,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     invoke(project, element.getContainingFile(), editor, element);
   }
 

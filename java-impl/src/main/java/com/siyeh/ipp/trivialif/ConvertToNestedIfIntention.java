@@ -15,8 +15,8 @@
  */
 package com.siyeh.ipp.trivialif;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -34,7 +34,7 @@ import com.siyeh.ipp.psiutils.ErrorUtil;
 public class ConvertToNestedIfIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new PsiElementPredicate() {
 
@@ -55,7 +55,7 @@ public class ConvertToNestedIfIntention extends Intention {
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) {
+  public void processIntention(@Nonnull PsiElement element) {
     final PsiReturnStatement returnStatement = (PsiReturnStatement)element;
     final PsiExpression returnValue = returnStatement.getReturnValue();
     if (returnValue == null || ErrorUtil.containsDeepError(returnValue)) {

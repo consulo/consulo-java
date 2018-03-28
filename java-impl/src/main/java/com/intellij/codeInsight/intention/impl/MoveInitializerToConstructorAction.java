@@ -25,7 +25,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -34,26 +34,26 @@ import java.util.*;
  */
 public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction {
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.move.initializer.to.constructor");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected Collection<String> getUnsuitableModifiers() {
     return Arrays.asList(PsiModifier.STATIC);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected Collection<PsiMethod> getOrCreateMethods(@NotNull Project project, @NotNull Editor editor, PsiFile file, @NotNull PsiClass aClass) {
+  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
     final Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
     if (constructors.isEmpty()) {
       return createConstructor(project, editor, file, aClass);
@@ -62,8 +62,8 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
     return removeChainedConstructors(constructors);
   }
 
-  @NotNull
-  private static Collection<PsiMethod> removeChainedConstructors(@NotNull Collection<PsiMethod> constructors) {
+  @Nonnull
+  private static Collection<PsiMethod> removeChainedConstructors(@Nonnull Collection<PsiMethod> constructors) {
     final List<PsiMethod> result = new ArrayList<PsiMethod>(constructors);
 
     final Iterator<PsiMethod> iterator = result.iterator();
@@ -78,11 +78,11 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
     return result;
   }
 
-  @NotNull
-  private static Collection<PsiMethod> createConstructor(@NotNull Project project,
-                                                         @NotNull Editor editor,
+  @Nonnull
+  private static Collection<PsiMethod> createConstructor(@Nonnull Project project,
+                                                         @Nonnull Editor editor,
                                                          PsiFile file,
-                                                         @NotNull PsiClass aClass) {
+                                                         @Nonnull PsiClass aClass) {
     final IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
     final int offset = editor.getCaretModel().getOffset();
     addDefaultConstructorFix.invoke(project, editor, file);

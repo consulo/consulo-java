@@ -25,8 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MoveClassFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,21 +38,21 @@ public class PackageVisibleInnerClassInspection extends BaseInspection {
   public boolean ignoreInterfaces = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "package.visible.inner.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "package.visible.inner.class.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox(InspectionGadgetsBundle.message("package.visible.inner.class.ignore.enum.option"), "ignoreEnums");
@@ -79,7 +78,7 @@ public class PackageVisibleInnerClassInspection extends BaseInspection {
   private class PackageVisibleInnerClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.hasModifierProperty(PsiModifier.PUBLIC) ||
           aClass.hasModifierProperty(PsiModifier.PROTECTED) ||
           aClass.hasModifierProperty(PsiModifier.PRIVATE)) {

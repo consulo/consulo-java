@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
 import com.intellij.openapi.components.ServiceManager;
@@ -73,7 +73,7 @@ public class ProjectBytecodeAnalysis
 	private final boolean nullableMethod;
 	private final boolean nullableMethodTransitivity;
 
-	public static ProjectBytecodeAnalysis getInstance(@NotNull Project project)
+	public static ProjectBytecodeAnalysis getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, ProjectBytecodeAnalysis.class);
 	}
@@ -86,7 +86,7 @@ public class ProjectBytecodeAnalysis
 	}
 
 	@Nullable
-	public PsiAnnotation findInferredAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN)
+	public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN)
 	{
 		if(!(listOwner instanceof PsiCompiledElement))
 		{
@@ -110,8 +110,8 @@ public class ProjectBytecodeAnalysis
 		}
 	}
 
-	@NotNull
-	public PsiAnnotation[] findInferredAnnotations(@NotNull final PsiModifierListOwner listOwner)
+	@Nonnull
+	public PsiAnnotation[] findInferredAnnotations(@Nonnull final PsiModifierListOwner listOwner)
 	{
 		if(!(listOwner instanceof PsiCompiledElement))
 		{
@@ -145,7 +145,7 @@ public class ProjectBytecodeAnalysis
 		return index > 0 && path.lastIndexOf("platforms/android-", index) > 0;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiAnnotation[] collectInferredAnnotations(PsiModifierListOwner listOwner)
 	{
 		if(isInsideDummyAndroidJar(listOwner.getContainingFile()))
@@ -324,7 +324,7 @@ public class ProjectBytecodeAnalysis
 	}
 
 	@Nullable
-	public static HKey getKey(@NotNull PsiModifierListOwner owner, MessageDigest md)
+	public static HKey getKey(@Nonnull PsiModifierListOwner owner, MessageDigest md)
 	{
 		LOG.assertTrue(owner instanceof PsiCompiledElement, owner);
 		if(owner instanceof PsiMethod)
@@ -354,12 +354,12 @@ public class ProjectBytecodeAnalysis
 	 * @param primaryKey primary compressed key for this method
 	 * @return compressed keys for this method
 	 */
-	public static ArrayList<HKey> collectMethodKeys(@NotNull PsiMethod method, HKey primaryKey)
+	public static ArrayList<HKey> collectMethodKeys(@Nonnull PsiMethod method, HKey primaryKey)
 	{
 		return BytecodeAnalysisConverter.mkInOutKeys(method, primaryKey);
 	}
 
-	private ParameterAnnotations loadParameterAnnotations(@NotNull HKey notNullKey) throws EquationsLimitException
+	private ParameterAnnotations loadParameterAnnotations(@Nonnull HKey notNullKey) throws EquationsLimitException
 	{
 
 		Map<Bytes, List<HEquations>> equationsCache = new HashMap<Bytes, List<HEquations>>();
@@ -380,7 +380,7 @@ public class ProjectBytecodeAnalysis
 		return new ParameterAnnotations(notNull, nullable);
 	}
 
-	private MethodAnnotations loadMethodAnnotations(@NotNull PsiMethod owner, @NotNull HKey key, ArrayList<HKey> allKeys) throws EquationsLimitException
+	private MethodAnnotations loadMethodAnnotations(@Nonnull PsiMethod owner, @Nonnull HKey key, ArrayList<HKey> allKeys) throws EquationsLimitException
 	{
 		MethodAnnotations result = new MethodAnnotations();
 		Map<Bytes, List<HEquations>> equationsCache = new HashMap<Bytes, List<HEquations>>();
@@ -475,7 +475,7 @@ public class ProjectBytecodeAnalysis
 		}
 	}
 
-	private void collectEquations(List<HKey> keys, Solver solver, @NotNull Map<Bytes, List<HEquations>> cache) throws EquationsLimitException
+	private void collectEquations(List<HKey> keys, Solver solver, @Nonnull Map<Bytes, List<HEquations>> cache) throws EquationsLimitException
 	{
 
 		GlobalSearchScope librariesScope = ProjectScope.getLibrariesScope(myProject);
@@ -539,7 +539,7 @@ public class ProjectBytecodeAnalysis
 		}
 	}
 
-	private void collectSingleEquation(HKey hKey, Solver solver, @NotNull Map<Bytes, List<HEquations>> cache) throws EquationsLimitException
+	private void collectSingleEquation(HKey hKey, Solver solver, @Nonnull Map<Bytes, List<HEquations>> cache) throws EquationsLimitException
 	{
 		GlobalSearchScope librariesScope = ProjectScope.getLibrariesScope(myProject);
 
@@ -570,8 +570,8 @@ public class ProjectBytecodeAnalysis
 		}
 	}
 
-	@NotNull
-	private PsiAnnotation createAnnotationFromText(@NotNull final String text) throws IncorrectOperationException
+	@Nonnull
+	private PsiAnnotation createAnnotationFromText(@Nonnull final String text) throws IncorrectOperationException
 	{
 		PsiAnnotation annotation = JavaPsiFacade.getElementFactory(myProject).createAnnotationFromText(text, null);
 		annotation.putUserData(INFERRED_ANNOTATION, Boolean.TRUE);

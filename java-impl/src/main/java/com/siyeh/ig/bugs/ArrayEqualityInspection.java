@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,19 +28,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ArrayEqualityInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "array.comparison.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "array.comparison.problem.descriptor");
@@ -62,7 +63,7 @@ public class ArrayEqualityInspection extends BaseInspection {
       this.deepEquals = deepEquals;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       if (deepEquals) {
@@ -122,7 +123,7 @@ public class ArrayEqualityInspection extends BaseInspection {
 
     @Override
     public void visitBinaryExpression(
-      @NotNull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiExpression rhs = expression.getROperand();
       if (rhs == null) {

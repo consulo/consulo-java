@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow.inliner;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.psi.PsiMethodCallExpression;
 
@@ -33,5 +34,5 @@ public interface CallInliner
 	 * @return true if inlining is successful. In this case subsequent inliners are skipped and default processing is omitted.
 	 * If false is returned, inliner must not emit any instructions via builder.
 	 */
-	boolean tryInlineCall(@NotNull CFGBuilder builder, @NotNull PsiMethodCallExpression call);
+	boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call);
 }

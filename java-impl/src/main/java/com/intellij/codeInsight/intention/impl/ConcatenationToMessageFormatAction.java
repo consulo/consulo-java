@@ -30,8 +30,8 @@ import com.intellij.psi.util.PsiConcatenationUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,19 +41,19 @@ import java.util.List;
  */
 public class ConcatenationToMessageFormatAction implements IntentionAction {
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.replace.concatenation.with.formatted.output.family");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.replace.concatenation.with.formatted.output.text");
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiElement element = findElementAtCaret(editor, file);
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(element);
@@ -129,14 +129,14 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (PsiUtil.getLanguageLevel(file).compareTo(LanguageLevel.JDK_1_4) < 0) return false;
     final PsiElement element = findElementAtCaret(editor, file);
     PsiPolyadicExpression binaryExpression = getEnclosingLiteralConcatenation(element);
     return binaryExpression != null && !AnnotationUtil.isInsideAnnotation(binaryExpression);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiElement findElementAtCaret(Editor editor, PsiFile file) {
     return file.findElementAt(editor.getCaretModel().getOffset());
   }

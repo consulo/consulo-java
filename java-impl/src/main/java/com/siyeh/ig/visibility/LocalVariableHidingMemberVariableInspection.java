@@ -24,8 +24,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -37,12 +37,12 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
   @SuppressWarnings("PublicField")
   public boolean m_ignoreStaticMethods = true;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "LocalVariableHidesMemberVariable";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("local.variable.hides.member.variable.display.name");
   }
@@ -55,7 +55,7 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsBundle.message("local.variable.hides.member.variable.problem.descriptor", aClass.getName());
@@ -75,7 +75,7 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
   private class LocalVariableHidingMemberVariableVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLocalVariable(@NotNull PsiLocalVariable variable) {
+    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       if (m_ignoreStaticMethods) {
         final PsiMember member = PsiTreeUtil.getParentOfType(variable, PsiMethod.class, PsiClassInitializer.class);
@@ -91,7 +91,7 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
     }
 
     @Override
-    public void visitParameter(@NotNull PsiParameter variable) {
+    public void visitParameter(@Nonnull PsiParameter variable) {
       super.visitParameter(variable);
       final PsiElement declarationScope = variable.getDeclarationScope();
       if (!(declarationScope instanceof PsiCatchSection) && !(declarationScope instanceof PsiForeachStatement)) {

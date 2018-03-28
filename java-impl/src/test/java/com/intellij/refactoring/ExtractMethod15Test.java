@@ -20,14 +20,15 @@
  */
 package com.intellij.refactoring;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import org.jetbrains.annotations.NotNull;
 
 public class ExtractMethod15Test extends LightCodeInsightTestCase {
   private static final String BASE_PATH = "/refactoring/extractMethod15/";
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

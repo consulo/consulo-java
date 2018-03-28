@@ -15,7 +15,8 @@
  */
 package consulo.java.psi.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiManager;
@@ -33,24 +34,24 @@ import consulo.psi.PsiPackageSupportProvider;
 public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider
 {
 	@Override
-	public boolean isSupported(@NotNull ModuleExtension moduleExtension)
+	public boolean isSupported(@Nonnull ModuleExtension moduleExtension)
 	{
 		return moduleExtension instanceof JavaModuleExtension;
 	}
 
 	@Override
-	public boolean isValidPackageName(@NotNull Module module, @NotNull String packageName)
+	public boolean isValidPackageName(@Nonnull Module module, @Nonnull String packageName)
 	{
 		return PsiNameHelper.getInstance(module.getProject()).isQualifiedName(packageName);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiPackage createPackage(
-			@NotNull PsiManager psiManager,
-			@NotNull PsiPackageManager packageManager,
-			@NotNull Class<? extends ModuleExtension> extensionClass,
-			@NotNull String packageName)
+			@Nonnull PsiManager psiManager,
+			@Nonnull PsiPackageManager packageManager,
+			@Nonnull Class<? extends ModuleExtension> extensionClass,
+			@Nonnull String packageName)
 	{
 		return new PsiPackageImpl(psiManager, packageManager, extensionClass, packageName);
 	}

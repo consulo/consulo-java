@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
@@ -28,17 +28,17 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStub> implements PsiUsesStatement
 {
-	public PsiUsesStatementImpl(@NotNull PsiUsesStatementStub stub)
+	public PsiUsesStatementImpl(@Nonnull PsiUsesStatementStub stub)
 	{
 		super(stub, JavaStubElementTypes.USES_STATEMENT);
 	}
 
-	public PsiUsesStatementImpl(@NotNull ASTNode node)
+	public PsiUsesStatementImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiJavaCodeReferenceElement getClassReference()
 	{
@@ -46,7 +46,7 @@ public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStu
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

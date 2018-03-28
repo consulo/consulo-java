@@ -30,7 +30,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.impl.ClauseImpl;
 import org.osmorc.manifest.lang.psi.stub.ClauseStub;
@@ -47,7 +47,7 @@ public class ClauseElementType extends AbstractManifestStubElementType<ClauseStu
   }
 
   @Override
-  public Clause createPsi(@NotNull ClauseStub stub) {
+  public Clause createPsi(@Nonnull ClauseStub stub) {
     return new ClauseImpl(stub, this);
   }
 
@@ -57,18 +57,18 @@ public class ClauseElementType extends AbstractManifestStubElementType<ClauseStu
   }
 
   @Override
-  public ClauseStub createStub(@NotNull Clause psi, StubElement parentStub) {
+  public ClauseStub createStub(@Nonnull Clause psi, StubElement parentStub) {
     return new ClauseStubImpl(parentStub);
   }
 
-  public void serialize(@NotNull ClauseStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull ClauseStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
   }
 
-  @NotNull
-  public ClauseStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  @Nonnull
+  public ClauseStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new ClauseStubImpl(parentStub);
   }
 
-  public void indexStub(@NotNull ClauseStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull ClauseStub stub, @Nonnull IndexSink sink) {
   }
 }

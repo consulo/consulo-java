@@ -24,7 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -43,13 +43,13 @@ public class MultipleReturnPointsPerMethodInspection
   public boolean ignoreEqualsMethod = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MethodWithMultipleReturnPoints";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "multiple.return.points.per.method.display.name");
@@ -66,7 +66,7 @@ public class MultipleReturnPointsPerMethodInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer returnPointCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -124,7 +124,7 @@ public class MultipleReturnPointsPerMethodInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

@@ -15,13 +15,14 @@
  */
 package com.intellij.codeInsight.template.macro;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.template.*;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiTypeParameter;
-import org.jetbrains.annotations.NotNull;
 
 public class QualifiedClassNameMacro extends Macro {
 
@@ -36,7 +37,7 @@ public class QualifiedClassNameMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
     while(place != null){
       if (place instanceof PsiClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)){

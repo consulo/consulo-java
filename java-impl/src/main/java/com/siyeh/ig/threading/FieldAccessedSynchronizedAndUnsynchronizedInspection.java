@@ -25,8 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MakeFieldFinalFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Set;
@@ -40,21 +39,21 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
   public boolean countGettersAndSetters = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.accessed.synchronized.and.unsynchronized.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "field.accessed.synchronized.and.unsynchronized.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
       InspectionGadgetsBundle.message(
@@ -81,7 +80,7 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!containsSynchronization(aClass)) {
         return;
       }

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.internationalization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiExpression;
@@ -24,25 +26,23 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class CharacterComparisonInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CharacterComparison";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("character.comparison.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("character.comparison.problem.descriptor");
   }
@@ -55,7 +55,7 @@ public class CharacterComparisonInspection extends BaseInspection {
   private static class CharacterComparisonVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@NotNull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiExpression rhs = expression.getROperand();
       if (!ComparisonUtils.isComparison(expression) || ComparisonUtils.isEqualityComparison(expression)) {
@@ -71,7 +71,7 @@ public class CharacterComparisonInspection extends BaseInspection {
       registerError(expression);
     }
 
-    private static boolean isCharacter(@Nullable PsiExpression expression) {
+    private static boolean isCharacter(@javax.annotation.Nullable PsiExpression expression) {
       return ExpressionUtils.hasType(expression, PsiKeyword.CHAR) ||
              ExpressionUtils.hasType(expression, CommonClassNames.JAVA_LANG_CHARACTER);
     }

@@ -18,11 +18,12 @@ package com.intellij.codeInspection;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.diagnostic.Logger;
@@ -44,7 +45,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 	public boolean reportNotAnnotatedInterfaces = true;
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getGroupDisplayName()
 	{
@@ -52,7 +53,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
@@ -65,7 +66,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getShortName()
 	{
@@ -79,9 +80,9 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 		return new SingleCheckboxOptionsPanel("Report when interface is not annotated with @FunctionalInterface", this, "reportNotAnnotatedInterfaces");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -125,7 +126,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 
 	private static class ReplaceWithMethodRefFix implements LocalQuickFix
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -133,7 +134,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			final PsiElement element = descriptor.getPsiElement();
 			if(element instanceof PsiNewExpression)
@@ -161,7 +162,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 		}
 	}
 
-	static void replaceWithMethodReference(@NotNull Project project, String methodRefText, PsiType castType, PsiElement replacementTarget)
+	static void replaceWithMethodReference(@Nonnull Project project, String methodRefText, PsiType castType, PsiElement replacementTarget)
 	{
 		final Collection<PsiComment> comments = ContainerUtil.map(PsiTreeUtil.findChildrenOfType(replacementTarget, PsiComment.class), comment -> (PsiComment) comment.copy());
 

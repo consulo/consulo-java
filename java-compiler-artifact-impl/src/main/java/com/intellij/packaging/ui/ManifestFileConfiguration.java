@@ -18,8 +18,8 @@ package com.intellij.packaging.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -31,7 +31,7 @@ public class ManifestFileConfiguration
 	private String myMainClass;
 	private String myManifestFilePath;
 
-	public ManifestFileConfiguration(@NotNull ManifestFileConfiguration configuration)
+	public ManifestFileConfiguration(@Nonnull ManifestFileConfiguration configuration)
 	{
 		myWritable = configuration.isWritable();
 		myClasspath.addAll(configuration.getClasspath());
@@ -39,7 +39,7 @@ public class ManifestFileConfiguration
 		myManifestFilePath = configuration.getManifestFilePath();
 	}
 
-	public ManifestFileConfiguration(@NotNull String manifestFilePath, @Nullable List<String> classpath, @Nullable String mainClass,
+	public ManifestFileConfiguration(@Nonnull String manifestFilePath, @Nullable List<String> classpath, @javax.annotation.Nullable String mainClass,
 			boolean isWritable)
 	{
 		myWritable = isWritable;

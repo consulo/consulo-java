@@ -26,10 +26,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.*;
@@ -83,7 +82,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<RefClass> getOutTypeReferences()
 	{
 		if(myOutTypeReferences == null)
@@ -182,7 +181,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public String getAccessModifier()
 	{
 		long access_id = myFlags & ACCESS_MODIFIER_MASK;

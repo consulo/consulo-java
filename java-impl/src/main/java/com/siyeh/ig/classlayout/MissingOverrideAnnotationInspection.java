@@ -28,7 +28,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -44,20 +44,20 @@ public class MissingOverrideAnnotationInspection extends BaseInspection {
   public boolean ignoreAnonymousClassMethods = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "override";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "missing.override.annotation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "missing.override.annotation.problem.descriptor");
@@ -83,7 +83,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection {
   private static class MissingOverrideAnnotationFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "missing.override.annotation.add.quickfix");
@@ -122,7 +122,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
         return;
       }
@@ -219,7 +219,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection {
     }
 
     private PsiMethod[] getSuperMethodsInJavaSense(
-      @NotNull PsiMethod method, @NotNull PsiClass methodClass) {
+      @Nonnull PsiMethod method, @Nonnull PsiClass methodClass) {
       final PsiMethod[] superMethods = method.findSuperMethods();
       final List<PsiMethod> toExclude = new SmartList<PsiMethod>();
       for (PsiMethod superMethod : superMethods) {

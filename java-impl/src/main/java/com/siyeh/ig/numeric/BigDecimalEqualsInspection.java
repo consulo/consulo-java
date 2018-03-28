@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.numeric;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,18 +27,17 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class BigDecimalEqualsInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("big.decimal.equals.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("big.decimal.equals.problem.descriptor");
   }
@@ -47,7 +48,7 @@ public class BigDecimalEqualsInspection extends BaseInspection {
   }
 
   private static class BigDecimalEqualsFix extends InspectionGadgetsFix {
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("big.decimal.equals.replace.quickfix");
     }
@@ -79,7 +80,7 @@ public class BigDecimalEqualsInspection extends BaseInspection {
   private static class BigDecimalEqualsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;

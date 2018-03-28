@@ -22,7 +22,8 @@ import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
 
 import java.util.function.UnaryOperator;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.codeInspection.dataFlow.NullabilityProblem;
@@ -111,11 +112,11 @@ public class StreamChainInliner implements CallInliner
 	{
 		final Step myNext;
 		final
-		@NotNull
+		@Nonnull
 		PsiMethodCallExpression myCall;
 		final PsiExpression myFunction;
 
-		Step(@NotNull PsiMethodCallExpression call, Step next, PsiExpression function)
+		Step(@Nonnull PsiMethodCallExpression call, Step next, PsiExpression function)
 		{
 			myNext = next;
 			myCall = call;
@@ -178,7 +179,7 @@ public class StreamChainInliner implements CallInliner
 	{
 		PsiVariable myResult;
 
-		TerminalStep(@NotNull PsiMethodCallExpression call, PsiExpression function)
+		TerminalStep(@Nonnull PsiMethodCallExpression call, PsiExpression function)
 		{
 			super(call, null, function);
 		}
@@ -201,7 +202,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class LambdaTerminalStep extends Step
 	{
-		LambdaTerminalStep(@NotNull PsiMethodCallExpression call)
+		LambdaTerminalStep(@Nonnull PsiMethodCallExpression call)
 		{
 			super(call, null, call.getArgumentList().getExpressions()[0]);
 		}
@@ -215,7 +216,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class SumTerminalStep extends TerminalStep
 	{
-		SumTerminalStep(@NotNull PsiMethodCallExpression call)
+		SumTerminalStep(@Nonnull PsiMethodCallExpression call)
 		{
 			super(call, null);
 		}
@@ -237,7 +238,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class OptionalTerminalStep extends TerminalStep
 	{
-		OptionalTerminalStep(@NotNull PsiMethodCallExpression call)
+		OptionalTerminalStep(@Nonnull PsiMethodCallExpression call)
 		{
 			super(call, ArrayUtil.getFirstElement(call.getArgumentList().getExpressions()));
 		}
@@ -261,7 +262,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class MatchTerminalStep extends TerminalStep
 	{
-		MatchTerminalStep(@NotNull PsiMethodCallExpression call)
+		MatchTerminalStep(@Nonnull PsiMethodCallExpression call)
 		{
 			super(call, call.getArgumentList().getExpressions()[0]);
 		}
@@ -282,7 +283,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class FilterStep extends Step
 	{
-		FilterStep(@NotNull PsiMethodCallExpression call, Step next)
+		FilterStep(@Nonnull PsiMethodCallExpression call, Step next)
 		{
 			super(call, next, call.getArgumentList().getExpressions()[0]);
 		}
@@ -296,7 +297,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class MapStep extends Step
 	{
-		MapStep(@NotNull PsiMethodCallExpression call, Step next)
+		MapStep(@Nonnull PsiMethodCallExpression call, Step next)
 		{
 			super(call, next, call.getArgumentList().getExpressions()[0]);
 		}
@@ -314,7 +315,7 @@ public class StreamChainInliner implements CallInliner
 		private final PsiParameter myParameter;
 		private final PsiExpression myStreamSource;
 
-		FlatMapStep(@NotNull PsiMethodCallExpression call, Step next)
+		FlatMapStep(@Nonnull PsiMethodCallExpression call, Step next)
 		{
 			super(call, next, null);
 			// Try to inline smoothly .flatMap(x -> stream().call().chain())
@@ -395,7 +396,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class PeekStep extends Step
 	{
-		PeekStep(@NotNull PsiMethodCallExpression call, Step next)
+		PeekStep(@Nonnull PsiMethodCallExpression call, Step next)
 		{
 			super(call, next, call.getArgumentList().getExpressions()[0]);
 		}
@@ -409,7 +410,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class StateFilterStep extends Step
 	{
-		StateFilterStep(@NotNull PsiMethodCallExpression call, Step next)
+		StateFilterStep(@Nonnull PsiMethodCallExpression call, Step next)
 		{
 			super(call, next, null);
 		}
@@ -436,7 +437,7 @@ public class StreamChainInliner implements CallInliner
 	// (e.g. warn if stream can contain nulls, but comparator is not null-friendly)
 	static class SortedStep extends Step
 	{
-		SortedStep(@NotNull PsiMethodCallExpression call, Step next)
+		SortedStep(@Nonnull PsiMethodCallExpression call, Step next)
 		{
 			super(call, next, null);
 		}
@@ -457,7 +458,7 @@ public class StreamChainInliner implements CallInliner
 
 	static class BoxedStep extends Step
 	{
-		BoxedStep(@NotNull PsiMethodCallExpression call, Step next)
+		BoxedStep(@Nonnull PsiMethodCallExpression call, Step next)
 		{
 			super(call, next, null);
 		}
@@ -476,7 +477,7 @@ public class StreamChainInliner implements CallInliner
 	}
 
 	@Override
-	public boolean tryInlineCall(@NotNull CFGBuilder builder, @NotNull PsiMethodCallExpression call)
+	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
 	{
 		if(!TERMINAL_CALL.test(call))
 		{

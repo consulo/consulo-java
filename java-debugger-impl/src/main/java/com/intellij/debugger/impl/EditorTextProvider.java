@@ -15,7 +15,6 @@
  */
 package com.intellij.debugger.impl;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.util.Pair;
@@ -29,9 +28,9 @@ import com.intellij.psi.PsiElement;
 public interface EditorTextProvider {
   LanguageExtension<EditorTextProvider> EP = new LanguageExtension<EditorTextProvider>("consulo.java.debuggerEditorTextProvider");
 
-  @Nullable
+  @javax.annotation.Nullable
   TextWithImports getEditorText(PsiElement elementAtCaret);
 
-  @Nullable
+  @javax.annotation.Nullable
   Pair<PsiElement, TextRange> findExpression(PsiElement elementAtCaret, boolean allowMethodCalls);
 }

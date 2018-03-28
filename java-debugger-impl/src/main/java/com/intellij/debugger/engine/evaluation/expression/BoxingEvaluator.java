@@ -18,7 +18,6 @@ package com.intellij.debugger.engine.evaluation.expression;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -69,7 +68,7 @@ public class BoxingEvaluator implements Evaluator{
     throw new EvaluateException("Cannot perform boxing conversion for a value of type " + ((Value)result).type().name());
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public Modifier getModifier() {
     return null;
   }

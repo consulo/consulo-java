@@ -15,36 +15,37 @@
  */
 package com.intellij.codeInspection.compiler;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 public class JavacQuirksInspection extends BaseLocalInspectionTool {
-  @Nls @NotNull
+  @Nls @Nonnull
   @Override
   public String getGroupDisplayName() {
     return GroupNames.COMPILER_ISSUES;
   }
 
-  @Nls @NotNull
+  @Nls @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.compiler.javac.quirks.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getShortName() {
     return "JavacQuirks";
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
     return new JavacQuirksInspectionVisitor(holder);
   }
 }

@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaFileHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
@@ -27,9 +27,9 @@ public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighl
     super(JavaLanguage.INSTANCE);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public SyntaxHighlighter getSyntaxHighlighter(@NotNull LanguageVersion languageVersion) {
+  public SyntaxHighlighter getSyntaxHighlighter(@Nonnull LanguageVersion languageVersion) {
     return new JavaFileHighlighter(languageVersion);
   }
 }

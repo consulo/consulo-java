@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.junit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
@@ -27,21 +27,21 @@ public class TestMethodInProductCodeInspection extends BaseInspection
 {
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("test.method.in.product.code.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getID()
 	{
 		return "JUnitTestMethodInProductSource";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("test.method.in.product.code.problem.descriptor");

@@ -18,8 +18,8 @@ package com.intellij.psi.ref;
 import com.intellij.psi.PsiChildLink;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
@@ -40,8 +40,8 @@ public class InstanceofLink<Parent extends PsiElement, Child extends PsiElement,
   }
 
   @Override
-  @NotNull
-  public CastTo createChild(@NotNull Parent parent) throws IncorrectOperationException {
+  @Nonnull
+  public CastTo createChild(@Nonnull Parent parent) throws IncorrectOperationException {
     return (CastTo) myDelegate.createChild(parent);
   }
 

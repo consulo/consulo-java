@@ -29,8 +29,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.WeakestTypeFinder;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.*;
@@ -50,14 +50,14 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
   public boolean onlyWeakentoInterface = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.may.be.weakened.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>)infos[1];
     @NonNls final StringBuilder builder = new StringBuilder();
@@ -100,7 +100,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>)infos[1];
     final Collection<InspectionGadgetsFix> fixes = new ArrayList();
@@ -118,11 +118,11 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
 
     private final String fqClassName;
 
-    TypeMayBeWeakenedFix(@NotNull String fqClassName) {
+    TypeMayBeWeakenedFix(@Nonnull String fqClassName) {
       this.fqClassName = fqClassName;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("type.may.be.weakened.quickfix", fqClassName);
     }

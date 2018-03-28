@@ -20,7 +20,7 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -41,7 +41,7 @@ class BinaryExpressionEvaluator implements Evaluator
 	private final IElementType myOpType;
 	private final String myExpectedType; // a result of PsiType.getCanonicalText()
 
-	public BinaryExpressionEvaluator(@NotNull Evaluator leftOperand, @NotNull Evaluator rightOperand, @NotNull IElementType opType, String expectedType)
+	public BinaryExpressionEvaluator(@Nonnull Evaluator leftOperand, @Nonnull Evaluator rightOperand, @Nonnull IElementType opType, String expectedType)
 	{
 		myLeftOperand = DisableGC.create(leftOperand);
 		myRightOperand = DisableGC.create(rightOperand);

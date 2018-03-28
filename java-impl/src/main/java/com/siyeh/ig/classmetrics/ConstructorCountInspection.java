@@ -22,7 +22,7 @@ import com.intellij.util.ui.GridBag;
 import com.intellij.util.ui.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,12 +33,12 @@ public class ConstructorCountInspection extends ClassMetricInspection {
 
   public boolean ignoreDeprecatedConstructors = false;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ClassWithTooManyConstructors";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("too.many.constructors.display.name");
   }
@@ -68,7 +68,7 @@ public class ConstructorCountInspection extends ClassMetricInspection {
     return panel;
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer count = (Integer)infos[0];
     return InspectionGadgetsBundle.message("too.many.constructors.problem.descriptor", count);
@@ -81,7 +81,7 @@ public class ConstructorCountInspection extends ClassMetricInspection {
   private class ConstructorCountVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       final int constructorCount = calculateTotalConstructorCount(aClass);
       if (constructorCount <= getLimit()) {
         return;

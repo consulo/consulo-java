@@ -17,7 +17,7 @@ package com.intellij.psi.filters.element;
 
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.

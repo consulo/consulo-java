@@ -23,7 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,7 +34,7 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
    */
   public boolean m_ignoreClassesWithNoConstructors = true;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.without.no.arg.constructor.display.name");
@@ -47,7 +47,7 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
       this, "m_ignoreClassesWithNoConstructors");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "class.without.no.arg.constructor.problem.descriptor");
@@ -61,7 +61,7 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (aClass.isInterface() || aClass.isEnum() ||
           aClass.isAnnotationType()) {

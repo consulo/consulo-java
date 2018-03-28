@@ -19,12 +19,12 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
@@ -77,7 +77,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 	public static final String DEFAULT_JAVA_RUNNER_ID = "Run";
 
 	@Override
-	public boolean canRun(@NotNull final String executorId, @NotNull final RunProfile profile)
+	public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile)
 	{
 		return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
 	}
@@ -88,7 +88,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 		runCustomPatchers(javaParameters, DefaultRunExecutor.getRunExecutorInstance(), runProfile);
 	}
 
-	protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException
+	protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException
 	{
 		FileDocumentManager.getInstance().saveAllDocuments();
 
@@ -110,7 +110,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 					handler.addProcessListener(new ProcessAdapter()
 					{
 						@Override
-						public void processTerminated(@NotNull ProcessEvent event)
+						public void processTerminated(@Nonnull ProcessEvent event)
 						{
 							proxy.destroy();
 						}
@@ -147,7 +147,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 		return contentBuilder.showRunContent(env.getContentToReuse());
 	}
 
-	private static void addDefaultActions(@NotNull RunContentBuilder contentBuilder, @NotNull ExecutionResult executionResult)
+	private static void addDefaultActions(@Nonnull RunContentBuilder contentBuilder, @Nonnull ExecutionResult executionResult)
 	{
 		final ExecutionConsole executionConsole = executionResult.getExecutionConsole();
 		final JComponent consoleComponent = executionConsole != null ? executionConsole.getComponent() : null;
@@ -160,7 +160,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 			processHandler.addProcessListener(new ProcessAdapter()
 			{
 				@Override
-				public void processTerminated(@NotNull final ProcessEvent event)
+				public void processTerminated(@Nonnull final ProcessEvent event)
 				{
 					processHandler.removeProcessListener(this);
 					controlBreakAction.unregisterCustomShortcutSet(consoleComponent);
@@ -184,7 +184,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 
 		@RequiredDispatchThread
 		@Override
-		public final void update(@NotNull AnActionEvent event)
+		public final void update(@Nonnull AnActionEvent event)
 		{
 			ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
 			boolean available = proxy != null && available(proxy);
@@ -202,7 +202,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 
 		@RequiredDispatchThread
 		@Override
-		public final void actionPerformed(@NotNull AnActionEvent e)
+		public final void actionPerformed(@Nonnull AnActionEvent e)
 		{
 			ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
 			if(proxy != null)
@@ -338,7 +338,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getRunnerId()
 	{
 		return DEFAULT_JAVA_RUNNER_ID;

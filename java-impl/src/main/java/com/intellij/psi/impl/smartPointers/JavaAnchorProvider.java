@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.smartPointers;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.*;
 
@@ -26,7 +26,7 @@ import com.intellij.psi.*;
 public class JavaAnchorProvider implements SmartPointerAnchorProvider
 {
 	@Override
-	public PsiElement getAnchor(@NotNull PsiElement element)
+	public PsiElement getAnchor(@Nonnull PsiElement element)
 	{
 		if(!element.getLanguage().isKindOf(JavaLanguage.INSTANCE) || !element.isPhysical())
 		{
@@ -50,7 +50,7 @@ public class JavaAnchorProvider implements SmartPointerAnchorProvider
 
 	@Nullable
 	@Override
-	public PsiElement restoreElement(@NotNull PsiElement anchor)
+	public PsiElement restoreElement(@Nonnull PsiElement anchor)
 	{
 		if(anchor instanceof PsiIdentifier)
 		{

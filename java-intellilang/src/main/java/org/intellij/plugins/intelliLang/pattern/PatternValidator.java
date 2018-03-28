@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -33,8 +34,6 @@ import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.intellij.plugins.intelliLang.util.SubstitutedExpressionEvaluationHelper;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -81,21 +80,21 @@ public class PatternValidator extends LocalInspectionTool
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return PATTERN_VALIDATION;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return "Validate Annotated Patterns";
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public JComponent createOptionsPanel()
 	{
 		final JPanel jPanel = new JPanel(new BorderLayout());
@@ -115,7 +114,7 @@ public class PatternValidator extends LocalInspectionTool
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -123,8 +122,8 @@ public class PatternValidator extends LocalInspectionTool
 	}
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -188,7 +187,7 @@ public class PatternValidator extends LocalInspectionTool
 				visitExpression(expression);
 			}
 
-			private void check(@NotNull PsiExpression expression, ProblemsHolder holder, boolean isAnnotationValue)
+			private void check(@Nonnull PsiExpression expression, ProblemsHolder holder, boolean isAnnotationValue)
 			{
 				if(expression instanceof PsiConditionalExpression)
 				{
@@ -355,21 +354,21 @@ public class PatternValidator extends LocalInspectionTool
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getName()
 		{
 			return "Introduce Variable";
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return getName();
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
 			final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();

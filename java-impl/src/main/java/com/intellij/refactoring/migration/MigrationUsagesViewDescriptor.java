@@ -16,7 +16,8 @@
 
 package com.intellij.refactoring.migration;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
@@ -39,7 +40,7 @@ class MigrationUsagesViewDescriptor implements UsageViewDescriptor
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getElements()
 	{
 		return PsiElement.EMPTY_ARRAY;

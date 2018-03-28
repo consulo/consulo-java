@@ -18,8 +18,9 @@ package com.intellij.psi.impl.compiled;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.InheritanceImplUtil;
@@ -44,7 +45,7 @@ import com.intellij.util.IncorrectOperationException;
 public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParameterStub> implements PsiTypeParameter {
   private final LightEmptyImplementsList myLightEmptyImplementsList;
 
-  public ClsTypeParameterImpl(@NotNull PsiTypeParameterStub stub) {
+  public ClsTypeParameterImpl(@Nonnull PsiTypeParameterStub stub) {
     super(stub);
     myLightEmptyImplementsList = new LightEmptyImplementsList(getManager());
   }
@@ -70,13 +71,13 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiField[] getFields() {
     return PsiField.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiMethod[] getMethods() {
     return PsiMethod.EMPTY_ARRAY;
   }
@@ -87,7 +88,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiMethod[] findMethodsBySignature(PsiMethod patternMethod, boolean checkBases) {
     return PsiClassImplUtil.findMethodsBySignature(this, patternMethod, checkBases);
   }
@@ -98,19 +99,19 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsByName(this, name, checkBases);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsAndTheirSubstitutorsByName(this, name, checkBases);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors() {
     return PsiClassImplUtil.getAllWithSubstitutorsByMap(this, PsiClassImplUtil.MemberType.METHOD);
   }
@@ -142,7 +143,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  public boolean isInheritor(@NotNull PsiClass baseClass, boolean checkDeep) {
+  public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep) {
     return InheritanceImplUtil.isInheritor(this, baseClass, checkDeep);
   }
 
@@ -152,7 +153,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     return PsiClassImplUtil.processDeclarationsInClass(this, processor, state, null, lastParent, place, PsiUtil.getLanguageLevel(place), false);
   }
 
@@ -162,12 +163,12 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Cannot change compiled classes");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiMethod[] getConstructors() {
     return PsiMethod.EMPTY_ARRAY;
   }
@@ -183,7 +184,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiReferenceList getExtendsList() {
     return getStub().findChildStubByType(JavaStubElementTypes.EXTENDS_BOUND_LIST).getPsi();
   }
@@ -194,49 +195,49 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClassType[] getExtendsListTypes() {
     return getExtendsList().getReferencedTypes();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClassType[] getImplementsListTypes() {
     return PsiClassType.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClass[] getInnerClasses() {
     return PsiClass.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiField[] getAllFields() {
     return PsiField.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiMethod[] getAllMethods() {
     return PsiMethod.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClass[] getAllInnerClasses() {
     return PsiClass.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClassInitializer[] getInitializers() {
     return PsiClassInitializer.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiTypeParameter[] getTypeParameters() {
     return PsiTypeParameter.EMPTY_ARRAY;
   }
@@ -252,13 +253,13 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClass[] getSupers() {
     return PsiClassImplUtil.getSupers(this);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClassType[] getSuperTypes() {
     return PsiClassImplUtil.getSuperTypes(this);
   }
@@ -269,7 +270,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Collection<HierarchicalMethodSignature> getVisibleSignatures() {
     return PsiSuperMethodImplUtil.getVisibleSignatures(this);
   }
@@ -280,7 +281,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  public boolean hasModifierProperty(@NotNull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return false;
   }
 
@@ -295,7 +296,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitTypeParameter(this);
     }
@@ -310,7 +311,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     buffer.append(getName());
 
     PsiJavaCodeReferenceElement[] bounds = getExtendsList().getReferenceElements();
@@ -324,13 +325,13 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirror(getExtendsList(), SourceTreeToPsiMap.<PsiTypeParameter>treeToPsiNotNull(element).getExtendsList());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getChildren() {
     return PsiElement.EMPTY_ARRAY;
   }
@@ -356,31 +357,31 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public SearchScope getUseScope() {
     return PsiClassImplUtil.getClassUseScope(this);
   }
 
   //todo parse annotataions
   @Override
-  @NotNull
+  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     return PsiAnnotation.EMPTY_ARRAY;
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@NotNull @NonNls String qualifiedName) {
+  public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
     return null;
   }
 
   @Override
-  @NotNull
-  public PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName) {
+  @Nonnull
+  public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
     throw new IncorrectOperationException();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getAnnotations();
   }

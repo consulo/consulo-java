@@ -1,7 +1,8 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class SimpleReturn {
-  @NotNull public Object test() {
+  @Nonnull
+  public Object test() {
     return null;
   }
 }

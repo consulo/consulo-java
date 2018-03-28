@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.generate.config.*;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.psi.PsiAdapter;
@@ -78,7 +77,7 @@ public class GenerateToStringWorker
 	 * @throws GenerateCodeException       is thrown when there is an error generating the javacode.
 	 * @throws IncorrectOperationException is thrown by IDEA.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiMethod createToStringMethod(Collection<PsiMember> selectedMembers,
 			ConflictResolutionPolicy policy,
 			Map<String, String> params,

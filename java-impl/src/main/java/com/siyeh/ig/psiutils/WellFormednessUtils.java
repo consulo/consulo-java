@@ -15,16 +15,17 @@
  */
 package com.siyeh.ig.psiutils;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiExpression;
-import org.jetbrains.annotations.NotNull;
 
 public class WellFormednessUtils {
   private WellFormednessUtils() {
     super();
   }
 
-  public static boolean isWellFormed(@NotNull PsiAssignmentExpression expression) {
+  public static boolean isWellFormed(@Nonnull PsiAssignmentExpression expression) {
 
     final PsiExpression rhs = expression.getRExpression();
     return rhs != null;

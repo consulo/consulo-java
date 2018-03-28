@@ -19,8 +19,8 @@
  */
 package com.intellij.lang.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.FormattingModel;
 import com.intellij.formatting.FormattingModelBuilder;
@@ -48,7 +48,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 	private static final Logger LOG = Logger.getInstance("#com.intellij.lang.java.JavaFormattingModelBuilder");
 
 	@Override
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	public FormattingModel createModel(final PsiElement element, final CodeStyleSettings settings)
 	{
@@ -115,9 +115,9 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 	 * @param node target node
 	 * @return given node range if there is no error-element before it; combined range otherwise
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
-	private static TextRange combineWithErrorElementIfPossible(@NotNull ASTNode node)
+	private static TextRange combineWithErrorElementIfPossible(@Nonnull ASTNode node)
 	{
 		if(node.getElementType() == TokenType.ERROR_ELEMENT)
 		{
@@ -140,7 +140,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static ASTNode findNearestExpressionParent(final ASTNode current)
 	{
 		ASTNode result = current;

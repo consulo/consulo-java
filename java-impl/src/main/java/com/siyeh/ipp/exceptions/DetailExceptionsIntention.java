@@ -19,7 +19,7 @@ import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
@@ -27,13 +27,13 @@ import java.util.*;
 public class DetailExceptionsIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new DetailExceptionsPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiJavaToken token = (PsiJavaToken)element;
     PsiElement parent = token.getParent();
     if (parent instanceof PsiCatchSection) {

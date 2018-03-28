@@ -21,8 +21,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -47,13 +46,13 @@ public class LoggingConditionDisagreesWithLogStatementInspection extends BaseIns
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("logging.condition.disagrees.with.log.statement.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("logging.condition.disagrees.with.log.statement.problem.descriptor", infos[0]);
   }
@@ -210,7 +209,7 @@ public class LoggingConditionDisagreesWithLogStatementInspection extends BaseIns
       return !loggingLevel.equals(priority);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public static String getLoggingLevelFromArgument(PsiExpression argument) {
       if (!(argument instanceof PsiReferenceExpression)) {
         return null;

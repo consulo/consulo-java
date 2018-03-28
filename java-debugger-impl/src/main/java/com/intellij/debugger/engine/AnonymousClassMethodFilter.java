@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiMethod;

@@ -28,7 +28,7 @@ import com.intellij.refactoring.typeCook.deductive.resolver.Binding;
 import com.intellij.refactoring.typeCook.deductive.resolver.ResolverTree;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,12 +47,12 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
     mySettings = settings;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new TypeCookViewDescriptor(myElements);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     final SystemBuilder systemBuilder = new SystemBuilder(myProject, mySettings);
 

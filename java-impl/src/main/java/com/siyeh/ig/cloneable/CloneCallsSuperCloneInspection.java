@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.cloneable;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
@@ -22,22 +24,21 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CloneUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class CloneCallsSuperCloneInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CloneDoesntCallSuperClone";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "clone.doesnt.call.super.clone.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "clone.doesnt.call.super.clone.problem.descriptor");
@@ -55,7 +56,7 @@ public class CloneCallsSuperCloneInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       if (!CloneUtils.isClone(method)) {
         return;

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
@@ -110,7 +110,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 		return !StringUtil.isEmpty(name) && name.startsWith(LAMBDA_METHOD_PREFIX);
 	}
 
-	public static int getLambdaOrdinal(@NotNull String name)
+	public static int getLambdaOrdinal(@Nonnull String name)
 	{
 		int pos = name.lastIndexOf('$');
 		if(pos > -1)

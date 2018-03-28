@@ -21,7 +21,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -67,20 +67,20 @@ public class JDBCResourceInspection extends ResourceInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "JDBCResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "jdbc.resource.opened.not.closed.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -106,7 +106,7 @@ public class JDBCResourceInspection extends ResourceInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isJDBCResourceCreation(expression)) {
         return;

@@ -21,8 +21,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.SmartTypePointer;
 import com.intellij.psi.SmartTypePointerManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.event.ItemListener;
@@ -123,7 +122,7 @@ public class TypeSelector {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiType getSelectedType() {
     if (myComponent instanceof JLabel) {
       return myType;
@@ -133,7 +132,7 @@ public class TypeSelector {
     }
   }
 
-  public void selectType(@NotNull PsiType type) {
+  public void selectType(@Nonnull PsiType type) {
     if (myComponent instanceof JComboBox) {
       ((JComboBox)myComponent).setSelectedItem(new PsiTypeItem(type, myProject));
     }
@@ -172,7 +171,7 @@ public class TypeSelector {
       myTypePointer = SmartTypePointerManager.getInstance(project).createSmartTypePointer(type);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public PsiType getType() {
       return myTypePointer.getType();
     }

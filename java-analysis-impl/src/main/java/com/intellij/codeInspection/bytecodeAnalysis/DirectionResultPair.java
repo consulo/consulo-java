@@ -16,14 +16,14 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class DirectionResultPair {
   final int directionKey;
-  @NotNull
+  @Nonnull
   final HResult hResult;
 
-  DirectionResultPair(int directionKey, @NotNull HResult hResult) {
+  DirectionResultPair(int directionKey, @Nonnull HResult hResult) {
     this.directionKey = directionKey;
     this.hResult = hResult;
   }

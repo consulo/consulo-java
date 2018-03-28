@@ -25,9 +25,10 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.IStubElementType;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.psi.Directive;
 import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
 
@@ -35,11 +36,11 @@ import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class DirectiveImpl extends AbstractAssignmentExpression implements Directive {
-  public DirectiveImpl(AssignmentExpressionStub stub, @NotNull IStubElementType nodeType) {
+  public DirectiveImpl(AssignmentExpressionStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public DirectiveImpl(@NotNull ASTNode node) {
+  public DirectiveImpl(@Nonnull ASTNode node) {
     super(node);
   }
 }

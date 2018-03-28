@@ -27,8 +27,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -38,14 +37,14 @@ import java.util.Map;
 public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
   private final Logger LOG = Logger.getInstance("#com.intellij.refactoring.rename.RenamePsiPackageProcessor");
 
-  public boolean canProcessElement(@NotNull final PsiElement element) {
+  public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiJavaPackage;
   }
 
   public void renameElement(final PsiElement element,
                             final String newName,
                             final UsageInfo[] usages,
-                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
+                            @javax.annotation.Nullable RefactoringElementListener listener) throws IncorrectOperationException {
     final PsiJavaPackage psiPackage = (PsiJavaPackage)element;
     psiPackage.handleQualifiedNameChange(PsiUtilCore.getQualifiedNameAfterRename(psiPackage.getQualifiedName(), newName));
     RenameUtil.doRenameGenericNamedElement(element, newName, usages, listener);
@@ -90,7 +89,7 @@ public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public Runnable getPostRenameCallback(final PsiElement element, final String newName, final RefactoringElementListener listener) {
     final Project project = element.getProject();
     final PsiJavaPackage psiPackage = (PsiJavaPackage)element;
@@ -106,7 +105,7 @@ public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
     };
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @NonNls
   public String getHelpID(final PsiElement element) {
     return HelpID.RENAME_PACKAGE;

@@ -24,8 +24,8 @@ import gnu.trove.THashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.HierarchicalMethodSignature;
 import com.intellij.psi.JavaPsiFacade;
@@ -37,8 +37,8 @@ import com.intellij.psi.PsiResolveHelper;
 public class ClassUtil {
   private ClassUtil() { }
 
-  @Nullable
-  public static PsiMethod getAnyAbstractMethod(@NotNull PsiClass aClass) {
+  @javax.annotation.Nullable
+  public static PsiMethod getAnyAbstractMethod(@Nonnull PsiClass aClass) {
     PsiMethod methodToImplement = getAnyMethodToImplement(aClass);
     if (methodToImplement != null) {
       return methodToImplement;
@@ -51,8 +51,8 @@ public class ClassUtil {
     return null;
   }
 
-  @Nullable
-  public static PsiMethod getAnyMethodToImplement(@NotNull PsiClass aClass) {
+  @javax.annotation.Nullable
+  public static PsiMethod getAnyMethodToImplement(@Nonnull PsiClass aClass) {
     Set<PsiMethod> alreadyImplemented = new THashSet<PsiMethod>();
     for (HierarchicalMethodSignature signatureHierarchical : aClass.getVisibleSignatures()) {
       for (PsiMethod superS : signatureHierarchical.getMethod().findSuperMethods()) {
@@ -85,8 +85,8 @@ public class ClassUtil {
     return checkPackageLocalInSuperClass(aClass);
   }
 
-  @Nullable
-  private static PsiMethod checkPackageLocalInSuperClass(@NotNull PsiClass aClass) {
+  @javax.annotation.Nullable
+  private static PsiMethod checkPackageLocalInSuperClass(@Nonnull PsiClass aClass) {
     // super class can have package local abstract methods not accessible for overriding
     PsiClass superClass = aClass.getSuperClass();
     if (superClass == null) return null;

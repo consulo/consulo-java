@@ -22,8 +22,7 @@ import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInspection.*;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,27 +34,27 @@ import java.util.Set;
  */
 public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool {
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("redundant.throws.declaration");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "RedundantThrowsDeclaration";
   }
 
   @Override
-  @Nullable
-  public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly) {
+  @javax.annotation.Nullable
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly) {
     final Set<ProblemDescriptor> problems = new HashSet<ProblemDescriptor>();
     file.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {

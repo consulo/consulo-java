@@ -25,8 +25,7 @@ import com.intellij.codeInspection.reference.RefPackage;
 import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -36,7 +35,7 @@ public class PackageWithTooFewClassesInspection extends BaseGlobalInspection {
   @SuppressWarnings({"PublicField"})
   public int limit = 3;
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
@@ -44,7 +43,7 @@ public class PackageWithTooFewClassesInspection extends BaseGlobalInspection {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity,
     AnalysisScope analysisScope,

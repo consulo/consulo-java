@@ -15,6 +15,8 @@
  */
 package com.intellij.coverage;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.configurations.ConfigurationInfoProvider;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunProfile;
@@ -22,10 +24,9 @@ import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
 import com.intellij.openapi.extensions.Extensions;
-import org.jetbrains.annotations.NotNull;
 
 public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
-  public boolean canRun(@NotNull final String executorId, @NotNull final RunProfile profile) {
+  public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
     try {
       return executorId.equals(CoverageExecutor.EXECUTOR_ID) &&
              //profile instanceof ModuleBasedConfiguration &&
@@ -43,7 +44,7 @@ public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
     return new CoverageRunnerData();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getRunnerId() {
     return "Cover";

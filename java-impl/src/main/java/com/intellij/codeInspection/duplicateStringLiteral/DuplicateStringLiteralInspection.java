@@ -30,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -38,8 +40,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -88,8 +88,8 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 	private static final String BR = "<br>";
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -108,28 +108,28 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.duplicates.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.INTERNATIONALIZATION_GROUP_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "DuplicateStringLiteralInspection";
 	}
 
-	private void checkStringLiteralExpression(@NotNull final PsiLiteralExpression originalExpression,
-			@NotNull ProblemsHolder holder,
+	private void checkStringLiteralExpression(@Nonnull final PsiLiteralExpression originalExpression,
+			@Nonnull ProblemsHolder holder,
 			final boolean isOnTheFly)
 	{
 		Object value = originalExpression.getValue();
@@ -303,7 +303,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 		holder.registerProblem(originalExpression, msg, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, array);
 	}
 
-	private boolean shouldCheck(@NotNull Project project, @NotNull PsiLiteralExpression expression)
+	private boolean shouldCheck(@Nonnull Project project, @Nonnull PsiLiteralExpression expression)
 	{
 		if(IGNORE_PROPERTY_KEYS && JavaI18nUtil.mustBePropertyKey(project, expression, new THashMap<String, Object>()))
 		{
@@ -445,14 +445,14 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getName()
 		{
 			return InspectionsBundle.message("introduce.constant.across.the.project");
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			SwingUtilities.invokeLater(new Runnable()
 			{
@@ -509,7 +509,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return getName();
@@ -531,7 +531,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 			myConst = SmartPointerManager.getInstance(constant.getProject()).createSmartPsiElementPointer(constant);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getText()
 		{
@@ -539,11 +539,11 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 		}
 
 		@Override
-		public void invoke(@NotNull Project project,
-				@NotNull PsiFile file,
-				@Nullable("is null when called from inspection") Editor editor,
-				@NotNull PsiElement startElement,
-				@NotNull PsiElement endElement)
+		public void invoke(@Nonnull Project project,
+				@Nonnull PsiFile file,
+				@Nullable Editor editor,
+				@Nonnull PsiElement startElement,
+				@Nonnull PsiElement endElement)
 		{
 			final PsiLiteralExpression myOriginalExpression = (PsiLiteralExpression) startElement;
 			final PsiField myConstant = myConst.getElement();
@@ -570,7 +570,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionsBundle.message("inspection.duplicates.replace.family.quickfix");

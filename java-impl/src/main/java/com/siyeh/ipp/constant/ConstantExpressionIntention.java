@@ -16,7 +16,7 @@
 package com.siyeh.ipp.constant;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -36,7 +36,7 @@ public class ConstantExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ConstantExpressionPredicate();
   }

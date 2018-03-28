@@ -22,8 +22,8 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -35,14 +35,14 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
   public boolean ignoreCollectionLoops = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "for.loop.with.missing.component.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean hasInitializer = ((Boolean)infos[0]).booleanValue();
     final boolean hasCondition = ((Boolean)infos[1]).booleanValue();
@@ -99,7 +99,7 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @NotNull PsiForStatement statement) {
+      @Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final boolean hasCondition = hasCondition(statement);
       final boolean hasInitializer = hasInitializer(statement);

@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.*;
@@ -38,13 +38,13 @@ public class MissortedModifiersInspection extends BaseInspection {
    */
   public boolean m_requireAnnotationsFirst = true;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "missorted.modifiers.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "missorted.modifiers.problem.descriptor");
@@ -67,7 +67,7 @@ public class MissortedModifiersInspection extends BaseInspection {
 
   private static class SortModifiersFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "missorted.modifiers.sort.quickfix");
@@ -122,38 +122,38 @@ public class MissortedModifiersInspection extends BaseInspection {
       new ModifierComparator();
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       super.visitClass(aClass);
       checkForMissortedModifiers(aClass);
     }
 
     @Override
     public void visitClassInitializer(
-      @NotNull PsiClassInitializer initializer) {
+      @Nonnull PsiClassInitializer initializer) {
       super.visitClassInitializer(initializer);
       checkForMissortedModifiers(initializer);
     }
 
     @Override
-    public void visitLocalVariable(@NotNull PsiLocalVariable variable) {
+    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       checkForMissortedModifiers(variable);
     }
 
     @Override
-    public void visitParameter(@NotNull PsiParameter parameter) {
+    public void visitParameter(@Nonnull PsiParameter parameter) {
       super.visitParameter(parameter);
       checkForMissortedModifiers(parameter);
     }
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       checkForMissortedModifiers(method);
     }
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       checkForMissortedModifiers(field);
     }

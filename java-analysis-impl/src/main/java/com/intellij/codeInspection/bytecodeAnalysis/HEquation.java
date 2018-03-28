@@ -16,14 +16,15 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 final class HEquation {
-  @NotNull
+  @Nonnull
   final HKey key;
-  @NotNull final HResult result;
+  @Nonnull
+  final HResult result;
 
-  HEquation(@NotNull HKey key, @NotNull HResult result) {
+  HEquation(@Nonnull HKey key, @Nonnull HResult result) {
     this.key = key;
     this.result = result;
   }

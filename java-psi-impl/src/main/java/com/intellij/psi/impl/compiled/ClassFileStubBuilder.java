@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.compiled.ClassFileDecompilers;
@@ -42,13 +43,13 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder
 	public static final int STUB_VERSION = 18;
 
 	@Override
-	public boolean acceptsFile(@NotNull VirtualFile file)
+	public boolean acceptsFile(@Nonnull VirtualFile file)
 	{
 		return true;
 	}
 
 	@Override
-	public StubElement buildStubTree(@NotNull FileContent fileContent)
+	public StubElement buildStubTree(@Nonnull FileContent fileContent)
 	{
 		VirtualFile file = fileContent.getFile();
 		byte[] content = fileContent.getContent();

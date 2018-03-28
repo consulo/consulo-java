@@ -21,23 +21,23 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 import gnu.trove.TIntArrayList;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.intellij.refactoring.IntroduceParameterRefactoring.*;
 
 public interface IntroduceParameterData {
-  @NotNull
+  @Nonnull
   Project getProject();
 
   PsiMethod getMethodToReplaceIn();
 
-  @NotNull
+  @Nonnull
   PsiMethod getMethodToSearchFor();
 
   ExpressionWrapper getParameterInitializer();
 
-  @NotNull
+  @Nonnull
   String getParameterName();
 
   @MagicConstant(intValues = {REPLACE_FIELDS_WITH_GETTERS_ALL, REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE, REPLACE_FIELDS_WITH_GETTERS_NONE})
@@ -47,20 +47,20 @@ public interface IntroduceParameterData {
 
   boolean isGenerateDelegate();
 
-  @NotNull
+  @Nonnull
   PsiType getForcedType();
 
-  @NotNull
+  @Nonnull
   TIntArrayList getParametersToRemove();
 
   interface ExpressionWrapper<RealExpression extends PsiElement> {
-    @NotNull
+    @Nonnull
     String getText();
 
     @Nullable
     PsiType getType();
 
-    @NotNull
+    @Nonnull
     RealExpression getExpression();
 
   }

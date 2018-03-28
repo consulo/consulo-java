@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.impl.descriptors.data;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.ui.impl.watch.UserExpressionDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
@@ -39,7 +40,7 @@ public class UserExpressionData extends DescriptorData<UserExpressionDescriptor>
 		myText = text;
 	}
 
-	protected UserExpressionDescriptorImpl createDescriptorImpl(@NotNull Project project)
+	protected UserExpressionDescriptorImpl createDescriptorImpl(@Nonnull Project project)
 	{
 		return new UserExpressionDescriptorImpl(project, myParentDescriptor, myTypeName, myName, myText, myEnumerationIndex);
 	}

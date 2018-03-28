@@ -15,10 +15,11 @@
  */
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiTypeCastExpression;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author nik
@@ -31,7 +32,7 @@ public class PsiTypeCastExpressionPattern extends PsiExpressionPattern<PsiTypeCa
   public PsiTypeCastExpressionPattern withOperand(final ElementPattern<? extends PsiExpression> operand) {
     return with(new PatternCondition<PsiTypeCastExpression>("withOperand") {
       @Override
-      public boolean accepts(@NotNull PsiTypeCastExpression psiTypeCastExpression, ProcessingContext context) {
+      public boolean accepts(@Nonnull PsiTypeCastExpression psiTypeCastExpression, ProcessingContext context) {
         return operand.accepts(psiTypeCastExpression.getOperand(), context);
       }
     });

@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.generation.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.actions.BaseCodeInsightAction;
 import com.intellij.openapi.editor.Editor;
@@ -22,17 +24,16 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
 
 public class GenerateSuperMethodCallAction extends BaseCodeInsightAction {
-  @NotNull
+  @Nonnull
   @Override
   protected CodeInsightActionHandler getHandler() {
     return new GenerateSuperMethodCallHandler();
   }
 
   @Override
-  protected boolean isValidForFile(@NotNull Project project, @NotNull Editor editor, @NotNull final PsiFile file) {
+  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull final PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }

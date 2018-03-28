@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
@@ -45,7 +45,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddExceptionToCatchFix");
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     int offset = editor.getCaretModel().getOffset();
 
@@ -135,7 +135,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
     }
   }
 
-  private static PsiElement getFinallySectionStart(@NotNull PsiCodeBlock finallyBlock) {
+  private static PsiElement getFinallySectionStart(@Nonnull PsiCodeBlock finallyBlock) {
     PsiElement finallyElement = finallyBlock;
     while (!PsiUtil.isJavaToken(finallyElement, JavaTokenType.FINALLY_KEYWORD) && finallyElement != null) {
       finallyElement = finallyElement.getPrevSibling();
@@ -145,7 +145,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
 
     int offset = editor.getCaretModel().getOffset();
@@ -157,7 +157,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiElement findElement(final PsiFile file, final int offset) {
     PsiElement element = file.findElementAt(offset);
     if (element instanceof PsiWhiteSpace) element = file.findElementAt(offset - 1);
@@ -186,7 +186,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("add.catch.clause.family");
   }

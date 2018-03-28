@@ -15,7 +15,7 @@
  */
 package com.intellij.openapi.fileTypes.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -26,7 +26,7 @@ import consulo.java.fileTypes.JModFileType;
 public class JavaFileTypeFactory extends FileTypeFactory
 {
 	@Override
-	public void createFileTypes(@NotNull final FileTypeConsumer consumer)
+	public void createFileTypes(@Nonnull final FileTypeConsumer consumer)
 	{
 		consumer.consume(JarArchiveFileType.INSTANCE, "jar;war;apk");
 		consumer.consume(JavaClassFileType.INSTANCE);

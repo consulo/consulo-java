@@ -27,8 +27,7 @@ import com.intellij.psi.impl.source.tree.Factory;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ class DeclarationMover extends LineMover {
   private PsiEnumConstant myEnumToInsertSemicolonAfter;
 
   @Override
-  public void beforeMove(@NotNull final Editor editor, @NotNull final MoveInfo info, final boolean down) {
+  public void beforeMove(@Nonnull final Editor editor, @Nonnull final MoveInfo info, final boolean down) {
     super.beforeMove(editor, info, down);
 
     if (myEnumToInsertSemicolonAfter != null) {
@@ -61,7 +60,7 @@ class DeclarationMover extends LineMover {
   }
 
   @Override
-  public boolean checkAvailable(@NotNull final Editor editor, @NotNull final PsiFile file, @NotNull final MoveInfo info, final boolean down) {
+  public boolean checkAvailable(@Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final MoveInfo info, final boolean down) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }
@@ -120,7 +119,7 @@ class DeclarationMover extends LineMover {
     return true;
   }
 
-  private static LineRange memberRange(@NotNull PsiElement member, Editor editor, LineRange lineRange) {
+  private static LineRange memberRange(@Nonnull PsiElement member, Editor editor, LineRange lineRange) {
     final TextRange textRange = member.getTextRange();
     if (editor.getDocument().getTextLength() < textRange.getEndOffset()) return null;
     final int startLine = editor.offsetToLogicalPosition(textRange.getStartOffset()).line;
@@ -130,7 +129,7 @@ class DeclarationMover extends LineMover {
     return new LineRange(startLine, endLine);
   }
 
-  private static boolean isInsideDeclaration(@NotNull final PsiElement member,
+  private static boolean isInsideDeclaration(@Nonnull final PsiElement member,
                                              final int startLine,
                                              final int endLine,
                                              final LineRange lineRange,
@@ -176,7 +175,7 @@ class DeclarationMover extends LineMover {
 
   // null means we are not crossing class border
   // throws IllegalMoveException when corresponding movement has no sense
-  @Nullable
+  @javax.annotation.Nullable
   private LineRange moveInsideOutsideClassPosition(Editor editor, PsiElement sibling, final boolean isDown, boolean areWeMovingClass) throws IllegalMoveException{
     if (sibling == null) throw new IllegalMoveException();
     if (sibling instanceof PsiJavaToken &&

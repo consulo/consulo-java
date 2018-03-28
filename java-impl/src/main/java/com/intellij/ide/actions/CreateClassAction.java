@@ -18,7 +18,7 @@ package com.intellij.ide.actions;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -134,7 +134,7 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 	}
 
 	@Override
-	protected PsiElement getNavigationElement(@NotNull PsiClass createdElement)
+	protected PsiElement getNavigationElement(@Nonnull PsiClass createdElement)
 	{
 		return createdElement.getLBrace();
 	}

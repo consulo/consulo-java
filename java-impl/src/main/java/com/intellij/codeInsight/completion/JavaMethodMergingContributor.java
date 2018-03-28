@@ -19,8 +19,8 @@ import static com.intellij.util.ObjectUtils.assertNotNull;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
@@ -32,7 +32,7 @@ public class JavaMethodMergingContributor extends CompletionContributor
 {
 
 	@Override
-	public AutoCompletionDecision handleAutoCompletionPossibility(@NotNull AutoCompletionContext context)
+	public AutoCompletionDecision handleAutoCompletionPossibility(@Nonnull AutoCompletionContext context)
 	{
 		final CompletionParameters parameters = context.getParameters();
 		if(parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType.BASIC)
@@ -96,7 +96,7 @@ public class JavaMethodMergingContributor extends CompletionContributor
 		return (PsiType.VOID.equals(method.getReturnType()) ? 0 : 1) + (method.getParameterList().getParametersCount() > 0 ? 2 : 0);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiMethod getItemMethod(LookupElement item)
 	{
 		Object o = item.getPsiElement();

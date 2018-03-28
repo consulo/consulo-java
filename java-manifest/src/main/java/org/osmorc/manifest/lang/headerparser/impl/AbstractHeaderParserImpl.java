@@ -24,9 +24,10 @@
  */
 package org.osmorc.manifest.lang.headerparser.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiReference;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 
@@ -34,12 +35,12 @@ import org.osmorc.manifest.lang.psi.HeaderValuePart;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public abstract class AbstractHeaderParserImpl implements HeaderParser {
-  public Object getValue(@NotNull HeaderValuePart headerValuePart) {
+  public Object getValue(@Nonnull HeaderValuePart headerValuePart) {
     return headerValuePart.getUnwrappedText();
   }
 
   @Override
-  public boolean isAcceptable(@NotNull Object o) {
+  public boolean isAcceptable(@Nonnull Object o) {
     return true;
   }
 
@@ -47,11 +48,11 @@ public abstract class AbstractHeaderParserImpl implements HeaderParser {
     return true;
   }
 
-  public PsiReference[] getReferences(@NotNull HeaderValuePart headerValuePart) {
+  public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
     return PsiReference.EMPTY_ARRAY;
   }
 
-  public void annotate(@NotNull HeaderValuePart headerValue, @NotNull AnnotationHolder holder) {
+  public void annotate(@Nonnull HeaderValuePart headerValue, @Nonnull AnnotationHolder holder) {
 
   }
 }

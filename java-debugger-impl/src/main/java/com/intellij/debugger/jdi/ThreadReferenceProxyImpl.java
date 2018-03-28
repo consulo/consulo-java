@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -74,7 +74,7 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
 		return (ThreadReference) getObjectReference();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public VirtualMachineProxyImpl getVirtualMachine()
 	{
@@ -259,7 +259,7 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
 	 * this is useful when you need all frames but do not plan to invoke anything
 	 * as only one request is sent
 	 */
-	@NotNull
+	@Nonnull
 	public List<StackFrameProxyImpl> forceFrames() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -299,7 +299,7 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
 		return myFrames;
 	}
 
-	@NotNull
+	@Nonnull
 	public List<StackFrameProxyImpl> frames() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -323,7 +323,7 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
 		return myFrames;
 	}
 
-	private void checkFrames(@NotNull final ThreadReference threadRef) throws EvaluateException
+	private void checkFrames(@Nonnull final ThreadReference threadRef) throws EvaluateException
 	{
 		int frameCount = frameCount();
 		if(myFramesFromBottom.size() < frameCount)

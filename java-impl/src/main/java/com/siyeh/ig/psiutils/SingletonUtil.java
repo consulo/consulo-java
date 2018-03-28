@@ -19,14 +19,14 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class SingletonUtil {
 
   private SingletonUtil() {
   }
 
-  public static boolean isSingleton(@NotNull PsiClass aClass) {
+  public static boolean isSingleton(@Nonnull PsiClass aClass) {
     if (aClass.isInterface() || aClass.isEnum() ||
         aClass.isAnnotationType()) {
       return false;

@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiAnnotationParameterList;
@@ -31,17 +32,17 @@ import com.intellij.psi.impl.source.JavaStubPsiElement;
  */
 public class PsiAnnotationParamListImpl extends JavaStubPsiElement<PsiAnnotationParameterListStub> implements PsiAnnotationParameterList
 {
-	public PsiAnnotationParamListImpl(@NotNull PsiAnnotationParameterListStub stub)
+	public PsiAnnotationParamListImpl(@Nonnull PsiAnnotationParameterListStub stub)
 	{
 		super(stub, JavaStubElementTypes.ANNOTATION_PARAMETER_LIST);
 	}
 
-	public PsiAnnotationParamListImpl(@NotNull ASTNode node)
+	public PsiAnnotationParamListImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiNameValuePair[] getAttributes()
 	{
@@ -49,7 +50,7 @@ public class PsiAnnotationParamListImpl extends JavaStubPsiElement<PsiAnnotation
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

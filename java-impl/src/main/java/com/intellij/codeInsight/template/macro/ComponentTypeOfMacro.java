@@ -17,7 +17,8 @@ package com.intellij.codeInsight.template.macro;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
@@ -49,7 +50,7 @@ public class ComponentTypeOfMacro extends Macro
 	}
 
 	@Override
-	public LookupElement[] calculateLookupItems(@NotNull Expression[] params, ExpressionContext context)
+	public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context)
 	{
 		if(params.length != 1)
 		{
@@ -79,7 +80,7 @@ public class ComponentTypeOfMacro extends Macro
 	}
 
 	@Override
-	public Result calculateResult(@NotNull Expression[] params, final ExpressionContext context)
+	public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context)
 	{
 		if(params.length != 1)
 		{

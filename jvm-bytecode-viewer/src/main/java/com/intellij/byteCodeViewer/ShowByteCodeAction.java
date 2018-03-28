@@ -15,8 +15,8 @@
  */
 package com.intellij.byteCodeViewer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.documentation.DocumentationManager;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.icons.AllIcons;
@@ -108,7 +108,7 @@ public class ShowByteCodeAction extends AnAction
 			private String myErrorTitle;
 
 			@Override
-			public void run(@NotNull ProgressIndicator indicator)
+			public void run(@Nonnull ProgressIndicator indicator)
 			{
 				if(ProjectRootManager.getInstance(project).getFileIndex().isInContent(virtualFile) && TranslatingCompilerFilesMonitor.getInstance().isMarkedForCompilation(project, virtualFile))
 				{

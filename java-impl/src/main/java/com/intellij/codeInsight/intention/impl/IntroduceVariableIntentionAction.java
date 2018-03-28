@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -23,26 +25,25 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.BaseRefactoringIntentionAction;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableHandler;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Danila Ponomarenko
  */
 public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAction {
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return CodeInsightBundle.message("intention.introduce.variable.text");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof SyntheticElement){
       return false;
     }
@@ -58,7 +59,7 @@ public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAc
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiExpressionStatement statement = PsiTreeUtil.getParentOfType(element,PsiExpressionStatement.class);
     if (statement == null){
       return;

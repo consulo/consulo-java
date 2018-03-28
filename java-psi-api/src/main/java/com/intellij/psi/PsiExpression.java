@@ -15,11 +15,11 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.Function;
 import com.intellij.util.NullableFunction;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a Java expression.
@@ -31,7 +31,7 @@ public interface PsiExpression extends PsiAnnotationMemberValue {
   PsiExpression[] EMPTY_ARRAY = new PsiExpression[0];
 
   ArrayFactory<PsiExpression> ARRAY_FACTORY = new ArrayFactory<PsiExpression>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiExpression[] create(final int count) {
       return count == 0 ? PsiExpression.EMPTY_ARRAY : new PsiExpression[count];
@@ -50,6 +50,6 @@ public interface PsiExpression extends PsiAnnotationMemberValue {
    *
    * @return the expression type, or null if the type is not known.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiType getType();
 }

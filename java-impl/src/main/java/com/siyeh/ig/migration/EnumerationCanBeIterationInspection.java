@@ -32,8 +32,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.PsiElementOrderComparator;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,21 +56,21 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   private static final int KEEP_DECLARATION = 2;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "enumeration.can.be.iteration.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "enumeration.can.be.iteration.problem.descriptor", infos[0]);
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new EnumerationCanBeIterationFix();
   }
@@ -79,7 +78,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   private static class EnumerationCanBeIterationFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "enumeration.can.be.iteration.quickfix");
@@ -184,7 +183,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       }
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiStatement createDeclaration(
       PsiMethodCallExpression methodCallExpression,
       String variableName, PsiType parameterType)
@@ -450,7 +449,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     }
 
     private static boolean isEnumerationMethodCalled(
-      @NotNull PsiVariable variable, @NotNull PsiElement context) {
+      @Nonnull PsiVariable variable, @Nonnull PsiElement context) {
       final EnumerationMethodCalledVisitor visitor =
         new EnumerationMethodCalledVisitor(variable);
       context.accept(visitor);
@@ -463,7 +462,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       private final PsiVariable variable;
       private boolean enumerationMethodCalled = false;
 
-      EnumerationMethodCalledVisitor(@NotNull PsiVariable variable) {
+      EnumerationMethodCalledVisitor(@Nonnull PsiVariable variable) {
         this.variable = variable;
       }
 

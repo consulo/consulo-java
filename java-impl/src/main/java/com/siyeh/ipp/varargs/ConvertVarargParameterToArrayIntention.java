@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.varargs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -25,16 +27,15 @@ import com.intellij.util.Query;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ConvertVarargParameterToArrayIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertVarargParameterToArrayPredicate();
   }
 
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiParameterList parameterList = (PsiParameterList)element;
     convertVarargsToArray(parameterList);

@@ -25,8 +25,7 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.ig.ui.UiUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 import java.util.List;
@@ -55,7 +54,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getID() {
     return "AccessToNonThreadSafeStaticField";
@@ -63,14 +62,14 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "access.to.non.thread.safe.static.field.from.instance.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "access.to.non.thread.safe.static.field.from.instance.field.problem.descriptor",
@@ -78,7 +77,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return UiUtils.createTreeClassChooserList(nonThreadSafeClasses,
                                               InspectionGadgetsBundle.message(

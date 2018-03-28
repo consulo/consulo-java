@@ -17,8 +17,8 @@ package com.siyeh.ig.style;
 
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +49,7 @@ class VariableIsModifiedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!modified) {
       super.visitElement(element);
     }
@@ -57,7 +57,7 @@ class VariableIsModifiedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @NotNull PsiMethodCallExpression call) {
+    @Nonnull PsiMethodCallExpression call) {
     if (modified) {
       return;
     }

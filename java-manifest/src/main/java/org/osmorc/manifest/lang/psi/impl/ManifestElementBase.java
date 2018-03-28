@@ -24,12 +24,13 @@
  */
 package org.osmorc.manifest.lang.psi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 
 /**
@@ -37,7 +38,7 @@ import org.osmorc.manifest.lang.ManifestLanguage;
  */
 public abstract class ManifestElementBase<T extends StubElement> extends StubBasedPsiElementBase<T> {
 
-  protected ManifestElementBase(T stub, @NotNull IStubElementType nodeType) {
+  protected ManifestElementBase(T stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -45,7 +46,7 @@ public abstract class ManifestElementBase<T extends StubElement> extends StubBas
     super(node);
   }
 
-  @NotNull
+  @Nonnull
   public Language getLanguage() {
     return ManifestLanguage.INSTANCE;
   }

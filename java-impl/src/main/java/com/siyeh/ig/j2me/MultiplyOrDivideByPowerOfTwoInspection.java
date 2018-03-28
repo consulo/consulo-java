@@ -28,8 +28,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.WellFormednessUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -41,20 +40,20 @@ public class MultiplyOrDivideByPowerOfTwoInspection
    */
   public boolean checkDivision = false;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "multiply.or.divide.by.power.of.two.display.name");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
       "multiply.or.divide.by.power.of.two.divide.option"), this,
                                           "checkDivision");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "expression.can.be.replaced.problem.descriptor",
@@ -136,7 +135,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection
 
   private static class MultiplyByPowerOfTwoFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "multiply.or.divide.by.power.of.two.replace.quickfix");
@@ -159,7 +158,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection
 
     @Override
     public void visitBinaryExpression(
-      @NotNull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiExpression rhs = expression.getROperand();
       if (rhs == null) {
@@ -187,7 +186,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;

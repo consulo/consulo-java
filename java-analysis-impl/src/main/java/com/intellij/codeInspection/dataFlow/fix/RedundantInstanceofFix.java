@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow.fix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -31,14 +32,14 @@ import com.intellij.psi.PsiInstanceOfExpression;
 public class RedundantInstanceofFix implements LocalQuickFix
 {
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return InspectionsBundle.message("inspection.data.flow.redundant.instanceof.quickfix");
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 		if(psiElement instanceof PsiInstanceOfExpression)

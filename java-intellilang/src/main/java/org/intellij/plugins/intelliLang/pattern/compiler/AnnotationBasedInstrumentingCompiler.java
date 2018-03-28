@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import consulo.java.module.extension.JavaModuleExtension;
@@ -68,7 +68,7 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
   public AnnotationBasedInstrumentingCompiler() {
   }
 
-  @NotNull
+  @Nonnull
   public ProcessingItem[] getProcessingItems(final CompileContext context) {
     if (!isEnabled()) {
       return ProcessingItem.EMPTY_ARRAY;

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -23,26 +25,25 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.AddSerialVersionUIDFix;
 import com.siyeh.ig.psiutils.SerializationUtils;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NotNull;
 
 public class SerializableHasSerialVersionUIDFieldInspection extends SerializableInspection {
 
   @Pattern("[a-zA-Z_0-9.-]+")
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "serial";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "serializable.class.without.serialversionuid.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.class.without.serialversionuid.problem.descriptor");
@@ -61,7 +62,7 @@ public class SerializableHasSerialVersionUIDFieldInspection extends Serializable
   private class SerializableHasSerialVersionUIDFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;
       }

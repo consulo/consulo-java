@@ -15,12 +15,13 @@
  */
 package com.intellij.psi.search.searches;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
@@ -48,11 +49,11 @@ public class AnnotatedPackagesSearch extends ExtensibleQueryFactory<PsiJavaPacka
 
   private AnnotatedPackagesSearch() {}
 
-  public static Query<PsiJavaPackage> search(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiJavaPackage> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return INSTANCE.createQuery(new Parameters(annotationClass, scope));
   }
 
-  public static Query<PsiJavaPackage> search(@NotNull PsiClass annotationClass) {
+  public static Query<PsiJavaPackage> search(@Nonnull PsiClass annotationClass) {
     return search(annotationClass, GlobalSearchScope.allScope(annotationClass.getProject()));
   }
 }

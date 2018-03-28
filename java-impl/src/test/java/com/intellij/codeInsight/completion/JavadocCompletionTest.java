@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -96,7 +96,7 @@ public class JavadocCompletionTest extends LightFixtureCompletionTestCase {
     assertTrue(getLookupElementStrings().containsAll(Arrays.asList("foo", "myField")));
   }
 
-  @NotNull
+  @Nonnull
   private List<String> getLookupElementStrings() {
     return ObjectUtils.assertNotNull(myFixture.getLookupElementStrings());
   }
@@ -212,8 +212,8 @@ public class JavadocCompletionTest extends LightFixtureCompletionTestCase {
       (PsiReferenceRegistrarImpl) ReferenceProvidersRegistry.getInstance().getRegistrar(JavaLanguage.INSTANCE);
     PsiReferenceProvider provider = new PsiReferenceProvider() {
       @Override
-      @NotNull
-      public PsiReference[] getReferencesByElement(@NotNull final PsiElement element, @NotNull final ProcessingContext context) {
+      @Nonnull
+      public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element) {
 
           @Override
@@ -222,7 +222,7 @@ public class JavadocCompletionTest extends LightFixtureCompletionTestCase {
           }
 
           @Override
-          @NotNull
+          @Nonnull
           public Object[] getVariants() {
             return new Object[]{"1", "2", "3"};
           }

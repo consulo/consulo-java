@@ -17,7 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.regex.Pattern;
 
@@ -74,7 +74,7 @@ public class IteratorUtils {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (doesCallIteratorNext) {
         return;
       }
@@ -83,7 +83,7 @@ public class IteratorUtils {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       if (doesCallIteratorNext) {
         return;
       }

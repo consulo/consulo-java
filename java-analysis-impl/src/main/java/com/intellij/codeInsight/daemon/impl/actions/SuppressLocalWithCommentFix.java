@@ -20,14 +20,14 @@ import com.intellij.codeInspection.JavaSuppressionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * User: anna
  */
 public class SuppressLocalWithCommentFix extends SuppressByJavaCommentFix {
-  public SuppressLocalWithCommentFix(@NotNull HighlightDisplayKey key) {
+  public SuppressLocalWithCommentFix(@Nonnull HighlightDisplayKey key) {
     super(key);
   }
 
@@ -43,12 +43,12 @@ public class SuppressLocalWithCommentFix extends SuppressByJavaCommentFix {
   }
 
   @Override
-  protected void createSuppression(@NotNull Project project, @NotNull PsiElement element, @NotNull PsiElement container)
+  protected void createSuppression(@Nonnull Project project, @Nonnull PsiElement element, @Nonnull PsiElement container)
     throws IncorrectOperationException {
     suppressWithComment(project, element, container);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Suppress for statement with comment";

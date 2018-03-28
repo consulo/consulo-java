@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,21 +26,20 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class NonShortCircuitBooleanInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "NonShortCircuitBooleanExpression";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("non.short.circuit.boolean.expression.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("non.short.circuit.boolean.expression.problem.descriptor");
   }
@@ -50,7 +51,7 @@ public class NonShortCircuitBooleanInspection extends BaseInspection {
   private static class NonShortCircuitBooleanFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("non.short.circuit.boolean.expression.replace.quickfix");
     }

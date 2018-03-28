@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -31,12 +31,12 @@ import com.intellij.psi.PsiType;
  */
 public class InstanceofInstruction extends BinopInstruction
 {
-	@NotNull
+	@Nonnull
 	private final PsiExpression myLeft;
-	@NotNull
+	@Nonnull
 	private final PsiType myCastType;
 
-	public InstanceofInstruction(PsiElement psiAnchor, @NotNull Project project, PsiExpression left, PsiType castType)
+	public InstanceofInstruction(PsiElement psiAnchor, @Nonnull Project project, PsiExpression left, PsiType castType)
 	{
 		super(JavaTokenType.INSTANCEOF_KEYWORD, psiAnchor, project);
 		myLeft = left;
@@ -49,13 +49,13 @@ public class InstanceofInstruction extends BinopInstruction
 		return visitor.visitInstanceof(this, runner, stateBefore);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiExpression getLeft()
 	{
 		return myLeft;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiType getCastType()
 	{
 		return myCastType;

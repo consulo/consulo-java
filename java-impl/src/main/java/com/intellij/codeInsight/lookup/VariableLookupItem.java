@@ -17,8 +17,8 @@ package com.intellij.codeInsight.lookup;
 
 import java.awt.Color;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.CodeCompletionFeatures;
@@ -80,7 +80,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		myTailText = getInitializerText(field);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private String getInitializerText(PsiVariable var)
 	{
 		if(myColor != null || !var.hasModifierProperty(PsiModifier.FINAL) || !var.hasModifierProperty(PsiModifier.STATIC))
@@ -100,7 +100,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		return StringUtil.trimLog(prefix + initText + suffix, 30);
 	}
 
-	private static PsiExpression getInitializer(@NotNull PsiVariable var)
+	private static PsiExpression getInitializer(@Nonnull PsiVariable var)
 	{
 		PsiElement navigationElement = var.getNavigationElement();
 		if(navigationElement instanceof PsiVariable)
@@ -110,8 +110,8 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		return var instanceof PsiFieldImpl ? ((PsiFieldImpl) var).getDetachedInitializer() : var.getInitializer();
 	}
 
-	@Nullable
-	private static Color getInitializerColor(@NotNull PsiVariable var)
+	@javax.annotation.Nullable
+	private static Color getInitializerColor(@Nonnull PsiVariable var)
 	{
 		if(!JavaColorProvider.isColorType(var.getType()))
 		{
@@ -131,19 +131,19 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType getType()
 	{
 		return getSubstitutor().substitute(getObject().getType());
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiSubstitutor getSubstitutor()
 	{
 		return mySubstitutor;
 	}
 
-	public VariableLookupItem setSubstitutor(@NotNull PsiSubstitutor substitutor)
+	public VariableLookupItem setSubstitutor(@Nonnull PsiSubstitutor substitutor)
 	{
 		mySubstitutor = substitutor;
 		return this;
@@ -297,7 +297,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		return parent instanceof PsiConditionalExpression && ref == ((PsiConditionalExpression) parent).getThenExpression();
 	}
 
-	public static void makeFinalIfNeeded(@NotNull InsertionContext context, @NotNull PsiVariable variable)
+	public static void makeFinalIfNeeded(@Nonnull InsertionContext context, @Nonnull PsiVariable variable)
 	{
 		PsiElement place = context.getFile().findElementAt(context.getTailOffset() - 1);
 		if(place == null || PsiUtil.isLanguageLevel8OrHigher(place))

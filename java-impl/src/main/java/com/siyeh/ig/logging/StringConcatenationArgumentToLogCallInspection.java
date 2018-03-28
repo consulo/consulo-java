@@ -30,8 +30,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,19 +52,19 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.argument.to.log.call.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.concatenation.argument.to.log.call.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     if (!StringConcatenationArgumentToLogCallFix.isAvailable((PsiExpression)infos[0])) {
@@ -79,7 +78,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
 
     public StringConcatenationArgumentToLogCallFix() {}
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("string.concatenation.in.format.call.quickfix");
@@ -273,7 +272,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
       registerMethodCallError(expression, argument);
     }
 
-    private static boolean containsNonConstantConcatenation(@Nullable PsiExpression expression) {
+    private static boolean containsNonConstantConcatenation(@javax.annotation.Nullable PsiExpression expression) {
       if (expression instanceof PsiParenthesizedExpression) {
         final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
         return containsNonConstantConcatenation(parenthesizedExpression.getExpression());

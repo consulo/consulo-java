@@ -15,8 +15,8 @@
 */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.LangBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
@@ -26,7 +26,7 @@ public class HighlightMessageUtil {
   private HighlightMessageUtil() { }
 
   @Nullable
-  public static String getSymbolName(@NotNull PsiElement symbol, PsiSubstitutor substitutor) {
+  public static String getSymbolName(@Nonnull PsiElement symbol, PsiSubstitutor substitutor) {
     String symbolName = null;
 
     if (symbol instanceof PsiClass) {

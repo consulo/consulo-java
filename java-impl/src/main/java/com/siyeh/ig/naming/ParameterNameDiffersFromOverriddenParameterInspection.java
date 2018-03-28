@@ -26,8 +26,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameParameterFix;
 import com.siyeh.ig.psiutils.LibraryUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -44,13 +43,13 @@ public class ParameterNameDiffersFromOverriddenParameterInspection
    */
   public boolean m_ignoreOverridesOfLibraryMethods = false;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "parameter.name.differs.from.overridden.parameter.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "parameter.name.differs.from.overridden.parameter.problem.descriptor",
@@ -69,7 +68,7 @@ public class ParameterNameDiffersFromOverriddenParameterInspection
     return optionsPanel;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new RenameParameterFix((String)infos[0]);
   }
@@ -82,7 +81,7 @@ public class ParameterNameDiffersFromOverriddenParameterInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() == 0) {
         return;

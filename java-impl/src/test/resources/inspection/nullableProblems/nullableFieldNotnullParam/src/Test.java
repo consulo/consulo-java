@@ -1,16 +1,18 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.*;
 
 class Test {
-     @Nullable private final String baseFile;
-     @Nullable private final String baseFile1;
+     @javax.annotation.Nullable
+	 private final String baseFile;
+     @javax.annotation.Nullable
+	 private final String baseFile1;
 
 
-     public Test(@NotNull String baseFile) {
+     public Test(@Nonnull String baseFile) {
          this.baseFile = baseFile;
          this.baseFile1 = null;
      }
 
-     public Test(@NotNull String baseFile1, boolean a) {
+     public Test(@Nonnull String baseFile1, boolean a) {
          this.baseFile1 = baseFile1;
          if (baseFile1.contains("foo")) {
            this.baseFile = null;

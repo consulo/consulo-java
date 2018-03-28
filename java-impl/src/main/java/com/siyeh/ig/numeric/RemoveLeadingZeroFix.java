@@ -24,11 +24,11 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class RemoveLeadingZeroFix extends InspectionGadgetsFix {
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message(
       "remove.leading.zero.to.make.decimal.quickfix");

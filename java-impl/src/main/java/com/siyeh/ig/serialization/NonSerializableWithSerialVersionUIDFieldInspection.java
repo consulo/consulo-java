@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -29,26 +31,25 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MakeSerializableFix;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class NonSerializableWithSerialVersionUIDFieldInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "NonSerializableClassWithSerialVersionUID";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.serializable.with.serialversionuid.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType()) {
@@ -70,7 +71,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType() || aClass.isInterface() ||
@@ -83,7 +84,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
 
   private static class RemoveSerialVersionUIDFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "non.serializable.with.serialversionuid.remove.quickfix");
@@ -112,7 +113,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       final PsiField field = aClass.findFieldByName(
         HardcodedMethodConstants.SERIAL_VERSION_UID, false);

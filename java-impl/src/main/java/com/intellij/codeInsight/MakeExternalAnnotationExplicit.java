@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -49,7 +49,7 @@ import com.intellij.util.IncorrectOperationException;
 public class MakeExternalAnnotationExplicit extends BaseIntentionAction
 {
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -57,7 +57,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
 		final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
@@ -82,7 +82,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
 		final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
@@ -125,8 +125,8 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction
 		return Collections.singletonList(file);
 	}
 
-	@NotNull
-	private PsiAnnotation[] getAnnotations(@NotNull Project project, PsiModifierListOwner owner)
+	@Nonnull
+	private PsiAnnotation[] getAnnotations(@Nonnull Project project, PsiModifierListOwner owner)
 	{
 		PsiAnnotation[] annotations = ExternalAnnotationsManager.getInstance(project).findExternalAnnotations(owner);
 		if(annotations == null)

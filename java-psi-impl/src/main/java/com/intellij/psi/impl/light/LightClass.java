@@ -15,11 +15,12 @@
  */
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author peter
@@ -27,22 +28,22 @@ import org.jetbrains.annotations.NotNull;
 public class LightClass extends AbstractLightClass {
   private final PsiClass myDelegate;
 
-  public LightClass(@NotNull PsiClass delegate) {
+  public LightClass(@Nonnull PsiClass delegate) {
     this(delegate, JavaLanguage.INSTANCE);
   }
 
-  public LightClass(@NotNull PsiClass delegate, final Language language) {
+  public LightClass(@Nonnull PsiClass delegate, final Language language) {
     super(delegate.getManager(), language);
     myDelegate = delegate;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiClass getDelegate() {
     return myDelegate;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiElement copy() {
     return new LightClass(this);

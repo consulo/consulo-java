@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -50,14 +50,14 @@ public class IntegerDivisionInFloatingPointContextInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "integer.division.in.floating.point.context.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "integer.division.in.floating.point.context.problem.descriptor");
@@ -73,7 +73,7 @@ public class IntegerDivisionInFloatingPointContextInspection
 
     @Override
     public void visitBinaryExpression(
-      @NotNull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.DIV)) {

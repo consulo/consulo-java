@@ -20,7 +20,6 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.StackFrameContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -59,7 +58,7 @@ public class UserExpressionDescriptorImpl extends EvaluationDescriptor implement
 		return StringUtil.isEmpty(myName) ? myText.getText() : myName;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getDeclaredType()
 	{

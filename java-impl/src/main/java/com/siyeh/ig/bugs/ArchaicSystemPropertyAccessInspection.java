@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,25 +27,24 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UseOfArchaicSystemPropertyAccessors";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "archaic.system.property.accessors.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethodCallExpression call =
       (PsiMethodCallExpression)infos[0];
@@ -62,7 +63,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return new InspectionGadgetsFix[]{new ReplaceWithParseMethodFix(),
       new ReplaceWithStandardPropertyAccessFix()};
@@ -70,7 +71,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
 
   private static class ReplaceWithParseMethodFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "archaic.system.property.accessors.replace.parse.quickfix");
@@ -106,7 +107,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
   private static class ReplaceWithStandardPropertyAccessFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "archaic.system.property.accessors.replace.standard.quickfix");
@@ -158,7 +159,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (isIntegerGetInteger(expression) ||
           isLongGetLong(expression) ||

@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.TailType;
@@ -35,7 +35,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix
 
 	private final SmartPsiElementPointer<PsiNameValuePair> myNameValuePair;
 
-	public CreateAnnotationMethodFromUsageFix(@NotNull PsiNameValuePair valuePair)
+	public CreateAnnotationMethodFromUsageFix(@Nonnull PsiNameValuePair valuePair)
 	{
 		myNameValuePair = SmartPointerManager.getInstance(valuePair.getProject()).createSmartPsiElementPointer(valuePair);
 	}
@@ -109,7 +109,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix
 				(nameValuePair), expectedTypes, context);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getAnnotationValueType(PsiAnnotationMemberValue value)
 	{
 		PsiType type = null;
@@ -175,13 +175,13 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("create.method.from.usage.family");
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected PsiNameValuePair getNameValuePair()
 	{
 		return myNameValuePair.getElement();

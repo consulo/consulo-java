@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.encapsulateFields;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
@@ -26,8 +28,8 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Max Medvedev
@@ -36,9 +38,9 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
   private static final Logger LOG = Logger.getInstance(JavaEncapsulateFieldHelper.class);
 
   @Nullable
-  public EncapsulateFieldUsageInfo createUsage(@NotNull EncapsulateFieldsDescriptor descriptor,
-                                               @NotNull FieldDescriptor fieldDescriptor,
-                                               @NotNull PsiReference reference) {
+  public EncapsulateFieldUsageInfo createUsage(@Nonnull EncapsulateFieldsDescriptor descriptor,
+                                               @Nonnull FieldDescriptor fieldDescriptor,
+                                               @Nonnull PsiReference reference) {
     if (!(reference instanceof PsiReferenceExpression)) return null;
 
     boolean findSet = descriptor.isToEncapsulateSet();
@@ -95,8 +97,8 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return false;
   }
 
-  public boolean processUsage(@NotNull EncapsulateFieldUsageInfo usage,
-                              @NotNull EncapsulateFieldsDescriptor descriptor,
+  public boolean processUsage(@Nonnull EncapsulateFieldUsageInfo usage,
+                              @Nonnull EncapsulateFieldsDescriptor descriptor,
                               PsiMethod setter,
                               PsiMethod getter) {
     final PsiElement element = usage.getElement();
@@ -256,7 +258,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiMethodCallExpression createGetterCall(FieldDescriptor fieldDescriptor,
                                                           PsiReferenceExpression expr,
                                                           PsiClass aClass,
@@ -311,27 +313,27 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiField[] getApplicableFields(@NotNull PsiClass aClass) {
+  public PsiField[] getApplicableFields(@Nonnull PsiClass aClass) {
     return aClass.getFields();
   }
 
   @Override
-  @NotNull
-  public String suggestSetterName(@NotNull PsiField field) {
+  @Nonnull
+  public String suggestSetterName(@Nonnull PsiField field) {
     return PropertyUtil.suggestSetterName(field);
   }
 
   @Override
-  @NotNull
-  public String suggestGetterName(@NotNull PsiField field) {
+  @Nonnull
+  public String suggestGetterName(@Nonnull PsiField field) {
     return PropertyUtil.suggestGetterName(field);
   }
 
   @Override
-  @Nullable
-  public PsiMethod generateMethodPrototype(@NotNull PsiField field, @NotNull String methodName, boolean isGetter) {
+  @javax.annotation.Nullable
+  public PsiMethod generateMethodPrototype(@Nonnull PsiField field, @Nonnull String methodName, boolean isGetter) {
     PsiMethod prototype = isGetter
                           ? GenerateMembersUtil.generateGetterPrototype(field)
                           : GenerateMembersUtil.generateSetterPrototype(field);

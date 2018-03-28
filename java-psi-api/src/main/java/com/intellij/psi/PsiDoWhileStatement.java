@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java <code>do ... while</code> statement.
@@ -34,7 +34,7 @@ public interface PsiDoWhileStatement extends PsiLoopStatement {
    *
    * @return the keyword, or null if the statement is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiKeyword getWhileKeyword();
 
   /**
@@ -42,7 +42,7 @@ public interface PsiDoWhileStatement extends PsiLoopStatement {
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaToken getLParenth();
 
   /**

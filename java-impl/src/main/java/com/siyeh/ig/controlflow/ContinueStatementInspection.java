@@ -15,21 +15,22 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiContinueStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ContinueStatementInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "continue.statement.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "statement.problem.descriptor");
@@ -44,7 +45,7 @@ public class ContinueStatementInspection extends BaseInspection {
 
     @Override
     public void visitContinueStatement(
-      @NotNull PsiContinueStatement statement) {
+      @Nonnull PsiContinueStatement statement) {
       super.visitContinueStatement(statement);
       registerStatementError(statement);
     }

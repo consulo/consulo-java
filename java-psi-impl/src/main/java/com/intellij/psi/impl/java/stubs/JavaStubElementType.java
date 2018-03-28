@@ -23,7 +23,7 @@ import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.tree.ICompositeElementType;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -32,16 +32,16 @@ public abstract class JavaStubElementType<StubT extends StubElement, PsiT extend
     extends ILightStubElementType<StubT, PsiT> implements ICompositeElementType {
   private final boolean myLeftBound;
 
-  protected JavaStubElementType(@NotNull @NonNls final String debugName) {
+  protected JavaStubElementType(@Nonnull @NonNls final String debugName) {
     this(debugName, false);
   }
 
-  protected JavaStubElementType(@NotNull @NonNls final String debugName, final boolean leftBound) {
+  protected JavaStubElementType(@Nonnull @NonNls final String debugName, final boolean leftBound) {
     super(debugName, JavaLanguage.INSTANCE);
     myLeftBound = leftBound;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getExternalId() {
     return "java." + toString();
@@ -65,10 +65,10 @@ public abstract class JavaStubElementType<StubT extends StubElement, PsiT extend
   }
 
   @SuppressWarnings("MethodOverloadsMethodOfSuperclass")
-  public abstract PsiT createPsi(@NotNull ASTNode node);
+  public abstract PsiT createPsi(@Nonnull ASTNode node);
 
   @Override
-  public final StubT createStub(@NotNull final PsiT psi, final StubElement parentStub) {
+  public final StubT createStub(@Nonnull final PsiT psi, final StubElement parentStub) {
     final String message = "Should not be called. Element=" + psi + "; class" + psi.getClass() + "; file=" + (psi.isValid() ? psi.getContainingFile() : "-");
     throw new UnsupportedOperationException(message);
   }

@@ -27,7 +27,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.containers.SLRUCache;
 import com.intellij.util.io.PersistentEnumerator;
 import com.intellij.util.io.PersistentStringEnumerator;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class SymbolTable {
   private static final int STRING_CACHE_SIZE = 1024;
 
   private final SLRUCache<Integer, String> myIndexStringCache = new SLRUCache<Integer, String>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
-    @NotNull
+    @Nonnull
     public String createValue(Integer key) {
       try {
         return myTrie.valueOf(key.intValue());
@@ -51,7 +51,7 @@ public class SymbolTable {
   };
 
   private final SLRUCache<String, Integer> myStringIndexCache = new SLRUCache<String, Integer>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
-    @NotNull
+    @Nonnull
     public Integer createValue(String key) {
       try {
         return myTrie.enumerate(key);
@@ -78,7 +78,7 @@ public class SymbolTable {
     }
   }
 
-  public synchronized int getId(@NotNull String symbol) throws CacheCorruptedException {
+  public synchronized int getId(@Nonnull String symbol) throws CacheCorruptedException {
     if (symbol.length() == 0) {
       return -1;
     }

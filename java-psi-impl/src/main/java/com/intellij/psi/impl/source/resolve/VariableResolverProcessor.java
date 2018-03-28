@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Key;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -29,7 +31,6 @@ import com.intellij.psi.scope.conflictResolvers.JavaVariableConflictResolver;
 import com.intellij.psi.scope.processor.ConflictFilterProcessor;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.SmartList;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ik, dsl
@@ -41,7 +42,7 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
   private final PsiClass myAccessClass;
   private PsiElement myCurrentFileContext = null;
 
-  public VariableResolverProcessor(@NotNull PsiJavaCodeReferenceElement place, PsiFile placeFile) {
+  public VariableResolverProcessor(@Nonnull PsiJavaCodeReferenceElement place, PsiFile placeFile) {
     super(place.getText(), ourFilter, new PsiConflictResolver[]{new JavaVariableConflictResolver()}, new SmartList<CandidateInfo>(), place, placeFile);
 
     PsiElement referenceName = place.getReferenceNameElement();
@@ -92,7 +93,7 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
   }
 
   @Override
-  public boolean execute(@NotNull PsiElement element, ResolveState state) {
+  public boolean execute(@Nonnull PsiElement element, ResolveState state) {
     if (!(element instanceof PsiField) && (myName == null || PsiUtil.checkName(element, myName, myPlace))) {
       super.execute(element, state);
       return myResults.isEmpty();
@@ -102,7 +103,7 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
   }
 
   @Override
-  public <T> T getHint(@NotNull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       return (T)this;
     }

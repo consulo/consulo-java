@@ -15,25 +15,26 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ReturnThisInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ReturnOfThis";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.this.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "return.this.problem.descriptor");
@@ -46,7 +47,7 @@ public class ReturnThisInspection extends BaseInspection {
   private static class ReturnThisVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitThisExpression(@NotNull PsiThisExpression thisValue) {
+    public void visitThisExpression(@Nonnull PsiThisExpression thisValue) {
       super.visitThisExpression(thisValue);
       if (thisValue.getQualifier() != null) {
         return;

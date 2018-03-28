@@ -26,9 +26,9 @@ import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.psi.*;
 import com.intellij.xml.util.XmlStringUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
   private final HTMLComposerImpl myComposer;
@@ -149,7 +149,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
     }
     refElement.accept(new RefJavaVisitor() {
       @Override
-      public void visitClass(@NotNull RefClass refClass) {
+      public void visitClass(@Nonnull RefClass refClass) {
         if (refClass.isStatic()) {
           buf.append(InspectionsBundle.message("inspection.export.results.static"));
           buf.append(HTMLComposerImpl.NBSP);
@@ -163,7 +163,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
       }
 
       @Override
-      public void visitField(@NotNull RefField field) {
+      public void visitField(@Nonnull RefField field) {
         PsiField psiField = field.getElement();
         if (psiField != null) {
           if (field.isStatic()) {
@@ -182,7 +182,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
       }
 
       @Override
-      public void visitMethod(@NotNull RefMethod method) {
+      public void visitMethod(@Nonnull RefMethod method) {
         PsiMethod psiMethod = (PsiMethod)method.getElement();
         if (psiMethod != null) {
           PsiType returnType = psiMethod.getReturnType();
@@ -214,7 +214,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
       }
 
       @Override
-      public void visitFile(@NotNull RefFile file) {
+      public void visitFile(@Nonnull RefFile file) {
         final PsiFile psiFile = file.getElement();
         buf.append(HTMLComposerImpl.B_OPENING);
         buf.append(psiFile.getName());

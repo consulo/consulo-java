@@ -15,7 +15,7 @@
  */
 package com.intellij.openapi.compiler;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * TODO [VISTALL] just a stub for future work

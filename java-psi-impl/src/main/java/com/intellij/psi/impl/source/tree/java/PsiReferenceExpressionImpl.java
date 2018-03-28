@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -94,7 +94,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@Override
-	public PsiElement bindToElementViaStaticImport(@NotNull PsiClass qualifierClass) throws IncorrectOperationException
+	public PsiElement bindToElementViaStaticImport(@Nonnull PsiClass qualifierClass) throws IncorrectOperationException
 	{
 		String qualifiedName = qualifierClass.getQualifiedName();
 		if(qualifiedName == null)
@@ -174,7 +174,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 		}
 	}
 
-	private static List<PsiJavaCodeReferenceElement> getImportsFromClass(@NotNull PsiImportList importList, String className)
+	private static List<PsiJavaCodeReferenceElement> getImportsFromClass(@Nonnull PsiImportList importList, String className)
 	{
 		final List<PsiJavaCodeReferenceElement> array = new ArrayList<>();
 		for(PsiImportStaticStatement staticStatement : importList.getImportStaticStatements())
@@ -237,9 +237,9 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	{
 		public static final OurGenericsResolver INSTANCE = new OurGenericsResolver();
 
-		@NotNull
+		@Nonnull
 		@Override
-		public ResolveResult[] resolve(@NotNull PsiJavaReference ref, @NotNull PsiFile containingFile, boolean incompleteCode)
+		public ResolveResult[] resolve(@Nonnull PsiJavaReference ref, @Nonnull PsiFile containingFile, boolean incompleteCode)
 		{
 			PsiReferenceExpressionImpl expression = (PsiReferenceExpressionImpl) ref;
 			CompositeElement treeParent = expression.getTreeParent();
@@ -260,8 +260,8 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 			return result;
 		}
 
-		@NotNull
-		private static List<ResolveResult[]> resolveAllQualifiers(@NotNull PsiReferenceExpressionImpl expression, @NotNull final PsiFile containingFile)
+		@Nonnull
+		private static List<ResolveResult[]> resolveAllQualifiers(@Nonnull PsiReferenceExpressionImpl expression, @Nonnull final PsiFile containingFile)
 		{
 			// to avoid SOE, resolve all qualifiers starting from the innermost
 			PsiElement qualifier = expression.getQualifier();
@@ -290,7 +290,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 				}
 
 				@Override
-				protected void elementFinished(@NotNull PsiElement element)
+				protected void elementFinished(@Nonnull PsiElement element)
 				{
 					if(!(element instanceof PsiReferenceExpressionImpl))
 					{
@@ -321,8 +321,8 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 		}
 	}
 
-	@NotNull
-	private JavaResolveResult[] resolve(IElementType parentType, @NotNull PsiFile containingFile)
+	@Nonnull
+	private JavaResolveResult[] resolve(IElementType parentType, @Nonnull PsiFile containingFile)
 	{
 		if(parentType == JavaElementType.REFERENCE_EXPRESSION)
 		{
@@ -382,8 +382,8 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 		return resolveToVariable(containingFile);
 	}
 
-	@NotNull
-	private JavaResolveResult[] resolveToMethod(@NotNull PsiFile containingFile)
+	@Nonnull
+	private JavaResolveResult[] resolveToMethod(@Nonnull PsiFile containingFile)
 	{
 		final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) getParent();
 		final MethodResolverProcessor processor = new MethodResolverProcessor(methodCall, containingFile);
@@ -398,8 +398,8 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 		return processor.getResult();
 	}
 
-	@NotNull
-	private JavaResolveResult[] resolveToPackage(@NotNull PsiFile containingFile)
+	@Nonnull
+	private JavaResolveResult[] resolveToPackage(@Nonnull PsiFile containingFile)
 	{
 		final String packageName = getCachedNormalizedText();
 		Project project = containingFile.getProject();
@@ -418,8 +418,8 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 		return new JavaResolveResult[]{new CandidateInfo(aPackage, PsiSubstitutor.EMPTY)};
 	}
 
-	@NotNull
-	private JavaResolveResult[] resolveToClass(@NotNull PsiElement classNameElement, @NotNull PsiFile containingFile)
+	@Nonnull
+	private JavaResolveResult[] resolveToClass(@Nonnull PsiElement classNameElement, @Nonnull PsiFile containingFile)
 	{
 		final String className = classNameElement.getText();
 
@@ -428,8 +428,8 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 		return processor.getResult();
 	}
 
-	@NotNull
-	private JavaResolveResult[] resolveToVariable(@NotNull PsiFile containingFile)
+	@Nonnull
+	private JavaResolveResult[] resolveToVariable(@Nonnull PsiFile containingFile)
 	{
 		final VariableResolverProcessor processor = new VariableResolverProcessor(this, containingFile);
 		PsiScopesUtil.resolveAndWalk(processor, this, null);
@@ -437,14 +437,14 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult[] multiResolve(boolean incompleteCode)
 	{
 		return PsiImplUtil.multiResolveImpl(this, incompleteCode, OurGenericsResolver.INSTANCE);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getCanonicalText()
 	{
 		final PsiElement element = resolve();
@@ -597,7 +597,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@Override
-	public void processVariants(@NotNull PsiScopeProcessor processor)
+	public void processVariants(@Nonnull PsiScopeProcessor processor)
 	{
 		DelegatingScopeProcessor filterProcessor = new DelegatingScopeProcessor(processor)
 		{
@@ -605,12 +605,12 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 			private final Set<String> myVarNames = new THashSet<>();
 
 			@Override
-			public boolean execute(@NotNull final PsiElement element, @NotNull final ResolveState state)
+			public boolean execute(@Nonnull final PsiElement element, @Nonnull final ResolveState state)
 			{
 				return !shouldProcess(element) || super.execute(element, state);
 			}
 
-			private boolean shouldProcess(@NotNull PsiElement element)
+			private boolean shouldProcess(@Nonnull PsiElement element)
 			{
 				if(element instanceof PsiVariable)
 				{
@@ -631,7 +631,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 				return false;
 			}
 
-			private boolean ensureNonShadowedVariable(@NotNull PsiVariable element)
+			private boolean ensureNonShadowedVariable(@Nonnull PsiVariable element)
 			{
 				if(element instanceof PsiLocalVariable || element instanceof PsiParameter)
 				{
@@ -644,14 +644,14 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 				return true;
 			}
 
-			private boolean shouldProcessMethod(@NotNull PsiMethod method)
+			private boolean shouldProcessMethod(@Nonnull PsiMethod method)
 			{
 				PsiReferenceExpressionImpl ref = PsiReferenceExpressionImpl.this;
 				return !method.isConstructor() && hasValidQualifier(method, ref, myResolveContext);
 			}
 
 			@Override
-			public void handleEvent(@NotNull Event event, Object associated)
+			public void handleEvent(@Nonnull Event event, Object associated)
 			{
 				if(event == JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT)
 				{
@@ -720,7 +720,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@VisibleForTesting
-	public static boolean seemsScrambledByStructure(@NotNull PsiClass aClass)
+	public static boolean seemsScrambledByStructure(@Nonnull PsiClass aClass)
 	{
 		PsiClass containingClass = aClass.getContainingClass();
 		if(containingClass != null && !seemsScrambledByStructure(containingClass))
@@ -811,7 +811,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull final PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		CheckUtil.checkWritable(this);
 
@@ -894,7 +894,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@Override
-	public void deleteChildInternal(@NotNull ASTNode child)
+	public void deleteChildInternal(@Nonnull ASTNode child)
 	{
 		if(getChildRole(child) == ChildRole.QUALIFIER)
 		{
@@ -969,7 +969,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -1014,7 +1014,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	}
 
 	@Override
-	public void fullyQualify(@NotNull PsiClass targetClass)
+	public void fullyQualify(@Nonnull PsiClass targetClass)
 	{
 		JavaSourceUtil.fullyQualifyReference(this, targetClass);
 	}

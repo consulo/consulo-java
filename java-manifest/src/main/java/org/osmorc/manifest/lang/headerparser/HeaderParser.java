@@ -24,16 +24,17 @@
  */
 package org.osmorc.manifest.lang.headerparser;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiReference;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public interface HeaderParser{
-  PsiReference[] getReferences(@NotNull HeaderValuePart headerValuePart);
+  PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart);
 
   /**
    * The value of the given header value. Complex headers will probably have several header values. This method is
@@ -41,9 +42,9 @@ public interface HeaderParser{
    *
    * @return The converted value.
    */
-  Object getValue(@NotNull HeaderValuePart headerValuePart);
+  Object getValue(@Nonnull HeaderValuePart headerValuePart);
 
-  boolean isAcceptable(@NotNull Object o);
+  boolean isAcceptable(@Nonnull Object o);
 
   /**
    * Simple headers don't have clauses, attributes and directives. Semicolons and commas don't have any special meaning

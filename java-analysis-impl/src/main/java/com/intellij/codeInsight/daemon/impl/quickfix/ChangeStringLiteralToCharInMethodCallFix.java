@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -43,7 +43,7 @@ public class ChangeStringLiteralToCharInMethodCallFix implements IntentionAction
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     final String convertedValue = convertedValue();
     final boolean isString = isString(myLiteral.getType());
@@ -52,18 +52,18 @@ public class ChangeStringLiteralToCharInMethodCallFix implements IntentionAction
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.single.character.string.to.char.literal.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myCall.isValid() && myLiteral.isValid() && myCall.getManager().isInProject(myCall);
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     final Object value = myLiteral.getValue();
@@ -93,8 +93,8 @@ public class ChangeStringLiteralToCharInMethodCallFix implements IntentionAction
     return builder.toString();
   }
 
-  public static void registerFixes(@NotNull final PsiMethod[] candidates, @NotNull final PsiConstructorCall call,
-                                        @NotNull final HighlightInfo out) {
+  public static void registerFixes(@Nonnull final PsiMethod[] candidates, @Nonnull final PsiConstructorCall call,
+                                        @Nonnull final HighlightInfo out) {
     final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
     if (call.getArgumentList() == null) {
       return;
@@ -108,8 +108,8 @@ public class ChangeStringLiteralToCharInMethodCallFix implements IntentionAction
     }
   }
 
-  public static void registerFixes(@NotNull final CandidateInfo[] candidates,
-                                   @NotNull final PsiMethodCallExpression methodCall,
+  public static void registerFixes(@Nonnull final CandidateInfo[] candidates,
+                                   @Nonnull final PsiMethodCallExpression methodCall,
                                    @Nullable final HighlightInfo info) {
     if (info == null) return;
     final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
@@ -125,9 +125,9 @@ public class ChangeStringLiteralToCharInMethodCallFix implements IntentionAction
     }
   }
 
-  private static void processLiterals(@NotNull final Set<PsiLiteralExpression> literals,
-                                      @NotNull final PsiCall call,
-                                      @NotNull final HighlightInfo info) {
+  private static void processLiterals(@Nonnull final Set<PsiLiteralExpression> literals,
+                                      @Nonnull final PsiCall call,
+                                      @Nonnull final HighlightInfo info) {
     for (PsiLiteralExpression literal : literals) {
       final ChangeStringLiteralToCharInMethodCallFix fix = new ChangeStringLiteralToCharInMethodCallFix(literal, call);
       QuickFixAction.registerQuickFixAction(info, fix);

@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -74,14 +74,14 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 	private static final TokenSet CALL_TYPES = TokenSet.create(METHOD_CALL_EXPRESSION, NEW_EXPRESSION, ANONYMOUS_CLASS);
 	private boolean myOfflineMode = ApplicationManager.getApplication().isCommandLine() && !ApplicationManager.getApplication().isUnitTestMode();
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ID<MethodCallData, Void> getName()
 	{
 		return INDEX_ID;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DataIndexer<MethodCallData, Void, FileContent> getIndexer()
 	{
@@ -125,7 +125,7 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	private static Set<LighterASTNode> findCallsWithNulls(LighterAST lighterAst, int[] nullOffsets)
 	{
 		Set<LighterASTNode> calls = new HashSet<>();
@@ -145,8 +145,8 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 		return calls;
 	}
 
-	@Nullable
-	private static IntArrayList getNullParameterIndices(LighterAST lighterAst, @NotNull LighterASTNode methodCall)
+	@javax.annotation.Nullable
+	private static IntArrayList getNullParameterIndices(LighterAST lighterAst, @Nonnull LighterASTNode methodCall)
 	{
 		final LighterASTNode node = LightTreeUtil.firstChildOfType(lighterAst, methodCall, EXPRESSION_LIST);
 		if(node == null)
@@ -165,13 +165,13 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 		return indices;
 	}
 
-	private static boolean isNullLiteral(LighterAST lighterAst, @Nullable LighterASTNode expr)
+	private static boolean isNullLiteral(LighterAST lighterAst, @javax.annotation.Nullable LighterASTNode expr)
 	{
 		return expr != null && expr.getTokenType() == LITERAL_EXPRESSION && lighterAst.getChildren(expr).get(0).getTokenType() == JavaTokenType.NULL_KEYWORD;
 	}
 
-	@Nullable
-	private static String getMethodName(LighterAST lighterAst, @NotNull LighterASTNode call, IElementType elementType)
+	@javax.annotation.Nullable
+	private static String getMethodName(LighterAST lighterAst, @Nonnull LighterASTNode call, IElementType elementType)
 	{
 		if(elementType == NEW_EXPRESSION || elementType == ANONYMOUS_CLASS)
 		{
@@ -193,7 +193,7 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public KeyDescriptor<MethodCallData> getKeyDescriptor()
 	{
@@ -212,14 +212,14 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 			}
 
 			@Override
-			public void save(@NotNull DataOutput out, MethodCallData value) throws IOException
+			public void save(@Nonnull DataOutput out, MethodCallData value) throws IOException
 			{
 				EnumeratorStringDescriptor.INSTANCE.save(out, value.getMethodName());
 				DataInputOutputUtil.writeINT(out, value.getNullParameterIndex());
 			}
 
 			@Override
-			public MethodCallData read(@NotNull DataInput in) throws IOException
+			public MethodCallData read(@Nonnull DataInput in) throws IOException
 			{
 				return new MethodCallData(EnumeratorStringDescriptor.INSTANCE.read(in), DataInputOutputUtil.readINT(in));
 			}
@@ -232,14 +232,14 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 		return 0;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileBasedIndex.InputFilter getInputFilter()
 	{
 		return new DefaultFileTypeSpecificInputFilter(JavaFileType.INSTANCE)
 		{
 			@Override
-			public boolean acceptInput(@Nullable Project project, @NotNull VirtualFile file)
+			public boolean acceptInput(@Nullable Project project, @Nonnull VirtualFile file)
 			{
 				return JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(file);
 			}
@@ -254,17 +254,17 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 
 	public static final class MethodCallData
 	{
-		@NotNull
+		@Nonnull
 		private final String myMethodName;
 		private final int myNullParameterIndex;
 
-		public MethodCallData(@NotNull String name, int index)
+		public MethodCallData(@Nonnull String name, int index)
 		{
 			myMethodName = name;
 			myNullParameterIndex = index;
 		}
 
-		@NotNull
+		@Nonnull
 		public String getMethodName()
 		{
 			return myMethodName;

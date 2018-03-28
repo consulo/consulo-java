@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.org.objectweb.asm.Opcodes;
 import org.jetbrains.org.objectweb.asm.tree.MethodNode;
 import org.jetbrains.org.objectweb.asm.tree.analysis.Analyzer;
@@ -36,7 +36,7 @@ public class PurityAnalysis {
 
   static final int UN_ANALYZABLE_FLAG = Opcodes.ACC_ABSTRACT | Opcodes.ACC_NATIVE | Opcodes.ACC_INTERFACE;
 
-  @NotNull
+  @Nonnull
   public static Equation analyze(Method method, MethodNode methodNode, boolean stable) {
     Key key = new Key(method, Direction.Pure, stable);
     Set<EffectQuantum> hardCodedSolution = HardCodedPurity.getHardCodedSolution(key);

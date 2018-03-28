@@ -18,8 +18,8 @@ package com.intellij.psi.impl.source.tree.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -43,9 +43,9 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
 {
 	private static final Logger LOG = Logger.getInstance("#" + MethodReferenceResolver.class.getName());
 
-	@NotNull
+	@Nonnull
 	@Override
-	public JavaResolveResult[] resolve(@NotNull final PsiMethodReferenceExpressionImpl reference, @NotNull final PsiFile containingFile, boolean incompleteCode)
+	public JavaResolveResult[] resolve(@Nonnull final PsiMethodReferenceExpressionImpl reference, @Nonnull final PsiFile containingFile, boolean incompleteCode)
 	{
 		final PsiMethodReferenceUtil.QualifierResolveResult qualifierResolveResult = PsiMethodReferenceUtil.getQualifierResolveResult(reference);
 
@@ -102,8 +102,8 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
 					}
 
 					@Override
-					protected MethodCandidateInfo createCandidateInfo(@NotNull final PsiMethod method,
-							@NotNull final PsiSubstitutor substitutor,
+					protected MethodCandidateInfo createCandidateInfo(@Nonnull final PsiMethod method,
+							@Nonnull final PsiSubstitutor substitutor,
 							final boolean staticProblem,
 							final boolean accessible,
 							final boolean varargs)
@@ -119,9 +119,9 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
 								return varargs;
 							}
 
-							@NotNull
+							@Nonnull
 							@Override
-							public PsiSubstitutor inferTypeArguments(@NotNull ParameterTypeInferencePolicy policy, boolean includeReturnConstraint)
+							public PsiSubstitutor inferTypeArguments(@Nonnull ParameterTypeInferencePolicy policy, boolean includeReturnConstraint)
 							{
 								return inferTypeArguments(includeReturnConstraint);
 							}
@@ -191,7 +191,7 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
 		return JavaResolveResult.EMPTY_ARRAY;
 	}
 
-	public static boolean canBeConstructed(@NotNull PsiClass psiClass)
+	public static boolean canBeConstructed(@Nonnull PsiClass psiClass)
 	{
 		return !psiClass.isEnum() && !psiClass.hasModifierProperty(PsiModifier.ABSTRACT) && !(psiClass instanceof PsiTypeParameter);
 	}
@@ -253,14 +253,14 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
 		}
 
 		@Override
-		protected int getPertinentApplicabilityLevel(@NotNull MethodCandidateInfo conflict)
+		protected int getPertinentApplicabilityLevel(@Nonnull MethodCandidateInfo conflict)
 		{
 			return conflict.isVarargs() ? MethodCandidateInfo.ApplicabilityLevel.VARARGS : MethodCandidateInfo.ApplicabilityLevel.FIXED_ARITY;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
-		protected CandidateInfo guardedOverloadResolution(@NotNull List<CandidateInfo> conflicts)
+		protected CandidateInfo guardedOverloadResolution(@Nonnull List<CandidateInfo> conflicts)
 		{
 			if(mySignature == null)
 			{
@@ -440,7 +440,7 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
 		}
 
 		@Override
-		protected boolean nonComparable(@NotNull CandidateInfo method, @NotNull CandidateInfo conflict, boolean fixedArity)
+		protected boolean nonComparable(@Nonnull CandidateInfo method, @Nonnull CandidateInfo conflict, boolean fixedArity)
 		{
 			if(method == conflict)
 			{

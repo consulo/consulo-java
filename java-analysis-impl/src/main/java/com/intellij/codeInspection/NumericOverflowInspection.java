@@ -23,7 +23,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.psi.util.TypeConversionUtil;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * User: cdr
@@ -32,28 +32,28 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
   private static final Key<String> HAS_OVERFLOW_IN_CHILD = Key.create("HAS_OVERFLOW_IN_CHILD");
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getGroupDisplayName() {
     return GroupNames.NUMERIC_GROUP_NAME;
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Numeric overflow";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getShortName() {
     return "NumericOverflow";
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       @Override
       public void visitReferenceExpression(PsiReferenceExpression expression) {
@@ -70,7 +70,7 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
     };
   }
 
-  private static boolean hasOverflow(PsiExpression expr, @NotNull Project project) {
+  private static boolean hasOverflow(PsiExpression expr, @Nonnull Project project) {
     if (!TypeConversionUtil.isNumericType(expr.getType())) return false;
     boolean overflow = false;
     try {

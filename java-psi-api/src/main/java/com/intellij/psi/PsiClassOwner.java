@@ -16,7 +16,8 @@
 
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.util.IncorrectOperationException;
 
 /**
@@ -26,7 +27,7 @@ public interface PsiClassOwner extends PsiFile {
   /**
    * @return classes owned by this element.
    */
-  @NotNull
+  @Nonnull
   PsiClass[] getClasses();
 
   /**

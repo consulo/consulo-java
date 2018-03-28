@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInsight.unwrap;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiPolyadicExpression;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -64,8 +64,8 @@ public class JavaPolyadicExpressionUnwrapper extends JavaUnwrapper {
     context.delete(parent);
   }
 
-  @Nullable
-  private static PsiExpression findOperand(@NotNull PsiElement e, @NotNull PsiPolyadicExpression expression) {
+  @javax.annotation.Nullable
+  private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
     final TextRange elementTextRange = e.getTextRange();
 
     for (PsiExpression operand : expression.getOperands()) {

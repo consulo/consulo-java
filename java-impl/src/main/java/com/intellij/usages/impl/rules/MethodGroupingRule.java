@@ -15,9 +15,9 @@
  */
 package com.intellij.usages.impl.rules;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.navigation.NavigationItemFileStatus;
 import com.intellij.openapi.actionSystem.DataSink;
@@ -58,7 +58,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
   private static final Logger LOG = Logger.getInstance("#com.intellij.usages.impl.rules.MethodGroupingRule");
 
   @Override
-  public UsageGroup groupUsage(@NotNull Usage usage) {
+  public UsageGroup groupUsage(@Nonnull Usage usage) {
     if (!(usage instanceof PsiElementUsage)) return null;
     PsiElement psiElement = ((PsiElementUsage)usage).getElement();
     PsiFile containingFile = psiElement.getContainingFile();
@@ -135,7 +135,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getText(UsageView view) {
       return myName;
     }

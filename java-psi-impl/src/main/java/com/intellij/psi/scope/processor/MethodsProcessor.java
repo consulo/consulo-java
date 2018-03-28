@@ -17,8 +17,8 @@ package com.intellij.psi.scope.processor;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Key;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiCallExpression;
@@ -56,7 +56,7 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 	private PsiType[] myTypeArguments;
 	private final LanguageLevel myLanguageLevel;
 
-	public MethodsProcessor(@NotNull PsiConflictResolver[] resolvers, @NotNull List<CandidateInfo> container, @NotNull PsiElement place, @NotNull PsiFile placeFile)
+	public MethodsProcessor(@Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container, @Nonnull PsiElement place, @Nonnull PsiFile placeFile)
 	{
 		super(null, ourFilter, resolvers, container, place, placeFile);
 		myLanguageLevel = PsiUtil.getLanguageLevel(placeFile);
@@ -72,13 +72,13 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 		myArgumentList = argList;
 	}
 
-	@NotNull
+	@Nonnull
 	public LanguageLevel getLanguageLevel()
 	{
 		return myLanguageLevel;
 	}
 
-	public void obtainTypeArguments(@NotNull PsiCallExpression callExpression)
+	public void obtainTypeArguments(@Nonnull PsiCallExpression callExpression)
 	{
 		final PsiType[] typeArguments = callExpression.getTypeArguments();
 		if(typeArguments.length > 0)
@@ -103,7 +103,7 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 	}
 
 	@Override
-	public void handleEvent(@NotNull Event event, Object associated)
+	public void handleEvent(@Nonnull Event event, Object associated)
 	{
 		if(event == JavaScopeProcessorEvent.START_STATIC)
 		{
@@ -130,13 +130,13 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 		this.myIsConstructor = myIsConstructor;
 	}
 
-	public void forceAddResult(@NotNull PsiMethod method)
+	public void forceAddResult(@Nonnull PsiMethod method)
 	{
 		add(new CandidateInfo(method, PsiSubstitutor.EMPTY, false, false, myCurrentFileContext));
 	}
 
 	@Override
-	public <T> T getHint(@NotNull Key<T> hintKey)
+	public <T> T getHint(@Nonnull Key<T> hintKey)
 	{
 		if(hintKey == ElementClassHint.KEY)
 		{

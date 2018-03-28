@@ -21,8 +21,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.openapi.project.Project;
@@ -54,8 +54,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler
 {
 	@Override
 	@Nullable
-	public MoveMembersProcessor.MoveMembersUsageInfo getUsage(@NotNull PsiMember member, @NotNull PsiReference psiReference,
-			@NotNull Set<PsiMember> membersToMove, @NotNull PsiClass targetClass)
+	public MoveMembersProcessor.MoveMembersUsageInfo getUsage(@Nonnull PsiMember member, @Nonnull PsiReference psiReference,
+			@Nonnull Set<PsiMember> membersToMove, @Nonnull PsiClass targetClass)
 	{
 		PsiElement ref = psiReference.getElement();
 		if(ref instanceof PsiReferenceExpression)
@@ -98,9 +98,9 @@ public class MoveJavaMemberHandler implements MoveMemberHandler
 	}
 
 	@Override
-	public void checkConflictsOnUsage(@NotNull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
-			@Nullable PsiModifierList modifierListCopy, @NotNull PsiClass targetClass, @NotNull Set<PsiMember> membersToMove,
-			@NotNull MultiMap<PsiElement, String> conflicts)
+	public void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
+			@Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
+			@Nonnull MultiMap<PsiElement, String> conflicts)
 	{
 		final PsiElement element = usageInfo.getElement();
 		if(element == null)
@@ -149,8 +149,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler
 	}
 
 	@Override
-	public void checkConflictsOnMember(@NotNull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
-			@NotNull PsiClass targetClass, @NotNull Set<PsiMember> membersToMove, @NotNull MultiMap<PsiElement, String> conflicts)
+	public void checkConflictsOnMember(@Nonnull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
+			@Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts)
 	{
 		if(member instanceof PsiMethod && hasMethod(targetClass, (PsiMethod) member) || member instanceof PsiField && hasField(targetClass,
 				(PsiField) member))
@@ -191,7 +191,7 @@ public class MoveJavaMemberHandler implements MoveMemberHandler
 	}
 
 	@Override
-	public boolean changeExternalUsage(@NotNull MoveMembersOptions options, @NotNull MoveMembersProcessor.MoveMembersUsageInfo usage)
+	public boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage)
 	{
 		final PsiElement element = usage.getElement();
 		if(element == null || !element.isValid())
@@ -254,8 +254,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler
 	}
 
 	@Override
-	@NotNull
-	public PsiMember doMove(@NotNull MoveMembersOptions options, @NotNull PsiMember member, PsiElement anchor, @NotNull PsiClass targetClass)
+	@Nonnull
+	public PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, PsiElement anchor, @Nonnull PsiClass targetClass)
 	{
 		if(member instanceof PsiVariable)
 		{
@@ -290,14 +290,14 @@ public class MoveJavaMemberHandler implements MoveMemberHandler
 	}
 
 	@Override
-	public void decodeContextInfo(@NotNull PsiElement scope)
+	public void decodeContextInfo(@Nonnull PsiElement scope)
 	{
 		ChangeContextUtil.decodeContextInfo(scope, null, null);
 	}
 
 	@Override
 	@Nullable
-	public PsiElement getAnchor(@NotNull final PsiMember member, @NotNull final PsiClass targetClass, final Set<PsiMember> membersToMove)
+	public PsiElement getAnchor(@Nonnull final PsiMember member, @Nonnull final PsiClass targetClass, final Set<PsiMember> membersToMove)
 	{
 		if(member instanceof PsiField && member.hasModifierProperty(PsiModifier.STATIC))
 		{

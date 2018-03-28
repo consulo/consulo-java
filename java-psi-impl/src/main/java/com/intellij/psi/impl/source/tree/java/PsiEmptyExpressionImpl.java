@@ -15,12 +15,13 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.Constants;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiEmptyExpressionImpl extends ExpressionPsiElement implements PsiExpression{
   public PsiEmptyExpressionImpl() {
@@ -33,7 +34,7 @@ public class PsiEmptyExpressionImpl extends ExpressionPsiElement implements PsiE
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitExpression(this);
     }

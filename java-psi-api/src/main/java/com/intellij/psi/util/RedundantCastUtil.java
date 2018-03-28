@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
@@ -41,7 +41,7 @@ public class RedundantCastUtil {
 
   private RedundantCastUtil() { }
 
-  @NotNull
+  @Nonnull
   public static List<PsiTypeCastExpression> getRedundantCastsInside(PsiElement where) {
     MyCollectingVisitor visitor = new MyCollectingVisitor();
     if (where instanceof PsiEnumConstant) {
@@ -117,7 +117,7 @@ public class RedundantCastUtil {
     }
 
     @Override
-    protected void addToResults(@NotNull PsiTypeCastExpression typeCast){
+    protected void addToResults(@Nonnull PsiTypeCastExpression typeCast){
       if (!isTypeCastSemantic(typeCast)) {
         myFoundCasts.add(typeCast);
       }
@@ -139,7 +139,7 @@ public class RedundantCastUtil {
       }
     }
 
-    protected void addToResults(@NotNull PsiTypeCastExpression typeCast){
+    protected void addToResults(@Nonnull PsiTypeCastExpression typeCast){
       if (!isTypeCastSemantic(typeCast)) {
         isRedundant = true;
       }

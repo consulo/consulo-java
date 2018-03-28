@@ -23,7 +23,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.refactoring.util.RefactoringUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,17 +35,17 @@ import java.util.Set;
  * Date: 2/9/12
  */
 public class ChangeMethodSignatureFromUsageReverseOrderFix extends ChangeMethodSignatureFromUsageFix {
-  public ChangeMethodSignatureFromUsageReverseOrderFix(@NotNull PsiMethod targetMethod,
-                                                       @NotNull PsiExpression[] expressions,
-                                                       @NotNull PsiSubstitutor substitutor,
-                                                       @NotNull PsiElement context,
+  public ChangeMethodSignatureFromUsageReverseOrderFix(@Nonnull PsiMethod targetMethod,
+                                                       @Nonnull PsiExpression[] expressions,
+                                                       @Nonnull PsiSubstitutor substitutor,
+                                                       @Nonnull PsiElement context,
                                                        boolean changeAllUsages,
                                                        int minUsagesNumberToShowDialog) {
     super(targetMethod, expressions, substitutor, context, changeAllUsages, minUsagesNumberToShowDialog);
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (myTargetMethod.isValid() && myExpressions.length > myTargetMethod.getParameterList().getParametersCount()) {
       if (super.isAvailable(project, editor, file)) {
         final ArrayList<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();

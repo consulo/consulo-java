@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -29,31 +31,30 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.refactoring.actions.TypeCookAction;
-import org.jetbrains.annotations.NotNull;
 
 public class GenerifyFileFix implements IntentionAction, LocalQuickFix {
   private String myFileName;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("generify.text", myFileName);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return getText();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("generify.family");
   }
 
   @Override
-  public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
     final PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
     final PsiFile file = element.getContainingFile();
@@ -69,7 +70,7 @@ public class GenerifyFileFix implements IntentionAction, LocalQuickFix {
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (file != null && file.isValid()) {
       myFileName = file.getName();
       return PsiManager.getInstance(project).isInProject(file);
@@ -80,7 +81,7 @@ public class GenerifyFileFix implements IntentionAction, LocalQuickFix {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     new TypeCookAction().getHandler().invoke(project, editor, file, null);
   }

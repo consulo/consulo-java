@@ -17,27 +17,26 @@ package com.intellij.refactoring.encapsulateFields;
 
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * @author Max Medvedev
  */
 public interface FieldDescriptor {
-  @NotNull
+  @Nonnull
   PsiField getField();
 
-  @NotNull
+  @Nonnull
   String getGetterName();
 
-  @NotNull
+  @Nonnull
   String getSetterName();
 
-  @Nullable
+  @javax.annotation.Nullable
   PsiMethod getGetterPrototype();
 
-  @Nullable
+  @javax.annotation.Nullable
   PsiMethod getSetterPrototype();
 
-  void refreshField(@NotNull PsiField newField);
+  void refreshField(@Nonnull PsiField newField);
 }

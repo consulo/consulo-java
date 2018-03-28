@@ -27,7 +27,7 @@ package org.osmorc.manifest.lang;
 import com.intellij.lexer.LexerBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

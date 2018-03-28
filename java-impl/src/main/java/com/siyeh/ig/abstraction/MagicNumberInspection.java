@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.IntroduceConstantFix;
 import com.siyeh.ig.psiutils.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -44,13 +44,13 @@ public class MagicNumberInspection extends BaseInspection {
   public boolean ignoreInitialCapacity = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("magic.number.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("magic.number.problem.descriptor");
   }
@@ -83,7 +83,7 @@ public class MagicNumberInspection extends BaseInspection {
   private class MagicNumberVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLiteralExpression(@NotNull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (!ClassUtils.isPrimitiveNumericType(type) || PsiType.CHAR.equals(type)) {

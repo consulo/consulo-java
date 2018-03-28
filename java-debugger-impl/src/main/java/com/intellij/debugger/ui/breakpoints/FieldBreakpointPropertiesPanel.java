@@ -24,12 +24,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaFieldBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.ui.IdeBorderFactory;
@@ -47,7 +47,7 @@ public class FieldBreakpointPropertiesPanel extends XBreakpointCustomPropertiesP
 	//}
 
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -105,14 +105,14 @@ public class FieldBreakpointPropertiesPanel extends XBreakpointCustomPropertiesP
 	}
 
 	@Override
-	public void loadFrom(@NotNull XLineBreakpoint<JavaFieldBreakpointProperties> breakpoint)
+	public void loadFrom(@Nonnull XLineBreakpoint<JavaFieldBreakpointProperties> breakpoint)
 	{
 		myWatchAccessCheckBox.setSelected(breakpoint.getProperties().WATCH_ACCESS);
 		myWatchModificationCheckBox.setSelected(breakpoint.getProperties().WATCH_MODIFICATION);
 	}
 
 	@Override
-	public void saveTo(@NotNull XLineBreakpoint<JavaFieldBreakpointProperties> breakpoint)
+	public void saveTo(@Nonnull XLineBreakpoint<JavaFieldBreakpointProperties> breakpoint)
 	{
 		breakpoint.getProperties().WATCH_ACCESS = myWatchAccessCheckBox.isSelected();
 		breakpoint.getProperties().WATCH_MODIFICATION = myWatchModificationCheckBox.isSelected();

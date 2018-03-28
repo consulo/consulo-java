@@ -16,8 +16,8 @@
 package com.intellij.psi.util;
 
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Arrays;
 
@@ -28,7 +28,7 @@ public abstract class MethodSignatureBase implements MethodSignature {
   private volatile PsiType[] myErasedParameterTypes;
   protected final PsiTypeParameter[] myTypeParameters;
 
-  protected MethodSignatureBase(@NotNull PsiSubstitutor substitutor, @NotNull PsiType[] parameterTypes, @NotNull PsiTypeParameter[] typeParameters) {
+  protected MethodSignatureBase(@Nonnull PsiSubstitutor substitutor, @Nonnull PsiType[] parameterTypes, @Nonnull PsiTypeParameter[] typeParameters) {
     mySubstitutor = substitutor;
     assert substitutor.isValid();
     myParameterTypes = parameterTypes.length == 0 ? PsiType.EMPTY_ARRAY : new PsiType[parameterTypes.length];
@@ -43,9 +43,9 @@ public abstract class MethodSignatureBase implements MethodSignature {
     myTypeParameters = typeParameters;
   }
 
-  protected MethodSignatureBase(@NotNull PsiSubstitutor substitutor,
+  protected MethodSignatureBase(@Nonnull PsiSubstitutor substitutor,
                                 @Nullable PsiParameterList parameterList,
-                                @Nullable PsiTypeParameterList typeParameterList) {
+                                @javax.annotation.Nullable PsiTypeParameterList typeParameterList) {
     mySubstitutor = substitutor;
     if (parameterList == null) {
       myParameterTypes = PsiType.EMPTY_ARRAY;
@@ -64,13 +64,13 @@ public abstract class MethodSignatureBase implements MethodSignature {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getParameterTypes() {
     return myParameterTypes;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiTypeParameter[] getTypeParameters() {
     return myTypeParameters;
   }
@@ -120,7 +120,7 @@ public abstract class MethodSignatureBase implements MethodSignature {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiSubstitutor getSubstitutor() {
     return mySubstitutor;
   }

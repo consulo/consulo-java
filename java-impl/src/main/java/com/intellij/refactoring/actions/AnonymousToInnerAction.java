@@ -24,18 +24,18 @@ import com.intellij.psi.PsiNewExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.anonymousToInner.AnonymousToInnerHandler;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AnonymousToInnerAction extends BaseRefactoringAction {
   public boolean isAvailableInEditorOnly() {
     return true;
   }
 
-  public boolean isEnabledOnElements(@NotNull PsiElement[] elements) {
+  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     return false;
   }
 
-  protected boolean isAvailableOnElementInEditorAndFile(@NotNull final PsiElement element, @NotNull final Editor editor, @NotNull PsiFile file, @NotNull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     final PsiElement targetElement = file.findElementAt(editor.getCaretModel().getOffset());
     if (PsiTreeUtil.getParentOfType(targetElement, PsiAnonymousClass.class) != null) {
       return true;
@@ -47,7 +47,7 @@ public class AnonymousToInnerAction extends BaseRefactoringAction {
     return newExpression != null && newExpression.getAnonymousClass() != null;
   }
 
-  public RefactoringActionHandler getHandler(@NotNull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new AnonymousToInnerHandler();
   }
 }

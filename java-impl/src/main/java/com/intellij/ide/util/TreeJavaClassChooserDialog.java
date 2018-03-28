@@ -28,8 +28,8 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.util.Query;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.List;
@@ -47,7 +47,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
   }
 
   public TreeJavaClassChooserDialog(String title,
-                                    @NotNull Project project,
+                                    @Nonnull Project project,
                                     GlobalSearchScope scope,
                                     final ClassFilter classFilter, @Nullable PsiClass initialClass) {
     super(title, project, scope, PsiClass.class, createFilter(classFilter), initialClass);
@@ -55,7 +55,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
 
   public TreeJavaClassChooserDialog(String title,
-                                    @NotNull Project project,
+                                    @Nonnull Project project,
                                     GlobalSearchScope scope,
                                     @Nullable ClassFilter classFilter,
                                     PsiClass baseClass,
@@ -73,7 +73,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
   }
 
   public static TreeJavaClassChooserDialog withInnerClasses(String title,
-                                                            @NotNull Project project,
+                                                            @Nonnull Project project,
                                                             GlobalSearchScope scope,
                                                             final ClassFilter classFilter,
                                                             @Nullable PsiClass initialClass) {
@@ -100,7 +100,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     }
   }
 
-  @NotNull
+  @Nonnull
   protected List<PsiClass> getClassesByName(final String name,
                                             final boolean checkBoxState,
                                             final String pattern,
@@ -111,9 +111,9 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     return ContainerUtil.newArrayList(classes);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected BaseClassInheritorsProvider<PsiClass> getInheritorsProvider(@NotNull PsiClass baseClass) {
+  protected BaseClassInheritorsProvider<PsiClass> getInheritorsProvider(@Nonnull PsiClass baseClass) {
     return new JavaInheritorsProvider(getProject(), baseClass, getScope());
   }
 
@@ -125,7 +125,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
       myProject = project;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     protected Query<PsiClass> searchForInheritors(PsiClass baseClass, GlobalSearchScope searchScope, boolean checkDeep) {
       return ClassInheritorsSearch.search(baseClass, searchScope, checkDeep);

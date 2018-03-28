@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents the list of parameters of a Java method.
@@ -29,7 +29,7 @@ public interface PsiParameterList extends PsiElement {
    *
    * @return the array of parameters.
    */
-  @NotNull
+  @Nonnull
   PsiParameter[] getParameters();
 
   /**

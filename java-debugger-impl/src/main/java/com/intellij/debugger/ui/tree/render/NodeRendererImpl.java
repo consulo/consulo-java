@@ -15,11 +15,10 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -47,12 +46,12 @@ public abstract class NodeRendererImpl implements NodeRenderer
 		this("unnamed");
 	}
 
-	protected NodeRendererImpl(@NotNull String presentableName)
+	protected NodeRendererImpl(@Nonnull String presentableName)
 	{
 		this(presentableName, false);
 	}
 
-	protected NodeRendererImpl(@NotNull String presentableName, boolean enabledDefaultValue)
+	protected NodeRendererImpl(@Nonnull String presentableName, boolean enabledDefaultValue)
 	{
 		myProperties = new BasicRendererProperties(enabledDefaultValue);
 		myProperties.setName(presentableName);
@@ -149,7 +148,7 @@ public abstract class NodeRendererImpl implements NodeRenderer
 		return getName();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getIdLabel(Value value, DebugProcess process)
 	{
 		return value instanceof ObjectReference && isShowType() ? ValueDescriptorImpl.getIdLabel((ObjectReference) value) : null;

@@ -19,7 +19,7 @@ package com.intellij.psi.impl.beanProperties;
 import com.intellij.find.findUsages.FindUsagesHandler;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class BeanPropertyFindUsagesHandler extends FindUsagesHandler {
 
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getPrimaryElements() {
     final ArrayList<PsiElement> elements = new ArrayList<PsiElement>(3);
     elements.add(myProperty.getPsiElement());

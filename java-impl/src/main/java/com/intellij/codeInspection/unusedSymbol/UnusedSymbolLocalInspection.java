@@ -24,7 +24,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiModifier;
 import com.intellij.util.ui.UIUtil;
 
@@ -133,7 +132,7 @@ public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public JComponent createOptionsPanel()
 	{
 		return new OptionsPanel().getPanel();

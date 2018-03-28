@@ -44,8 +44,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,11 +58,11 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
 
   @Override
   @Nullable
-  public CommonProblemDescriptor[] checkElement(@NotNull final RefEntity refEntity,
-                                                @NotNull final AnalysisScope scope,
-                                                @NotNull final InspectionManager manager,
-                                                @NotNull final GlobalInspectionContext globalContext,
-                                                @NotNull final ProblemDescriptionsProcessor processor) {
+  public CommonProblemDescriptor[] checkElement(@Nonnull final RefEntity refEntity,
+                                                @Nonnull final AnalysisScope scope,
+                                                @Nonnull final InspectionManager manager,
+                                                @Nonnull final GlobalInspectionContext globalContext,
+                                                @Nonnull final ProblemDescriptionsProcessor processor) {
     if (refEntity instanceof RefMethod) {
       final RefMethod refMethod = (RefMethod)refEntity;
 
@@ -103,8 +103,8 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
   }
 
   @Override
-  protected boolean queryExternalUsagesRequests(@NotNull final RefManager manager, @NotNull final GlobalJavaInspectionContext globalContext,
-                                                @NotNull final ProblemDescriptionsProcessor processor) {
+  protected boolean queryExternalUsagesRequests(@Nonnull final RefManager manager, @Nonnull final GlobalJavaInspectionContext globalContext,
+                                                @Nonnull final ProblemDescriptionsProcessor processor) {
     final Project project = manager.getProject();
     for (RefElement entryPoint : globalContext.getEntryPointsManager(manager).getEntryPoints()) {
       processor.ignoreElement(entryPoint);
@@ -114,7 +114,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
     final AnalysisScope scope = manager.getScope();
     manager.iterate(new RefJavaVisitor() {
       @Override
-      public void visitElement(@NotNull RefEntity refEntity) {
+      public void visitElement(@Nonnull RefEntity refEntity) {
         if (refEntity instanceof RefMethod) {
           RefMethod refMethod = (RefMethod)refEntity;
           final PsiModifierListOwner element = refMethod.getElement();
@@ -161,19 +161,19 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
   }
 
   @Override
-  @Nullable
-  public String getHint(@NotNull final QuickFix fix) {
+  @javax.annotation.Nullable
+  public String getHint(@Nonnull final QuickFix fix) {
     return ((AcceptSuggested)fix).getHint();
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public QuickFix getQuickFix(final String hint) {
     return new AcceptSuggested(null, null, hint);
   }
 
   @Override
-  public void compose(@NotNull final StringBuffer buf, @NotNull final RefEntity refEntity, @NotNull final HTMLComposer composer) {
+  public void compose(@Nonnull final StringBuffer buf, @Nonnull final RefEntity refEntity, @Nonnull final HTMLComposer composer) {
     if (refEntity instanceof RefMethod) {
       final RefMethod refMethod = (RefMethod)refEntity;
       final HTMLJavaHTMLComposer javaComposer = composer.getExtension(HTMLJavaHTMLComposer.COMPOSER);
@@ -200,7 +200,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
     return res;
   }
 
-  private static void clearUsedParameters(@NotNull RefMethod refMethod, RefParameter[] params, boolean checkDeep) {
+  private static void clearUsedParameters(@Nonnull RefMethod refMethod, RefParameter[] params, boolean checkDeep) {
     RefParameter[] methodParms = refMethod.getParameters();
 
     for (int i = 0; i < methodParms.length; i++) {
@@ -215,19 +215,19 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.unused.parameter.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
@@ -258,19 +258,19 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.unused.parameter.delete.quickfix");
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) return;
       final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class);
       if (psiMethod != null) {

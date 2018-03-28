@@ -24,13 +24,14 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
 import com.intellij.refactoring.classMembers.AbstractUsesDependencyMemberInfoModel;
-import org.jetbrains.annotations.NotNull;
 
 public class UsesDependencyMemberInfoModel<T extends NavigatablePsiElement, C extends PsiElement, M extends MemberInfoBase<T>>
   extends AbstractUsesDependencyMemberInfoModel<T,C,M> {
@@ -40,7 +41,7 @@ public class UsesDependencyMemberInfoModel<T extends NavigatablePsiElement, C ex
   }
 
   @Override
-  protected int doCheck(@NotNull M memberInfo, int problem) {
+  protected int doCheck(@Nonnull M memberInfo, int problem) {
     final PsiElement member = memberInfo.getMember();
     if(problem == ERROR
             && member instanceof PsiModifierListOwner

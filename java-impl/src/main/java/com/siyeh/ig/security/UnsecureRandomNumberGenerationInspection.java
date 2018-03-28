@@ -15,26 +15,27 @@
  */
 package com.siyeh.ig.security;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class UnsecureRandomNumberGenerationInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unsecure.random.number.generation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     @NonNls final String text = ((PsiElement)infos[0]).getText();
     if ("random".equals(text)) {
@@ -61,7 +62,7 @@ public class UnsecureRandomNumberGenerationInspection
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiJavaCodeReferenceElement reference =
         expression.getClassReference();
@@ -85,7 +86,7 @@ public class UnsecureRandomNumberGenerationInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

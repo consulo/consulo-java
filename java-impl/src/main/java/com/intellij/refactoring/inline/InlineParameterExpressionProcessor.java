@@ -33,8 +33,8 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -76,13 +76,13 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
   }
 
 
-  @NotNull
+  @Nonnull
   @Override
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InlineViewDescriptor(myParameter);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected UsageInfo[] findUsages() {
 
@@ -301,19 +301,19 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
     private final PsiElement myReplacement;
     private final PsiVariable myVariable;
 
-    public LocalReplacementUsageInfo(@NotNull PsiReference element, @NotNull PsiElement replacement) {
+    public LocalReplacementUsageInfo(@Nonnull PsiReference element, @Nonnull PsiElement replacement) {
       super(element);
       final PsiElement resolved = element.resolve();
       myVariable = resolved instanceof PsiVariable ? (PsiVariable)resolved : null;
       myReplacement = replacement;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public PsiElement getReplacement() {
       return myReplacement.isValid() ? myReplacement : null;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public PsiVariable getVariable() {
       return myVariable != null && myVariable.isValid() ? myVariable : null;
     }

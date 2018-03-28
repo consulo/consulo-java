@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
@@ -28,20 +29,20 @@ import com.siyeh.ig.psiutils.TestUtils;
 
 public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "BeforeOrAfterWithIncorrectSignature";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "before.or.after.is.public.void.no.arg.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "before.or.after.is.public.void.no.arg.problem.descriptor");
@@ -56,7 +57,7 @@ public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       if (!TestUtils.isJUnit4BeforeOrAfterMethod(method)) {
         return;

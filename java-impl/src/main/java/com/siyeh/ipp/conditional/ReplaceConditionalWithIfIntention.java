@@ -15,8 +15,8 @@
  */
 package com.siyeh.ipp.conditional;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -37,14 +37,14 @@ public class ReplaceConditionalWithIfIntention extends Intention
 	private static final Logger LOG = Logger.getInstance("#" + ReplaceConditionalWithIfIntention.class.getName());
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElementPredicate getElementPredicate()
 	{
 		return new ReplaceConditionalWithIfPredicate();
 	}
 
 	@Override
-	public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException
+	public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		final PsiConditionalExpression expression = (PsiConditionalExpression) element;
 		replaceConditionalWithIf(expression);
@@ -151,8 +151,8 @@ public class ReplaceConditionalWithIfIntention extends Intention
 		}
 	}
 
-	private static void appendElementTextWithoutParentheses(@NotNull PsiElement element, @NotNull PsiElement elementToReplace,
-			@Nullable PsiExpression replacementExpression, @NotNull StringBuilder out)
+	private static void appendElementTextWithoutParentheses(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
+			@Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out)
 	{
 		final PsiElement expressionParent = elementToReplace.getParent();
 		if(expressionParent instanceof PsiParenthesizedExpression)
@@ -168,8 +168,8 @@ public class ReplaceConditionalWithIfIntention extends Intention
 		appendElementText(element, elementToReplace, replacementExpression, out);
 	}
 
-	private static void appendElementText(@NotNull PsiElement element, @NotNull PsiElement elementToReplace,
-			@Nullable PsiExpression replacementExpression, @NotNull StringBuilder out)
+	private static void appendElementText(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
+			@javax.annotation.Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out)
 	{
 		if(element.equals(elementToReplace))
 		{

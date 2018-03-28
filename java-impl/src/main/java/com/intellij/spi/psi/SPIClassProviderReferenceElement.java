@@ -18,7 +18,8 @@ package com.intellij.spi.psi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaPsiFacade;
@@ -36,7 +37,7 @@ public class SPIClassProviderReferenceElement extends SPIPackageOrClassReference
     super(node);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Object[] getVariants() {
     final String name = getContainingFile().getName();

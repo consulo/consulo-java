@@ -20,17 +20,17 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.InheritanceUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class CastToIncompatibleInterfaceInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "casting.to.incompatible.interface.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "casting.to.incompatible.interface.problem.descriptor");
@@ -45,7 +45,7 @@ public class CastToIncompatibleInterfaceInspection extends BaseInspection {
 
     @Override
     public void visitTypeCastExpression(
-      @NotNull PsiTypeCastExpression expression) {
+      @Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       final PsiTypeElement castTypeElement = expression.getCastType();
       if (castTypeElement == null) {

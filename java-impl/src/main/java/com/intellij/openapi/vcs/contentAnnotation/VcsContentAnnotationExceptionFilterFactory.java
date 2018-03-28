@@ -15,7 +15,8 @@
  */
 package com.intellij.openapi.vcs.contentAnnotation;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.filters.ExceptionFilterFactory;
 import com.intellij.execution.filters.Filter;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -28,9 +29,9 @@ import com.intellij.psi.search.GlobalSearchScope;
  */
 public class VcsContentAnnotationExceptionFilterFactory implements ExceptionFilterFactory
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public Filter create(@NotNull GlobalSearchScope searchScope)
+	public Filter create(@Nonnull GlobalSearchScope searchScope)
 	{
 		return new VcsContentAnnotationExceptionFilter(searchScope);
 	}

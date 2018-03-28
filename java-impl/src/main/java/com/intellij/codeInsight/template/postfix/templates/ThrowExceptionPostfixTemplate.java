@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 
 public class ThrowExceptionPostfixTemplate extends JavaStatementWrapPostfixTemplate {
@@ -23,7 +23,7 @@ public class ThrowExceptionPostfixTemplate extends JavaStatementWrapPostfixTempl
     super("throw", "throw expr;", JavaPostfixTemplatesUtils.JAVA_PSI_INFO, JavaPostfixTemplatesUtils.IS_THROWABLE);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getHead() {
     return "throw ";

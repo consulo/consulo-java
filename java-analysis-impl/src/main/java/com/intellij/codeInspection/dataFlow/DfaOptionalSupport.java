@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
@@ -45,8 +45,8 @@ public class DfaOptionalSupport
 	public static final CallMatcher GUAVA_OPTIONAL_FROM_NULLABLE = CallMatcher.staticCall(GUAVA_OPTIONAL, "fromNullable").parameterCount(1);
 	public static final CallMatcher OPTIONAL_OF_NULLABLE = CallMatcher.anyOf(JDK_OPTIONAL_OF_NULLABLE, GUAVA_OPTIONAL_FROM_NULLABLE);
 
-	@Nullable
-	static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(@NotNull PsiExpression qualifier)
+	@javax.annotation.Nullable
+	static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(@Nonnull PsiExpression qualifier)
 	{
 		final PsiElement call = findCallExpression(qualifier);
 		final PsiMethod method = call == null ? null : ((PsiMethodCallExpression) call).resolveMethod();
@@ -66,7 +66,7 @@ public class DfaOptionalSupport
 		return null;
 	}
 
-	private static PsiMethodCallExpression findCallExpression(@NotNull PsiElement anchor)
+	private static PsiMethodCallExpression findCallExpression(@Nonnull PsiElement anchor)
 	{
 		final PsiElement argList = PsiUtil.skipParenthesizedExprUp(anchor).getParent();
 		if(argList instanceof PsiExpressionList)
@@ -80,8 +80,8 @@ public class DfaOptionalSupport
 		return null;
 	}
 
-	@Nullable
-	static LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(@NotNull PsiElement anchor)
+	@javax.annotation.Nullable
+	static LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(@Nonnull PsiElement anchor)
 	{
 		final PsiMethodCallExpression parent = findCallExpression(anchor);
 		if(parent == null)
@@ -92,8 +92,8 @@ public class DfaOptionalSupport
 		return new ReplaceOptionalCallFix(jdkOptional ? "empty" : "absent", true);
 	}
 
-	@Nullable
-	static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(@NotNull PsiElement anchor)
+	@javax.annotation.Nullable
+	static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(@Nonnull PsiElement anchor)
 	{
 		final PsiMethodCallExpression parent = findCallExpression(anchor);
 		if(parent == null)
@@ -119,7 +119,7 @@ public class DfaOptionalSupport
 			myClearArguments = clearArguments;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -127,7 +127,7 @@ public class DfaOptionalSupport
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			final PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
 			if(methodCallExpression != null)

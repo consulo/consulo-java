@@ -1,5 +1,7 @@
 package com.intellij.refactoring;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -11,7 +13,6 @@ import com.intellij.testFramework.TestDataPath;
 import com.intellij.util.VisibilityUtil;
 import junit.framework.Assert;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class IntroduceConstantTest extends LightCodeInsightTestCase {
   @NonNls private static final String BASE_PATH = "/refactoring/introduceConstant/";
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

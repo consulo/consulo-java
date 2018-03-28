@@ -22,10 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
@@ -55,9 +54,7 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.testFramework.LightVirtualFile;
-import com.intellij.ui.RowIcon;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PlatformIcons;
 
 public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements PsiField, PsiVariableEx, Queryable
 {
@@ -113,21 +110,21 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public CompositeElement getNode()
 	{
 		return (CompositeElement) super.getNode();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiIdentifier getNameIdentifier()
 	{
 		return (PsiIdentifier) getNode().findChildByRoleAsPsiElement(ChildRole.NAME);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		final PsiFieldStub stub = getGreenStub();
@@ -139,14 +136,14 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 	}
 
 	@Override
-	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
 	{
 		PsiImplUtil.setName(getNameIdentifier(), name);
 		return this;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@SuppressWarnings("Duplicates")
 	public PsiType getType()
 	{
@@ -184,7 +181,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiModifierList getModifierList()
 	{
 		final PsiModifierList selfModifierList = getSelfModifierList();
@@ -219,7 +216,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		return getModifierList().hasModifierProperty(name);
 	}
@@ -331,7 +328,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 		private static final OurConstValueComputer INSTANCE = new OurConstValueComputer();
 
 		@Override
-		public Object execute(@NotNull PsiVariable variable, Set<PsiVariable> visitedVars)
+		public Object execute(@Nonnull PsiVariable variable, Set<PsiVariable> visitedVars)
 		{
 			return ((PsiFieldImpl) variable)._computeConstantValue(visitedVars);
 		}
@@ -446,7 +443,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -459,7 +456,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 		return true;
@@ -505,14 +502,14 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public SearchScope getUseScope()
 	{
 		return PsiImplUtil.getMemberUseScope(this);
 	}
 
 	@Override
-	public void putInfo(@NotNull Map<String, String> info)
+	public void putInfo(@Nonnull Map<String, String> info)
 	{
 		info.put("fieldName", getName());
 	}

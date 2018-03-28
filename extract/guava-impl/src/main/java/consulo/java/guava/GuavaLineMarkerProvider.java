@@ -20,8 +20,8 @@ import java.util.Collection;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
@@ -106,7 +106,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider
 	@RequiredReadAction
 	@Nullable
 	@Override
-	public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element)
+	public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element)
 	{
 		PsiElement parent;
 		if(element instanceof PsiIdentifier && (parent = element.getParent()) instanceof PsiClass)
@@ -146,8 +146,8 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider
 		return null;
 	}
 
-	@NotNull
-	private static Query<PsiMember> createQuery(@NotNull PsiClass target, @NotNull PsiClass annClass)
+	@Nonnull
+	private static Query<PsiMember> createQuery(@Nonnull PsiClass target, @Nonnull PsiClass annClass)
 	{
 		PsiImmediateClassType type = new PsiImmediateClassType(target, PsiSubstitutor.EMPTY);
 		return new FilteredQuery<>(AnnotatedMembersSearch.search(annClass), psiMember -> ReadAction.compute(() ->
@@ -166,7 +166,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider
 	}
 
 	@Nullable
-	private static PsiClass findSubscribeAnnotation(@NotNull PsiElement element)
+	private static PsiClass findSubscribeAnnotation(@Nonnull PsiElement element)
 	{
 		return CachedValuesManager.getCachedValue(element, () ->
 		{

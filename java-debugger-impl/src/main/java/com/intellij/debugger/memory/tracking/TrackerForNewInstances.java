@@ -17,12 +17,12 @@ package com.intellij.debugger.memory.tracking;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 public interface TrackerForNewInstances
 {
-	@NotNull
+	@Nonnull
 	List<ObjectReference> getNewInstances();
 
 	int getCount();

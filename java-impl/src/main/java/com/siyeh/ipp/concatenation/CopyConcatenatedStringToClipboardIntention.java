@@ -17,7 +17,8 @@ package com.siyeh.ipp.concatenation;
 
 import java.awt.datatransfer.StringSelection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
@@ -34,13 +35,13 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 public class CopyConcatenatedStringToClipboardIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new SimpleStringConcatenationPredicate(false);
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiPolyadicExpression)) {
       return;
     }

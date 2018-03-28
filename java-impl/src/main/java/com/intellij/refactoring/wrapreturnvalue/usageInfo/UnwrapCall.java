@@ -15,20 +15,21 @@
  */
 package com.intellij.refactoring.wrapreturnvalue.usageInfo;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCallExpression;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class UnwrapCall extends FixableUsageInfo {
-    @NotNull
+    @Nonnull
     private final PsiCallExpression call;
-    @NotNull
+    @Nonnull
     private final String unwrapMethod;
 
-    public UnwrapCall(@NotNull PsiCallExpression call, @NotNull String unwrapMethod) {
+    public UnwrapCall(@Nonnull PsiCallExpression call, @Nonnull String unwrapMethod) {
         super(call);
         this.call =call;
         this.unwrapMethod = unwrapMethod;

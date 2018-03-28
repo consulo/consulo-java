@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Represents a {@code uses} statement of a Java module declaration.
  *
@@ -26,6 +24,6 @@ public interface PsiUsesStatement extends PsiStatement
 {
 	PsiUsesStatement[] EMPTY_ARRAY = new PsiUsesStatement[0];
 
-	@Nullable
+	@javax.annotation.Nullable
 	PsiJavaCodeReferenceElement getClassReference();
 }

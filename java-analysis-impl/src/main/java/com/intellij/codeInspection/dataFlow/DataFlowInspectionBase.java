@@ -27,12 +27,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
@@ -107,7 +106,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 	}
 
 	@Override
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		node.addContent(new Element("option").setAttribute("name", "SUGGEST_NULLABLE_ANNOTATIONS").setAttribute("value", String.valueOf(SUGGEST_NULLABLE_ANNOTATIONS)));
 		node.addContent(new Element("option").setAttribute("name", "DONT_REPORT_TRUE_ASSERT_STATEMENTS").setAttribute("value", String.valueOf(DONT_REPORT_TRUE_ASSERT_STATEMENTS)));
@@ -138,8 +137,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 	}
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -236,7 +235,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		}
 	}
 
-	private void analyzeCodeBlock(@Nullable final PsiElement scope, ProblemsHolder holder, final boolean onTheFly)
+	private void analyzeCodeBlock(@javax.annotation.Nullable final PsiElement scope, ProblemsHolder holder, final boolean onTheFly)
 	{
 		if(scope == null)
 		{
@@ -288,7 +287,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	protected List<LocalQuickFix> createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly)
 	{
 		return Collections.emptyList();
@@ -299,7 +298,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		return Collections.emptyList();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected LocalQuickFix createIntroduceVariableFix(PsiExpression expression)
 	{
 		return null;
@@ -506,8 +505,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		}
 	}
 
-	@NotNull
-	private static PsiElement getElementToHighlight(@NotNull PsiCall call)
+	@Nonnull
+	private static PsiElement getElementToHighlight(@Nonnull PsiCall call)
 	{
 		PsiJavaCodeReferenceElement ref;
 		if(call instanceof PsiNewExpression)
@@ -646,7 +645,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		holder.registerProblem(toHighlight, InspectionsBundle.message("dataflow.message.npe.method.invocation"), fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
 	}
 
-	private void reportFieldAccessMayProduceNpe(ProblemsHolder holder, PsiElement elementToAssert, @NotNull PsiExpression expression)
+	private void reportFieldAccessMayProduceNpe(ProblemsHolder holder, PsiElement elementToAssert, @Nonnull PsiExpression expression)
 	{
 		LocalQuickFix[] fix = createNPEFixes((PsiExpression) elementToAssert, expression, holder.isOnTheFly()).toArray(LocalQuickFix.EMPTY_ARRAY);
 		if(expression instanceof PsiArrayAccessExpression)
@@ -829,7 +828,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiMethod getScopeMethod(PsiElement block)
 	{
 		PsiElement parent = block.getParent();
@@ -844,7 +843,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		return null;
 	}
 
-	private void reportNullableReturns(DataFlowInstructionVisitor visitor, ProblemsHolder holder, Set<PsiElement> reportedAnchors, @NotNull PsiElement block)
+	private void reportNullableReturns(DataFlowInstructionVisitor visitor, ProblemsHolder holder, Set<PsiElement> reportedAnchors, @Nonnull PsiElement block)
 	{
 		final PsiMethod method = getScopeMethod(block);
 		if(method == null || NullableStuffInspectionBase.isNullableNotInferred(method, true))
@@ -1021,7 +1020,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static LocalQuickFix createSimplifyBooleanExpressionFix(PsiElement element, final boolean value)
 	{
 		SimplifyBooleanExpressionFix fix = createIntention(element, value);
@@ -1033,14 +1032,14 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		return new LocalQuickFix()
 		{
 			@Override
-			@NotNull
+			@Nonnull
 			public String getName()
 			{
 				return text;
 			}
 
 			@Override
-			public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+			public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 			{
 				final PsiElement psiElement = descriptor.getPsiElement();
 				if(psiElement == null)
@@ -1064,7 +1063,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public String getFamilyName()
 			{
 				return InspectionsBundle.message("inspection.data.flow.simplify.boolean.expression.quickfix");
@@ -1072,7 +1071,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	protected static LocalQuickFix createSimplifyToAssignmentFix()
 	{
 		return new SimplifyToAssignmentFix();
@@ -1105,21 +1104,21 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.data.flow.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.BUGS_GROUP_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -22,25 +24,24 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ThreadStartInConstructionInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToThreadStartDuringObjectConstruction";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "thread.start.in.construction.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "thread.start.in.construction.problem.descriptor");
@@ -55,7 +56,7 @@ public class ThreadStartInConstructionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (method.isConstructor()) {
         method.accept(new ThreadStartVisitor());
       }
@@ -63,7 +64,7 @@ public class ThreadStartInConstructionInspection extends BaseInspection {
 
     @Override
     public void visitClassInitializer(
-      @NotNull PsiClassInitializer initializer) {
+      @Nonnull PsiClassInitializer initializer) {
       if (!initializer.hasModifierProperty(PsiModifier.STATIC)) {
         initializer.accept(new ThreadStartVisitor());
       }
@@ -78,7 +79,7 @@ public class ThreadStartInConstructionInspection extends BaseInspection {
 
       @Override
       public void visitMethodCallExpression(
-        @NotNull PsiMethodCallExpression expression) {
+        @Nonnull PsiMethodCallExpression expression) {
         super.visitMethodCallExpression(expression);
 
         final PsiReferenceExpression methodExpression =

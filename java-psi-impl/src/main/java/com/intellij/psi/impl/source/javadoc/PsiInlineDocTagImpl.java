@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElement;
@@ -76,13 +77,13 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
 		return (PsiDocTagValue) findPsiChildByType(TAG_VALUE_BIT_SET);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiElement[] getDataElementsIgnoreWhitespaces()
 	{
 		return getChildrenAsPsiElements(VALUE_NO_WHITESPACE_BIT_SET, PsiElement.ARRAY_FACTORY);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -126,7 +127,7 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -146,7 +147,7 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
 	}
 
 	@Override
-	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
 	{
 		PsiImplUtil.setName(getNameElement(), name);
 		return this;

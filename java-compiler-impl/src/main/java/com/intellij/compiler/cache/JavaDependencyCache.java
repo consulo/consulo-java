@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.compiler.classParsing.*;
 import com.intellij.compiler.impl.ExitException;
 import com.intellij.compiler.make.CacheCorruptedException;
@@ -78,7 +78,7 @@ public class JavaDependencyCache implements DependencyCache
   @NonNls
   private static final String SYMBOLTABLE_FILE_NAME = "java-symboltable.dat";
 
-  public JavaDependencyCache(@NotNull Project project, @NotNull String cacheDir) {
+  public JavaDependencyCache(@Nonnull Project project, @Nonnull String cacheDir) {
     myStoreDirectoryPath = cacheDir + File.separator + ".java-dependency-info";
     mySymbolTableFilePath = myStoreDirectoryPath + "/" + SYMBOLTABLE_FILE_NAME;
   }
@@ -143,7 +143,7 @@ public class JavaDependencyCache implements DependencyCache
     myToUpdate.add(qName);
   }
 
-  public int reparseClassFile(@NotNull File file, @Nullable byte[] fileContent) throws ClsFormatException, CacheCorruptedException {
+  public int reparseClassFile(@Nonnull File file, @Nullable byte[] fileContent) throws ClsFormatException, CacheCorruptedException {
     SymbolTable symbolTable = getSymbolTable();
 
     final int qName = getNewClassesCache().importClassInfo(new ClassFileReader(file, symbolTable, fileContent), symbolTable);
@@ -247,7 +247,7 @@ public class JavaDependencyCache implements DependencyCache
   }
 
   @Override
-  public String relativePathToQName(@NotNull String path, char separator) {
+  public String relativePathToQName(@Nonnull String path, char separator) {
     return JavaMakeUtil.relativeClassPathToQName(path, separator);
   }
 

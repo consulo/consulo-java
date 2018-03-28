@@ -26,29 +26,28 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class CallToStringConcatCanBeReplacedByOperatorInspection
   extends BaseInspection {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "call.to.string.concat.can.be.replaced.by.operator.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "call.to.string.concat.can.be.replaced.by.operator.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new CallToStringConcatCanBeReplacedByOperatorFix();
   }
@@ -61,7 +60,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
   private static class CallToStringConcatCanBeReplacedByOperatorFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("call.to.string.concat.can.be.replaced.by.operator.quickfix");
     }

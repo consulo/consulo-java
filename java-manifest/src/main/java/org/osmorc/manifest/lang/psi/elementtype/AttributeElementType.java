@@ -30,7 +30,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Attribute;
 import org.osmorc.manifest.lang.psi.impl.AttributeImpl;
 import org.osmorc.manifest.lang.psi.stub.AttributeStub;
@@ -47,7 +47,7 @@ public class AttributeElementType extends AbstractManifestStubElementType<Attrib
   }
 
   @Override
-  public Attribute createPsi(@NotNull AttributeStub stub) {
+  public Attribute createPsi(@Nonnull AttributeStub stub) {
     return new AttributeImpl(stub, this);
   }
 
@@ -57,20 +57,20 @@ public class AttributeElementType extends AbstractManifestStubElementType<Attrib
   }
 
   @Override
-  public AttributeStub createStub(@NotNull Attribute psi, StubElement parentStub) {
+  public AttributeStub createStub(@Nonnull Attribute psi, StubElement parentStub) {
     return new AttributeStubImpl(parentStub, psi.getName(), psi.getValue());
   }
 
-  public void serialize(@NotNull AttributeStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull AttributeStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeUTFFast(stub.getValue());
   }
 
-  @NotNull
-  public AttributeStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  @Nonnull
+  public AttributeStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new AttributeStubImpl(parentStub, dataStream.readName().toString(), dataStream.readUTFFast());
   }
 
-  public void indexStub(@NotNull AttributeStub stub, @NotNull IndexSink sink) {
+  public void indexStub(@Nonnull AttributeStub stub, @Nonnull IndexSink sink) {
   }
 }

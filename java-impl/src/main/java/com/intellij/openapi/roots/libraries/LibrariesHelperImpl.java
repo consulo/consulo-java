@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -37,7 +36,7 @@ public class LibrariesHelperImpl extends LibrariesHelper
 		return library == null ? null : findRootByClass(Arrays.asList(library.getFiles(BinariesOrderRootType.getInstance())), fqn);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public VirtualFile findRootByClass(List<VirtualFile> roots, String fqn)
 	{

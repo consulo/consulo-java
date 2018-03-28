@@ -16,8 +16,8 @@
 
 package consulo.java.unscramble;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationActivationListener;
 import com.intellij.openapi.application.ApplicationManager;
@@ -34,13 +34,13 @@ public class UnscrambleManager
 {
 	private static final String KEY = "java.analyze.exceptions.on.the.fly";
 
-	@NotNull
+	@Nonnull
 	public static UnscrambleManager getInstance()
 	{
 		return ApplicationManager.getApplication().getComponent(UnscrambleManager.class);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private MessageBusConnection myConnection;
 
 	private final UnscrambleListener myListener = new UnscrambleListener();

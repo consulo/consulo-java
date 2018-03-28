@@ -15,7 +15,7 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -24,12 +24,12 @@ class OutputDir {
   private final String myPath;
   private final int myKind;
 
-  OutputDir(@NotNull String path, int kind) {
+  OutputDir(@Nonnull String path, int kind) {
     myPath = path;
     myKind = kind;
   }
 
-  @NotNull
+  @Nonnull
   public String getPath() {
     return myPath;
   }

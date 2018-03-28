@@ -17,7 +17,7 @@ package com.intellij.spellchecker;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
@@ -35,7 +35,7 @@ public class DocCommentTokenizer extends Tokenizer<PsiDocComment> {
   private static final Set<String> excludedTags = ContainerUtil.immutableSet("author", "see", "by", "link");
 
   @Override
-  public void tokenize(@NotNull PsiDocComment comment, TokenConsumer consumer) {
+  public void tokenize(@Nonnull PsiDocComment comment, TokenConsumer consumer) {
     final CommentSplitter splitter = CommentSplitter.getInstance();
 
     for (PsiElement el : comment.getChildren()) {

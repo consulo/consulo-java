@@ -22,7 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SwitchUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,7 +37,7 @@ public class SwitchStatementWithTooManyBranchesInspection
    */
   public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "switch.statement.with.too.many.branches.display.name");
@@ -50,7 +50,7 @@ public class SwitchStatementWithTooManyBranchesInspection
       this, "m_limit");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -67,7 +67,7 @@ public class SwitchStatementWithTooManyBranchesInspection
 
     @Override
     public void visitSwitchStatement(
-      @NotNull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {
         return;

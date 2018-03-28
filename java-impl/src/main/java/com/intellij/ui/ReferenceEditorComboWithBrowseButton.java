@@ -18,7 +18,7 @@ package com.intellij.ui;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -37,14 +37,14 @@ import com.intellij.util.ArrayUtil;
 public class ReferenceEditorComboWithBrowseButton extends ComponentWithBrowseButton<EditorComboBox> implements TextAccessor {
   public ReferenceEditorComboWithBrowseButton(final ActionListener browseActionListener,
                                               final String text,
-                                              @NotNull final Project project,
+                                              @Nonnull final Project project,
                                               boolean toAcceptClasses, final String recentsKey) {
     this(browseActionListener, text, project, toAcceptClasses, JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE, recentsKey);
   }
 
   public ReferenceEditorComboWithBrowseButton(final ActionListener browseActionListener,
                                               final String text,
-                                              @NotNull final Project project,
+                                              @Nonnull final Project project,
                                               boolean toAcceptClasses,
                                               final JavaCodeFragment.VisibilityChecker visibilityChecker, final String recentsKey) {
     super(new EditorComboBox(createDocument(StringUtil.isEmpty(text) ? "" : text, project, toAcceptClasses, visibilityChecker), project, JavaFileType.INSTANCE),

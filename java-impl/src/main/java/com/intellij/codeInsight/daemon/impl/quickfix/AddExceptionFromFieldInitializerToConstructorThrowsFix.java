@@ -20,8 +20,9 @@ import gnu.trove.THashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
@@ -49,7 +50,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		if(!myWrongElement.isValid())
 		{
@@ -84,7 +85,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
 	{
 		if(!FileModificationService.getInstance().prepareFileForWrite(file))
 		{
@@ -124,7 +125,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{

@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiLiteralExpression;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -24,34 +24,34 @@ public class EmptyIntentionInspectionQuickFixTest extends LightQuickFixTestCase{
     return "/codeInsight/daemonCodeAnalyzer/quickFix/emptyIntention";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new DefUseInspection(), new LocalInspectionTool() {
       @Override
       @Nls
-      @NotNull
+      @Nonnull
       public String getGroupDisplayName() {
         return "MyGroup";
       }
 
       @Override
       @Nls
-      @NotNull
+      @Nonnull
       public String getDisplayName() {
         return "My";
       }
 
       @Override
       @NonNls
-      @NotNull
+      @Nonnull
       public String getShortName() {
         return getDisplayName();
       }
 
       @Override
-      @NotNull
-      public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+      @Nonnull
+      public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
         return new JavaElementVisitor() {
           @Override public void visitLiteralExpression(PsiLiteralExpression expression) {
             final String s = (String)expression.getValue();

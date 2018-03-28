@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.org.objectweb.asm.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
@@ -170,7 +170,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		}
 	}
 
-	private String getFqn(@NotNull String internalName, @Nullable String shortName, @Nullable String parentName)
+	private String getFqn(@Nonnull String internalName, @javax.annotation.Nullable String shortName, @javax.annotation.Nullable String parentName)
 	{
 		if(shortName == null || !internalName.endsWith(shortName))
 		{
@@ -218,7 +218,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		return result;
 	}
 
-	private static void newReferenceList(@NotNull JavaClassReferenceListElementType type, StubElement parent, @NotNull String[] types)
+	private static void newReferenceList(@Nonnull JavaClassReferenceListElementType type, StubElement parent, @Nonnull String[] types)
 	{
 		new PsiClassReferenceListStubImpl(type, parent, types);
 	}
@@ -358,7 +358,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value)
 	{
 		if(isSet(access, Opcodes.ACC_SYNTHETIC))
@@ -415,7 +415,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	};
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
 	{
 		// JLS 13.1 says: Any constructs introduced by the compiler that do not have a corresponding construct in the source code
@@ -616,7 +616,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		private boolean hasPrefix;
 		private boolean hasParams;
 
-		private AnnotationTextCollector(@Nullable String desc, Function<String, String> mapping, Consumer<String> callback)
+		private AnnotationTextCollector(@javax.annotation.Nullable String desc, Function<String, String> mapping, Consumer<String> callback)
 		{
 			super(ASM_API);
 			myMapping = mapping;
@@ -860,8 +860,8 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		}
 	}
 
-	@Nullable
-	private static String constToString(@Nullable Object value, @Nullable String type, boolean anno, Function<String, String> mapping)
+	@javax.annotation.Nullable
+	private static String constToString(@javax.annotation.Nullable Object value, @Nullable String type, boolean anno, Function<String, String> mapping)
 	{
 		if(value == null)
 		{

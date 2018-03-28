@@ -15,10 +15,10 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiExpression;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
   public ForAscendingPostfixTemplate() {
@@ -26,20 +26,20 @@ public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String getOperator() {
     return "++";
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected String getComparativeSign(@NotNull PsiExpression expr) {
+  protected String getComparativeSign(@Nonnull PsiExpression expr) {
     return "<";
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
-  protected Pair<String, String> calculateBounds(@NotNull PsiExpression expression) {
+  protected Pair<String, String> calculateBounds(@Nonnull PsiExpression expression) {
     String bound = getExpressionBound(expression);
     return bound != null ? Pair.create("0", bound) : null;
   }

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -25,7 +27,6 @@ import com.intellij.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class EncapsulateVariableFix extends InspectionGadgetsFix {
 
@@ -36,7 +37,7 @@ public class EncapsulateVariableFix extends InspectionGadgetsFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("encapsulate.variable.quickfix",
                                            fieldName);

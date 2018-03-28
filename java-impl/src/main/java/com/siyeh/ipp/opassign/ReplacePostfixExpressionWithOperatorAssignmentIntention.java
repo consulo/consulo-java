@@ -21,7 +21,7 @@ import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ReplacePostfixExpressionWithOperatorAssignmentIntention
   extends MutablyNamedIntention {
@@ -45,14 +45,14 @@ public class ReplacePostfixExpressionWithOperatorAssignmentIntention
       signText, replacementText);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ReplacePostfixExpressionWithOperatorAssignmentPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiPostfixExpression postfixExpression =
       (PsiPostfixExpression)element;

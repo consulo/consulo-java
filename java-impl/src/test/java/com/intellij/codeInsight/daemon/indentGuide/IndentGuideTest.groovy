@@ -15,14 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.indentGuide
 
-import com.intellij.openapi.editor.impl.IndentsModelImpl
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
-import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
-import com.intellij.util.ArrayUtilRt
-import org.jetbrains.annotations.NotNull
-
-import static junit.framework.Assert.assertNotNull
-
 /**
  * @author Denis Zhdanov
  * @since 2/7/13 4:01 PM

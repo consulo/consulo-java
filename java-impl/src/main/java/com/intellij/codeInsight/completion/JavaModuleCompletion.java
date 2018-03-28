@@ -19,7 +19,8 @@ import static com.intellij.codeInsight.completion.BasicExpressionCompletionContr
 
 import java.util.function.Predicate;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.JavaKeywordCompletion.OverrideableSpace;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -39,12 +40,12 @@ import consulo.psi.PsiPackage;
 
 class JavaModuleCompletion
 {
-	static boolean isModuleFile(@NotNull PsiFile file)
+	static boolean isModuleFile(@Nonnull PsiFile file)
 	{
 		return PsiJavaModule.MODULE_INFO_FILE.equals(file.getName()) && PsiUtil.isLanguageLevel9OrHigher(file);
 	}
 
-	static void addVariants(@NotNull PsiElement position, @NotNull CompletionResultSet resultSet)
+	static void addVariants(@Nonnull PsiElement position, @Nonnull CompletionResultSet resultSet)
 	{
 		Consumer<LookupElement> result = element ->
 		{

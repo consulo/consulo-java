@@ -15,8 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
@@ -25,33 +27,32 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import consulo.java.JavaQuickFixBundle;
 
 public class SafeDeleteFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  public SafeDeleteFix(@NotNull PsiElement element) {
+  public SafeDeleteFix(@Nonnull PsiElement element) {
     super(element);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     PsiElement startElement = getStartElement();
     return JavaQuickFixBundle.message("safe.delete.text", startElement == null ? "" : HighlightMessageUtil.getSymbolName(startElement, PsiSubstitutor.EMPTY));
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("safe.delete.family");
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     SafeDeleteHandler.invoke(project, new PsiElement[]{startElement}, false);
   }

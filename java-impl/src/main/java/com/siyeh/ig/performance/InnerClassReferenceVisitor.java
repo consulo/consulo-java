@@ -19,7 +19,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
@@ -65,7 +65,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitThisExpression(
-    @NotNull PsiThisExpression expression) {
+    @Nonnull PsiThisExpression expression) {
     if (!referencesStaticallyAccessible) {
       return;
     }
@@ -78,7 +78,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitSuperExpression(
-    @NotNull PsiSuperExpression expression) {
+    @Nonnull PsiSuperExpression expression) {
     if (!referencesStaticallyAccessible) {
       return;
     }
@@ -104,7 +104,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceElement(
-    @NotNull PsiJavaCodeReferenceElement reference) {
+    @Nonnull PsiJavaCodeReferenceElement reference) {
     if (!referencesStaticallyAccessible) {
       return;
     }
@@ -129,7 +129,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @NotNull PsiReferenceExpression expression) {
+    @Nonnull PsiReferenceExpression expression) {
     if (!referencesStaticallyAccessible) {
       return;
     }

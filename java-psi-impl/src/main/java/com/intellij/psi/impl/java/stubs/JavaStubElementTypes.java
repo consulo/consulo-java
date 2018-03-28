@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiKeyword;
@@ -51,7 +52,7 @@ public interface JavaStubElementTypes
 
 	JavaClassElementType CLASS = new JavaClassElementType("CLASS")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -60,7 +61,7 @@ public interface JavaStubElementTypes
 	};
 	JavaClassElementType ANONYMOUS_CLASS = new JavaClassElementType("ANONYMOUS_CLASS")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -69,7 +70,7 @@ public interface JavaStubElementTypes
 	};
 	JavaClassElementType ENUM_CONSTANT_INITIALIZER = new JavaClassElementType("ENUM_CONSTANT_INITIALIZER")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -79,7 +80,7 @@ public interface JavaStubElementTypes
 
 	JavaMethodElementType METHOD = new JavaMethodElementType("METHOD")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -88,7 +89,7 @@ public interface JavaStubElementTypes
 	};
 	JavaMethodElementType ANNOTATION_METHOD = new JavaMethodElementType("ANNOTATION_METHOD")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -98,7 +99,7 @@ public interface JavaStubElementTypes
 
 	JavaFieldStubElementType FIELD = new JavaFieldStubElementType("FIELD")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -107,7 +108,7 @@ public interface JavaStubElementTypes
 	};
 	JavaFieldStubElementType ENUM_CONSTANT = new JavaFieldStubElementType("ENUM_CONSTANT")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -117,7 +118,7 @@ public interface JavaStubElementTypes
 
 	JavaClassReferenceListElementType EXTENDS_LIST = new JavaClassReferenceListElementType("EXTENDS_LIST")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -126,7 +127,7 @@ public interface JavaStubElementTypes
 	};
 	JavaClassReferenceListElementType IMPLEMENTS_LIST = new JavaClassReferenceListElementType("IMPLEMENTS_LIST")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -135,7 +136,7 @@ public interface JavaStubElementTypes
 	};
 	JavaClassReferenceListElementType THROWS_LIST = new JavaClassReferenceListElementType("THROWS_LIST")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -144,7 +145,7 @@ public interface JavaStubElementTypes
 	};
 	JavaClassReferenceListElementType EXTENDS_BOUND_LIST = new JavaClassReferenceListElementType("EXTENDS_BOUND_LIST")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -153,7 +154,7 @@ public interface JavaStubElementTypes
 	};
 	JavaClassReferenceListElementType PROVIDES_WITH_LIST = new JavaClassReferenceListElementType("PROVIDES_WITH_LIST")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -163,7 +164,7 @@ public interface JavaStubElementTypes
 
 	JavaImportStatementElementType IMPORT_STATEMENT = new JavaImportStatementElementType("IMPORT_STATEMENT")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -172,7 +173,7 @@ public interface JavaStubElementTypes
 	};
 	JavaImportStatementElementType IMPORT_STATIC_STATEMENT = new JavaImportStatementElementType("IMPORT_STATIC_STATEMENT")
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{

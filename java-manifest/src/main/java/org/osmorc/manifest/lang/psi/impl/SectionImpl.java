@@ -27,7 +27,7 @@ package org.osmorc.manifest.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.IStubElementType;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Section;
 import org.osmorc.manifest.lang.psi.stub.SectionStub;
 
@@ -35,7 +35,7 @@ import org.osmorc.manifest.lang.psi.stub.SectionStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class SectionImpl extends ManifestElementBase<SectionStub> implements Section {
-  public SectionImpl(SectionStub stub, @NotNull IStubElementType nodeType) {
+  public SectionImpl(SectionStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 

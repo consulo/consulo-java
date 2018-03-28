@@ -15,17 +15,18 @@
  */
 package com.intellij.debugger.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.util.EventDispatcher;
 
 public abstract class DebuggerStateManager
 {
 	private final EventDispatcher<DebuggerContextListener> myEventDispatcher = EventDispatcher.create(DebuggerContextListener.class);
 
-	@NotNull
+	@Nonnull
 	public abstract DebuggerContextImpl getContext();
 
-	public abstract void setState(@NotNull DebuggerContextImpl context, DebuggerSession.State state, DebuggerSession.Event event, String description);
+	public abstract void setState(@Nonnull DebuggerContextImpl context, DebuggerSession.State state, DebuggerSession.Event event, String description);
 
 	//we allow add listeners inside DebuggerContextListener.changeEvent
 	public void addListener(DebuggerContextListener listener)
@@ -39,7 +40,7 @@ public abstract class DebuggerStateManager
 		myEventDispatcher.removeListener(listener);
 	}
 
-	protected void fireStateChanged(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event)
+	protected void fireStateChanged(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
 	{
 		myEventDispatcher.getMulticaster().changeEvent(newContext, event);
 	}

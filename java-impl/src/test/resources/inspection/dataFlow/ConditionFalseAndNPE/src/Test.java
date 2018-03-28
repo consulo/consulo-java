@@ -1,6 +1,6 @@
-import org.jetbrains.annotations.Nullable;
 public class Foo {
-    @Nullable Foo foo() {
+    @javax.annotation.Nullable
+	Foo foo() {
         return null;
     }
 

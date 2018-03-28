@@ -15,27 +15,28 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
+
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.AddSerialVersionUIDFix;
-import org.jetbrains.annotations.NotNull;
 
 public class SerializableInnerClassHasSerialVersionUIDFieldInspection
   extends SerializableInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "SerializableNonStaticInnerClassWithoutSerialVersionUID";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "serializable.inner.class.has.serial.version.uid.field.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.inner.class.has.serial.version.uid.field.problem.descriptor");

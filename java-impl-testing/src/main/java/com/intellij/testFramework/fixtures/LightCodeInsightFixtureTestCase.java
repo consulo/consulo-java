@@ -18,7 +18,7 @@ package com.intellij.testFramework.fixtures;
 import java.io.File;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
@@ -78,7 +78,7 @@ public abstract class LightCodeInsightFixtureTestCase extends UsefulTestCase {
     return "";
   }
 
-  @NotNull
+  @Nonnull
   protected TestModuleDescriptor getProjectDescriptor() {
     return JAVA_LATEST;
   }

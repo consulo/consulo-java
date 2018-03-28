@@ -15,8 +15,9 @@
  */
 package com.intellij.openapi.projectRoots;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author anna
@@ -24,12 +25,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JavaVersionServiceImpl extends JavaVersionService {
   @Override
-  public boolean isAtLeast(@NotNull PsiElement element, @NotNull JavaSdkVersion version) {
+  public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
     return JavaSdkVersionUtil.isAtLeast(element, version);
   }
 
   @Override
-  public JavaSdkVersion getJavaSdkVersion(@NotNull PsiElement element) {
+  public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
     return JavaSdkVersionUtil.getJavaSdkVersion(element);
   }
 }

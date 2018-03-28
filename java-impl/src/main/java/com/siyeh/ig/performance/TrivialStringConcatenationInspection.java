@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -28,24 +30,23 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class TrivialStringConcatenationInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConcatenationWithEmptyString";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("trivial.string.concatenation.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("trivial.string.concatenation.problem.descriptor");
   }
@@ -114,7 +115,7 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
     return text.toString();
   }
 
-  static String buildReplacement(@NotNull PsiExpression operandToReplace, boolean seenString) {
+  static String buildReplacement(@Nonnull PsiExpression operandToReplace, boolean seenString) {
     if (ExpressionUtils.isNullLiteral(operandToReplace)) {
       if (seenString) {
         return "null";
@@ -142,7 +143,7 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
       m_name = InspectionGadgetsBundle.message("string.replace.quickfix", calculateReplacementExpression(expression));
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return m_name;
     }

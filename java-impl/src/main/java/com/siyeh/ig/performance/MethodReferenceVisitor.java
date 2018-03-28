@@ -15,9 +15,10 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
-import org.jetbrains.annotations.NotNull;
 
 class MethodReferenceVisitor extends JavaRecursiveElementVisitor {
 
@@ -61,7 +62,7 @@ class MethodReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @NotNull PsiReferenceExpression expression) {
+    @Nonnull PsiReferenceExpression expression) {
     super.visitReferenceExpression(expression);
     final PsiElement qualifier = expression.getQualifierExpression();
     if (qualifier != null && !(qualifier instanceof PsiThisExpression) &&
@@ -83,7 +84,7 @@ class MethodReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitThisExpression(
-    @NotNull PsiThisExpression expression) {
+    @Nonnull PsiThisExpression expression) {
     super.visitThisExpression(expression);
     m_referencesStaticallyAccessible = false;
   }

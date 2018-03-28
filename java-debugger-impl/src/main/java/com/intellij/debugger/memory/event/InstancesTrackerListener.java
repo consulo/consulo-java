@@ -17,16 +17,17 @@ package com.intellij.debugger.memory.event;
 
 import java.util.EventListener;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.memory.tracking.TrackingType;
 
 public interface InstancesTrackerListener extends EventListener
 {
-	default void classChanged(@NotNull String name, @NotNull TrackingType type)
+	default void classChanged(@Nonnull String name, @Nonnull TrackingType type)
 	{
 	}
 
-	default void classRemoved(@NotNull String name)
+	default void classRemoved(@Nonnull String name)
 	{
 	}
 

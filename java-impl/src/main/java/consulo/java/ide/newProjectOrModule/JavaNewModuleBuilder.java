@@ -16,7 +16,8 @@
 
 package consulo.java.ide.newProjectOrModule;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
@@ -36,13 +37,13 @@ import consulo.roots.impl.ProductionContentFolderTypeProvider;
 public class JavaNewModuleBuilder implements NewModuleBuilder
 {
 	@Override
-	public void setupContext(@NotNull NewModuleContext context)
+	public void setupContext(@Nonnull NewModuleContext context)
 	{
 		NewModuleContext.Group group = context.createGroup("java", "Java");
 
 		group.add("Empty", AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleBuilderPanel>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public JavaNewModuleBuilderPanel createConfigurationPanel()
 			{
@@ -50,7 +51,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 			}
 
 			@Override
-			public void setupModule(@NotNull JavaNewModuleBuilderPanel panel, @NotNull ContentEntry contentEntry, @NotNull ModifiableRootModel modifiableRootModel)
+			public void setupModule(@Nonnull JavaNewModuleBuilderPanel panel, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
 			{
 				JavaNewModuleBuilder.setupModule(panel, contentEntry, modifiableRootModel);
 			}
@@ -58,7 +59,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 
 		group.add("Console Application", AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleBuilderPanel>("/moduleTemplates/#JavaHelloWorld.zip")
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public JavaNewModuleBuilderPanel createConfigurationPanel()
 			{
@@ -66,7 +67,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 			}
 
 			@Override
-			public void setupModule(@NotNull JavaNewModuleBuilderPanel panel, @NotNull ContentEntry contentEntry, @NotNull ModifiableRootModel modifiableRootModel)
+			public void setupModule(@Nonnull JavaNewModuleBuilderPanel panel, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
 			{
 				unzip(modifiableRootModel);
 
@@ -76,7 +77,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 	}
 
 	@RequiredReadAction
-	private static void setupModule(@NotNull JavaNewModuleBuilderPanel panel, @NotNull ContentEntry contentEntry, @NotNull ModifiableRootModel modifiableRootModel)
+	private static void setupModule(@Nonnull JavaNewModuleBuilderPanel panel, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
 	{
 		// need get by id - due, extension can be from original Java impl, or from other plugin, like IKVM.NET
 		JavaMutableModuleExtension<?> javaMutableModuleExtension = modifiableRootModel.getExtensionWithoutCheck("java");

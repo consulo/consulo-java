@@ -33,12 +33,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.editorActions.SelectWordUtil;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.GenerationInfo;
@@ -253,7 +253,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     }.execute();
   }
 
-  @NotNull
+  @Nonnull
   private static String detectClassPrefix(Collection<PsiClass> classes) {
     String detectedPrefix = "";
     List<TextRange> range = new SmartList<TextRange>();

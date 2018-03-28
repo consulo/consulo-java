@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
@@ -24,7 +26,6 @@ import com.intellij.execution.configurations.RemoteState;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author lex
@@ -39,7 +40,7 @@ public class RemoteStateState implements RemoteState {
     myConnection = connection;
   }
 
-  public ExecutionResult execute(final Executor executor, @NotNull final ProgramRunner runner) throws ExecutionException {
+  public ExecutionResult execute(final Executor executor, @Nonnull final ProgramRunner runner) throws ExecutionException {
     ConsoleViewImpl consoleView = new ConsoleViewImpl(myProject, false);
     RemoteDebugProcessHandler process = new RemoteDebugProcessHandler(myProject);
     consoleView.attachToProcess(process);

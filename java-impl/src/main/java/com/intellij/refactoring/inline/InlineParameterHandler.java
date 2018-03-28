@@ -37,7 +37,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.InlineUtil;
 import com.intellij.refactoring.util.RefactoringMessageDialog;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -257,7 +257,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     return value1 != null && value2 != null && value1.equals(value2);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getCannotInlineMessage(final PsiParameter psiParameter, final PsiMethod method) {
     if (psiParameter.isVarArgs()) {
       return RefactoringBundle.message("inline.parameter.error.varargs");

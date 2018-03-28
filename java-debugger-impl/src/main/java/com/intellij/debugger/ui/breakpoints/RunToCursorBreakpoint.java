@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
@@ -37,12 +37,12 @@ import consulo.xdebugger.breakpoints.XLineBreakpointResolverTypeExtension;
 public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProperties>
 {
 	private final boolean myRestoreBreakpoints;
-	@NotNull
+	@Nonnull
 	protected final SourcePosition myCustomPosition;
 	private String mySuspendPolicy;
 	private final JavaLineBreakpointProperties myProperties = new JavaLineBreakpointProperties();
 
-	protected RunToCursorBreakpoint(@NotNull Project project, @NotNull SourcePosition pos, boolean restoreBreakpoints)
+	protected RunToCursorBreakpoint(@Nonnull Project project, @Nonnull SourcePosition pos, boolean restoreBreakpoints)
 	{
 		super(project, null);
 		myCustomPosition = pos;
@@ -50,7 +50,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		myRestoreBreakpoints = restoreBreakpoints;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SourcePosition getSourcePosition()
 	{
@@ -135,7 +135,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected JavaLineBreakpointProperties getProperties()
 	{
@@ -148,7 +148,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 	}
 
 	@Override
-	protected boolean isMuted(@NotNull final DebugProcessImpl debugProcess)
+	protected boolean isMuted(@Nonnull final DebugProcessImpl debugProcess)
 	{
 		return false;  // always enabled
 	}
@@ -174,8 +174,8 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		return null;
 	}
 
-	@Nullable
-	protected static RunToCursorBreakpoint create(@NotNull Project project, @NotNull XSourcePosition position, boolean restoreBreakpoints)
+	@javax.annotation.Nullable
+	protected static RunToCursorBreakpoint create(@Nonnull Project project, @Nonnull XSourcePosition position, boolean restoreBreakpoints)
 	{
 		PsiFile psiFile = PsiManager.getInstance(project).findFile(position.getFile());
 		if(psiFile == null)

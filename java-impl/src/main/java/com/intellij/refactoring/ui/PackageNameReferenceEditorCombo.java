@@ -19,7 +19,7 @@ import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +28,7 @@ import java.awt.event.ActionListener;
  * @author yole
  */
 public class PackageNameReferenceEditorCombo extends ReferenceEditorComboWithBrowseButton {
-  public PackageNameReferenceEditorCombo(final String text, @NotNull final Project project,
+  public PackageNameReferenceEditorCombo(final String text, @Nonnull final Project project,
                                          final String recentsKey, final String chooserTitle) {
     super(null, text, project, false, recentsKey);
     addActionListener(new ActionListener() {

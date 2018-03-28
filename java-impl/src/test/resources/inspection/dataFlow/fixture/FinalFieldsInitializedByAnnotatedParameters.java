@@ -1,5 +1,4 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.lang.Object;
 
@@ -8,7 +7,7 @@ public class Doo {
   private final Object myB;
   private final Object myC;
 
-  public Doo(@Nullable Object myA, @NotNull Object myB, Object c) {
+  public Doo(@javax.annotation.Nullable Object myA, @Nonnull Object myB, Object c) {
     this.myA = myA;
     this.myB = myB;
     myC = c;

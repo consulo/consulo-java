@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -52,14 +53,14 @@ public class StaticImportInspectionBase extends BaseInspection
 	public OrderedSet<String> allowedClasses = new OrderedSet<>();
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("static.import.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("static.import.problem.descriptor");
@@ -87,7 +88,7 @@ public class StaticImportInspectionBase extends BaseInspection
 	{
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("static.import.replace.quickfix");
@@ -168,7 +169,7 @@ public class StaticImportInspectionBase extends BaseInspection
 			private final boolean onDemand;
 			private final List<PsiJavaCodeReferenceElement> references = new ArrayList<>();
 
-			StaticImportReferenceCollector(@NotNull JavaResolveResult[] importTargets, boolean onDemand)
+			StaticImportReferenceCollector(@Nonnull JavaResolveResult[] importTargets, boolean onDemand)
 			{
 				this.importTargets = importTargets;
 				this.onDemand = onDemand;
@@ -292,7 +293,7 @@ public class StaticImportInspectionBase extends BaseInspection
 	{
 
 		@Override
-		public void visitClass(@NotNull PsiClass aClass)
+		public void visitClass(@Nonnull PsiClass aClass)
 		{
 			final PsiElement parent = aClass.getParent();
 			if(!(parent instanceof PsiJavaFile))

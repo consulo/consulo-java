@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nonnull;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,8 +31,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.tree.TreeNode;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -104,7 +103,7 @@ public class InstancesWindow extends DialogWrapper
 	private final String myClassName;
 	private final MyInstancesView myInstancesView;
 
-	public InstancesWindow(@NotNull XDebugSession session, @NotNull InstancesProvider provider, @NotNull String className)
+	public InstancesWindow(@Nonnull XDebugSession session, @Nonnull InstancesProvider provider, @Nonnull String className)
 	{
 		super(session.getProject(), false);
 
@@ -132,27 +131,27 @@ public class InstancesWindow extends DialogWrapper
 		root.setDefaultButton(myInstancesView.myFilterButton);
 	}
 
-	private void addWarningMessage(@Nullable String message)
+	private void addWarningMessage(@javax.annotation.Nullable String message)
 	{
 		String warning = message == null ? "" : String.format(". Warning: %s", message);
 		setTitle(String.format("Instances of %s%s", myClassName, warning));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getDimensionServiceKey()
 	{
 		return "#org.jetbrains.debugger.memory.view.InstancesWindow";
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	protected JComponent createCenterPanel()
 	{
 		return myInstancesView;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	protected JComponent createSouthPanel()
 	{
@@ -165,7 +164,7 @@ public class InstancesWindow extends DialogWrapper
 		return comp;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected Action[] createActions()
 	{
@@ -195,7 +194,7 @@ public class InstancesWindow extends DialogWrapper
 
 		private volatile MyFilteringWorker myFilteringTask = null;
 
-		MyInstancesView(@NotNull XDebugSession session)
+		MyInstancesView(@Nonnull XDebugSession session)
 		{
 			super(new BorderLayout(0, JBUI.scale(BORDER_LAYOUT_DEFAULT_GAP)));
 
@@ -286,7 +285,7 @@ public class InstancesWindow extends DialogWrapper
 				}
 
 				@Override
-				public void threadAction(@NotNull SuspendContextImpl suspendContext)
+				public void threadAction(@Nonnull SuspendContextImpl suspendContext)
 				{
 					myIsAndroidVM = AndroidUtil.isAndroidVM(myDebugProcess.getVirtualMachineProxy().getVirtualMachine());
 					final int limit = myIsAndroidVM ? AndroidUtil.ANDROID_INSTANCES_LIMIT : DEFAULT_INSTANCES_LIMIT;
@@ -327,7 +326,7 @@ public class InstancesWindow extends DialogWrapper
 			}
 		}
 
-		private XValueMarkers<?, ?> getValueMarkers(@NotNull XDebugSession session)
+		private XValueMarkers<?, ?> getValueMarkers(@Nonnull XDebugSession session)
 		{
 			return session instanceof XDebugSessionImpl ? ((XDebugSessionImpl) session).getValueMarkers() : null;
 		}
@@ -363,7 +362,7 @@ public class InstancesWindow extends DialogWrapper
 		{
 			private final XValueMarkers<?, ?> myValueMarkers;
 
-			private MyActionListener(@NotNull XValueMarkers<?, ?> markers)
+			private MyActionListener(@Nonnull XValueMarkers<?, ?> markers)
 			{
 				myValueMarkers = markers;
 			}
@@ -423,7 +422,7 @@ public class InstancesWindow extends DialogWrapper
 			private long myLastTreeUpdatingTime;
 			private long myLastProgressUpdatingTime;
 
-			public MyFilteringCallback(@NotNull EvaluationContextImpl evaluationContext)
+			public MyFilteringCallback(@Nonnull EvaluationContextImpl evaluationContext)
 			{
 				myEvaluationContext = evaluationContext;
 			}
@@ -439,9 +438,9 @@ public class InstancesWindow extends DialogWrapper
 				ApplicationManager.getApplication().invokeLater(() -> myProgress.start(total));
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
-			public Action matched(@NotNull ObjectReference ref)
+			public Action matched(@Nonnull ObjectReference ref)
 			{
 				final JavaValue val = new InstanceJavaValue(new InstanceValueDescriptor(myProject, ref), myEvaluationContext, myNodeManager);
 				myMatchedCount++;
@@ -453,9 +452,9 @@ public class InstancesWindow extends DialogWrapper
 				return myMatchedCount < MAX_TREE_NODE_COUNT ? Action.CONTINUE : Action.STOP;
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
-			public Action notMatched(@NotNull ObjectReference ref)
+			public Action notMatched(@Nonnull ObjectReference ref)
 			{
 				myProceedCount++;
 				updateProgress();
@@ -463,9 +462,9 @@ public class InstancesWindow extends DialogWrapper
 				return Action.CONTINUE;
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
-			public Action error(@NotNull ObjectReference ref, @NotNull String description)
+			public Action error(@Nonnull ObjectReference ref, @Nonnull String description)
 			{
 				final JavaValue val = new InstanceJavaValue(new InstanceValueDescriptor(myProject, ref), myEvaluationContext, myNodeManager);
 				myErrorsGroup.addErrorValue(description, val);
@@ -476,7 +475,7 @@ public class InstancesWindow extends DialogWrapper
 			}
 
 			@Override
-			public void completed(@NotNull FilteringResult reason)
+			public void completed(@Nonnull FilteringResult reason)
 			{
 				if(!myErrorsGroup.isEmpty())
 				{
@@ -530,7 +529,7 @@ public class InstancesWindow extends DialogWrapper
 		{
 			private final FilteringTask myTask;
 
-			MyFilteringWorker(@NotNull List<ObjectReference> refs, @NotNull XExpression expression, @NotNull EvaluationContextImpl evaluationContext)
+			MyFilteringWorker(@Nonnull List<ObjectReference> refs, @Nonnull XExpression expression, @Nonnull EvaluationContextImpl evaluationContext)
 			{
 				myTask = new FilteringTask(myClassName, myDebugProcess, expression, refs, new MyFilteringCallback(evaluationContext));
 			}
@@ -557,7 +556,7 @@ public class InstancesWindow extends DialogWrapper
 			super(project, null);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public DebuggerTreeNodeImpl createNode(final NodeDescriptor descriptor, EvaluationContext evaluationContext)
 		{
@@ -570,7 +569,7 @@ public class InstancesWindow extends DialogWrapper
 			return new DebuggerTreeNodeImpl(null, descriptor);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public DebuggerTreeNodeImpl createMessageNode(String message)
 		{

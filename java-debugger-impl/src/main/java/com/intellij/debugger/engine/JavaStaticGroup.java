@@ -17,10 +17,10 @@ package com.intellij.debugger.engine;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
@@ -53,7 +53,7 @@ public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvid
 		myNodeManager = nodeManager;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getSeparator()
 	{
@@ -74,7 +74,7 @@ public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvid
 	}
 
 	@Override
-	public void computeChildren(@NotNull final XCompositeNode node)
+	public void computeChildren(@Nonnull final XCompositeNode node)
 	{
 		myEvaluationContext.getDebugProcess().getManagerThread().schedule(new SuspendContextCommandImpl(myEvaluationContext.getSuspendContext())
 		{

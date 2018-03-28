@@ -20,8 +20,8 @@
  */
 package com.intellij.codeInspection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.psi.PsiElement;
@@ -45,7 +45,7 @@ public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool impl
   }
 
   @Override
-  public boolean isSuppressedFor(@NotNull final PsiElement element) {
+  public boolean isSuppressedFor(@Nonnull final PsiElement element) {
     return SuppressManager.getInstance().isSuppressedFor(element, getShortName());
   }
 }

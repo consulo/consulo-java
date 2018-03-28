@@ -16,13 +16,13 @@
 package com.intellij.spi;
 
 import com.intellij.lang.Commenter;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * User: anna
  */
 public class SPICommenter implements Commenter {
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public String getLineCommentPrefix() {
     return "#";
@@ -40,13 +40,13 @@ public class SPICommenter implements Commenter {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public String getCommentedBlockCommentPrefix() {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public String getCommentedBlockCommentSuffix() {
     return null;

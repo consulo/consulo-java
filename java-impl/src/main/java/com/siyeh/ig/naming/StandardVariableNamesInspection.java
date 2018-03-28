@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
   public boolean ignoreParameterNameSameAsSuper = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "standard.variable.names.display.name");
@@ -83,7 +83,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];
     final String name = variable.getName();
@@ -117,7 +117,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final String variableName = variable.getName();
       final String expectedType = s_expectedTypes.get(variableName);

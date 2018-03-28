@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.assignment;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -22,7 +24,6 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Bas Leijdekkers
@@ -30,13 +31,13 @@ import org.jetbrains.annotations.NotNull;
 public class AssignmentToSuperclassFieldInspection extends  BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("assignment.to.superclass.field.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[0];

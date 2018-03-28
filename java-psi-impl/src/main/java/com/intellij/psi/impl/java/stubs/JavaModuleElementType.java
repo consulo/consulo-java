@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -42,7 +43,7 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
 		super("MODULE");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -50,13 +51,13 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
 	}
 
 	@Override
-	public PsiJavaModule createPsi(@NotNull PsiJavaModuleStub stub)
+	public PsiJavaModule createPsi(@Nonnull PsiJavaModuleStub stub)
 	{
 		return getPsiFactory(stub).createModule(stub);
 	}
 
 	@Override
-	public PsiJavaModule createPsi(@NotNull ASTNode node)
+	public PsiJavaModule createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiJavaModuleImpl(node);
 	}
@@ -69,21 +70,21 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
 	}
 
 	@Override
-	public void serialize(@NotNull PsiJavaModuleStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiJavaModuleStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getName());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiJavaModuleStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiJavaModuleStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		String name = StringRef.toString(dataStream.readName());
 		return new PsiJavaModuleStubImpl(parentStub, name);
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiJavaModuleStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiJavaModuleStub stub, @Nonnull IndexSink sink)
 	{
 		sink.occurrence(JavaStubIndexKeys.MODULE_NAMES, stub.getName());
 	}

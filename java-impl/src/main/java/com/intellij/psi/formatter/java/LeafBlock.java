@@ -18,8 +18,8 @@ package com.intellij.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.ASTBlock;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
@@ -59,7 +59,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TextRange getTextRange()
 	{
 		if(myStartOffset != -1)
@@ -70,7 +70,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<Block> getSubBlocks()
 	{
 		return EMPTY_SUB_BLOCKS;
@@ -95,7 +95,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @NotNull Block child2)
+	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return null;
 	}
@@ -106,7 +106,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		return new ChildAttributes(getIndent(), null);
@@ -132,7 +132,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 
 	@Override
 	@Nullable
-	public List<TextRange> getExtraRangesToFormat(@NotNull FormattingRangesInfo info)
+	public List<TextRange> getExtraRangesToFormat(@Nonnull FormattingRangesInfo info)
 	{
 		int startOffset = getTextRange().getStartOffset();
 		if(info.isOnInsertedLine(startOffset) && myNode.getTextLength() == 1 && myNode.textContains('}'))

@@ -23,7 +23,7 @@ import java.io.File;
 import java.security.SecureRandom;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.impl.DebugUtil;

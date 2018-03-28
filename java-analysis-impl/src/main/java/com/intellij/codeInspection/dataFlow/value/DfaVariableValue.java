@@ -19,8 +19,8 @@ package com.intellij.codeInspection.dataFlow.value;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.DfaFactMap;
 import com.intellij.codeInspection.dataFlow.DfaFactType;
 import com.intellij.codeInspection.dataFlow.Nullness;
@@ -57,8 +57,8 @@ public class DfaVariableValue extends DfaValue
 			return createVariableValue(variable, varType, isNegated, null);
 		}
 
-		@NotNull
-		public DfaVariableValue createVariableValue(@NotNull PsiModifierListOwner myVariable, @Nullable PsiType varType, boolean isNegated, @Nullable DfaVariableValue qualifier)
+		@Nonnull
+		public DfaVariableValue createVariableValue(@Nonnull PsiModifierListOwner myVariable, @javax.annotation.Nullable PsiType varType, boolean isNegated, @javax.annotation.Nullable DfaVariableValue qualifier)
 		{
 			Trinity<Boolean, String, DfaVariableValue> key = Trinity.create(isNegated, ((PsiNamedElement) myVariable).getName(), qualifier);
 			for(DfaVariableValue aVar : myExistingVars.get(key))
@@ -79,8 +79,8 @@ public class DfaVariableValue extends DfaValue
 			return result;
 		}
 
-		@NotNull
-		public List<DfaVariableValue> getAllQualifiedBy(@NotNull DfaVariableValue value)
+		@Nonnull
+		public List<DfaVariableValue> getAllQualifiedBy(@Nonnull DfaVariableValue value)
 		{
 			return value.myDependents;
 		}
@@ -88,7 +88,7 @@ public class DfaVariableValue extends DfaValue
 
 	private final PsiModifierListOwner myVariable;
 	private final PsiType myVarType;
-	@Nullable
+	@javax.annotation.Nullable
 	private final DfaVariableValue myQualifier;
 	private DfaVariableValue myNegatedValue;
 	private final boolean myIsNegated;
@@ -96,7 +96,7 @@ public class DfaVariableValue extends DfaValue
 	private final DfaTypeValue myTypeValue;
 	private final List<DfaVariableValue> myDependents = new SmartList<>();
 
-	private DfaVariableValue(@NotNull PsiModifierListOwner variable, @Nullable PsiType varType, boolean isNegated, DfaValueFactory factory, @Nullable DfaVariableValue qualifier)
+	private DfaVariableValue(@Nonnull PsiModifierListOwner variable, @javax.annotation.Nullable PsiType varType, boolean isNegated, DfaValueFactory factory, @javax.annotation.Nullable DfaVariableValue qualifier)
 	{
 		super(factory);
 		myVariable = variable;
@@ -111,19 +111,19 @@ public class DfaVariableValue extends DfaValue
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public DfaTypeValue getTypeValue()
 	{
 		return myTypeValue;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiModifierListOwner getPsiVariable()
 	{
 		return myVariable;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiType getVariableType()
 	{
 		return myVarType;
@@ -134,7 +134,7 @@ public class DfaVariableValue extends DfaValue
 		return myIsNegated;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public DfaVariableValue getNegatedValue()
 	{
 		return myNegatedValue;
@@ -161,7 +161,7 @@ public class DfaVariableValue extends DfaValue
 		return psiVar == myVariable && negated == myIsNegated && qualifier == myQualifier && Comparing.equal(TypeConversionUtil.erasure(varType), TypeConversionUtil.erasure(myVarType));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public DfaVariableValue getQualifier()
 	{
 		return myQualifier;
@@ -177,7 +177,7 @@ public class DfaVariableValue extends DfaValue
 		return myInherentFacts;
 	}
 
-	@NotNull
+	@Nonnull
 	public Nullness getInherentNullability()
 	{
 		return NullnessUtil.fromBoolean(getInherentFacts().get(DfaFactType.CAN_BE_NULL));

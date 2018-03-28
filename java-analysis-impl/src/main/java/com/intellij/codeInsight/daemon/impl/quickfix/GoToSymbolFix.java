@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -31,14 +32,14 @@ public class GoToSymbolFix implements IntentionAction
 	private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
 	private final String myMessage;
 
-	public GoToSymbolFix(@NotNull NavigatablePsiElement symbol, @NotNull @Nls String message)
+	public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message)
 	{
 		myPointer = SmartPointerManager.getInstance(symbol.getProject()).createSmartPsiElementPointer(symbol);
 		myMessage = message;
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -46,7 +47,7 @@ public class GoToSymbolFix implements IntentionAction
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -54,13 +55,13 @@ public class GoToSymbolFix implements IntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return myPointer.getElement() != null;
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		NavigatablePsiElement e = myPointer.getElement();
 		if(e != null && e.isValid())

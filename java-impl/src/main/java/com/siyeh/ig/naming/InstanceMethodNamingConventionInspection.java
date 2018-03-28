@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.naming;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
@@ -24,7 +26,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class InstanceMethodNamingConventionInspection extends ConventionInspection {
 
@@ -32,7 +33,7 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   private static final int DEFAULT_MAX_LENGTH = 32;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("instance.method.naming.convention.display.name");
   }
@@ -48,7 +49,7 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String methodName = (String)infos[0];
     if (methodName.length() < getMinLength()) {
@@ -83,7 +84,7 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC)) {
         return;

@@ -17,8 +17,8 @@ package com.intellij.psi.scope;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.infos.CandidateInfo;
 
 /**
@@ -31,5 +31,5 @@ import com.intellij.psi.infos.CandidateInfo;
 public interface PsiConflictResolver
 {
 	@Nullable
-	CandidateInfo resolveConflict(@NotNull List<CandidateInfo> conflicts);
+	CandidateInfo resolveConflict(@Nonnull List<CandidateInfo> conflicts);
 }

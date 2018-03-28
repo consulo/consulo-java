@@ -1,6 +1,6 @@
 <root>
   <item name='suppressed.ExistingExternalName java.lang.String foo()'>
-    <annotation name='org.jetbrains.annotations.NotNull'/>
+    <annotation name='javax.annotation.Nonnull'/>
   </item>
   <item name='suppressed.SecondSuppression void second()'>
     <annotation name='java.lang.SuppressWarnings'>

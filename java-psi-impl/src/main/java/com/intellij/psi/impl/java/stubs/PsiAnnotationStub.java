@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.ArrayFactory;
@@ -29,7 +29,7 @@ public interface PsiAnnotationStub extends StubElement<PsiAnnotation>
 
 	public static ArrayFactory<PsiAnnotationStub> ARRAY_FACTORY = new ArrayFactory<PsiAnnotationStub>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiAnnotationStub[] create(int count)
 		{

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.naming;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -23,19 +25,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ConfusingMainMethodInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "confusing.main.method.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "confusing.main.method.problem.descriptor");
@@ -60,7 +61,7 @@ public class ConfusingMainMethodInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod aMethod) {
+    public void visitMethod(@Nonnull PsiMethod aMethod) {
       // no call to super, so it doesn't drill down into inner classes
       final String methodName = aMethod.getName();
       if (!HardcodedMethodConstants.MAIN.equals(methodName)) {

@@ -17,7 +17,8 @@ package com.intellij.psi.impl.source;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;
@@ -68,7 +69,7 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
 		return isInSourceContent(file);
 	}
 
-	public static boolean isInSourceContent(@NotNull VirtualFile file)
+	public static boolean isInSourceContent(@Nonnull VirtualFile file)
 	{
 		final VirtualFile dir = file.getParent();
 		return dir == null || dir.getUserData(LanguageLevel.KEY) != null;
@@ -103,7 +104,7 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
 		root.done(this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getExternalId()
 	{
@@ -111,7 +112,7 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
 	}
 
 	@Override
-	public void serialize(@NotNull PsiJavaFileStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiJavaFileStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeBoolean(stub.isCompiled());
 		LanguageLevel level = stub.getLanguageLevel();
@@ -119,9 +120,9 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
 		dataStream.writeName(stub.getPackageName());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiJavaFileStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiJavaFileStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		boolean compiled = dataStream.readBoolean();
 		int level = dataStream.readByte();
@@ -131,7 +132,7 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
 
 	@Override
 	@SuppressWarnings("LambdaUnfriendlyMethodOverload")
-	public void indexStub(@NotNull PsiJavaFileStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiJavaFileStub stub, @Nonnull IndexSink sink)
 	{
 	}
 }

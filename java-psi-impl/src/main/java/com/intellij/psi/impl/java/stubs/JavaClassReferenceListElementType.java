@@ -18,7 +18,8 @@ package com.intellij.psi.impl.java.stubs;
 import java.io.IOException;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -43,19 +44,19 @@ import com.intellij.util.io.StringRef;
  */
 public abstract class JavaClassReferenceListElementType extends JavaStubElementType<PsiClassReferenceListStub, PsiReferenceList>
 {
-	public JavaClassReferenceListElementType(@NotNull String id)
+	public JavaClassReferenceListElementType(@Nonnull String id)
 	{
 		super(id, true);
 	}
 
 	@Override
-	public PsiReferenceList createPsi(@NotNull PsiClassReferenceListStub stub)
+	public PsiReferenceList createPsi(@Nonnull PsiClassReferenceListStub stub)
 	{
 		return getPsiFactory(stub).createClassReferenceList(stub);
 	}
 
 	@Override
-	public PsiReferenceList createPsi(@NotNull ASTNode node)
+	public PsiReferenceList createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiReferenceListImpl(node);
 	}
@@ -67,8 +68,8 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
 		return new PsiClassReferenceListStubImpl(type, parentStub, getTexts(tree, node));
 	}
 
-	@NotNull
-	private static String[] getTexts(@NotNull LighterAST tree, @NotNull LighterASTNode node)
+	@Nonnull
+	private static String[] getTexts(@Nonnull LighterAST tree, @Nonnull LighterASTNode node)
 	{
 		List<LighterASTNode> refs = LightTreeUtil.getChildrenOfType(tree, node, JavaElementType.JAVA_CODE_REFERENCE);
 		String[] texts = ArrayUtil.newStringArray(refs.size());
@@ -80,7 +81,7 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
 	}
 
 	@Override
-	public void serialize(@NotNull PsiClassReferenceListStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiClassReferenceListStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		String[] names = stub.getReferencedNames();
 		dataStream.writeVarInt(names.length);
@@ -90,9 +91,9 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiClassReferenceListStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiClassReferenceListStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		int len = dataStream.readVarInt();
 		String[] names = ArrayUtil.newStringArray(len);
@@ -104,7 +105,7 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiClassReferenceListStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiClassReferenceListStub stub, @Nonnull IndexSink sink)
 	{
 		PsiReferenceList.Role role = stub.getRole();
 		if(role == PsiReferenceList.Role.EXTENDS_LIST || role == PsiReferenceList.Role.IMPLEMENTS_LIST)
@@ -138,8 +139,8 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
 		}
 	}
 
-	@NotNull
-	public static PsiReferenceList.Role elementTypeToRole(@NotNull IElementType type)
+	@Nonnull
+	public static PsiReferenceList.Role elementTypeToRole(@Nonnull IElementType type)
 	{
 		if(type == JavaStubElementTypes.EXTENDS_BOUND_LIST)
 		{

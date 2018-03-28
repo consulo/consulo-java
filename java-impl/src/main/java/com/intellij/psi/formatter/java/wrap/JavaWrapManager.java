@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.formatter.java.wrap;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.formatting.ASTBlock;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Wrap;
@@ -83,7 +82,7 @@ public class JavaWrapManager
 	 * @return wrap to use for the given {@code 'child'} node if it's possible to define the one;
 	 * {@code null} otherwise
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public Wrap arrangeChildWrap(ASTNode child, ASTNode parent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings, Wrap suggestedWrap, AbstractJavaBlock reservedWrapsProvider)
 	{
 		return myChildArranger.arrange(child, parent, settings, javaSettings, suggestedWrap, reservedWrapsProvider);
@@ -99,7 +98,7 @@ public class JavaWrapManager
 	 *                              soon as formatting code refactoring is done
 	 * @return wrap to use for the sub-blocks of the given block
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public Wrap createChildBlockWrap(ASTBlock block, CommonCodeStyleSettings settings, ReservedWrapsProvider reservedWrapsProvider)
 	{
 		return myChildBlockFactory.create(block, settings, reservedWrapsProvider);

@@ -15,28 +15,28 @@
  */
 package com.intellij.psi.codeStyle.arrangement;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.codeStyle.arrangement.std.ArrangementSettingsToken;
 
 public class JavaSectionArrangementEntry extends JavaElementArrangementEntry implements TextAwareArrangementEntry
 {
-	@NotNull
+	@Nonnull
 	private final String myText;
 
 	public JavaSectionArrangementEntry(
 			@Nullable ArrangementEntry parent,
-			@NotNull ArrangementSettingsToken type,
-			@NotNull TextRange range,
-			@NotNull String text,
+			@Nonnull ArrangementSettingsToken type,
+			@Nonnull TextRange range,
+			@Nonnull String text,
 			boolean canBeMatched)
 	{
 		super(parent, range.getStartOffset(), range.getEndOffset(), type, "SECTION", canBeMatched);
 		myText = text;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{

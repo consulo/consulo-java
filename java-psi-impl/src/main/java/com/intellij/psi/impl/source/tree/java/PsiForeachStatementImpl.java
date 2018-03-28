@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -25,7 +27,6 @@ import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -37,7 +38,7 @@ public class PsiForeachStatementImpl extends CompositePsiElement implements PsiF
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiParameter getIterationParameter() {
     return (PsiParameter) findChildByRoleAsPsiElement(ChildRole.FOR_ITERATION_PARAMETER);
   }
@@ -53,7 +54,7 @@ public class PsiForeachStatementImpl extends CompositePsiElement implements PsiF
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiJavaToken getLParenth() {
     return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.LPARENTH);
   }
@@ -132,7 +133,7 @@ public class PsiForeachStatementImpl extends CompositePsiElement implements PsiF
   }
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     if (lastParent == null || lastParent.getParent() != this /*|| lastParent == getIteratedValue()*/)
       // Parent element should not see our vars
@@ -142,7 +143,7 @@ public class PsiForeachStatementImpl extends CompositePsiElement implements PsiF
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitForeachStatement(this);
     }

@@ -15,10 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -47,7 +47,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 {
 	@RequiredReadAction
 	@Override
-	public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element)
+	public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiAssignmentExpression)
 		{
@@ -106,7 +106,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 		return null;
 	}
 
-	private static boolean methodContainsReturnStatementOnly(@NotNull PsiMethod method)
+	private static boolean methodContainsReturnStatementOnly(@Nonnull PsiMethod method)
 	{
 		final PsiCodeBlock body = method.getBody();
 		if(body == null || body.getStatements().length != 1)
@@ -117,13 +117,13 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 		return body.getStatements()[0] instanceof PsiReturnStatement;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static LineMarkerInfo<PsiElement> createIconLineMarker(PsiType type, @Nullable PsiExpression initializer)
 	{
 		return createIconLineMarker(type, initializer, initializer);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static LineMarkerInfo<PsiElement> createIconLineMarker(PsiType type, @Nullable PsiExpression initializer, PsiElement bindingElement)
 	{
 		if(initializer == null)
@@ -156,7 +156,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 		return AllIcons.Gutter.Colors;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{

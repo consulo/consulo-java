@@ -21,7 +21,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -162,7 +162,7 @@ public abstract class InvokeThread<E extends PrioritizedTask>
 		workerRequest.setRequestFuture(ApplicationManager.getApplication().executeOnPooledThread(workerRequest));
 	}
 
-	private void run(final @NotNull WorkerThreadRequest threadRequest)
+	private void run(final @Nonnull WorkerThreadRequest threadRequest)
 	{
 		try
 		{

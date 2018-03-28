@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -23,7 +25,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author cdr
@@ -38,7 +39,7 @@ public class NegationBroadScopeFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     String text = myPrefixExpression.getOperand().getText();
     text += " ";
@@ -63,13 +64,13 @@ public class NegationBroadScopeFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("negation.broader.scope.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (myPrefixExpression == null || !myPrefixExpression.isValid()) return false;
 
     PsiElement parent = myPrefixExpression.getParent();
@@ -82,7 +83,7 @@ public class NegationBroadScopeFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myPrefixExpression)) return;
     PsiExpression operand = myPrefixExpression.getOperand();
     PsiElement unnegated = myPrefixExpression.replace(operand);

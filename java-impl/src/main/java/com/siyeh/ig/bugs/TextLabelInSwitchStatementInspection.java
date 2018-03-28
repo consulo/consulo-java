@@ -15,21 +15,22 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class TextLabelInSwitchStatementInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "text.label.in.switch.statement.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "text.label.in.switch.statement.problem.descriptor");
@@ -44,7 +45,7 @@ public class TextLabelInSwitchStatementInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @NotNull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {

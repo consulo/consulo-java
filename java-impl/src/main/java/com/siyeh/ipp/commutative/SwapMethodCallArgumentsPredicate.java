@@ -17,11 +17,11 @@ package com.siyeh.ipp.commutative;
 
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class SwapMethodCallArgumentsPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@NotNull PsiElement element) {
+  public boolean satisfiedBy(@Nonnull PsiElement element) {
     if (!(element instanceof PsiExpressionList)) {
       return false;
     }

@@ -17,8 +17,8 @@ package com.intellij.refactoring.move.moveClassesOrPackages;
 
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
@@ -74,12 +74,13 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
   private boolean mySearchInNonJavaFiles;
   private final PackageWrapper myTargetPackage;
   private final MoveCallback myMoveCallback;
-  protected @NotNull final MoveDestination myMoveDestination;
+  protected @Nonnull
+  final MoveDestination myMoveDestination;
   protected NonCodeUsageInfo[] myNonCodeUsages;
 
   public MoveClassesOrPackagesProcessor(Project project,
                                         PsiElement[] elements,
-                                        @NotNull final MoveDestination moveDestination,
+                                        @Nonnull final MoveDestination moveDestination,
                                         boolean searchInComments,
                                         boolean searchInNonJavaFiles,
                                         MoveCallback moveCallback) {
@@ -117,7 +118,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     myMoveCallback = moveCallback;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     PsiElement[] elements = new PsiElement[myElementsToMove.length];
     System.arraycopy(myElementsToMove, 0, elements, 0, myElementsToMove.length);
@@ -161,7 +162,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
   }
 
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     List<UsageInfo> allUsages = new ArrayList<UsageInfo>();
     MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
@@ -412,7 +413,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   private String getNewQName(PsiElement element) {
     final String qualifiedName = myTargetPackage.getQualifiedName();
     final String newQName;

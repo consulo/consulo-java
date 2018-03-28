@@ -42,8 +42,8 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -57,7 +57,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.CreateLocalVarFromInstanceofAction");
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);
     if (instanceOfExpression == null) return false;
     PsiTypeElement checkType = instanceOfExpression.getCheckType();
@@ -136,7 +136,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiInstanceOfExpression retrieveInstanceOfFromCondition(Editor editor,
                                                                          PsiElement element,
                                                                          PsiStatement statement,
@@ -197,7 +197,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);
@@ -244,8 +244,8 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     }
   }
 
-  @Nullable
-  protected static PsiStatement getExpressionStatementInside(PsiFile file, Editor editor, @NotNull PsiExpression operand) {
+  @javax.annotation.Nullable
+  protected static PsiStatement getExpressionStatementInside(PsiFile file, Editor editor, @Nonnull PsiExpression operand) {
     PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset());
 
     PsiBlockStatement blockStatement = PsiTreeUtil.getParentOfType(elementAt, PsiBlockStatement.class);
@@ -278,7 +278,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiDeclarationStatement createLocalVariableDeclaration(final PsiInstanceOfExpression instanceOfExpression,
                                                                         final PsiStatement statementInside) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(instanceOfExpression.getProject()).getElementFactory();
@@ -303,7 +303,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   static PsiElement insertAtAnchor(final PsiInstanceOfExpression instanceOfExpression, PsiElement toInsert) throws IncorrectOperationException {
     boolean negated = isNegated(instanceOfExpression);
     PsiStatement statement = PsiTreeUtil.getParentOfType(instanceOfExpression, PsiStatement.class);
@@ -438,7 +438,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.local.from.instanceof.usage.family");
   }

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
@@ -27,14 +27,14 @@ public abstract class SourcePositionProvider
 {
 	public static final ExtensionPointName<SourcePositionProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.sourcePositionProvider");
 
-	@Nullable
-	public static SourcePosition getSourcePosition(@NotNull NodeDescriptor descriptor, @NotNull Project project, @NotNull DebuggerContextImpl context)
+	@javax.annotation.Nullable
+	public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context)
 	{
 		return getSourcePosition(descriptor, project, context, false);
 	}
 
-	@Nullable
-	public static SourcePosition getSourcePosition(@NotNull NodeDescriptor descriptor, @NotNull Project project, @NotNull DebuggerContextImpl context, boolean nearest)
+	@javax.annotation.Nullable
+	public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest)
 	{
 		for(SourcePositionProvider provider : EP_NAME.getExtensions())
 		{
@@ -47,6 +47,6 @@ public abstract class SourcePositionProvider
 		return null;
 	}
 
-	@Nullable
-	protected abstract SourcePosition computeSourcePosition(@NotNull NodeDescriptor descriptor, @NotNull Project project, @NotNull DebuggerContextImpl context, boolean nearest);
+	@javax.annotation.Nullable
+	protected abstract SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest);
 }

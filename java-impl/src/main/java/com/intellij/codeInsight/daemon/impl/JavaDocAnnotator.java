@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -30,7 +30,7 @@ import com.intellij.psi.javadoc.PsiDocTagValue;
  */
 public class JavaDocAnnotator implements Annotator {
   @Override
-  public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
+  public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
     if (element instanceof PsiDocTag) {
       String name = ((PsiDocTag)element).getName();
       if ("param".equals(name)) {

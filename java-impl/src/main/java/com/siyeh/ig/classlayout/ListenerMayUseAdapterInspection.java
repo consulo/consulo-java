@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -37,14 +37,14 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "listener.may.use.adapter.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     final String className = aClass.getName();
@@ -72,11 +72,11 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
     private final PsiClass adapterClass;
 
-    ListenerMayUseAdapterFix(@NotNull PsiClass adapterClass) {
+    ListenerMayUseAdapterFix(@Nonnull PsiClass adapterClass) {
       this.adapterClass = adapterClass;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "listener.may.use.adapter.quickfix",
@@ -161,8 +161,8 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
     }
 
     private void checkReference(
-      @NotNull PsiClass aClass,
-      @NotNull PsiJavaCodeReferenceElement implementsReference) {
+      @Nonnull PsiClass aClass,
+      @Nonnull PsiJavaCodeReferenceElement implementsReference) {
       final PsiElement target = implementsReference.resolve();
       if (!(target instanceof PsiClass)) {
         return;

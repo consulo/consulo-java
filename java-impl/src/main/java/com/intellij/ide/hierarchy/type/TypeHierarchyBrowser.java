@@ -19,11 +19,10 @@ import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.hierarchy.HierarchyBrowserBaseEx;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
@@ -58,7 +57,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 	}
 
 	@Override
-	protected void createTrees(@NotNull Map<String, JTree> trees)
+	protected void createTrees(@Nonnull Map<String, JTree> trees)
 	{
 		createTreeAndSetupCommonActions(trees, IdeActions.GROUP_TYPE_HIERARCHY_POPUP);
 	}
@@ -78,13 +77,13 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 	}
 
 	@Override
-	protected String getContentDisplayName(@NotNull String typeName, @NotNull PsiElement element)
+	protected String getContentDisplayName(@Nonnull String typeName, @Nonnull PsiElement element)
 	{
 		return MessageFormat.format(typeName, ClassPresentationUtil.getNameForClass((PsiClass) element, false));
 	}
 
 	@Override
-	protected PsiElement getElementFromDescriptor(@NotNull HierarchyNodeDescriptor descriptor)
+	protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor)
 	{
 		if(!(descriptor instanceof TypeHierarchyNodeDescriptor))
 		{
@@ -94,14 +93,14 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	protected JPanel createLegendPanel()
 	{
 		return null;
 	}
 
 	@Override
-	protected boolean isApplicableElement(@NotNull final PsiElement element)
+	protected boolean isApplicableElement(@Nonnull final PsiElement element)
 	{
 		return element instanceof PsiClass;
 	}
@@ -113,7 +112,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 	}
 
 	@Override
-	protected HierarchyTreeStructure createHierarchyTreeStructure(@NotNull final String typeName, @NotNull final PsiElement psiElement)
+	protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement)
 	{
 		if(SUPERTYPES_HIERARCHY_TYPE.equals(typeName))
 		{
@@ -152,13 +151,13 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 
 	public static class BaseOnThisTypeAction extends TypeHierarchyBrowserBase.BaseOnThisTypeAction
 	{
-		protected boolean isEnabled(@NotNull final HierarchyBrowserBaseEx browser, @NotNull final PsiElement psiElement)
+		protected boolean isEnabled(@Nonnull final HierarchyBrowserBaseEx browser, @Nonnull final PsiElement psiElement)
 		{
 			return super.isEnabled(browser, psiElement) && !CommonClassNames.JAVA_LANG_OBJECT.equals(((PsiClass) psiElement).getQualifiedName());
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected TypeHierarchyBrowserBase.BaseOnThisTypeAction createBaseOnThisAction()
 	{

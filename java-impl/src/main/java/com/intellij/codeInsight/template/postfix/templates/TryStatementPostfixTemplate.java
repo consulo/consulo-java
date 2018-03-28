@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.generation.surroundWith.JavaWithTryCatchSurrounder;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -36,12 +37,12 @@ public class TryStatementPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
     return null != PsiTreeUtil.getNonStrictParentOfType(context, PsiStatement.class);
   }
 
   @Override
-  public void expand(@NotNull PsiElement context, @NotNull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiStatement statement = PsiTreeUtil.getNonStrictParentOfType(context, PsiStatement.class);
     assert statement != null;
 

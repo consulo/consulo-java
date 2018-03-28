@@ -43,8 +43,8 @@ import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -82,12 +82,12 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     myCreateNewBuilderClass = createNewBuilderClass;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(final UsageInfo[] usages) {
     return new ReplaceConstructorWithBuilderViewDescriptor();
   }
 
-  protected void findUsages(@NotNull final List<FixableUsageInfo> usages) {
+  protected void findUsages(@Nonnull final List<FixableUsageInfo> usages) {
     final String builderQualifiedName = StringUtil.getQualifiedName(myPackageName, myClassName);
     final PsiClass builderClass =
       JavaPsiFacade.getInstance(myProject).findClass(builderQualifiedName, GlobalSearchScope.projectScope(myProject));

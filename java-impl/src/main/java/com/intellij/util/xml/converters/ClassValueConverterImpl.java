@@ -21,7 +21,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassRe
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.converters.values.ClassValueConverter;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * User: Sergey.Vasiliev
@@ -34,7 +34,7 @@ public class ClassValueConverterImpl extends ClassValueConverter {
     REFERENCE_PROVIDER.setAllowEmpty(true);
   }
 
-  @NotNull
+  @Nonnull
   public PsiReference[] createReferences(final GenericDomValue genericDomValue, final PsiElement element, final ConvertContext context) {
     return REFERENCE_PROVIDER.getReferencesByElement(element);
   }

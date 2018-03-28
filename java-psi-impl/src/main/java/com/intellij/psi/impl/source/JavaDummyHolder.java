@@ -19,7 +19,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -43,32 +44,32 @@ public class JavaDummyHolder extends DummyHolder implements PsiImportHolder
 	private static final Map<String, PsiClass> EMPTY = Collections.emptyMap();
 	private Map<String, PsiClass> myPseudoImports = EMPTY;
 
-	public JavaDummyHolder(@NotNull PsiManager manager, TreeElement contentElement, PsiElement context)
+	public JavaDummyHolder(@Nonnull PsiManager manager, TreeElement contentElement, PsiElement context)
 	{
 		super(manager, contentElement, context, null, null, language(context, JavaLanguage.INSTANCE));
 	}
 
-	public JavaDummyHolder(@NotNull PsiManager manager, CharTable table, boolean validity)
+	public JavaDummyHolder(@Nonnull PsiManager manager, CharTable table, boolean validity)
 	{
 		super(manager, null, null, table, Boolean.valueOf(validity), JavaLanguage.INSTANCE);
 	}
 
-	public JavaDummyHolder(@NotNull PsiManager manager, PsiElement context)
+	public JavaDummyHolder(@Nonnull PsiManager manager, PsiElement context)
 	{
 		super(manager, null, context, null, null, language(context, JavaLanguage.INSTANCE));
 	}
 
-	public JavaDummyHolder(@NotNull PsiManager manager, TreeElement contentElement, PsiElement context, CharTable table)
+	public JavaDummyHolder(@Nonnull PsiManager manager, TreeElement contentElement, PsiElement context, CharTable table)
 	{
 		super(manager, contentElement, context, table, null, language(context, JavaLanguage.INSTANCE));
 	}
 
-	public JavaDummyHolder(@NotNull PsiManager manager, PsiElement context, CharTable table)
+	public JavaDummyHolder(@Nonnull PsiManager manager, PsiElement context, CharTable table)
 	{
 		super(manager, null, context, table, null, language(context, JavaLanguage.INSTANCE));
 	}
 
-	public JavaDummyHolder(@NotNull PsiManager manager, final CharTable table)
+	public JavaDummyHolder(@Nonnull PsiManager manager, final CharTable table)
 	{
 		super(manager, null, null, table, null, JavaLanguage.INSTANCE);
 	}
@@ -105,7 +106,7 @@ public class JavaDummyHolder extends DummyHolder implements PsiImportHolder
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
 		if(classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.CLASS))
@@ -181,7 +182,7 @@ public class JavaDummyHolder extends DummyHolder implements PsiImportHolder
 	}
 
 	@Override
-	public void setOriginalFile(@NotNull final PsiFile originalFile)
+	public void setOriginalFile(@Nonnull final PsiFile originalFile)
 	{
 		super.setOriginalFile(originalFile);
 		putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, PsiUtil.getLanguageLevel(originalFile));

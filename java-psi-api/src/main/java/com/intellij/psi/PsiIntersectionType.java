@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -39,25 +40,25 @@ public class PsiIntersectionType extends PsiType.Stub
 {
 	private final PsiType[] myConjuncts;
 
-	private PsiIntersectionType(@NotNull PsiType[] conjuncts)
+	private PsiIntersectionType(@Nonnull PsiType[] conjuncts)
 	{
 		super(TypeAnnotationProvider.EMPTY);
 		myConjuncts = conjuncts;
 	}
 
-	@NotNull
-	public static PsiType createIntersection(@NotNull List<PsiType> conjuncts)
+	@Nonnull
+	public static PsiType createIntersection(@Nonnull List<PsiType> conjuncts)
 	{
 		return createIntersection(conjuncts.toArray(createArray(conjuncts.size())));
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiType createIntersection(PsiType... conjuncts)
 	{
 		return createIntersection(true, conjuncts);
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiType createIntersection(boolean flatten, PsiType... conjuncts)
 	{
 		assert conjuncts.length > 0;
@@ -138,13 +139,13 @@ public class PsiIntersectionType extends PsiType.Stub
 		return types;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiType[] getConjuncts()
 	{
 		return myConjuncts;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableText(final boolean annotated)
 	{
@@ -158,14 +159,14 @@ public class PsiIntersectionType extends PsiType.Stub
 		}, " & ");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText(boolean annotated)
 	{
 		return myConjuncts[0].getCanonicalText(annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
@@ -193,13 +194,13 @@ public class PsiIntersectionType extends PsiType.Stub
 	}
 
 	@Override
-	public boolean equalsToText(@NotNull String text)
+	public boolean equalsToText(@Nonnull String text)
 	{
 		return false;
 	}
 
 	@Override
-	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitIntersectionType(this);
 	}
@@ -211,13 +212,13 @@ public class PsiIntersectionType extends PsiType.Stub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getSuperTypes()
 	{
 		return myConjuncts;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiType getRepresentative()
 	{
 		return myConjuncts[0];

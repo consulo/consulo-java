@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.infos;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiSubstitutor;
@@ -29,17 +30,17 @@ import com.intellij.psi.PsiSubstitutor;
  */
 public class ClassCandidateInfo extends CandidateInfo
 {
-	public ClassCandidateInfo(@NotNull PsiElement candidate, @NotNull PsiSubstitutor substitutor, boolean accessProblem, PsiElement currFileContext)
+	public ClassCandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, PsiElement currFileContext)
 	{
 		super(candidate, substitutor, accessProblem, false, currFileContext);
 	}
 
-	public ClassCandidateInfo(@NotNull PsiElement candidate, @NotNull PsiSubstitutor substitutor)
+	public ClassCandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor)
 	{
 		super(candidate, substitutor, false, false);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiClass getElement()
 	{

@@ -20,7 +20,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
@@ -85,7 +85,7 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
   }
 
   @Override
-  public boolean isAppropriateElementTypeForLiteral(final @NotNull IElementType tokenType) {
+  public boolean isAppropriateElementTypeForLiteral(final @Nonnull IElementType tokenType) {
     return isAppropriateElementTypeForLiteralStatic(tokenType);
   }
 

@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiJavaFile;
@@ -27,8 +29,6 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class JavaFileElement extends FileElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.JavaFileElement");
@@ -38,7 +38,7 @@ public class JavaFileElement extends FileElement {
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (child.getElementType() == JavaElementType.CLASS) {
       PsiJavaFile file = SourceTreeToPsiMap.treeToPsiNotNull(this);
       if (file.getClasses().length == 1) {
@@ -50,7 +50,7 @@ public class JavaFileElement extends FileElement {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
     switch (role) {
@@ -84,7 +84,7 @@ public class JavaFileElement extends FileElement {
   }
 
   @Override
-  public void replaceChildInternal(@NotNull ASTNode child, @NotNull TreeElement newElement) {
+  public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement) {
     if (newElement.getElementType() == JavaElementType.IMPORT_LIST) {
       LOG.assertTrue(child.getElementType() == JavaElementType.IMPORT_LIST);
       if (newElement.getFirstChildNode() == null) { //empty import list

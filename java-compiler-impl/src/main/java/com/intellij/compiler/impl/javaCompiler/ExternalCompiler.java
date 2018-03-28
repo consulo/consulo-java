@@ -17,7 +17,7 @@ package com.intellij.compiler.impl.javaCompiler;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -29,12 +29,12 @@ public abstract class ExternalCompiler implements BackendCompiler
 {
 	private static final Logger LOG = Logger.getInstance(ExternalCompiler.class);
 
-	@NotNull
+	@Nonnull
 	public abstract GeneralCommandLine createStartupCommand(ModuleChunk chunk, CompileContext context, String outputPath) throws IOException, IllegalArgumentException;
 
 	@Override
-	@NotNull
-	public Process launchProcess(@NotNull final ModuleChunk chunk, @NotNull final String outputDir, @NotNull final CompileContext compileContext) throws IOException
+	@Nonnull
+	public Process launchProcess(@Nonnull final ModuleChunk chunk, @Nonnull final String outputDir, @Nonnull final CompileContext compileContext) throws IOException
 	{
 		final GeneralCommandLine commandLine = createStartupCommand(chunk, compileContext, outputDir);
 

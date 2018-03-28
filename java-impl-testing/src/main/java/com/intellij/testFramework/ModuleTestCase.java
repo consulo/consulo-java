@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.module.Module;
@@ -98,12 +98,12 @@ public abstract class ModuleTestCase extends IdeaTestCase
 		return module;
 	}
 
-	protected Module loadModule(@NotNull VirtualFile file)
+	protected Module loadModule(@Nonnull VirtualFile file)
 	{
 		return loadModule(file.getPath());
 	}
 
-	protected Module loadModule(@NotNull String modulePath)
+	protected Module loadModule(@Nonnull String modulePath)
 	{
 		final ModuleManager moduleManager = ModuleManager.getInstance(myProject);
 		Module module = null;
@@ -122,13 +122,13 @@ public abstract class ModuleTestCase extends IdeaTestCase
 	}
 
 	@Nullable
-	protected Module loadAllModulesUnder(@NotNull VirtualFile rootDir)
+	protected Module loadAllModulesUnder(@Nonnull VirtualFile rootDir)
 	{
 		return loadAllModulesUnder(rootDir, null);
 	}
 
 	@Nullable
-	protected Module loadAllModulesUnder(@NotNull VirtualFile rootDir, @Nullable final Consumer<Module> moduleConsumer)
+	protected Module loadAllModulesUnder(@Nonnull VirtualFile rootDir, @Nullable final Consumer<Module> moduleConsumer)
 	{
 		final Ref<Module> result = Ref.create();
 

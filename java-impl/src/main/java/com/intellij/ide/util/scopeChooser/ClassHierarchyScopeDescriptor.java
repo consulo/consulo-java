@@ -31,7 +31,6 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.PsiUtilBase;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +48,7 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
     return IdeBundle.message("scope.class.hierarchy");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public SearchScope getScope() {
     if (myCachedScope == null) {
       TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createAllProjectScopeChooser(IdeBundle.message("prompt.choose.base.class.of.the.hierarchy"));

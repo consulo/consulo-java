@@ -27,19 +27,19 @@ import com.intellij.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ReplaceInheritanceWithDelegationFix extends InspectionGadgetsFix {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message(
       "replace.inheritance.with.delegation.quickfix");
   }
 
   @Override
-  public void doFix(@NotNull final Project project, ProblemDescriptor descriptor) {
+  public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiClass aClass = (PsiClass)nameElement.getParent();
     assert !(aClass instanceof PsiAnonymousClass);

@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
 
@@ -36,7 +36,7 @@ public class ImportsUtil
 	}
 
 	public static List<PsiJavaCodeReferenceElement> collectReferencesThrough(PsiFile file,
-			@Nullable final PsiJavaCodeReferenceElement refExpr,
+			@javax.annotation.Nullable final PsiJavaCodeReferenceElement refExpr,
 			final PsiImportStaticStatement staticImport)
 	{
 		final List<PsiJavaCodeReferenceElement> expressionToExpand = new ArrayList<PsiJavaCodeReferenceElement>();
@@ -60,7 +60,7 @@ public class ImportsUtil
 	}
 
 	public static void replaceAllAndDeleteImport(List<PsiJavaCodeReferenceElement> expressionToExpand,
-			@Nullable PsiJavaCodeReferenceElement refExpr,
+			@javax.annotation.Nullable PsiJavaCodeReferenceElement refExpr,
 			PsiImportStaticStatement staticImport)
 	{
 		if(refExpr != null)
@@ -82,7 +82,7 @@ public class ImportsUtil
 		staticImport.delete();
 	}
 
-	public static void expand(@NotNull PsiJavaCodeReferenceElement refExpr, PsiImportStaticStatement staticImport)
+	public static void expand(@Nonnull PsiJavaCodeReferenceElement refExpr, PsiImportStaticStatement staticImport)
 	{
 		final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(refExpr.getProject());
 		final PsiReferenceExpression referenceExpression = elementFactory.createReferenceExpression(staticImport

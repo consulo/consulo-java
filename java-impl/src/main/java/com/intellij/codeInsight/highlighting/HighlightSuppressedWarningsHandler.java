@@ -40,7 +40,7 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
 import com.intellij.psi.*;
 import com.intellij.util.Consumer;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,7 +93,7 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
           return FINAL_CHOICE;
         }
 
-        @NotNull
+        @Nonnull
         @Override
         public String getTextFor(PsiLiteralExpression value) {
           final Object o = value.getValue();

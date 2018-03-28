@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;
@@ -32,7 +32,7 @@ public class AddTypeArgumentsFix extends MethodArgumentFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     if (myArgList.getExpressions().length == 1) {
       return JavaQuickFixBundle.message("add.type.arguments.single.argument.text");

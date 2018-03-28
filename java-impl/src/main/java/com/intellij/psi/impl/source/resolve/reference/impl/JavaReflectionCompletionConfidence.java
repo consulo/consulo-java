@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.CompletionConfidence;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -27,9 +28,9 @@ import com.intellij.util.ThreeState;
 public class JavaReflectionCompletionConfidence extends CompletionConfidence
 {
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ThreeState shouldSkipAutopopup(@NotNull PsiElement contextElement, @NotNull PsiFile psiFile, int offset)
+	public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset)
 	{
 		final PsiElement literal = contextElement.getParent();
 		if(literal != null && (JavaReflectionReferenceContributor.PATTERN.accepts(literal) || JavaReflectionReferenceContributor.CLASS_PATTERN.accepts(literal)))

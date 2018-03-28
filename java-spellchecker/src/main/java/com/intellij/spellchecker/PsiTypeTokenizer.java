@@ -17,7 +17,7 @@ package com.intellij.spellchecker;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.TextRange;
@@ -40,7 +40,7 @@ import com.intellij.spellchecker.tokenizer.Tokenizer;
 public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement> {
 
   @Override
-  public void tokenize(@NotNull PsiTypeElement element, TokenConsumer consumer) {
+  public void tokenize(@Nonnull PsiTypeElement element, TokenConsumer consumer) {
     final PsiType type = element.getType();
     if (type instanceof PsiDisjunctionType) {
       tokenizeComplexType(element, consumer);
@@ -71,8 +71,8 @@ public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement> {
     }
   }
 
-  @NotNull
-  private static TextRange getRangeToCheck(@NotNull String text, @NotNull String name) {
+  @Nonnull
+  private static TextRange getRangeToCheck(@Nonnull String text, @Nonnull String name) {
     final int i = text.indexOf(name);
     return new TextRange(i, i + name.length());
   }

@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
@@ -50,7 +51,7 @@ public class JavaSourceUtil
 	{
 	}
 
-	public static void fullyQualifyReference(@NotNull CompositeElement reference, @NotNull PsiClass targetClass)
+	public static void fullyQualifyReference(@Nonnull CompositeElement reference, @Nonnull PsiClass targetClass)
 	{
 		if(((SourceJavaCodeReference) reference).isQualified())
 		{ // qualified reference
@@ -102,8 +103,8 @@ public class JavaSourceUtil
 		}
 	}
 
-	@NotNull
-	public static String getReferenceText(@NotNull PsiJavaCodeReferenceElement ref)
+	@Nonnull
+	public static String getReferenceText(@Nonnull PsiJavaCodeReferenceElement ref)
 	{
 		final StringBuilder buffer = new StringBuilder();
 
@@ -142,15 +143,15 @@ public class JavaSourceUtil
 		return buffer.toString();
 	}
 
-	@NotNull
-	public static String getReferenceText(@NotNull LighterAST tree, @NotNull LighterASTNode node)
+	@Nonnull
+	public static String getReferenceText(@Nonnull LighterAST tree, @Nonnull LighterASTNode node)
 	{
 		return LightTreeUtil.toFilteredString(tree, node, REF_FILTER);
 	}
 
-	public static TreeElement addParenthToReplacedChild(@NotNull IElementType parenthType,
-			@NotNull TreeElement newChild,
-			@NotNull PsiManager manager)
+	public static TreeElement addParenthToReplacedChild(@Nonnull IElementType parenthType,
+			@Nonnull TreeElement newChild,
+			@Nonnull PsiManager manager)
 	{
 		CompositeElement parenthExpr = ASTFactory.composite(parenthType);
 
@@ -181,7 +182,7 @@ public class JavaSourceUtil
 		return parenthExpr;
 	}
 
-	public static void deleteSeparatingComma(@NotNull CompositeElement element, @NotNull ASTNode child)
+	public static void deleteSeparatingComma(@Nonnull CompositeElement element, @Nonnull ASTNode child)
 	{
 		assert child.getElementType() != JavaTokenType.COMMA : child;
 
@@ -200,9 +201,9 @@ public class JavaSourceUtil
 		}
 	}
 
-	public static void addSeparatingComma(@NotNull CompositeElement element,
-			@NotNull ASTNode child,
-			@NotNull TokenSet listTypes)
+	public static void addSeparatingComma(@Nonnull CompositeElement element,
+			@Nonnull ASTNode child,
+			@Nonnull TokenSet listTypes)
 	{
 		assert child.getElementType() != JavaTokenType.COMMA : child;
 

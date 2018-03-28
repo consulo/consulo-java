@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
@@ -88,20 +88,20 @@ public class DfaPsiUtil
 		return codeBlock;
 	}
 
-	@NotNull
-	public static Nullness getElementNullability(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner)
+	@Nonnull
+	public static Nullness getElementNullability(@javax.annotation.Nullable PsiType resultType, @javax.annotation.Nullable PsiModifierListOwner owner)
 	{
 		return getElementNullability(resultType, owner, false);
 	}
 
-	@NotNull
-	public static Nullness getElementNullabilityIgnoringParameterInference(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner)
+	@Nonnull
+	public static Nullness getElementNullabilityIgnoringParameterInference(@javax.annotation.Nullable PsiType resultType, @Nullable PsiModifierListOwner owner)
 	{
 		return getElementNullability(resultType, owner, true);
 	}
 
-	@NotNull
-	private static Nullness getElementNullability(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner, boolean ignoreParameterNullabilityInference)
+	@Nonnull
+	private static Nullness getElementNullability(@Nullable PsiType resultType, @javax.annotation.Nullable PsiModifierListOwner owner, boolean ignoreParameterNullabilityInference)
 	{
 		if(owner == null)
 		{
@@ -145,8 +145,8 @@ public class DfaPsiUtil
 		return Nullness.UNKNOWN;
 	}
 
-	@NotNull
-	public static Nullness inferParameterNullability(@NotNull PsiParameter parameter)
+	@Nonnull
+	public static Nullness inferParameterNullability(@Nonnull PsiParameter parameter)
 	{
 		PsiElement parent = parameter.getParent();
 		if(parent instanceof PsiParameterList && parent.getParent() instanceof PsiLambdaExpression)
@@ -164,8 +164,8 @@ public class DfaPsiUtil
 		return Nullness.UNKNOWN;
 	}
 
-	@NotNull
-	public static Nullness getTypeNullability(@Nullable PsiType type)
+	@Nonnull
+	public static Nullness getTypeNullability(@javax.annotation.Nullable PsiType type)
 	{
 		if(type == null || type instanceof PsiPrimitiveType)
 		{
@@ -181,7 +181,7 @@ public class DfaPsiUtil
 		return result.get();
 	}
 
-	@NotNull
+	@Nonnull
 	private static Nullness getTypeOwnNullability(Ref<Nullness> result, PsiType eachType)
 	{
 		for(PsiAnnotation annotation : eachType.getAnnotations())
@@ -207,7 +207,7 @@ public class DfaPsiUtil
 	 * @param index    parameter index
 	 * @return nullness, defined by SAM parameter annotations or known otherwise
 	 */
-	@NotNull
+	@Nonnull
 	public static Nullness getFunctionalParameterNullability(PsiFunctionalExpression function, int index)
 	{
 		Nullness nullness = inferLambdaParameterNullness(function, index);
@@ -231,7 +231,7 @@ public class DfaPsiUtil
 		return Nullness.UNKNOWN;
 	}
 
-	@NotNull
+	@Nonnull
 	private static Nullness inferLambdaParameterNullness(PsiFunctionalExpression lambda, int parameterIndex)
 	{
 		PsiElement expression = lambda;
@@ -258,8 +258,8 @@ public class DfaPsiUtil
 		return Nullness.UNKNOWN;
 	}
 
-	@NotNull
-	private static Nullness getLambdaParameterNullness(@NotNull PsiMethod method, int parameterIndex, int lambdaParameterIndex)
+	@Nonnull
+	private static Nullness getLambdaParameterNullness(@Nonnull PsiMethod method, int parameterIndex, int lambdaParameterIndex)
 	{
 		PsiClass type = method.getContainingClass();
 		if(type != null)
@@ -276,7 +276,7 @@ public class DfaPsiUtil
 		return Nullness.UNKNOWN;
 	}
 
-	private static boolean isNotNullLocally(@NotNull PsiModifierListOwner owner, boolean ignoreParameterNullabilityInference)
+	private static boolean isNotNullLocally(@Nonnull PsiModifierListOwner owner, boolean ignoreParameterNullabilityInference)
 	{
 		NullableNotNullManager nnnm = NullableNotNullManager.getInstance(owner.getProject());
 		PsiAnnotation notNullAnno = nnnm.getNotNullAnnotation(owner, true);
@@ -295,7 +295,7 @@ public class DfaPsiUtil
 		return isOwnAnnotation(owner, notNullAnno) || nnnm.isContainerAnnotation(notNullAnno);
 	}
 
-	private static boolean isOwnAnnotation(@NotNull PsiModifierListOwner owner, @NotNull PsiAnnotation anno)
+	private static boolean isOwnAnnotation(@Nonnull PsiModifierListOwner owner, @Nonnull PsiAnnotation anno)
 	{
 		return AnnotationUtil.findAnnotation(owner, anno.getQualifiedName()) == anno;
 	}
@@ -358,7 +358,7 @@ public class DfaPsiUtil
 
 		return CachedValuesManager.getCachedValue(constructor, new CachedValueProvider<Set<PsiField>>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public Result<Set<PsiField>> compute()
 			{
@@ -416,9 +416,9 @@ public class DfaPsiUtil
 						return typeContainers.contains(containingClass);
 					}
 
-					@NotNull
+					@Nonnull
 					@Override
-					protected DfaInstructionState[] acceptInstruction(@NotNull InstructionVisitor visitor, @NotNull DfaInstructionState instructionState)
+					protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState)
 					{
 						Instruction instruction = instructionState.getInstruction();
 						if(isCallExposingNonInitializedFields(instruction) || instruction instanceof ReturnInstruction && !((ReturnInstruction) instruction).isViaException())
@@ -479,7 +479,7 @@ public class DfaPsiUtil
 
 		return CachedValuesManager.getCachedValue(psiClass, new CachedValueProvider<MultiMap<PsiField, PsiExpression>>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public Result<MultiMap<PsiField, PsiExpression>> compute()
 			{
@@ -522,8 +522,8 @@ public class DfaPsiUtil
 		});
 	}
 
-	@Nullable
-	public static PsiElement getTopmostBlockInSameClass(@NotNull PsiElement position)
+	@javax.annotation.Nullable
+	public static PsiElement getTopmostBlockInSameClass(@Nonnull PsiElement position)
 	{
 		return JBIterable.
 				generate(position, PsiElement::getParent).
@@ -532,8 +532,8 @@ public class DfaPsiUtil
 				last();
 	}
 
-	@NotNull
-	public static Collection<PsiExpression> getVariableAssignmentsInFile(@NotNull PsiVariable psiVariable, final boolean literalsOnly, final PsiElement place)
+	@Nonnull
+	public static Collection<PsiExpression> getVariableAssignmentsInFile(@Nonnull PsiVariable psiVariable, final boolean literalsOnly, final PsiElement place)
 	{
 		Ref<Boolean> modificationRef = Ref.create(Boolean.FALSE);
 		PsiElement codeBlock = place == null ? null : getTopmostBlockInSameClass(place);

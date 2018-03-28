@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -12,8 +13,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Header;
@@ -331,7 +331,7 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -345,22 +345,22 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor
 		return myRoot;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
 		return "UI Editor";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public FileEditorState getState(@NotNull FileEditorStateLevel level)
+	public FileEditorState getState(@Nonnull FileEditorStateLevel level)
 	{
 		return FileEditorState.INSTANCE;
 	}
 
 	@Override
-	public void setState(@NotNull FileEditorState state)
+	public void setState(@Nonnull FileEditorState state)
 	{
 	}
 
@@ -387,12 +387,12 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor
 	}
 
 	@Override
-	public void addPropertyChangeListener(@NotNull PropertyChangeListener listener)
+	public void addPropertyChangeListener(@Nonnull PropertyChangeListener listener)
 	{
 	}
 
 	@Override
-	public void removePropertyChangeListener(@NotNull PropertyChangeListener listener)
+	public void removePropertyChangeListener(@Nonnull PropertyChangeListener listener)
 	{
 	}
 

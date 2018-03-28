@@ -18,8 +18,8 @@ package com.intellij.refactoring.extractMethod;
 import java.util.*;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.CodeInsightUtil;
@@ -244,7 +244,7 @@ public class ExtractMethodProcessor implements MatchProvider
 	/**
 	 * Invoked in atomic action
 	 */
-	public boolean prepare(@Nullable Pass<ExtractMethodProcessor> pass) throws PrepareFailedException
+	public boolean prepare(@javax.annotation.Nullable Pass<ExtractMethodProcessor> pass) throws PrepareFailedException
 	{
 		myExpression = null;
 		if(myElements.length == 1 && myElements[0] instanceof PsiExpression)
@@ -1719,7 +1719,7 @@ public class ExtractMethodProcessor implements MatchProvider
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	protected PsiMethodCallExpression generateMethodCall(PsiExpression instanceQualifier, final boolean generateArgs) throws IncorrectOperationException
 	{
 		@NonNls StringBuilder buffer = new StringBuilder();
@@ -1810,7 +1810,7 @@ public class ExtractMethodProcessor implements MatchProvider
 			final PsiElementProcessor<PsiClass> processor = new PsiElementProcessor<PsiClass>()
 			{
 				@Override
-				public boolean execute(@NotNull PsiClass selectedClass)
+				public boolean execute(@Nonnull PsiClass selectedClass)
 				{
 					AnonymousTargetClassPreselectionUtil.rememberSelection(selectedClass, myTargetClass);
 					final List<PsiVariable> array = classes.get(selectedClass);
@@ -1995,7 +1995,7 @@ public class ExtractMethodProcessor implements MatchProvider
 		return extractPass == null && !(target instanceof PsiAnonymousClass);
 	}
 
-	private boolean applyChosenClassAndExtract(List<PsiVariable> inputVariables, @Nullable Pass<ExtractMethodProcessor> extractPass) throws PrepareFailedException
+	private boolean applyChosenClassAndExtract(List<PsiVariable> inputVariables, @javax.annotation.Nullable Pass<ExtractMethodProcessor> extractPass) throws PrepareFailedException
 	{
 		myStatic = shouldBeStatic();
 		final Set<PsiField> fields = new LinkedHashSet<PsiField>();

@@ -17,8 +17,8 @@ package com.intellij.psi.impl.smartPointers;
 
 import java.lang.ref.Reference;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.SmartTypePointer;
 import com.intellij.reference.SoftReference;
@@ -30,7 +30,7 @@ public abstract class TypePointerBase<T extends PsiType> implements SmartTypePoi
 {
 	private Reference<T> myTypeRef;
 
-	public TypePointerBase(@NotNull T type)
+	public TypePointerBase(@Nonnull T type)
 	{
 		myTypeRef = new SoftReference<T>(type);
 	}

@@ -23,7 +23,8 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
@@ -42,7 +43,7 @@ import com.intellij.util.containers.MultiMap;
 //pull first method from class a.A to class b.B
 public class PullUpMultifileTest extends MultiFileTestCase
 {
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getTestRoot()
 	{

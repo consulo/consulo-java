@@ -3,8 +3,8 @@ package com.intellij.coverage;
 import java.io.File;
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.rt.coverage.data.ProjectData;
@@ -20,7 +20,7 @@ public class IDEACoverageRunner extends JavaCoverageRunner
 	private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class.getName());
 
 	@Override
-	public ProjectData loadCoverageData(@NotNull final File sessionDataFile, @Nullable final CoverageSuite coverageSuite)
+	public ProjectData loadCoverageData(@Nonnull final File sessionDataFile, @javax.annotation.Nullable final CoverageSuite coverageSuite)
 	{
 		return ProjectDataLoader.load(sessionDataFile);
 	}

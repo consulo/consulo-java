@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -24,8 +24,8 @@ import com.intellij.psi.TokenType;
 
 public class DefaultHighlightUtil
 {
-	@Nullable
-	public static HighlightInfo checkBadCharacter(@NotNull PsiElement element)
+	@javax.annotation.Nullable
+	public static HighlightInfo checkBadCharacter(@Nonnull PsiElement element)
 	{
 		ASTNode node = element.getNode();
 		if(node != null && node.getElementType() == TokenType.BAD_CHARACTER)

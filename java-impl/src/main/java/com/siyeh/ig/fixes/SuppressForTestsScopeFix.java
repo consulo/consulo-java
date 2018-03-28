@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
@@ -48,7 +48,7 @@ public class SuppressForTestsScopeFix extends InspectionGadgetsFix
 		myInspection = inspection;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static SuppressForTestsScopeFix build(AbstractBaseJavaLocalInspectionTool inspection, PsiElement context)
 	{
 		if(!TestUtils.isInTestSourceContent(context))
@@ -58,7 +58,7 @@ public class SuppressForTestsScopeFix extends InspectionGadgetsFix
 		return new SuppressForTestsScopeFix(inspection);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{

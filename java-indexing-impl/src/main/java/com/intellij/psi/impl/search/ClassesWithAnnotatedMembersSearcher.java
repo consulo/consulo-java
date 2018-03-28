@@ -17,7 +17,8 @@ package com.intellij.psi.impl.search;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.application.ReadAction;
@@ -38,7 +39,7 @@ import com.intellij.util.containers.hash.HashSet;
 public class ClassesWithAnnotatedMembersSearcher extends QueryExecutorBase<PsiClass, ClassesWithAnnotatedMembersSearch.Parameters>
 {
 	@Override
-	public void processQuery(@NotNull ClassesWithAnnotatedMembersSearch.Parameters queryParameters, @NotNull final Processor<PsiClass> consumer)
+	public void processQuery(@Nonnull ClassesWithAnnotatedMembersSearch.Parameters queryParameters, @Nonnull final Processor<PsiClass> consumer)
 	{
 		SearchScope scope = queryParameters.getScope();
 		for(QueryExecutor executor : Extensions.getExtensions(ClassesWithAnnotatedMembersSearch.EP_NAME))

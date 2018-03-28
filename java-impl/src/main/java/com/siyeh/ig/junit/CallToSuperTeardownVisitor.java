@@ -15,16 +15,17 @@
  */
 package com.siyeh.ig.junit;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 class CallToSuperTeardownVisitor extends JavaRecursiveElementVisitor {
 
   private boolean callToSuperTearDownFound = false;
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!callToSuperTearDownFound) {
       super.visitElement(element);
     }
@@ -32,7 +33,7 @@ class CallToSuperTeardownVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @NotNull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     if (callToSuperTearDownFound) {
       return;
     }

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -27,18 +29,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class TransientFieldInNonSerializableClassInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "transient.field.in.non.serializable.class.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     return InspectionGadgetsBundle.message(
@@ -54,7 +55,7 @@ public class TransientFieldInNonSerializableClassInspection
   private static class TransientFieldInNonSerializableClassFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "transient.field.in.non.serializable.class.remove.quickfix");
@@ -75,7 +76,7 @@ public class TransientFieldInNonSerializableClassInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
         return;
       }

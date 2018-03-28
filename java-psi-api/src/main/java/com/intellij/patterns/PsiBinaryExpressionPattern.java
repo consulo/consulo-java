@@ -15,7 +15,8 @@
  */
 package com.intellij.patterns;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.util.ProcessingContext;
 
@@ -27,17 +28,17 @@ public class PsiBinaryExpressionPattern extends PsiExpressionPattern<PsiBinaryEx
     super(PsiBinaryExpression.class);
   }
 
-  public PsiBinaryExpressionPattern left(@NotNull final ElementPattern pattern) {
+  public PsiBinaryExpressionPattern left(@Nonnull final ElementPattern pattern) {
     return with(new PatternCondition<PsiBinaryExpression>("left") {
-      public boolean accepts(@NotNull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiBinaryExpression.getLOperand(), context);
       }
     });
   }
 
-  public PsiBinaryExpressionPattern right(@NotNull final ElementPattern pattern) {
+  public PsiBinaryExpressionPattern right(@Nonnull final ElementPattern pattern) {
     return with(new PatternCondition<PsiBinaryExpression>("right") {
-      public boolean accepts(@NotNull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiBinaryExpression.getROperand(), context);
       }
     });
@@ -45,7 +46,7 @@ public class PsiBinaryExpressionPattern extends PsiExpressionPattern<PsiBinaryEx
 
   public PsiBinaryExpressionPattern operation(final ElementPattern pattern) {
     return with(new PatternCondition<PsiBinaryExpression>("operation") {
-      public boolean accepts(@NotNull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiBinaryExpression.getOperationSign(), context);
       }
     });

@@ -29,8 +29,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.VariableSearchUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -40,13 +40,13 @@ public class UnnecessaryThisInspection extends BaseInspection {
   public boolean ignoreAssignments = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.this.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.this.problem.descriptor");
   }
@@ -65,7 +65,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
 
   private static class UnnecessaryThisFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.this.remove.quickfix");
     }
@@ -92,7 +92,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
   private class UnnecessaryThisVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@NotNull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       final PsiReferenceParameterList parameterList = expression.getParameterList();
       if (parameterList == null) {

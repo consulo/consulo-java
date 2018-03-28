@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaFile;
@@ -53,14 +53,14 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
 		myFactory = compiled ? ClsStubPsiFactory.INSTANCE : SourceStubPsiFactory.INSTANCE;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public IStubFileElementType getType()
 	{
 		return JavaStubElementTypes.JAVA_FILE;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiClass[] getClasses()
 	{
@@ -92,7 +92,7 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
 		return myCompiled;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public StubPsiFactory getPsiFactory()
 	{

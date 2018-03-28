@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
@@ -101,7 +101,7 @@ public class StackFrameItem
 		myVariables = variables;
 	}
 
-	@NotNull
+	@Nonnull
 	public String path()
 	{
 		return myLocation.declaringType().name();
@@ -112,8 +112,8 @@ public class StackFrameItem
 		return DebuggerUtilsEx.getLineNumber(myLocation, false);
 	}
 
-	@NotNull
-	public static List<StackFrameItem> createFrames(@NotNull SuspendContextImpl suspendContext, boolean withVars) throws EvaluateException
+	@Nonnull
+	public static List<StackFrameItem> createFrames(@Nonnull SuspendContextImpl suspendContext, boolean withVars) throws EvaluateException
 	{
 		ThreadReferenceProxyImpl threadReferenceProxy = suspendContext.getThread();
 		if(threadReferenceProxy != null)
@@ -259,7 +259,7 @@ public class StackFrameItem
 		}
 
 		@Override
-		public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place)
+		public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place)
 		{
 			ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
 			String type = classRenderer.renderTypeName(myType);
@@ -312,7 +312,7 @@ public class StackFrameItem
 			myVariables = item.myVariables;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public XSourcePosition getSourcePosition()
 		{
@@ -330,7 +330,7 @@ public class StackFrameItem
 		}
 
 		@Override
-		public void customizePresentation(@NotNull ColoredTextContainer component)
+		public void customizePresentation(@Nonnull ColoredTextContainer component)
 		{
 			component.setIcon(JBUI.scale(EmptyIcon.create(6)));
 			component.append(String.format("%s:%d, %s", myMethodName, myLineNumber, StringUtil.getShortName(myPath)), getAttributes());
@@ -342,7 +342,7 @@ public class StackFrameItem
 		}
 
 		@Override
-		public void computeChildren(@NotNull XCompositeNode node)
+		public void computeChildren(@Nonnull XCompositeNode node)
 		{
 			if(myVariables == VARS_CAPTURE_DISABLED)
 			{

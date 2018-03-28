@@ -15,16 +15,17 @@
  */
 package com.intellij.codeInsight.folding.impl.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.actions.BaseCodeInsightAction;
 import com.intellij.codeInsight.folding.impl.CollapseBlockHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
  */
 public class CollapseBlockAction  extends BaseCodeInsightAction {
-  @NotNull
+  @Nonnull
   @Override
   protected CodeInsightActionHandler getHandler() {
     return new CollapseBlockHandler ();

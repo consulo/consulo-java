@@ -15,7 +15,8 @@
  */
 package com.siyeh.ipp.bool;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -52,13 +53,13 @@ public class FlipComparisonIntention extends MutablyNamedIntention
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiElementPredicate getElementPredicate()
 	{
 		return new ComparisonPredicate();
 	}
 
-	public void processIntention(@NotNull PsiElement element) throws IncorrectOperationException
+	public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		final PsiBinaryExpression expression = (PsiBinaryExpression) element;
 		final PsiExpression lhs = expression.getLOperand();

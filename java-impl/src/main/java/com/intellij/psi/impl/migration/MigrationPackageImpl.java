@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.migration;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.file.PsiPackageImpl;
@@ -47,7 +48,7 @@ public class MigrationPackageImpl extends PsiPackageImpl {
   }
 
   @Override
-  public void handleQualifiedNameChange(@NotNull String newQualifiedName) {
+  public void handleQualifiedNameChange(@Nonnull String newQualifiedName) {
     throw new UnsupportedOperationException();
   }
 

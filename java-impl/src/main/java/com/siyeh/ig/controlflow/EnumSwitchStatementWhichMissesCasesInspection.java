@@ -20,8 +20,8 @@ import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -29,7 +29,7 @@ public class EnumSwitchStatementWhichMissesCasesInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "enum.switch.statement.which.misses.cases.display.name");
@@ -41,7 +41,7 @@ public class EnumSwitchStatementWhichMissesCasesInspection
   public boolean ignoreSwitchStatementsWithDefault = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiSwitchStatement switchStatement =
       (PsiSwitchStatement)infos[0];
@@ -78,7 +78,7 @@ public class EnumSwitchStatementWhichMissesCasesInspection
 
     @Override
     public void visitSwitchStatement(
-      @NotNull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       if (!switchStatementMissingCases(statement)) {
         return;

@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.jvm.JvmParameter;
 import com.intellij.util.ArrayFactory;
 
@@ -38,7 +38,7 @@ public interface PsiParameter extends PsiVariable, JvmParameter
 	 *
 	 * @return the declaration scope for the parameter.
 	 */
-	@NotNull
+	@Nonnull
 	PsiElement getDeclarationScope();
 
 	/**
@@ -52,16 +52,16 @@ public interface PsiParameter extends PsiVariable, JvmParameter
 	 * {@inheritDoc}
 	 */
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	PsiTypeElement getTypeElement();
 
 	/* This explicit declaration is required to force javac generate bridge method 'JvmType getType()'; without it calling
 	JvmParameter#getType() method on instances which weren't recompiled against the new API will cause AbstractMethodError. */
-	@NotNull
+	@Nonnull
 	@Override
 	PsiType getType();
 
-	@NotNull
+	@Nonnull
 	@Override
 	default PsiAnnotation[] getAnnotations()
 	{

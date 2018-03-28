@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
@@ -24,23 +26,22 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.SerializationUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ReadObjectAndWriteObjectPrivateInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "NonPrivateSerializationMethod";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "readwriteobject.private.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "readwriteobject.private.problem.descriptor");
@@ -58,7 +59,7 @@ public class ReadObjectAndWriteObjectPrivateInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // no call to super, so it doesn't drill down
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {

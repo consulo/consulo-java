@@ -20,12 +20,13 @@ import com.intellij.psi.PsiField;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.psi.MyUsageViewUtil;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
-  private @NotNull final PsiField field;
+  private @Nonnull
+  final PsiField field;
 
-  RemoveMiddlemanUsageViewDescriptor(@NotNull PsiField field) {
+  RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
     super();
     this.field = field;
   }

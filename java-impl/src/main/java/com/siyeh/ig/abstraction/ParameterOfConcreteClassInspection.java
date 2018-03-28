@@ -22,7 +22,7 @@ import com.intellij.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -32,20 +32,20 @@ public class ParameterOfConcreteClassInspection extends BaseInspection {
   public boolean ignoreAbstractClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MethodParameterOfConcreteClass";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "concrete.class.method.parameter.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "concrete.class.method.parameter.problem.descriptor",
@@ -69,7 +69,7 @@ public class ParameterOfConcreteClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitParameter(@NotNull PsiParameter parameter) {
+    public void visitParameter(@Nonnull PsiParameter parameter) {
       super.visitParameter(parameter);
 
       if (parameter.getDeclarationScope() instanceof PsiCatchSection) {

@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.application.options.ModuleDescriptionsComboBox;
 import com.intellij.application.options.ModuleListCellRenderer;
 import com.intellij.application.options.ModulesComboBox;

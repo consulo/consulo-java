@@ -19,7 +19,7 @@ import static java.util.Collections.singletonMap;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -39,7 +39,7 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String>
 
 	private final DataIndexer<String, Void, FileContent> myIndexer = data -> singletonMap(LightJavaModule.moduleName(data.getFile().getNameWithoutExtension()), null);
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ID<String, Void> getName()
 	{
@@ -52,7 +52,7 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String>
 		return 1 + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 2 : 0);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public KeyDescriptor<String> getKeyDescriptor()
 	{
@@ -65,22 +65,22 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String>
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileBasedIndex.InputFilter getInputFilter()
 	{
 		return myFilter;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DataIndexer<String, Void, FileContent> getIndexer()
 	{
 		return myIndexer;
 	}
 
-	@NotNull
-	public static Collection<VirtualFile> getFilesByKey(@NotNull String moduleName, @NotNull GlobalSearchScope scope)
+	@Nonnull
+	public static Collection<VirtualFile> getFilesByKey(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope)
 	{
 		return FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, scope);
 	}

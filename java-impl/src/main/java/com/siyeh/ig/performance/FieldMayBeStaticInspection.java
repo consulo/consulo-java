@@ -24,11 +24,11 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class FieldMayBeStaticInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.may.be.static.display.name");
@@ -38,7 +38,7 @@ public class FieldMayBeStaticInspection extends BaseInspection {
     return new FieldMayBeStaticVisitor();
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "field.may.be.static.problem.descriptor");
@@ -51,7 +51,7 @@ public class FieldMayBeStaticInspection extends BaseInspection {
   private static class FieldMayBeStaticVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

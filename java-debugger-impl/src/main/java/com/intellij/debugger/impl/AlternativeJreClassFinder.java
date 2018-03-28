@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.execution.configurations.ConfigurationWithAlternativeJre;
 import com.intellij.execution.configurations.RunProfile;
@@ -79,7 +79,7 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder
 		return res;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static Sdk getAlternativeJre(RunProfile profile)
 	{
 		if(profile instanceof ConfigurationWithAlternativeJre)
@@ -93,20 +93,20 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder
 		return null;
 	}
 
-	@NotNull
-	private static Collection<VirtualFile> getClassRoots(@NotNull Sdk jre)
+	@Nonnull
+	private static Collection<VirtualFile> getClassRoots(@Nonnull Sdk jre)
 	{
 		return Arrays.asList(jre.getRootProvider().getFiles(OrderRootType.CLASSES));
 	}
 
-	@NotNull
-	public static Collection<VirtualFile> getSourceRoots(@NotNull Sdk jre)
+	@Nonnull
+	public static Collection<VirtualFile> getSourceRoots(@Nonnull Sdk jre)
 	{
 		return Arrays.asList(jre.getRootProvider().getFiles(OrderRootType.SOURCES));
 	}
 
-	@NotNull
-	public static GlobalSearchScope getSearchScope(@NotNull Sdk jre)
+	@Nonnull
+	public static GlobalSearchScope getSearchScope(@Nonnull Sdk jre)
 	{
 		return new NonClasspathDirectoriesScope(getClassRoots(jre));
 	}

@@ -17,8 +17,8 @@ package com.intellij.codeInspection;
 
 import static com.intellij.util.ObjectUtils.tryCast;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -35,14 +35,14 @@ import consulo.java.codeInsight.JavaInspectionsBundle;
 public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
 {
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaInspectionsBundle.message("inspection.data.flow.filter.notnull.quickfix");
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		PsiFunctionalExpression function = findFunction(descriptor.getStartElement());
 		if(function == null)
@@ -66,8 +66,8 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
 		LambdaCanBeMethodReferenceInspection.replaceAllLambdasWithMethodReferences(result.getArgumentList());
 	}
 
-	@NotNull
-	private static String suggestVariableName(@NotNull PsiFunctionalExpression function, @NotNull PsiExpression qualifier)
+	@Nonnull
+	private static String suggestVariableName(@Nonnull PsiFunctionalExpression function, @Nonnull PsiExpression qualifier)
 	{
 		String name = null;
 		if(function instanceof PsiLambdaExpression)

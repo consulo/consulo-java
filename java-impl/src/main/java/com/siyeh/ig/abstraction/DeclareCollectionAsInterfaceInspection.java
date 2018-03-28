@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -51,21 +51,21 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 	public boolean ignorePrivateMethodsAndFields = false;
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getID()
 	{
 		return "CollectionDeclaredAsConcreteClass";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("collection.declared.by.class.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String buildErrorString(Object... infos)
 	{
 		final String type = (String) infos[0];
@@ -99,13 +99,13 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getName()
 		{
 			return InspectionGadgetsBundle.message("declare.collection.as.interface.quickfix", typeString);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -149,7 +149,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitVariable(@NotNull PsiVariable variable)
+		public void visitVariable(@Nonnull PsiVariable variable)
 		{
 			if(isOnTheFly() && DeclarationSearchUtils.isTooExpensiveToSearch(variable, false))
 			{
@@ -199,7 +199,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 		}
 
 		@Override
-		public void visitMethod(@NotNull PsiMethod method)
+		public void visitMethod(@Nonnull PsiMethod method)
 		{
 			super.visitMethod(method);
 			if(ignorePrivateMethodsAndFields && method.hasModifierProperty(PsiModifier.PRIVATE))

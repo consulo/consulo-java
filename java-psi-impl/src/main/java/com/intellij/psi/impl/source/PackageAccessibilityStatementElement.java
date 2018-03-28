@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -29,13 +29,13 @@ import com.intellij.psi.tree.IElementType;
  */
 public class PackageAccessibilityStatementElement extends CompositeElement
 {
-	public PackageAccessibilityStatementElement(@NotNull IElementType type)
+	public PackageAccessibilityStatementElement(@Nonnull IElementType type)
 	{
 		super(type);
 	}
 
 	@Override
-	public void deleteChildInternal(@NotNull ASTNode child)
+	public void deleteChildInternal(@Nonnull ASTNode child)
 	{
 		if(child.getElementType() == JavaElementType.MODULE_REFERENCE)
 		{
@@ -56,8 +56,8 @@ public class PackageAccessibilityStatementElement extends CompositeElement
 		super.deleteChildInternal(child);
 	}
 
-	@Nullable
-	private static ASTNode findNearestComma(@NotNull ASTNode child)
+	@javax.annotation.Nullable
+	private static ASTNode findNearestComma(@Nonnull ASTNode child)
 	{
 		ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
 		if(next != null && next.getElementType() == JavaTokenType.COMMA)

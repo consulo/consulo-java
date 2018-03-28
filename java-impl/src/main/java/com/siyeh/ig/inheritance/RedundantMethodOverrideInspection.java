@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.inheritance;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -40,14 +40,14 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 {
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("redundant.method.override.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("redundant.method.override.problem.descriptor");
@@ -64,7 +64,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 	{
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("redundant.method.override.quickfix");
@@ -133,7 +133,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 			private final PsiMethod myMethod;
 			private final PsiMethod mySuperMethod;
 
-			ParameterEquivalenceChecker(@NotNull PsiMethod method, @NotNull PsiMethod superMethod)
+			ParameterEquivalenceChecker(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod)
 			{
 				myMethod = method;
 				mySuperMethod = superMethod;
@@ -283,7 +283,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 			return true;
 		}
 
-		private static boolean modifierListsAreEquivalent(@Nullable PsiModifierList list1, @Nullable PsiModifierList list2)
+		private static boolean modifierListsAreEquivalent(@Nullable PsiModifierList list1, @javax.annotation.Nullable PsiModifierList list2)
 		{
 			if(list1 == null)
 			{

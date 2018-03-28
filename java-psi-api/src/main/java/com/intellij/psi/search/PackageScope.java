@@ -21,7 +21,8 @@ package com.intellij.psi.search;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
@@ -42,7 +43,7 @@ public class PackageScope extends GlobalSearchScope {
   protected final String myPackageQualifiedName;
   protected final String myPackageQNamePrefix;
 
-  public PackageScope(@NotNull PsiJavaPackage aPackage, boolean includeSubpackages, final boolean includeLibraries) {
+  public PackageScope(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages, final boolean includeLibraries) {
     super(aPackage.getProject());
     myPackage = aPackage;
     myIncludeSubpackages = includeSubpackages;
@@ -81,7 +82,7 @@ public class PackageScope extends GlobalSearchScope {
   }
 
   @Override
-  public boolean isSearchInModuleContent(@NotNull Module aModule) {
+  public boolean isSearchInModuleContent(@Nonnull Module aModule) {
     return true;
   }
 
@@ -96,11 +97,11 @@ public class PackageScope extends GlobalSearchScope {
            ", includeSubpackages = " + myIncludeSubpackages;
   }
 
-  public static GlobalSearchScope packageScope(@NotNull PsiJavaPackage aPackage, boolean includeSubpackages) {
+  public static GlobalSearchScope packageScope(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages) {
     return new PackageScope(aPackage, includeSubpackages, true);
   }
 
-  public static GlobalSearchScope packageScopeWithoutLibraries(@NotNull PsiJavaPackage aPackage, boolean includeSubpackages) {
+  public static GlobalSearchScope packageScopeWithoutLibraries(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages) {
     return new PackageScope(aPackage, includeSubpackages, false);
   }
 }

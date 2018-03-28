@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.openapi.extensions.ExtensionPointName;
 

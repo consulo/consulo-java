@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.migration;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -35,25 +37,23 @@ import com.siyeh.ig.psiutils.StringUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class WhileCanBeForeachInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "WhileLoopReplaceableByForEach";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("while.can.be.foreach.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("while.can.be.foreach.problem.descriptor");
   }
@@ -70,7 +70,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
 
   private static class WhileCanBeForeachFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("foreach.replace.quickfix");
     }
@@ -82,7 +82,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       replaceWhileWithForEach(whileStatement);
     }
 
-    private static void replaceWhileWithForEach(@NotNull PsiWhileStatement whileStatement) {
+    private static void replaceWhileWithForEach(@Nonnull PsiWhileStatement whileStatement) {
       final PsiStatement body = whileStatement.getBody();
       if (body == null) {
         return;
@@ -185,7 +185,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       replaceStatementAndShortenClassNames(whileStatement, result);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiType getContentType(PsiType type, PsiElement context) {
       if (!(type instanceof PsiClassType)) {
         return null;
@@ -208,7 +208,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return TypeUtils.getObjectType(context);
     }
 
-    private static void replaceIteratorNext(@NotNull PsiElement element, String contentVariableName, PsiVariable iterator,
+    private static void replaceIteratorNext(@Nonnull PsiElement element, String contentVariableName, PsiVariable iterator,
                                             PsiType contentType, PsiElement childToSkip, StringBuilder out) {
       if (isIteratorNext(element, iterator, contentType)) {
         out.append(contentVariableName);
@@ -302,7 +302,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return iterator.equals(target);
     }
 
-    private static String createNewVariableName(@NotNull PsiWhileStatement scope, PsiType type, String containerName) {
+    private static String createNewVariableName(@Nonnull PsiWhileStatement scope, PsiType type, String containerName) {
       final Project project = scope.getProject();
       final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
       @NonNls String baseName;
@@ -325,8 +325,8 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return codeStyleManager.suggestUniqueVariableName(baseName, scope, true);
     }
 
-    @Nullable
-    private static PsiStatement getFirstStatement(@NotNull PsiStatement body) {
+    @javax.annotation.Nullable
+    private static PsiStatement getFirstStatement(@Nonnull PsiStatement body) {
       if (body instanceof PsiBlockStatement) {
         final PsiBlockStatement block = (PsiBlockStatement)body;
         final PsiCodeBlock codeBlock = block.getCodeBlock();
@@ -346,7 +346,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
   private static class WhileCanBeForeachVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitWhileStatement(@NotNull PsiWhileStatement whileStatement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement whileStatement) {
       super.visitWhileStatement(whileStatement);
       if (!PsiUtil.isLanguageLevel5OrHigher(whileStatement)) {
         return;
@@ -489,7 +489,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiStatement getPreviousStatement(PsiElement context) {
     final PsiElement prevStatement = PsiTreeUtil.skipSiblingsBackward(context, PsiWhiteSpace.class, PsiComment.class);
     if (!(prevStatement instanceof PsiStatement)) {
@@ -508,7 +508,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression callExpression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression callExpression) {
       super.visitMethodCallExpression(callExpression);
       final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
       @NonNls final String methodName = methodExpression.getReferenceName();
@@ -542,14 +542,14 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!methodCalled) {
         super.visitElement(element);
       }
     }
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       if (methodCalled) {
         return;
       }
@@ -585,14 +585,14 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!hasNextCalled) {
         super.visitElement(element);
       }
     }
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       @NonNls final String name = methodExpression.getReferenceName();

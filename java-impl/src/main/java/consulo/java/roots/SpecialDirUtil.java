@@ -20,14 +20,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.vcsUtil.VcsUtil;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.roots.ContentFolderScopes;
 
 /**
@@ -38,7 +39,7 @@ public class SpecialDirUtil {
   public static final String META_INF = "META-INF";
 
   @Nullable
-  public static String getSpecialDirLocation(@NotNull Module module, @NotNull String name) {
+  public static String getSpecialDirLocation(@Nonnull Module module, @Nonnull String name) {
     final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return null;
@@ -66,8 +67,8 @@ public class SpecialDirUtil {
     return null;
   }
 
-  @NotNull
-  public static List<VirtualFile> collectSpecialDirs(@NotNull Module module, @NotNull String name) {
+  @Nonnull
+  public static List<VirtualFile> collectSpecialDirs(@Nonnull Module module, @Nonnull String name) {
     final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return Collections.emptyList();

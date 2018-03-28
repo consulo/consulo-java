@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.encapsulateFields;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.psi.PsiClass;
@@ -36,27 +36,27 @@ public abstract class EncapsulateFieldHelper {
   }
   private static final Extension INSTANCE = new Extension();
 
-  @NotNull
-  public abstract PsiField[] getApplicableFields(@NotNull PsiClass aClass);
+  @Nonnull
+  public abstract PsiField[] getApplicableFields(@Nonnull PsiClass aClass);
 
-  @NotNull
-  public abstract String suggestSetterName(@NotNull PsiField field);
+  @Nonnull
+  public abstract String suggestSetterName(@Nonnull PsiField field);
 
-  @NotNull
-  public abstract String suggestGetterName(@NotNull PsiField field);
+  @Nonnull
+  public abstract String suggestGetterName(@Nonnull PsiField field);
 
   @Nullable
-  public abstract PsiMethod generateMethodPrototype(@NotNull PsiField field, @NotNull String methodName, boolean isGetter);
+  public abstract PsiMethod generateMethodPrototype(@Nonnull PsiField field, @Nonnull String methodName, boolean isGetter);
 
-  public abstract boolean processUsage(@NotNull EncapsulateFieldUsageInfo usage,
-                                       @NotNull EncapsulateFieldsDescriptor descriptor,
+  public abstract boolean processUsage(@Nonnull EncapsulateFieldUsageInfo usage,
+                                       @Nonnull EncapsulateFieldsDescriptor descriptor,
                                        PsiMethod setter,
                                        PsiMethod getter);
 
   @Nullable
-  public abstract EncapsulateFieldUsageInfo createUsage(@NotNull EncapsulateFieldsDescriptor descriptor,
-                                                        @NotNull FieldDescriptor fieldDescriptor,
-                                                        @NotNull PsiReference reference);
+  public abstract EncapsulateFieldUsageInfo createUsage(@Nonnull EncapsulateFieldsDescriptor descriptor,
+                                                        @Nonnull FieldDescriptor fieldDescriptor,
+                                                        @Nonnull PsiReference reference);
 
   public static EncapsulateFieldHelper getHelper(Language lang) {
     return INSTANCE.forLanguage(lang);

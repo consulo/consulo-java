@@ -15,9 +15,9 @@ import gnu.trove.TIntArrayList;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -37,7 +37,7 @@ import com.intellij.testFramework.TestDataPath;
 @TestDataPath("$CONTENT_ROOT/testData")
 public class IntroduceParameterTest extends LightRefactoringTestCase
 {
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{
@@ -410,9 +410,9 @@ public class IntroduceParameterTest extends LightRefactoringTestCase
 			myEditor.getSettings().setVariableInplaceRenameEnabled(false);
 			new IntroduceParameterHandler().invoke(getProject(), myEditor, myFile, new DataContext()
 			{
-				@Nullable
+				@javax.annotation.Nullable
 				@Override
-				public <T> T getData(@NotNull Key<T> key)
+				public <T> T getData(@Nonnull Key<T> key)
 				{
 					return null;
 				}

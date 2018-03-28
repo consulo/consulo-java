@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerImpl;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -134,7 +134,7 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
     data.checkResult(infos, LightPlatformCodeInsightTestCase.getEditor().getDocument().getText(), filePath);
   }
 
-  protected HighlightTestInfo doTestFile(@NonNls @NotNull String filePath) {
+  protected HighlightTestInfo doTestFile(@NonNls @Nonnull String filePath) {
     return new HighlightTestInfo(getTestRootDisposable(), filePath) {
       @Override
       public HighlightTestInfo doTest() {
@@ -150,12 +150,12 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
     };
   }
 
-  @NotNull
+  @Nonnull
   protected List<HighlightInfo> highlightErrors() {
     return doHighlighting(HighlightSeverity.ERROR);
   }
 
-  @NotNull
+  @Nonnull
   protected List<HighlightInfo> doHighlighting() {
     PsiDocumentManager.getInstance(LightPlatformTestCase.getProject()).commitAllDocuments();
 

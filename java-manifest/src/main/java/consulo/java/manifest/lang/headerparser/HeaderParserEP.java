@@ -1,6 +1,7 @@
 package consulo.java.manifest.lang.headerparser;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.TestOnly;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import com.intellij.openapi.application.ApplicationManager;
@@ -15,11 +16,11 @@ import com.intellij.util.xmlb.annotations.Attribute;
 public class HeaderParserEP extends AbstractExtensionPointBean {
   public static final ExtensionPointName<HeaderParserEP> EP_NAME = ExtensionPointName.create("consulo.java.manifest.headerParser");
 
-  @NotNull
+  @Nonnull
   @Attribute("key")
   public String key;
 
-  @NotNull
+  @Nonnull
   @Attribute("implementationClass")
   public String implementationClass;
 
@@ -28,7 +29,7 @@ public class HeaderParserEP extends AbstractExtensionPointBean {
   }
 
   @TestOnly
-  public HeaderParserEP(@NotNull String key, @NotNull Class<? extends HeaderParser> clazz) {
+  public HeaderParserEP(@Nonnull String key, @Nonnull Class<? extends HeaderParser> clazz) {
     this.key = key;
     this.implementationClass = clazz.getName();
   }

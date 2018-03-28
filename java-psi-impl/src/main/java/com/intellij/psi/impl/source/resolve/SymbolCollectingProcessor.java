@@ -24,7 +24,7 @@ import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.containers.MostlySingularMultiMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -34,7 +34,7 @@ public class SymbolCollectingProcessor extends BaseScopeProcessor implements Ele
   private PsiElement myCurrentFileContext = null;
 
   @Override
-  public <T> T getHint(@NotNull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       //noinspection unchecked
       return (T)this;
@@ -50,7 +50,7 @@ public class SymbolCollectingProcessor extends BaseScopeProcessor implements Ele
   }
 
   @Override
-  public boolean execute(@NotNull PsiElement element, ResolveState state) {
+  public boolean execute(@Nonnull PsiElement element, ResolveState state) {
     if (element instanceof PsiNamedElement) {
       PsiNamedElement named = (PsiNamedElement)element;
       String name = named.getName();
@@ -74,12 +74,12 @@ public class SymbolCollectingProcessor extends BaseScopeProcessor implements Ele
     private final PsiNamedElement myElement;
     private final PsiElement myFileContext;
 
-    public ResultWithContext(@NotNull PsiNamedElement element, PsiElement fileContext) {
+    public ResultWithContext(@Nonnull PsiNamedElement element, PsiElement fileContext) {
       myElement = element;
       myFileContext = fileContext;
     }
 
-    @NotNull
+    @Nonnull
     public PsiNamedElement getElement() {
       return myElement;
     }

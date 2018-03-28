@@ -18,8 +18,8 @@ package com.intellij.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
@@ -68,14 +68,14 @@ public class SyntheticCodeBlock implements Block, JavaBlock
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TextRange getTextRange()
 	{
 		return myTextRange;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<Block> getSubBlocks()
 	{
 		return mySubBlocks;
@@ -100,7 +100,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @NotNull Block child2)
+	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return JavaSpacePropertyProcessor.getSpacing(AbstractJavaBlock.getTreeNode(child2), mySettings, myJavaSettings);
 	}
@@ -154,7 +154,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		if(myChildAttributes != null)

@@ -22,8 +22,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.project.Project;
@@ -39,7 +40,7 @@ public class ExternalJavadocPresentationTest extends LightCodeInsightTestCase
 {
 	private static final String TEST_ROOT = "/codeInsight/externalJavadoc/";
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

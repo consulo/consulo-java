@@ -16,27 +16,29 @@
 
 package com.intellij.util.descriptors;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author nik
  */
 public class ConfigFileInfo {
-  @NotNull private final ConfigFileMetaData myMetaData;
-  @NotNull private final String myUrl;
+  @Nonnull
+  private final ConfigFileMetaData myMetaData;
+  @Nonnull
+  private final String myUrl;
 
 
-  public ConfigFileInfo(@NotNull final ConfigFileMetaData metaData, @NotNull final String url) {
+  public ConfigFileInfo(@Nonnull final ConfigFileMetaData metaData, @Nonnull final String url) {
     myMetaData = metaData;
     myUrl = url;
   }
 
-  @NotNull
+  @Nonnull
   public ConfigFileMetaData getMetaData() {
     return myMetaData;
   }
 
-  @NotNull
+  @Nonnull
   public String getUrl() {
     return myUrl;
   }

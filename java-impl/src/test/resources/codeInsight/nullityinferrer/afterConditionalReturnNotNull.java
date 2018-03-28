@@ -1,8 +1,8 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 class Test {
-    @NotNull
+    @Nonnull
     public  String noNull( @Nullable String text) {
         return text == null ? "" : text;
     }

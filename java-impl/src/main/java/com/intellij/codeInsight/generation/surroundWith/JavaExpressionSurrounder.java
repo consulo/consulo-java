@@ -17,7 +17,8 @@
 
 package com.intellij.codeInsight.generation.surroundWith;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -34,7 +35,7 @@ public abstract class JavaExpressionSurrounder implements Surrounder {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.surroundWith.SurroundExpressionHandler");
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement[] elements) {
+  public boolean isApplicable(@Nonnull PsiElement[] elements) {
     LOG.assertTrue(elements.length == 1 && elements[0] instanceof PsiExpression);
     return isApplicable((PsiExpression)elements[0]);
   }
@@ -42,9 +43,9 @@ public abstract class JavaExpressionSurrounder implements Surrounder {
   public abstract boolean isApplicable(PsiExpression expr);
 
   @Override
-  public TextRange surroundElements(@NotNull Project project,
-                                    @NotNull Editor editor,
-                                    @NotNull PsiElement[] elements) throws IncorrectOperationException {
+  public TextRange surroundElements(@Nonnull Project project,
+                                    @Nonnull Editor editor,
+                                    @Nonnull PsiElement[] elements) throws IncorrectOperationException {
     return surroundExpression(project, editor, (PsiExpression)elements[0]);
   }
 

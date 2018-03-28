@@ -15,25 +15,25 @@
  */
 package com.siyeh.ig.imports;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.DeleteImportFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class UnusedImportInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unused.import.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unused.import.problem.descriptor");
   }
@@ -77,7 +77,7 @@ public class UnusedImportInspection extends BaseInspection {
       checkImports(importStatements, classes, annotationList);
     }
 
-    private void checkImports(PsiImportStatementBase[] importStatements, PsiClass[] classes, @Nullable PsiModifierList annotationList) {
+    private void checkImports(PsiImportStatementBase[] importStatements, PsiClass[] classes, @javax.annotation.Nullable PsiModifierList annotationList) {
       if (importStatements.length == 0) {
         return;
       }

@@ -26,6 +26,7 @@ import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 
+import javax.annotation.Nonnull;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -33,7 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -50,7 +50,7 @@ public class GetJPDADialog extends DialogWrapper {
     init();
   }
 
-  @NotNull
+  @Nonnull
   protected Action[] createActions() {
     return new Action[]{getOKAction()};
   }

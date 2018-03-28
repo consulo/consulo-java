@@ -18,7 +18,7 @@ package com.siyeh.ipp.types;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
@@ -40,7 +40,7 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention
 {
 	private static final Logger LOG = Logger.getInstance("#" + ReplaceLambdaWithAnonymousIntention.class.getName());
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected PsiElementPredicate getElementPredicate()
 	{
@@ -48,12 +48,12 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention
 	}
 
 	@Override
-	protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException
+	protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 	}
 
 	@Override
-	protected void processIntention(Editor editor, @NotNull PsiElement element) throws IncorrectOperationException
+	protected void processIntention(Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
 		LOG.assertTrue(lambdaExpression != null);

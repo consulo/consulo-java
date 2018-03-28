@@ -22,7 +22,7 @@ import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,13 +34,13 @@ public class CheckForOutOfMemoryOnLargeArrayAllocationInspection
    */
   public int m_limit = 64;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "large.array.allocation.no.outofmemoryerror.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "large.array.allocation.no.outofmemoryerror.problem.descriptor");
@@ -61,7 +61,7 @@ public class CheckForOutOfMemoryOnLargeArrayAllocationInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@NotNull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
       if (!(type instanceof PsiArrayType)) {

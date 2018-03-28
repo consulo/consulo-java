@@ -30,7 +30,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +38,18 @@ import java.util.List;
 public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.problem.descriptor");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> result = new ArrayList<InspectionGadgetsFix>();
@@ -79,7 +79,7 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   private static class CharUsedInArithmeticContentFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.quickfix");
     }
@@ -108,7 +108,7 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
       this.typeText = typeText;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.cast.quickfix", typeText);
     }

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -54,7 +54,7 @@ public class LocalVariableDescriptorImpl extends ValueDescriptorImpl implements 
 
 	private boolean myIsNewLocal = true;
 
-	public LocalVariableDescriptorImpl(Project project, @NotNull LocalVariableProxyImpl local)
+	public LocalVariableDescriptorImpl(Project project, @Nonnull LocalVariableProxyImpl local)
 	{
 		super(project);
 		setLvalue(true);
@@ -142,7 +142,7 @@ public class LocalVariableDescriptorImpl extends ValueDescriptorImpl implements 
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@NotNull String expression, @NotNull XModificationCallback callback)
+			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
 			{
 				final LocalVariableProxyImpl local = LocalVariableDescriptorImpl.this.getLocalVariable();
 				if(local != null)

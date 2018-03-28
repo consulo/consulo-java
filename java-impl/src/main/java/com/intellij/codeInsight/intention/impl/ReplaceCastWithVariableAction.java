@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -26,8 +28,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -36,7 +36,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   private String myReplaceVariableName = "";
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
     final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
 
@@ -67,7 +67,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
 
     if (typeCastExpression == null) {
@@ -79,10 +79,10 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     toReplace.replace(factory.createExpressionFromText(myReplaceVariableName, toReplace));
   }
 
-  @Nullable
-  private static PsiLocalVariable findReplacement(@NotNull PsiMethod method,
-                                                  @NotNull PsiVariable castedVar,
-                                                  @NotNull PsiTypeCastExpression expression) {
+  @javax.annotation.Nullable
+  private static PsiLocalVariable findReplacement(@Nonnull PsiMethod method,
+                                                  @Nonnull PsiVariable castedVar,
+                                                  @Nonnull PsiTypeCastExpression expression) {
     final TextRange expressionTextRange = expression.getTextRange();
     for (PsiExpression occurrence : CodeInsightUtil.findExpressionOccurrences(method,expression)){
       ProgressIndicatorProvider.checkCanceled();
@@ -104,10 +104,10 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     return null;
   }
 
-  private static boolean isChangedBetween(@NotNull final PsiVariable variable,
-                                          @NotNull final PsiElement scope,
-                                          @NotNull final PsiElement start,
-                                          @NotNull final PsiElement end) {
+  private static boolean isChangedBetween(@Nonnull final PsiVariable variable,
+                                          @Nonnull final PsiElement scope,
+                                          @Nonnull final PsiElement start,
+                                          @Nonnull final PsiElement end) {
     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
       return false;
     }
@@ -147,8 +147,8 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     return result.get() == Boolean.TRUE;
   }
 
-  @Nullable
-  private static PsiLocalVariable getVariable(@NotNull PsiExpression occurrence) {
+  @javax.annotation.Nullable
+  private static PsiLocalVariable getVariable(@Nonnull PsiExpression occurrence) {
     final PsiElement parent = occurrence.getParent();
 
     if (parent instanceof PsiLocalVariable) {
@@ -169,7 +169,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.replace.cast.with.var.family");

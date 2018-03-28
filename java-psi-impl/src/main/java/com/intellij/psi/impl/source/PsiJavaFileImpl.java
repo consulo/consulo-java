@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
@@ -61,7 +61,7 @@ public class PsiJavaFileImpl extends PsiJavaFileBaseImpl
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public FileType getFileType()
 	{
 		return JavaFileType.INSTANCE;

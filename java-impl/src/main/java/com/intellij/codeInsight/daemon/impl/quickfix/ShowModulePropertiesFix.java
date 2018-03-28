@@ -26,13 +26,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ShowModulePropertiesFix extends IntentionAndQuickFixAction {
   private final String myModuleName;
 
-  public ShowModulePropertiesFix(@NotNull PsiElement context) {
+  public ShowModulePropertiesFix(@Nonnull PsiElement context) {
     this(ModuleUtilCore.findModuleForPsiElement(context));
   }
 
@@ -40,7 +40,7 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction {
     myModuleName = module == null ? null : module.getName();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     AnAction action = ActionManager.getInstance().getAction(IdeActions.MODULE_SETTINGS);
@@ -48,18 +48,18 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myModuleName != null;
   }
 
   @Override
-  public void applyFix(@NotNull Project project, PsiFile file, @Nullable Editor editor) {
+  public void applyFix(@Nonnull Project project, PsiFile file, @javax.annotation.Nullable Editor editor) {
     ProjectSettingsService.getInstance(project).showModuleConfigurationDialog(myModuleName, null);
   }
 

@@ -15,9 +15,9 @@
  */
 package consulo.java.packaging.impl.elements;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.packaging.impl.elements.ArchivePackagingElement;
-import consulo.java.packaging.impl.elements.JarArchiveElementType;
 import consulo.packaging.elements.ArchivePackageWriter;
 import consulo.packaging.impl.elements.ZipArchivePackagingElement;
 
@@ -32,7 +32,7 @@ public class JarArchivePackagingElement extends ArchivePackagingElement
 		super(JarArchiveElementType.getInstance());
 	}
 
-	public JarArchivePackagingElement(@NotNull String archiveFileName)
+	public JarArchivePackagingElement(@Nonnull String archiveFileName)
 	{
 		super(JarArchiveElementType.getInstance(), archiveFileName);
 	}

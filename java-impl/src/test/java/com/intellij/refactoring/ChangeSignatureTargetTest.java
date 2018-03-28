@@ -26,10 +26,10 @@ import com.intellij.psi.PsiMember;
 import com.intellij.refactoring.changeSignature.JavaChangeSignatureHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ChangeSignatureTargetTest extends LightCodeInsightTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

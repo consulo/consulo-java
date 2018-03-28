@@ -15,13 +15,14 @@
  */
 package com.intellij.codeInsight.template.macro;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.template.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiVariable;
-import org.jetbrains.annotations.NotNull;
 
 public class TypeOfVariableMacro extends Macro {
   @Override
@@ -35,13 +36,13 @@ public class TypeOfVariableMacro extends Macro {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultValue() {
     return "A";
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     if (params.length == 0) return null;
 
     final Project project = context.getProject();
@@ -64,7 +65,7 @@ public class TypeOfVariableMacro extends Macro {
   }
 
   @Override
-  public Result calculateQuickResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
 

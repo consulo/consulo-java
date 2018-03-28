@@ -39,8 +39,8 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -49,7 +49,7 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
   private TextRange mySelectionRange;
 
   @Override
-  public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
     // do it later because the fix was called inside writeAction
     ApplicationManager.getApplication().invokeLater(new Runnable(){
       @Override
@@ -60,13 +60,13 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return CodeInsightBundle.message("inspection.i18n.quickfix");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getName();
   }
@@ -152,7 +152,7 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
     }, CodeInsightBundle.message("quickfix.i18n.command.name"),project);
   }
 
-  protected PsiElement doReplacementInJava(@NotNull final PsiFile psiFile,
+  protected PsiElement doReplacementInJava(@Nonnull final PsiFile psiFile,
                                            final Editor editor,
                                            final PsiLiteralExpression literalExpression,
                                            String i18nizedText) throws                                                                                                                            IncorrectOperationException {

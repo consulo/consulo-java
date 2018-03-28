@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.junit;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.AnnotateMethodFix;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -33,19 +33,19 @@ import com.siyeh.ig.psiutils.TestUtils;
 public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("junit3.style.test.method.in.junit4.class.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("junit3.style.test.method.in.junit4.class.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new DelegatingFix(new AnnotateMethodFix("org.junit.Test"));

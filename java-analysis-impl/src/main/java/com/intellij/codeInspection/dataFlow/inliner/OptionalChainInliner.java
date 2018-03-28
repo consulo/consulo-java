@@ -23,8 +23,9 @@ import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
 
 import java.util.function.BiConsumer;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.codeInspection.dataFlow.NullabilityProblem;
 import com.intellij.codeInspection.dataFlow.Nullness;
@@ -96,7 +97,7 @@ public class OptionalChainInliner implements CallInliner
 	{/* no op */});
 
 	@Override
-	public boolean tryInlineCall(@NotNull CFGBuilder builder, @NotNull PsiMethodCallExpression call)
+	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
 	{
 		BiConsumer<CFGBuilder, PsiMethodCallExpression> terminalInliner = TERMINAL_MAPPER.mapFirst(call);
 		if(terminalInliner != null)

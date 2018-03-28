@@ -32,7 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.lang.Language;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
@@ -87,14 +88,14 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
 	}
 
 	@Override
-	@NotNull
-	protected UsageViewDescriptor createUsageViewDescriptor(@NotNull UsageInfo[] usages)
+	@Nonnull
+	protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages)
 	{
 		return new PullUpUsageViewDescriptor();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		final List<UsageInfo> result = new ArrayList<UsageInfo>();
@@ -146,7 +147,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
 	}  */
 
 	@Override
-	protected void performRefactoring(@NotNull UsageInfo[] usages)
+	protected void performRefactoring(@Nonnull UsageInfo[] usages)
 	{
 		moveMembersToBase();
 		moveFieldInitializations();
@@ -261,7 +262,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
 		}
 	}
 
-	private PullUpHelper<MemberInfo> getProcessor(@NotNull PsiElement element)
+	private PullUpHelper<MemberInfo> getProcessor(@Nonnull PsiElement element)
 	{
 		Language language = element.getLanguage();
 		return getProcessor(language);
@@ -278,7 +279,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
 		return helper;
 	}
 
-	private PullUpHelper<MemberInfo> getProcessor(@NotNull MemberInfo info)
+	private PullUpHelper<MemberInfo> getProcessor(@Nonnull MemberInfo info)
 	{
 		PsiReferenceList refList = info.getSourceReferenceList();
 		if(refList != null)
@@ -395,7 +396,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public PsiElement[] getElements()
 		{
 			return new PsiElement[]{mySourceClass};

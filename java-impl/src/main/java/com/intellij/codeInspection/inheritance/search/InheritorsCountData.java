@@ -1,17 +1,18 @@
 package com.intellij.codeInspection.inheritance.search;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
 class InheritorsCountData implements Comparable<InheritorsCountData> {
-  @NotNull
+  @Nonnull
   private final PsiClass myPsiClass;
   private final int myInheritorsCount;
 
-  public InheritorsCountData(@NotNull final PsiClass psiClass, final int inheritorsCount) {
+  public InheritorsCountData(@Nonnull final PsiClass psiClass, final int inheritorsCount) {
     myPsiClass = psiClass;
     myInheritorsCount = inheritorsCount;
   }
@@ -25,7 +26,7 @@ class InheritorsCountData implements Comparable<InheritorsCountData> {
     return myInheritorsCount == data.myInheritorsCount && myPsiClass.equals(data.myPsiClass);
   }
 
-  @NotNull
+  @Nonnull
   public PsiClass getPsiClass() {
     return myPsiClass;
   }
@@ -42,7 +43,7 @@ class InheritorsCountData implements Comparable<InheritorsCountData> {
   }
 
   @Override
-  public int compareTo(@NotNull final InheritorsCountData that) {
+  public int compareTo(@Nonnull final InheritorsCountData that) {
     final int sub = -this.myInheritorsCount + that.myInheritorsCount;
     if (sub != 0) return sub;
     return String.CASE_INSENSITIVE_ORDER.compare(this.myPsiClass.getName(), that.myPsiClass.getName());

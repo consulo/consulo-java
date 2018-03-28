@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -97,7 +97,7 @@ public class PsiSuperMethodUtil
 		return null;
 	}
 
-	public static boolean isSuperMethod(@NotNull PsiMethod method, @NotNull PsiMethod superMethod)
+	public static boolean isSuperMethod(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod)
 	{
 		HierarchicalMethodSignature signature = method.getHierarchicalMethodSignature();
 		List<HierarchicalMethodSignature> superSignatures = signature.getSuperSignatures();
@@ -114,8 +114,8 @@ public class PsiSuperMethodUtil
 		return false;
 	}
 
-	@NotNull
-	public static PsiSubstitutor obtainFinalSubstitutor(@NotNull PsiClass superClass, @NotNull PsiSubstitutor superSubstitutor, @NotNull PsiSubstitutor derivedSubstitutor, boolean inRawContext)
+	@Nonnull
+	public static PsiSubstitutor obtainFinalSubstitutor(@Nonnull PsiClass superClass, @Nonnull PsiSubstitutor superSubstitutor, @Nonnull PsiSubstitutor derivedSubstitutor, boolean inRawContext)
 	{
 		if(inRawContext)
 		{
@@ -138,8 +138,8 @@ public class PsiSuperMethodUtil
 		return map == null ? PsiSubstitutor.EMPTY : JavaPsiFacade.getInstance(superClass.getProject()).getElementFactory().createSubstitutor(map);
 	}
 
-	@NotNull
-	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@NotNull PsiClass aClass)
+	@Nonnull
+	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@Nonnull PsiClass aClass)
 	{
 		final Map<MethodSignature, Set<PsiMethod>> overrideEquivalent = new THashMap<MethodSignature, Set<PsiMethod>>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 		final GlobalSearchScope resolveScope = aClass.getResolveScope();
@@ -197,7 +197,7 @@ public class PsiSuperMethodUtil
 		return overrideEquivalent;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass correctClassByScope(PsiClass psiClass, final GlobalSearchScope resolveScope)
 	{
 		if(psiClass == null)

@@ -18,8 +18,8 @@ package com.intellij.refactoring.typeMigration;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.SmartList;
@@ -46,7 +46,7 @@ public class Util
 		return parent;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiElement normalizeElement(final PsiElement element)
 	{
 		if(element instanceof PsiMethod)
@@ -109,12 +109,12 @@ public class Util
 		return element;
 	}
 
-	public static boolean canBeMigrated(@NotNull final PsiElement[] es)
+	public static boolean canBeMigrated(@Nonnull final PsiElement[] es)
 	{
 		return Arrays.stream(es).allMatch(Util::canBeMigrated);
 	}
 
-	private static boolean canBeMigrated(@Nullable final PsiElement e)
+	private static boolean canBeMigrated(@javax.annotation.Nullable final PsiElement e)
 	{
 		if(e == null)
 		{

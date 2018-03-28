@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.formatter.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.alignment.AlignmentStrategy;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
@@ -25,18 +25,18 @@ import com.intellij.psi.TokenType;
 public abstract class ChildAlignmentStrategyProvider
 {
 
-	public abstract AlignmentStrategy getNextChildStrategy(@NotNull ASTNode child);
+	public abstract AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child);
 
 	public static ChildAlignmentStrategyProvider NULL_STRATEGY_PROVIDER = new ChildAlignmentStrategyProvider()
 	{
 		@Override
-		public AlignmentStrategy getNextChildStrategy(@NotNull ASTNode child)
+		public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
 		{
 			return AlignmentStrategy.getNullStrategy();
 		}
 	};
 
-	public static boolean isWhiteSpaceWithBlankLines(@Nullable ASTNode node)
+	public static boolean isWhiteSpaceWithBlankLines(@javax.annotation.Nullable ASTNode node)
 	{
 		return node != null && node.getElementType() == TokenType.WHITE_SPACE && StringUtil.countNewLines(node.getChars()) > 1;
 	}

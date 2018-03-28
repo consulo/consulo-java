@@ -15,9 +15,9 @@
  */
 package com.intellij.execution.applet;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
@@ -46,13 +46,13 @@ public class AppletConfigurationType implements ConfigurationType
 			}
 
 			@Override
-			public boolean isApplicable(@NotNull Project project)
+			public boolean isApplicable(@Nonnull Project project)
 			{
 				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
 			}
 
 			@Override
-			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration)
+			public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration)
 			{
 				((ModuleBasedConfiguration) configuration).onNewConfigurationCreated();
 			}
@@ -84,7 +84,7 @@ public class AppletConfigurationType implements ConfigurationType
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getId()
 	{
 		return "Applet";

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -52,7 +52,7 @@ public abstract class ResolveTestCase extends PsiTestCase {
     return configureByFileText(fileText, fileName, null);
   }
   
-  protected PsiReference configureByFileText(String fileText, String fileName, @Nullable final VirtualFile parentDir) throws Exception {
+  protected PsiReference configureByFileText(String fileText, String fileName, @javax.annotation.Nullable final VirtualFile parentDir) throws Exception {
     int offset = fileText.indexOf(MARKER);
     assertTrue(offset >= 0);
     fileText = fileText.substring(0, offset) + fileText.substring(offset + MARKER.length());

@@ -15,10 +15,11 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.generation.surroundWith.JavaWithCastSurrounder;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiExpression;
-import org.jetbrains.annotations.NotNull;
 
 public class CastExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
   public CastExpressionPostfixTemplate() {
@@ -26,7 +27,7 @@ public class CastExpressionPostfixTemplate extends ExpressionPostfixTemplateWith
   }
 
   @Override
-  protected void doIt(@NotNull final Editor editor, @NotNull final PsiExpression expression) {
+  protected void doIt(@Nonnull final Editor editor, @Nonnull final PsiExpression expression) {
     PostfixTemplatesUtils.surround(new JavaWithCastSurrounder(), editor, expression);
   }
 }

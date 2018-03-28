@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.UninitializedReadCollector;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,20 +34,20 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
   public boolean m_ignorePrimitives = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "StaticVariableUsedBeforeInitialization";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "static.variable.used.before.initialization.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.variable.used.before.initialization.problem.descriptor");
@@ -70,7 +70,7 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

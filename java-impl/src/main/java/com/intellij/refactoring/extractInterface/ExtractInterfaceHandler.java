@@ -15,9 +15,9 @@
  */
 package com.intellij.refactoring.extractInterface;
 
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
@@ -56,7 +56,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
   private PsiDirectory myTargetDir;
   private DocCommentPolicy myJavaDocPolicy;
 
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = file.findElementAt(offset);
@@ -74,7 +74,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
     }
   }
 
-  public void invoke(@NotNull final Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     myProject = project;

@@ -26,17 +26,17 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class CStyleArrayDeclarationInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "c.style.array.declaration.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "c.style.array.declaration.problem.descriptor");
@@ -49,7 +49,7 @@ public class CStyleArrayDeclarationInspection extends BaseInspection {
   private static class CStyleArrayDeclarationFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "c.style.array.declaration.replace.quickfix");
@@ -72,7 +72,7 @@ public class CStyleArrayDeclarationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable var) {
+    public void visitVariable(@Nonnull PsiVariable var) {
       super.visitVariable(var);
       final PsiType declaredType = var.getType();
       if (declaredType.getArrayDimensions() == 0) {

@@ -18,7 +18,8 @@ package consulo.java.module.extension;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.roots.ModifiableRootModel;
 import consulo.module.extension.ModuleExtension;
 import consulo.roots.ContentFolderSupportPatcher;
@@ -35,7 +36,7 @@ import consulo.roots.impl.TestResourceContentFolderTypeProvider;
 public class JavaContentFolderSupportPatcher implements ContentFolderSupportPatcher
 {
 	@Override
-	public void patch(@NotNull ModifiableRootModel model, @NotNull Set<ContentFolderTypeProvider> set)
+	public void patch(@Nonnull ModifiableRootModel model, @Nonnull Set<ContentFolderTypeProvider> set)
 	{
 		ModuleExtension javaModuleExtension = model.getExtension("java");
 		if(javaModuleExtension != null)

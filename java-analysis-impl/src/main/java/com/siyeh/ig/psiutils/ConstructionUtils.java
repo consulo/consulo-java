@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -216,7 +215,7 @@ public class ConstructionUtils
 	 * @param expression expression to test
 	 * @return true if supplied expression is an empty array initializer
 	 */
-	public static boolean isEmptyArrayInitializer(@Nullable PsiExpression expression)
+	public static boolean isEmptyArrayInitializer(@javax.annotation.Nullable PsiExpression expression)
 	{
 		expression = PsiUtil.skipParenthesizedExprDown(expression);
 		if(!(expression instanceof PsiNewExpression))

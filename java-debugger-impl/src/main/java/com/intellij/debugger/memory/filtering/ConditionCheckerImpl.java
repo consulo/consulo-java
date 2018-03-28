@@ -17,8 +17,8 @@ package com.intellij.debugger.memory.filtering;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -41,7 +41,7 @@ public class ConditionCheckerImpl implements ConditionChecker
 	private final MyCachedEvaluator myEvaluator;
 	private final AtomicReference<CheckingResult> myResultReference = new AtomicReference<>();
 
-	public ConditionCheckerImpl(@NotNull DebugProcessImpl debugProcess, @Nullable XExpression expression, @NotNull String className)
+	public ConditionCheckerImpl(@Nonnull DebugProcessImpl debugProcess, @javax.annotation.Nullable XExpression expression, @Nonnull String className)
 	{
 		myDebugProcess = debugProcess;
 		myEvaluator = new MyCachedEvaluator(myDebugProcess.getProject(), className);
@@ -49,7 +49,7 @@ public class ConditionCheckerImpl implements ConditionChecker
 	}
 
 	@Override
-	public CheckingResult check(@NotNull ObjectReference ref)
+	public CheckingResult check(@Nonnull ObjectReference ref)
 	{
 		myDebugProcess.getManagerThread().invokeAndWait(new MyCheckerCommand(ref));
 		return myResultReference.get();
@@ -59,7 +59,7 @@ public class ConditionCheckerImpl implements ConditionChecker
 	{
 		private final ObjectReference myReference;
 
-		protected MyCheckerCommand(@NotNull ObjectReference ref)
+		protected MyCheckerCommand(@Nonnull ObjectReference ref)
 		{
 			super(myDebugProcess.getDebuggerContext());
 			myReference = ref;
@@ -72,7 +72,7 @@ public class ConditionCheckerImpl implements ConditionChecker
 		}
 
 		@Override
-		public void threadAction(@NotNull SuspendContextImpl suspendContext)
+		public void threadAction(@Nonnull SuspendContextImpl suspendContext)
 		{
 			try
 			{
@@ -91,7 +91,7 @@ public class ConditionCheckerImpl implements ConditionChecker
 		private final Project myProject;
 		private final String myClassName;
 
-		public MyCachedEvaluator(@NotNull Project project, @NotNull String className)
+		public MyCachedEvaluator(@Nonnull Project project, @Nonnull String className)
 		{
 			super();
 			myProject = project;

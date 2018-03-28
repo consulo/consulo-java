@@ -37,8 +37,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocTagValue(this);
     }
@@ -120,7 +120,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
           (methodSignature != null && !MethodSignatureUtil.areSignaturesErasureEqual(methodSignature, method.getSignature(PsiSubstitutor.EMPTY)))) continue;
       return new MyReference(method) {
         @Override
-        @NotNull
+        @Nonnull
         public PsiElement[] getVariants() {
           final List<PsiMethod> lst = new ArrayList<PsiMethod>();
           for (PsiMethod method : methods) {
@@ -235,21 +235,21 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public JavaResolveResult advancedResolve(boolean incompleteCode) {
       return myReferredElement == null ? JavaResolveResult.EMPTY
                                   : new CandidateInfo(myReferredElement, PsiSubstitutor.EMPTY);
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public JavaResolveResult[] multiResolve(boolean incompleteCode) {
       return myReferredElement == null ? JavaResolveResult.EMPTY_ARRAY
                                   : new JavaResolveResult[]{new CandidateInfo(myReferredElement, PsiSubstitutor.EMPTY)};
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public PsiElement[] getVariants(){
       final List<PsiModifierListOwner> vars = new ArrayList<PsiModifierListOwner>();
       PsiClass scope = getScope();
@@ -267,7 +267,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getCanonicalText() {
       final PsiElement nameElement = getNameElement();
       assert nameElement != null;
@@ -286,7 +286,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+    public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
       if (isReferenceTo(element)) return PsiDocMethodOrFieldRef.this;
       final PsiElement nameElement = getNameElement();
       assert nameElement != null;

@@ -21,7 +21,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElementFinder;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class MigrationElementFinder extends PsiElementFinder implements DumbAwar
   }
 
   @Override
-  public PsiClass findClass(@NotNull String qualifiedName, @NotNull GlobalSearchScope scope) {
+  public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     PsiMigrationImpl migration = PsiMigrationManager.getInstance(myProject).getCurrentMigration();
     if (migration != null) {
       return migration.getMigrationClass(qualifiedName);
@@ -44,9 +44,9 @@ public class MigrationElementFinder extends PsiElementFinder implements DumbAwar
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass[] findClasses(@NotNull String qualifiedName, @NotNull GlobalSearchScope scope) {
+  public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     PsiMigrationImpl migration = PsiMigrationManager.getInstance(myProject).getCurrentMigration();
     if (migration != null) {
       final PsiClass migrationClass = migration.getMigrationClass(qualifiedName);
@@ -57,9 +57,9 @@ public class MigrationElementFinder extends PsiElementFinder implements DumbAwar
     return PsiClass.EMPTY_ARRAY;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass[] getClasses(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope) {
+  public PsiClass[] getClasses(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     PsiMigrationImpl migration = PsiMigrationManager.getInstance(myProject).getCurrentMigration();
     if (migration != null) {
       List<PsiClass> classes = migration.getMigrationClasses(psiPackage.getQualifiedName());

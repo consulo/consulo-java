@@ -19,7 +19,7 @@ import gnu.trove.THashSet;
 
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PropertyUtil;
@@ -166,7 +166,7 @@ public class RemoveUnusedVariableUtil {
     }
   }
 
-  static void collectReferences(@NotNull PsiElement context, final PsiVariable variable, final List<PsiElement> references) {
+  static void collectReferences(@Nonnull PsiElement context, final PsiVariable variable, final List<PsiElement> references) {
     context.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
         if (expression.resolve() == variable) references.add(expression);

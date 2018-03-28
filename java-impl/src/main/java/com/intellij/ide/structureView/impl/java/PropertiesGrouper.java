@@ -22,7 +22,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.PlatformIcons;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class PropertiesGrouper implements Grouper{
   @NonNls public static final String ID = "SHOW_PROPERTIES";
 
-  @NotNull
+  @Nonnull
   public Collection<Group> group(final AbstractTreeNode parent, Collection<TreeElement> children) {
     if (parent.getValue() instanceof PropertyGroup) return Collections.emptyList();
     Map<Group,Group> result = new THashMap<Group, Group>();
@@ -60,12 +60,12 @@ public class PropertiesGrouper implements Grouper{
     return result.values();
   }
 
-  @NotNull
+  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.structureview.show.properties"), null, PlatformIcons.PROPERTY_ICON);
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return ID;
   }

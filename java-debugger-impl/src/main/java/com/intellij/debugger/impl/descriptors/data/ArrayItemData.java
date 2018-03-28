@@ -19,7 +19,7 @@ import com.intellij.debugger.ui.impl.watch.ArrayElementDescriptorImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.ArrayReference;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public final class ArrayItemData extends DescriptorData<ArrayElementDescriptorImpl>{
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.descriptors.data.ArrayItemData");
@@ -27,7 +27,7 @@ public final class ArrayItemData extends DescriptorData<ArrayElementDescriptorIm
   private final ArrayReference myArray;
   private final int myIndex;
 
-  public ArrayItemData(@NotNull ArrayReference arrRef, int idx) {
+  public ArrayItemData(@Nonnull ArrayReference arrRef, int idx) {
     LOG.assertTrue(0 <= idx);
     if(LOG.isDebugEnabled()) {
       LOG.assertTrue(idx <= arrRef.length());

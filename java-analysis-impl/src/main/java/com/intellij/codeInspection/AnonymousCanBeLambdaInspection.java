@@ -27,11 +27,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -68,7 +69,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 	public boolean reportNotAnnotatedInterfaces = true;
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getGroupDisplayName()
 	{
@@ -76,7 +77,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
@@ -89,7 +90,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getShortName()
 	{
@@ -103,9 +104,9 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		return new SingleCheckboxOptionsPanel("Report when interface is not annotated with @FunctionalInterface", this, "reportNotAnnotatedInterfaces");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -138,7 +139,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		};
 	}
 
-	static boolean hasRuntimeAnnotations(PsiMethod method, @NotNull Set<String> runtimeAnnotationsToIgnore)
+	static boolean hasRuntimeAnnotations(PsiMethod method, @Nonnull Set<String> runtimeAnnotationsToIgnore)
 	{
 		PsiAnnotation[] annotations = method.getModifierList().getAnnotations();
 		for(PsiAnnotation annotation : annotations)
@@ -229,7 +230,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		return PsiType.NULL;
 	}
 
-	public static boolean canBeConvertedToLambda(PsiAnonymousClass aClass, boolean acceptParameterizedFunctionTypes, @NotNull Set<String> ignoredRuntimeAnnotations)
+	public static boolean canBeConvertedToLambda(PsiAnonymousClass aClass, boolean acceptParameterizedFunctionTypes, @Nonnull Set<String> ignoredRuntimeAnnotations)
 	{
 		return canBeConvertedToLambda(aClass, acceptParameterizedFunctionTypes, true, ignoredRuntimeAnnotations);
 	}
@@ -255,7 +256,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 	public static boolean canBeConvertedToLambda(PsiAnonymousClass aClass,
 			boolean acceptParameterizedFunctionTypes,
 			boolean reportNotAnnotatedInterfaces,
-			@NotNull Set<String> ignoredRuntimeAnnotations)
+			@Nonnull Set<String> ignoredRuntimeAnnotations)
 	{
 		if(PsiUtil.getLanguageLevel(aClass).isAtLeast(LanguageLevel.JDK_1_8))
 		{
@@ -279,7 +280,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		return false;
 	}
 
-	public static PsiExpression replaceAnonymousWithLambda(@NotNull PsiElement anonymousClass, PsiType expectedType)
+	public static PsiExpression replaceAnonymousWithLambda(@Nonnull PsiElement anonymousClass, PsiType expectedType)
 	{
 		PsiNewExpression newArrayExpression = (PsiNewExpression) JavaPsiFacade.getElementFactory(anonymousClass.getProject()).createExpressionFromText("new " + expectedType.getCanonicalText() +
 				"[]{" + anonymousClass.getText() + "}", anonymousClass);
@@ -288,7 +289,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		return replacePsiElementWithLambda(initializer.getInitializers()[0], true, false);
 	}
 
-	public static PsiExpression replacePsiElementWithLambda(@NotNull PsiElement element, final boolean ignoreEqualsMethod, boolean forceIgnoreTypeCast)
+	public static PsiExpression replacePsiElementWithLambda(@Nonnull PsiElement element, final boolean ignoreEqualsMethod, boolean forceIgnoreTypeCast)
 	{
 		if(!(element instanceof PsiNewExpression))
 		{
@@ -331,7 +332,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 	 * @param forceIgnoreTypeCast if false, type cast might be added if necessary
 	 * @return newly-generated lambda expression (possibly with typecast)
 	 */
-	@NotNull
+	@Nonnull
 	static PsiExpression generateLambdaByMethod(PsiAnonymousClass anonymousClass, PsiMethod method, UnaryOperator<PsiLambdaExpression> replacer, boolean forceIgnoreTypeCast)
 	{
 		ChangeContextUtil.encodeContextInfo(anonymousClass, true);
@@ -393,7 +394,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		return (PsiExpression) javaCodeStyleManager.shortenClassReferences(typeCast);
 	}
 
-	@NotNull
+	@Nonnull
 	static Collection<PsiComment> collectCommentsOutsideMethodBody(PsiAnonymousClass anonymousClass, PsiCodeBlock body)
 	{
 		final Collection<PsiComment> psiComments = PsiTreeUtil.findChildrenOfType(anonymousClass, PsiComment.class);
@@ -445,7 +446,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 
 	private static class ReplaceWithLambdaFix implements LocalQuickFix, HighPriorityAction
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -453,7 +454,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			final PsiElement element = descriptor.getPsiElement();
 			if(element != null)

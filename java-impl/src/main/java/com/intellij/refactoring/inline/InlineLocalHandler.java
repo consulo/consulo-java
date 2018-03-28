@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExceptionUtil;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
@@ -71,7 +71,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
   /**
    * should be called in AtomicAction
    */
-  public static void invoke(@NotNull final Project project, final Editor editor, final PsiLocalVariable local, PsiReferenceExpression refExpr) {
+  public static void invoke(@Nonnull final Project project, final Editor editor, final PsiLocalVariable local, PsiReferenceExpression refExpr) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, local)) return;
 
     final HighlightManager highlightManager = HighlightManager.getInstance(project);
@@ -272,7 +272,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     }, RefactoringBundle.message("inline.command", localName), null);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiElement checkRefsInAugmentedAssignmentOrUnaryModified(final PsiElement[] refsToInline) {
     for (PsiElement element : refsToInline) {
 
@@ -313,7 +313,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     return defToInline.getParent() instanceof PsiVariable;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiExpression getDefToInline(final PsiLocalVariable local,
                                               final PsiElement refExpr,
                                               final PsiCodeBlock block) {

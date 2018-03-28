@@ -26,7 +26,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -45,28 +46,28 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
   private final PsiClass myPsiClass;
 
 
-  public QualifyThisArgumentFix(@NotNull PsiThisExpression expression, @NotNull PsiClass psiClass) {
+  public QualifyThisArgumentFix(@Nonnull PsiThisExpression expression, @Nonnull PsiClass psiClass) {
     myExpression = expression;
     myPsiClass = psiClass;
   }
 
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!myExpression.isValid()) return false;
     if (!myPsiClass.isValid()) return false;
     setText("Qualify this expression with \'" + myPsiClass.getQualifiedName() + "\'");
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return "Qualify this";
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     myExpression.replace(RefactoringChangeUtil.createThisExpression(PsiManager.getInstance(project), myPsiClass));
   }
 

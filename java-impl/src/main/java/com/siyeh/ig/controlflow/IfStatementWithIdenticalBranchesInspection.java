@@ -17,8 +17,8 @@ package com.siyeh.ig.controlflow;
 
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiBlockStatement;
@@ -47,14 +47,14 @@ public class IfStatementWithIdenticalBranchesInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "if.statement.with.identical.branches.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "if.statement.with.identical.branches.problem.descriptor");
@@ -70,14 +70,14 @@ public class IfStatementWithIdenticalBranchesInspection
     public CollapseIfFix() {
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "if.statement.with.identical.branches.collapse.quickfix");
     }
 
     @Override
-    public void doFix(@NotNull Project project,
+    public void doFix(@Nonnull Project project,
                       ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement identifier = descriptor.getPsiElement();
@@ -163,7 +163,7 @@ public class IfStatementWithIdenticalBranchesInspection
 
     @Override
     public void visitIfStatement(
-      @NotNull PsiIfStatement ifStatement) {
+      @Nonnull PsiIfStatement ifStatement) {
       super.visitIfStatement(ifStatement);
       final PsiStatement elseBranch = ifStatement.getElseBranch();
       final PsiStatement thenBranch = ifStatement.getThenBranch();

@@ -26,8 +26,8 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.containers.HashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,12 +36,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class JavaTestFinder implements TestFinder {
-  public PsiClass findSourceElement(@NotNull PsiElement element) {
+  public PsiClass findSourceElement(@Nonnull PsiElement element) {
     return TestIntegrationUtils.findOuterClass(element);
   }
 
-  @NotNull
-  public Collection<PsiElement> findClassesForTest(@NotNull PsiElement element) {
+  @Nonnull
+  public Collection<PsiElement> findClassesForTest(@Nonnull PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) return Collections.emptySet();
 
@@ -75,8 +75,8 @@ public class JavaTestFinder implements TestFinder {
     return true;
   }
 
-  @NotNull
-  public Collection<PsiElement> findTestsForClass(@NotNull PsiElement element) {
+  @Nonnull
+  public Collection<PsiElement> findTestsForClass(@Nonnull PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) return Collections.emptySet();
 
@@ -118,7 +118,7 @@ public class JavaTestFinder implements TestFinder {
     return index.getModuleForFile(element.getContainingFile().getVirtualFile());
   }
 
-  public boolean isTest(@NotNull PsiElement element) {
+  public boolean isTest(@Nonnull PsiElement element) {
     return TestIntegrationUtils.isTest(element);
   }
 }

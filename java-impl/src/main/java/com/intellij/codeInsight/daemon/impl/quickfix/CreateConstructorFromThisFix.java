@@ -25,7 +25,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiTypeParameter;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +42,7 @@ public class CreateConstructorFromThisFix extends CreateConstructorFromThisOrSup
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     PsiElement e = element;
     do {
@@ -57,7 +57,7 @@ public class CreateConstructorFromThisFix extends CreateConstructorFromThisOrSup
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.constructor.from.this.call.family");
   }

@@ -16,7 +16,7 @@
 
 package consulo.java.module.extension;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.NotNullFunction;
@@ -38,7 +38,7 @@ public class LazyValueBySdk<T>
 
 	private Sdk myLastSdk;
 
-	public LazyValueBySdk(@NotNull ModuleExtensionWithSdk<?> extension, @NotNull T defaultValue, @NotNull NotNullFunction<Sdk, T> func)
+	public LazyValueBySdk(@Nonnull ModuleExtensionWithSdk<?> extension, @Nonnull T defaultValue, @Nonnull NotNullFunction<Sdk, T> func)
 	{
 		myExtension = extension;
 		myFunc = func;

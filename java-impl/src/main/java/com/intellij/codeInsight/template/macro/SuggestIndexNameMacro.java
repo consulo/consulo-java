@@ -15,12 +15,13 @@
  */
 package com.intellij.codeInsight.template.macro;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.template.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class SuggestIndexNameMacro extends Macro {
   @Override
@@ -34,13 +35,13 @@ public class SuggestIndexNameMacro extends Macro {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     if (params.length != 0) return null;
 
     final Project project = context.getProject();

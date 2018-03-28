@@ -15,9 +15,11 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.pom.Navigatable;
@@ -51,7 +53,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
 		super(stub);
 		myReferenceElement = new AtomicNotNullLazyValue<ClsJavaCodeReferenceElementImpl>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected ClsJavaCodeReferenceElementImpl compute()
 			{
@@ -63,7 +65,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
 		};
 		myParameterList = new AtomicNotNullLazyValue<ClsAnnotationParameterListImpl>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected ClsAnnotationParameterListImpl compute()
 			{
@@ -75,14 +77,14 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		buffer.append('@').append(myReferenceElement.getValue().getCanonicalText());
 		appendText(getParameterList(), indentLevel, buffer);
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, null);
 		PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -91,7 +93,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return new PsiElement[]{
@@ -101,7 +103,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -114,7 +116,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotationParameterList getParameterList()
 	{
 		return myParameterList.getValue();

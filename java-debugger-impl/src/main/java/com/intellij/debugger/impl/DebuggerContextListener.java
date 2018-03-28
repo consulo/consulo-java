@@ -17,10 +17,10 @@ package com.intellij.debugger.impl;
 
 import java.util.EventListener;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 
 public interface DebuggerContextListener extends EventListener
 {
-	void changeEvent(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event);
+	void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event);
 }

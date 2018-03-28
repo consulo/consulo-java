@@ -21,11 +21,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import javax.annotation.Nonnull;
 import javax.swing.KeyStroke;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.MemberChooser;
@@ -84,7 +85,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
 		final PsiMethodMember[] all = convertToMethodMembers(allCandidates);
 		final NotNullLazyValue<PsiMethodWithOverridingPercentMember[]> lazyElementsWithPercent = new NotNullLazyValue<PsiMethodWithOverridingPercentMember[]>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected PsiMethodWithOverridingPercentMember[] compute()
 			{
@@ -132,7 +133,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
 	private JavaOverrideImplementMemberChooser(final PsiMethodMember[] allElements,
 			final PsiMethodMember[] onlyPrimaryElements,
 			final NotNullLazyValue<PsiMethodWithOverridingPercentMember[]> lazyElementsWithPercent,
-			final @NotNull Project project,
+			final @Nonnull Project project,
 			final boolean isInsertOverrideVisible,
 			final boolean merge,
 			final boolean toImplement,

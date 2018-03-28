@@ -20,8 +20,8 @@ import static com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer.ORG_JETBR
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis;
 import com.intellij.codeInspection.dataFlow.ContractInference;
 import com.intellij.codeInspection.dataFlow.HardcodedContracts;
@@ -56,7 +56,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 
 	@Nullable
 	@Override
-	public PsiAnnotation findInferredAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN)
+	public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN)
 	{
 		if(!INFERRED_ANNOTATIONS.contains(annotationFQN))
 		{
@@ -115,7 +115,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 	}
 
 	@Override
-	public boolean ignoreInference(@NotNull PsiModifierListOwner owner, @Nullable String annotationFQN)
+	public boolean ignoreInference(@Nonnull PsiModifierListOwner owner, @javax.annotation.Nullable String annotationFQN)
 	{
 		if(owner instanceof PsiMethod && PsiUtil.canBeOverriden((PsiMethod) owner))
 		{
@@ -139,7 +139,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiAnnotation getInferredContractAnnotation(PsiMethodImpl method)
 	{
 		if(method.getModifierList().findAnnotation(ORG_JETBRAINS_ANNOTATIONS_CONTRACT) != null)
@@ -150,7 +150,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 		return createContractAnnotation(ContractInference.inferContracts(method), PurityInference.inferPurity(method));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiAnnotation getInferredNullityAnnotation(PsiMethodImpl method)
 	{
 		NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
@@ -204,13 +204,13 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiAnnotation createContractAnnotation(List<? extends MethodContract> contracts, boolean pure)
 	{
 		return createContractAnnotation(myProject, pure, StreamEx.of(contracts).select(StandardMethodContract.class).joining("; "));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiAnnotation createContractAnnotation(Project project, boolean pure, String contracts)
 	{
 		final String attrs;
@@ -233,9 +233,9 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 		return ProjectBytecodeAnalysis.getInstance(project).createContractAnnotation(attrs);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiAnnotation[] findInferredAnnotations(@NotNull PsiModifierListOwner listOwner)
+	public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner)
 	{
 		listOwner = PsiUtil.preferCompiledElement(listOwner);
 		List<PsiAnnotation> result = ContainerUtil.newArrayList();
@@ -277,7 +277,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 	}
 
 	@Override
-	public boolean isInferredAnnotation(@NotNull PsiAnnotation annotation)
+	public boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation)
 	{
 		return annotation.getUserData(ProjectBytecodeAnalysis.INFERRED_ANNOTATION) != null;
 	}

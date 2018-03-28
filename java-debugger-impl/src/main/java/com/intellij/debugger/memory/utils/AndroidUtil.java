@@ -17,7 +17,7 @@ package com.intellij.debugger.memory.utils;
 
 import java.util.Locale;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.VirtualMachine;
 
 public class AndroidUtil
@@ -25,7 +25,7 @@ public class AndroidUtil
 	public static final int ANDROID_COUNT_BY_CLASSES_BATCH_SIZE = 500;
 	public static final int ANDROID_INSTANCES_LIMIT = 30000;
 
-	public static boolean isAndroidVM(@NotNull VirtualMachine vm)
+	public static boolean isAndroidVM(@Nonnull VirtualMachine vm)
 	{
 		return vm.name().toLowerCase(Locale.ENGLISH).contains("dalvik");
 	}

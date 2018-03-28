@@ -22,7 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
@@ -49,8 +50,8 @@ public class CommentTracker
 	 * @return a text to be inserted into refactored code
 	 */
 	public
-	@NotNull
-	String text(@NotNull PsiElement element)
+	@Nonnull
+	String text(@Nonnull PsiElement element)
 	{
 		checkState();
 		addIgnored(element);
@@ -66,8 +67,8 @@ public class CommentTracker
 	 * @return the passed argument
 	 */
 	public
-	@NotNull
-	<T extends PsiElement> T markUnchanged(@NotNull T element)
+	@Nonnull
+	<T extends PsiElement> T markUnchanged(@Nonnull T element)
 	{
 		checkState();
 		addIgnored(element);
@@ -79,7 +80,7 @@ public class CommentTracker
 	 *
 	 * @param element element to delete
 	 */
-	public void delete(@NotNull PsiElement element)
+	public void delete(@Nonnull PsiElement element)
 	{
 		grabComments(element);
 		element.delete();
@@ -90,7 +91,7 @@ public class CommentTracker
 	 *
 	 * @param elements elements to delete (all not null)
 	 */
-	public void delete(@NotNull PsiElement... elements)
+	public void delete(@Nonnull PsiElement... elements)
 	{
 		for(PsiElement element : elements)
 		{
@@ -106,7 +107,7 @@ public class CommentTracker
 	 *
 	 * @param element element to delete
 	 */
-	public void deleteAndRestoreComments(@NotNull PsiElement element)
+	public void deleteAndRestoreComments(@Nonnull PsiElement element)
 	{
 		grabComments(element);
 		insertCommentsBefore(element instanceof PsiVariable ? element.getParent() : element);
@@ -121,8 +122,8 @@ public class CommentTracker
 	 * @return the element which was actually inserted in the tree (either {@code replacement} or its copy)
 	 */
 	public
-	@NotNull
-	PsiElement replace(@NotNull PsiElement element, @NotNull PsiElement replacement)
+	@Nonnull
+	PsiElement replace(@Nonnull PsiElement element, @Nonnull PsiElement replacement)
 	{
 		grabComments(element);
 		return element.replace(replacement);
@@ -143,8 +144,8 @@ public class CommentTracker
 	 * @return the element which was actually inserted in the tree
 	 */
 	public
-	@NotNull
-	PsiElement replace(@NotNull PsiElement element, @NotNull String text)
+	@Nonnull
+	PsiElement replace(@Nonnull PsiElement element, @Nonnull String text)
 	{
 		PsiElement replacement = createElement(element, text);
 		return replace(element, replacement);
@@ -161,8 +162,8 @@ public class CommentTracker
 	 * @return the element which was actually inserted in the tree (either {@code replacement} or its copy)
 	 */
 	public
-	@NotNull
-	PsiElement replaceAndRestoreComments(@NotNull PsiElement element, @NotNull PsiElement replacement)
+	@Nonnull
+	PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull PsiElement replacement)
 	{
 		PsiElement result = replace(element, replacement);
 		PsiElement anchor = PsiTreeUtil.getNonStrictParentOfType(result, PsiStatement.class, PsiLambdaExpression.class, PsiVariable.class);
@@ -200,15 +201,15 @@ public class CommentTracker
 	 * @return the element which was actually inserted in the tree
 	 */
 	public
-	@NotNull
-	PsiElement replaceAndRestoreComments(@NotNull PsiElement element, @NotNull String text)
+	@Nonnull
+	PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull String text)
 	{
 		PsiElement replacement = createElement(element, text);
 		return replaceAndRestoreComments(element, replacement);
 	}
 
-	@NotNull
-	private static PsiElement createElement(@NotNull PsiElement element, @NotNull String text)
+	@Nonnull
+	private static PsiElement createElement(@Nonnull PsiElement element, @Nonnull String text)
 	{
 		PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
 		PsiElement replacement;
@@ -246,7 +247,7 @@ public class CommentTracker
 	 *
 	 * @param anchor
 	 */
-	public void insertCommentsBefore(@NotNull PsiElement anchor)
+	public void insertCommentsBefore(@Nonnull PsiElement anchor)
 	{
 		checkState();
 		if(!comments.isEmpty())
@@ -276,7 +277,7 @@ public class CommentTracker
 		comments = null;
 	}
 
-	@NotNull
+	@Nonnull
 	private static ASTNode normalizeWhiteSpace(PsiWhiteSpace whiteSpace)
 	{
 		String text = whiteSpace.getText();
@@ -345,8 +346,8 @@ public class CommentTracker
 	 *              (though possibly on another hierarchy level)
 	 * @return a string containing all the comments between start and end.
 	 */
-	@NotNull
-	public static String commentsBetween(@NotNull PsiElement start, @NotNull PsiElement end)
+	@Nonnull
+	public static String commentsBetween(@Nonnull PsiElement start, @Nonnull PsiElement end)
 	{
 		PsiElement parent = PsiTreeUtil.findCommonParent(start, end);
 		if(parent == null)

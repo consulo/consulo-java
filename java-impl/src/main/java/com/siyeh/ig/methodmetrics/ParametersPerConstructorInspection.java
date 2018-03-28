@@ -21,7 +21,7 @@ import com.intellij.psi.PsiParameterList;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -61,19 +61,19 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
   @SuppressWarnings("PublicField") public Scope ignoreScope = Scope.NONE;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConstructorWithTooManyParameters";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("parameters.per.constructor.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer parameterCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message("parameters.per.constructor.problem.descriptor", parameterCount);
@@ -145,7 +145,7 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
   private class ParametersPerConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

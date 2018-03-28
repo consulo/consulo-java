@@ -29,8 +29,8 @@ import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflection
 import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.JAVA_LANG_INVOKE_METHOD_HANDLES_LOOKUP;
 import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.LOAD_CLASS;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiJavaElementPattern;
 import com.intellij.psi.PsiElement;
@@ -59,13 +59,13 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor
 			(JAVA_LANG_INVOKE_METHOD_HANDLES_LOOKUP));
 
 	@Override
-	public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar)
+	public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar)
 	{
 		registrar.registerReferenceProvider(PATTERN, new JavaReflectionReferenceProvider()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
-			protected PsiReference[] getReferencesByMethod(@NotNull PsiLiteralExpression literalArgument, @NotNull PsiReferenceExpression methodReference, @NotNull ProcessingContext context)
+			protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context)
 			{
 
 				final PsiExpression qualifier = methodReference.getQualifierExpression();
@@ -75,9 +75,9 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor
 
 		registrar.registerReferenceProvider(CLASS_PATTERN, new JavaReflectionReferenceProvider()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
-			protected PsiReference[] getReferencesByMethod(@NotNull PsiLiteralExpression literalArgument, @NotNull PsiReferenceExpression methodReference, @NotNull ProcessingContext context)
+			protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context)
 			{
 
 				final String referenceName = methodReference.getReferenceName();

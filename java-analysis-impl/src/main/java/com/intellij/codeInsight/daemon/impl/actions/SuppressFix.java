@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.actions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -38,18 +38,18 @@ import com.intellij.util.IncorrectOperationException;
 public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix
 {
 
-	public SuppressFix(@NotNull HighlightDisplayKey key)
+	public SuppressFix(@Nonnull HighlightDisplayKey key)
 	{
 		this(key.getID());
 	}
 
-	public SuppressFix(@NotNull String ID)
+	public SuppressFix(@Nonnull String ID)
 	{
 		super(ID, false);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		String myText = super.getText();
@@ -57,7 +57,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiDocCommentOwner getContainer(final PsiElement context)
 	{
 		if(context == null || !context.getManager().isInProject(context))
@@ -87,7 +87,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull final Project project, @NotNull final PsiElement context)
+	public boolean isAvailable(@Nonnull final Project project, @Nonnull final PsiElement context)
 	{
 		PsiDocCommentOwner container = getContainer(context);
 		boolean isValid = container != null && !(container instanceof PsiMethod && container instanceof SyntheticElement);
@@ -101,7 +101,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, @NotNull final PsiElement element) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		if(doSuppress(project, getContainer(element)))
 		{
@@ -112,7 +112,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix
 		UndoUtil.markPsiFileForUndo(element.getContainingFile());
 	}
 
-	private boolean doSuppress(@NotNull Project project, PsiDocCommentOwner container)
+	private boolean doSuppress(@Nonnull Project project, PsiDocCommentOwner container)
 	{
 		assert container != null;
 		if(!FileModificationService.getInstance().preparePsiElementForWrite(container))
@@ -156,7 +156,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix
 		return false;
 	}
 
-	protected boolean use15Suppressions(@NotNull PsiDocCommentOwner container)
+	protected boolean use15Suppressions(@Nonnull PsiDocCommentOwner container)
 	{
 		return JavaSuppressionUtil.canHave15Suppressions(container) && !JavaSuppressionUtil.alreadyHas14Suppressions(container);
 	}

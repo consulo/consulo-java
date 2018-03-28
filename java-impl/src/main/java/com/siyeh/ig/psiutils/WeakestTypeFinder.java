@@ -28,8 +28,8 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.Query;
 import com.siyeh.HardcodedMethodConstants;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -37,8 +37,8 @@ public class WeakestTypeFinder {
 
   private WeakestTypeFinder() {}
 
-  @NotNull
-  public static Collection<PsiClass> calculateWeakestClassesNecessary(@NotNull PsiElement variableOrMethod,
+  @Nonnull
+  public static Collection<PsiClass> calculateWeakestClassesNecessary(@Nonnull PsiElement variableOrMethod,
                                                                       boolean useRighthandTypeAsWeakestTypeInAssignments,
                                                                       boolean useParameterizedTypeForCollectionMethods) {
     final PsiType variableOrMethodType;
@@ -325,8 +325,8 @@ public class WeakestTypeFinder {
     return checkType(type, substitutor, weakestTypeClasses);
   }
 
-  private static boolean checkType(@Nullable PsiType type, @NotNull PsiSubstitutor substitutor,
-                                   @NotNull Collection<PsiClass> weakestTypeClasses) {
+  private static boolean checkType(@javax.annotation.Nullable PsiType type, @Nonnull PsiSubstitutor substitutor,
+                                   @Nonnull Collection<PsiClass> weakestTypeClasses) {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
@@ -502,7 +502,7 @@ public class WeakestTypeFinder {
     return false;
   }
 
-  private static boolean checkType(@Nullable PsiType type, @NotNull Collection<PsiClass> weakestTypeClasses) {
+  private static boolean checkType(@Nullable PsiType type, @Nonnull Collection<PsiClass> weakestTypeClasses) {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
@@ -530,7 +530,7 @@ public class WeakestTypeFinder {
     return result;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass getVisibleInheritor(PsiClass superClass, PsiElement context) {
     final Query<PsiClass> search = DirectClassInheritorsSearch.search(superClass, context.getResolveScope());
     for (PsiClass aClass : search) {
@@ -546,7 +546,7 @@ public class WeakestTypeFinder {
     return null;
   }
 
-  private static void checkClass(@Nullable PsiClass aClass, @NotNull Collection<PsiClass> weakestTypeClasses) {
+  private static void checkClass(@javax.annotation.Nullable PsiClass aClass, @Nonnull Collection<PsiClass> weakestTypeClasses) {
     if (aClass == null) {
       return;
     }

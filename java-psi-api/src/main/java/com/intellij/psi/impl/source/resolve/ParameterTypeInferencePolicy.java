@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.ConstraintType;
 import com.intellij.psi.PsiCallExpression;
@@ -30,7 +29,7 @@ import com.intellij.psi.PsiTypeParameter;
  */
 public abstract class ParameterTypeInferencePolicy
 {
-	@Nullable
+	@javax.annotation.Nullable
 	public abstract Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall,
 			PsiExpressionList parent,
 			PsiCallExpression contextCall,

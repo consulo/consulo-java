@@ -15,23 +15,24 @@
  */
 package com.siyeh.ig.cloneable;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class CloneCallsConstructorsInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "clone.instantiates.objects.with.constructor.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "clone.instantiates.objects.with.constructor.problem.descriptor");
@@ -45,7 +46,7 @@ public class CloneCallsConstructorsInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final String methodName = method.getName();
       final PsiParameterList parameterList = method.getParameterList();
       final boolean isClone =
@@ -56,7 +57,7 @@ public class CloneCallsConstructorsInspection extends BaseInspection {
 
           @Override
           public void visitNewExpression(
-            @NotNull PsiNewExpression newExpression) {
+            @Nonnull PsiNewExpression newExpression) {
             super.visitNewExpression(newExpression);
             final PsiExpression[] arrayDimensions =
               newExpression.getArrayDimensions();

@@ -15,7 +15,6 @@
  */
 package org.jetbrains.java.debugger.breakpoints.properties;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.util.xmlb.annotations.Attribute;
 
 /**
@@ -42,7 +41,7 @@ public class JavaFieldBreakpointProperties extends JavaBreakpointProperties<Java
 	{
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JavaFieldBreakpointProperties getState()
 	{

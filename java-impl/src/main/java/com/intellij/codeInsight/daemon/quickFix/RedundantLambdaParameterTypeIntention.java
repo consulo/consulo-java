@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -36,14 +37,14 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
 {
 	public static final Logger LOG = Logger.getInstance("#" + RedundantLambdaParameterTypeIntention.class.getName());
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
 		return "Remove redundant types";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -51,7 +52,7 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element)
 	{
 		final PsiParameterList parameterList = PsiTreeUtil.getParentOfType(element, PsiParameterList.class);
 		if(parameterList == null)
@@ -152,9 +153,9 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
 	}
 
 	@Override
-	public void invoke(@NotNull Project project,
+	public void invoke(@Nonnull Project project,
 			Editor editor,
-			@NotNull PsiElement element) throws IncorrectOperationException
+			@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
 		removeTypes(lambdaExpression);

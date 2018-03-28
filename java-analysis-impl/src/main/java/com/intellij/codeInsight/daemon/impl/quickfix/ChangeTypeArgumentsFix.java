@@ -23,8 +23,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.HighPriorityAction;
@@ -46,10 +46,10 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
   private static final Logger LOG = Logger.getInstance("#" + ChangeTypeArgumentsFix.class.getName());
   private final PsiNewExpression myNewExpression;
 
-  ChangeTypeArgumentsFix(@NotNull PsiMethod targetMethod,
+  ChangeTypeArgumentsFix(@Nonnull PsiMethod targetMethod,
                          PsiClass psiClass,
-                         @NotNull PsiExpression[] expressions,
-                         @NotNull PsiElement context) {
+                         @Nonnull PsiExpression[] expressions,
+                         @Nonnull PsiElement context) {
     myTargetMethod = targetMethod;
     myPsiClass = psiClass;
     myExpressions = expressions;
@@ -57,7 +57,7 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     final PsiSubstitutor substitutor = inferTypeArguments();
     return "Change type arguments to <" + StringUtil.join(myPsiClass.getTypeParameters(), new Function<PsiTypeParameter, String>() {
@@ -71,13 +71,13 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
 
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return "Change type arguments";
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiTypeParameter[] typeParameters = myPsiClass.getTypeParameters();
     if (typeParameters.length > 0) {
       if (myNewExpression != null && myNewExpression.isValid() && myNewExpression.getArgumentList() != null) {
@@ -107,7 +107,7 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
   }
 
   @Override
-  public void invoke(@NotNull final Project project, Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     final PsiTypeParameter[] typeParameters = myPsiClass.getTypeParameters();
@@ -138,8 +138,8 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
   }
 
 
-  public static void registerIntentions(@NotNull JavaResolveResult[] candidates,
-                                        @NotNull PsiExpressionList list,
+  public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
+                                        @Nonnull PsiExpressionList list,
                                         @Nullable HighlightInfo highlightInfo,
                                         PsiClass psiClass) {
     if (candidates.length == 0) return;
@@ -149,11 +149,11 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
     }
   }
 
-  private static void registerIntention(@NotNull PsiExpression[] expressions,
+  private static void registerIntention(@Nonnull PsiExpression[] expressions,
                                         @Nullable HighlightInfo highlightInfo,
                                         PsiClass psiClass,
-                                        @NotNull JavaResolveResult candidate,
-                                        @NotNull PsiElement context) {
+                                        @Nonnull JavaResolveResult candidate,
+                                        @Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
     PsiMethod method = (PsiMethod)candidate.getElement();
     if (method != null && context.getManager().isInProject(method)) {

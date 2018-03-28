@@ -17,8 +17,8 @@ package com.intellij.debugger.ui.impl.watch;
 
 import java.util.HashMap;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.StackFrameContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
@@ -67,7 +67,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		myDisplayDescriptorSearcher.clear();
 	}
 
-	@NotNull
+	@Nonnull
 	public <T extends NodeDescriptor> T getDescriptor(NodeDescriptor parent, DescriptorData<T> key)
 	{
 		final T descriptor = key.createDescriptor(myProject);
@@ -92,7 +92,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		return descriptor;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected <T extends NodeDescriptor> T findDisplayDescriptor(NodeDescriptor parent, T descriptor, DisplayKey<T> key)
 	{
 		return myDisplayDescriptorSearcher.search(parent, descriptor, key);
@@ -166,7 +166,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		return getDescriptor(parent, new ArrayItemData(array, index));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FieldDescriptorImpl getFieldDescriptor(NodeDescriptor parent, ObjectReference objRef, Field field)
 	{
@@ -197,7 +197,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		return getDescriptor(parent, new ArgValueData(variable, value));
 	}
 
-	public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, @NotNull StackFrameProxyImpl frameProxy)
+	public StackFrameDescriptorImpl getStackFrameDescriptor(@javax.annotation.Nullable NodeDescriptorImpl parent, @Nonnull StackFrameProxyImpl frameProxy)
 	{
 		return getDescriptor(parent, new StackFrameData(frameProxy));
 	}
@@ -238,7 +238,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		return getDescriptor(parent, data);
 	}
 
-	public WatchItemDescriptor getWatchItemDescriptor(NodeDescriptor parent, TextWithImports text, @Nullable Value value)
+	public WatchItemDescriptor getWatchItemDescriptor(NodeDescriptor parent, TextWithImports text, @javax.annotation.Nullable Value value)
 	{
 		return getDescriptor(parent, new WatchItemData(text, value));
 	}

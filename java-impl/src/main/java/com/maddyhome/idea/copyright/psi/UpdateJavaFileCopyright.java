@@ -19,10 +19,10 @@ package com.maddyhome.idea.copyright.psi;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
@@ -43,7 +43,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
 	public static final int LOCATION_BEFORE_IMPORT = 2;
 	public static final int LOCATION_BEFORE_CLASS = 3;
 
-	public UpdateJavaFileCopyright(@NotNull PsiFile psiFile, @NotNull CopyrightProfile copyrightProfile)
+	public UpdateJavaFileCopyright(@Nonnull PsiFile psiFile, @Nonnull CopyrightProfile copyrightProfile)
 	{
 		super(psiFile, copyrightProfile);
 	}
@@ -129,29 +129,29 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
 
 	public static class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider<CopyrightFileConfig>
 	{
-		@NotNull
+		@Nonnull
 		@Override
-		public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@NotNull PsiFile file, @NotNull CopyrightProfile copyrightProfile)
+		public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@Nonnull PsiFile file, @Nonnull CopyrightProfile copyrightProfile)
 		{
 			return new UpdateJavaFileCopyright(file, copyrightProfile);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public CopyrightFileConfig createDefaultOptions()
 		{
 			return new CopyrightFileConfig();
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public TemplateCommentPanel createConfigurable(@NotNull Project project, @NotNull TemplateCommentPanel parentPane,
-				@NotNull FileType fileType)
+		public TemplateCommentPanel createConfigurable(@Nonnull Project project, @Nonnull TemplateCommentPanel parentPane,
+				@Nonnull FileType fileType)
 		{
 			return new TemplateCommentPanel(fileType, parentPane, project)
 			{
 				@Override
-				public void addAdditionalComponents(@NotNull JPanel additionalPanel)
+				public void addAdditionalComponents(@Nonnull JPanel additionalPanel)
 				{
 					addLocationInFile(new String[]{
 							"Before Package",

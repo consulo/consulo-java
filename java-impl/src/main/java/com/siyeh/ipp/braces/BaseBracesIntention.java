@@ -15,12 +15,12 @@
  */
 package com.siyeh.ipp.braces;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -36,11 +36,11 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
     return IntentionPowerPackBundle.message(getMessageKey(), getKeyword(body.getParent(), body));
   }
 
-  @NotNull
+  @Nonnull
   protected abstract String getMessageKey();
 
-  @NotNull
-  private static String getKeyword(@NotNull PsiElement parent, @NotNull PsiElement element) {
+  @Nonnull
+  private static String getKeyword(@Nonnull PsiElement parent, @Nonnull PsiElement element) {
     if (parent instanceof PsiIfStatement) {
       final PsiIfStatement ifStatement = (PsiIfStatement)parent;
       final PsiStatement elseBranch = ifStatement.getElseBranch();
@@ -52,8 +52,8 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
   }
 
 
-  @Nullable
-  protected static PsiStatement getSurroundingStatement(@NotNull PsiElement element) {
+  @javax.annotation.Nullable
+  protected static PsiStatement getSurroundingStatement(@Nonnull PsiElement element) {
     final PsiElement parent = element.getParent();
     if (parent instanceof PsiIfStatement) {
       final PsiIfStatement ifStatement = (PsiIfStatement)parent;
@@ -80,7 +80,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
     return null;
   }
 
-  private static boolean isBetweenThen(@NotNull PsiIfStatement ifStatement, @NotNull PsiElement element) {
+  private static boolean isBetweenThen(@Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
     final PsiElement rParenth = ifStatement.getRParenth();
     final PsiElement elseElement = ifStatement.getElseElement();
 
@@ -99,7 +99,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
     return new TextRange(rParenthTextRangeTextRange.getEndOffset(), elseElementTextRange.getStartOffset()).contains(elementTextRange);
   }
 
-  private static boolean isBetweenElse(@NotNull PsiIfStatement ifStatement, @NotNull PsiElement element) {
+  private static boolean isBetweenElse(@Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
     final PsiElement elseElement = ifStatement.getElseElement();
 
     if (elseElement == null) {

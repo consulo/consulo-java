@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Represents a Java <code>this</code> expression.
  */
@@ -28,6 +26,6 @@ public interface PsiThisExpression extends PsiQualifiedExpression {
    * @return the qualifier, or null if the expression has no qualifier.
    */
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaCodeReferenceElement getQualifier();
 }

@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
@@ -40,8 +41,8 @@ import com.intellij.util.containers.HashMap;
 
 public class HotSwapManager
 {
-	@NotNull
-	public static HotSwapManager getInstance(@NotNull Project project)
+	@Nonnull
+	public static HotSwapManager getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, HotSwapManager.class);
 	}

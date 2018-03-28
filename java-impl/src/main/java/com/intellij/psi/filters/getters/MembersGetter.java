@@ -21,8 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
@@ -54,7 +54,7 @@ public abstract class MembersGetter
 	private final List<PsiMethod> myPlaceMethods = new ArrayList<>();
 	protected final PsiElement myPlace;
 
-	protected MembersGetter(StaticMemberProcessor processor, @NotNull final PsiElement place)
+	protected MembersGetter(StaticMemberProcessor processor, @Nonnull final PsiElement place)
 	{
 		myPlace = place;
 		processor.processMembersOfRegisteredClasses(PrefixMatcher.ALWAYS_TRUE, (member, psiClass) -> myImportedStatically.add(member));
@@ -77,7 +77,7 @@ public abstract class MembersGetter
 
 	}
 
-	private boolean mayProcessMembers(@Nullable PsiClass psiClass)
+	private boolean mayProcessMembers(@javax.annotation.Nullable PsiClass psiClass)
 	{
 		if(psiClass == null)
 		{
@@ -94,7 +94,7 @@ public abstract class MembersGetter
 		return true;
 	}
 
-	public void processMembers(final Consumer<LookupElement> results, @Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors)
+	public void processMembers(final Consumer<LookupElement> results, @javax.annotation.Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors)
 	{
 		if(where == null || isPrimitiveClass(where))
 		{
@@ -185,9 +185,9 @@ public abstract class MembersGetter
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected abstract LookupElement createFieldElement(PsiField field);
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected abstract LookupElement createMethodElement(PsiMethod method);
 }

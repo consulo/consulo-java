@@ -1,7 +1,6 @@
 // "Bind Constructor Parameters to Fields" "true"
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class TestBefore {
 

@@ -33,7 +33,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -47,14 +47,14 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
   public boolean ignoreInlineLinkToSuper = false;
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.javadoc.link.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final int n = ((Integer)infos[1]).intValue();
@@ -94,7 +94,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
       this.tagName = tagName;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.javadoc.link.quickfix", tagName);

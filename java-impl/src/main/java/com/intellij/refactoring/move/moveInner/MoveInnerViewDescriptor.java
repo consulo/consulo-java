@@ -20,12 +20,13 @@
  */
 package com.intellij.refactoring.move.moveInner;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
 
 class MoveInnerViewDescriptor implements UsageViewDescriptor {
 
@@ -35,7 +36,7 @@ class MoveInnerViewDescriptor implements UsageViewDescriptor {
     myInnerClass = innerClass;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myInnerClass};
   }

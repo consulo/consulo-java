@@ -18,8 +18,7 @@ package com.siyeh.ig.dataflow;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.PsiElementOrderComparator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 
@@ -27,8 +26,8 @@ class ScopeUtils {
 
   private ScopeUtils() {}
 
-  @Nullable
-  public static PsiElement findTighterDeclarationLocation(@NotNull PsiElement sibling, @NotNull PsiVariable variable) {
+  @javax.annotation.Nullable
+  public static PsiElement findTighterDeclarationLocation(@Nonnull PsiElement sibling, @Nonnull PsiVariable variable) {
     PsiElement prevSibling = sibling.getPrevSibling();
     while (prevSibling instanceof PsiWhiteSpace || prevSibling instanceof PsiComment) {
       prevSibling = prevSibling.getPrevSibling();
@@ -42,8 +41,8 @@ class ScopeUtils {
     return prevSibling;
   }
 
-  @Nullable
-  public static PsiElement getChildWhichContainsElement(@NotNull PsiElement ancestor, @NotNull PsiElement element) {
+  @javax.annotation.Nullable
+  public static PsiElement getChildWhichContainsElement(@Nonnull PsiElement ancestor, @Nonnull PsiElement element) {
     PsiElement child = element;
     PsiElement parent = child.getParent();
     while (!parent.equals(ancestor)) {
@@ -56,8 +55,8 @@ class ScopeUtils {
     return child;
   }
 
-  @Nullable
-  public static PsiElement getCommonParent(@NotNull PsiElement[] referenceElements) {
+  @javax.annotation.Nullable
+  public static PsiElement getCommonParent(@Nonnull PsiElement[] referenceElements) {
     Arrays.sort(referenceElements, PsiElementOrderComparator.getInstance());
     PsiElement commonParent = null;
     for (PsiElement referenceElement : referenceElements) {
@@ -118,8 +117,8 @@ class ScopeUtils {
     return commonParent;
   }
 
-  @Nullable
-  public static PsiElement moveOutOfLoopsAndClasses(@NotNull PsiElement scope, @NotNull PsiElement maxScope) {
+  @javax.annotation.Nullable
+  public static PsiElement moveOutOfLoopsAndClasses(@Nonnull PsiElement scope, @Nonnull PsiElement maxScope) {
     PsiElement result = maxScope;
     if (result instanceof PsiLoopStatement) {
       return result;

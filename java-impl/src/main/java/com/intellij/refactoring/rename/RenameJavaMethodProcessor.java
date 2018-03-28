@@ -45,22 +45,21 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
 public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.rename.RenameJavaMethodProcessor");
 
-  public boolean canProcessElement(@NotNull final PsiElement element) {
+  public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiMethod;
   }
 
   public void renameElement(final PsiElement psiElement,
                             final String newName,
                             final UsageInfo[] usages,
-                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
+                            @javax.annotation.Nullable RefactoringElementListener listener) throws IncorrectOperationException {
     PsiMethod method = (PsiMethod) psiElement;
     Set<PsiMethod> methodAndOverriders = new HashSet<PsiMethod>();
     Set<PsiClass> containingClasses = new HashSet<PsiClass>();
@@ -134,7 +133,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
    * @param newName
    * @return
    */
-  @Nullable
+  @javax.annotation.Nullable
   protected PsiElement processRef(PsiReference ref, String newName) {
     return ref.handleElementRename(newName);
   }
@@ -160,7 +159,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
     }
   }
 
-  @NotNull
+  @Nonnull
   public Collection<PsiReference> findReferences(final PsiElement element) {
     GlobalSearchScope projectScope = GlobalSearchScope.projectScope(element.getProject());
     return MethodReferencesSearch.search((PsiMethod)element, projectScope, true).findAll();
@@ -297,7 +296,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
     JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_METHOD = enabled;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiElement substituteElementToRename(PsiElement element, Editor editor) {
     PsiMethod psiMethod = (PsiMethod)element;
     if (psiMethod.isConstructor()) {
@@ -315,9 +314,9 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
   }
 
   @Override
-  public void substituteElementToRename(@NotNull PsiElement element,
-                                        @NotNull final Editor editor,
-                                        @NotNull final Pass<PsiElement> renameCallback) {
+  public void substituteElementToRename(@Nonnull PsiElement element,
+                                        @Nonnull final Editor editor,
+                                        @Nonnull final Pass<PsiElement> renameCallback) {
     final PsiMethod psiMethod = (PsiMethod)element;
     if (psiMethod.isConstructor()) {
       final PsiClass containingClass = psiMethod.getContainingClass();
@@ -331,7 +330,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
     else {
       SuperMethodWarningUtil.checkSuperMethod(psiMethod, "Rename", new PsiElementProcessor<PsiMethod>() {
         @Override
-        public boolean execute(@NotNull PsiMethod method) {
+        public boolean execute(@Nonnull PsiMethod method) {
           if (!PsiElementRenameHandler.canRename(method.getProject(), editor, method)) return false;
           renameCallback.pass(method);
           return false;

@@ -26,8 +26,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,27 +38,27 @@ public class StringConstructorInspection extends BaseInspection {
   public boolean ignoreSubstringArguments = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "string.constructor.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "RedundantStringConstructorCall";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "string.constructor.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
       "string.constructor.substring.parameter.option"), this,
@@ -97,7 +96,7 @@ public class StringConstructorInspection extends BaseInspection {
       }
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return m_name;
     }
@@ -126,7 +125,7 @@ public class StringConstructorInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
       if (!TypeUtils.isJavaLangString(type)) {

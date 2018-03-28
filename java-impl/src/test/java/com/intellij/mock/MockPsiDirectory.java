@@ -3,6 +3,8 @@
  */
 package com.intellij.mock;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -11,8 +13,8 @@ import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.lang.Language;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -20,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   private final PsiJavaPackage myPackage;
 
-  public MockPsiDirectory(final PsiJavaPackage aPackage, @NotNull Disposable parentDisposable) {
+  public MockPsiDirectory(final PsiJavaPackage aPackage, @Nonnull Disposable parentDisposable) {
     super(parentDisposable);
     myPackage = aPackage;
   }
@@ -30,19 +32,19 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return Language.ANY;
   }
 
   @Override
-  public void checkCreateFile(@NotNull final String name) throws IncorrectOperationException {
+  public void checkCreateFile(@Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method checkCreateFile is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  public void checkCreateSubdirectory(@NotNull final String name) throws IncorrectOperationException {
+  public void checkCreateSubdirectory(@Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method checkCreateSubdirectory is not yet implemented in " + getClass().getName());
   }
 
@@ -53,43 +55,43 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
 
 
   @Override
-  @NotNull
-  public PsiFile createFile(@NotNull final String name) throws IncorrectOperationException {
+  @Nonnull
+  public PsiFile createFile(@Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method createFile is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @NotNull
-  public PsiFile copyFileFrom(@NotNull final String newName, @NotNull final PsiFile originalFile) throws IncorrectOperationException {
+  @Nonnull
+  public PsiFile copyFileFrom(@Nonnull final String newName, @Nonnull final PsiFile originalFile) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method copyFileFrom is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @NotNull
-  public PsiDirectory createSubdirectory(@NotNull final String name) throws IncorrectOperationException {
+  @Nonnull
+  public PsiDirectory createSubdirectory(@Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method createSubdirectory is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nullable
-  public PsiFile findFile(@NotNull @NonNls final String name) {
+  public PsiFile findFile(@Nonnull @NonNls final String name) {
     throw new UnsupportedOperationException("Method findFile is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nullable
-  public PsiDirectory findSubdirectory(@NotNull final String name) {
+  public PsiDirectory findSubdirectory(@Nonnull final String name) {
     throw new UnsupportedOperationException("Method findSubdirectory is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiFile[] getFiles() {
     throw new UnsupportedOperationException("Method getFiles is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     throw new UnsupportedOperationException("Method getName is not yet implemented in " + getClass().getName());
   }
@@ -102,13 +104,13 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiDirectory[] getSubdirectories() {
     throw new UnsupportedOperationException("Method getSubdirectories is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public VirtualFile getVirtualFile() {
     throw new UnsupportedOperationException("Method getVirtualFile is not yet implemented in " + getClass().getName());
   }
@@ -119,8 +121,8 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  @NotNull
-  public PsiElement setName(@NotNull final String name) throws IncorrectOperationException {
+  @Nonnull
+  public PsiElement setName(@Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method setName is not yet implemented in " + getClass().getName());
   }
 
@@ -130,7 +132,7 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public ItemPresentation getPresentation() {
     throw new UnsupportedOperationException("Method getPresentation is not yet implemented in " + getClass().getName());
   }

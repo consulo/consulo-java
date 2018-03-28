@@ -20,9 +20,9 @@
   */
 package com.intellij.codeInspection.ex;
 
+import javax.annotation.Nonnull;
 import javax.swing.JButton;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.openapi.Disposable;
@@ -35,13 +35,13 @@ public abstract class EntryPointsManager implements Disposable {
     return ServiceManager.getService(project, EntryPointsManager.class);
   }
 
-  public abstract void resolveEntryPoints(@NotNull RefManager manager);
+  public abstract void resolveEntryPoints(@Nonnull RefManager manager);
 
-  public abstract void addEntryPoint(@NotNull RefElement newEntryPoint, boolean isPersistent);
+  public abstract void addEntryPoint(@Nonnull RefElement newEntryPoint, boolean isPersistent);
 
-  public abstract void removeEntryPoint(@NotNull RefElement anEntryPoint);
+  public abstract void removeEntryPoint(@Nonnull RefElement anEntryPoint);
 
-  @NotNull
+  @Nonnull
   public abstract RefElement[] getEntryPoints();
 
   public abstract void cleanup();
@@ -52,5 +52,5 @@ public abstract class EntryPointsManager implements Disposable {
 
   public abstract JButton createConfigureAnnotationsBtn();
 
-  public abstract boolean isEntryPoint(@NotNull PsiElement element);
+  public abstract boolean isEntryPoint(@Nonnull PsiElement element);
 }

@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a Java statement with an attached label.
@@ -27,7 +27,7 @@ public interface PsiLabeledStatement extends PsiStatement, PsiNameIdentifierOwne
    *
    * @return the label identifier.
    */
-  @NotNull
+  @Nonnull
   PsiIdentifier getLabelIdentifier();
 
   /**
@@ -39,6 +39,6 @@ public interface PsiLabeledStatement extends PsiStatement, PsiNameIdentifierOwne
   PsiStatement getStatement();
 
   @Override
-  @NotNull
+  @Nonnull
   String getName();
 }

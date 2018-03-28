@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.valueparser.impl.valueobject;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Author: Robert F. Beeger (robert@beeger.net)
@@ -39,33 +39,33 @@ public class VersionRange {
   private final Version _ceiling;
   private final Boundary _ceilingBoundary;
 
-  public VersionRange(@NotNull Boundary floorBoundary,
-                      @NotNull Version floor,
-                      @NotNull Version ceiling,
-                      @NotNull Boundary ceilingBoundary) {
+  public VersionRange(@Nonnull Boundary floorBoundary,
+                      @Nonnull Version floor,
+                      @Nonnull Version ceiling,
+                      @Nonnull Boundary ceilingBoundary) {
     _floorBoundary = floorBoundary;
     _floor = floor;
     _ceiling = ceiling;
     _ceilingBoundary = ceilingBoundary;
   }
 
-  public VersionRange(@NotNull Version atleast) {
+  public VersionRange(@Nonnull Version atleast) {
     _floor = atleast;
     _floorBoundary = Boundary.INCLUSIVE;
     _ceiling = null;
     _ceilingBoundary = null;
   }
 
-  public boolean contains(@NotNull Version version) {
+  public boolean contains(@Nonnull Version version) {
     return checkFloor(version) && checkCeiling(version);
   }
 
-  private boolean checkFloor(@NotNull Version version) {
+  private boolean checkFloor(@Nonnull Version version) {
     int comparison = version.compareTo(_floor);
     return _floorBoundary == Boundary.INCLUSIVE ? comparison >= 0 : comparison > 0;
   }
 
-  private boolean checkCeiling(@NotNull Version version) {
+  private boolean checkCeiling(@Nonnull Version version) {
     if (_ceiling != null) {
       int comparison = version.compareTo(_ceiling);
       return _ceilingBoundary == Boundary.INCLUSIVE ? comparison <= 0 : comparison < 0;

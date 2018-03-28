@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.headerparser.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import com.intellij.psi.PsiReference;
@@ -36,7 +36,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiPackageR
  */
 public class ImportPackageParser extends AbstractHeaderParserImpl {
 
-  public PsiReference[] getReferences(@NotNull HeaderValuePart headerValuePart) {
+  public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
     if (headerValuePart.getParent() instanceof Clause) {
       PackageReferenceSet referenceSet = new PackageReferenceSet(headerValuePart.getUnwrappedText(), headerValuePart, 0);
       return referenceSet.getReferences().toArray(new PsiPackageReference[referenceSet.getReferences().size()]);

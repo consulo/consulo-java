@@ -15,11 +15,11 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 
 public interface UnusedImportProvider
 {
 	// is "unused import" warning can be shown in this file
-	boolean isUnusedImportEnabled(@NotNull PsiElement element);
+	boolean isUnusedImportEnabled(@Nonnull PsiElement element);
 }

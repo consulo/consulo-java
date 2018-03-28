@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.bool;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -49,7 +49,7 @@ public class NegateComparisonIntention extends MutablyNamedIntention {
     }
   }
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ComparisonPredicate();
   }

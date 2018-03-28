@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.swing.JTree;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -40,7 +40,7 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
 {
 	protected final List<SliceNode> myCachedChildren;
 
-	public SliceLeafValueRootNode(@NotNull Project project,
+	public SliceLeafValueRootNode(@Nonnull Project project,
 			PsiElement leafExpression,
 			SliceNode root,
 			List<SliceNode> children,
@@ -51,7 +51,7 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<SliceNode> getChildren()
 	{
 		return myCachedChildren;
@@ -80,8 +80,8 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
 	}
 
 	@Override
-	public void customizeCellRenderer(@NotNull SliceUsageCellRenderer renderer,
-			@NotNull JTree tree,
+	public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
+			@Nonnull JTree tree,
 			Object value,
 			boolean selected,
 			boolean expanded,
@@ -110,9 +110,9 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
 		}
 	}
 
-	private static void appendElementText(@NotNull UsageInfo2UsageAdapter usage,
-			@NotNull final PsiElement element,
-			@NotNull final SliceUsageCellRenderer renderer)
+	private static void appendElementText(@Nonnull UsageInfo2UsageAdapter usage,
+			@Nonnull final PsiElement element,
+			@Nonnull final SliceUsageCellRenderer renderer)
 	{
 		PsiFile file = element.getContainingFile();
 		List<TextChunk> result = new ArrayList<TextChunk>();

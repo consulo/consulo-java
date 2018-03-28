@@ -27,8 +27,8 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -70,13 +70,13 @@ public class JavaCreatePropertyFix extends CreatePropertyFix {
     return result;
   }
 
-  @Nullable
-  protected Pair<String, String> invokeAction(@NotNull final Project project,
-                                              @NotNull PsiFile file,
-                                              @NotNull PsiElement psiElement,
+  @javax.annotation.Nullable
+  protected Pair<String, String> invokeAction(@Nonnull final Project project,
+                                              @Nonnull PsiFile file,
+                                              @Nonnull PsiElement psiElement,
                                               @Nullable final String suggestedKey,
-                                              @Nullable String suggestedValue,
-                                              @Nullable final List<PropertiesFile> propertiesFiles) {
+                                              @javax.annotation.Nullable String suggestedValue,
+                                              @javax.annotation.Nullable final List<PropertiesFile> propertiesFiles) {
     final PsiLiteralExpression literalExpression = psiElement instanceof PsiLiteralExpression ? (PsiLiteralExpression)psiElement : null;
     final String propertyValue = suggestedValue == null ? "" : suggestedValue;
 

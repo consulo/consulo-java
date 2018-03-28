@@ -16,15 +16,15 @@
 package com.intellij.debugger.engine.evaluation;
 
 import com.intellij.openapi.fileTypes.FileType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface TextWithImports {
   String getText();
 
   void setText(String newText);
 
-  @NotNull
+  @Nonnull
   String getImports();
 
   CodeFragmentKind getKind();

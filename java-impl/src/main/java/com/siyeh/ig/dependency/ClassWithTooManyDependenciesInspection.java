@@ -27,7 +27,7 @@ import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Set;
@@ -38,7 +38,7 @@ public class ClassWithTooManyDependenciesInspection
   @SuppressWarnings({"PublicField"})
   public int limit = 10;
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
@@ -55,7 +55,7 @@ public class ClassWithTooManyDependenciesInspection
     refManager.iterate(new RefJavaVisitor() {
 
       @Override
-      public void visitClass(@NotNull RefClass refClass) {
+      public void visitClass(@Nonnull RefClass refClass) {
         super.visitClass(refClass);
         if (!(refClass.getOwner() instanceof RefFile)) {
           return;

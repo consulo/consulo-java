@@ -18,8 +18,8 @@ package com.intellij.psi.codeStyle.arrangement;
 import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Section.END_SECTION;
 import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Section.START_SECTION;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
@@ -46,7 +46,7 @@ public class ArrangementSectionDetector
 	private final Stack<ArrangementSectionRule> myOpenedSections = ContainerUtil.newStack();
 
 	public ArrangementSectionDetector(
-			@Nullable Document document, @NotNull ArrangementSettings settings, @NotNull Consumer<ArrangementSectionEntryTemplate> producer)
+			@Nullable Document document, @Nonnull ArrangementSettings settings, @Nonnull Consumer<ArrangementSectionEntryTemplate> producer)
 	{
 		myDocument = document;
 		mySettings = settings;
@@ -58,7 +58,7 @@ public class ArrangementSectionDetector
 	 *
 	 * @return true for section comment, false otherwise
 	 */
-	public boolean processComment(@NotNull PsiComment comment)
+	public boolean processComment(@Nonnull PsiComment comment)
 	{
 		final TextRange range = comment.getTextRange();
 		final TextRange expandedRange = myDocument == null ? range : ArrangementUtil.expandToLineIfPossible(range, myDocument);
@@ -86,8 +86,8 @@ public class ArrangementSectionDetector
 		return false;
 	}
 
-	@Nullable
-	public static ArrangementSectionRule isSectionStartComment(@NotNull ArrangementSettings settings, @NotNull String comment)
+	@javax.annotation.Nullable
+	public static ArrangementSectionRule isSectionStartComment(@Nonnull ArrangementSettings settings, @Nonnull String comment)
 	{
 		for(ArrangementSectionRule rule : settings.getSections())
 		{
@@ -107,7 +107,7 @@ public class ArrangementSectionDetector
 		private String myText;
 
 		public ArrangementSectionEntryTemplate(
-				@NotNull PsiElement element, @NotNull ArrangementSettingsToken token, @NotNull TextRange range, @NotNull String text)
+				@Nonnull PsiElement element, @Nonnull ArrangementSettingsToken token, @Nonnull TextRange range, @Nonnull String text)
 		{
 			myElement = element;
 			myToken = token;

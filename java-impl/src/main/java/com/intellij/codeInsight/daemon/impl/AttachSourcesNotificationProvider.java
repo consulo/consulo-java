@@ -24,10 +24,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.ProjectTopics;
 import com.intellij.codeEditor.JavaEditorFileSwapper;
 import com.intellij.codeInsight.AttachSourcesProvider;
@@ -99,7 +99,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Key<EditorNotificationPanel> getKey()
 	{
@@ -108,7 +108,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 
 	@RequiredDispatchThread
 	@Override
-	public EditorNotificationPanel createNotificationPanel(@NotNull final VirtualFile file, @NotNull FileEditor fileEditor)
+	public EditorNotificationPanel createNotificationPanel(@Nonnull final VirtualFile file, @Nonnull FileEditor fileEditor)
 	{
 		if(file.getFileType() != JavaClassFileType.INSTANCE)
 		{
@@ -216,7 +216,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return panel;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String getClassFileInfo(VirtualFile file)
 	{
 		try
@@ -268,7 +268,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return entries;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static VirtualFile findSourceFileInSameJar(VirtualFile classFile)
 	{
 		String name = classFile.getName();
@@ -333,7 +333,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			new WriteAction()
 			{
 				@Override
-				protected void run(@NotNull final Result result)
+				protected void run(@Nonnull final Result result)
 				{
 					for(Library.ModifiableModel model : modelsToCommit)
 					{
@@ -345,7 +345,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			return ActionCallback.DONE;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		private VirtualFile findRoot(Library library)
 		{
 			for(VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance()))
@@ -420,7 +420,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 						return value == null ? new ListSeparator() : null;
 					}
 
-					@NotNull
+					@Nonnull
 					@Override
 					public String getTextFor(LibraryOrderEntry value)
 					{

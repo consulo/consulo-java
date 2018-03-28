@@ -17,7 +17,8 @@ package com.intellij.codeInsight.template.postfix.templates;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.CompletionInitializationContext;
 import com.intellij.codeInsight.completion.JavaCompletionContributor;
 import com.intellij.openapi.application.ApplicationManager;
@@ -55,7 +56,7 @@ public class JavaPostfixTemplateProvider implements PostfixTemplateProvider
 				new TryWithResourcesPostfixTemplate(), new WhileStatementPostfixTemplate());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Set<PostfixTemplate> getTemplates()
 	{
@@ -69,7 +70,7 @@ public class JavaPostfixTemplateProvider implements PostfixTemplateProvider
 	}
 
 	@Override
-	public void preExpand(@NotNull final PsiFile file, @NotNull final Editor editor)
+	public void preExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 
@@ -103,7 +104,7 @@ public class JavaPostfixTemplateProvider implements PostfixTemplateProvider
 	}
 
 	@Override
-	public void afterExpand(@NotNull final PsiFile file, @NotNull final Editor editor)
+	public void afterExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor)
 	{
 		final SmartPsiElementPointer<PsiElement> pointer = file.getUserData(ADDED_SEMICOLON);
 		if(pointer != null)
@@ -130,9 +131,9 @@ public class JavaPostfixTemplateProvider implements PostfixTemplateProvider
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiFile preCheck(final @NotNull PsiFile copyFile, final @NotNull Editor realEditor, final int currentOffset)
+	public PsiFile preCheck(final @Nonnull PsiFile copyFile, final @Nonnull Editor realEditor, final int currentOffset)
 	{
 		return ApplicationManager.getApplication().runReadAction(new Computable<PsiFile>()
 		{
@@ -154,12 +155,12 @@ public class JavaPostfixTemplateProvider implements PostfixTemplateProvider
 		});
 	}
 
-	public static void doNotDeleteSemicolon(@NotNull PsiFile file)
+	public static void doNotDeleteSemicolon(@Nonnull PsiFile file)
 	{
 		file.putUserData(ADDED_SEMICOLON, null);
 	}
 
-	private static boolean isSemicolonNeeded(@NotNull PsiFile file, @NotNull Editor editor)
+	private static boolean isSemicolonNeeded(@Nonnull PsiFile file, @Nonnull Editor editor)
 	{
 		return JavaCompletionContributor.semicolonNeeded(editor, file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
 	}

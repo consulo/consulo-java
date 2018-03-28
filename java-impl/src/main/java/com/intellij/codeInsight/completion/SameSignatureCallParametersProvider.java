@@ -20,8 +20,8 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -51,12 +51,12 @@ class SameSignatureCallParametersProvider implements CompletionProvider
 			.class).withParent(psiElement(PsiExpressionList.class).withParent(PsiCall.class)));
 
 	@Override
-	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
+	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result)
 	{
 		addSignatureItems(parameters, result);
 	}
 
-	void addSignatureItems(@NotNull CompletionParameters parameters, @NotNull Consumer<LookupElement> result)
+	void addSignatureItems(@Nonnull CompletionParameters parameters, @Nonnull Consumer<LookupElement> result)
 	{
 		final PsiCall methodCall = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiCall.class);
 		assert methodCall != null;

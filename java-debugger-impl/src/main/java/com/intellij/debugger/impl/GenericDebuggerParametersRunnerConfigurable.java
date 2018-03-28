@@ -18,6 +18,7 @@ package com.intellij.debugger.impl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -25,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.settings.DebuggerSettings;
@@ -98,7 +98,7 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JComponent createEditor()
 	{
 		return myPanel;

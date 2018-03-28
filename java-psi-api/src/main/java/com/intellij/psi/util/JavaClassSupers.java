@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiSubstitutor;
@@ -42,9 +42,9 @@ public abstract class JavaClassSupers
 	 * @see InheritanceUtil#isInheritorOrSelf(PsiClass, PsiClass, boolean)
 	 */
 	@Nullable
-	public abstract PsiSubstitutor getSuperClassSubstitutor(@NotNull PsiClass superClass,
-			@NotNull PsiClass derivedClass,
-			@NotNull GlobalSearchScope resolveScope,
-			@NotNull PsiSubstitutor derivedSubstitutor);
+	public abstract PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass,
+			@Nonnull PsiClass derivedClass,
+			@Nonnull GlobalSearchScope resolveScope,
+			@Nonnull PsiSubstitutor derivedSubstitutor);
 
 }

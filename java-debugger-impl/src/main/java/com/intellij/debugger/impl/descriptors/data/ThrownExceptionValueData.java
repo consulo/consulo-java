@@ -15,16 +15,17 @@
  */
 package com.intellij.debugger.impl.descriptors.data;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.ui.impl.watch.ThrownExceptionValueDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.ObjectReference;
-import org.jetbrains.annotations.NotNull;
 
 public final class ThrownExceptionValueData extends DescriptorData<ThrownExceptionValueDescriptorImpl>{
-  @NotNull
+  @Nonnull
   private final ObjectReference myExceptionObj;
 
-  public ThrownExceptionValueData(@NotNull ObjectReference exceptionObj) {
+  public ThrownExceptionValueData(@Nonnull ObjectReference exceptionObj) {
     myExceptionObj = exceptionObj;
   }
 

@@ -20,7 +20,8 @@ import static com.intellij.openapi.util.text.StringUtil.nullize;
 import java.util.List;
 import java.util.Locale;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.AtomicNullableLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
@@ -53,7 +54,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
 		};
 		myModuleReferences = new AtomicNotNullLazyValue<Iterable<PsiJavaModuleReferenceElement>>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected Iterable<PsiJavaModuleReferenceElement> compute()
 			{
@@ -62,7 +63,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Role getRole()
 	{
@@ -81,14 +82,14 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
 		return nullize(getStub().getPackageName());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Iterable<PsiJavaModuleReferenceElement> getModuleReferences()
 	{
 		return myModuleReferences.getValue();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<String> getModuleNames()
 	{
@@ -96,7 +97,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		StringUtil.repeatSymbol(buffer, ' ', indentLevel);
 		buffer.append(getRole().toString().toLowerCase(Locale.US)).append(' ').append(getPackageName());
@@ -117,7 +118,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, getStub().getStubType());
 	}

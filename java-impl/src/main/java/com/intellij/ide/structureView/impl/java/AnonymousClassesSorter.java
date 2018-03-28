@@ -18,7 +18,7 @@ package com.intellij.ide.structureView.impl.java;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.ide.util.treeView.smartTree.SorterUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Comparator;
 
@@ -53,13 +53,13 @@ public class AnonymousClassesSorter implements Sorter {
     return false;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public ActionPresentation getPresentation() {
     return ALPHA_SORTER.getPresentation();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return "ANONYMOUS_CLASSES_SORTER";

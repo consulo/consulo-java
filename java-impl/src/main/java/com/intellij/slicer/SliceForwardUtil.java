@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
@@ -40,9 +40,9 @@ import com.intellij.util.Processor;
  */
 public class SliceForwardUtil
 {
-	public static boolean processUsagesFlownFromThe(@NotNull PsiElement element,
-			@NotNull final Processor<SliceUsage> processor,
-			@NotNull final SliceUsage parent)
+	public static boolean processUsagesFlownFromThe(@Nonnull PsiElement element,
+			@Nonnull final Processor<SliceUsage> processor,
+			@Nonnull final SliceUsage parent)
 	{
 		Pair<PsiElement, PsiSubstitutor> pair = getAssignmentTarget(element, parent);
 		if(pair != null)
@@ -118,7 +118,7 @@ public class SliceForwardUtil
 	private static boolean processAssignedFrom(final PsiElement from,
 			final PsiElement context,
 			final SliceUsage parent,
-			@NotNull final Processor<SliceUsage> processor)
+			@Nonnull final Processor<SliceUsage> processor)
 	{
 		if(from instanceof PsiLocalVariable)
 		{
@@ -238,8 +238,8 @@ public class SliceForwardUtil
 		return true;
 	}
 
-	private static boolean searchReferencesAndProcessAssignmentTarget(@NotNull PsiElement element,
-			@Nullable final PsiElement context,
+	private static boolean searchReferencesAndProcessAssignmentTarget(@Nonnull PsiElement element,
+			@javax.annotation.Nullable final PsiElement context,
 			final SliceUsage parent,
 			final Processor<SliceUsage> processor)
 	{
@@ -357,8 +357,8 @@ public class SliceForwardUtil
 		return target == null ? null : Pair.create(target, substitutor);
 	}
 
-	@NotNull
-	public static PsiElement complexify(@NotNull PsiElement element)
+	@Nonnull
+	public static PsiElement complexify(@Nonnull PsiElement element)
 	{
 		PsiElement parent = element.getParent();
 		if(parent instanceof PsiParenthesizedExpression && element.equals(((PsiParenthesizedExpression) parent).getExpression()))

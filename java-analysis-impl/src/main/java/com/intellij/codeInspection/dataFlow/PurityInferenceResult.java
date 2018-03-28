@@ -19,7 +19,6 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -34,7 +33,7 @@ import consulo.annotations.RequiredReadAction;
 class PurityInferenceResult
 {
 	private List<ExpressionRange> mutableRefs;
-	@Nullable
+	@javax.annotation.Nullable
 	private ExpressionRange singleCall;
 
 	PurityInferenceResult(List<ExpressionRange> mutableRefs, ExpressionRange singleCall)
@@ -53,7 +52,7 @@ class PurityInferenceResult
 		return mutableRefs;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public ExpressionRange getSingleCall()
 	{
 		return singleCall;

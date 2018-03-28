@@ -19,8 +19,7 @@ package com.intellij.util.descriptors.impl;
 import com.intellij.util.descriptors.ConfigFileMetaData;
 import com.intellij.util.descriptors.ConfigFileMetaDataRegistry;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +43,7 @@ public class ConfigFileMetaDataRegistryImpl implements ConfigFileMetaDataRegistr
     }
   }
 
-  @NotNull
+  @Nonnull
   public ConfigFileMetaData[] getMetaData() {
     if (myCachedMetaData == null) {
       myCachedMetaData = myMetaData.toArray(new ConfigFileMetaData[myMetaData.size()]);
@@ -52,12 +51,12 @@ public class ConfigFileMetaDataRegistryImpl implements ConfigFileMetaDataRegistr
     return myCachedMetaData;
   }
 
-  @Nullable
-  public ConfigFileMetaData findMetaData(@NonNls @NotNull final String id) {
+  @javax.annotation.Nullable
+  public ConfigFileMetaData findMetaData(@NonNls @Nonnull final String id) {
     return myId2MetaData.get(id);
   }
 
-  public void registerMetaData(@NotNull final ConfigFileMetaData... metaData) {
+  public void registerMetaData(@Nonnull final ConfigFileMetaData... metaData) {
     for (ConfigFileMetaData data : metaData) {
       myMetaData.add(data);
       myId2MetaData.put(data.getId(), data);

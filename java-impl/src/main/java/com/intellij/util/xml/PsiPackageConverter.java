@@ -16,8 +16,8 @@
 package com.intellij.util.xml;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
@@ -34,11 +34,11 @@ public class PsiPackageConverter extends Converter<PsiJavaPackage> implements Cu
     return JavaPsiFacade.getInstance(context.getPsiManager().getProject()).findPackage(s);
   }
 
-  public String toString(@Nullable PsiJavaPackage psiPackage, final ConvertContext context) {
+  public String toString(@javax.annotation.Nullable PsiJavaPackage psiPackage, final ConvertContext context) {
     return psiPackage == null ? null : psiPackage.getQualifiedName();
   }
 
-  @NotNull
+  @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiJavaPackage> genericDomValue, PsiElement element, ConvertContext context) {
     final String s = genericDomValue.getStringValue();
     if (s == null) {

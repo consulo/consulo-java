@@ -15,10 +15,12 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
 import org.jetbrains.java.debugger.breakpoints.JavaBreakpointFiltersPanel;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
@@ -38,7 +40,7 @@ import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
  */
 public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties> extends XBreakpointType<XBreakpoint<T>, T>
 {
-	protected JavaBreakpointTypeBase(@NonNls @NotNull String id, @Nls @NotNull String title)
+	protected JavaBreakpointTypeBase(@NonNls @Nonnull String id, @Nls @Nonnull String title)
 	{
 		super(id, title, true);
 	}
@@ -49,23 +51,23 @@ public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties>
 		return true;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(@NotNull Project project)
+	public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(@Nonnull Project project)
 	{
 		return new JavaBreakpointFiltersPanel<T, XBreakpoint<T>>(project);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public final XDebuggerEditorsProvider getEditorsProvider(@NotNull XBreakpoint<T> breakpoint, @NotNull Project project)
+	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XBreakpoint<T> breakpoint, @Nonnull Project project)
 	{
 		return new JavaDebuggerEditorsProvider();
 	}
 
 	@Nullable
 	@Override
-	public XSourcePosition getSourcePosition(@NotNull XBreakpoint<T> breakpoint)
+	public XSourcePosition getSourcePosition(@Nonnull XBreakpoint<T> breakpoint)
 	{
 		Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint != null)

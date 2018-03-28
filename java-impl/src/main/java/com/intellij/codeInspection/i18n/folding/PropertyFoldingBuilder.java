@@ -21,8 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
@@ -55,8 +55,8 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 			PropertiesElementTypes.PROPERTY);
 
 	@Override
-	@NotNull
-	public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement element, @NotNull Document document, boolean quick)
+	@Nonnull
+	public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement element, @Nonnull Document document, boolean quick)
 	{
 		if(!(element instanceof PsiJavaFile) || quick || !isFoldingsOn())
 		{
@@ -131,7 +131,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 
 
 	@Override
-	public String getPlaceholderText(@NotNull ASTNode node)
+	public String getPlaceholderText(@Nonnull ASTNode node)
 	{
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(node);
 		if(element instanceof PsiLiteralExpression)
@@ -186,7 +186,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 		return methodCallExpression.getText();
 	}
 
-	private static String getI18nMessage(@NotNull Project project, PsiLiteralExpression literal)
+	private static String getI18nMessage(@Nonnull Project project, PsiLiteralExpression literal)
 	{
 		final IProperty property = getI18nProperty(project, literal);
 		return property == null ? literal.getText() : formatI18nProperty(literal, property);
@@ -253,13 +253,13 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 	}
 
 	@Override
-	public boolean isCollapsedByDefault(@NotNull ASTNode node)
+	public boolean isCollapsedByDefault(@Nonnull ASTNode node)
 	{
 		return isFoldingsOn();
 	}
 
 
-	public static boolean isI18nProperty(@NotNull Project project, @NotNull PsiLiteralExpression expr)
+	public static boolean isI18nProperty(@Nonnull Project project, @Nonnull PsiLiteralExpression expr)
 	{
 		if(!isStringLiteral(expr))
 		{

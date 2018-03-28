@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
@@ -38,7 +39,7 @@ public class ConstructorReferencesSearchHelper
 {
 	private final PsiManager myManager;
 
-	public ConstructorReferencesSearchHelper(@NotNull PsiManager manager)
+	public ConstructorReferencesSearchHelper(@Nonnull PsiManager manager)
 	{
 		myManager = manager;
 	}
@@ -49,14 +50,14 @@ public class ConstructorReferencesSearchHelper
 	 * 2. Exception avoidance. Project is needed outside of read action (to run it via DumbService in the first place),
 	 *    and so getProject would fail with an assertion that read action is required but not present.
 	 */
-	public boolean processConstructorReferences(@NotNull final Processor<PsiReference> processor,
-			@NotNull final PsiMethod constructor,
-			@NotNull final PsiClass containingClass,
-			@NotNull final SearchScope searchScope,
-			@NotNull final Project project,
+	public boolean processConstructorReferences(@Nonnull final Processor<PsiReference> processor,
+			@Nonnull final PsiMethod constructor,
+			@Nonnull final PsiClass containingClass,
+			@Nonnull final SearchScope searchScope,
+			@Nonnull final Project project,
 			boolean ignoreAccessScope,
 			final boolean isStrictSignatureSearch,
-			@NotNull SearchRequestCollector collector)
+			@Nonnull SearchRequestCollector collector)
 	{
 		final boolean[] constructorCanBeCalledImplicitly = new boolean[1];
 		final boolean[] isEnum = new boolean[1];
@@ -159,8 +160,8 @@ public class ConstructorReferencesSearchHelper
 		return ClassInheritorsSearch.search(containingClass, searchScope, false).forEach(processor2);
 	}
 
-	private static boolean processEnumReferences(@NotNull final Processor<PsiReference> processor, @NotNull final PsiMethod constructor, @NotNull final Project project,
-			@NotNull final PsiClass aClass)
+	private static boolean processEnumReferences(@Nonnull final Processor<PsiReference> processor, @Nonnull final PsiMethod constructor, @Nonnull final Project project,
+			@Nonnull final PsiClass aClass)
 	{
 		return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
 		{
@@ -186,10 +187,10 @@ public class ConstructorReferencesSearchHelper
 		});
 	}
 
-	private static boolean process18MethodPointers(@NotNull final Processor<PsiReference> processor,
-			@NotNull final PsiMethod constructor,
-			@NotNull final Project project,
-			@NotNull PsiClass aClass,
+	private static boolean process18MethodPointers(@Nonnull final Processor<PsiReference> processor,
+			@Nonnull final PsiMethod constructor,
+			@Nonnull final Project project,
+			@Nonnull PsiClass aClass,
 			SearchScope searchScope)
 	{
 		return ReferencesSearch.search(aClass, searchScope).forEach(new Processor<PsiReference>()
@@ -225,14 +226,14 @@ public class ConstructorReferencesSearchHelper
 		});
 	}
 
-	private boolean processSuperOrThis(@NotNull PsiClass inheritor,
-			@NotNull PsiMethod constructor,
+	private boolean processSuperOrThis(@Nonnull PsiClass inheritor,
+			@Nonnull PsiMethod constructor,
 			final boolean constructorCanBeCalledImplicitly,
-			@NotNull SearchScope searchScope,
-			@NotNull Project project,
+			@Nonnull SearchScope searchScope,
+			@Nonnull Project project,
 			final boolean isStrictSignatureSearch,
-			@NotNull String superOrThisKeyword,
-			@NotNull Processor<PsiReference> processor)
+			@Nonnull String superOrThisKeyword,
+			@Nonnull Processor<PsiReference> processor)
 	{
 		PsiMethod[] constructors = inheritor.getConstructors();
 		if(constructors.length == 0 && constructorCanBeCalledImplicitly)
@@ -293,11 +294,11 @@ public class ConstructorReferencesSearchHelper
 		return true;
 	}
 
-	private boolean processImplicitConstructorCall(@NotNull final PsiMember usage,
-			@NotNull final Processor<PsiReference> processor,
-			@NotNull final PsiMethod constructor,
-			@NotNull final Project project,
-			@NotNull final PsiClass containingClass)
+	private boolean processImplicitConstructorCall(@Nonnull final PsiMember usage,
+			@Nonnull final Processor<PsiReference> processor,
+			@Nonnull final PsiMethod constructor,
+			@Nonnull final Project project,
+			@Nonnull final PsiClass containingClass)
 	{
 		if(containingClass instanceof PsiAnonymousClass)
 		{

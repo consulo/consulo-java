@@ -20,8 +20,8 @@ import static com.intellij.psi.formatter.java.AbstractJavaBlock.newJavaBlock;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
@@ -39,15 +39,15 @@ public class CallChunkBlockBuilder
 	private final CommonCodeStyleSettings.IndentOptions myIndentSettings;
 	private final JavaCodeStyleSettings myJavaSettings;
 
-	public CallChunkBlockBuilder(@NotNull CommonCodeStyleSettings settings, @NotNull JavaCodeStyleSettings javaSettings)
+	public CallChunkBlockBuilder(@Nonnull CommonCodeStyleSettings settings, @Nonnull JavaCodeStyleSettings javaSettings)
 	{
 		mySettings = settings;
 		myIndentSettings = settings.getIndentOptions();
 		myJavaSettings = javaSettings;
 	}
 
-	@NotNull
-	public Block create(@NotNull final List<ASTNode> subNodes, final Wrap wrap, @Nullable final Alignment alignment)
+	@Nonnull
+	public Block create(@Nonnull final List<ASTNode> subNodes, final Wrap wrap, @Nullable final Alignment alignment)
 	{
 		final ArrayList<Block> subBlocks = new ArrayList<>();
 		final ASTNode firstNode = subNodes.get(0);
@@ -66,8 +66,8 @@ public class CallChunkBlockBuilder
 		return new SyntheticCodeBlock(createJavaBlocks(subNodes), alignment, mySettings, myJavaSettings, Indent.getContinuationWithoutFirstIndent(myIndentSettings.USE_RELATIVE_INDENTS), null);
 	}
 
-	@NotNull
-	private List<Block> createJavaBlocks(@NotNull final List<ASTNode> subNodes)
+	@Nonnull
+	private List<Block> createJavaBlocks(@Nonnull final List<ASTNode> subNodes)
 	{
 		final ArrayList<Block> result = new ArrayList<>();
 		for(ASTNode node : subNodes)

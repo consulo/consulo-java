@@ -19,9 +19,11 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaCreateFromTemplateHandler;
@@ -59,9 +61,9 @@ public class CreateClassUtil {
   private CreateClassUtil() {}
 
   @Nullable
-  private static PsiClass createClassFromTemplate(@NotNull final Properties attributes, @Nullable final String templateName,
-                                                  @NotNull final PsiDirectory directoryRoot,
-                                                  @NotNull final String className) throws IncorrectOperationException {
+  private static PsiClass createClassFromTemplate(@Nonnull final Properties attributes, @Nullable final String templateName,
+                                                  @Nonnull final PsiDirectory directoryRoot,
+                                                  @Nonnull final String className) throws IncorrectOperationException {
     if (templateName == null) return null;
     if (templateName.equals(DO_NOT_CREATE_CLASS_TEMPLATE)) return null;
 
@@ -101,8 +103,8 @@ public class CreateClassUtil {
     }
   }
 
-  @NotNull
-  private static PsiDirectory createParentDirectories(@NotNull PsiDirectory directoryRoot, @NotNull String className) throws IncorrectOperationException {
+  @Nonnull
+  private static PsiDirectory createParentDirectories(@Nonnull PsiDirectory directoryRoot, @Nonnull String className) throws IncorrectOperationException {
     final PsiJavaPackage currentPackage = JavaDirectoryService.getInstance().getPackage(directoryRoot);
     final String packagePrefix = currentPackage == null? null : currentPackage.getQualifiedName() + ".";
     final String packageName = extractPackage(packagePrefix != null && className.startsWith(packagePrefix)?
@@ -151,12 +153,12 @@ public class CreateClassUtil {
   }
 
   @Nullable
-  public static PsiClass createClassNamed(String newClassName, String templateName, @NotNull PsiDirectory directory) throws IncorrectOperationException {
+  public static PsiClass createClassNamed(String newClassName, String templateName, @Nonnull PsiDirectory directory) throws IncorrectOperationException {
     return createClassNamed(newClassName, FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties(), templateName, directory);
   }
 
   @Nullable
-  public static PsiClass createClassNamed(String newClassName, Map classProperties, String templateName, @NotNull PsiDirectory directory)
+  public static PsiClass createClassNamed(String newClassName, Map classProperties, String templateName, @Nonnull PsiDirectory directory)
     throws IncorrectOperationException {
     Properties defaultProperties = FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties();
     Properties properties = new Properties(defaultProperties);
@@ -165,11 +167,11 @@ public class CreateClassUtil {
     return createClassNamed(newClassName, properties, templateName, directory);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass createClassNamed(@Nullable String newClassName,
-                                           @NotNull Properties properties,
+                                           @Nonnull Properties properties,
                                            String templateName,
-                                           @NotNull PsiDirectory directory) throws IncorrectOperationException {
+                                           @Nonnull PsiDirectory directory) throws IncorrectOperationException {
     if (newClassName == null) {
       return null;
     }

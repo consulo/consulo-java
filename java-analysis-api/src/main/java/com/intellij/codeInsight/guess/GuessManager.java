@@ -18,8 +18,8 @@ package com.intellij.codeInsight.guess;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -35,9 +35,9 @@ public abstract class GuessManager {
 
   public abstract PsiType[] guessTypeToCast(PsiExpression expr);
 
-  @NotNull 
-  public abstract Map<PsiExpression, PsiType> getControlFlowExpressionTypes(@NotNull PsiExpression forPlace);
+  @Nonnull
+  public abstract Map<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull PsiExpression forPlace);
 
   @Nullable
-  public abstract PsiType getControlFlowExpressionType(@NotNull PsiExpression expr);
+  public abstract PsiType getControlFlowExpressionType(@Nonnull PsiExpression expr);
 }

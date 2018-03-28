@@ -16,7 +16,7 @@
 package com.intellij.refactoring.changeSignature;
 
 import com.intellij.usageView.UsageInfo;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public class CallReferenceUsageInfo extends UsageInfo {
   private final PsiCallReference myReference;
 
-  public CallReferenceUsageInfo(@NotNull PsiCallReference reference) {
+  public CallReferenceUsageInfo(@Nonnull PsiCallReference reference) {
     super(reference);
     myReference = reference;
   }

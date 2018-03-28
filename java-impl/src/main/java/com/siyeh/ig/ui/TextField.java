@@ -17,7 +17,7 @@ package com.siyeh.ig.ui;
 
 import com.intellij.codeInspection.InspectionProfileEntry;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -26,7 +26,7 @@ import java.lang.reflect.Field;
 
 public class TextField extends JTextField {
 
-  public TextField(@NotNull InspectionProfileEntry owner,
+  public TextField(@Nonnull InspectionProfileEntry owner,
                    @NonNls String property) {
     super(getPropertyValue(owner, property));
     final DocumentListener documentListener =

@@ -26,7 +26,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -38,19 +38,19 @@ public class JavaClassInitializerElementType extends JavaStubElementType<PsiClas
     super("CLASS_INITIALIZER");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new ClassInitializerElement();
   }
 
   @Override
-  public PsiClassInitializer createPsi(@NotNull final PsiClassInitializerStub stub) {
+  public PsiClassInitializer createPsi(@Nonnull final PsiClassInitializerStub stub) {
     return getPsiFactory(stub).createClassInitializer(stub);
   }
 
   @Override
-  public PsiClassInitializer createPsi(@NotNull final ASTNode node) {
+  public PsiClassInitializer createPsi(@Nonnull final ASTNode node) {
     return new PsiClassInitializerImpl(node);
   }
 
@@ -62,16 +62,16 @@ public class JavaClassInitializerElementType extends JavaStubElementType<PsiClas
   }
 
   @Override
-  public void serialize(@NotNull final PsiClassInitializerStub stub, @NotNull final StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull final PsiClassInitializerStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClassInitializerStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiClassInitializerStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     return new PsiClassInitializerStubImpl(parentStub);
   }
 
   @Override
-  public void indexStub(@NotNull final PsiClassInitializerStub stub, @NotNull final IndexSink sink) {
+  public void indexStub(@Nonnull final PsiClassInitializerStub stub, @Nonnull final IndexSink sink) {
   }
 }

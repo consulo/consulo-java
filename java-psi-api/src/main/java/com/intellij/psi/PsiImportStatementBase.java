@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.util.ArrayFactory;
 
 /**
@@ -33,7 +33,7 @@ public interface PsiImportStatementBase extends PsiElement
 
 	ArrayFactory<PsiImportStatementBase> ARRAY_FACTORY = new ArrayFactory<PsiImportStatementBase>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public PsiImportStatementBase[] create(final int count)
 		{
@@ -62,7 +62,7 @@ public interface PsiImportStatementBase extends PsiElement
 	 *
 	 * @return the target element, or null if it was not possible to resolve the reference to a valid target.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiElement resolve();
 
 	boolean isForeignFileImport();

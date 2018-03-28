@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInspection.defaultFileTemplateUsage;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -45,21 +47,21 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 	public boolean CHECK_METHOD_BODY = true;
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GENERAL_GROUP_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("default.file.template.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -68,7 +70,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly)
 	{
 		ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
 		return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
@@ -97,7 +99,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionsBundle.message("default.file.template.edit.template");
@@ -110,7 +112,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
 			configurable.setTemplate(myTemplateToEdit, null);

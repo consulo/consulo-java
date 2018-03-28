@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
@@ -50,7 +50,7 @@ public class CommentFormatter
 	private final JDParser myParser;
 	private final Project myProject;
 
-	public CommentFormatter(@NotNull PsiElement element)
+	public CommentFormatter(@Nonnull PsiElement element)
 	{
 		mySettings = CodeStyleSettingsManager.getSettings(element.getProject());
 		myParser = new JDParser(mySettings, PsiUtil.getLanguageLevel(element));
@@ -67,7 +67,7 @@ public class CommentFormatter
 		return myParser;
 	}
 
-	public void processComment(@Nullable ASTNode element)
+	public void processComment(@javax.annotation.Nullable ASTNode element)
 	{
 		if(!getSettings().ENABLE_JAVADOC_FORMATTING)
 		{
@@ -101,7 +101,7 @@ public class CommentFormatter
 		}
 	}
 
-	private void replaceDocComment(@Nullable String newCommentText, @NotNull final PsiDocCommentOwner psiDocCommentOwner)
+	private void replaceDocComment(@javax.annotation.Nullable String newCommentText, @Nonnull final PsiDocCommentOwner psiDocCommentOwner)
 	{
 		final PsiDocComment oldComment = psiDocCommentOwner.getDocComment();
 		if(newCommentText != null)
@@ -157,7 +157,7 @@ public class CommentFormatter
 	}
 
 	@Nullable
-	private String formatClassComment(@NotNull PsiClass psiClass)
+	private String formatClassComment(@Nonnull PsiClass psiClass)
 	{
 		final String info = getOrigCommentInfo(psiClass);
 		if(info == null)
@@ -169,8 +169,8 @@ public class CommentFormatter
 		return comment.generate(getIndent(psiClass));
 	}
 
-	@Nullable
-	private String formatMethodComment(@NotNull PsiMethod psiMethod)
+	@javax.annotation.Nullable
+	private String formatMethodComment(@Nonnull PsiMethod psiMethod)
 	{
 		final String info = getOrigCommentInfo(psiMethod);
 		if(info == null)
@@ -183,7 +183,7 @@ public class CommentFormatter
 	}
 
 	@Nullable
-	private String formatFieldComment(@NotNull PsiField psiField)
+	private String formatFieldComment(@Nonnull PsiField psiField)
 	{
 		final String info = getOrigCommentInfo(psiField);
 		if(info == null)
@@ -259,7 +259,7 @@ public class CommentFormatter
 	 * @param element PsiClass or PsiMethod or PsiField
 	 * @return indentation size
 	 */
-	private int getIndentSpecial(@NotNull PsiElement element)
+	private int getIndentSpecial(@Nonnull PsiElement element)
 	{
 		assert (element instanceof PsiClass ||
 				element instanceof PsiField ||
@@ -289,8 +289,8 @@ public class CommentFormatter
 	 *
 	 * @return indent which would be used for the given element when it's formatted according to the current code style settings
 	 */
-	@NotNull
-	private String getIndent(@NotNull PsiElement element)
+	@Nonnull
+	private String getIndent(@Nonnull PsiElement element)
 	{
 		return StringUtil.repeatSymbol(' ', getIndentSpecial(element));
 	}

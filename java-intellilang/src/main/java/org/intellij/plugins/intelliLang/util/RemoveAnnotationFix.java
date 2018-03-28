@@ -15,6 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -23,7 +25,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.IncorrectOperationException;
 import org.intellij.plugins.intelliLang.inject.java.validation.InjectionNotApplicable;
-import org.jetbrains.annotations.NotNull;
 
 public class RemoveAnnotationFix implements LocalQuickFix {
   private final LocalInspectionTool myTool;
@@ -32,17 +33,17 @@ public class RemoveAnnotationFix implements LocalQuickFix {
     myTool = tool;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return "Remove Annotation";
   }
 
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return myTool.getGroupDisplayName();
   }
 
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     if (FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
       try {
         descriptor.getPsiElement().delete();

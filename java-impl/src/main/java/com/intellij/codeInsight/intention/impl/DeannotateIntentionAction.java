@@ -36,8 +36,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -46,19 +46,19 @@ public class DeannotateIntentionAction implements IntentionAction {
   private String myAnnotationName = null;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("deannotate.intention.action.text") + (myAnnotationName != null ? " " + myAnnotationName : "");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("deannotate.intention.action.text");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiModifierListOwner listOwner = getContainer(editor, file);
     if (listOwner != null) {
       final ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -129,7 +129,7 @@ public class DeannotateIntentionAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
     final PsiModifierListOwner listOwner = getContainer(editor, file);
     LOG.assertTrue(listOwner != null); 
     final ExternalAnnotationsManager annotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -147,7 +147,7 @@ public class DeannotateIntentionAction implements IntentionAction {
       }
 
       @Override
-      @NotNull
+      @Nonnull
       public String getTextFor(final PsiAnnotation value) {
         final String qualifiedName = value.getQualifiedName();
         LOG.assertTrue(qualifiedName != null);

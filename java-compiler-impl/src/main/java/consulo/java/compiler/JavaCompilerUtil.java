@@ -18,9 +18,11 @@ package consulo.java.compiler;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
@@ -159,8 +161,8 @@ public class JavaCompilerUtil
 
 
 	//todo[nik] rewrite using JavaSdkVersion#getMaxLanguageLevel
-	@NotNull
-	public static LanguageLevel getApplicableLanguageLevel(String versionString, @NotNull LanguageLevel languageLevel)
+	@Nonnull
+	public static LanguageLevel getApplicableLanguageLevel(String versionString, @Nonnull LanguageLevel languageLevel)
 	{
 		final boolean is9OrNewer = isOfVersion(versionString, "1.9") || isOfVersion(versionString, "9.0");
 		final boolean is8OrNewer = isOfVersion(versionString, "1.8") || isOfVersion(versionString, "8.0");
@@ -211,8 +213,8 @@ public class JavaCompilerUtil
 	}
 
 
-	@Nullable
-	public static Sdk getSdkForCompilation(@NotNull final Module module)
+	@javax.annotation.Nullable
+	public static Sdk getSdkForCompilation(@Nonnull final Module module)
 	{
 		JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
 		if(extension == null)
@@ -228,8 +230,8 @@ public class JavaCompilerUtil
 		return getSdkForCompilation(chunk.getModule());
 	}
 
-	@NotNull
-	public static Set<VirtualFile> getCompilationClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
+	@Nonnull
+	public static Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
 		if(extension == null)
@@ -239,8 +241,8 @@ public class JavaCompilerUtil
 		return extension.getCompilationClasspath(compileContext, moduleChunk);
 	}
 
-	@NotNull
-	public static Set<VirtualFile> getCompilationBootClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
+	@Nonnull
+	public static Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
 		if(extension == null)

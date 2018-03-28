@@ -17,7 +17,8 @@ package com.intellij.ide.fileTemplates;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -117,20 +118,20 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler
 	}
 
 	@Override
-	public boolean handlesTemplate(@NotNull FileTemplate template)
+	public boolean handlesTemplate(@Nonnull FileTemplate template)
 	{
 		FileType fileType = FileTypeManagerEx.getInstanceEx().getFileTypeByExtension(template.getExtension());
 		return fileType.equals(JavaFileType.INSTANCE) && !ArrayUtil.contains(template.getName(), JavaTemplateUtil.INTERNAL_FILE_TEMPLATES);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiElement createFromTemplate(Project project,
 			PsiDirectory directory,
 			String fileName,
 			FileTemplate template,
 			String templateText,
-			@NotNull Map<String, Object> props) throws IncorrectOperationException
+			@Nonnull Map<String, Object> props) throws IncorrectOperationException
 	{
 		String extension = template.getExtension();
 		PsiElement result = createClassOrInterface(project, directory, templateText, template.isReformatCode(), extension);
@@ -173,9 +174,9 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public String commandName(@NotNull FileTemplate template)
+	public String commandName(@Nonnull FileTemplate template)
 	{
 		return IdeBundle.message("command.create.class.from.template");
 	}

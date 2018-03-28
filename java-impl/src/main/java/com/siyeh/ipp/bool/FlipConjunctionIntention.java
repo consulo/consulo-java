@@ -15,13 +15,14 @@
  */
 package com.siyeh.ipp.bool;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class FlipConjunctionIntention extends MutablyNamedIntention {
 
@@ -34,12 +35,12 @@ public class FlipConjunctionIntention extends MutablyNamedIntention {
                                             sign.getText());
   }
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ConjunctionPredicate();
   }
 
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     PsiExpression exp = (PsiExpression)element;
     final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression)exp;

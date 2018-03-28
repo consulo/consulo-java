@@ -18,16 +18,17 @@ package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.org.objectweb.asm.tree.analysis.Value;
 
 final class ParamsValue implements Value
 {
-  @NotNull
+  @Nonnull
   final boolean[] params;
   final int size;
 
-  ParamsValue(@NotNull boolean[] params, int size) {
+  ParamsValue(@Nonnull boolean[] params, int size) {
     this.params = params;
     this.size = size;
   }

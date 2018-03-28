@@ -30,9 +30,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInspection.dataFlow.inliner.*;
@@ -94,7 +96,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 	private PsiLambdaExpression myLambdaExpression = null;
 	private boolean myForceNotNullLambdaResult = false;
 
-	ControlFlowAnalyzer(final DfaValueFactory valueFactory, @NotNull PsiElement codeFragment, boolean ignoreAssertions, boolean inlining)
+	ControlFlowAnalyzer(final DfaValueFactory valueFactory, @Nonnull PsiElement codeFragment, boolean ignoreAssertions, boolean inlining)
 	{
 		myInlining = inlining;
 		myFactory = valueFactory;
@@ -513,13 +515,13 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		addInstruction(new ControlTransferInstruction(myFactory.controlTransfer(target, traps)));
 	}
 
-	@NotNull
+	@Nonnull
 	private FList<Trap> getTrapsInsideStatement(PsiStatement statement)
 	{
 		return FList.createFromReversed(ContainerUtil.reverse(ContainerUtil.findAll(myTrapStack, cd -> PsiTreeUtil.isAncestor(statement, cd.getAnchor(), true))));
 	}
 
-	@NotNull
+	@Nonnull
 	private List<DfaVariableValue> getVariablesInside(PsiElement exitedStatement)
 	{
 		return ContainerUtil.map(PsiTreeUtil.findChildrenOfType(exitedStatement, PsiVariable.class), var -> myFactory.getVarFactory().createVariableValue(var, false));
@@ -1314,7 +1316,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(expression);
 	}
 
-	private void processArrayInitializers(@NotNull PsiArrayInitializerExpression expression, @Nullable PsiType componentType, @NotNull Nullness componentNullability)
+	private void processArrayInitializers(@Nonnull PsiArrayInitializerExpression expression, @Nullable PsiType componentType, @Nonnull Nullness componentNullability)
 	{
 		PsiExpression[] initializers = expression.getInitializers();
 		for(PsiExpression initializer : initializers)
@@ -1469,12 +1471,12 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	void generateBoxingUnboxingInstructionFor(@NotNull PsiExpression expression, PsiType expectedType)
+	void generateBoxingUnboxingInstructionFor(@Nonnull PsiExpression expression, PsiType expectedType)
 	{
 		generateBoxingUnboxingInstructionFor(expression, expression.getType(), expectedType);
 	}
 
-	void generateBoxingUnboxingInstructionFor(@NotNull PsiExpression context, PsiType actualType, PsiType expectedType)
+	void generateBoxingUnboxingInstructionFor(@Nonnull PsiExpression context, PsiType actualType, PsiType expectedType)
 	{
 		if(PsiType.VOID.equals(expectedType))
 		{
@@ -1723,7 +1725,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		throwException(new ExceptionTransfer(myFactory.createTypeValue(ref, Nullness.NOT_NULL)), anchor);
 	}
 
-	private void throwException(ExceptionTransfer kind, @Nullable PsiElement anchor)
+	private void throwException(ExceptionTransfer kind, @javax.annotation.Nullable PsiElement anchor)
 	{
 		addInstruction(new EmptyStackInstruction());
 		addInstruction(new ReturnInstruction(myFactory.controlTransfer(kind, myTrapStack), anchor));
@@ -1802,7 +1804,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(expression);
 	}
 
-	void addBareCall(@Nullable PsiMethodCallExpression expression, @NotNull PsiReferenceExpression reference)
+	void addBareCall(@Nullable PsiMethodCallExpression expression, @Nonnull PsiReferenceExpression reference)
 	{
 		addConditionalRuntimeThrow();
 		PsiMethod method = ObjectUtils.tryCast(reference.resolve(), PsiMethod.class);
@@ -1841,13 +1843,13 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	public static List<? extends MethodContract> getMethodCallContracts(@NotNull final PsiMethod method, @Nullable PsiMethodCallExpression call)
+	public static List<? extends MethodContract> getMethodCallContracts(@Nonnull final PsiMethod method, @Nullable PsiMethodCallExpression call)
 	{
 		List<MethodContract> contracts = HardcodedContracts.getHardcodedContracts(method, call);
 		return !contracts.isEmpty() ? contracts : getMethodContracts(method);
 	}
 
-	public static List<StandardMethodContract> getMethodContracts(@NotNull final PsiMethod method)
+	public static List<StandardMethodContract> getMethodContracts(@Nonnull final PsiMethod method)
 	{
 		return CachedValuesManager.getCachedValue(method, () ->
 		{
@@ -1873,12 +1875,12 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 	}
 
 	@Nullable
-	public static PsiAnnotation findContractAnnotation(@NotNull PsiMethod method)
+	public static PsiAnnotation findContractAnnotation(@Nonnull PsiMethod method)
 	{
 		return AnnotationUtil.findAnnotationInHierarchy(method, Collections.singleton(ORG_JETBRAINS_ANNOTATIONS_CONTRACT));
 	}
 
-	public static boolean isPure(@NotNull PsiMethod method)
+	public static boolean isPure(@Nonnull PsiMethod method)
 	{
 		PsiAnnotation anno = findContractAnnotation(method);
 		return anno != null && Boolean.TRUE.equals(AnnotationUtil.getBooleanAttributeValue(anno, "pure"));

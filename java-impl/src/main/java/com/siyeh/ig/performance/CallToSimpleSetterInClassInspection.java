@@ -29,8 +29,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -42,17 +42,17 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
   @SuppressWarnings("UnusedDeclaration")
   public boolean onlyReportPrivateSetter = false;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToSimpleSetterFromWithinClass";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("call.to.simple.setter.in.class.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("call.to.simple.setter.in.class.problem.descriptor");
   }
@@ -73,7 +73,7 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
 
   private static class InlineCallFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("call.to.simple.setter.in.class.inline.quickfix");
     }
@@ -140,7 +140,7 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
   private class CallToSimpleSetterInClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiClass containingClass = ClassUtils.getContainingClass(call);
       if (containingClass == null) {

@@ -24,8 +24,8 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiMethod;
@@ -48,13 +48,13 @@ public class UsesAndInterfacesDependencyMemberInfoModel<T extends PsiMember, M e
 	public UsesAndInterfacesDependencyMemberInfoModel(PsiClass aClass,
 			@Nullable PsiClass superClass,
 			boolean recursive,
-			@NotNull final InterfaceContainmentVerifier interfaceContainmentVerifier)
+			@Nonnull final InterfaceContainmentVerifier interfaceContainmentVerifier)
 	{
 		super(new ANDCombinedMemberInfoModel<T, M>(new UsesDependencyMemberInfoModel<T, PsiClass, M>(aClass,
 				superClass, recursive)
 		{
 			@Override
-			public int checkForProblems(@NotNull M memberInfo)
+			public int checkForProblems(@Nonnull M memberInfo)
 			{
 				final int problem = super.checkForProblems(memberInfo);
 				if(problem == OK)

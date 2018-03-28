@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.cache.ModifierFlags;
@@ -34,65 +35,65 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return getAnnotations();
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		return ModifierFlags.hasModifierProperty(name, getStub().getModifiersMask());
 	}
 
 	@Override
-	public boolean hasExplicitModifier(@NotNull String name)
+	public boolean hasExplicitModifier(@Nonnull String name)
 	{
 		return hasModifierProperty(name);
 	}
 
 	@Override
-	public void setModifierProperty(@NotNull String name, boolean value) throws IncorrectOperationException
+	public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException
 	{
 		throw cannotModifyException(this);
 	}
 
 	@Override
-	public void checkSetModifierProperty(@NotNull String name, boolean value) throws IncorrectOperationException
+	public void checkSetModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException
 	{
 		throw cannotModifyException(this);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotation[] getAnnotations()
 	{
 		return getStub().getChildrenByType(JavaStubElementTypes.ANNOTATION, PsiAnnotation.ARRAY_FACTORY);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotation[] getApplicableAnnotations()
 	{
 		return getAnnotations();
 	}
 
 	@Override
-	public PsiAnnotation findAnnotation(@NotNull String qualifiedName)
+	public PsiAnnotation findAnnotation(@Nonnull String qualifiedName)
 	{
 		return PsiImplUtil.findAnnotation(this, qualifiedName);
 	}
 
 	@Override
-	@NotNull
-	public PsiAnnotation addAnnotation(@NotNull String qualifiedName)
+	@Nonnull
+	public PsiAnnotation addAnnotation(@Nonnull String qualifiedName)
 	{
 		throw cannotModifyException(this);
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		PsiElement parent = getParent();
 		PsiAnnotation[] annotations = getAnnotations();
@@ -172,14 +173,14 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.MODIFIER_LIST);
 		setMirrors(getAnnotations(), SourceTreeToPsiMap.<PsiModifierList>treeToPsiNotNull(element).getAnnotations());
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

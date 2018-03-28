@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
@@ -76,7 +76,7 @@ public class InferenceVariable extends LightTypeParameter
 		myInstantiation = instantiation;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiClassType[] getExtendsListTypes()
 	{
@@ -224,7 +224,7 @@ public class InferenceVariable extends LightTypeParameter
 	}
 
 	@Override
-	public boolean isInheritor(@NotNull PsiClass baseClass, boolean checkDeep)
+	public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep)
 	{
 		for(PsiType type : getBounds(InferenceBound.UPPER))
 		{

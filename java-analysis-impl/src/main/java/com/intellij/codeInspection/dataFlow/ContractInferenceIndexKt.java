@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -49,7 +49,7 @@ class ContractInferenceIndexKt
 	private static PsiFileGist<Map<Integer, MethodData>> ourMethodDataPsiFileGist = GistManager.getInstance().newPsiFileGist("javaContractInference", 2, MethodDataExternalizer.INSTANCE, file ->
 			indexFile(file.getNode().getLighterAST()));
 
-	@NotNull
+	@Nonnull
 	private static Map<Integer, MethodData> indexFile(LighterAST tree)
 	{
 		Map<Integer, MethodData> result = new HashMap<>();
@@ -59,7 +59,7 @@ class ContractInferenceIndexKt
 			int methodIndex;
 
 			@Override
-			public void visitNode(@NotNull LighterASTNode element)
+			public void visitNode(@Nonnull LighterASTNode element)
 			{
 				if(element.getTokenType() == JavaElementType.METHOD)
 				{
@@ -118,7 +118,7 @@ class ContractInferenceIndexKt
 		return elements.indexOf(method);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static MethodData calcData(LighterAST tree, LighterASTNode method)
 	{
 		LighterASTNode body = LightTreeUtil.firstChildOfType(tree, method, JavaElementType.CODE_BLOCK);
@@ -142,7 +142,7 @@ class ContractInferenceIndexKt
 		return createData(body, contracts, nullityVisitor.getResult(), purityVisitor.getResult());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static MethodData createData(LighterASTNode body, List<PreContract> contracts, NullityInferenceResult nullity, PurityInferenceResult purity)
 	{
 		if(nullity == null && purity == null && contracts.isEmpty())
@@ -158,7 +158,7 @@ class ContractInferenceIndexKt
 		new RecursiveLighterASTNodeWalkingVisitor(tree)
 		{
 			@Override
-			public void visitNode(@NotNull LighterASTNode element)
+			public void visitNode(@Nonnull LighterASTNode element)
 			{
 				IElementType type = element.getTokenType();
 				if(type == JavaElementType.CLASS || type == JavaElementType.FIELD || type == JavaElementType.METHOD || type == JavaElementType.ANNOTATION_METHOD || type == JavaElementType

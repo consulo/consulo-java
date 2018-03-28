@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java basic <code>for</code> statement.
@@ -34,7 +34,7 @@ public interface PsiForStatement extends PsiLoopStatement{
    *
    * @return the condition part, or null if the statement is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getCondition();
 
   /**
@@ -42,7 +42,7 @@ public interface PsiForStatement extends PsiLoopStatement{
    *
    * @return the update part, or null if the statement is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiStatement getUpdate();
 
   /**
@@ -50,7 +50,7 @@ public interface PsiForStatement extends PsiLoopStatement{
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaToken getLParenth();
 
   /**
@@ -58,6 +58,6 @@ public interface PsiForStatement extends PsiLoopStatement{
    *
    * @return the closing parenthesis, or null if the statement is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaToken getRParenth();
 }

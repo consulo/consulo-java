@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.CommonClassNames;
@@ -39,15 +39,15 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix
 {
 	public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
-	protected WrapArrayToArraysAsListFix(final @NotNull PsiExpressionList list,
+	protected WrapArrayToArraysAsListFix(final @Nonnull PsiExpressionList list,
 			final int i,
-			final @NotNull PsiType toType,
-			final @NotNull ArgumentFixerActionFactory fixerActionFactory)
+			final @Nonnull PsiType toType,
+			final @Nonnull ArgumentFixerActionFactory fixerActionFactory)
 	{
 		super(list, i, toType, fixerActionFactory);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -64,7 +64,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix
 	public static class MyFixerActionFactory extends ArgumentFixerActionFactory
 	{
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		protected PsiExpression getModifiedArgument(final PsiExpression expression,
 				final PsiType toType) throws IncorrectOperationException
@@ -98,7 +98,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix
 			return (PsiExpression) JavaCodeStyleManager.getInstance(project).shortenClassReferences(newExpression);
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		private static PsiClass getJavaUtilList(final PsiElement context)
 		{
 			return JavaPsiFacade.getInstance(context.getProject()).findClass(CommonClassNames.JAVA_UTIL_LIST,

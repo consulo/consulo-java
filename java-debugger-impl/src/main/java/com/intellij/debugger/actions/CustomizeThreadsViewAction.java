@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.actions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -34,7 +35,7 @@ public class CustomizeThreadsViewAction extends DebuggerAction
 {
 	@RequiredDispatchThread
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e)
+	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
 		Project project = e.getData(CommonDataKeys.PROJECT);
 
@@ -43,7 +44,7 @@ public class CustomizeThreadsViewAction extends DebuggerAction
 
 	@RequiredDispatchThread
 	@Override
-	public void update(@NotNull AnActionEvent e)
+	public void update(@Nonnull AnActionEvent e)
 	{
 		e.getPresentation().setVisible(true);
 		e.getPresentation().setText(ActionsBundle.actionText(DebuggerActions.CUSTOMIZE_THREADS_VIEW));

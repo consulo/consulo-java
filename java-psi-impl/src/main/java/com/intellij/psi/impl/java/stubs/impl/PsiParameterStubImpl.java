@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -45,12 +45,12 @@ public class PsiParameterStubImpl extends StubBase<PsiParameter> implements PsiP
 	private final TypeInfo myType;
 	private byte myFlags;
 
-	public PsiParameterStubImpl(StubElement parent, @NotNull String name, @NotNull TypeInfo type, boolean ellipsis, boolean generatedName)
+	public PsiParameterStubImpl(StubElement parent, @Nonnull String name, @Nonnull TypeInfo type, boolean ellipsis, boolean generatedName)
 	{
 		this(parent, name, type, packFlags(ellipsis, generatedName));
 	}
 
-	public PsiParameterStubImpl(StubElement parent, @NotNull String name, @NotNull TypeInfo type, byte flags)
+	public PsiParameterStubImpl(StubElement parent, @Nonnull String name, @Nonnull TypeInfo type, byte flags)
 	{
 		super(parent, JavaStubElementTypes.PARAMETER);
 		myName = name;
@@ -65,7 +65,7 @@ public class PsiParameterStubImpl extends StubBase<PsiParameter> implements PsiP
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TypeInfo getType(boolean doResolve)
 	{
 		return doResolve ? myType.applyAnnotations(this) : myType;
@@ -84,7 +84,7 @@ public class PsiParameterStubImpl extends StubBase<PsiParameter> implements PsiP
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{

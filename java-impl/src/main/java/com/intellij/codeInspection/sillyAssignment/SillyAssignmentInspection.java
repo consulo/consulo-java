@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection.sillyAssignment;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -24,8 +26,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * User: anna
@@ -33,19 +35,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.variable.assigned.to.itself.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "SillyAssignment";
@@ -57,8 +59,8 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
 
       @Override public void visitAssignmentExpression(PsiAssignmentExpression expression) {

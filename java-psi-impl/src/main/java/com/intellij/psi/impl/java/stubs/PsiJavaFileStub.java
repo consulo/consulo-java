@@ -19,7 +19,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiJavaModule;
@@ -35,6 +35,6 @@ public interface PsiJavaFileStub extends PsiClassHolderFileStub<PsiJavaFile>
 
 	boolean isCompiled();
 
-	@NotNull
+	@Nonnull
 	StubPsiFactory getPsiFactory();
 }

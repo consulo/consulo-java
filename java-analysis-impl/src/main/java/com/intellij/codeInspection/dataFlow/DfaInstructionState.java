@@ -24,7 +24,8 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 
 public class DfaInstructionState implements Comparable<DfaInstructionState>
@@ -33,19 +34,19 @@ public class DfaInstructionState implements Comparable<DfaInstructionState>
 	private final DfaMemoryState myBeforeMemoryState;
 	private final Instruction myInstruction;
 
-	public DfaInstructionState(@NotNull Instruction myInstruction, @NotNull DfaMemoryState myBeforeMemoryState)
+	public DfaInstructionState(@Nonnull Instruction myInstruction, @Nonnull DfaMemoryState myBeforeMemoryState)
 	{
 		this.myBeforeMemoryState = myBeforeMemoryState;
 		this.myInstruction = myInstruction;
 	}
 
-	@NotNull
+	@Nonnull
 	public Instruction getInstruction()
 	{
 		return myInstruction;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaMemoryState getMemoryState()
 	{
 		return myBeforeMemoryState;
@@ -57,7 +58,7 @@ public class DfaInstructionState implements Comparable<DfaInstructionState>
 	}
 
 	@Override
-	public int compareTo(@NotNull DfaInstructionState o)
+	public int compareTo(@Nonnull DfaInstructionState o)
 	{
 		return myInstruction.getIndex() - o.myInstruction.getIndex();
 	}

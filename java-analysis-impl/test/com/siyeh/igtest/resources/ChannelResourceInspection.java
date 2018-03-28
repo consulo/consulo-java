@@ -1,11 +1,8 @@
 package com.siyeh.igtest.resources;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.*;
-import java.net.Socket;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.net.ServerSocket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.FileChannel;
@@ -56,7 +53,7 @@ public class ChannelResourceInspection {
         }
     }
 
-    public static void copyFile(@NotNull File from, @NotNull File to)
+    public static void copyFile(@Nonnull File from, @Nonnull File to)
             throws IOException {
         if (from.getCanonicalPath().equals(to.getCanonicalPath()))
             return;

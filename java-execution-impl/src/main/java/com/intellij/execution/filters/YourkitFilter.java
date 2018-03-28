@@ -18,10 +18,9 @@ package com.intellij.execution.filters;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.swing.JList;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.util.EditSourceUtil;
 import com.intellij.ide.util.PsiElementListCellRenderer;
@@ -47,7 +46,7 @@ public class YourkitFilter implements Filter{
 
   private static final Pattern PATTERN = Pattern.compile("\\s*(\\w*)\\(\\):(-?\\d*), (\\w*\\.java)\\n");
 
-  public YourkitFilter(@NotNull final Project project) {
+  public YourkitFilter(@Nonnull final Project project) {
     myProject = project;
   }
 
@@ -130,7 +129,7 @@ public class YourkitFilter implements Filter{
       return element.getContainingFile().getName();
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     protected String getContainerText(final PsiElement element, final String name) {
       final PsiDirectory parent = ((PsiFile)element).getParent();
       if (parent == null) return null;

@@ -19,8 +19,8 @@ import static com.intellij.psi.PsiJvmConversionHelper.getListAnnotations;
 import static com.intellij.psi.PsiJvmConversionHelper.getListModifiers;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.JvmModifiersOwner;
 
@@ -46,23 +46,23 @@ public interface PsiModifierListOwner extends PsiElement, JvmModifiersOwner
 	 * @param name the name of the modifier to check.
 	 * @return true if the element has the modifier, false otherwise
 	 */
-	boolean hasModifierProperty(@PsiModifier.ModifierConstant @NonNls @NotNull String name);
+	boolean hasModifierProperty(@PsiModifier.ModifierConstant @NonNls @Nonnull String name);
 
-	@NotNull
+	@Nonnull
 	@Override
 	default PsiAnnotation[] getAnnotations()
 	{
 		return getListAnnotations(this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	default JvmModifier[] getModifiers()
 	{
 		return getListModifiers(this);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	default PsiElement getSourceElement()
 	{

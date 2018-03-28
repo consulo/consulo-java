@@ -21,7 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.analysis.JavaAnalysisScope;
@@ -100,7 +100,7 @@ public class CyclicDependenciesAction extends AnAction{
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   private static AnalysisScope getInspectionScope(final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     if (project == null) return null;
@@ -144,7 +144,7 @@ public class CyclicDependenciesAction extends AnAction{
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static AnalysisScope getProjectScope(DataContext dataContext) {
     final Project data = dataContext.getData(CommonDataKeys.PROJECT);
     if (data == null) {
@@ -153,7 +153,7 @@ public class CyclicDependenciesAction extends AnAction{
     return new AnalysisScope(data);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static AnalysisScope getModuleScope(DataContext dataContext) {
     final Module data = dataContext.getData(LangDataKeys.MODULE);
     if (data == null) {

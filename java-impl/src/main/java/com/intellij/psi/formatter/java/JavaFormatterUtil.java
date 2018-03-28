@@ -20,7 +20,8 @@ import static java.util.Arrays.asList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiExpression;
@@ -80,7 +81,7 @@ public class JavaFormatterUtil
 		return expression1.getOperationTokenType() == expression2.getOperationTokenType();
 	}
 
-	public static boolean hasMultilineArguments(@NotNull PsiExpression[] arguments)
+	public static boolean hasMultilineArguments(@Nonnull PsiExpression[] arguments)
 	{
 		for(PsiExpression argument : arguments)
 		{
@@ -94,7 +95,7 @@ public class JavaFormatterUtil
 		return false;
 	}
 
-	public static boolean isMultilineExceptArguments(@NotNull PsiExpression[] arguments)
+	public static boolean isMultilineExceptArguments(@Nonnull PsiExpression[] arguments)
 	{
 		for(PsiExpression argument : arguments)
 		{
@@ -110,12 +111,12 @@ public class JavaFormatterUtil
 		return isWhiteSpaceWithLineFeed(afterLastArgument);
 	}
 
-	private static boolean isWhiteSpaceWithLineFeed(@NotNull ASTNode node)
+	private static boolean isWhiteSpaceWithLineFeed(@Nonnull ASTNode node)
 	{
 		return node instanceof PsiWhiteSpace && node.textContains('\n');
 	}
 
-	@NotNull
+	@Nonnull
 	public static WrapType getWrapType(int wrap)
 	{
 		switch(wrap)

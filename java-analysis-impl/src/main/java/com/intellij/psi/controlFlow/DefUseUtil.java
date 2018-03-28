@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.*;
@@ -86,7 +86,7 @@ public class DefUseUtil
 		private final List<InstructionKey> myBackwardTraces;
 		private boolean myIsVisited;
 
-		public InstructionState(@NotNull InstructionKey instructionKey)
+		public InstructionState(@Nonnull InstructionKey instructionKey)
 		{
 			myInstructionKey = instructionKey;
 			myBackwardTraces = new ArrayList<>(2);
@@ -150,7 +150,7 @@ public class DefUseUtil
 		}
 
 		@Override
-		public int compareTo(@NotNull InstructionState other)
+		public int compareTo(@Nonnull InstructionState other)
 		{
 			return myInstructionKey.compareTo(other.myInstructionKey);
 		}
@@ -324,13 +324,13 @@ public class DefUseUtil
 		return unusedDefs;
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiElement[] getDefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref)
 	{
 		return getDefs(body, def, ref, false);
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiElement[] getDefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref, boolean rethrow)
 	{
 		try
@@ -406,7 +406,7 @@ public class DefUseUtil
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiElement[] getRefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref)
 	{
 		try
@@ -486,7 +486,7 @@ public class DefUseUtil
 
 		protected abstract boolean defs();
 
-		@NotNull
+		@Nonnull
 		private PsiElement[] get(final PsiVariable def, PsiElement refOrDef)
 		{
 			if(body == null)
@@ -571,7 +571,7 @@ public class DefUseUtil
 	}
 
 
-	@NotNull
+	@Nonnull
 	private static IntArrayList[] getBackwardTraces(final List<Instruction> instructions)
 	{
 		final IntArrayList[] states = new IntArrayList[instructions.size()];
@@ -737,7 +737,7 @@ public class DefUseUtil
 	private static final ControlFlowPolicy ourPolicy = new ControlFlowPolicy()
 	{
 		@Override
-		public PsiVariable getUsedVariable(@NotNull PsiReferenceExpression refExpr)
+		public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr)
 		{
 			if(refExpr.isQualified())
 			{
@@ -754,13 +754,13 @@ public class DefUseUtil
 		}
 
 		@Override
-		public boolean isParameterAccepted(@NotNull PsiParameter psiParameter)
+		public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter)
 		{
 			return true;
 		}
 
 		@Override
-		public boolean isLocalVariableAccepted(@NotNull PsiLocalVariable psiVariable)
+		public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable)
 		{
 			return true;
 		}

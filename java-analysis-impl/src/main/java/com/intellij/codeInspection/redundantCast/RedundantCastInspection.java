@@ -30,8 +30,7 @@ import com.intellij.psi.util.RedundantCastUtil;
 import com.intellij.util.containers.IntArrayList;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public ProblemDescriptor[] getDescriptions(PsiElement where, InspectionManager manager, boolean isOnTheFly) {
     List<PsiTypeCastExpression> redundantCasts = RedundantCastUtil.getRedundantCastsInside(where);
     if (redundantCasts.isEmpty()) return null;
@@ -71,7 +70,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
   }
 
   @Override
-  public void writeSettings(@NotNull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     if (IGNORE_ANNOTATED_METHODS || IGNORE_SUSPICIOUS_METHOD_CALLS) {
       super.writeSettings(node);
     }
@@ -85,8 +84,8 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
     return optionsPanel;
   }
 
-  @Nullable
-  private ProblemDescriptor createDescription(@NotNull PsiTypeCastExpression cast, @NotNull InspectionManager manager, boolean onTheFly) {
+  @javax.annotation.Nullable
+  private ProblemDescriptor createDescription(@Nonnull PsiTypeCastExpression cast, @Nonnull InspectionManager manager, boolean onTheFly) {
     PsiExpression operand = cast.getOperand();
     PsiTypeElement castType = cast.getCastType();
     if (operand == null || castType == null) return null;
@@ -132,13 +131,13 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
 
   private static class AcceptSuggested implements LocalQuickFix {
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.redundant.cast.remove.quickfix");
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) return;
       PsiElement castTypeElement = descriptor.getPsiElement();
       PsiTypeCastExpression cast = castTypeElement == null ? null : (PsiTypeCastExpression)castTypeElement.getParent();
@@ -148,26 +147,26 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.VERBOSE_GROUP_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }

@@ -17,7 +17,7 @@ package com.intellij.codeInsight.javadoc;
 
 import com.intellij.psi.*;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -29,7 +29,7 @@ public class ColorUtil {
   private ColorUtil() {
   }
 
-  public static String generatePreviewHtml(@NotNull final Color color) {
+  public static String generatePreviewHtml(@Nonnull final Color color) {
     return String.format("<div style=\"padding: 1px; width: 52px; height: 32px; background-color: #555555;\"><div style=\"width: 50px; height: 30px; background-color: #%s;\">&nbsp;</div></div>", com.intellij.ui.ColorUtil.toHex(color));
   }
 

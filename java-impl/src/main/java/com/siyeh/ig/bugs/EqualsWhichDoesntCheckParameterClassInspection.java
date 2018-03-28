@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -29,14 +30,14 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
 {
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("equals.doesnt.check.class.parameter.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("equals.doesnt.check.class.parameter.problem.descriptor");
@@ -58,7 +59,7 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
 	{
 
 		@Override
-		public void visitMethod(@NotNull PsiMethod method)
+		public void visitMethod(@Nonnull PsiMethod method)
 		{
 			// note: no call to super
 			if(!MethodUtils.isEquals(method))

@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiSubstitutorImpl;
@@ -56,8 +56,8 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 	}
 
 	@Override
-	@NotNull
-	public SmartTypePointer createSmartTypePointer(@NotNull PsiType type)
+	@Nonnull
+	public SmartTypePointer createSmartTypePointer(@Nonnull PsiType type)
 	{
 		final SmartTypePointer pointer = type.accept(new SmartTypeCreatingVisitor());
 		return pointer != null ? pointer : NULL_POINTER;
@@ -67,7 +67,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 	{
 		private final PsiType myType;
 
-		private SimpleTypePointer(@NotNull PsiType type)
+		private SimpleTypePointer(@Nonnull PsiType type)
 		{
 			myType = type;
 		}
@@ -83,7 +83,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 	{
 		private final SmartTypePointer myComponentTypePointer;
 
-		public ArrayTypePointer(@NotNull PsiArrayType type, @NotNull SmartTypePointer componentTypePointer)
+		public ArrayTypePointer(@Nonnull PsiArrayType type, @Nonnull SmartTypePointer componentTypePointer)
 		{
 			super(type);
 			myComponentTypePointer = componentTypePointer;
@@ -104,7 +104,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 		private final SmartTypePointer myBoundPointer;
 		private final boolean myIsExtending;
 
-		public WildcardTypePointer(@NotNull PsiWildcardType type, @Nullable SmartTypePointer boundPointer)
+		public WildcardTypePointer(@Nonnull PsiWildcardType type, @javax.annotation.Nullable SmartTypePointer boundPointer)
 		{
 			super(type);
 			myManager = type.getManager();
@@ -137,9 +137,9 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 		private final SmartPsiElementPointer myClass;
 		private final Map<SmartPsiElementPointer, SmartTypePointer> myMap;
 
-		public ClassTypePointer(@NotNull PsiClassType type,
-				@NotNull SmartPsiElementPointer aClass,
-				@NotNull Map<SmartPsiElementPointer, SmartTypePointer> map)
+		public ClassTypePointer(@Nonnull PsiClassType type,
+				@Nonnull SmartPsiElementPointer aClass,
+				@Nonnull Map<SmartPsiElementPointer, SmartTypePointer> map)
 		{
 			super(type);
 			myClass = aClass;
@@ -181,7 +181,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 	{
 		private final List<SmartTypePointer> myPointers;
 
-		private DisjunctionTypePointer(@NotNull PsiDisjunctionType type)
+		private DisjunctionTypePointer(@Nonnull PsiDisjunctionType type)
 		{
 			super(type);
 			myPointers = ContainerUtil.map(type.getDisjunctions(), new Function<PsiType, SmartTypePointer>()
@@ -268,8 +268,8 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 		}
 	}
 
-	@NotNull
-	private SmartTypePointer createClassReferenceTypePointer(@NotNull PsiClassType classType)
+	@Nonnull
+	private SmartTypePointer createClassReferenceTypePointer(@Nonnull PsiClassType classType)
 	{
 		for(ClassTypePointerFactory factory : ClassTypePointerFactory.EP_NAME.getExtensions())
 		{

@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection.concurrencyAnnotations;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -22,33 +24,32 @@ import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.CONCURRENCY_ANNOTATION_ISSUES;
   }
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Non-final @GuardedBy field";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "NonFinalGuard";
   }
 
 
   @Override
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
     return new Visitor(holder);
   }
 

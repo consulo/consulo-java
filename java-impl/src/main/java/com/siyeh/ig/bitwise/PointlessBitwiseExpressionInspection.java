@@ -28,7 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -54,14 +54,14 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "pointless.bitwise.expression.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiPolyadicExpression polyadicExpression =
       (PsiPolyadicExpression)infos[0];
@@ -169,7 +169,7 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
 
   private class PointlessBitwiseFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "pointless.bitwise.expression.simplify.quickfix");
@@ -190,7 +190,7 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
 
     @Override
     public void visitPolyadicExpression(
-      @NotNull PsiPolyadicExpression expression) {
+      @Nonnull PsiPolyadicExpression expression) {
       super.visitPolyadicExpression(expression);
       final IElementType sign = expression.getOperationTokenType();
       if (!bitwiseTokens.contains(sign)) {

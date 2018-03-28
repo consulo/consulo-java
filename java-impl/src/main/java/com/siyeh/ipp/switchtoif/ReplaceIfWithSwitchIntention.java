@@ -23,8 +23,8 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ControlFlowUtils;
 import com.siyeh.ipp.psiutils.EquivalenceChecker;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +32,13 @@ import java.util.List;
 public class ReplaceIfWithSwitchIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new IfToSwitchPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) {
+  public void processIntention(@Nonnull PsiElement element) {
     final PsiJavaToken switchToken = (PsiJavaToken)element;
     PsiIfStatement ifStatement = (PsiIfStatement)switchToken.getParent();
     if (ifStatement == null) {
@@ -132,8 +132,8 @@ public class ReplaceIfWithSwitchIntention extends Intention {
   }
 
   @Nullable
-  public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @NotNull Class<T> aClass,
-                                                              @NotNull Class<? extends PsiElement>... stopAt) {
+  public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
+                                                              @Nonnull Class<? extends PsiElement>... stopAt) {
     if (element == null) {
       return null;
     }

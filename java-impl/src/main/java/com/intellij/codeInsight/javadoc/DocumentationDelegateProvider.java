@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.javadoc;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiMember;
@@ -53,10 +53,10 @@ public abstract class DocumentationDelegateProvider
 	 * @return delegate PsiDocCommentOwner instance.
 	 */
 	@Nullable
-	public abstract PsiDocCommentOwner computeDocumentationDelegate(@NotNull PsiMember member);
+	public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
 
 	@Nullable
-	public static PsiDocCommentOwner findDocumentationDelegate(@NotNull PsiMember method)
+	public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method)
 	{
 		for(DocumentationDelegateProvider delegator : EP_NAME.getExtensions())
 		{

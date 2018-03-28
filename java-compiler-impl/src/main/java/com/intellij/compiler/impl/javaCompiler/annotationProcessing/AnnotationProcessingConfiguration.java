@@ -15,7 +15,7 @@
  */
 package com.intellij.compiler.impl.javaCompiler.annotationProcessing;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,18 +27,18 @@ import java.util.Set;
 public interface AnnotationProcessingConfiguration {
   boolean isEnabled();
 
-  @NotNull
+  @Nonnull
   String getProcessorPath();
 
-  @NotNull
+  @Nonnull
   String getGeneratedSourcesDirectoryName(boolean forTests);
 
   boolean isOutputRelativeToContentRoot();
 
-  @NotNull
+  @Nonnull
   Set<String> getProcessors();
 
-  @NotNull
+  @Nonnull
   Map<String, String> getProcessorOptions();
 
   boolean isObtainProcessorsFromClasspath();

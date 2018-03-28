@@ -1,7 +1,7 @@
 package consulo.java.manifest.lang;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -18,9 +18,9 @@ import consulo.lang.LanguageVersionResolver;
 public class ManifestLanguageVersionResolver implements LanguageVersionResolver
 {
 	@RequiredReadAction
-	@NotNull
+	@Nonnull
 	@Override
-	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable PsiElement element)
+	public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable PsiElement element)
 	{
 		if(element == null)
 		{
@@ -35,9 +35,9 @@ public class ManifestLanguageVersionResolver implements LanguageVersionResolver
 	}
 
 	@RequiredReadAction
-	@NotNull
+	@Nonnull
 	@Override
-	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile)
+	public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile)
 	{
 		if(virtualFile == null)
 		{

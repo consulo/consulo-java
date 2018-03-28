@@ -15,9 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Represents a file or code fragment to which import statements can be added.
  */

@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiModifier;
@@ -27,7 +28,7 @@ public class AddDefaultConstructorFix extends AddMethodFix {
     this(aClass, PsiUtil.getMaximumModifierForMember(aClass, false));
   }
 
-  public AddDefaultConstructorFix(PsiClass aClass, @NotNull @PsiModifier.ModifierConstant final String modifier) {
+  public AddDefaultConstructorFix(PsiClass aClass, @Nonnull @PsiModifier.ModifierConstant final String modifier) {
     super(generateConstructor(aClass.getName(), modifier), aClass);
     setText(JavaQuickFixBundle.message("add.default.constructor.text", VisibilityUtil.toPresentableText(modifier), aClass.getName()));
   }
@@ -40,7 +41,7 @@ public class AddDefaultConstructorFix extends AddMethodFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("add.default.constructor.family");
   }

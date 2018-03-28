@@ -17,7 +17,7 @@ package com.intellij.refactoring.changeSignature;
 
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -35,16 +35,16 @@ public interface JavaChangeInfo extends ChangeInfo {
 
   CanonicalTypes.Type getNewReturnType();
 
-  @NotNull
+  @Nonnull
   JavaParameterInfo[] getNewParameters();
 
   @PsiModifier.ModifierConstant
   String getNewVisibility();
 
-  @NotNull
+  @Nonnull
   String[] getOldParameterNames();
 
-  @NotNull
+  @Nonnull
   String[] getOldParameterTypes();
 
   ThrownExceptionInfo[] getNewExceptions();

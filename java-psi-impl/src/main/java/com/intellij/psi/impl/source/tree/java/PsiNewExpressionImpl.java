@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
@@ -34,7 +34,6 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -54,14 +53,14 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 	}
 
 	@Override
-	public PsiType getOwner(@NotNull PsiAnnotation annotation)
+	public PsiType getOwner(@Nonnull PsiAnnotation annotation)
 	{
 		assert annotation.getParent() == this : annotation.getParent() + " != " + this;
 		return doGetType(annotation);
 	}
 
-	@Nullable
-	private PsiType doGetType(@Nullable PsiAnnotation stopAt)
+	@javax.annotation.Nullable
+	private PsiType doGetType(@javax.annotation.Nullable PsiAnnotation stopAt)
 	{
 		PsiType type = null;
 		SmartList<PsiAnnotation> annotations = new SmartList<>();
@@ -144,7 +143,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiExpression[] getArrayDimensions()
 	{
 		PsiExpression[] expressions = getChildrenAsPsiElements(ElementType.ARRAY_DIMENSION_BIT_SET, PsiExpression.ARRAY_FACTORY);
@@ -179,8 +178,8 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 		return new PsiPolyVariantCachingReference()
 		{
 			@Override
-			@NotNull
-			public JavaResolveResult[] resolveInner(boolean incompleteCode, @NotNull PsiFile containingFile)
+			@Nonnull
+			public JavaResolveResult[] resolveInner(boolean incompleteCode, @Nonnull PsiFile containingFile)
 			{
 				ASTNode classRef = findChildByRole(ChildRole.TYPE_REFERENCE);
 				if(classRef != null)
@@ -222,7 +221,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public String getCanonicalText()
 			{
 				throw new UnsupportedOperationException();
@@ -235,7 +234,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 			}
 
 			@Override
-			public PsiElement bindToElement(@NotNull PsiElement element)
+			public PsiElement bindToElement(@Nonnull PsiElement element)
 			{
 				return null;
 			}
@@ -255,7 +254,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult resolveMethodGenerics()
 	{
 		ResolveResult[] results = getConstructorFakeReference().multiResolve(false);
@@ -269,14 +268,14 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiReferenceParameterList getTypeArgumentList()
 	{
 		return (PsiReferenceParameterList) findChildByRoleAsPsiElement(ChildRole.REFERENCE_PARAMETER_LIST);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getTypeArguments()
 	{
 		return getTypeArgumentList().getTypeArguments();
@@ -308,7 +307,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 	private static final TokenSet CLASS_REF = TokenSet.create(JavaElementType.JAVA_CODE_REFERENCE, JavaElementType.ANONYMOUS_CLASS);
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiJavaCodeReferenceElement getClassOrAnonymousClassReference()
 	{
 		ASTNode ref = findChildByType(CLASS_REF);
@@ -325,7 +324,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 	}
 
 	@Override
-	public void deleteChildInternal(@NotNull ASTNode child)
+	public void deleteChildInternal(@Nonnull ASTNode child)
 	{
 		if(getChildRole(child) == ChildRole.QUALIFIER)
 		{
@@ -468,7 +467,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

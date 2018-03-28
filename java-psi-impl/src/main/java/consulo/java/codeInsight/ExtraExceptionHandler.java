@@ -15,7 +15,8 @@
  */
 package consulo.java.codeInsight;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
@@ -27,5 +28,5 @@ import com.intellij.psi.PsiElement;
 public interface ExtraExceptionHandler {
   ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create("consulo.java.extraExceptionHandler");
 
-  boolean isHandled(@NotNull PsiClassType type, @NotNull PsiElement element);
+  boolean isHandled(@Nonnull PsiClassType type, @Nonnull PsiElement element);
 }

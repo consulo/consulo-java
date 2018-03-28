@@ -20,7 +20,7 @@ import com.intellij.codeInspection.reference.*;
 import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.*;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
   private final RefManager myManager;
   public static int CAN_BE_FINAL_MASK;
 
-  public CanBeFinalAnnotator(@NotNull RefManager manager) {
+  public CanBeFinalAnnotator(@Nonnull RefManager manager) {
     myManager = manager;
   }
 

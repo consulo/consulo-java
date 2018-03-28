@@ -33,8 +33,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +52,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
     return findTargetClass(editor, file);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass findTargetClass(Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
@@ -72,7 +71,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
   }
 
   @Override
-  protected boolean isValidForFile(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
+  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     if (file instanceof PsiCompiledElement) return false;
 
     PsiDocumentManager.getInstance(project).commitAllDocuments();
@@ -94,7 +93,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
       myMethodKind = methodKind;
     }
 
-    public void invoke(@NotNull Project project, @NotNull final Editor editor, @NotNull final PsiFile file) {
+    public void invoke(@Nonnull Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
       final PsiClass targetClass = findTargetClass(editor, file);
       final List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
       if (frameworks.isEmpty()) return;
@@ -163,7 +162,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
       });
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiMethod generateDummyMethod(Editor editor, PsiFile file) throws IncorrectOperationException {
       final PsiMethod method = TestIntegrationUtils.createDummyMethod(file);
       final PsiGenerationInfo<PsiMethod> info = OverrideImplementUtil.createGenerationInfo(method);

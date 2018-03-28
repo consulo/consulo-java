@@ -15,8 +15,8 @@
  */
 package com.intellij.ide.hierarchy.method;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.hierarchy.HierarchyBrowser;
 import com.intellij.ide.hierarchy.HierarchyProvider;
 import com.intellij.ide.hierarchy.MethodHierarchyBrowserBase;
@@ -41,7 +41,7 @@ import com.intellij.psi.util.PsiTreeUtil;
  */
 public class JavaMethodHierarchyProvider implements HierarchyProvider
 {
-	public PsiElement getTarget(@NotNull final DataContext dataContext)
+	public PsiElement getTarget(@Nonnull final DataContext dataContext)
 	{
 		final PsiMethod method = getMethodImpl(dataContext);
 		if(method != null && method.getContainingClass() != null && !method.hasModifierProperty(PsiModifier.PRIVATE) && !method.hasModifierProperty(PsiModifier.STATIC))
@@ -106,13 +106,13 @@ public class JavaMethodHierarchyProvider implements HierarchyProvider
 		return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
 	}
 
-	@NotNull
+	@Nonnull
 	public HierarchyBrowser createHierarchyBrowser(final PsiElement target)
 	{
 		return new MethodHierarchyBrowser(target.getProject(), (PsiMethod) target);
 	}
 
-	public void browserActivated(@NotNull final HierarchyBrowser hierarchyBrowser)
+	public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser)
 	{
 		((MethodHierarchyBrowser) hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
 	}

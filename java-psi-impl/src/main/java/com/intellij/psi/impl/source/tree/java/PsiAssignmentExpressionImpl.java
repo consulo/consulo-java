@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -24,7 +26,6 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements PsiAssignmentExpression {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiAssignmentExpressionImpl");
@@ -34,7 +35,7 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiExpression getLExpression() {
     return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.LOPERAND);
   }
@@ -45,13 +46,13 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public IElementType getOperationTokenType() {
     return getOperationSign().getTokenType();
   }
@@ -101,7 +102,7 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
                                                                          JavaTokenType.ANDEQ, JavaTokenType.OREQ, JavaTokenType.XOREQ);
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitAssignmentExpression(this);
     }

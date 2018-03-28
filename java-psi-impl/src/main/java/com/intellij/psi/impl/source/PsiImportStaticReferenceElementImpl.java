@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -117,7 +118,7 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getTypeParameters() {
     return PsiType.EMPTY_ARRAY;
   }
@@ -190,7 +191,7 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getCanonicalText() {
     String canonicalText = myCanonicalText;
     if (canonicalText == null) {
@@ -214,7 +215,7 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     final JavaResolveResult[] results = multiResolve(incompleteCode);
     if (results.length == 1) return results[0];
@@ -222,7 +223,7 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     PsiFile file = getContainingFile();
     final ResolveCache resolveCache = ResolveCache.getInstance(file.getProject());
@@ -233,9 +234,9 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
   private static final class OurGenericsResolver implements ResolveCache.PolyVariantResolver<PsiImportStaticReferenceElementImpl> {
     private static final OurGenericsResolver INSTANCE = new OurGenericsResolver();
 
-    @NotNull
+    @Nonnull
     @Override
-    public JavaResolveResult[] resolve(@NotNull final PsiImportStaticReferenceElementImpl referenceElement, final boolean incompleteCode) {
+    public JavaResolveResult[] resolve(@Nonnull final PsiImportStaticReferenceElementImpl referenceElement, final boolean incompleteCode) {
       final PsiElement qualifier = referenceElement.getQualifier();
       if (!(qualifier instanceof PsiJavaCodeReferenceElement)) return JavaResolveResult.EMPTY_ARRAY;
       final PsiElement target = ((PsiJavaCodeReferenceElement)qualifier).resolve();
@@ -284,7 +285,7 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
   }
 
   @Override
-  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiMember) ||
         !(element instanceof PsiNamedElement) ||
         ((PsiNamedElement)element).getName() == null) {
@@ -332,7 +333,7 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitImportStaticReferenceElement(this);
     }

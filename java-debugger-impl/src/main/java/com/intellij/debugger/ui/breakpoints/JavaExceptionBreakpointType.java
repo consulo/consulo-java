@@ -15,11 +15,11 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.HelpID;
@@ -50,14 +50,14 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 		super("java-exception", DebuggerBundle.message("exception.breakpoints.tab.title"));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getEnabledIcon()
 	{
 		return AllIcons.Debugger.Db_exception_breakpoint;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getDisabledIcon()
 	{
@@ -97,7 +97,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 		return new JavaExceptionBreakpointProperties();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>> createCustomPropertiesPanel()
 	{
@@ -106,7 +106,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 
 	@Nullable
 	@Override
-	public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(@NotNull XBreakpointCreator<JavaExceptionBreakpointProperties>
+	public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(@Nonnull XBreakpointCreator<JavaExceptionBreakpointProperties>
 			creator)
 	{
 		return creator.createBreakpoint(new JavaExceptionBreakpointProperties());
@@ -116,7 +116,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 	//  return ExceptionBreakpoint.CATEGORY;
 	//}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XBreakpoint<JavaExceptionBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent)
 	{

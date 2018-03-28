@@ -16,8 +16,9 @@
 
 package com.intellij.util.descriptors;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -25,10 +26,10 @@ import org.jetbrains.annotations.NonNls;
  */
 public interface ConfigFileMetaDataProvider {
 
-  @NotNull
+  @Nonnull
   ConfigFileMetaData[] getMetaData();
 
   @Nullable
-  ConfigFileMetaData findMetaData(@NonNls @NotNull String id);
+  ConfigFileMetaData findMetaData(@NonNls @Nonnull String id);
 
 }

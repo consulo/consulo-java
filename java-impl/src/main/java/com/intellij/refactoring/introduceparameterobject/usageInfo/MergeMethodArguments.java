@@ -28,7 +28,6 @@ import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -193,7 +192,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
     return newExpression.toString();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private String getArgument(PsiExpression[] args, int i) {
     if (i < args.length) {
       return args[i].getText();

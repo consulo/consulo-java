@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -58,17 +58,17 @@ public class PullUpConflictsUtil {
   public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
                                         PsiClass subclass,
                                         @Nullable PsiClass superClass,
-                                        @NotNull PsiJavaPackage targetPackage,
-                                        @NotNull PsiDirectory targetDirectory,
+                                        @Nonnull PsiJavaPackage targetPackage,
+                                        @Nonnull PsiDirectory targetDirectory,
                                         final InterfaceContainmentVerifier interfaceContainmentVerifier) {
     return checkConflicts(infos, subclass, superClass, targetPackage, targetDirectory, interfaceContainmentVerifier, true);
   }
 
   public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
-                                                            @NotNull final PsiClass subclass,
+                                                            @Nonnull final PsiClass subclass,
                                                             @Nullable PsiClass superClass,
-                                                            @NotNull final PsiJavaPackage targetPackage,
-                                                            @NotNull PsiDirectory targetDirectory,
+                                                            @Nonnull final PsiJavaPackage targetPackage,
+                                                            @Nonnull PsiDirectory targetDirectory,
                                                             final InterfaceContainmentVerifier interfaceContainmentVerifier,
                                                             boolean movedMembers2Super) {
     final Set<PsiMember> movedMembers = new HashSet<PsiMember>();

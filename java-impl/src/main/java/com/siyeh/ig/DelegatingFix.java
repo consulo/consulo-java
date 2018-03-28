@@ -20,7 +20,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class DelegatingFix extends InspectionGadgetsFix {
 
@@ -30,12 +30,12 @@ public class DelegatingFix extends InspectionGadgetsFix {
     this.delegate = delegate;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return delegate.getName();
   }
 
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return delegate.getName();
   }

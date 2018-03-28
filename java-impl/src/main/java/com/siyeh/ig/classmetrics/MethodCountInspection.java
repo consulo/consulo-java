@@ -23,7 +23,7 @@ import com.intellij.util.ui.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,13 +39,13 @@ public class MethodCountInspection extends BaseInspection {
   public boolean ignoreGettersAndSetters = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ClassWithTooManyMethods";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("too.many.methods.display.name");
   }
@@ -85,7 +85,7 @@ public class MethodCountInspection extends BaseInspection {
 
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer count = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -100,7 +100,7 @@ public class MethodCountInspection extends BaseInspection {
   private class MethodCountVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // note: no call to super
       final int methodCount = calculateTotalMethodCount(aClass);
       if (methodCount <= m_limit) {

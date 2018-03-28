@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -29,18 +31,16 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SimplifiableEqualsExpressionInspection extends BaseInspection {
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("simplifiable.equals.expression.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("simplifiable.equals.expression.problem.descriptor", infos[0]);
@@ -59,7 +59,7 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
       myMethodName = methodName;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("simplifiable.equals.expression.quickfix", myMethodName);
@@ -234,7 +234,7 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
       return PsiUtil.isConstantExpression(argument);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiVariable getVariableFromNullComparison(PsiExpression expression, boolean equals) {
       if (!(expression instanceof PsiPolyadicExpression)) {
         return null;

@@ -19,8 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.hint.QuestionAction;
@@ -90,7 +90,7 @@ public class MoveClassToModuleFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     if (myModules.size() == 1) {
       final PsiClass aClass = myModules.keySet().iterator().next();
@@ -101,18 +101,18 @@ public class MoveClassToModuleFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return "move it";
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return !myModules.isEmpty();
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (myModules.size() == 1) {
       moveClass(project, editor, file, myModules.keySet().iterator().next());
     }
@@ -125,7 +125,7 @@ public class MoveClassToModuleFix implements IntentionAction {
           return psiClass.getQualifiedName();
         }
 
-        @Nullable
+        @javax.annotation.Nullable
         @Override
         protected String getContainerText(PsiClass element, String name) {
           return null;

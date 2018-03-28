@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
@@ -92,7 +92,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
 	@Override
 	@Nullable
-	public PsiExpressionList findElementForParameterInfo(@NotNull final CreateParameterInfoContext context)
+	public PsiExpressionList findElementForParameterInfo(@Nonnull final CreateParameterInfoContext context)
 	{
 		PsiExpressionList argumentList = findArgumentList(context.getFile(), context.getOffset(), context.getParameterListStart());
 
@@ -118,7 +118,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 		return argumentList;
 	}
 
-	private static PsiExpressionList findMethodsForArgumentList(final CreateParameterInfoContext context, @NotNull final PsiExpressionList argumentList)
+	private static PsiExpressionList findMethodsForArgumentList(final CreateParameterInfoContext context, @Nonnull final PsiExpressionList argumentList)
 	{
 
 		CandidateInfo[] candidates = getMethods(argumentList);
@@ -132,19 +132,19 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 	}
 
 	@Override
-	public void showParameterInfo(@NotNull final PsiExpressionList element, @NotNull final CreateParameterInfoContext context)
+	public void showParameterInfo(@Nonnull final PsiExpressionList element, @Nonnull final CreateParameterInfoContext context)
 	{
 		context.showHint(element, element.getTextRange().getStartOffset(), this);
 	}
 
 	@Override
-	public PsiExpressionList findElementForUpdatingParameterInfo(@NotNull final UpdateParameterInfoContext context)
+	public PsiExpressionList findElementForUpdatingParameterInfo(@Nonnull final UpdateParameterInfoContext context)
 	{
 		return findArgumentList(context.getFile(), context.getOffset(), context.getParameterListStart());
 	}
 
 	@Override
-	public void updateParameterInfo(@NotNull final PsiExpressionList o, @NotNull final UpdateParameterInfoContext context)
+	public void updateParameterInfo(@Nonnull final PsiExpressionList o, @Nonnull final UpdateParameterInfoContext context)
 	{
 		PsiElement parameterOwner = context.getParameterOwner();
 		if(parameterOwner != o)
@@ -317,27 +317,27 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Class<PsiExpressionList> getArgumentListClass()
 	{
 		return PsiExpressionList.class;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public IElementType getActualParametersRBraceType()
 	{
 		return JavaTokenType.RBRACE;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Set<Class> getArgumentListAllowedParentClasses()
 	{
 		return ourArgumentListAllowedParentClassesSet;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Set<? extends Class> getArgListStopSearchClasses()
 	{
@@ -345,15 +345,15 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public IElementType getActualParameterDelimiterType()
 	{
 		return JavaTokenType.COMMA;
 	}
 
 	@Override
-	@NotNull
-	public PsiExpression[] getActualParameters(@NotNull PsiExpressionList psiExpressionList)
+	@Nonnull
+	public PsiExpression[] getActualParameters(@Nonnull PsiExpressionList psiExpressionList)
 	{
 		return psiExpressionList.getExpressions();
 	}
@@ -471,7 +471,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 		return results.toArray(new CandidateInfo[results.size()]);
 	}
 
-	public static String updateMethodPresentation(@NotNull PsiMethod method, @Nullable PsiSubstitutor substitutor, @NotNull ParameterInfoUIContext context)
+	public static String updateMethodPresentation(@Nonnull PsiMethod method, @Nullable PsiSubstitutor substitutor, @Nonnull ParameterInfoUIContext context)
 	{
 		CodeInsightSettings settings = CodeInsightSettings.getInstance();
 
@@ -563,7 +563,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 				.getDefaultParameterColor());
 	}
 
-	private static void appendModifierList(@NotNull StringBuilder buffer, @NotNull PsiModifierListOwner owner)
+	private static void appendModifierList(@Nonnull StringBuilder buffer, @Nonnull PsiModifierListOwner owner)
 	{
 		int lastSize = buffer.length();
 		Set<String> shownAnnotations = ContainerUtil.newHashSet();
@@ -597,7 +597,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 	}
 
 	@Override
-	public void updateUI(final Object p, @NotNull final ParameterInfoUIContext context)
+	public void updateUI(final Object p, @Nonnull final ParameterInfoUIContext context)
 	{
 		if(p instanceof CandidateInfo)
 		{

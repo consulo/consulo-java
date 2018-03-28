@@ -16,7 +16,7 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class RecursionVisitor extends JavaRecursiveElementVisitor {
 
@@ -24,14 +24,14 @@ class RecursionVisitor extends JavaRecursiveElementVisitor {
   private final PsiMethod method;
   private final String methodName;
 
-  public RecursionVisitor(@NotNull PsiMethod method) {
+  public RecursionVisitor(@Nonnull PsiMethod method) {
     super();
     this.method = method;
     methodName = method.getName();
   }
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!recursive) {
       super.visitElement(element);
     }
@@ -39,7 +39,7 @@ class RecursionVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @NotNull PsiMethodCallExpression call) {
+    @Nonnull PsiMethodCallExpression call) {
     if (recursive) {
       return;
     }

@@ -25,8 +25,9 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -56,8 +57,8 @@ import com.intellij.util.text.LineReader;
  */
 public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
 
-  @NotNull
-  public static String shiftIndentInside(@NotNull String initial, final int i, boolean shiftEmptyLines) throws IOException {
+  @Nonnull
+  public static String shiftIndentInside(@Nonnull String initial, final int i, boolean shiftEmptyLines) throws IOException {
     StringBuilder result = new StringBuilder(initial.length());
     LineReader reader = new LineReader(new ByteArrayInputStream(initial.getBytes()));
     boolean first = true;

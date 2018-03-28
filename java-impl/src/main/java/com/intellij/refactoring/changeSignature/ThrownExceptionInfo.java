@@ -17,7 +17,7 @@ package com.intellij.refactoring.changeSignature;
 
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author ven

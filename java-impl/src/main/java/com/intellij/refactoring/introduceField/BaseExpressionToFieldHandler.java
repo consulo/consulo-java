@@ -68,8 +68,8 @@ import com.intellij.refactoring.util.occurrences.OccurrenceManager;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,7 +92,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
     myIsConstant = isConstant;
   }
 
-  protected boolean invokeImpl(final Project project, @NotNull final PsiExpression selectedExpr, final Editor editor) {
+  protected boolean invokeImpl(final Project project, @Nonnull final PsiExpression selectedExpr, final Editor editor) {
     final PsiElement element = getPhysicalElement(selectedExpr);
 
     final PsiFile file = element.getContainingFile();
@@ -142,7 +142,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
                                         "Choose class to introduce " + (myIsConstant ? "constant" : "field"),
                                         new PsiElementProcessor<PsiClass>() {
                                           @Override
-                                          public boolean execute(@NotNull PsiClass aClass) {
+                                          public boolean execute(@Nonnull PsiClass aClass) {
                                             myParentClass = aClass;
                                             convertExpressionToField(selectedExpr, editor, file, project, tempType);
                                             return false;
@@ -292,7 +292,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
     return RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
   }
 
-  public PsiClass getParentClass(@NotNull PsiExpression initializerExpression) {
+  public PsiClass getParentClass(@Nonnull PsiExpression initializerExpression) {
     PsiElement element = initializerExpression.getUserData(ElementToWorkOn.PARENT);
     if (element == null) element = initializerExpression.getParent();
     PsiElement parent = element;
@@ -612,7 +612,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
       myProject = parentClass.getProject();
     }
 
-    public TargetDestination(@NotNull PsiClass targetClass) {
+    public TargetDestination(@Nonnull PsiClass targetClass) {
       myTargetClass = targetClass;
       myQualifiedName = targetClass.getQualifiedName();
       myProject = targetClass.getProject();
@@ -903,7 +903,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
     }
 
     @Nullable
-    private static PsiField checkForwardRefs(@Nullable final PsiExpression initializer, final PsiClass parentClass) {
+    private static PsiField checkForwardRefs(@javax.annotation.Nullable final PsiExpression initializer, final PsiClass parentClass) {
       if (initializer == null) return null;
       final PsiField[] refConstantFields = new PsiField[1];
       initializer.accept(new JavaRecursiveElementWalkingVisitor() {

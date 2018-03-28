@@ -31,8 +31,8 @@ import com.siyeh.ig.fixes.EqualityToEqualsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -55,13 +55,13 @@ public class ObjectEqualityInspection extends BaseInspection {
   public boolean m_ignorePrivateConstructors = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("object.comparison.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "object.comparison.problem.description");
@@ -90,7 +90,7 @@ public class ObjectEqualityInspection extends BaseInspection {
   private class ObjectEqualityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@NotNull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
@@ -193,7 +193,7 @@ public class ObjectEqualityInspection extends BaseInspection {
       return rawType.equalsToText(CommonClassNames.JAVA_LANG_CLASS);
     }
 
-    private boolean isEnumType(@Nullable PsiExpression expression) {
+    private boolean isEnumType(@javax.annotation.Nullable PsiExpression expression) {
       return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_ENUM);
     }
 

@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.memory.utils;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.openapi.Disposable;
 import com.intellij.util.Alarm;
@@ -27,7 +28,7 @@ public class SingleAlarmWithMutableDelay
 
 	private volatile int myDelayMillis;
 
-	public SingleAlarmWithMutableDelay(@NotNull Task task, @NotNull Disposable parentDisposable)
+	public SingleAlarmWithMutableDelay(@Nonnull Task task, @Nonnull Disposable parentDisposable)
 	{
 		myAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, parentDisposable);
 		myTask = task;
@@ -38,7 +39,7 @@ public class SingleAlarmWithMutableDelay
 		myDelayMillis = millis;
 	}
 
-	public void cancelAndRequest(@NotNull SuspendContextImpl suspendContext)
+	public void cancelAndRequest(@Nonnull SuspendContextImpl suspendContext)
 	{
 		if(!myAlarm.isDisposed())
 		{
@@ -52,7 +53,7 @@ public class SingleAlarmWithMutableDelay
 		myAlarm.cancelAllRequests();
 	}
 
-	private void addRequest(@NotNull Runnable runnable)
+	private void addRequest(@Nonnull Runnable runnable)
 	{
 		myAlarm.addRequest(runnable, myDelayMillis);
 	}
@@ -60,6 +61,6 @@ public class SingleAlarmWithMutableDelay
 	@FunctionalInterface
 	public interface Task
 	{
-		void run(@NotNull SuspendContextImpl suspendContext);
+		void run(@Nonnull SuspendContextImpl suspendContext);
 	}
 }

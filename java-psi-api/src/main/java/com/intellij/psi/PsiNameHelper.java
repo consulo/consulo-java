@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
@@ -34,8 +34,8 @@ import com.intellij.util.ArrayUtil;
  */
 public abstract class PsiNameHelper
 {
-	@NotNull
-	public static PsiNameHelper getInstance(@NotNull Project project)
+	@Nonnull
+	public static PsiNameHelper getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, PsiNameHelper.class);
 	}
@@ -47,7 +47,7 @@ public abstract class PsiNameHelper
 	 * @param text the text to check.
 	 * @return true if the text is an identifier, false otherwise
 	 */
-	public abstract boolean isIdentifier(@Nullable String text);
+	public abstract boolean isIdentifier(@javax.annotation.Nullable String text);
 
 	/**
 	 * Checks if the specified text is a Java identifier, using the specified language level
@@ -58,7 +58,7 @@ public abstract class PsiNameHelper
 	 *                      depending on language level
 	 * @return true if the text is an identifier, false otherwise
 	 */
-	public abstract boolean isIdentifier(@Nullable String text, LanguageLevel languageLevel);
+	public abstract boolean isIdentifier(@javax.annotation.Nullable String text, LanguageLevel languageLevel);
 
 	/**
 	 * Checks if the specified text is a Java keyword, using the language level of the project
@@ -67,7 +67,7 @@ public abstract class PsiNameHelper
 	 * @param text the text to check.
 	 * @return true if the text is a keyword, false otherwise
 	 */
-	public abstract boolean isKeyword(@Nullable String text);
+	public abstract boolean isKeyword(@javax.annotation.Nullable String text);
 
 	/**
 	 * Checks if the specified string is a qualified name (sequence of identifiers separated by
@@ -76,10 +76,10 @@ public abstract class PsiNameHelper
 	 * @param text the text to check.
 	 * @return true if the text is a qualified name, false otherwise.
 	 */
-	public abstract boolean isQualifiedName(@Nullable String text);
+	public abstract boolean isQualifiedName(@javax.annotation.Nullable String text);
 
-	@NotNull
-	public static String getShortClassName(@NotNull String referenceText)
+	@Nonnull
+	public static String getShortClassName(@Nonnull String referenceText)
 	{
 		int lessPos = referenceText.length();
 		int bracesBalance = 0;
@@ -129,18 +129,18 @@ public abstract class PsiNameHelper
 		return sub.length() == referenceText.length() ? sub : new String(sub);
 	}
 
-	@NotNull
-	public static String getPresentableText(@NotNull PsiJavaCodeReferenceElement ref)
+	@Nonnull
+	public static String getPresentableText(@Nonnull PsiJavaCodeReferenceElement ref)
 	{
 		String name = ref.getReferenceName();
 		PsiAnnotation[] annotations = PsiTreeUtil.getChildrenOfType(ref, PsiAnnotation.class);
 		return getPresentableText(name, notNull(annotations, PsiAnnotation.EMPTY_ARRAY), ref.getTypeParameters());
 	}
 
-	@NotNull
-	public static String getPresentableText(@Nullable String refName,
-			@NotNull PsiAnnotation[] annotations,
-			@NotNull PsiType[] types)
+	@Nonnull
+	public static String getPresentableText(@javax.annotation.Nullable String refName,
+			@Nonnull PsiAnnotation[] annotations,
+			@Nonnull PsiType[] types)
 	{
 		if(types.length == 0 && annotations.length == 0)
 		{
@@ -154,8 +154,8 @@ public abstract class PsiNameHelper
 		return buffer.toString();
 	}
 
-	@NotNull
-	public static String getQualifiedClassName(@NotNull String referenceText, boolean removeWhitespace)
+	@Nonnull
+	public static String getQualifiedClassName(@Nonnull String referenceText, boolean removeWhitespace)
 	{
 		if(removeWhitespace)
 		{
@@ -196,7 +196,7 @@ public abstract class PsiNameHelper
 
 	private static final Pattern WHITESPACE_PATTERN = Pattern.compile("(?:\\s)|(?:/\\*.*\\*/)|(?://[^\\n]*)");
 
-	private static String removeWhitespace(@NotNull String referenceText)
+	private static String removeWhitespace(@Nonnull String referenceText)
 	{
 		return WHITESPACE_PATTERN.matcher(referenceText).replaceAll("");
 	}
@@ -210,8 +210,8 @@ public abstract class PsiNameHelper
 	 * @param referenceText the text of the reference to calculate type parameters for.
 	 * @return the calculated array of type parameters.
 	 */
-	@NotNull
-	public static String[] getClassParametersText(@NotNull String referenceText)
+	@Nonnull
+	public static String[] getClassParametersText(@Nonnull String referenceText)
 	{
 		if(referenceText.indexOf('<') < 0)
 		{
@@ -311,14 +311,14 @@ public abstract class PsiNameHelper
 		return result;
 	}
 
-	public static boolean isSubpackageOf(@NotNull String subpackageName, @NotNull String packageName)
+	public static boolean isSubpackageOf(@Nonnull String subpackageName, @Nonnull String packageName)
 	{
 		return subpackageName.equals(packageName) || subpackageName.startsWith(packageName) && subpackageName.charAt
 				(packageName.length()) == '.';
 	}
 
-	public static void appendTypeArgs(@NotNull StringBuilder sb,
-			@NotNull PsiType[] types,
+	public static void appendTypeArgs(@Nonnull StringBuilder sb,
+			@Nonnull PsiType[] types,
 			boolean canonical,
 			boolean annotated)
 	{
@@ -348,15 +348,15 @@ public abstract class PsiNameHelper
 		sb.append('>');
 	}
 
-	public static boolean appendAnnotations(@NotNull StringBuilder sb,
-			@NotNull PsiAnnotation[] annotations,
+	public static boolean appendAnnotations(@Nonnull StringBuilder sb,
+			@Nonnull PsiAnnotation[] annotations,
 			boolean canonical)
 	{
 		return appendAnnotations(sb, Arrays.asList(annotations), canonical);
 	}
 
-	public static boolean appendAnnotations(@NotNull StringBuilder sb,
-			@NotNull List<PsiAnnotation> annotations,
+	public static boolean appendAnnotations(@Nonnull StringBuilder sb,
+			@Nonnull List<PsiAnnotation> annotations,
 			boolean canonical)
 	{
 		boolean updated = false;

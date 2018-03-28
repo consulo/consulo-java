@@ -48,7 +48,7 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -117,12 +117,12 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     return "";
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
     return new WrapReturnValueUsageViewDescriptor(method, usageInfos);
   }
 
-  public void findUsages(@NotNull List<FixableUsageInfo> usages) {
+  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
     findUsagesForMethod(method, usages);
     for (PsiMethod overridingMethod : OverridingMethodsSearch.search(method)) {
       findUsagesForMethod(overridingMethod, usages);

@@ -15,6 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.inject.java.validation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -26,11 +28,10 @@ import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
 import org.intellij.plugins.intelliLang.pattern.PatternValidator;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class UnknownLanguageID extends LocalInspectionTool {
 
-  @NotNull
+  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
@@ -39,18 +40,18 @@ public class UnknownLanguageID extends LocalInspectionTool {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Unknown Language ID";
   }
 
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final String annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
 
@@ -81,7 +82,7 @@ public class UnknownLanguageID extends LocalInspectionTool {
     };
   }
 
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "UnknownLanguage";

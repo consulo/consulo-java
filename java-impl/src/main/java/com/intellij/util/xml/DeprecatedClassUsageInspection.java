@@ -15,8 +15,9 @@
  */
 package com.intellij.util.xml;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.XmlSuppressableInspectionTool;
@@ -37,11 +38,11 @@ import com.intellij.util.ArrayUtil;
  */
 public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionTool {
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
                                         boolean isOnTheFly,
-                                        @NotNull LocalInspectionToolSession session) {
+                                        @Nonnull LocalInspectionToolSession session) {
     return new XmlElementVisitor() {
       @Override
       public void visitXmlTag(XmlTag tag) {
@@ -77,20 +78,20 @@ public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionToo
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getGroupDisplayName() {
     return "XML";
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Deprecated API usage in XML";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getShortName() {
     return "DeprecatedClassUsageInspection";

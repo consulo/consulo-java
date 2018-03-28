@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -81,7 +81,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 
 	@Override
 	@Nullable
-	public LineMarkerInfo getLineMarkerInfo(@NotNull final PsiElement element)
+	public LineMarkerInfo getLineMarkerInfo(@Nonnull final PsiElement element)
 	{
 		PsiElement parent;
 		if(element instanceof PsiIdentifier && (parent = element.getParent()) instanceof PsiMethod)
@@ -174,14 +174,14 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		return null;
 	}
 
-	@NotNull
-	private static LineMarkerInfo createSuperMethodLineMarkerInfo(@NotNull PsiElement name, @NotNull Icon icon, int passId)
+	@Nonnull
+	private static LineMarkerInfo createSuperMethodLineMarkerInfo(@Nonnull PsiElement name, @Nonnull Icon icon, int passId)
 	{
 		ArrowUpLineMarkerInfo info = new ArrowUpLineMarkerInfo(name, icon, MarkerType.OVERRIDING_METHOD, passId);
 		return NavigateAction.setNavigateAction(info, "Go to super method", IdeActions.ACTION_GOTO_SUPER);
 	}
 
-	private static int getCategory(@NotNull PsiElement element, @NotNull CharSequence documentChars)
+	private static int getCategory(@Nonnull PsiElement element, @Nonnull CharSequence documentChars)
 	{
 		if(element instanceof PsiField || element instanceof PsiTypeParameter)
 		{
@@ -207,7 +207,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 	}
 
 	@Override
-	public void collectSlowLineMarkers(@NotNull final List<PsiElement> elements, @NotNull final Collection<LineMarkerInfo> result)
+	public void collectSlowLineMarkers(@Nonnull final List<PsiElement> elements, @Nonnull final Collection<LineMarkerInfo> result)
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
 
@@ -258,7 +258,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		});
 	}
 
-	private static List<LineMarkerInfo> collectSiblingInheritedMethods(@NotNull final Collection<PsiMethod> methods)
+	private static List<LineMarkerInfo> collectSiblingInheritedMethods(@Nonnull final Collection<PsiMethod> methods)
 	{
 		Map<PsiMethod, FindSuperElementsHelper.SiblingInfo> map = FindSuperElementsHelper.getSiblingInheritanceInfos(methods);
 		return ContainerUtil.map(map.keySet(), method ->
@@ -269,8 +269,8 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		});
 	}
 
-	@NotNull
-	private static PsiElement getMethodRange(@NotNull PsiMethod method)
+	@Nonnull
+	private static PsiElement getMethodRange(@Nonnull PsiMethod method)
 	{
 		PsiElement range;
 		if(method.isPhysical())
@@ -289,7 +289,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		return range;
 	}
 
-	protected List<LineMarkerInfo> collectInheritingClasses(@NotNull PsiClass aClass)
+	protected List<LineMarkerInfo> collectInheritingClasses(@Nonnull PsiClass aClass)
 	{
 		if(aClass.hasModifierProperty(PsiModifier.FINAL))
 		{
@@ -333,7 +333,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		return Collections.emptyList();
 	}
 
-	private List<LineMarkerInfo> collectOverridingMethods(@NotNull final Iterable<PsiMethod> _methods, @NotNull PsiClass containingClass)
+	private List<LineMarkerInfo> collectOverridingMethods(@Nonnull final Iterable<PsiMethod> _methods, @Nonnull PsiClass containingClass)
 	{
 		if(!myOverriddenOption.isEnabled() && !myImplementedOption.isEnabled())
 		{
@@ -414,13 +414,13 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 
 	private static class ArrowUpLineMarkerInfo extends MergeableLineMarkerInfo<PsiElement>
 	{
-		private ArrowUpLineMarkerInfo(@NotNull PsiElement element, @NotNull Icon icon, @NotNull MarkerType markerType, int passId)
+		private ArrowUpLineMarkerInfo(@Nonnull PsiElement element, @Nonnull Icon icon, @Nonnull MarkerType markerType, int passId)
 		{
 			super(element, element.getTextRange(), icon, passId, markerType.getTooltip(), markerType.getNavigationHandler(), GutterIconRenderer.Alignment.LEFT);
 		}
 
 		@Override
-		public boolean canMergeWith(@NotNull MergeableLineMarkerInfo<?> info)
+		public boolean canMergeWith(@Nonnull MergeableLineMarkerInfo<?> info)
 		{
 			if(!(info instanceof ArrowUpLineMarkerInfo))
 			{
@@ -433,14 +433,14 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 
 
 		@Override
-		public Icon getCommonIcon(@NotNull List<MergeableLineMarkerInfo> infos)
+		public Icon getCommonIcon(@Nonnull List<MergeableLineMarkerInfo> infos)
 		{
 			return myIcon;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public Function<? super PsiElement, String> getCommonTooltip(@NotNull List<MergeableLineMarkerInfo> infos)
+		public Function<? super PsiElement, String> getCommonTooltip(@Nonnull List<MergeableLineMarkerInfo> infos)
 		{
 			return (Function<PsiElement, String>) element -> "Multiple method overrides";
 		}

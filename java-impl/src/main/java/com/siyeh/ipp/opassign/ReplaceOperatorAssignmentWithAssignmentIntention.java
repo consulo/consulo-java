@@ -18,7 +18,7 @@ package com.siyeh.ipp.opassign;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiElement;
@@ -52,7 +52,7 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new OperatorAssignmentPredicate();
   }
@@ -66,7 +66,7 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) {
+  protected void processIntention(@Nonnull PsiElement element) {
     final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)element;
     final PsiJavaToken sign = assignmentExpression.getOperationSign();
     final PsiExpression lhs = assignmentExpression.getLExpression();

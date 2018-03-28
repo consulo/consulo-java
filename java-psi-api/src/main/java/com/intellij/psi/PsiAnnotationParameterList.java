@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents the list of name/value elements for an annotation.
@@ -29,6 +29,6 @@ public interface PsiAnnotationParameterList extends PsiElement {
    *
    * @return the array of name/value pairs.
    */
-  @NotNull
+  @Nonnull
   PsiNameValuePair[] getAttributes();
 }

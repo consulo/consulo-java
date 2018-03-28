@@ -1,7 +1,7 @@
 
 package com.intellij.codeInsight.daemon.quickFix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.localCanBeFinal.LocalCanBeFinal;
 
@@ -12,7 +12,7 @@ public class SuppressLocalInspectionTest extends LightQuickFixTestCase {
    // LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_3);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new LocalCanBeFinal()};

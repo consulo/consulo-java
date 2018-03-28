@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JList;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.application.options.ModuleDescriptionsComboBox;
 import com.intellij.execution.ShortenCommandLine;
 import com.intellij.openapi.module.Module;
@@ -30,7 +30,7 @@ public class ShortenCommandLineModeCombo extends ComboBox<ShortenCommandLine>
 		setRenderer(new ColoredListCellRenderer<ShortenCommandLine>()
 		{
 			@Override
-			protected void customizeCellRenderer(@NotNull JList<? extends ShortenCommandLine> list, ShortenCommandLine value, int index, boolean selected, boolean hasFocus)
+			protected void customizeCellRenderer(@Nonnull JList<? extends ShortenCommandLine> list, ShortenCommandLine value, int index, boolean selected, boolean hasFocus)
 			{
 				if(value == null)
 				{

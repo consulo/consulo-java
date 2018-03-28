@@ -19,12 +19,10 @@ package com.intellij.util.descriptors.impl;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.openapi.util.MultiValuesMap;
 import com.intellij.openapi.vfs.*;
 import com.intellij.util.EventDispatcher;
 import com.intellij.util.descriptors.*;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -79,7 +77,7 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public ConfigFile getConfigFile(ConfigFileMetaData metaData) {
     final Collection<ConfigFile> descriptors = myConfigFiles.get(metaData);
     if (descriptors == null || descriptors.isEmpty()) {

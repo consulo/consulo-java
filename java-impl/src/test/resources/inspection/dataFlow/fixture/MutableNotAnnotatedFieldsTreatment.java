@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.Nullable;
-
 class Foo {
   Object data;
 

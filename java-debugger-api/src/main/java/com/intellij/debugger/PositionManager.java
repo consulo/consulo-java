@@ -18,8 +18,8 @@ package com.intellij.debugger;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.requests.ClassPrepareRequestor;
 import com.intellij.openapi.fileTypes.FileType;
 import consulo.internal.com.sun.jdi.Location;
@@ -41,8 +41,8 @@ public interface PositionManager
 	 * @return the corresponding source position.
 	 * @throws NoDataException if the location is not in the code managed by this {@code PositionManager}
 	 */
-	@Nullable
-	SourcePosition getSourcePosition(@Nullable Location location) throws NoDataException;
+	@javax.annotation.Nullable
+	SourcePosition getSourcePosition(@javax.annotation.Nullable Location location) throws NoDataException;
 
 	/**
 	 * Returns the list of all Java classes corresponding to the specified position in the source code.
@@ -52,8 +52,8 @@ public interface PositionManager
 	 * @throws NoDataException if the location is not in the code managed by this {@code PositionManager}
 	 * @see com.intellij.debugger.engine.jdi.VirtualMachineProxy#classesByName
 	 */
-	@NotNull
-	List<ReferenceType> getAllClasses(@NotNull SourcePosition classPosition) throws NoDataException;
+	@Nonnull
+	List<ReferenceType> getAllClasses(@Nonnull SourcePosition classPosition) throws NoDataException;
 
 	/**
 	 * Returns the list of bytecode locations in a specific class corresponding to the specified position in the source code.
@@ -64,8 +64,8 @@ public interface PositionManager
 	 * @throws NoDataException if the location is not in the code managed by this {@code PositionManager}
 	 * @see ReferenceType#locationsOfLine(int)
 	 */
-	@NotNull
-	List<Location> locationsOfLine(@NotNull ReferenceType type, @NotNull SourcePosition position) throws NoDataException;
+	@Nonnull
+	List<Location> locationsOfLine(@Nonnull ReferenceType type, @Nonnull SourcePosition position) throws NoDataException;
 
 	/**
 	 * Called to request the JVM to notify the debugger engine when a class corresponding to a breakpoint location is loaded.
@@ -77,15 +77,15 @@ public interface PositionManager
 	 * @return the prepare request, or null if the code is managed by this {@code PositionManager} but no class prepare notification is needed
 	 * @throws NoDataException if the position is not in the code managed by this {@code PositionManager}
 	 */
-	@Nullable
-	ClassPrepareRequest createPrepareRequest(@NotNull ClassPrepareRequestor requestor, @NotNull SourcePosition position) throws NoDataException;
+	@javax.annotation.Nullable
+	ClassPrepareRequest createPrepareRequest(@Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
 
 	/**
 	 * Return file types this position manager accepts
 	 *
 	 * @return set of accepted file types, or null if it accepts all
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	default Set<? extends FileType> getAcceptedFileTypes()
 	{
 		return null;

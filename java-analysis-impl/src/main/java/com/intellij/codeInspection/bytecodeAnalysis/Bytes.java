@@ -18,15 +18,15 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Bytes of primary HKey of a method.
  */
 final class Bytes {
-  @NotNull
+  @Nonnull
   final byte[] bytes;
-  Bytes(@NotNull byte[] bytes) {
+  Bytes(@Nonnull byte[] bytes) {
     this.bytes = bytes;
   }
 

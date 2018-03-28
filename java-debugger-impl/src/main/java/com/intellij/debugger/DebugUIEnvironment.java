@@ -17,7 +17,6 @@ package com.intellij.debugger;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -30,14 +29,14 @@ public interface DebugUIEnvironment
 {
 	DebugEnvironment getEnvironment();
 
-	@Nullable
+	@javax.annotation.Nullable
 	RunContentDescriptor getReuseContent();
 
-	@Nullable
+	@javax.annotation.Nullable
 	Icon getIcon();
 
 	void initActions(RunContentDescriptor content, DefaultActionGroup actionGroup);
 
-	@Nullable
+	@javax.annotation.Nullable
 	RunProfile getRunProfile();
 }

@@ -18,7 +18,7 @@ package com.intellij.execution.testframework;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
 import com.intellij.execution.junit2.PsiMemberParameterizedLocation;
@@ -40,9 +40,9 @@ public class JavaTestLocator implements SMTestLocator
 
 	public static final JavaTestLocator INSTANCE = new JavaTestLocator();
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<Location> getLocation(@NotNull String protocol, @NotNull String path, @NotNull Project project, @NotNull GlobalSearchScope scope)
+	public List<Location> getLocation(@Nonnull String protocol, @Nonnull String path, @Nonnull Project project, @Nonnull GlobalSearchScope scope)
 	{
 		List<Location> results = Collections.emptyList();
 
@@ -76,7 +76,7 @@ public class JavaTestLocator implements SMTestLocator
 		return results;
 	}
 
-	private static List<Location> collectMethodNavigatables(@NotNull String path, @NotNull Project project, @NotNull GlobalSearchScope scope, String paramName)
+	private static List<Location> collectMethodNavigatables(@Nonnull String path, @Nonnull Project project, @Nonnull GlobalSearchScope scope, String paramName)
 	{
 		List<Location> results = Collections.emptyList();
 		String className = StringUtil.getPackageName(path);
@@ -107,7 +107,7 @@ public class JavaTestLocator implements SMTestLocator
 		return results;
 	}
 
-	private static Location createClassNavigatable(String paramName, @NotNull PsiClass aClass)
+	private static Location createClassNavigatable(String paramName, @Nonnull PsiClass aClass)
 	{
 		return paramName != null ? PsiMemberParameterizedLocation.getParameterizedLocation(aClass, paramName) : new PsiLocation<>(aClass.getProject(), aClass);
 	}

@@ -15,8 +15,9 @@
  */
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiElement;
@@ -31,14 +32,14 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter
 		super(delegate);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiTypeParameter getDelegate()
 	{
 		return (PsiTypeParameter) super.getDelegate();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiElement copy()
 	{
@@ -46,7 +47,7 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter
 	}
 
 	@Override
-	public void accept(@NotNull final PsiElementVisitor visitor)
+	public void accept(@Nonnull final PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -70,14 +71,14 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter
 		return getDelegate().getIndex();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiAnnotation[] getAnnotations()
 	{
 		return getDelegate().getAnnotations();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiAnnotation[] getApplicableAnnotations()
 	{
@@ -85,14 +86,14 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter
 	}
 
 	@Override
-	public PsiAnnotation findAnnotation(@NotNull @NonNls final String qualifiedName)
+	public PsiAnnotation findAnnotation(@Nonnull @NonNls final String qualifiedName)
 	{
 		return getDelegate().findAnnotation(qualifiedName);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiAnnotation addAnnotation(@NotNull @NonNls final String qualifiedName)
+	public PsiAnnotation addAnnotation(@Nonnull @NonNls final String qualifiedName)
 	{
 		return getDelegate().addAnnotation(qualifiedName);
 	}

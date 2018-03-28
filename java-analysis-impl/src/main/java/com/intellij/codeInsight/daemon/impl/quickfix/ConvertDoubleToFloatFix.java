@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -38,20 +38,20 @@ public class ConvertDoubleToFloatFix implements IntentionAction {
     myExpression = expression;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Convert '" + myExpression.getText() + "' to float";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (myExpression.isValid()) {
       if (!StringUtil.endsWithIgnoreCase(myExpression.getText(), "f")) {
         final PsiLiteralExpression expression = (PsiLiteralExpression)createFloatingPointExpression(project);
@@ -63,7 +63,7 @@ public class ConvertDoubleToFloatFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     myExpression.replace(createFloatingPointExpression(project));
   }
 
@@ -81,8 +81,8 @@ public class ConvertDoubleToFloatFix implements IntentionAction {
     return true;
   }
 
-  public static void registerIntentions(@NotNull JavaResolveResult[] candidates,
-                                        @NotNull PsiExpressionList list,
+  public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
+                                        @Nonnull PsiExpressionList list,
                                         @Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange) {
     if (candidates.length == 0) return;
@@ -92,11 +92,11 @@ public class ConvertDoubleToFloatFix implements IntentionAction {
     }
   }
 
-  private static void registerIntention(@NotNull PsiExpression[] expressions,
+  private static void registerIntention(@Nonnull PsiExpression[] expressions,
                                         @Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange,
-                                        @NotNull JavaResolveResult candidate,
-                                        @NotNull PsiElement context) {
+                                        @Nonnull JavaResolveResult candidate,
+                                        @Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
     PsiMethod method = (PsiMethod)candidate.getElement();
     if (method != null && context.getManager().isInProject(method)) {

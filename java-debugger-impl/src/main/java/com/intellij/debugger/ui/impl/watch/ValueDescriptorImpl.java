@@ -19,10 +19,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.Patches;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
@@ -268,7 +268,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		myIsNew = false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static ObjectReference getTargetExceptionWithStackTraceFilled(final EvaluationContextImpl evaluationContext, EvaluateException ex)
 	{
 		final ObjectReference exceptionObj = ex.getExceptionFromTargetVM();
@@ -447,7 +447,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		return myValueIcon = icon;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Icon getValueIcon()
 	{
 		return myValueIcon;
@@ -464,7 +464,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		return name;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getDeclaredType()
 	{
 		return null;
@@ -514,7 +514,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	//returns expression that evaluates tree to this descriptor
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiElement getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException
 	{
 		JavaValue parent = value.getParent();
@@ -642,7 +642,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	public String getIdLabel()
 	{
 		return StringUtil.notNullize(myIdLabel);
@@ -658,7 +658,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		return getValueText();
 	}
 
-	@NotNull
+	@Nonnull
 	public String getValueText()
 	{
 		return StringUtil.notNullize(myValueText);
@@ -674,7 +674,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public ValueMarkup getMarkup(final DebugProcess debugProcess)
 	{
 		final Value value = getValue();
@@ -691,7 +691,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	public void setMarkup(final DebugProcess debugProcess, @Nullable final ValueMarkup markup)
+	public void setMarkup(final DebugProcess debugProcess, @javax.annotation.Nullable final ValueMarkup markup)
 	{
 		final Value value = getValue();
 		if(value instanceof ObjectReference)
@@ -726,7 +726,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		return myProject;
 	}
 
-	@NotNull
+	@Nonnull
 	public String getDeclaredTypeLabel()
 	{
 		ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();

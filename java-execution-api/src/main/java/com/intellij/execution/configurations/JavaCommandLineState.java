@@ -15,7 +15,7 @@
  */
 package com.intellij.execution.configurations;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -25,7 +25,7 @@ public abstract class JavaCommandLineState extends CommandLineState implements J
 {
 	private OwnJavaParameters myParams;
 
-	protected JavaCommandLineState(@NotNull ExecutionEnvironment environment)
+	protected JavaCommandLineState(@Nonnull ExecutionEnvironment environment)
 	{
 		super(environment);
 	}
@@ -46,7 +46,7 @@ public abstract class JavaCommandLineState extends CommandLineState implements J
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected OSProcessHandler startProcess() throws ExecutionException
 	{
 		return JavaCommandLineStateUtil.startProcess(createCommandLine(), ansiColoringEnabled());

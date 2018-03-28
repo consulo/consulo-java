@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
 import com.intellij.psi.ElementManipulator;
 import com.intellij.psi.ElementManipulators;
@@ -38,7 +38,7 @@ public abstract class GenericReference extends CachingReference implements Empty
 {
 	public static final GenericReference[] EMPTY_ARRAY = new GenericReference[0];
 
-	@Nullable
+	@javax.annotation.Nullable
 	private final GenericReferenceProvider myProvider;
 
 	public GenericReference(final GenericReferenceProvider provider)
@@ -60,7 +60,7 @@ public abstract class GenericReference extends CachingReference implements Empty
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiElement handleElementRename(String string) throws IncorrectOperationException
 	{
 		final PsiElement element = getElement();
@@ -75,7 +75,7 @@ public abstract class GenericReference extends CachingReference implements Empty
 		return element;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiReferenceProvider getProvider()
 	{
 		return myProvider;

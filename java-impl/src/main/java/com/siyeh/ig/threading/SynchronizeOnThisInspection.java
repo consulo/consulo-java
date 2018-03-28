@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class SynchronizeOnThisInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "synchronize.on.this.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "synchronize.on.this.problem.descriptor");
@@ -45,7 +46,7 @@ public class SynchronizeOnThisInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @NotNull PsiSynchronizedStatement statement) {
+      @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiExpression lockExpression = statement.getLockExpression();
       if (!(lockExpression instanceof PsiThisExpression)) {
@@ -56,7 +57,7 @@ public class SynchronizeOnThisInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

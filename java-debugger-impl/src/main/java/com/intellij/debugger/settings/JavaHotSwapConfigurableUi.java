@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.Border;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.openapi.options.ConfigurableUi;
 
@@ -43,7 +43,7 @@ class JavaHotSwapConfigurableUi implements ConfigurableUi<DebuggerSettings>
 	private JRadioButton myRbAsk;
 
 	@Override
-	public void reset(@NotNull DebuggerSettings settings)
+	public void reset(@Nonnull DebuggerSettings settings)
 	{
 		myHotswapInBackground.setSelected(settings.HOTSWAP_IN_BACKGROUND);
 		myCbCompileBeforeHotswap.setSelected(settings.COMPILE_BEFORE_HOTSWAP);
@@ -64,7 +64,7 @@ class JavaHotSwapConfigurableUi implements ConfigurableUi<DebuggerSettings>
 	}
 
 	@Override
-	public void apply(@NotNull DebuggerSettings settings)
+	public void apply(@Nonnull DebuggerSettings settings)
 	{
 		getSettingsTo(settings);
 	}
@@ -90,14 +90,14 @@ class JavaHotSwapConfigurableUi implements ConfigurableUi<DebuggerSettings>
 	}
 
 	@Override
-	public boolean isModified(@NotNull DebuggerSettings currentSettings)
+	public boolean isModified(@Nonnull DebuggerSettings currentSettings)
 	{
 		final DebuggerSettings debuggerSettings = currentSettings.clone();
 		getSettingsTo(debuggerSettings);
 		return !debuggerSettings.equals(currentSettings);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{

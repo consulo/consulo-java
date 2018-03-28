@@ -19,7 +19,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.filters.FilterUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class KeywordLookupItem extends LookupItem<PsiKeyword> implements TypedLookupItem {
   private final PsiElement myPosition;
 
-  public KeywordLookupItem(final PsiKeyword keyword, @NotNull PsiElement position) {
+  public KeywordLookupItem(final PsiKeyword keyword, @Nonnull PsiElement position) {
     super(keyword, keyword.getText());
     myPosition = position;
   }

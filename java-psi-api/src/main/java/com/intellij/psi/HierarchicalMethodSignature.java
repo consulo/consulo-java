@@ -16,7 +16,7 @@
 package com.intellij.psi;
 
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import java.util.List;
  * @since 5.1
  */
 public abstract class HierarchicalMethodSignature extends MethodSignatureBackedByPsiMethod {
-  public HierarchicalMethodSignature(@NotNull MethodSignatureBackedByPsiMethod signature) {
+  public HierarchicalMethodSignature(@Nonnull MethodSignatureBackedByPsiMethod signature) {
     super(signature.getMethod(), signature.getSubstitutor(), signature.isRaw(), 
           getParameterTypes(signature.getMethod()), signature.getTypeParameters());
   }
@@ -47,5 +47,6 @@ public abstract class HierarchicalMethodSignature extends MethodSignatureBackedB
    * @return the super method signature list.
    * Note that the list may include signatures for which isSubsignature() check returns false, but erasures are equal 
    */
-  @NotNull public abstract List<HierarchicalMethodSignature> getSuperSignatures();
+  @Nonnull
+  public abstract List<HierarchicalMethodSignature> getSuperSignatures();
 }

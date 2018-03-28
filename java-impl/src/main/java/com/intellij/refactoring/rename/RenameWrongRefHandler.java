@@ -16,7 +16,8 @@
 
 package com.intellij.refactoring.rename;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.quickfix.RenameWrongRefFix;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -59,7 +60,7 @@ public class RenameWrongRefHandler implements RenameHandler
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext)
+	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext)
 	{
 		final PsiReferenceExpression reference = (PsiReferenceExpression) file.findReferenceAt(editor.getCaretModel().getOffset());
 		new WriteCommandAction(project)
@@ -73,7 +74,7 @@ public class RenameWrongRefHandler implements RenameHandler
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, @NotNull final PsiElement[] elements, final DataContext dataContext)
+	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
 	{
 	}
 }

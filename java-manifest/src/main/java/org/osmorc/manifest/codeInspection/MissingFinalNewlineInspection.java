@@ -25,6 +25,8 @@
 
 package org.osmorc.manifest.codeInspection;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.project.Project;
@@ -32,7 +34,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestFile;
@@ -43,18 +44,18 @@ import org.osmorc.manifest.lang.psi.Section;
  */
 public class MissingFinalNewlineInspection extends LocalInspectionTool {
   @Nls
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return "Manifest";
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Missing Final New Line";
   }
 
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return getClass().getSimpleName();
   }
@@ -63,13 +64,13 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
 
   @Override
-  public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     if (file instanceof ManifestFile) {
       String text = file.getText();
       // http://ea.jetbrains.com/browser/ea_problems/22570
@@ -96,17 +97,17 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
       this.section = section;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return "Add newline";
     }
 
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return "Osmorc";
     }
 
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiElement lastChild = section.getLastChild();
       if (lastChild instanceof Header) {
         Header header = (Header)lastChild;

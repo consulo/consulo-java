@@ -18,8 +18,8 @@ package com.intellij.codeInsight.folding.impl;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
@@ -38,8 +38,8 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.folding.impl.JavaElementSignatureProvider");
 
   @Override
-  @Nullable
-  public String getSignature(@NotNull final PsiElement element) {
+  @javax.annotation.Nullable
+  public String getSignature(@Nonnull final PsiElement element) {
     PsiFile file = element.getContainingFile();
     if (!(file instanceof PsiJavaFile)) {
       return null;
@@ -165,11 +165,11 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
   }
 
   @Override
-  protected PsiElement restoreBySignatureTokens(@NotNull PsiFile file,
-                                                @NotNull PsiElement parent,
-                                                @NotNull String type,
-                                                @NotNull StringTokenizer tokenizer,
-                                                @Nullable StringBuilder processingInfoStorage)
+  protected PsiElement restoreBySignatureTokens(@Nonnull PsiFile file,
+                                                @Nonnull PsiElement parent,
+                                                @Nonnull String type,
+                                                @Nonnull StringTokenizer tokenizer,
+                                                @javax.annotation.Nullable StringBuilder processingInfoStorage)
   {
     if (type.equals("imports")) {
       if (!(file instanceof PsiJavaFile)) return null;

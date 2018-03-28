@@ -25,11 +25,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -307,7 +308,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return true;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private Collection<VirtualFile> findClassCandidatesInSourceContent(final String className, final GlobalSearchScope scope, final ProjectFileIndex fileIndex)
 	{
 		final int dollarIndex = className.indexOf("$");
@@ -524,7 +525,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return ContextUtil.getContextElement(getSourcePosition());
 	}
 
-	public static LineBreakpoint create(@NotNull Project project, XBreakpoint xBreakpoint)
+	public static LineBreakpoint create(@Nonnull Project project, XBreakpoint xBreakpoint)
 	{
 		LineBreakpoint breakpoint = new LineBreakpoint(project, xBreakpoint);
 		return (LineBreakpoint) breakpoint.init();
@@ -600,7 +601,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return canAdd[0];
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getMethodName()
 	{
 		XSourcePosition position = myXBreakpoint.getSourcePosition();

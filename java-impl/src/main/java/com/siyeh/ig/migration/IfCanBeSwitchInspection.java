@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.ButtonModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -35,8 +36,8 @@ import javax.swing.text.Document;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -70,13 +71,13 @@ public class IfCanBeSwitchInspection extends BaseInspection {
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("if.can.be.switch.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("if.can.be.switch.problem.descriptor");
@@ -155,7 +156,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       myMinimumBranches = minimumBranches;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("if.can.be.switch.quickfix");
     }
@@ -255,8 +256,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     }
 
     @Nullable
-    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @NotNull Class<T> aClass,
-                                                                @NotNull Class<? extends PsiElement>... stopAt) {
+    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
+                                                                @Nonnull Class<? extends PsiElement>... stopAt) {
       if (element == null) {
         return null;
       }

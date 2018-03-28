@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,18 +28,17 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class SimplifiableJUnitAssertionInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("simplifiable.junit.assertion.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("simplifiable.junit.assertion.problem.descriptor", infos[0]);
   }
@@ -50,7 +51,7 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
   private static class SimplifyJUnitAssertFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("simplify.junit.assertion.simplify.quickfix");
     }
@@ -334,7 +335,7 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
   private static class SimplifiableJUnitAssertionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (isAssertThatCouldBeAssertNull(expression)) {
         if (hasEqEqExpressionArgument(expression)) {
@@ -660,20 +661,20 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
     return PsiKeyword.NULL.equals(lhs.getText()) || PsiKeyword.NULL.equals(rhs.getText());
   }
 
-  private static boolean isAssertTrue(@NotNull PsiMethodCallExpression expression) {
+  private static boolean isAssertTrue(@Nonnull PsiMethodCallExpression expression) {
     return isAssertMethodCall(expression, "assertTrue");
   }
 
-  private static boolean isAssertFalse(@NotNull PsiMethodCallExpression expression) {
+  private static boolean isAssertFalse(@Nonnull PsiMethodCallExpression expression) {
     return isAssertMethodCall(expression, "assertFalse");
   }
 
-  private static boolean isAssertEquals(@NotNull PsiMethodCallExpression expression) {
+  private static boolean isAssertEquals(@Nonnull PsiMethodCallExpression expression) {
     return isAssertMethodCall(expression, "assertEquals");
   }
 
-  private static boolean isAssertMethodCall(@NotNull PsiMethodCallExpression expression,
-    @NonNls @NotNull String assertMethodName) {
+  private static boolean isAssertMethodCall(@Nonnull PsiMethodCallExpression expression,
+    @NonNls @Nonnull String assertMethodName) {
     final PsiReferenceExpression methodExpression = expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();
     if (!assertMethodName.equals(methodName)) {

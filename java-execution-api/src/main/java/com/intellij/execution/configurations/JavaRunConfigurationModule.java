@@ -26,8 +26,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,7 +61,7 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
     return myClassesInLibraries ? GlobalSearchScope.allScope(getProject()) : GlobalSearchScope.projectScope(getProject());
   }
 
-  public static Collection<Module> getModulesForClass(@NotNull final Project project, final String className) {
+  public static Collection<Module> getModulesForClass(@Nonnull final Project project, final String className) {
     if (project.isDefault()) return Arrays.asList(ModuleManager.getInstance(project).getModules());
     PsiDocumentManager.getInstance(project).commitAllDocuments();
     final PsiClass[] possibleClasses = JavaPsiFacade.getInstance(project).findClasses(className, GlobalSearchScope.projectScope(project));

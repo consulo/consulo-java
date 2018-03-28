@@ -19,9 +19,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JTree;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -34,7 +34,7 @@ public class SliceRootNode extends SliceNode
 {
 	private final SliceUsage myRootUsage;
 
-	public SliceRootNode(@NotNull Project project, @NotNull DuplicateMap targetEqualUsages, final SliceUsage rootUsage)
+	public SliceRootNode(@Nonnull Project project, @Nonnull DuplicateMap targetEqualUsages, final SliceUsage rootUsage)
 	{
 		super(project, SliceUsage.createRootUsage(rootUsage.getElement().getContainingFile(), rootUsage.params), targetEqualUsages);
 		myRootUsage = rootUsage;
@@ -46,7 +46,7 @@ public class SliceRootNode extends SliceNode
 		myCachedChildren = Collections.singletonList(node);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	SliceRootNode copy()
 	{
@@ -58,7 +58,7 @@ public class SliceRootNode extends SliceNode
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<? extends AbstractTreeNode> getChildren()
 	{
 		if(myCachedChildren == null)
@@ -68,9 +68,9 @@ public class SliceRootNode extends SliceNode
 		return myCachedChildren;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<? extends AbstractTreeNode> getChildrenUnderProgress(@NotNull ProgressIndicator progress)
+	public List<? extends AbstractTreeNode> getChildrenUnderProgress(@Nonnull ProgressIndicator progress)
 	{
 		return (List<? extends AbstractTreeNode>) getChildren();
 	}
@@ -93,8 +93,8 @@ public class SliceRootNode extends SliceNode
 
 
 	@Override
-	public void customizeCellRenderer(@NotNull SliceUsageCellRenderer renderer,
-			@NotNull JTree tree,
+	public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
+			@Nonnull JTree tree,
 			Object value,
 			boolean selected,
 			boolean expanded,

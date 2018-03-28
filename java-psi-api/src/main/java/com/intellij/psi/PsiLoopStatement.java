@@ -16,8 +16,6 @@
 
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * @author ven
  */
@@ -27,5 +25,6 @@ public interface PsiLoopStatement extends PsiStatement {
    *
    * @return the body of the statement, or null if the body is empty
    */
-  @Nullable PsiStatement getBody();
+  @javax.annotation.Nullable
+  PsiStatement getBody();
 }

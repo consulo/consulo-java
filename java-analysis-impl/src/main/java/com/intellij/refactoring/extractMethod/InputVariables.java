@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
@@ -245,7 +245,7 @@ public class InputVariables
 		return currentType;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiType getBroaderType(PsiType currentType, PsiType castType)
 	{
 		if(currentType != null)

@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java code block, usually surrounded by curly braces.
@@ -33,7 +33,7 @@ public interface PsiCodeBlock extends PsiElement, PsiModifiableCodeBlock {
    *
    * @return the array of statements.
    */
-  @NotNull
+  @Nonnull
   PsiStatement[] getStatements();
 
   /**

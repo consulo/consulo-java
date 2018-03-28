@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -28,8 +29,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.DocumentEvent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -133,13 +132,13 @@ public class JarArtifactFromModulesDialog extends DialogWrapper
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private Module getSelectedModule()
 	{
 		return (Module) myModuleComboBox.getSelectedItem();
 	}
 
-	@NotNull
+	@Nonnull
 	public Module[] getSelectedModules()
 	{
 		final Module module = getSelectedModule();
@@ -150,7 +149,7 @@ public class JarArtifactFromModulesDialog extends DialogWrapper
 		return myContext.getModulesProvider().getModules();
 	}
 
-	@NotNull
+	@Nonnull
 	public String getDirectoryForManifest()
 	{
 		return FileUtil.toSystemIndependentName(myManifestDirField.getText());

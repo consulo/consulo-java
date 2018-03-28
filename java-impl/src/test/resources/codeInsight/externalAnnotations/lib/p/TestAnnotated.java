@@ -1,10 +1,10 @@
 package p;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class Test {
 
-  @NotNull
+  @Nonnull
   String g<caret>et() {
     return null;
   }

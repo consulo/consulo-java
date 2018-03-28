@@ -8,7 +8,6 @@ import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.testframework.TestSearchScope;
 import com.intellij.openapi.module.Module;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yole
@@ -22,7 +21,7 @@ public abstract class JavaRunConfigurationProducerBase<T extends ModuleBasedConf
     super(configurationType);
   }
 
-  protected boolean setupConfigurationModule(@Nullable ConfigurationContext context, T configuration) {
+  protected boolean setupConfigurationModule(@javax.annotation.Nullable ConfigurationContext context, T configuration) {
     if (context != null) {
       final RunnerAndConfigurationSettings template = context.getRunManager().getConfigurationTemplate(getConfigurationFactory());
       final Module contextModule = context.getModule();
@@ -58,7 +57,7 @@ public abstract class JavaRunConfigurationProducerBase<T extends ModuleBasedConf
     return scope;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public ConfigurationFromContext createConfigurationFromContext(ConfigurationContext context) {
     ConfigurationFromContext fromContext = super.createConfigurationFromContext(context);

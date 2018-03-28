@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
@@ -66,7 +66,7 @@ public class GenerateFieldOrPropertyHandler extends GenerateMembersHandlerBase
 
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] members) throws IncorrectOperationException
 	{
 		PsiElementFactory psiElementFactory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
@@ -129,8 +129,8 @@ public class GenerateFieldOrPropertyHandler extends GenerateMembersHandlerBase
 		}
 	}
 
-	@Nullable
-	public PsiMember findExistingMember(@NotNull PsiClass aClass, @NotNull PropertyMemberType memberType)
+	@javax.annotation.Nullable
+	public PsiMember findExistingMember(@Nonnull PsiClass aClass, @Nonnull PropertyMemberType memberType)
 	{
 		if(memberType == PropertyMemberType.FIELD)
 		{

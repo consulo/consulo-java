@@ -23,8 +23,8 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiType;
 import com.intellij.util.xml.Converter;
 import com.intellij.util.xml.GenericDomValue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -99,7 +99,7 @@ public class GenericDomValueConvertersRegistry {
     registerConverter(new NumberValueConverter(BigInteger.class, true), BigInteger.class);
   }
 
-  public void registerConverter(@NotNull Converter<?> provider, @NotNull final PsiType type) {
+  public void registerConverter(@Nonnull Converter<?> provider, @Nonnull final PsiType type) {
     registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
       public boolean value(final Pair<PsiType, GenericDomValue> pair) {
         return Comparing.equal(pair.getFirst(), type);
@@ -107,14 +107,14 @@ public class GenericDomValueConvertersRegistry {
     });
   }
 
-  public void registerConverter(@NotNull Converter<?> provider, @NotNull Condition<Pair<PsiType, GenericDomValue>> condition) {
+  public void registerConverter(@Nonnull Converter<?> provider, @Nonnull Condition<Pair<PsiType, GenericDomValue>> condition) {
     myConditionConverters.put(condition, provider);
   }
 
-  @Nullable
-  public Converter<?> getConverter(@NotNull GenericDomValue domValue, @Nullable PsiType type) {
+  @javax.annotation.Nullable
+  public Converter<?> getConverter(@Nonnull GenericDomValue domValue, @Nullable PsiType type) {
     final Pair<PsiType, GenericDomValue> pair = new Pair<PsiType, GenericDomValue>(type, domValue);
-    for (@NotNull Condition<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {
+    for (@Nonnull Condition<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {
       if (condition.value(pair)) {
         return myConditionConverters.get(condition);
       }
@@ -122,7 +122,7 @@ public class GenericDomValueConvertersRegistry {
     return null;
   }
 
-  public void registerConverter(@NotNull Converter<?> provider, @NotNull Class type) {
+  public void registerConverter(@Nonnull Converter<?> provider, @Nonnull Class type) {
     final String name = type.getCanonicalName();
     registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
       public boolean value(final Pair<PsiType, GenericDomValue> pair) {

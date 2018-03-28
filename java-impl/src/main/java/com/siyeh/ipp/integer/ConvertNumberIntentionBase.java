@@ -15,8 +15,8 @@
  */
 package com.siyeh.ipp.integer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
@@ -28,7 +28,7 @@ import com.siyeh.ipp.base.Intention;
 public abstract class ConvertNumberIntentionBase extends Intention
 {
 	@Override
-	protected void processIntention(@NotNull final PsiElement element) throws IncorrectOperationException
+	protected void processIntention(@Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		final PsiExpression expression = (PsiExpression) element;
 		final Number value = (Number) ExpressionUtils.computeConstantExpression(expression);

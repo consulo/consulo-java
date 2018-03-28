@@ -25,9 +25,10 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.IStubElementType;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.psi.Attribute;
 import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
 
@@ -35,11 +36,11 @@ import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class AttributeImpl extends AbstractAssignmentExpression implements Attribute {
-  public AttributeImpl(AssignmentExpressionStub stub, @NotNull IStubElementType nodeType) {
+  public AttributeImpl(AssignmentExpressionStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public AttributeImpl(@NotNull ASTNode node) {
+  public AttributeImpl(@Nonnull ASTNode node) {
     super(node);
   }
 }

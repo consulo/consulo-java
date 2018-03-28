@@ -18,8 +18,8 @@ package com.intellij.spi.psi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.application.ApplicationManager;
@@ -43,7 +43,7 @@ import consulo.psi.PsiPackage;
  * User: anna
  */
 public class SPIFile extends PsiFileBase {
-  public SPIFile(@NotNull FileViewProvider viewProvider) {
+  public SPIFile(@Nonnull FileViewProvider viewProvider) {
     super(viewProvider, SPILanguage.INSTANCE);
   }
 
@@ -57,7 +57,7 @@ public class SPIFile extends PsiFileBase {
     }));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiReference[] getReferences() {
     final List<PsiReference> refs = new ArrayList<PsiReference>();
@@ -86,7 +86,7 @@ public class SPIFile extends PsiFileBase {
     return refs.toArray(new PsiReference[refs.size()]);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public FileType getFileType() {
     return SPIFileType.INSTANCE;
@@ -100,7 +100,7 @@ public class SPIFile extends PsiFileBase {
       myClass = aClass;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     @Override
     public PsiElement resolve() {
       return myClass;
@@ -119,7 +119,7 @@ public class SPIFile extends PsiFileBase {
     }
 
     @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+    public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
       if (element instanceof PsiClass) {
         final String className = ClassUtil.getJVMClassName((PsiClass)element);
         if (className != null) {
@@ -133,12 +133,12 @@ public class SPIFile extends PsiFileBase {
   private static class SPIFileName2PackageReference extends PsiReferenceBase<PsiFile> {
     private final PsiElement myPackageOrContainingClass;
 
-    public SPIFileName2PackageReference(PsiFile file, @NotNull PsiElement psiPackage) {
+    public SPIFileName2PackageReference(PsiFile file, @Nonnull PsiElement psiPackage) {
       super(file, new TextRange(0, 0), false);
       myPackageOrContainingClass = psiPackage;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getCanonicalText() {
       return myPackageOrContainingClass instanceof PsiJavaPackage
@@ -157,7 +157,7 @@ public class SPIFile extends PsiFileBase {
     }
 
     @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+    public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
       if (element instanceof PsiPackage) {
         return handleElementRename(((PsiPackage)element).getQualifiedName());
       } else if (element instanceof PsiClass) {

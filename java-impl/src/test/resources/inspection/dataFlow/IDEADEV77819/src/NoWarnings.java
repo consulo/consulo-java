@@ -1,7 +1,6 @@
-import org.jetbrains.annotations.*;
-
 public class Test {
-  public @Nullable String foo;
+  public @javax.annotation.Nullable
+  String foo;
   
   public void test() {
     

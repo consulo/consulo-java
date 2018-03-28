@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -24,11 +26,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.text.LiteralFormatUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     if (!PsiUtil.isLanguageLevel7OrHigher(element)) return false;
 
     final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
@@ -46,7 +47,7 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return;
 
@@ -59,13 +60,13 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
     literalExpression.replace(replacement);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.underscores.in.literals.family");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return CodeInsightBundle.message("intention.insert.literal.underscores");

@@ -1,47 +1,49 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.*;
 
 class Test {
-  @NotNull
+  @Nonnull
   String myFoo = "";
 
-  @Nullable
+  @javax.annotation.Nullable
   String myFoo1 = null;
 
-  @NotNull
+  @Nonnull
   String myFoo2 = foo2();
-  @NotNull String foo2() { return "";}
+  @Nonnull
+  String foo2() { return "";}
 
-  @Nullable
+  @javax.annotation.Nullable
   String myFoo3 = foo3();
-  @Nullable String foo3() { return null;}
+  @javax.annotation.Nullable
+  String foo3() { return null;}
 
   String myFoo4;
   void setFoo4() {
     myFoo4 = "";
   }
 
-  @NotNull
+  @Nonnull
   final String myFoo5;
-  @Nullable
+  @javax.annotation.Nullable
   final String myFoo6;
-  @NotNull
+  @Nonnull
   final String myFoo7;
-  @Nullable
+  @javax.annotation.Nullable
   final String myFoo8;
   final String myFoo9;
-  @Nullable
+  @javax.annotation.Nullable
   final String myFoo10;
 
   final String myFoo11 = "";
-  @NotNull
+  @Nonnull
   final String myFoo12;
-  @Nullable
+  @javax.annotation.Nullable
   final String myFoo13 = null;
 
   /**
    * {@link #myFoo6}
    */
-  Test(@NotNull String param, @Nullable String paramNullable, String simpleParam) {
+  Test(@Nonnull String param, @javax.annotation.Nullable String paramNullable, String simpleParam) {
     myFoo5 = "";
     myFoo6 = null;
     myFoo7 = param;
@@ -51,7 +53,7 @@ class Test {
     myFoo12 = "";
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   String foo10(boolean flag) {
     return flag ? foo2() : foo3();
   }

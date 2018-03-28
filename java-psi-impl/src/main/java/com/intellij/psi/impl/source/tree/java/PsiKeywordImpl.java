@@ -22,7 +22,7 @@ import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.impl.source.CharTableImpl;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.lang.reflect.Field;
 
@@ -37,7 +37,7 @@ public class PsiKeywordImpl extends LeafPsiElement implements PsiKeyword, PsiJav
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitKeyword(this);
     }

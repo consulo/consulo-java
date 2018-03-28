@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.memory.filtering;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 /**
@@ -25,16 +25,16 @@ public interface FilteringTaskCallback
 {
 	void started(int totalCount);
 
-	@NotNull
-	Action matched(@NotNull ObjectReference ref);
+	@Nonnull
+	Action matched(@Nonnull ObjectReference ref);
 
-	@NotNull
-	Action notMatched(@NotNull ObjectReference ref);
+	@Nonnull
+	Action notMatched(@Nonnull ObjectReference ref);
 
-	@NotNull
-	Action error(@NotNull ObjectReference ref, @NotNull String description);
+	@Nonnull
+	Action error(@Nonnull ObjectReference ref, @Nonnull String description);
 
-	void completed(@NotNull FilteringResult reason);
+	void completed(@Nonnull FilteringResult reason);
 
 	enum Action
 	{

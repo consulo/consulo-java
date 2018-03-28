@@ -17,7 +17,8 @@ package com.siyeh.ig.psiutils;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Attachment;
 import com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments;
 import com.intellij.psi.*;
@@ -52,7 +53,7 @@ public class StatementExtractor
 	 * @param root              a root expression
 	 * @return an array of non-physical statements which represent the same logic as passed expressions
 	 */
-	@NotNull
+	@Nonnull
 	public static PsiStatement[] generateStatements(List<PsiExpression> expressionsToKeep, PsiExpression root)
 	{
 		String statementsCode = generateStatementsText(expressionsToKeep, root);
@@ -71,8 +72,8 @@ public class StatementExtractor
 		return result.toString();
 	}
 
-	@NotNull
-	private static Node createNode(@NotNull PsiExpression expression, @NotNull PsiExpression root)
+	@Nonnull
+	private static Node createNode(@Nonnull PsiExpression expression, @Nonnull PsiExpression root)
 	{
 		Node result = new Expr(expression);
 		PsiExpression parent;
@@ -95,8 +96,8 @@ public class StatementExtractor
 		return result;
 	}
 
-	@NotNull
-	private static Node foldNode(@NotNull Node node, @NotNull PsiExpression expression, @NotNull PsiExpression parent)
+	@Nonnull
+	private static Node foldNode(@Nonnull Node node, @Nonnull PsiExpression expression, @Nonnull PsiExpression parent)
 	{
 		if(parent instanceof PsiPolyadicExpression)
 		{
@@ -155,17 +156,17 @@ public class StatementExtractor
 	private static class Cond extends Node
 	{
 		private final
-		@NotNull
+		@Nonnull
 		PsiExpression myCondition;
 		private final
-		@NotNull
+		@Nonnull
 		Node myThenBranch;
 		private final
-		@NotNull
+		@Nonnull
 		Node myElseBranch;
 		private final int myLimit;
 
-		private Cond(@NotNull PsiExpression anchor, @NotNull PsiExpression condition, int limit, @NotNull Node thenBranch, @NotNull Node elseBranch)
+		private Cond(@Nonnull PsiExpression anchor, @Nonnull PsiExpression condition, int limit, @Nonnull Node thenBranch, @Nonnull Node elseBranch)
 		{
 			super(anchor);
 			myCondition = condition;
@@ -227,7 +228,7 @@ public class StatementExtractor
 
 	private static class Expr extends Node
 	{
-		private Expr(@NotNull PsiExpression expression)
+		private Expr(@Nonnull PsiExpression expression)
 		{
 			super(expression);
 		}
@@ -247,13 +248,13 @@ public class StatementExtractor
 	private static class Cons extends Node
 	{
 		private final
-		@NotNull
+		@Nonnull
 		Node myHead;
 		private final
-		@NotNull
+		@Nonnull
 		Node myTail;
 
-		private Cons(@NotNull Node head, @NotNull Node tail)
+		private Cons(@Nonnull Node head, @Nonnull Node tail)
 		{
 			super(head.myAnchor);
 			assert !(head instanceof Cons);

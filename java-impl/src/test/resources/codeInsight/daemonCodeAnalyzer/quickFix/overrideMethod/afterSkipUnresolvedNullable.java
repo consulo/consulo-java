@@ -1,8 +1,8 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 // "Implement method 'foo'" "true"
 abstract class Test {
-  public abstract void foo(@org.jetbrains.annotations.Nullable String a);
+  public abstract void foo(@javax.annotation.Nullable String a);
 }
 
 class TImple extends Test {

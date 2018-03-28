@@ -21,8 +21,8 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.EXPRESSION_LIST;
 import java.util.List;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.psi.JavaTokenType;
@@ -37,29 +37,29 @@ public class JavaLightTreeUtil
 {
 	@Nullable
 	@Contract("_,null->null")
-	public static List<LighterASTNode> getArgList(@NotNull LighterAST tree, @Nullable LighterASTNode call)
+	public static List<LighterASTNode> getArgList(@Nonnull LighterAST tree, @javax.annotation.Nullable LighterASTNode call)
 	{
 		LighterASTNode anonClass = LightTreeUtil.firstChildOfType(tree, call, ANONYMOUS_CLASS);
 		LighterASTNode exprList = LightTreeUtil.firstChildOfType(tree, anonClass != null ? anonClass : call, EXPRESSION_LIST);
 		return exprList == null ? null : getExpressionChildren(tree, exprList);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Contract("_,null->null")
-	public static String getNameIdentifierText(@NotNull LighterAST tree, @Nullable LighterASTNode idOwner)
+	public static String getNameIdentifierText(@Nonnull LighterAST tree, @javax.annotation.Nullable LighterASTNode idOwner)
 	{
 		LighterASTNode id = LightTreeUtil.firstChildOfType(tree, idOwner, JavaTokenType.IDENTIFIER);
 		return id != null ? RecordUtil.intern(tree.getCharTable(), id) : null;
 	}
 
-	@NotNull
-	public static List<LighterASTNode> getExpressionChildren(@NotNull LighterAST tree, @NotNull LighterASTNode node)
+	@Nonnull
+	public static List<LighterASTNode> getExpressionChildren(@Nonnull LighterAST tree, @Nonnull LighterASTNode node)
 	{
 		return LightTreeUtil.getChildrenOfType(tree, node, ElementType.EXPRESSION_BIT_SET);
 	}
 
-	@Nullable
-	public static LighterASTNode findExpressionChild(@NotNull LighterAST tree, @Nullable LighterASTNode node)
+	@javax.annotation.Nullable
+	public static LighterASTNode findExpressionChild(@Nonnull LighterAST tree, @Nullable LighterASTNode node)
 	{
 		return LightTreeUtil.firstChildOfType(tree, node, ElementType.EXPRESSION_BIT_SET);
 	}

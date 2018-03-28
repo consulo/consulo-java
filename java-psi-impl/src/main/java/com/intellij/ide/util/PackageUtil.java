@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -219,16 +219,16 @@ public class PackageUtil
 	}
 
 	@Nullable
-	public static PsiDirectory findOrCreateDirectoryForPackage(@NotNull Module module,
+	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module,
 			String packageName,
-			@Nullable PsiDirectory baseDir,
+			@javax.annotation.Nullable PsiDirectory baseDir,
 			boolean askUserToCreate) throws IncorrectOperationException
 	{
 		return findOrCreateDirectoryForPackage(module, packageName, baseDir, askUserToCreate, false);
 	}
 
 	@Nullable
-	public static PsiDirectory findOrCreateDirectoryForPackage(@NotNull Module module,
+	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module,
 			String packageName,
 			PsiDirectory baseDir,
 			boolean askUserToCreate,
@@ -400,7 +400,7 @@ public class PackageUtil
 		return false;
 	}
 
-	private static PsiDirectory getWritableModuleDirectory(@NotNull Query<VirtualFile> vFiles, @NotNull Module module, PsiManager manager)
+	private static PsiDirectory getWritableModuleDirectory(@Nonnull Query<VirtualFile> vFiles, @Nonnull Module module, PsiManager manager)
 	{
 		for(VirtualFile vFile : vFiles)
 		{
@@ -522,8 +522,8 @@ public class PackageUtil
 		return convertRoots(project, files);
 	}
 
-	@NotNull
-	public static PsiDirectory findOrCreateSubdirectory(@NotNull PsiDirectory directory, @NotNull String directoryName)
+	@Nonnull
+	public static PsiDirectory findOrCreateSubdirectory(@Nonnull PsiDirectory directory, @Nonnull String directoryName)
 	{
 		PsiDirectory subDirectory = directory.findSubdirectory(directoryName);
 		if(subDirectory == null)

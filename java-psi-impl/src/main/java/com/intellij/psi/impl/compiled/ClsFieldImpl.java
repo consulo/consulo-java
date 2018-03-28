@@ -21,8 +21,8 @@ import gnu.trove.THashSet;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.extensions.Extensions;
@@ -50,12 +50,12 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	private final NotNullLazyValue<PsiTypeElement> myTypeElement;
 	private final NullableLazyValue<PsiExpression> myInitializer;
 
-	public ClsFieldImpl(@NotNull PsiFieldStub stub)
+	public ClsFieldImpl(@Nonnull PsiFieldStub stub)
 	{
 		super(stub);
 		myTypeElement = new AtomicNotNullLazyValue<PsiTypeElement>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected PsiTypeElement compute()
 			{
@@ -79,7 +79,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return getChildren(getDocComment(), getModifierList(), getTypeElement(), getNameIdentifier());
@@ -92,7 +92,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType getType()
 	{
 		return assertNotNull(getTypeElement()).getType();
@@ -111,7 +111,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		return assertNotNull(getModifierList()).hasModifierProperty(name);
 	}
@@ -201,7 +201,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
 		appendText(getModifierList(), indentLevel, buffer, "");
@@ -219,7 +219,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, null);
 
@@ -231,7 +231,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -244,7 +244,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@SuppressWarnings({
 			"Duplicates",
 			"deprecation"
@@ -297,7 +297,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public SearchScope getUseScope()
 	{
 		return PsiImplUtil.getMemberUseScope(this);

@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -24,7 +26,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class GeneralizeCatchFix implements IntentionAction {
   private final PsiElement myElement;
@@ -32,13 +33,13 @@ public class GeneralizeCatchFix implements IntentionAction {
   private PsiTryStatement myTryStatement;
   private PsiParameter myCatchParameter;
 
-  public GeneralizeCatchFix(@NotNull PsiElement element, @NotNull PsiClassType unhandledException) {
+  public GeneralizeCatchFix(@Nonnull PsiElement element, @Nonnull PsiClassType unhandledException) {
     myElement = element;
     myUnhandledException = unhandledException;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("generalize.catch.text",
                                   JavaHighlightUtil.formatType(myCatchParameter == null ? null : myCatchParameter.getType()),
@@ -46,13 +47,13 @@ public class GeneralizeCatchFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("generalize.catch.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(myElement.isValid()
           && myUnhandledException.isValid()
           && myElement.getManager().isInProject(myElement))) return false;
@@ -80,7 +81,7 @@ public class GeneralizeCatchFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(myElement.getContainingFile())) return;
     PsiElementFactory factory = JavaPsiFacade.getInstance(myElement.getProject()).getElementFactory();
     PsiTypeElement type = factory.createTypeElement(myUnhandledException);

@@ -18,8 +18,8 @@ package com.intellij.psi.impl;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Factory;
 import com.intellij.openapi.util.Key;
@@ -95,10 +95,10 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
     }
   };
 
-  private Object getCached(@NotNull PsiElement element) {
+  private Object getCached(@Nonnull PsiElement element) {
     return map().get(element);
   }
-  private Object cache(@NotNull PsiElement element, @Nullable Object value) {
+  private Object cache(@Nonnull PsiElement element, @javax.annotation.Nullable Object value) {
     value = ConcurrencyUtil.cacheOrGet(map(), element, value == null ? NO_VALUE : value);
     if (value == NO_VALUE) {
       value = null;
@@ -106,16 +106,16 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
     return value;
   }
 
-  @NotNull
+  @Nonnull
   private ConcurrentMap<PsiElement, Object> map() {
     return myMapFactory.create();
   }
 
-  public static Object computeConstantExpression(PsiExpression expression, @Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow) {
+  public static Object computeConstantExpression(PsiExpression expression, @javax.annotation.Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow) {
     return computeConstantExpression(expression, visitedVars, throwExceptionOnOverflow, null);
   }
 
-  public static Object computeConstantExpression(PsiExpression expression, @Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow,
+  public static Object computeConstantExpression(PsiExpression expression, @javax.annotation.Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow,
                                                  final PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
     if (expression == null) return null;
 

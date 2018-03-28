@@ -15,14 +15,15 @@
  */
 package com.siyeh.ipp.braces;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class AddBracesIntention extends BaseBracesIntention {
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new PsiElementPredicate() {
       @Override
@@ -33,13 +34,13 @@ public class AddBracesIntention extends BaseBracesIntention {
     };
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getMessageKey() {
     return "add.braces.intention.name";
   }
 
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiStatement statement = getSurroundingStatement(element);
     if (statement == null) {
       return;

@@ -20,26 +20,26 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class StringBufferMustHaveInitialCapacityInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "StringBufferWithoutInitialCapacity";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "string.buffer.must.have.initial.capacity.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "string.buffer.must.have.initial.capacity.problem.descriptor");
@@ -55,7 +55,7 @@ public class StringBufferMustHaveInitialCapacityInspection
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
 

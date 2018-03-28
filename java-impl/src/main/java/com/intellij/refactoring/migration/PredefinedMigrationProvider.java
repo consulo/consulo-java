@@ -17,7 +17,7 @@ package com.intellij.refactoring.migration;
 
 import java.net.URL;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 
 public interface PredefinedMigrationProvider
@@ -32,6 +32,6 @@ public interface PredefinedMigrationProvider
 	 * 2. Create new migration map with all settings needed
 	 * 3. Copy map's file from config/migration to the plugin's resources
 	 */
-	@NotNull
+	@Nonnull
 	URL getMigrationMap();
 }

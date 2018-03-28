@@ -1,12 +1,12 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class Npe {
-   Object foo(@NotNull Object o) {
+   Object foo(@Nonnull Object o) {
      return o;
    }
 
-   @Nullable Object nullable() {
+   @javax.annotation.Nullable
+   Object nullable() {
      return null;
    }
 

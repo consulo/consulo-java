@@ -15,24 +15,25 @@
  */
 package com.siyeh.ig.portability;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class UseOfAWTPeerClassInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.of.awt.peer.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.of.awt.peer.class.problem.descriptor");
@@ -47,7 +48,7 @@ public class UseOfAWTPeerClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final PsiType type = variable.getType();
       if (!(type instanceof PsiClassType)) {
@@ -82,7 +83,7 @@ public class UseOfAWTPeerClassInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

@@ -18,8 +18,8 @@ package com.intellij.codeInspection.dataFlow.value;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.openapi.diagnostic.Logger;
@@ -69,7 +69,7 @@ public class DfaExpressionFactory
 	}
 
 	@Nullable
-	public DfaValue getExpressionDfaValue(@Nullable PsiExpression expression)
+	public DfaValue getExpressionDfaValue(@javax.annotation.Nullable PsiExpression expression)
 	{
 		if(expression == null)
 		{
@@ -130,7 +130,7 @@ public class DfaExpressionFactory
 		return null;
 	}
 
-	private DfaValue createReferenceValue(@NotNull PsiReferenceExpression refExpr)
+	private DfaValue createReferenceValue(@Nonnull PsiReferenceExpression refExpr)
 	{
 		PsiModifierListOwner var = getAccessedVariableOrGetter(refExpr.resolve());
 		if(var == null)

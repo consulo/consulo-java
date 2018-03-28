@@ -28,8 +28,8 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -119,7 +119,7 @@ public class SurroundWithUtil {
     return false;
   }
 
-  public static TextRange getRangeToSelect (@NotNull PsiCodeBlock block) {
+  public static TextRange getRangeToSelect (@Nonnull PsiCodeBlock block) {
     PsiElement first = block.getFirstBodyElement();
     if (first instanceof PsiWhiteSpace) {
       first = first.getNextSibling();
@@ -155,7 +155,7 @@ public class SurroundWithUtil {
    * @param container     code block that surrounds target statements
    * @param statements    target statements being surrounded
    */
-  public static void indentCommentIfNecessary(@NotNull PsiCodeBlock container, @Nullable PsiElement[] statements) {
+  public static void indentCommentIfNecessary(@Nonnull PsiCodeBlock container, @Nullable PsiElement[] statements) {
     if (statements == null || statements.length <= 0) {
       return;
     }

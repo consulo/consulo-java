@@ -19,7 +19,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -167,7 +167,7 @@ public class PsiTypeVariableFactory {
         return null;
       }
 
-      @NotNull
+      @Nonnull
       public PsiType[] getSuperTypes() {
         return new PsiType[0];
       }

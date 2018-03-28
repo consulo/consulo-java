@@ -18,8 +18,8 @@ package com.intellij.codeInsight;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.PsiClass;
@@ -62,13 +62,13 @@ public abstract class TestFrameworks
 	}
 
 	@Nullable
-	public static TestFramework detectFramework(@NotNull final PsiClass psiClass)
+	public static TestFramework detectFramework(@Nonnull final PsiClass psiClass)
 	{
 		return CachedValuesManager.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFramework(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
 	}
 
-	@NotNull
-	public static Set<TestFramework> detectApplicableFrameworks(@NotNull final PsiClass psiClass)
+	@Nonnull
+	public static Set<TestFramework> detectApplicableFrameworks(@Nonnull final PsiClass psiClass)
 	{
 		return CachedValuesManager.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFrameworks(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
 	}

@@ -25,8 +25,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class UnnecessaryTemporaryOnConversionToStringInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.temporary.on.conversion.to.string.display.name");
@@ -47,7 +47,7 @@ public class UnnecessaryTemporaryOnConversionToStringInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String replacementString = calculateReplacementExpression(
       (PsiMethodCallExpression)infos[0]);
@@ -106,7 +106,7 @@ public class UnnecessaryTemporaryOnConversionToStringInspection
       m_name = name;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return m_name;
     }
@@ -151,7 +151,7 @@ public class UnnecessaryTemporaryOnConversionToStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

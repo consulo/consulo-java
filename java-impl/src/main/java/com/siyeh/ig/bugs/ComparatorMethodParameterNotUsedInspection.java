@@ -21,7 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -30,14 +30,14 @@ public class ComparatorMethodParameterNotUsedInspection
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "comparator.method.parameter.not.used.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "comparator.method.parameter.not.used.problem.descriptor");
@@ -85,7 +85,7 @@ public class ComparatorMethodParameterNotUsedInspection
 
       private final Set<PsiParameter> parameters;
 
-      ParameterAccessVisitor(@NotNull PsiParameter[] parameters) {
+      ParameterAccessVisitor(@Nonnull PsiParameter[] parameters) {
         this.parameters = new HashSet(Arrays.asList(parameters));
       }
 

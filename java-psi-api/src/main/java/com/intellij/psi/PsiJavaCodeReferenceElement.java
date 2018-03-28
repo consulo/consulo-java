@@ -15,9 +15,9 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.util.ArrayFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a reference found in Java code (either an identifier or a sequence of identifiers
@@ -30,7 +30,7 @@ public interface PsiJavaCodeReferenceElement extends PsiJavaReference, PsiQualif
   PsiJavaCodeReferenceElement[] EMPTY_ARRAY = new PsiJavaCodeReferenceElement[0];
 
   ArrayFactory<PsiJavaCodeReferenceElement> ARRAY_FACTORY = new ArrayFactory<PsiJavaCodeReferenceElement>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiJavaCodeReferenceElement[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiJavaCodeReferenceElement[count];
@@ -43,7 +43,7 @@ public interface PsiJavaCodeReferenceElement extends PsiJavaReference, PsiQualif
    * @return the element, or null if the reference element is not physical (for example,
    *         exists in compiled code).
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiElement getReferenceNameElement();
 
   /**
@@ -51,7 +51,7 @@ public interface PsiJavaCodeReferenceElement extends PsiJavaReference, PsiQualif
    *
    * @return the type argument list, or null if the reference does not have any type arguments.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiReferenceParameterList getParameterList();
 
   /**
@@ -59,7 +59,7 @@ public interface PsiJavaCodeReferenceElement extends PsiJavaReference, PsiQualif
    *
    * @return the array of types, or an empty array if the reference does not have any type arguments.
    */
-  @NotNull
+  @Nonnull
   PsiType[] getTypeParameters();
 
   /**

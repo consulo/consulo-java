@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiAnchor;
@@ -49,8 +49,8 @@ import com.intellij.util.containers.hash.HashMap;
 
 public class FindSuperElementsHelper
 {
-	@NotNull
-	public static PsiElement[] findSuperElements(@NotNull PsiElement element)
+	@Nonnull
+	public static PsiElement[] findSuperElements(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiClass)
 		{
@@ -94,7 +94,7 @@ public class FindSuperElementsHelper
 		return PsiElement.EMPTY_ARRAY;
 	}
 
-	public static PsiMethod getSiblingInheritedViaSubClass(@NotNull PsiMethod method)
+	public static PsiMethod getSiblingInheritedViaSubClass(@Nonnull PsiMethod method)
 	{
 		SiblingInfo info = getSiblingInfoInheritedViaSubClass(method);
 		return info == null ? null : info.superMethod;
@@ -104,13 +104,13 @@ public class FindSuperElementsHelper
 	 * @return (super method, sub class) or null if can't find any siblings
 	 */
 	@Nullable
-	public static SiblingInfo getSiblingInfoInheritedViaSubClass(@NotNull final PsiMethod method)
+	public static SiblingInfo getSiblingInfoInheritedViaSubClass(@Nonnull final PsiMethod method)
 	{
 		return getSiblingInheritanceInfos(Collections.singletonList(method)).get(method);
 	}
 
-	@NotNull
-	public static Map<PsiMethod, SiblingInfo> getSiblingInheritanceInfos(@NotNull final Collection<PsiMethod> methods)
+	@Nonnull
+	public static Map<PsiMethod, SiblingInfo> getSiblingInheritanceInfos(@Nonnull final Collection<PsiMethod> methods)
 	{
 		MultiMap<PsiClass, PsiMethod> byClass = MultiMap.create();
 		for(PsiMethod method : methods)
@@ -145,12 +145,12 @@ public class FindSuperElementsHelper
 
 	public static class SiblingInfo
 	{
-		@NotNull
+		@Nonnull
 		public final PsiMethod superMethod;
-		@NotNull
+		@Nonnull
 		public final PsiClass subClass;
 
-		private SiblingInfo(@NotNull PsiMethod superMethod, @NotNull PsiClass subClass)
+		private SiblingInfo(@Nonnull PsiMethod superMethod, @Nonnull PsiClass subClass)
 		{
 			this.superMethod = superMethod;
 			this.subClass = subClass;

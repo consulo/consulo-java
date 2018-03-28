@@ -29,7 +29,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.HighlightUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -48,14 +48,14 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "dynamic.regex.replaceable.by.compiled.pattern.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "dynamic.regex.replaceable.by.compiled.pattern.problem.descriptor");
@@ -73,7 +73,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
   private static class DynamicRegexReplaceableByCompiledPatternFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "dynamic.regex.replaceable.by.compiled.pattern.quickfix");

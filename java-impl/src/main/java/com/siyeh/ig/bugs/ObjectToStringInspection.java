@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.HardcodedMethodConstants;
@@ -24,18 +26,17 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ObjectToStringInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("default.tostring.call.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("default.tostring.call.problem.descriptor");
   }
@@ -60,7 +61,7 @@ public class ObjectToStringInspection extends BaseInspection {
     }
 
     @Override
-    public void visitAssignmentExpression(@NotNull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSEQ)) {

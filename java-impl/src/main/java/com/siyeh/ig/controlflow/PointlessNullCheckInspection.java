@@ -26,8 +26,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This inspection finds instances of null checks followed by an instanceof check
@@ -43,13 +43,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PointlessNullCheckInspection extends BaseInspection {
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("pointless.nullcheck.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("pointless.nullcheck.problem.descriptor");
@@ -75,7 +75,7 @@ public class PointlessNullCheckInspection extends BaseInspection {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("pointless.nullcheck.simplify.quickfix", myExpressionText);
     }

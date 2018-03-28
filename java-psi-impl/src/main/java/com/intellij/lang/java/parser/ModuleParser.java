@@ -21,8 +21,8 @@ import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.JavaTokenType;
@@ -38,13 +38,13 @@ public class ModuleParser
 
 	private final JavaParser myParser;
 
-	public ModuleParser(@NotNull JavaParser parser)
+	public ModuleParser(@Nonnull JavaParser parser)
 	{
 		myParser = parser;
 	}
 
-	@Nullable
-	public PsiBuilder.Marker parse(@NotNull PsiBuilder builder)
+	@javax.annotation.Nullable
+	public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder)
 	{
 		PsiBuilder.Marker module = builder.mark();
 
@@ -290,7 +290,7 @@ public class ModuleParser
 		return parsePackageStatement(builder, statement, JavaElementType.OPENS_STATEMENT);
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiBuilder.Marker parsePackageStatement(PsiBuilder builder, PsiBuilder.Marker statement, IElementType type)
 	{
 		boolean hasError = false;

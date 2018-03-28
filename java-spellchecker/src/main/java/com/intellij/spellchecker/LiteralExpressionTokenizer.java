@@ -17,7 +17,8 @@ package com.intellij.spellchecker;
 
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiLiteralExpression;
@@ -36,7 +37,7 @@ import com.intellij.spellchecker.tokenizer.Tokenizer;
  */
 public class LiteralExpressionTokenizer extends Tokenizer<PsiLiteralExpression> {
   @Override
-  public void tokenize(@NotNull PsiLiteralExpression element, TokenConsumer consumer) {
+  public void tokenize(@Nonnull PsiLiteralExpression element, TokenConsumer consumer) {
     PsiLiteralExpressionImpl literalExpression = (PsiLiteralExpressionImpl) element;
     if (literalExpression.getLiteralElementType() != JavaTokenType.STRING_LITERAL) {
       return;  // not a string literal

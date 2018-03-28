@@ -28,7 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,20 +40,20 @@ public class NegatedConditionalInspection extends BaseInspection {
   public boolean m_ignoreNegatedNullComparison = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "negated.conditional.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConditionalExpressionWithNegatedCondition";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "negated.conditional.problem.descriptor");
@@ -78,7 +78,7 @@ public class NegatedConditionalInspection extends BaseInspection {
   private static class NegatedConditionalFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("negated.conditional.invert.quickfix");
     }

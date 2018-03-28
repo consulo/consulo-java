@@ -15,9 +15,9 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.pom.PomRenameableTarget;
 import com.intellij.util.IncorrectOperationException;
 
@@ -30,7 +30,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    *
    * @return the variable type.
    */
-  @NotNull
+  @Nonnull
   PsiType getType();
 
   /**
@@ -38,7 +38,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    *
    * @return the type element for the variable type.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiTypeElement getTypeElement();
 
   /**
@@ -47,7 +47,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the initializer expression, or null if it has no initializer.
    * @see {@link #hasInitializer()}
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getInitializer();
 
   /**
@@ -75,7 +75,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the calculated value, or null if the variable has no initializer or
    *         the initializer does not evaluate to a constant.
    */
-  @Nullable
+  @javax.annotation.Nullable
   Object computeConstantValue();
 
   /**
@@ -84,9 +84,9 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the variable name identifier.
    */
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   PsiIdentifier getNameIdentifier();
 
   @Override
-  PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException;
+  PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException;
 }

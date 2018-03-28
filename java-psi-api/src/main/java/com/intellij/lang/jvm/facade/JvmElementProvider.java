@@ -17,7 +17,7 @@ package com.intellij.lang.jvm.facade;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -26,6 +26,6 @@ public interface JvmElementProvider
 {
 	ExtensionPointName<JvmElementProvider> EP_NAME = ExtensionPointName.create("consulo.java.jvm.elementProvider");
 
-	@NotNull
-	List<? extends JvmClass> getClasses(@NotNull String qualifiedName, @NotNull GlobalSearchScope scope);
+	@Nonnull
+	List<? extends JvmClass> getClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 }

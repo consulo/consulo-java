@@ -19,15 +19,17 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.ChangeLocalityDetector;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class JavaChangeLocalityDetector implements ChangeLocalityDetector {
   @Override
   @Nullable
-  public PsiElement getChangeHighlightingDirtyScopeFor(@NotNull final PsiElement element) {
+  public PsiElement getChangeHighlightingDirtyScopeFor(@Nonnull final PsiElement element) {
     // optimization
     PsiElement parent = element.getParent();
     PsiElement grand;

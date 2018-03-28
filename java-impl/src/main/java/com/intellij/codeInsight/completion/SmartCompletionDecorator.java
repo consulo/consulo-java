@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.ExpectedTypeInfo;
@@ -45,11 +45,11 @@ import com.intellij.psi.util.TypeConversionUtil;
  */
 public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement>
 {
-	@NotNull
+	@Nonnull
 	private final Collection<ExpectedTypeInfo> myExpectedTypeInfos;
 	private PsiElement myPosition;
 
-	public SmartCompletionDecorator(LookupElement item, @NotNull Collection<ExpectedTypeInfo> expectedTypeInfos)
+	public SmartCompletionDecorator(LookupElement item, @Nonnull Collection<ExpectedTypeInfo> expectedTypeInfos)
 	{
 		super(item);
 		myExpectedTypeInfos = expectedTypeInfos;
@@ -239,7 +239,7 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement>
 		return false;
 	}
 
-	public static PsiSubstitutor calculateMethodReturnTypeSubstitutor(@NotNull PsiMethod method, @NotNull final PsiType expected)
+	public static PsiSubstitutor calculateMethodReturnTypeSubstitutor(@Nonnull PsiMethod method, @Nonnull final PsiType expected)
 	{
 		PsiType returnType = method.getReturnType();
 		if(returnType == null)
@@ -251,7 +251,7 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement>
 		return helper.inferTypeArguments(method.getTypeParameters(), new PsiType[]{expected}, new PsiType[]{returnType}, LanguageLevel.HIGHEST);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiElement getPosition(InsertionContext context, LookupElement element)
 	{
 		PsiElement position = context.getFile().findElementAt(context.getStartOffset() + element.getLookupString().length() - 1);

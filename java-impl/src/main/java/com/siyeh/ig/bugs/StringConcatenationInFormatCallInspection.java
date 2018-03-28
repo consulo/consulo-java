@@ -26,18 +26,18 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.FormatUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class StringConcatenationInFormatCallInspection extends BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.in.format.call.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.concatenation.in.format.call.problem.descriptor");
@@ -57,7 +57,7 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
       myPlural = plural;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       if (myPlural) {
         return InspectionGadgetsBundle.message("string.concatenation.in.format.call.plural.quickfix");

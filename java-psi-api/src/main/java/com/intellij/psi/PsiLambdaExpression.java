@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java lambda expression.
@@ -28,7 +28,7 @@ public interface PsiLambdaExpression extends PsiFunctionalExpression, PsiParamet
 	 *
 	 * @return parameter list.
 	 */
-	@NotNull
+	@Nonnull
 	PsiParameterList getParameterList();
 
 	/**

@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.openapi.diagnostic.Logger;
@@ -81,13 +81,13 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	private final Map<PsiElement, ControlFlowSubRange> mySubRanges = new THashMap<PsiElement, ControlFlowSubRange>();
 	private final PsiConstantEvaluationHelper myConstantEvaluationHelper;
 
-	ControlFlowAnalyzer(@NotNull PsiElement codeFragment, @NotNull ControlFlowPolicy policy, boolean enabledShortCircuit, boolean evaluateConstantIfCondition)
+	ControlFlowAnalyzer(@Nonnull PsiElement codeFragment, @Nonnull ControlFlowPolicy policy, boolean enabledShortCircuit, boolean evaluateConstantIfCondition)
 	{
 		this(codeFragment, policy, enabledShortCircuit, evaluateConstantIfCondition, false);
 	}
 
-	private ControlFlowAnalyzer(@NotNull PsiElement codeFragment,
-			@NotNull ControlFlowPolicy policy,
+	private ControlFlowAnalyzer(@Nonnull PsiElement codeFragment,
+			@Nonnull ControlFlowPolicy policy,
 			boolean enabledShortCircuit,
 			boolean evaluateConstantIfCondition,
 			boolean assignmentTargetsAreElements)
@@ -102,7 +102,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		myConstantEvaluationHelper = JavaPsiFacade.getInstance(project).getConstantEvaluationHelper();
 	}
 
-	@NotNull
+	@Nonnull
 	ControlFlow buildControlFlow() throws AnalysisCanceledException
 	{
 		// push guard outer statement offsets in case when nested expression is incorrect
@@ -139,7 +139,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 			myStatements.pop();
 		}
 
-		@NotNull
+		@Nonnull
 		private PsiElement peekElement()
 		{
 			return myStatements.peek();
@@ -150,14 +150,14 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 			return myAtStart.get(myAtStart.size() - 1) == 1;
 		}
 
-		private void pushStatement(@NotNull PsiElement statement, boolean atStart)
+		private void pushStatement(@Nonnull PsiElement statement, boolean atStart)
 		{
 			myStatements.push(statement);
 			myAtStart.add(atStart ? 1 : 0);
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private TIntArrayList getEmptyIntArray()
 	{
 		if(intArrayPool.isEmpty())
@@ -169,14 +169,14 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		return list;
 	}
 
-	private void poolIntArray(@NotNull TIntArrayList list)
+	private void poolIntArray(@Nonnull TIntArrayList list)
 	{
 		intArrayPool.add(list);
 	}
 
 	// patch instruction currently added to control flow so that its jump offset corrected on getStartOffset(element) or getEndOffset(element)
 	//  when corresponding element offset become available
-	private void addElementOffsetLater(@NotNull PsiElement element, boolean atStart)
+	private void addElementOffsetLater(@Nonnull PsiElement element, boolean atStart)
 	{
 		Map<PsiElement, TIntArrayList> offsetsAddElement = atStart ? offsetsAddElementStart : offsetsAddElementEnd;
 		TIntArrayList offsets = offsetsAddElement.get(element);
@@ -194,7 +194,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	}
 
 
-	private void patchInstructionOffsets(@NotNull PsiElement element)
+	private void patchInstructionOffsets(@Nonnull PsiElement element)
 	{
 		patchInstructionOffsets(offsetsAddElementStart.get(element), myCurrentFlow.getStartOffset(element));
 		offsetsAddElementStart.put(element, null);
@@ -202,7 +202,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		offsetsAddElementEnd.put(element, null);
 	}
 
-	private void patchInstructionOffsets(@Nullable TIntArrayList offsets, int add)
+	private void patchInstructionOffsets(@javax.annotation.Nullable TIntArrayList offsets, int add)
 	{
 		if(offsets == null)
 		{
@@ -240,7 +240,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	private void startElement(@NotNull PsiElement element)
+	private void startElement(@Nonnull PsiElement element)
 	{
 		for(PsiElement child = element.getFirstChild(); child != null; child = child.getNextSibling())
 		{
@@ -257,7 +257,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		generateUncheckedExceptionJumpsIfNeeded(element, true);
 	}
 
-	private void generateUncheckedExceptionJumpsIfNeeded(@NotNull PsiElement element, boolean atStart)
+	private void generateUncheckedExceptionJumpsIfNeeded(@Nonnull PsiElement element, boolean atStart)
 	{
 		// optimization: reduce number of instructions
 		boolean isGeneratingStatement = element instanceof PsiStatement && !(element instanceof PsiSwitchLabelStatement);
@@ -268,7 +268,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	private void finishElement(@NotNull PsiElement element)
+	private void finishElement(@Nonnull PsiElement element)
 	{
 		generateUncheckedExceptionJumpsIfNeeded(element, false);
 
@@ -277,7 +277,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	}
 
 
-	private void generateUncheckedExceptionJumps(@NotNull PsiElement element, boolean atStart)
+	private void generateUncheckedExceptionJumps(@Nonnull PsiElement element, boolean atStart)
 	{
 		// optimization: if we just generated all necessary jumps, do not generate it once again
 		if(atStart && element instanceof PsiStatement && element.getParent() instanceof PsiCodeBlock && element.getPrevSibling() != null)
@@ -322,7 +322,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	private void generateCheckedExceptionJumps(@NotNull PsiElement element)
+	private void generateCheckedExceptionJumps(@Nonnull PsiElement element)
 	{
 		//generate jumps to all handled exception handlers
 		Collection<PsiClassType> unhandledExceptions = ExceptionUtil.collectUnhandledExceptions(element, element.getParent());
@@ -333,7 +333,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	private void generateThrow(@NotNull PsiClassType unhandledException, @NotNull PsiElement throwingElement)
+	private void generateThrow(@Nonnull PsiClassType unhandledException, @Nonnull PsiElement throwingElement)
 	{
 		final List<PsiElement> catchBlocks = findThrowToBlocks(unhandledException);
 		for(PsiElement block : catchBlocks)
@@ -358,7 +358,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 
 	private final Map<PsiElement, List<PsiElement>> finallyBlockToUnhandledExceptions = new HashMap<PsiElement, List<PsiElement>>();
 
-	private boolean patchCheckedThrowInstructionIfInsideFinally(@NotNull ConditionalThrowToInstruction instruction, @NotNull PsiElement throwingElement, PsiElement elementToJumpTo)
+	private boolean patchCheckedThrowInstructionIfInsideFinally(@Nonnull ConditionalThrowToInstruction instruction, @Nonnull PsiElement throwingElement, PsiElement elementToJumpTo)
 	{
 		final PsiElement finallyBlock = findEnclosingFinallyBlockElement(throwingElement, elementToJumpTo);
 		if(finallyBlock == null)
@@ -385,7 +385,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		return true;
 	}
 
-	private boolean patchUncheckedThrowInstructionIfInsideFinally(@NotNull ConditionalThrowToInstruction instruction, @NotNull PsiElement throwingElement, @NotNull PsiElement elementToJumpTo)
+	private boolean patchUncheckedThrowInstructionIfInsideFinally(@Nonnull ConditionalThrowToInstruction instruction, @Nonnull PsiElement throwingElement, @Nonnull PsiElement elementToJumpTo)
 	{
 		final PsiElement finallyBlock = findEnclosingFinallyBlockElement(throwingElement, elementToJumpTo);
 		if(finallyBlock == null)
@@ -416,7 +416,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		registerSubRange(codeFragment, prevOffset);
 	}
 
-	private void registerSubRange(@NotNull PsiElement codeFragment, final int startOffset)
+	private void registerSubRange(@Nonnull PsiElement codeFragment, final int startOffset)
 	{
 		// cache child code block in hope it will be needed
 		ControlFlowSubRange flow = new ControlFlowSubRange(myCurrentFlow, startOffset, myCurrentFlow.getSize());
@@ -497,7 +497,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(statement);
 	}
 
-	private PsiElement findEnclosingFinallyBlockElement(@NotNull PsiElement sourceElement, @Nullable PsiElement jumpElement)
+	private PsiElement findEnclosingFinallyBlockElement(@Nonnull PsiElement sourceElement, @Nullable PsiElement jumpElement)
 	{
 		PsiElement element = sourceElement;
 		while(element != null && !(element instanceof PsiFile))
@@ -592,7 +592,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(statement);
 	}
 
-	private void processVariable(@NotNull PsiVariable element)
+	private void processVariable(@Nonnull PsiVariable element)
 	{
 		final PsiExpression initializer = element.getInitializer();
 		if(initializer != null)
@@ -832,7 +832,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(statement);
 	}
 
-	private void generateConditionalStatementInstructions(@NotNull PsiElement statement, @Nullable PsiExpression conditionExpression, final PsiElement thenBranch, final PsiElement elseBranch)
+	private void generateConditionalStatementInstructions(@Nonnull PsiElement statement, @Nullable PsiExpression conditionExpression, final PsiElement thenBranch, final PsiElement elseBranch)
 	{
 		if(thenBranch == null)
 		{
@@ -956,7 +956,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(statement);
 	}
 
-	private void addReturnInstruction(@NotNull PsiElement statement)
+	private void addReturnInstruction(@Nonnull PsiElement statement)
 	{
 		BranchingInstruction instruction;
 		final PsiElement finallyBlock = findEnclosingFinallyBlockElement(statement, null);
@@ -1117,8 +1117,8 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	 *
 	 * @return offset or -1 if not found
 	 */
-	@NotNull
-	private List<PsiElement> findThrowToBlocks(@NotNull PsiThrowStatement statement)
+	@Nonnull
+	private List<PsiElement> findThrowToBlocks(@Nonnull PsiThrowStatement statement)
 	{
 		final PsiExpression exceptionExpr = statement.getException();
 		if(exceptionExpr == null)
@@ -1133,8 +1133,8 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		return findThrowToBlocks((PsiClassType) throwType);
 	}
 
-	@NotNull
-	private List<PsiElement> findThrowToBlocks(@NotNull PsiClassType throwType)
+	@Nonnull
+	private List<PsiElement> findThrowToBlocks(@Nonnull PsiClassType throwType)
 	{
 		List<PsiElement> blocks = new ArrayList<PsiElement>();
 		for(int i = myCatchParameters.size() - 1; i >= 0; i--)
@@ -1674,7 +1674,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(expression);
 	}
 
-	private void generateLOperand(@NotNull PsiExpression lOperand, @Nullable PsiExpression rOperand, @NotNull IElementType signTokenType)
+	private void generateLOperand(@Nonnull PsiExpression lOperand, @Nullable PsiExpression rOperand, @Nonnull IElementType signTokenType)
 	{
 		if(rOperand != null)
 		{
@@ -1697,7 +1697,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	private static boolean isInsideIfCondition(@NotNull PsiExpression expression)
+	private static boolean isInsideIfCondition(@Nonnull PsiExpression expression)
 	{
 		PsiElement element = expression;
 		while(element instanceof PsiExpression)
@@ -1712,7 +1712,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		return false;
 	}
 
-	private boolean shouldCalculateConstantExpression(@NotNull PsiExpression expression)
+	private boolean shouldCalculateConstantExpression(@Nonnull PsiExpression expression)
 	{
 		return myEvaluateConstantIfCondition || !isInsideIfCondition(expression);
 	}
@@ -1723,7 +1723,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		visitChildren(expression);
 	}
 
-	private void visitChildren(@NotNull PsiElement element)
+	private void visitChildren(@Nonnull PsiElement element)
 	{
 		startElement(element);
 
@@ -1968,7 +1968,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		finishElement(aClass);
 	}
 
-	private void addUsedVariables(@NotNull List<PsiVariable> array, @NotNull PsiElement scope)
+	private void addUsedVariables(@Nonnull List<PsiVariable> array, @Nonnull PsiElement scope)
 	{
 		if(scope instanceof PsiReferenceExpression)
 		{
@@ -1990,20 +1990,20 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 	}
 
-	private void generateReadInstruction(@NotNull PsiVariable variable)
+	private void generateReadInstruction(@Nonnull PsiVariable variable)
 	{
 		Instruction instruction = new ReadVariableInstruction(variable);
 		myCurrentFlow.addInstruction(instruction);
 	}
 
-	private void generateWriteInstruction(@NotNull PsiVariable variable)
+	private void generateWriteInstruction(@Nonnull PsiVariable variable)
 	{
 		Instruction instruction = new WriteVariableInstruction(variable);
 		myCurrentFlow.addInstruction(instruction);
 	}
 
 	@Nullable
-	private PsiVariable getUsedVariable(@NotNull PsiReferenceExpression refExpr)
+	private PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr)
 	{
 		if(refExpr.getParent() instanceof PsiMethodCallExpression)
 		{

@@ -27,8 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.DummyHolder;
@@ -401,7 +401,7 @@ public class ControlFlowUtil {
     return codeFragment;
   }
 
-  private static boolean checkReferenceExpressionScope(final PsiReferenceExpression ref, @NotNull PsiElement targetClassMember) {
+  private static boolean checkReferenceExpressionScope(final PsiReferenceExpression ref, @Nonnull PsiElement targetClassMember) {
     final JavaResolveResult resolveResult = ref.advancedResolve(false);
     final PsiElement def = resolveResult.getElement();
     if (def != null) {
@@ -1166,7 +1166,7 @@ public class ControlFlowUtil {
       return newList;
     }
 
-    @NotNull
+    @Nonnull
     public List<VariableInfo> getList() {
       return list;
     }
@@ -1199,7 +1199,7 @@ public class ControlFlowUtil {
       return newList;
     }
 
-    public static CopyOnWriteList add(@Nullable CopyOnWriteList list, @NotNull VariableInfo value) {
+    public static CopyOnWriteList add(@javax.annotation.Nullable CopyOnWriteList list, @Nonnull VariableInfo value) {
       return list == null ? new CopyOnWriteList(value) : list.add(value);
     }
   }
@@ -1281,7 +1281,7 @@ public class ControlFlowUtil {
       merge(offset, readVars, readVariables);
     }
 
-    private static boolean isMethodParameter(@NotNull PsiVariable variable) {
+    private static boolean isMethodParameter(@Nonnull PsiVariable variable) {
       if (variable instanceof PsiParameter) {
         final PsiParameter parameter = (PsiParameter)variable;
         return !(parameter.getDeclarationScope() instanceof PsiForeachStatement);
@@ -1361,13 +1361,13 @@ public class ControlFlowUtil {
     return visitor.getResult().intValue();
   }
 
-  @NotNull
-  public static Collection<VariableInfo> getInitializedTwice(@NotNull ControlFlow flow) {
+  @Nonnull
+  public static Collection<VariableInfo> getInitializedTwice(@Nonnull ControlFlow flow) {
     return getInitializedTwice(flow, 0, flow.getSize());
   }
 
-  @NotNull
-  public static Collection<VariableInfo> getInitializedTwice(@NotNull ControlFlow flow, int startOffset, int endOffset) {
+  @Nonnull
+  public static Collection<VariableInfo> getInitializedTwice(@Nonnull ControlFlow flow, int startOffset, int endOffset) {
     InitializedTwiceClientVisitor visitor = new InitializedTwiceClientVisitor(flow, startOffset);
     depthFirstSearch(flow, visitor, startOffset, endOffset);
     return visitor.getResult();
@@ -1380,7 +1380,7 @@ public class ControlFlowUtil {
     private final ControlFlow myFlow;
     private final int myStartOffset;
 
-    public InitializedTwiceClientVisitor(@NotNull ControlFlow flow, final int startOffset) {
+    public InitializedTwiceClientVisitor(@Nonnull ControlFlow flow, final int startOffset) {
       myFlow = flow;
       myStartOffset = startOffset;
       writtenVariables = new CopyOnWriteList[myFlow.getSize() + 1];
@@ -1410,8 +1410,8 @@ public class ControlFlowUtil {
       merge(offset, writeTwiceVars, writtenTwiceVariables);
     }
 
-    @Nullable
-    private static PsiElement getExpression(@NotNull PsiElement element) {
+    @javax.annotation.Nullable
+    private static PsiElement getExpression(@Nonnull PsiElement element) {
       if (element instanceof PsiAssignmentExpression && ((PsiAssignmentExpression)element).getLExpression() instanceof PsiReferenceExpression) {
         return ((PsiAssignmentExpression)element).getLExpression();
       }
@@ -1428,8 +1428,8 @@ public class ControlFlowUtil {
       return null;
     }
 
-    @Nullable
-    private static PsiElement getLatestWriteVarExpression(@Nullable CopyOnWriteList writeVars, @Nullable PsiVariable variable) {
+    @javax.annotation.Nullable
+    private static PsiElement getLatestWriteVarExpression(@javax.annotation.Nullable CopyOnWriteList writeVars, @javax.annotation.Nullable PsiVariable variable) {
       if (writeVars == null) return null;
 
       for (final VariableInfo variableInfo : writeVars.getList()) {
@@ -1441,7 +1441,7 @@ public class ControlFlowUtil {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public Collection<VariableInfo> getResult() {
       final CopyOnWriteList writtenTwiceVariable = writtenTwiceVariables[myStartOffset];
       if (writtenTwiceVariable == null) return Collections.emptyList();

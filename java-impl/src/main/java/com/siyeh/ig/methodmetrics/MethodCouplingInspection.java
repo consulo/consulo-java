@@ -19,7 +19,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.util.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,19 +36,19 @@ public class MethodCouplingInspection extends MethodMetricInspection {
   public boolean m_includeLibraryClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyCoupledMethod";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.coupling.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer coupling = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -117,7 +117,7 @@ public class MethodCouplingInspection extends MethodMetricInspection {
   private class MethodCouplingVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

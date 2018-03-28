@@ -23,7 +23,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -308,7 +308,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
 		}
 
 		@Override
-		public int checkForProblems(@NotNull MemberInfo member)
+		public int checkForProblems(@Nonnull MemberInfo member)
 		{
 			if(member.isChecked())
 			{

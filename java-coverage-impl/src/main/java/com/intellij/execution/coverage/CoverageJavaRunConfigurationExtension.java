@@ -7,9 +7,9 @@ package com.intellij.execution.coverage;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.coverage.CoverageDataManager;
 import com.intellij.coverage.CoverageEngine;
 import com.intellij.coverage.CoverageRunner;
@@ -53,12 +53,12 @@ import consulo.java.execution.configurations.OwnJavaParameters;
  * Registers "Coverage" tab in Java run configurations
  */
 public class CoverageJavaRunConfigurationExtension extends RunConfigurationExtension {
-  public void attachToProcess(@NotNull final RunConfigurationBase configuration, @NotNull ProcessHandler handler, RunnerSettings runnerSettings) {
+  public void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull ProcessHandler handler, RunnerSettings runnerSettings) {
     CoverageDataManager.getInstance(configuration.getProject()).attachToProcess(handler, configuration, runnerSettings);
   }
 
-  @Nullable
-  public SettingsEditor createEditor(@NotNull RunConfigurationBase configuration) {
+  @javax.annotation.Nullable
+  public SettingsEditor createEditor(@Nonnull RunConfigurationBase configuration) {
     return new CoverageConfigurable(configuration);
   }
 
@@ -66,7 +66,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     return CoverageEngine.getEditorTitle();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getSerializationId() {
     return "coverage";
@@ -97,7 +97,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
   }
 
   @Override
-  public void readExternal(@NotNull final RunConfigurationBase runConfiguration, @NotNull Element element) throws InvalidDataException {
+  public void readExternal(@Nonnull final RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException {
      if (!isApplicableFor(runConfiguration)) {
       return;
     }
@@ -107,7 +107,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
   }
 
   @Override
-  public void writeExternal(@NotNull RunConfigurationBase runConfiguration, @NotNull Element element) throws WriteExternalException {
+  public void writeExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws WriteExternalException {
     if (!isApplicableFor(runConfiguration)) {
       return;
     }
@@ -116,7 +116,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
   }
 
   @Override
-  public void extendCreatedConfiguration(@NotNull RunConfigurationBase runJavaConfiguration, @NotNull Location location) {
+  public void extendCreatedConfiguration(@Nonnull RunConfigurationBase runJavaConfiguration, @Nonnull Location location) {
     final JavaCoverageEnabledConfiguration coverageEnabledConfiguration = JavaCoverageEnabledConfiguration.getFrom(runJavaConfiguration);
     assert coverageEnabledConfiguration != null;
     if (runJavaConfiguration instanceof CommonJavaRunConfigurationParameters) {
@@ -131,7 +131,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
   }
 
   @Override
-  public void validateConfiguration(@NotNull RunConfigurationBase runJavaConfiguration, boolean isExecution)
+  public void validateConfiguration(@Nonnull RunConfigurationBase runJavaConfiguration, boolean isExecution)
     throws RuntimeConfigurationException {
   }
 
@@ -181,7 +181,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     return listener;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String[] getFilters(JavaCoverageEnabledConfiguration coverageEnabledConfiguration) {
     final ClassFilter[] patterns = coverageEnabledConfiguration.getCoveragePatterns();
     if (patterns != null) {
@@ -218,7 +218,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     return false;
   }
 
-  protected boolean isApplicableFor(@NotNull final RunConfigurationBase configuration) {
+  protected boolean isApplicableFor(@Nonnull final RunConfigurationBase configuration) {
     return CoverageEnabledConfiguration.isApplicableTo(configuration);
   }
 

@@ -19,8 +19,9 @@ package com.intellij.codeInspection.dataFlow.value;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -29,16 +30,16 @@ public class DfaTypeValue extends DfaValue
 	public static class Factory
 	{
 		private final Map<DfaPsiType, ArrayList<DfaTypeValue>> myCache = ContainerUtil.newHashMap();
-		@NotNull
+		@Nonnull
 		private final DfaValueFactory myFactory;
 
-		Factory(@NotNull DfaValueFactory factory)
+		Factory(@Nonnull DfaValueFactory factory)
 		{
 			myFactory = factory;
 		}
 
-		@NotNull
-		DfaTypeValue createTypeValue(@NotNull DfaPsiType type, @NotNull Nullness nullness)
+		@Nonnull
+		DfaTypeValue createTypeValue(@Nonnull DfaPsiType type, @Nonnull Nullness nullness)
 		{
 			ArrayList<DfaTypeValue> conditions = myCache.get(type);
 			if(conditions == null)
@@ -64,19 +65,19 @@ public class DfaTypeValue extends DfaValue
 
 	}
 
-	@NotNull
+	@Nonnull
 	private final DfaPsiType myType;
-	@NotNull
+	@Nonnull
 	private final Nullness myNullness;
 
-	private DfaTypeValue(@NotNull DfaPsiType type, @NotNull Nullness nullness, @NotNull DfaValueFactory factory)
+	private DfaTypeValue(@Nonnull DfaPsiType type, @Nonnull Nullness nullness, @Nonnull DfaValueFactory factory)
 	{
 		super(factory);
 		myType = type;
 		myNullness = nullness;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaPsiType getDfaType()
 	{
 		return myType;
@@ -92,7 +93,7 @@ public class DfaTypeValue extends DfaValue
 		return myNullness == Nullness.NOT_NULL;
 	}
 
-	@NotNull
+	@Nonnull
 	public Nullness getNullness()
 	{
 		return myNullness;

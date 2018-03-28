@@ -15,13 +15,14 @@
  */
 package com.siyeh.ipp.opassign;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class ReplacePostfixExpressionWithAssignmentIntention
   extends MutablyNamedIntention {
@@ -38,14 +39,14 @@ public class ReplacePostfixExpressionWithAssignmentIntention
       signText, replacementText);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ReplacePostfixExpressionWithOperatorAssignmentPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiPostfixExpression postfixExpression =
       (PsiPostfixExpression)element;

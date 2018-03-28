@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.util.proximity;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -33,7 +34,7 @@ public class SamePsiMemberWeigher extends ProximityWeigher
 	private static final NotNullLazyKey<Boolean, ProximityLocation> INSIDE_PSI_MEMBER = NotNullLazyKey.create("insidePsiMember", new NotNullFunction<ProximityLocation, Boolean>()
 	{
 		@Override
-		@NotNull
+		@Nonnull
 		public Boolean fun(ProximityLocation proximityLocation)
 		{
 			return PsiTreeUtil.getContextOfType(proximityLocation.getPosition(), PsiMember.class, false) != null;
@@ -42,7 +43,7 @@ public class SamePsiMemberWeigher extends ProximityWeigher
 	private static final NotNullLazyKey<PsiElement, ProximityLocation> PHYSICAL_POSITION = NotNullLazyKey.create("physicalPosition", new NotNullFunction<ProximityLocation, PsiElement>()
 	{
 		@Override
-		@NotNull
+		@Nonnull
 		public PsiElement fun(ProximityLocation location)
 		{
 			PsiElement position = location.getPosition();
@@ -70,7 +71,7 @@ public class SamePsiMemberWeigher extends ProximityWeigher
 	});
 
 	@Override
-	public Comparable weigh(@NotNull final PsiElement element, @NotNull final ProximityLocation location)
+	public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location)
 	{
 		PsiElement position = location.getPosition();
 		if(position == null)

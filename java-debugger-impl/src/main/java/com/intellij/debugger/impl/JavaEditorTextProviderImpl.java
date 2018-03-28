@@ -25,7 +25,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -54,7 +53,7 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return result != null? new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, result) : null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiElement findExpression(PsiElement element) {
     PsiElement e = PsiTreeUtil.getParentOfType(element, PsiVariable.class, PsiExpression.class, PsiMethod.class);
     if (e instanceof PsiVariable) {
@@ -82,7 +81,7 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return e;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public Pair<PsiElement, TextRange> findExpression(PsiElement element, boolean allowMethodCalls) {
     if (!(element instanceof PsiIdentifier || element instanceof PsiKeyword)) {
       return null;
@@ -132,8 +131,8 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return null;
   }
 
-  @Nullable
-  private static String qualifyEnumConstant(PsiElement resolved, @Nullable String def) {
+  @javax.annotation.Nullable
+  private static String qualifyEnumConstant(PsiElement resolved, @javax.annotation.Nullable String def) {
     if (resolved instanceof PsiEnumConstant) {
       final PsiEnumConstant enumConstant = (PsiEnumConstant)resolved;
       final PsiClass enumClass = enumConstant.getContainingClass();

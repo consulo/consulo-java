@@ -37,7 +37,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +52,13 @@ public class DefUseInspection extends DefUseInspectionBase {
 
   private static class RemoveInitializerFix implements LocalQuickFix {
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.unused.assignment.remove.quickfix");
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement psiInitializer = descriptor.getPsiElement();
       if (!(psiInitializer instanceof PsiExpression)) return;
       if (!(psiInitializer.getParent() instanceof PsiVariable)) return;
@@ -94,7 +94,7 @@ public class DefUseInspection extends DefUseInspectionBase {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }

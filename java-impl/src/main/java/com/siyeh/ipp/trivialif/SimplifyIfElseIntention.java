@@ -22,17 +22,17 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ipp.psiutils.ConditionalUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 public class SimplifyIfElseIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new SimplifyIfElsePredicate();
   }
 
-  public void processIntention(@NotNull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiIfStatement statement = (PsiIfStatement)element.getParent();
     if (SimplifyIfElsePredicate.isSimplifiableAssignment(statement)) {

@@ -20,7 +20,7 @@
  */
 package com.intellij.codeInspection.reference;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
@@ -30,16 +30,16 @@ import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiType;
 
 public abstract class RefJavaUtil {
-  public abstract void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @Nullable PsiElement findIn);
+  public abstract void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @javax.annotation.Nullable PsiElement findIn);
 
   public abstract RefClass getTopLevelClass(RefElement refElement);
 
   public abstract boolean isInheritor(RefClass subClass, RefClass superClass);
 
-  @Nullable //default package name
+  @javax.annotation.Nullable //default package name
   public abstract String getPackageName(RefEntity refEntity);
 
-  @Nullable
+  @javax.annotation.Nullable
   public abstract RefClass getOwnerClass(RefManager refManager, PsiElement psiElement);
 
   @Nullable
@@ -61,7 +61,7 @@ public abstract class RefJavaUtil {
     return psiResolved instanceof PsiDocCommentOwner && ((PsiDocCommentOwner)psiResolved).isDeprecated();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static RefPackage getPackage(RefEntity refEntity) {
    while (refEntity != null && !(refEntity instanceof RefPackage)) refEntity = refEntity.getOwner();
 

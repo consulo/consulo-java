@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.numeric;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiExpression;
@@ -25,21 +27,19 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ConfusingFloatingPointLiteralInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "confusing.floating.point.literal.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "confusing.floating.point.literal.problem.descriptor");
@@ -53,7 +53,7 @@ public class ConfusingFloatingPointLiteralInspection
   private static class ConfusingFloatingPointLiteralFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "confusing.floating.point.literal.change.quickfix");
@@ -130,7 +130,7 @@ public class ConfusingFloatingPointLiteralInspection
 
     @Override
     public void visitLiteralExpression(
-      @NotNull PsiLiteralExpression literal) {
+      @Nonnull PsiLiteralExpression literal) {
       super.visitLiteralExpression(literal);
       final PsiType type = literal.getType();
       if (type == null) {
@@ -150,7 +150,7 @@ public class ConfusingFloatingPointLiteralInspection
     }
 
 
-    private static boolean isConfusing(@Nullable CharSequence text) {
+    private static boolean isConfusing(@javax.annotation.Nullable CharSequence text) {
       if (text == null) {
         return false;
       }

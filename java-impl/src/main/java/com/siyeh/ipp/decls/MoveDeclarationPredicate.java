@@ -15,16 +15,16 @@
  */
 package com.siyeh.ipp.decls;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 class MoveDeclarationPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@NotNull PsiElement element) {
+  public boolean satisfiedBy(@Nonnull PsiElement element) {
     if (!(element instanceof PsiLocalVariable)) {
       return false;
     }
@@ -71,9 +71,9 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     return !prevSibling.equals(variable.getParent());
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiElement getChildWhichContainsElement(
-    @NotNull PsiCodeBlock ancestor, @NotNull PsiElement descendant) {
+    @Nonnull PsiCodeBlock ancestor, @Nonnull PsiElement descendant) {
     PsiElement element = descendant;
     while (!element.equals(ancestor)) {
       descendant = element;
@@ -85,9 +85,9 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     return descendant;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiCodeBlock getTightestBlock(
-    @NotNull PsiReference[] references) {
+    @Nonnull PsiReference[] references) {
     PsiCodeBlock commonParentBlock = null;
     for (PsiReference reference : references) {
       final PsiElement referenceElement = reference.getElement();

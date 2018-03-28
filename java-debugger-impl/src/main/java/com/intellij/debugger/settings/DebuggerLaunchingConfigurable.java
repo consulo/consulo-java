@@ -17,6 +17,7 @@ package com.intellij.debugger.settings;
 
 import java.awt.BorderLayout;
 
+import javax.annotation.Nonnull;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -25,7 +26,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import consulo.java.debugger.apiAdapters.TransportClassDelegates;
 import com.intellij.openapi.options.ConfigurableUi;
@@ -40,7 +40,7 @@ class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
 	private JCheckBox myCbDisableJIT;
 
 	@Override
-	public void reset(@NotNull DebuggerSettings settings)
+	public void reset(@Nonnull DebuggerSettings settings)
 	{
 		Class<?> sharedMemoryTransportServiceClass = TransportClassDelegates.getSharedMemoryTransportServiceClass();
 
@@ -60,7 +60,7 @@ class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
 	}
 
 	@Override
-	public void apply(@NotNull DebuggerSettings settings)
+	public void apply(@Nonnull DebuggerSettings settings)
 	{
 		getSettingsTo(settings);
 	}
@@ -80,14 +80,14 @@ class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
 	}
 
 	@Override
-	public boolean isModified(@NotNull DebuggerSettings currentSettings)
+	public boolean isModified(@Nonnull DebuggerSettings currentSettings)
 	{
 		DebuggerSettings debuggerSettings = currentSettings.clone();
 		getSettingsTo(debuggerSettings);
 		return !debuggerSettings.equals(currentSettings);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{

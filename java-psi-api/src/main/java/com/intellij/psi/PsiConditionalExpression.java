@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java conditional expression (for example, <code>a ? 1 : 2</code>.
@@ -27,7 +27,7 @@ public interface PsiConditionalExpression extends PsiExpression {
    *
    * @return the condition expression.
    */
-  @NotNull
+  @Nonnull
   PsiExpression getCondition();
 
   /**
@@ -35,7 +35,7 @@ public interface PsiConditionalExpression extends PsiExpression {
    *
    * @return the true result expression, or null if the conditional expression is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getThenExpression();
 
   /**

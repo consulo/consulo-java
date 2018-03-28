@@ -15,11 +15,11 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface PsiAnnotatedJavaCodeReferenceElement extends PsiJavaCodeReferenceElement
 {
-	@NotNull
+	@Nonnull
 	String getCanonicalText(boolean annotated, @Nullable PsiAnnotation[] annotations);
 }

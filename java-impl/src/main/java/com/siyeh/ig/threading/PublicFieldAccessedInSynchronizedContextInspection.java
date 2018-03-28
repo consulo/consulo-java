@@ -15,26 +15,27 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SynchronizationUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class PublicFieldAccessedInSynchronizedContextInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("public.field.accessed.in.synchronized.context.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "NonPrivateFieldAccessedInSynchronizedContext";
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("public.field.accessed.in.synchronized.context.problem.descriptor");
   }
@@ -46,7 +47,7 @@ public class PublicFieldAccessedInSynchronizedContextInspection extends BaseInsp
   private static class PublicFieldAccessedInSynchronizedContextVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@NotNull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
       final PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier != null && !(qualifier instanceof PsiThisExpression) && !(qualifier instanceof PsiSuperExpression)) {
         return;

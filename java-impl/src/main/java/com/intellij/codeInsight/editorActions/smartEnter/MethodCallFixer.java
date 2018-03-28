@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiCallExpression;
@@ -109,7 +108,7 @@ public class MethodCallFixer implements Fixer
 		return parenth != null && ")".equals(parenth.getText());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static Integer getUnambiguousParameterCount(PsiCallExpression call)
 	{
 		int argCount = -1;

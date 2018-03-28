@@ -17,7 +17,7 @@ package com.intellij.util.xml.actions;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -101,7 +101,7 @@ public abstract class CreateClassMappingAction<T extends DomElement> extends Cre
 
   protected abstract DomElement createElement(T context);
 
-  @Nullable
+  @javax.annotation.Nullable
   protected PsiClass getBaseClass(T context, Project project, String baseClass) {
     return baseClass == null ? null : JavaPsiFacade.getInstance(project).findClass(baseClass, GlobalSearchScope.allScope(project));
   }

@@ -15,10 +15,12 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * Represents the list of import statements contained in a Java or JSP file.
@@ -28,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public interface PsiImportList extends PsiElement {
   PsiImportList[] EMPTY_ARRAY = new PsiImportList[0];
   ArrayFactory<PsiImportList> ARRAY_FACTORY = new ArrayFactory<PsiImportList>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiImportList[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportList[count];
@@ -40,21 +42,24 @@ public interface PsiImportList extends PsiElement {
    *
    * @return the array of non-static import statements.
    */
-  @NotNull PsiImportStatement[] getImportStatements();
+  @Nonnull
+  PsiImportStatement[] getImportStatements();
 
   /**
    * Returns the static import statements contained in the list.
    *
    * @return the array of static import statements.
    */
-  @NotNull PsiImportStaticStatement[] getImportStaticStatements();
+  @Nonnull
+  PsiImportStaticStatement[] getImportStaticStatements();
 
   /**
    * Returns all import statements contained in the list.
    *
    * @return the array of import statements.
    */
-  @NotNull PsiImportStatementBase[] getAllImportStatements();
+  @Nonnull
+  PsiImportStatementBase[] getAllImportStatements();
 
   /**
    * Searches the list for a single-class import statement importing the specified class.
@@ -62,7 +67,7 @@ public interface PsiImportList extends PsiElement {
    * @param qName the full-qualified name of the imported class.
    * @return the import statement, or null if one was not found.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiImportStatement findSingleClassImportStatement(String qName);
 
   /**
@@ -71,7 +76,7 @@ public interface PsiImportList extends PsiElement {
    * @param packageName the name of the imported package.
    * @return the import statement, or null if one was not found.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiImportStatement findOnDemandImportStatement(@NonNls String packageName);
 
   /**

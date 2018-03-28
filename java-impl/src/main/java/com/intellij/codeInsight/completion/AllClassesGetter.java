@@ -20,7 +20,8 @@ import gnu.trove.THashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -170,10 +171,10 @@ public class AllClassesGetter
 		}
 	};
 
-	public static void processJavaClasses(@NotNull final CompletionParameters parameters,
-			@NotNull final PrefixMatcher prefixMatcher,
+	public static void processJavaClasses(@Nonnull final CompletionParameters parameters,
+			@Nonnull final PrefixMatcher prefixMatcher,
 			final boolean filterByScope,
-			@NotNull final Consumer<PsiClass> consumer)
+			@Nonnull final Consumer<PsiClass> consumer)
 	{
 		final PsiElement context = parameters.getPosition();
 		final Project project = context.getProject();
@@ -182,7 +183,7 @@ public class AllClassesGetter
 		processJavaClasses(prefixMatcher, project, scope, new LimitedAccessibleClassPreprocessor(parameters, filterByScope, consumer));
 	}
 
-	public static void processJavaClasses(@NotNull final PrefixMatcher prefixMatcher, @NotNull Project project, @NotNull GlobalSearchScope scope, @NotNull Processor<PsiClass> processor)
+	public static void processJavaClasses(@Nonnull final PrefixMatcher prefixMatcher, @Nonnull Project project, @Nonnull GlobalSearchScope scope, @Nonnull Processor<PsiClass> processor)
 	{
 		final Set<String> names = new THashSet<>(10000);
 		AllClassesSearchExecutor.processClassNames(project, scope, s ->
@@ -196,7 +197,7 @@ public class AllClassesGetter
 		AllClassesSearchExecutor.processClassesByNames(project, scope, sorted, processor);
 	}
 
-	public static boolean isAcceptableInContext(@NotNull final PsiElement context, @NotNull final PsiClass psiClass, final boolean filterByScope, final boolean pkgContext)
+	public static boolean isAcceptableInContext(@Nonnull final PsiElement context, @Nonnull final PsiClass psiClass, final boolean filterByScope, final boolean pkgContext)
 	{
 		ProgressManager.checkCanceled();
 
@@ -219,7 +220,7 @@ public class AllClassesGetter
 		return JavaCompletionUtil.isSourceLevelAccessible(context, psiClass, pkgContext);
 	}
 
-	public static JavaPsiClassReferenceElement createLookupItem(@NotNull final PsiClass psiClass, final InsertHandler<JavaPsiClassReferenceElement> insertHandler)
+	public static JavaPsiClassReferenceElement createLookupItem(@Nonnull final PsiClass psiClass, final InsertHandler<JavaPsiClassReferenceElement> insertHandler)
 	{
 		final JavaPsiClassReferenceElement item = new JavaPsiClassReferenceElement(psiClass);
 		item.setInsertHandler(insertHandler);

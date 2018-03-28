@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.util.Condition;
@@ -46,14 +46,14 @@ public class MethodMayBeStaticInspection extends BaseInspection
 	public boolean m_ignoreEmptyMethods = true;
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("method.may.be.static.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("method.may.be.static.problem.descriptor");
@@ -84,7 +84,7 @@ public class MethodMayBeStaticInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitMethod(@NotNull PsiMethod method)
+		public void visitMethod(@Nonnull PsiMethod method)
 		{
 			super.visitMethod(method);
 			if(method.hasModifierProperty(PsiModifier.STATIC) ||

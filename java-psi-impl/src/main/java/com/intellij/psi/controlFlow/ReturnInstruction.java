@@ -15,8 +15,9 @@
  */
 package com.intellij.psi.controlFlow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
-import org.jetbrains.annotations.NotNull;
 
 
 public class ReturnInstruction extends GoToInstruction {
@@ -26,7 +27,7 @@ public class ReturnInstruction extends GoToInstruction {
   private CallInstruction myCallInstruction;
   private boolean myRethrowFromFinally = false;
 
-  public ReturnInstruction(int offset, @NotNull ControlFlowStack stack, CallInstruction callInstruction) {
+  public ReturnInstruction(int offset, @Nonnull ControlFlowStack stack, CallInstruction callInstruction) {
     super(offset, Role.END, false);
     myStack = stack;
     myCallInstruction = callInstruction;

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine.evaluation;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -34,14 +34,14 @@ public final class EvaluationContextImpl implements EvaluationContext
 	private boolean myAutoLoadClasses = true;
 	private ClassLoaderReference myClassLoader;
 
-	public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, @Nullable Value thisObject)
+	public EvaluationContextImpl(@Nonnull SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, @javax.annotation.Nullable Value thisObject)
 	{
 		myThisObject = NullableLazyValue.of(() -> thisObject);
 		myFrameProxy = frameProxy;
 		mySuspendContext = suspendContext;
 	}
 
-	public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext, @NotNull StackFrameProxyImpl frameProxy)
+	public EvaluationContextImpl(@Nonnull SuspendContextImpl suspendContext, @Nonnull StackFrameProxyImpl frameProxy)
 	{
 		myThisObject = NullableLazyValue.of(() ->
 		{
@@ -58,14 +58,14 @@ public final class EvaluationContextImpl implements EvaluationContext
 		mySuspendContext = suspendContext;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Value getThisObject()
 	{
 		return myThisObject.getValue();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SuspendContextImpl getSuspendContext()
 	{
@@ -78,7 +78,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return myFrameProxy;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DebugProcessImpl getDebugProcess()
 	{
@@ -105,7 +105,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return copy;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public ClassLoaderReference getClassLoader() throws EvaluateException
 	{

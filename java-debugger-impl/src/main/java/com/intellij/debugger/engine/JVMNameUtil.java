@@ -18,8 +18,8 @@ package com.intellij.debugger.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.SourcePosition;
@@ -150,7 +150,7 @@ public class JVMNameUtil
 	{
 		private final List<JVMName> myList = new ArrayList<JVMName>();
 
-		public void append(@NotNull JVMName evaluator)
+		public void append(@Nonnull JVMName evaluator)
 		{
 			myList.add(evaluator);
 		}
@@ -333,7 +333,7 @@ public class JVMNameUtil
 		}
 	}
 
-	public static JVMName getJVMQualifiedName(@NotNull PsiClass psiClass)
+	public static JVMName getJVMQualifiedName(@Nonnull PsiClass psiClass)
 	{
 		final String name = getNonAnonymousClassName(psiClass);
 		if(name != null)
@@ -392,13 +392,13 @@ public class JVMNameUtil
 		return getJVMSignature(method, true, declaringClass);
 	}
 
-	public static JVMName getJVMSignature(@NotNull PsiMethod method)
+	public static JVMName getJVMSignature(@Nonnull PsiMethod method)
 	{
 		return getJVMSignature(method, method.isConstructor(), method.getContainingClass());
 	}
 
-	@NotNull
-	public static String getJVMMethodName(@NotNull PsiMethod method)
+	@Nonnull
+	public static String getJVMMethodName(@Nonnull PsiMethod method)
 	{
 		return method.isConstructor() ? CONSTRUCTOR_NAME : method.getName();
 	}
@@ -443,7 +443,7 @@ public class JVMNameUtil
 		return signature.toName();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass getClassAt(@Nullable SourcePosition position)
 	{
 		if(position == null)

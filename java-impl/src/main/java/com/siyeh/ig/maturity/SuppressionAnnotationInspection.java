@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.maturity;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.SuppressManager;
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.psi.JavaTokenType;
@@ -26,17 +28,16 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class SuppressionAnnotationInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "inspection.suppression.annotation.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "inspection.suppression.annotation.problem.descriptor");

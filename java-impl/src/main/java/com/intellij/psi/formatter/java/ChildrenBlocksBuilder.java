@@ -18,7 +18,8 @@ package com.intellij.psi.formatter.java;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
@@ -99,7 +100,7 @@ public class ChildrenBlocksBuilder
 			return this;
 		}
 
-		public Config setAlignment(@NotNull IElementType elementType, @NotNull Alignment alignment)
+		public Config setAlignment(@Nonnull IElementType elementType, @Nonnull Alignment alignment)
 		{
 			myAlignments.put(elementType, alignment);
 			return this;

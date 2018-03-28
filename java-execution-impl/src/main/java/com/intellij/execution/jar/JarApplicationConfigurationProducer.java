@@ -15,7 +15,6 @@
  */
 package com.intellij.execution.jar;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.Location;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
@@ -48,7 +47,7 @@ public class JarApplicationConfigurationProducer extends RunConfigurationProduce
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static VirtualFile getJarFileFromContext(ConfigurationContext context)
 	{
 		Location location = context.getLocation();

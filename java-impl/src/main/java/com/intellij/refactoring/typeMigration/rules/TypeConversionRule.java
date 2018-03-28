@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.typeMigration.rules;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiExpression;

@@ -15,10 +15,10 @@
  */
 package com.intellij.psi.ref;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -35,12 +35,12 @@ public class AnnotationChildLink extends PsiChildLink<PsiModifierListOwner, PsiA
     return myAnnoFqn;
   }
 
-  public static PsiElementRef<PsiAnnotation> createRef(@NotNull PsiModifierListOwner parent, @NonNls String fqn) {
+  public static PsiElementRef<PsiAnnotation> createRef(@Nonnull PsiModifierListOwner parent, @NonNls String fqn) {
     return new AnnotationChildLink(fqn).createChildRef(parent);
   }
 
   @Override
-  public PsiAnnotation findLinkedChild(@Nullable PsiModifierListOwner member) {
+  public PsiAnnotation findLinkedChild(@javax.annotation.Nullable PsiModifierListOwner member) {
     if (member == null) return null;
 
     final PsiModifierList modifierList = member.getModifierList();
@@ -48,8 +48,8 @@ public class AnnotationChildLink extends PsiChildLink<PsiModifierListOwner, PsiA
   }
 
   @Override
-  @NotNull
-  public PsiAnnotation createChild(@NotNull PsiModifierListOwner member) throws IncorrectOperationException {
+  @Nonnull
+  public PsiAnnotation createChild(@Nonnull PsiModifierListOwner member) throws IncorrectOperationException {
     final PsiModifierList modifierList = member.getModifierList();
     assert modifierList != null;
     return modifierList.addAnnotation(myAnnoFqn);

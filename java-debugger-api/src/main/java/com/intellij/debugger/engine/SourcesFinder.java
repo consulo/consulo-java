@@ -17,7 +17,7 @@ package com.intellij.debugger.engine;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev

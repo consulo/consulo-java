@@ -31,8 +31,8 @@ import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.util.IncorrectOperationException;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool{
   public boolean IGNORE_BUILDER_PATTERN = false;
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
                                                 AnalysisScope scope,
                                                 InspectionManager manager,
@@ -78,7 +78,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool{
   }
 
   @Override
-  public void writeSettings(@NotNull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     if (IGNORE_BUILDER_PATTERN) {
       super.writeSettings(node);
     }
@@ -93,10 +93,10 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool{
   protected boolean queryExternalUsagesRequests(final RefManager manager, final GlobalJavaInspectionContext globalContext,
                                                 final ProblemDescriptionsProcessor processor) {
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@NotNull RefEntity refEntity) {
+      @Override public void visitElement(@Nonnull RefEntity refEntity) {
         if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
           refEntity.accept(new RefJavaVisitor() {
-            @Override public void visitMethod(@NotNull final RefMethod refMethod) {
+            @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
               globalContext.enqueueMethodUsagesProcessor(refMethod, new GlobalJavaInspectionContext.UsagesProcessor() {
                 @Override
                 public boolean process(PsiReference psiReference) {
@@ -114,19 +114,19 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool{
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.unused.return.value.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "UnusedReturnValue";
   }
@@ -153,13 +153,13 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool{
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.unused.return.value.make.void.quickfix");
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiMethod psiMethod = null;
       if (myProcessor != null) {
         RefElement refElement = (RefElement)myProcessor.getElement(descriptor);
@@ -175,12 +175,12 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool{
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
-    private static void makeMethodHierarchyVoid(Project project, @NotNull PsiMethod psiMethod) {
+    private static void makeMethodHierarchyVoid(Project project, @Nonnull PsiMethod psiMethod) {
       replaceReturnStatements(psiMethod);
       for (final PsiMethod oMethod : OverridingMethodsSearch.search(psiMethod)) {
         replaceReturnStatements(oMethod);
@@ -201,7 +201,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool{
       csp.run();
     }
 
-    private static void replaceReturnStatements(@NotNull final PsiMethod method) {
+    private static void replaceReturnStatements(@Nonnull final PsiMethod method) {
       final PsiCodeBlock body = method.getBody();
       if (body != null) {
         final List<PsiReturnStatement> returnStatements = new ArrayList<PsiReturnStatement>();

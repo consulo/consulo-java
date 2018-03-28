@@ -30,8 +30,8 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.rename.inplace.VariableInplaceRenamer;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -134,7 +134,7 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
     }
   }
 
-  private static boolean canBeDeclaredFinal(@NotNull final PsiVariable variable, @Nullable final PsiElement scope) {
+  private static boolean canBeDeclaredFinal(@Nonnull final PsiVariable variable, @Nullable final PsiElement scope) {
     if (scope == null) {
       return false;
     }

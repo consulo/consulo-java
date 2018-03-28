@@ -17,8 +17,8 @@ package com.intellij.refactoring.extractMethodObject;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -79,8 +79,8 @@ public class ExtractLightMethodObjectHandler
 
 	@Nullable
 	public static ExtractedData extractLightMethodObject(final Project project,
-			@Nullable PsiElement originalContext,
-			@NotNull final PsiCodeFragment fragment,
+			@javax.annotation.Nullable PsiElement originalContext,
+			@Nonnull final PsiCodeFragment fragment,
 			final String methodName) throws PrepareFailedException
 	{
 		final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
@@ -280,7 +280,7 @@ public class ExtractLightMethodObjectHandler
 		return new ExtractedData(generatedCall, (PsiClass) CodeStyleManager.getInstance(project).reformat(extractMethodObjectProcessor.getInnerClass()), originalAnchor);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiElement[] completeToStatementArray(PsiCodeFragment fragment, PsiElementFactory elementFactory)
 	{
 		PsiExpression expression = CodeInsightUtil.findExpressionInRange(fragment, 0, fragment.getTextLength());

@@ -28,7 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ImportUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,14 +39,14 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
   public boolean ignoreReferencesNeedingImport = false;
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessarily.qualified.inner.class.access.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
@@ -71,7 +71,7 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
   private static class UnnecessarilyQualifiedInnerClassAccessFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessarily.qualified.inner.class.access.quickfix");

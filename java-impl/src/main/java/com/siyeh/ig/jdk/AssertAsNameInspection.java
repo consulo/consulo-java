@@ -15,31 +15,32 @@
  */
 package com.siyeh.ig.jdk;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
 
 public class AssertAsNameInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "AssertAsIdentifier";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.assert.as.identifier.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.assert.as.identifier.problem.descriptor");
@@ -63,7 +64,7 @@ public class AssertAsNameInspection extends BaseInspection {
   private static class AssertAsNameVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final String variableName = variable.getName();
       if (!PsiKeyword.ASSERT.equals(variableName)) {
@@ -73,7 +74,7 @@ public class AssertAsNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       final String name = method.getName();
       if (!PsiKeyword.ASSERT.equals(name)) {
@@ -83,7 +84,7 @@ public class AssertAsNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       //note: no call to super, to avoid drill-down
       final String name = aClass.getName();
       if (!PsiKeyword.ASSERT.equals(name)) {

@@ -21,9 +21,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.JavaTestConfigurationBase;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.configurations.ConfigurationType;
@@ -45,10 +45,10 @@ import consulo.annotations.RequiredDispatchThread;
 
 public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction
 {
-	@NotNull
+	@Nonnull
 	protected abstract AbstractPatternBasedConfigurationProducer<T> getPatternBasedProducer();
 
-	@NotNull
+	@Nonnull
 	protected abstract ConfigurationType getConfigurationType();
 
 	protected abstract boolean isPatternBasedConfiguration(T configuration);
@@ -94,7 +94,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
 					return configuration.getIcon();
 				}
 
-				@NotNull
+				@Nonnull
 				@Override
 				public String getTextFor(T value)
 				{

@@ -17,7 +17,8 @@ package com.intellij.psi.scope.processor;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.JavaResolveResult;
 import com.intellij.psi.PsiElement;
@@ -45,10 +46,10 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	protected final PsiFile myPlaceFile;
 
 	public ConflictFilterProcessor(String name,
-			@NotNull ElementFilter filter,
-			@NotNull PsiConflictResolver[] resolvers,
-			@NotNull List<CandidateInfo> container,
-			@NotNull PsiElement place,
+			@Nonnull ElementFilter filter,
+			@Nonnull PsiConflictResolver[] resolvers,
+			@Nonnull List<CandidateInfo> container,
+			@Nonnull PsiElement place,
 			PsiFile placeFile)
 	{
 		super(filter, container);
@@ -59,7 +60,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	}
 
 	@Override
-	public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		JavaResolveResult[] cachedResult = myCachedResult;
 		if(cachedResult != null && cachedResult.length == 1 && cachedResult[0].isAccessible())
@@ -74,7 +75,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	}
 
 	@Override
-	protected void add(@NotNull PsiElement element, @NotNull PsiSubstitutor substitutor)
+	protected void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor)
 	{
 		add(new CandidateInfo(element, substitutor));
 	}
@@ -86,7 +87,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	}
 
 	@Override
-	public void handleEvent(@NotNull PsiScopeProcessor.Event event, Object associated)
+	public void handleEvent(@Nonnull PsiScopeProcessor.Event event, Object associated)
 	{
 		if(event == JavaScopeProcessorEvent.CHANGE_LEVEL && myName != null)
 		{
@@ -94,7 +95,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public JavaResolveResult[] getResult()
 	{
 		JavaResolveResult[] cachedResult = myCachedResult;
@@ -121,7 +122,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	}
 
 	@Override
-	public String getName(@NotNull ResolveState state)
+	public String getName(@Nonnull ResolveState state)
 	{
 		return myName;
 	}
@@ -132,7 +133,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	}
 
 	@Override
-	public <T> T getHint(@NotNull Key<T> hintKey)
+	public <T> T getHint(@Nonnull Key<T> hintKey)
 	{
 		if(hintKey == NameHint.KEY)
 		{

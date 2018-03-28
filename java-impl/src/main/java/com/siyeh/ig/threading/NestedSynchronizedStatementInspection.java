@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiSynchronizedStatement;
@@ -22,17 +24,16 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class NestedSynchronizedStatementInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "nested.synchronized.statement.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "nested.synchronized.statement.problem.descriptor");
@@ -47,7 +48,7 @@ public class NestedSynchronizedStatementInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @NotNull PsiSynchronizedStatement statement) {
+      @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiElement containingSynchronizedStatement =
         PsiTreeUtil.getParentOfType(statement,

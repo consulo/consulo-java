@@ -26,8 +26,8 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementEditorPredicate;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.PsiSelectionSearcher;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class FlipSetterCallIntention extends Intention {
 
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final Project project = element.getProject();
     final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
     if (editor != null) {
@@ -55,7 +55,7 @@ public class FlipSetterCallIntention extends Intention {
     }
   }
 
-  @NotNull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new SetterCallPredicate();
   }

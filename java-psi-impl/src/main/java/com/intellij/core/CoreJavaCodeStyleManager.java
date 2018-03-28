@@ -26,20 +26,19 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
 public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
   @Override
-  public boolean addImport(@NotNull PsiJavaFile file, @NotNull PsiClass refClass) {
+  public boolean addImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass refClass) {
     return false;
   }
 
   @Override
-  public PsiElement shortenClassReferences(@NotNull PsiElement element,
+  public PsiElement shortenClassReferences(@Nonnull PsiElement element,
                                            @MagicConstant(flags = {DO_NOT_ADD_IMPORTS,
                                                    INCOMPLETE_CODE
                                            }) int flags)
@@ -47,46 +46,46 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getPrefixByVariableKind(VariableKind variableKind) {
     return "";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getSuffixByVariableKind(VariableKind variableKind) {
     return "";
   }
 
   @Override
-  public int findEntryIndex(@NotNull PsiImportStatementBase statement) {
+  public int findEntryIndex(@Nonnull PsiImportStatementBase statement) {
     return 0;
   }
 
   @Override
-  public PsiElement shortenClassReferences(@NotNull PsiElement element) throws IncorrectOperationException {
+  public PsiElement shortenClassReferences(@Nonnull PsiElement element) throws IncorrectOperationException {
     return null;
   }
 
   @Override
-  public void shortenClassReferences(@NotNull PsiElement element, int startOffset, int endOffset) throws IncorrectOperationException {
+  public void shortenClassReferences(@Nonnull PsiElement element, int startOffset, int endOffset) throws IncorrectOperationException {
   }
 
   @Override
-  public void optimizeImports(@NotNull PsiFile file) throws IncorrectOperationException {
+  public void optimizeImports(@Nonnull PsiFile file) throws IncorrectOperationException {
   }
 
   @Override
-  public PsiImportList prepareOptimizeImportsResult(@NotNull PsiJavaFile file) {
+  public PsiImportList prepareOptimizeImportsResult(@Nonnull PsiJavaFile file) {
     return null;
   }
 
   @Override
-  public SuggestedNameInfo suggestVariableName(@NotNull VariableKind kind,
-                                               @Nullable String propertyName,
-                                               @Nullable PsiExpression expr,
-                                               @Nullable PsiType type,
+  public SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind,
+                                               @javax.annotation.Nullable String propertyName,
+                                               @javax.annotation.Nullable PsiExpression expr,
+                                               @javax.annotation.Nullable PsiType type,
                                                boolean correctKeywords) {
     return SuggestedNameInfo.NULL_INFO;
   }
@@ -147,9 +146,9 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public SuggestedNameInfo suggestUniqueVariableName(@NotNull final SuggestedNameInfo baseNameInfo,
+  public SuggestedNameInfo suggestUniqueVariableName(@Nonnull final SuggestedNameInfo baseNameInfo,
                                                      PsiElement place,
                                                      boolean ignorePlaceName,
                                                      boolean lookForward) {
@@ -175,12 +174,12 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
   }
 
   @Override
-  public PsiElement qualifyClassReferences(@NotNull PsiElement element) {
+  public PsiElement qualifyClassReferences(@Nonnull PsiElement element) {
     return element;
   }
 
   @Override
-  public void removeRedundantImports(@NotNull PsiJavaFile file) throws IncorrectOperationException {
+  public void removeRedundantImports(@Nonnull PsiJavaFile file) throws IncorrectOperationException {
   }
 
   @Override

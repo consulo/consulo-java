@@ -29,18 +29,18 @@ import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class StringEqualsEmptyStringInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.equals.empty.string.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final boolean useIsEmpty = ((Boolean)infos[0]).booleanValue();
     if (useIsEmpty) {
@@ -64,7 +64,7 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
       this.useIsEmpty = useIsEmpty;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       if (useIsEmpty) {
         return InspectionGadgetsBundle.message("string.equals.empty.string.isempty.quickfix");
@@ -174,7 +174,7 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
   private static class StringEqualsEmptyStringVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiReferenceExpression methodExpression = call.getMethodExpression();
       @NonNls final String methodName = methodExpression.getReferenceName();

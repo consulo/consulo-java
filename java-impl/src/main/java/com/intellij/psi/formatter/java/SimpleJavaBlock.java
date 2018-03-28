@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
@@ -120,7 +121,7 @@ public class SimpleJavaBlock extends AbstractJavaBlock
 		}
 	}
 
-	private void processHeadCommentsAndWhiteSpaces(@NotNull List<Block> result)
+	private void processHeadCommentsAndWhiteSpaces(@Nonnull List<Block> result)
 	{
 		while(myCurrentChild != null)
 		{
@@ -140,20 +141,20 @@ public class SimpleJavaBlock extends AbstractJavaBlock
 		}
 	}
 
-	private static boolean isNotEmptyNode(@NotNull ASTNode child)
+	private static boolean isNotEmptyNode(@Nonnull ASTNode child)
 	{
 		return !FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TextRange getTextRange()
 	{
 		return myStartOffset == -1 ? super.getTextRange() : new TextRange(myStartOffset, myStartOffset + myNode.getTextLength());
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		if(myNode.getElementType() == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION)

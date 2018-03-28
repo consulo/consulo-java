@@ -15,9 +15,9 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ArrayFactory;
@@ -34,14 +34,14 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
   PsiJavaPackage[] EMPTY_ARRAY = new PsiJavaPackage[0];
 
   ArrayFactory<PsiJavaPackage> ARRAY_FACTORY = new ArrayFactory<PsiJavaPackage>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiJavaPackage[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiJavaPackage[count];
     }
   };
 
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaPackage getParentPackage();
 
   /**
@@ -49,7 +49,7 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
    *
    * @return the array of subpackages.
    */
-  @NotNull
+  @Nonnull
   PsiJavaPackage[] getSubPackages();
 
   /**
@@ -58,15 +58,15 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
    * @param scope the scope in which packages are searched.
    * @return the array of subpackages.
    */
-  @NotNull
-  PsiJavaPackage[] getSubPackages(@NotNull GlobalSearchScope scope);
+  @Nonnull
+  PsiJavaPackage[] getSubPackages(@Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the list of classes in all directories corresponding to the package.
    *
    * @return the array of classes.
    */
-  @NotNull
+  @Nonnull
   PsiClass[] getClasses();
 
   /**
@@ -76,8 +76,8 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
    * @param scope the scope in which directories are searched.
    * @return the array of classes.
    */
-  @NotNull
-  PsiClass[] getClasses(@NotNull GlobalSearchScope scope);
+  @Nonnull
+  PsiClass[] getClasses(@Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the list of package-level annotations for the package.
@@ -85,7 +85,7 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
    * @return the list of annotations, or null if the package does not have any package-level annotations.
    * @since 5.1
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiModifierList getAnnotationList();
 
   /**
@@ -97,6 +97,6 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
 
   boolean containsClassNamed(String name);
 
-  @NotNull
-  PsiClass[] findClassByShortName(@NotNull String name, @NotNull GlobalSearchScope scope);
+  @Nonnull
+  PsiClass[] findClassByShortName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
 }

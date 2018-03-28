@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.impl.LibraryScopeCache;
@@ -38,7 +40,7 @@ public class TypeMigrationRules
 	private final Project myProject;
 	private SearchScope mySearchScope;
 
-	public TypeMigrationRules(@NotNull Project project)
+	public TypeMigrationRules(@Nonnull Project project)
 	{
 		myProject = project;
 		final TypeConversionRule[] extensions = Extensions.getExtensions(TypeConversionRule.EP_NAME);
@@ -116,7 +118,7 @@ public class TypeMigrationRules
 		return myConversionRules.stream().anyMatch(rule -> rule.shouldConvertNullInitializer(from, to, context));
 	}
 
-	public void setBoundScope(@NotNull SearchScope searchScope)
+	public void setBoundScope(@Nonnull SearchScope searchScope)
 	{
 		mySearchScope = searchScope.intersectWith(GlobalSearchScope.notScope(LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope()));
 	}

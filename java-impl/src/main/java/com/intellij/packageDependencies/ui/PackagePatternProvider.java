@@ -22,11 +22,12 @@ package com.intellij.packageDependencies.ui;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.scopeChooser.GroupByScopeTypeAction;
@@ -133,7 +134,7 @@ public class PackagePatternProvider extends PatternDialectProvider {
     return IdeBundle.message("title.packages");
   }
 
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return PACKAGES;
   }

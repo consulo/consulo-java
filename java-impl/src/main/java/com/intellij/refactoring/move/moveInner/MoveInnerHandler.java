@@ -15,13 +15,14 @@
  */
 package com.intellij.refactoring.move.moveInner;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.LanguageExtension;
 import com.intellij.psi.PsiClass;
 
 public interface MoveInnerHandler {
   LanguageExtension<MoveInnerHandler> EP_NAME = new LanguageExtension<MoveInnerHandler>("consulo.java.refactoring.moveInnerHandler");
 
-  @NotNull
-  PsiClass copyClass(@NotNull MoveInnerOptions options);
+  @Nonnull
+  PsiClass copyClass(@Nonnull MoveInnerOptions options);
 }

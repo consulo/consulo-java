@@ -18,8 +18,7 @@ package com.intellij.codeInsight.editorActions.wordSelection;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,9 +59,9 @@ public class VarargsSelectioner extends BasicSelectioner {
     return Collections.singletonList(new TextRange(firstExpressionRange.getStartOffset(), lastExpressionRange.getEndOffset()));
   }
 
-  @NotNull
-  private static PsiExpression[] getVarargArgs(@NotNull PsiParameterList parameterList,
-                                               @NotNull PsiExpressionList expressionList) {
+  @Nonnull
+  private static PsiExpression[] getVarargArgs(@Nonnull PsiParameterList parameterList,
+                                               @Nonnull PsiExpressionList expressionList) {
     final PsiParameter[] parameters = parameterList.getParameters();
     final PsiExpression[] expressions = expressionList.getExpressions();
 
@@ -79,8 +78,8 @@ public class VarargsSelectioner extends BasicSelectioner {
     return Arrays.copyOfRange(expressions, varargIndex, expressions.length);
   }
 
-  @Nullable
-  private static PsiParameterList getParameterList(@NotNull PsiExpressionList list) {
+  @javax.annotation.Nullable
+  private static PsiParameterList getParameterList(@Nonnull PsiExpressionList list) {
     if (!(list.getParent() instanceof PsiMethodCallExpression)) {
       return null;
     }

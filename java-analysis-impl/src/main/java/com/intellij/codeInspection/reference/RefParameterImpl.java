@@ -24,7 +24,6 @@
  */
 package com.intellij.codeInspection.reference;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
@@ -155,7 +154,7 @@ public class RefParameterImpl extends RefJavaElementImpl implements RefParameter
     return result[0];
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static RefElement parameterFromExternalName(final RefManager manager, final String fqName) {
     final int idx = fqName.lastIndexOf(' ');
     if (idx > 0) {
@@ -179,7 +178,7 @@ public class RefParameterImpl extends RefJavaElementImpl implements RefParameter
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiParameter findPsiParameter(String fqName, final PsiManager manager) {
     final int idx = fqName.lastIndexOf(' ');
     if (idx > 0) {

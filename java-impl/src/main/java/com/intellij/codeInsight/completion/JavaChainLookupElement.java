@@ -19,8 +19,8 @@ import gnu.trove.THashSet;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementDecorator;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -52,7 +52,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 		myQualifier = qualifier;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getLookupString()
 	{
@@ -74,7 +74,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 		return result;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String toString()
 	{
@@ -86,7 +86,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 		return getQualifierObject() instanceof PsiMethod ? s + "()" : s;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private Object getQualifierObject()
 	{
 		Object qObject = myQualifier.getObject();
@@ -194,7 +194,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	private LookupElement getComparableQualifier()
 	{
 		final CastingLookupElementDecorator casting = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY);

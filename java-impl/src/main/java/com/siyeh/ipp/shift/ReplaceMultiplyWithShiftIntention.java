@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.shift;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiBinaryExpression;
@@ -66,7 +66,7 @@ public class ReplaceMultiplyWithShiftIntention extends MutablyNamedIntention {
     }
   }
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new MultiplyByPowerOfTwoPredicate();
   }

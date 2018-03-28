@@ -22,8 +22,8 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
@@ -101,7 +101,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint
 		myInsertEvaluator = new MyEvaluator(myCapturePoint.myInsertKeyExpression);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected JavaMethodBreakpointProperties getProperties()
 	{
@@ -230,7 +230,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint
 		bpts.add(breakpoint);
 	}
 
-	public static <T> void putProcessUserData(@NotNull Key<T> key, @Nullable T value, DebugProcessImpl debugProcess)
+	public static <T> void putProcessUserData(@Nonnull Key<T> key, @Nullable T value, DebugProcessImpl debugProcess)
 	{
 		debugProcess.putUserData(key, value);
 		debugProcess.addDebugProcessListener(new DebugProcessListener()
@@ -244,7 +244,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint
 	}
 
 	@Nullable
-	public static CapturePoint getMatchingDisabledInsertionPoint(@NotNull StackFrameProxyImpl frame)
+	public static CapturePoint getMatchingDisabledInsertionPoint(@Nonnull StackFrameProxyImpl frame)
 	{
 		try
 		{
@@ -268,7 +268,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint
 	}
 
 	@Nullable
-	public static List<StackFrameItem> getRelatedStack(@NotNull StackFrameProxyImpl frame, @NotNull SuspendContextImpl suspendContext)
+	public static List<StackFrameItem> getRelatedStack(@Nonnull StackFrameProxyImpl frame, @Nonnull SuspendContextImpl suspendContext)
 	{
 		DebugProcessImpl debugProcess = suspendContext.getDebugProcess();
 		Map<Object, List<StackFrameItem>> capturedStacks = debugProcess.getUserData(CAPTURED_STACKS);

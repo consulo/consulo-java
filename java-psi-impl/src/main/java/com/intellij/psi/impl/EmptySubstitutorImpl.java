@@ -18,7 +18,8 @@ package com.intellij.psi.impl;
 import java.util.Collections;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.EmptySubstitutor;
 import com.intellij.psi.JavaPsiFacade;
@@ -35,7 +36,7 @@ public final class EmptySubstitutorImpl extends EmptySubstitutor
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.EmptySubstitutorImpl");
 
 	@Override
-	public PsiType substitute(@NotNull PsiTypeParameter typeParameter)
+	public PsiType substitute(@Nonnull PsiTypeParameter typeParameter)
 	{
 		return JavaPsiFacade.getInstance(typeParameter.getProject()).getElementFactory().createType(typeParameter);
 	}
@@ -47,14 +48,14 @@ public final class EmptySubstitutorImpl extends EmptySubstitutor
 	}
 
 	@Override
-	public PsiType substituteWithBoundsPromotion(@NotNull PsiTypeParameter typeParameter)
+	public PsiType substituteWithBoundsPromotion(@Nonnull PsiTypeParameter typeParameter)
 	{
 		return JavaPsiFacade.getInstance(typeParameter.getProject()).getElementFactory().createType(typeParameter);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiSubstitutor put(@NotNull PsiTypeParameter classParameter, PsiType mapping)
+	public PsiSubstitutor put(@Nonnull PsiTypeParameter classParameter, PsiType mapping)
 	{
 		if(mapping != null && !mapping.isValid())
 		{
@@ -63,9 +64,9 @@ public final class EmptySubstitutorImpl extends EmptySubstitutor
 		return new PsiSubstitutorImpl(classParameter, mapping);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiSubstitutor putAll(@NotNull PsiClass parentClass, PsiType[] mappings)
+	public PsiSubstitutor putAll(@Nonnull PsiClass parentClass, PsiType[] mappings)
 	{
 		if(!parentClass.hasTypeParameters())
 		{
@@ -74,15 +75,15 @@ public final class EmptySubstitutorImpl extends EmptySubstitutor
 		return new PsiSubstitutorImpl(parentClass, mappings);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiSubstitutor putAll(@NotNull PsiSubstitutor another)
+	public PsiSubstitutor putAll(@Nonnull PsiSubstitutor another)
 	{
 		return another;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Map<PsiTypeParameter, PsiType> getSubstitutionMap()
 	{
 		return Collections.emptyMap();

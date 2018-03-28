@@ -25,11 +25,12 @@
 
 package org.osmorc.manifest.lang.psi.elementtype;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 
 /**
@@ -40,12 +41,12 @@ public abstract class AbstractManifestStubElementType<StubT extends StubElement,
   private static final String ETERNAL_ID_PREFIX = "manifest.";
   private final String externalId;
 
-  public AbstractManifestStubElementType(@NotNull final String debugName) {
+  public AbstractManifestStubElementType(@Nonnull final String debugName) {
     super(debugName, ManifestLanguage.INSTANCE);
     externalId = ETERNAL_ID_PREFIX + debugName;
   }
 
-  @NotNull
+  @Nonnull
   public String getExternalId() {
     return externalId;
   }

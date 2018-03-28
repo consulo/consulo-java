@@ -15,7 +15,7 @@
  */
 package com.intellij.execution.runners;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLine;
 import com.intellij.execution.process.ProcessHandler;

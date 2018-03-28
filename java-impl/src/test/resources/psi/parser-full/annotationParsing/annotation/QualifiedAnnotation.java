@@ -1,3 +1,6 @@
+import javax.annotation.Nullable;
+
 interface PsiElement {
-  @org.jetbrains.annotations.Nullable <T> T getCopyableUserData(Key<T> key);
+  @Nullable
+  <T> T getCopyableUserData(Key<T> key);
 }

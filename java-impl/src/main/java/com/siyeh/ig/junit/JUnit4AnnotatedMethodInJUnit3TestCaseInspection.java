@@ -18,9 +18,10 @@ package com.siyeh.ig.junit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -39,13 +40,13 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("junit4.test.method.in.class.extending.junit3.testcase.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     if (AnnotationUtil.isAnnotated((PsiMethod)infos[1], IGNORE, false)) {
       return InspectionGadgetsBundle.message("ignore.test.method.in.class.extending.junit3.testcase.problem.descriptor");
@@ -58,7 +59,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> fixes = new ArrayList(3);
@@ -99,7 +100,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
       super("_" + method.getName());
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("ignore.test.method.in.class.extending.junit3.testcase.quickfix", getTargetName());
@@ -121,7 +122,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("convert.junit3.test.class.quickfix", className);
     }
@@ -199,9 +200,10 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
     private static class SuperLifeCycleCallRemover extends JavaRecursiveElementVisitor {
 
-      @NotNull private final String myLifeCycleMethodName;
+      @Nonnull
+	  private final String myLifeCycleMethodName;
 
-      private SuperLifeCycleCallRemover(@NotNull String lifeCycleMethodName) {
+      private SuperLifeCycleCallRemover(@Nonnull String lifeCycleMethodName) {
         myLifeCycleMethodName = lifeCycleMethodName;
       }
 
@@ -256,7 +258,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
   private static class RemoveTestAnnotationFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("remove.junit4.test.annotation.quickfix");
     }

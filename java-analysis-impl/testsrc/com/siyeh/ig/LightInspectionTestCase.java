@@ -19,10 +19,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -46,7 +43,7 @@ public abstract class LightInspectionTestCase extends LightCodeInsightFixtureTes
     return new String[]{};
   }
 
-  protected final void doTest(@Language("JAVA") @NotNull @NonNls String classText) {
+  protected final void doTest(@Language("JAVA") @Nonnull @NonNls String classText) {
     @NonNls final StringBuilder newText = new StringBuilder();
     int start = 0;
     int end = classText.indexOf("/*");

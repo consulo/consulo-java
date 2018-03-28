@@ -31,9 +31,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompilerUtil;
@@ -173,33 +173,33 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getPresentableName()
 	{
 		return JavaCompilerBundle.message("compiler.javac.name");
 	}
 
 	@Override
-	public OutputParser createErrorParser(@NotNull final String outputDir, Process process)
+	public OutputParser createErrorParser(@Nonnull final String outputDir, Process process)
 	{
 		return new JavacOutputParser(myProject);
 	}
 
 	@Override
-	public OutputParser createOutputParser(@NotNull final String outputDir)
+	public OutputParser createOutputParser(@Nonnull final String outputDir)
 	{
 		return null;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
 	{
 		return ReadAction.compute(() -> createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
 				.isAnnotationProcessorsEnabled()));
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
 			final String outputPath,
@@ -493,12 +493,12 @@ public class JavacCompiler extends ExternalCompiler
 		}
 	}
 
-	private static boolean isAtLeast(@NotNull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @NotNull JavaSdkVersion target)
+	private static boolean isAtLeast(@Nonnull JavaSdkVersion version, @javax.annotation.Nullable LanguageLevel languageLevel, @Nonnull JavaSdkVersion target)
 	{
 		return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(version.getMaxLanguageLevel()));
 	}
 
-	@NotNull
+	@Nonnull
 	private static Set<VirtualFile> filterModFiles(Set<VirtualFile> files)
 	{
 		Set<VirtualFile> newFiles = new LinkedHashSet<>(files.size());
@@ -515,7 +515,7 @@ public class JavacCompiler extends ExternalCompiler
 		return newFiles;
 	}
 
-	@NotNull
+	@Nonnull
 	private static String asString(Set<VirtualFile> files)
 	{
 		PathsList pathsList = new PathsList();

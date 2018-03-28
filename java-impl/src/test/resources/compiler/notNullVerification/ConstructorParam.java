@@ -1,6 +1,6 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ConstructorParam {
-  public ConstructorParam(@NotNull Object o) {
+  public ConstructorParam(@Nonnull Object o) {
   }
 }

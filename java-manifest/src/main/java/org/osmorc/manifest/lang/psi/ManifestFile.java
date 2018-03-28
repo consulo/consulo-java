@@ -26,8 +26,8 @@
 package org.osmorc.manifest.lang.psi;
 
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public interface ManifestFile extends PsiFile {
    *
    * @return the headers.
    */
-  @NotNull
+  @Nonnull
   Header[] getHeaders();
 
   /**
@@ -50,17 +50,17 @@ public interface ManifestFile extends PsiFile {
    * @param name the name
    * @return the header or null if no such header exists.
    */
-  @Nullable
-  Header getHeaderByName(@NotNull String name);
+  @javax.annotation.Nullable
+  Header getHeaderByName(@Nonnull String name);
 
   @Nullable
-  Object getValueByKey(@NotNull String key);
+  Object getValueByKey(@Nonnull String key);
 
   @Nullable
-  String getStringValueByKey(@NotNull String key);
+  String getStringValueByKey(@Nonnull String key);
 
-  @NotNull
-  List<String> getValuesByKey(@NotNull String key);
+  @Nonnull
+  List<String> getValuesByKey(@Nonnull String key);
 
-  void setHeaderValue(@NotNull String key, @NotNull String value);
+  void setHeaderValue(@Nonnull String key, @Nonnull String value);
 }

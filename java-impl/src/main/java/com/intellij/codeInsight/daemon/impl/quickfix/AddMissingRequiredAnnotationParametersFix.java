@@ -22,7 +22,8 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
@@ -61,7 +62,7 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
 		myMissedElements = missedElements;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -70,7 +71,7 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
 				".parameters.fix", StringUtil.join(myMissedElements, ", "));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -78,13 +79,13 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file)
+	public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file)
 	{
 		return myAnnotation.isValid();
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project,
+	public void invoke(@Nonnull final Project project,
 			final Editor editor,
 			final PsiFile file) throws IncorrectOperationException
 	{

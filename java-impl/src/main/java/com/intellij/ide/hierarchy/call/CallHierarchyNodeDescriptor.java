@@ -19,9 +19,9 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
@@ -62,7 +62,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
 	private final List<PsiReference> myReferences = new ArrayList<PsiReference>();
 	private final boolean myNavigateToReference;
 
-	public CallHierarchyNodeDescriptor(@NotNull Project project, final HierarchyNodeDescriptor parentDescriptor, @NotNull PsiElement element, final boolean isBase, final boolean navigateToReference)
+	public CallHierarchyNodeDescriptor(@Nonnull Project project, final HierarchyNodeDescriptor parentDescriptor, @Nonnull PsiElement element, final boolean isBase, final boolean navigateToReference)
 	{
 		super(project, parentDescriptor, element, isBase);
 		myNavigateToReference = navigateToReference;

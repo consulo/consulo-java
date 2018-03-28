@@ -17,7 +17,8 @@ package com.intellij.debugger.memory.ui;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.memory.utils.StackFrameItem;
@@ -46,12 +47,12 @@ class StackFrameList extends XDebuggerFramesList
 		myDebugProcess = debugProcess;
 	}
 
-	void setFrameItems(@NotNull List<StackFrameItem> items)
+	void setFrameItems(@Nonnull List<StackFrameItem> items)
 	{
 		setFrameItems(items, null);
 	}
 
-	void setFrameItems(@NotNull List<StackFrameItem> items, Runnable onDone)
+	void setFrameItems(@Nonnull List<StackFrameItem> items, Runnable onDone)
 	{
 		clear();
 		if(!items.isEmpty())
@@ -104,7 +105,7 @@ class StackFrameList extends XDebuggerFramesList
 		}
 	}
 
-	private void navigateToFrame(@NotNull XStackFrame frame, boolean focusOnEditor)
+	private void navigateToFrame(@Nonnull XStackFrame frame, boolean focusOnEditor)
 	{
 		XSourcePosition position = frame.getSourcePosition();
 		if(position == null)

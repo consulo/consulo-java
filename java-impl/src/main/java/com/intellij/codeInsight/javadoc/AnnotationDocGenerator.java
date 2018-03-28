@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.Flow;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.IndexNotReadyException;
@@ -34,17 +34,17 @@ import com.intellij.xml.util.XmlStringUtil;
 public class AnnotationDocGenerator
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.javadoc.AnnotationGenerator");
-	@NotNull
+	@Nonnull
 	private final PsiAnnotation myAnnotation;
-	@NotNull
+	@Nonnull
 	private final PsiJavaCodeReferenceElement myNameReference;
-	@NotNull
+	@Nonnull
 	private final PsiModifierListOwner myOwner;
-	@Nullable
+	@javax.annotation.Nullable
 	private final PsiClass myTargetClass;
 	private final boolean myResolveNotPossible;
 
-	private AnnotationDocGenerator(@NotNull PsiAnnotation annotation, @NotNull PsiJavaCodeReferenceElement nameReference, @NotNull PsiModifierListOwner owner)
+	private AnnotationDocGenerator(@Nonnull PsiAnnotation annotation, @Nonnull PsiJavaCodeReferenceElement nameReference, @Nonnull PsiModifierListOwner owner)
 	{
 		myAnnotation = annotation;
 		myNameReference = nameReference;
@@ -225,7 +225,7 @@ public class AnnotationDocGenerator
 		buffer.append(XmlStringUtil.escapeString(memberValue.getText()));
 	}
 
-	public static List<AnnotationDocGenerator> getAnnotationsToShow(@NotNull PsiModifierListOwner owner)
+	public static List<AnnotationDocGenerator> getAnnotationsToShow(@Nonnull PsiModifierListOwner owner)
 	{
 		List<AnnotationDocGenerator> infos = new ArrayList<>();
 

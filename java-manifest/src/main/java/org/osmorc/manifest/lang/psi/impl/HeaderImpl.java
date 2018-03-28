@@ -31,7 +31,7 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.*;
@@ -41,11 +41,11 @@ import org.osmorc.manifest.lang.psi.stub.HeaderStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Header {
-  public HeaderImpl(HeaderStub stub, @NotNull IStubElementType nodeType) {
+  public HeaderImpl(HeaderStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public HeaderImpl(@NotNull ASTNode node) {
+  public HeaderImpl(@Nonnull ASTNode node) {
     super(node);
   }
 
@@ -63,7 +63,7 @@ public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Heade
     return result != null ? result : "";
   }
 
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     ManifestToken nameToken = getNameToken();
     if (nameToken != null) {
       nameToken.replaceToken(name);
@@ -80,7 +80,7 @@ public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Heade
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Clause[] getClauses() {
     return findChildrenByClass(Clause.class);
   }
@@ -98,7 +98,7 @@ public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Heade
   }
 
   @Override
-  public void addClause(@NotNull String text) {
+  public void addClause(@Nonnull String text) {
     final String dummyTemplate;
     final boolean b = getClauses().length == 0;
     if (b) {

@@ -15,16 +15,17 @@
  */
 package com.intellij.psi.formatter;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaDocTokenType;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
  */
 public class JavadocWhiteSpaceFormattingStrategy extends WhiteSpaceFormattingStrategyAdapter {
   @Override
-  public boolean containsWhitespacesOnly(@NotNull final ASTNode node) {
+  public boolean containsWhitespacesOnly(@Nonnull final ASTNode node) {
     return node.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA && node.textContains('\n') && node.getText().trim().length() == 0;
   }
 }

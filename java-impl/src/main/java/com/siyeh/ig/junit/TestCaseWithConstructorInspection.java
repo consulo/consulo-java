@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -25,18 +25,18 @@ import com.siyeh.ig.psiutils.TestUtils;
 
 public class TestCaseWithConstructorInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "JUnitTestCaseWithNonTrivialConstructors";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "test.case.with.constructor.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     if (Boolean.TRUE.equals(infos[0])) {
       return InspectionGadgetsBundle.message(
@@ -56,7 +56,7 @@ public class TestCaseWithConstructorInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!method.isConstructor()) {
         return;
       }

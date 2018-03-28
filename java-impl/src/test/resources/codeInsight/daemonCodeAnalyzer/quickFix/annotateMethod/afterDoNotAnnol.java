@@ -1,8 +1,8 @@
 // "Annotate method as '@NotNull'" "true"
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class X {
-    @NotNull
+    @Nonnull
     String dontAnnotateBase() {
         return "X";
     }
@@ -13,7 +13,7 @@ class Y extends X{
     }
 }
 class Z extends Y {
-    @NotNull
+    @Nonnull
     String dontAnnotateBase<caret>() { // trigger quick fix for inspection here
         return "Z";
     }

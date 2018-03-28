@@ -17,12 +17,12 @@ package com.intellij.debugger.memory.ui;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.openapi.Disposable;
@@ -48,9 +48,9 @@ class ExpressionEditorWithHistory extends XDebuggerExpressionEditor
 {
 	private static final String HISTORY_ID_PREFIX = "filtering";
 
-	ExpressionEditorWithHistory(final @NotNull Project project,
-			final @NotNull String className,
-			final @NotNull XDebuggerEditorsProvider debuggerEditorsProvider,
+	ExpressionEditorWithHistory(final @Nonnull Project project,
+			final @Nonnull String className,
+			final @Nonnull XDebuggerEditorsProvider debuggerEditorsProvider,
 			final @Nullable Disposable parentDisposable)
 	{
 		super(project, debuggerEditorsProvider, HISTORY_ID_PREFIX + className, null, XExpressionImpl.EMPTY_EXPRESSION, false, true, true);
@@ -107,7 +107,7 @@ class ExpressionEditorWithHistory extends XDebuggerExpressionEditor
 					return new ColoredListCellRenderer<XExpression>()
 					{
 						@Override
-						protected void customizeCellRenderer(@NotNull JList list, XExpression value, int index, boolean selected, boolean hasFocus)
+						protected void customizeCellRenderer(@Nonnull JList list, XExpression value, int index, boolean selected, boolean hasFocus)
 						{
 							append(value.getExpression(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
 						}

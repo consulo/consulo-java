@@ -3,8 +3,8 @@ package com.intellij.coverage;
 import java.io.File;
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
@@ -25,7 +25,7 @@ public abstract class JavaCoverageRunner extends CoverageRunner
 	}
 
 	@Override
-	public boolean acceptsCoverageEngine(@NotNull CoverageEngine engine)
+	public boolean acceptsCoverageEngine(@Nonnull CoverageEngine engine)
 	{
 		return engine instanceof JavaCoverageEngine;
 	}
@@ -36,8 +36,8 @@ public abstract class JavaCoverageRunner extends CoverageRunner
 			final boolean collectLineInfo,
 			final boolean isSampling);
 
-	@NotNull
-	protected static String handleSpacesInPath(@NotNull File parent)
+	@Nonnull
+	protected static String handleSpacesInPath(@Nonnull File parent)
 	{
 		String agentPath;
 		final String userDefined = System.getProperty(COVERAGE_AGENT_PATH);

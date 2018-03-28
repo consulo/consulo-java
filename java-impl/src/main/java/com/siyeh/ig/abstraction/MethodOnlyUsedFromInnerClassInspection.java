@@ -28,8 +28,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -45,13 +44,13 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
   public boolean onlyReportStaticMethods = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.only.used.from.inner.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String name = element.getName();
@@ -66,7 +65,7 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox(InspectionGadgetsBundle.message("method.only.used.from.inner.class.ignore.option"),
@@ -137,7 +136,7 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
 
     private PsiClass cache = null;
 
-    MethodReferenceFinder(@NotNull PsiMethod method) {
+    MethodReferenceFinder(@Nonnull PsiMethod method) {
       this.method = method;
       methodClass = method.getContainingClass();
     }

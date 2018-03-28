@@ -19,7 +19,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.quickfix.LocateLibraryDialog;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.openapi.application.Result;
@@ -58,14 +59,14 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 	}
 
 	@Override
-	public AsyncResult<Void> addModuleDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addModuleDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope)
 	{
 		ModuleRootModificationUtil.addDependency(from, to, scope, false);
 		return AsyncResult.done(null);
 	}
 
 	@Override
-	public AsyncResult<Void> addExternalLibraryDependency(@NotNull final Collection<Module> modules, @NotNull final ExternalLibraryDescriptor descriptor, @NotNull final DependencyScope scope)
+	public AsyncResult<Void> addExternalLibraryDependency(@Nonnull final Collection<Module> modules, @Nonnull final ExternalLibraryDescriptor descriptor, @Nonnull final DependencyScope scope)
 	{
 		List<String> defaultRoots = descriptor.getLibraryClassesRoots();
 		Module firstModule = ContainerUtil.getFirstItem(modules);
@@ -84,7 +85,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 			{
 				new WriteAction()
 				{
-					protected void run(@NotNull Result result)
+					protected void run(@Nonnull Result result)
 					{
 						Library library = LibraryUtil.createLibrary(LibraryTablesRegistrar.getInstance().getLibraryTable(myProject), descriptor.getPresentableName());
 						Library.ModifiableModel model = library.getModifiableModel();
@@ -105,7 +106,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 	}
 
 	@Override
-	public AsyncResult<Void> addLibraryDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addLibraryDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope)
 	{
 		OrderEntryUtil.addLibraryToRoots(from, library);
 		return AsyncResult.done(null);
@@ -113,7 +114,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 
 	@Override
 	@RequiredReadAction
-	public AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel level)
+	public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel level)
 	{
 		if(JavaSdkUtil.isLanguageLevelAcceptable(myProject, module, level))
 		{

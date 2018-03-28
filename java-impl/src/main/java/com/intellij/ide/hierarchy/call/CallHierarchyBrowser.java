@@ -29,7 +29,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.ui.PopupHandler;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -38,12 +38,12 @@ import java.util.Map;
 public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.ide.hierarchy.call.CallHierarchyBrowser");
 
-  public CallHierarchyBrowser(@NotNull Project project, @NotNull PsiMethod method) {
+  public CallHierarchyBrowser(@Nonnull Project project, @Nonnull PsiMethod method) {
     super(project, method);
   }
 
   @Override
-  protected void createTrees(@NotNull final Map<String, JTree> type2TreeMap) {
+  protected void createTrees(@Nonnull final Map<String, JTree> type2TreeMap) {
     ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_CALL_HIERARCHY_POPUP);
     final JTree tree1 = createTree(false);
     PopupHandler.installPopupHandler(tree1, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
@@ -60,7 +60,7 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
   }
 
   @Override
-  protected PsiElement getElementFromDescriptor(@NotNull HierarchyNodeDescriptor descriptor) {
+  protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
     if (descriptor instanceof CallHierarchyNodeDescriptor) {
       CallHierarchyNodeDescriptor nodeDescriptor = (CallHierarchyNodeDescriptor)descriptor;
       return nodeDescriptor.getEnclosingElement();
@@ -69,7 +69,7 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
   }
 
   @Override
-  protected PsiElement getOpenFileElementFromDescriptor(@NotNull HierarchyNodeDescriptor descriptor) {
+  protected PsiElement getOpenFileElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
     if (descriptor instanceof CallHierarchyNodeDescriptor) {
       CallHierarchyNodeDescriptor nodeDescriptor = (CallHierarchyNodeDescriptor)descriptor;
       return nodeDescriptor.getTargetElement();
@@ -78,12 +78,12 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
   }
 
   @Override
-  protected boolean isApplicableElement(@NotNull final PsiElement element) {
+  protected boolean isApplicableElement(@Nonnull final PsiElement element) {
     return element instanceof PsiMethod;
   }
 
   @Override
-  protected HierarchyTreeStructure createHierarchyTreeStructure(@NotNull final String typeName, @NotNull final PsiElement psiElement) {
+  protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
     if (CALLER_TYPE.equals(typeName)) {
       return new CallerMethodsTreeStructure(myProject, (PsiMethod)psiElement, getCurrentScopeType());
     }

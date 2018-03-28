@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.configurations.RemoteConnection;
@@ -31,7 +31,7 @@ public interface DebugEnvironment
 	@Nullable
 	ExecutionResult createExecutionResult() throws ExecutionException;
 
-	@NotNull
+	@Nonnull
 	GlobalSearchScope getSearchScope();
 
 	@Nullable

@@ -16,7 +16,7 @@
 package com.intellij.debugger.ui.tree.render;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -131,7 +131,7 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 		return UNIQUE_ID;
 	}
 
-	public void setClassName(@NotNull String name)
+	public void setClassName(@Nonnull String name)
 	{
 		myProperties.setClassName(name);
 		if(getRawLabelRenderer() != null)
@@ -154,7 +154,7 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 	}
 
 	public
-	@NotNull
+	@Nonnull
 	String getClassName()
 	{
 		return myProperties.getClassName();

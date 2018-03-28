@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.cloneable;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -28,24 +30,23 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CloneDoesntDeclareCloneNotSupportedException";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.problem.descriptor");
   }
@@ -63,7 +64,7 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
   private static class CloneDeclaresCloneNotSupportedInspectionFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.declare.quickfix");
     }
@@ -84,7 +85,7 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
   private static class CloneDeclaresCloneNotSupportedExceptionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!CloneUtils.isClone(method)) {
         return;
       }

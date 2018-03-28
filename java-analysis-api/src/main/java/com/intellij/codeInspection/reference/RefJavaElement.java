@@ -22,8 +22,8 @@ package com.intellij.codeInspection.reference;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiModifier;
 
 public interface RefJavaElement extends RefElement {
@@ -31,7 +31,7 @@ public interface RefJavaElement extends RefElement {
    * Returns the collection of references used in this element.
    * @return the collection of used types
    */
-  @NotNull
+  @Nonnull
   Collection<RefClass> getOutTypeReferences();
 
 
@@ -69,7 +69,7 @@ public interface RefJavaElement extends RefElement {
    *
    * @return the modifier, or null if the element does not have any access modifier.
    */
-  @Nullable
+  @javax.annotation.Nullable
   @PsiModifier.ModifierConstant
   String getAccessModifier();
 }

@@ -15,7 +15,8 @@
  */
 package com.intellij.find.findUsages;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.impl.search.ThrowSearchUtil;
 
@@ -26,7 +27,7 @@ public class JavaThrowFindUsagesOptions extends JavaFindUsagesOptions
 {
 	private ThrowSearchUtil.Root root;
 
-	public JavaThrowFindUsagesOptions(@NotNull Project project)
+	public JavaThrowFindUsagesOptions(@Nonnull Project project)
 	{
 		super(project);
 		isSearchForTextOccurrences = false;

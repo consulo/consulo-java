@@ -17,7 +17,8 @@ package com.intellij.debugger.ui;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.actions.JavaMarkObjectActionHandler;
 import com.intellij.debugger.actions.JvmSmartStepIntoActionHandler;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
@@ -46,20 +47,20 @@ public class JavaDebuggerSupport extends DebuggerSupport
 	private final JavaMarkObjectActionHandler myMarkObjectActionHandler = new JavaMarkObjectActionHandler();
 
 	@Override
-	@NotNull
+	@Nonnull
 	public BreakpointPanelProvider<?> getBreakpointPanelProvider()
 	{
 		return myBreakpointPanelProvider;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public DebuggerActionHandler getSmartStepIntoHandler()
 	{
 		return mySmartStepIntoHandler;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MarkObjectActionHandler getMarkObjectHandler()
 	{
@@ -113,7 +114,7 @@ public class JavaDebuggerSupport extends DebuggerSupport
 		}
 
 		@Override
-		public Breakpoint findBreakpoint(@NotNull final Project project, @NotNull final Document document, final int offset)
+		public Breakpoint findBreakpoint(@Nonnull final Project project, @Nonnull final Document document, final int offset)
 		{
 			return null;
 			//return DebuggerManagerEx.getInstanceEx(project).getBreakpointManager().findBreakpoint(document, offset, null);

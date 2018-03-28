@@ -34,8 +34,8 @@ import gnu.trove.THashMap;
 import gnu.trove.THashSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.*;
@@ -50,19 +50,19 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
   public boolean IGNORE_ALL = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.redundant.suppression.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "RedundantSuppression";
@@ -74,19 +74,19 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
   }
 
   @Override
-  public void writeSettings(@NotNull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     if (IGNORE_ALL) {
       super.writeSettings(node);
     }
   }
 
   @Override
-  public void runInspection(@NotNull final AnalysisScope scope,
-                            @NotNull final InspectionManager manager,
-                            @NotNull final GlobalInspectionContext globalContext,
-                            @NotNull final ProblemDescriptionsProcessor problemDescriptionsProcessor) {
+  public void runInspection(@Nonnull final AnalysisScope scope,
+                            @Nonnull final InspectionManager manager,
+                            @Nonnull final GlobalInspectionContext globalContext,
+                            @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor) {
     globalContext.getRefManager().iterate(new RefJavaVisitor() {
-      @Override public void visitClass(@NotNull RefClass refClass) {
+      @Override public void visitClass(@Nonnull RefClass refClass) {
         if (!globalContext.shouldCheck(refClass, RedundantSuppressInspection.this)) return;
         CommonProblemDescriptor[] descriptors = checkElement(refClass, manager, globalContext.getProject());
         if (descriptors != null) {
@@ -108,13 +108,13 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
   }
 
   @Nullable
-  private CommonProblemDescriptor[] checkElement(@NotNull RefClass refEntity, @NotNull InspectionManager manager, @NotNull Project project) {
+  private CommonProblemDescriptor[] checkElement(@Nonnull RefClass refEntity, @Nonnull InspectionManager manager, @Nonnull Project project) {
     final PsiClass psiClass = refEntity.getElement();
     if (psiClass == null) return null;
     return checkElement(psiClass, manager, project);
   }
 
-  public CommonProblemDescriptor[] checkElement(@NotNull final PsiElement psiElement, @NotNull final InspectionManager manager, @NotNull Project project) {
+  public CommonProblemDescriptor[] checkElement(@Nonnull final PsiElement psiElement, @Nonnull final InspectionManager manager, @Nonnull Project project) {
     final Map<PsiElement, Collection<String>> suppressedScopes = new THashMap<PsiElement, Collection<String>>();
     psiElement.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitModifierList(PsiModifierList list) {
@@ -217,27 +217,27 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
           }
           descriptors = new ArrayList<CommonProblemDescriptor>();
           globalContext.getRefManager().iterate(new RefVisitor() {
-            @Override public void visitElement(@NotNull RefEntity refEntity) {
+            @Override public void visitElement(@Nonnull RefEntity refEntity) {
               CommonProblemDescriptor[]
                 descriptors1 = global.getTool().checkElement(refEntity, scope, manager, globalContext, new ProblemDescriptionsProcessor() {
                 @Nullable
                 @Override
-                public CommonProblemDescriptor[] getDescriptions(@NotNull RefEntity refEntity) {
+                public CommonProblemDescriptor[] getDescriptions(@Nonnull RefEntity refEntity) {
                   return new CommonProblemDescriptor[0];
                 }
 
                 @Override
-                public void ignoreElement(@NotNull RefEntity refEntity) {
+                public void ignoreElement(@Nonnull RefEntity refEntity) {
 
                 }
 
                 @Override
-                public void addProblemElement(@Nullable RefEntity refEntity, @NotNull CommonProblemDescriptor... commonProblemDescriptors) {
+                public void addProblemElement(@javax.annotation.Nullable RefEntity refEntity, @Nonnull CommonProblemDescriptor... commonProblemDescriptors) {
                   int i =0;
                 }
 
                 @Override
-                public RefEntity getElement(@NotNull CommonProblemDescriptor descriptor) {
+                public RefEntity getElement(@Nonnull CommonProblemDescriptor descriptor) {
                   return null;
                 }
               });
@@ -314,7 +314,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
     return result.toArray(new ProblemDescriptor[result.size()]);
   }
 
-  protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, @NotNull InspectionManager manager) {
+  protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, @Nonnull InspectionManager manager) {
     ModifiableModel model = InspectionProjectProfileManager.getInstance(manager.getProject()).getInspectionProfile().getModifiableModel();
     InspectionProfileWrapper profile = new InspectionProfileWrapper((InspectionProfile)model);
     profile.init(manager.getProject());
@@ -331,8 +331,8 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
 
 
   @Override
-  @Nullable
-  public String getHint(@NotNull final QuickFix fix) {
+  @javax.annotation.Nullable
+  public String getHint(@Nonnull final QuickFix fix) {
     if (myQuickFixes != null) {
       final List<String> list = myQuickFixes.getKeysByValue(fix);
       if (list != null) {

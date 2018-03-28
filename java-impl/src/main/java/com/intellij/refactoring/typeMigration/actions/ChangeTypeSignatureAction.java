@@ -15,7 +15,8 @@
  */
 package com.intellij.refactoring.typeMigration.actions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -39,7 +40,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction
 	}
 
 	@Override
-	public boolean isEnabledOnElements(@NotNull PsiElement[] elements)
+	public boolean isEnabledOnElements(@Nonnull PsiElement[] elements)
 	{
 		if(elements.length > 1)
 		{
@@ -58,7 +59,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction
 	}
 
 	@Override
-	protected boolean isAvailableOnElementInEditorAndFile(@NotNull final PsiElement element, @NotNull final Editor editor, @NotNull PsiFile file, @NotNull DataContext context)
+	protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context)
 	{
 		final int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
 		final PsiElement psiElement = file.findElementAt(offset);
@@ -71,7 +72,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction
 	}
 
 	@Override
-	public RefactoringActionHandler getHandler(@NotNull DataContext dataContext)
+	public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext)
 	{
 		return new ChangeTypeSignatureHandler();
 	}

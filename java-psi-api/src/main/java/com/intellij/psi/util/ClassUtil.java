@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
@@ -39,7 +39,7 @@ public class ClassUtil
 		return null;
 	}
 
-	public static String extractClassName(@NotNull String fqName)
+	public static String extractClassName(@Nonnull String fqName)
 	{
 		int i = fqName.lastIndexOf('.');
 		return i == -1 ? fqName : fqName.substring(i + 1);
@@ -71,7 +71,7 @@ public class ClassUtil
 		return null;
 	}
 
-	public static void formatClassName(@NotNull final PsiClass aClass, final StringBuilder buf)
+	public static void formatClassName(@Nonnull final PsiClass aClass, final StringBuilder buf)
 	{
 		final String qName = aClass.getQualifiedName();
 		if(qName != null)
@@ -95,7 +95,7 @@ public class ClassUtil
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiClass getContainerClass(final PsiClass aClass)
 	{
 		PsiElement parent = aClass.getContext();
@@ -106,7 +106,7 @@ public class ClassUtil
 		return (PsiClass) parent;
 	}
 
-	public static int getNonQualifiedClassIdx(@NotNull final PsiClass psiClass)
+	public static int getNonQualifiedClassIdx(@Nonnull final PsiClass psiClass)
 	{
 		final int[] result = {-1};
 		final PsiClass containingClass = getContainerClass(psiClass);
@@ -143,12 +143,12 @@ public class ClassUtil
 		return result[0];
 	}
 
-	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @NotNull final PsiClass containingClass)
+	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @Nonnull final PsiClass containingClass)
 	{
 		return findNonQualifiedClassByIndex(indexName, containingClass, false);
 	}
 
-	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @NotNull final PsiClass containingClass, final boolean jvmCompatible)
+	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @Nonnull final PsiClass containingClass, final boolean jvmCompatible)
 	{
 		String prefix = getDigitPrefix(indexName);
 		final int idx = prefix.length() > 0 ? Integer.parseInt(prefix) : -1;
@@ -214,7 +214,7 @@ public class ClassUtil
 		return result[0];
 	}
 
-	private static String getDigitPrefix(@NotNull String indexName)
+	private static String getDigitPrefix(@Nonnull String indexName)
 	{
 		int i;
 		for(i = 0; i < indexName.length(); i++)
@@ -236,20 +236,20 @@ public class ClassUtil
 	 * @param externalName class qualified name
 	 * @return found psiClass
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName)
 	{
 		return findPsiClass(psiManager, externalName, null, false);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, PsiClass psiClass, boolean jvmCompatible)
 	{
 		return findPsiClass(psiManager, externalName, psiClass, jvmCompatible, GlobalSearchScope.allScope(psiManager.getProject()));
 	}
 
-	@Nullable
-	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, @Nullable PsiClass psiClass, boolean jvmCompatible, final GlobalSearchScope scope)
+	@javax.annotation.Nullable
+	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, @javax.annotation.Nullable PsiClass psiClass, boolean jvmCompatible, final GlobalSearchScope scope)
 	{
 		final int topIdx = externalName.indexOf('$');
 		if(topIdx > -1)
@@ -291,7 +291,7 @@ public class ClassUtil
 	}
 
 	@Nullable
-	public static String getJVMClassName(@NotNull PsiClass aClass)
+	public static String getJVMClassName(@Nonnull PsiClass aClass)
 	{
 		final PsiClass containingClass = aClass.getContainingClass();
 		if(containingClass != null)
@@ -308,13 +308,13 @@ public class ClassUtil
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass findPsiClassByJVMName(final PsiManager manager, final String jvmClassName)
 	{
 		return findPsiClass(manager, jvmClassName.replace('/', '.'), null, true);
 	}
 
-	public static boolean isTopLevelClass(@NotNull PsiClass aClass)
+	public static boolean isTopLevelClass(@Nonnull PsiClass aClass)
 	{
 		if(aClass.getContainingClass() != null)
 		{

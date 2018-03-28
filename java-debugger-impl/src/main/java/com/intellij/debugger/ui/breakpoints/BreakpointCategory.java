@@ -16,7 +16,7 @@
 package com.intellij.debugger.ui.breakpoints;
 
 import com.intellij.openapi.util.Key;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public final class BreakpointCategory {
   private BreakpointCategory() {
   }
 
-  @NotNull
+  @Nonnull
   public static <T extends Breakpoint> Key<T> lookup(String name) {
     Key<T> key = ourMap.get(name);
     if (key == null) {

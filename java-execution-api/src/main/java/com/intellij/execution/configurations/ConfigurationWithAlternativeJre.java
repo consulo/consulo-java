@@ -15,7 +15,7 @@
  */
 package com.intellij.execution.configurations;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author egor

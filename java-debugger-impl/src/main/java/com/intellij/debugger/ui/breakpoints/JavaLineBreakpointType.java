@@ -18,12 +18,13 @@ package com.intellij.debugger.ui.breakpoints;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
@@ -60,7 +61,7 @@ import consulo.ide.IconDescriptorUpdaters;
  */
 public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineBreakpointProperties> implements JavaBreakpointType<JavaLineBreakpointProperties>
 {
-	@NotNull
+	@Nonnull
 	public static JavaLineBreakpointType getInstance()
 	{
 		return EXTENSION_POINT_NAME.findExtension(JavaLineBreakpointType.class);
@@ -71,7 +72,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		super("java-line", DebuggerBundle.message("line.breakpoints.tab.title"));
 	}
 
-	protected JavaLineBreakpointType(@NonNls @NotNull String id, @Nls @NotNull String title)
+	protected JavaLineBreakpointType(@NonNls @Nonnull String id, @Nls @Nonnull String title)
 	{
 		super(id, title);
 	}
@@ -101,23 +102,23 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		return new JavaLineBreakpointProperties();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public JavaLineBreakpointProperties createBreakpointProperties(@NotNull VirtualFile file, int line)
+	public JavaLineBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line)
 	{
 		return new JavaLineBreakpointProperties();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Breakpoint<JavaLineBreakpointProperties> createJavaBreakpoint(Project project, XBreakpoint breakpoint)
 	{
 		return new LineBreakpoint<>(project, breakpoint);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<JavaBreakpointVariant> computeVariants(@NotNull Project project, @NotNull XSourcePosition position)
+	public List<JavaBreakpointVariant> computeVariants(@Nonnull Project project, @Nonnull XSourcePosition position)
 	{
 		SourcePosition pos = DebuggerUtilsEx.toSourcePosition(position, project);
 		if(pos == null)
@@ -174,7 +175,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		return res;
 	}
 
-	public boolean matchesPosition(@NotNull LineBreakpoint<?> breakpoint, @NotNull SourcePosition position)
+	public boolean matchesPosition(@Nonnull LineBreakpoint<?> breakpoint, @Nonnull SourcePosition position)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties instanceof JavaLineBreakpointProperties)
@@ -194,7 +195,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 	}
 
 	@Nullable
-	public PsiElement getContainingMethod(@NotNull LineBreakpoint<?> breakpoint)
+	public PsiElement getContainingMethod(@Nonnull LineBreakpoint<?> breakpoint)
 	{
 		SourcePosition position = breakpoint.getSourcePosition();
 		if(position == null)
@@ -220,7 +221,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 
 	public class JavaBreakpointVariant extends XLineBreakpointAllVariant
 	{
-		public JavaBreakpointVariant(@NotNull XSourcePosition position)
+		public JavaBreakpointVariant(@Nonnull XSourcePosition position)
 		{
 			super(position);
 		}
@@ -231,7 +232,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		private final PsiElement myElement;
 		private final Integer myLambdaOrdinal;
 
-		public ExactJavaBreakpointVariant(@NotNull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal)
+		public ExactJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal)
 		{
 			super(position);
 			myElement = element;
@@ -259,7 +260,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 			return myElement != null ? myElement.getTextRange() : null;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public JavaLineBreakpointProperties createProperties()
 		{
@@ -272,7 +273,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 
 	public class LineJavaBreakpointVariant extends ExactJavaBreakpointVariant
 	{
-		public LineJavaBreakpointVariant(@NotNull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal)
+		public LineJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal)
 		{
 			super(position, element, lambdaOrdinal);
 		}
@@ -292,7 +293,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 
 	public class LambdaJavaBreakpointVariant extends ExactJavaBreakpointVariant
 	{
-		public LambdaJavaBreakpointVariant(@NotNull XSourcePosition position, @NotNull PsiElement element, Integer lambdaOrdinal)
+		public LambdaJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nonnull PsiElement element, Integer lambdaOrdinal)
 		{
 			super(position, element, lambdaOrdinal);
 		}
@@ -325,7 +326,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 	}
 
 	@Override
-	public XSourcePosition getSourcePosition(@NotNull XBreakpoint<JavaLineBreakpointProperties> breakpoint)
+	public XSourcePosition getSourcePosition(@Nonnull XBreakpoint<JavaLineBreakpointProperties> breakpoint)
 	{
 		Integer ordinal = getLambdaOrdinal(breakpoint);
 		if(ordinal != null && ordinal > -1)

@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.hierarchy.HierarchyBrowserManager;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
@@ -184,9 +184,9 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure
 	}
 
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected final Object[] buildChildren(@NotNull final HierarchyNodeDescriptor descriptor)
+	protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor)
 	{
 		final PsiElement psiElement = ((MethodHierarchyNodeDescriptor) descriptor).getPsiClass();
 		if(!(psiElement instanceof PsiClass))

@@ -31,7 +31,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.java.generate.element.FieldElement;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.project.Project;
@@ -145,7 +145,7 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiType createFieldListElementType(Project project)
 	{
 		final PsiType classType = createElementType(project, FieldElement.class);
@@ -153,7 +153,7 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
 		return listClass != null ? JavaPsiFacade.getElementFactory(project).createType(listClass, classType) : PsiType.NULL;
 	}
 
-	@NotNull
+	@Nonnull
 	public static PsiType createElementType(Project project, Class<?> elementClass)
 	{
 		final List<String> methodNames = ContainerUtil.mapNotNull(elementClass.getMethods(), new Function<Method, String>()

@@ -16,8 +16,8 @@
 
 package com.intellij.psi.impl.java.stubs;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.cache.TypeInfo;
 
@@ -35,7 +35,7 @@ public interface PsiMethodStub extends PsiMemberStub<PsiMethod>
 	@Nullable
 	String getDefaultValueText();
 
-	@NotNull
+	@Nonnull
 	TypeInfo getReturnTypeText(boolean doResolve);
 
 	boolean isDeprecated();

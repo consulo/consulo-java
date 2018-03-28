@@ -15,7 +15,6 @@
  */
 package com.intellij.debugger.codeinsight;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.EvaluatingComputable;
@@ -52,7 +51,7 @@ import consulo.internal.com.sun.jdi.Value;
  */
 public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiType>
 {
-	public RuntimeTypeEvaluator(@Nullable Editor editor, PsiElement expression, DebuggerContextImpl context, final ProgressIndicator indicator)
+	public RuntimeTypeEvaluator(@javax.annotation.Nullable Editor editor, PsiElement expression, DebuggerContextImpl context, final ProgressIndicator indicator)
 	{
 		super(editor, expression, context, indicator);
 	}
@@ -77,10 +76,10 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 		}
 	}
 
-	protected abstract void typeCalculationFinished(@Nullable PsiType type);
+	protected abstract void typeCalculationFinished(@javax.annotation.Nullable PsiType type);
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	protected PsiType evaluate(final EvaluationContextImpl evaluationContext) throws EvaluateException
 	{
 		final Project project = evaluationContext.getProject();
@@ -103,7 +102,7 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 		throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.surrounded.expression.null"));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getCastableRuntimeType(Project project, Value value)
 	{
 		Type type = value.type();

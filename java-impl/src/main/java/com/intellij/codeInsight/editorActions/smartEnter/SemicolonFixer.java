@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -41,7 +41,7 @@ public class SemicolonFixer implements Fixer
 		@SuppressWarnings("unused") boolean b = fixReturn(editor, psiElement) || fixForUpdate(editor, psiElement) || fixAfterLastValidElement(editor, psiElement);
 	}
 
-	private static boolean fixReturn(@NotNull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixReturn(@Nonnull Editor editor, @javax.annotation.Nullable PsiElement psiElement)
 	{
 		if(psiElement instanceof PsiReturnStatement)
 		{
@@ -60,7 +60,7 @@ public class SemicolonFixer implements Fixer
 		return false;
 	}
 
-	private static boolean fixForUpdate(@NotNull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixForUpdate(@Nonnull Editor editor, @javax.annotation.Nullable PsiElement psiElement)
 	{
 		if(!(psiElement instanceof PsiForStatement))
 		{
@@ -94,7 +94,7 @@ public class SemicolonFixer implements Fixer
 		return true;
 	}
 
-	private static boolean fixAfterLastValidElement(@NotNull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixAfterLastValidElement(@Nonnull Editor editor, @javax.annotation.Nullable PsiElement psiElement)
 	{
 		if(psiElement instanceof PsiExpressionStatement  ||
 				psiElement instanceof PsiDeclarationStatement ||

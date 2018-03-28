@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
@@ -28,7 +29,7 @@ public class ParenthesizedExpressionPostfixTemplate extends ExpressionPostfixTem
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expression) {
+  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
     PsiElementFactory factory = JavaPsiFacade.getInstance(expression.getProject()).getElementFactory();
     PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)factory.createExpressionFromText("(expr)", expression.getParent());
     PsiExpression operand = parenthesizedExpression.getExpression();

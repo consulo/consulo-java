@@ -19,7 +19,8 @@ package consulo.java.application.options;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.options.Configurable;
@@ -37,7 +38,7 @@ import consulo.ui.VerticalLayout;
 public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties implements Configurable
 {
 	@RequiredUIAccess
-	@NotNull
+	@Nonnull
 	@Override
 	protected Component createLayout(PropertyBuilder propertyBuilder)
 	{
@@ -69,7 +70,7 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
 	}
 
 	@RequiredUIAccess
-	private void checkBox(String text, VerticalLayout layout, @NotNull PropertyBuilder builder, @NotNull Supplier<Boolean> getter, @NotNull Consumer<Boolean> setter)
+	private void checkBox(String text, VerticalLayout layout, @Nonnull PropertyBuilder builder, @Nonnull Supplier<Boolean> getter, @Nonnull Consumer<Boolean> setter)
 	{
 		CheckBox checkBox = CheckBox.create(text);
 		builder.add(checkBox, getter, setter);

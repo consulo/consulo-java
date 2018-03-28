@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.editorActions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.completion.JavaClassReferenceCompletionContributor;
@@ -199,9 +199,9 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 		return Result.CONTINUE;
 	}
 
-	private static boolean shouldInsertStatementBody(@NotNull PsiElement statement,
-			@NotNull Document doc,
-			@Nullable PsiElement prev)
+	private static boolean shouldInsertStatementBody(@Nonnull PsiElement statement,
+			@Nonnull Document doc,
+			@javax.annotation.Nullable PsiElement prev)
 	{
 		PsiStatement block = statement instanceof PsiWhileStatement ? ((PsiWhileStatement) statement).getBody() : (
 				(PsiIfStatement) statement).getThenBranch();
@@ -216,7 +216,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 				statement) || condition == null);
 	}
 
-	private static boolean isRparenth(@Nullable PsiElement leaf)
+	private static boolean isRparenth(@javax.annotation.Nullable PsiElement leaf)
 	{
 		if(leaf == null)
 		{
@@ -234,7 +234,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 		return next.getNode().getElementType() == JavaTokenType.RPARENTH;
 	}
 
-	private static int startLine(@NotNull Document doc, @NotNull PsiElement psiElement)
+	private static int startLine(@Nonnull Document doc, @Nonnull PsiElement psiElement)
 	{
 		return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
 	}
@@ -242,8 +242,8 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 	@Override
 	public Result charTyped(final char c,
 			final Project project,
-			@NotNull final Editor editor,
-			@NotNull final PsiFile file)
+			@Nonnull final Editor editor,
+			@Nonnull final PsiFile file)
 	{
 		if(myJavaLTTyped)
 		{

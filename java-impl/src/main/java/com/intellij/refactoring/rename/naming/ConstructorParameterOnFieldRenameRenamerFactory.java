@@ -17,11 +17,7 @@ package com.intellij.refactoring.rename.naming;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
-import com.intellij.refactoring.rename.naming.AutomaticRenamer;
-import com.intellij.refactoring.rename.naming.AutomaticRenamerFactory;
-import com.intellij.refactoring.rename.naming.ConstructorParameterOnFieldRenameRenamer;
 import com.intellij.usageView.UsageInfo;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -30,7 +26,7 @@ public class ConstructorParameterOnFieldRenameRenamerFactory implements Automati
     return element instanceof PsiField;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String getOptionName() {
     return null;
   }

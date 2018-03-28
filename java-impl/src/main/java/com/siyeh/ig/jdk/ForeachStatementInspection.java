@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.jdk;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -29,16 +31,15 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ForeachStatementInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("extended.for.statement.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("extended.for.statement.problem.descriptor");
   }
@@ -49,7 +50,7 @@ public class ForeachStatementInspection extends BaseInspection {
 
   private static class ForEachFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("extended.for.statement.replace.quickfix");
     }
@@ -136,7 +137,7 @@ public class ForeachStatementInspection extends BaseInspection {
   private static class ForeachStatementVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitForeachStatement(@NotNull PsiForeachStatement statement) {
+    public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
       super.visitForeachStatement(statement);
       final PsiExpression iteratedValue = statement.getIteratedValue();
       if (iteratedValue == null || !InheritanceUtil.isInheritor(iteratedValue.getType(), CommonClassNames.JAVA_LANG_ITERABLE)) {

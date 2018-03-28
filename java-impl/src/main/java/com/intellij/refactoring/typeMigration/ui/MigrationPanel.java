@@ -38,8 +38,8 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.Disposable;
@@ -268,7 +268,7 @@ public class MigrationPanel extends JPanel implements Disposable
 								}
 								new WriteCommandAction(myProject)
 								{
-									protected void run(@NotNull Result result) throws Throwable
+									protected void run(@Nonnull Result result) throws Throwable
 									{
 										TypeMigrationProcessor.change(usages, myLabeler, myProject);
 									}
@@ -498,7 +498,7 @@ public class MigrationPanel extends JPanel implements Disposable
 
 	private static class MigrationRootsTreeCellRenderer extends ColoredTreeCellRenderer
 	{
-		public void customizeCellRenderer(@NotNull final JTree tree, final Object value, final boolean selected, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus)
+		public void customizeCellRenderer(@Nonnull final JTree tree, final Object value, final boolean selected, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus)
 		{
 			final Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
 			if(!(userObject instanceof MigrationNode))

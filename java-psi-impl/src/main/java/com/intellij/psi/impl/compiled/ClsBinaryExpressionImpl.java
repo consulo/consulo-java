@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiBinaryExpression;
@@ -44,13 +45,13 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		buffer.append(getText());
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.BINARY_EXPRESSION);
 	}
@@ -61,7 +62,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
 		return StringUtil.join(myLOperand.getText(), " ", myOperator.getText(), " ", myROperand.getText());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiElement[] getChildren()
 	{
@@ -79,7 +80,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -91,28 +92,28 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiExpression getLOperand()
 	{
 		return myLOperand;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiExpression getROperand()
 	{
 		return myROperand;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiJavaToken getOperationSign()
 	{
 		return myOperator;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public IElementType getOperationTokenType()
 	{
@@ -120,7 +121,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
 	}
 
 	@Override
-	public PsiJavaToken getTokenBeforeOperand(@NotNull PsiExpression operand)
+	public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand)
 	{
 		return getOperationSign();
 	}
@@ -131,7 +132,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
 		return myLOperand.getType();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiExpression[] getOperands()
 	{

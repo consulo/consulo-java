@@ -25,18 +25,19 @@ import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.io.FileUtil;
 
 public class CommandLineWrapperUtil
 {
-	@NotNull
+	@Nonnull
 	public static File createClasspathJarFile(Manifest manifest, List<String> pathList) throws IOException
 	{
 		return createClasspathJarFile(manifest, pathList, false);
 	}
 
-	@NotNull
+	@Nonnull
 	@SuppressWarnings({
 			"deprecation",
 			"IOResourceOpenedButNotSafelyClosed"

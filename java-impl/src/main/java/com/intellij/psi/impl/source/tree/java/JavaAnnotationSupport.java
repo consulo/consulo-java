@@ -15,17 +15,18 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteral;
 import com.intellij.psi.PsiAnnotationSupport;
-import org.jetbrains.annotations.NotNull;
 
 public class JavaAnnotationSupport implements PsiAnnotationSupport {
   @Override
-  @NotNull
-  public PsiLiteral createLiteralValue(@NotNull String value, @NotNull PsiElement context) {
+  @Nonnull
+  public PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context) {
     return (PsiLiteral)JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createExpressionFromText("\"" + StringUtil.escapeStringCharacters(value) + "\"", null);
   }
 }

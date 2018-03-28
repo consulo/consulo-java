@@ -31,9 +31,12 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import gnu.trove.THashMap;
+
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author anna
@@ -51,7 +54,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
   private PsiElementVisitor myProjectIterator;
   private EntryPointsManager myEntryPointsManager;
 
-  public RefJavaManagerImpl(@NotNull RefManagerImpl manager) {
+  public RefJavaManagerImpl(@Nonnull RefManagerImpl manager) {
     myRefManager = manager;
     final Project project = manager.getProject();
     final PsiManager psiManager = PsiManager.getInstance(project);
@@ -116,7 +119,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
     }
   };
 
-  @Nullable
+  @javax.annotation.Nullable
   private UnusedDeclarationInspection getDeadCodeTool(PsiElement element) {
     PsiFile file = element.getContainingFile();
     return file != null ? DEAD_CODE_TOOL.get(file, myRefManager).get() : null;
@@ -167,7 +170,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
 
   @Override
-  public void iterate(@NotNull final RefVisitor visitor) {
+  public void iterate(@Nonnull final RefVisitor visitor) {
     if (myPackages != null) {
       for (RefPackage refPackage : myPackages.values()) {
         refPackage.accept(visitor);
@@ -237,7 +240,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public RefEntity getReference(final String type, final String fqName) {
     if (METHOD.equals(type)) {
       return RefMethodImpl.methodFromExternalName(myRefManager, fqName);
@@ -258,7 +261,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public String getType(final RefEntity ref) {
     if (ref instanceof RefMethod) {
       return METHOD;
@@ -278,9 +281,9 @@ public class RefJavaManagerImpl extends RefJavaManager {
     return null;
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public RefEntity getRefinedElement(@NotNull final RefEntity ref) {
+  public RefEntity getRefinedElement(@Nonnull final RefEntity ref) {
     if (ref instanceof RefImplicitConstructor) {
       return ((RefImplicitConstructor)ref).getOwnerClass();
     }
@@ -308,7 +311,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
   }
 
   @Override
-  public void export(@NotNull final RefEntity refEntity, @NotNull final Element element) {
+  public void export(@Nonnull final RefEntity refEntity, @Nonnull final Element element) {
     if (refEntity instanceof RefElement) {
       final SmartPsiElementPointer pointer = ((RefElement)refEntity).getPointer();
       if (pointer != null) {

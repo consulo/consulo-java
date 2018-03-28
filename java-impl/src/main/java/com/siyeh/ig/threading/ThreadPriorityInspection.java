@@ -20,21 +20,21 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ThreadPriorityInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToThreadSetPriority";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("thread.priority.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "thread.priority.problem.descriptor");
@@ -49,7 +49,7 @@ public class ThreadPriorityInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression methodCallExpression) {
+      @Nonnull PsiMethodCallExpression methodCallExpression) {
       super.visitMethodCallExpression(methodCallExpression);
       if (!isThreadSetPriority(methodCallExpression)) {
         return;
@@ -61,7 +61,7 @@ public class ThreadPriorityInspection extends BaseInspection {
     }
 
     private static boolean isThreadSetPriority(
-      @NotNull PsiMethodCallExpression methodCallExpression) {
+      @Nonnull PsiMethodCallExpression methodCallExpression) {
       final PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
@@ -82,7 +82,7 @@ public class ThreadPriorityInspection extends BaseInspection {
     }
 
     private static boolean hasNormalPriorityArgument(
-      @NotNull PsiMethodCallExpression methodCallExpression) {
+      @Nonnull PsiMethodCallExpression methodCallExpression) {
       final PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
       final PsiExpression[] expressions = argumentList.getExpressions();

@@ -18,9 +18,11 @@ package com.intellij.util.xml;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClass;
@@ -64,7 +66,7 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return convertFromString(s, context);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiType convertFromString(final String s, final ConvertContext context) {
     if (s == null) return null;
 
@@ -129,7 +131,7 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return null;
   }
 
-  @NonNls @Nullable
+  @NonNls @javax.annotation.Nullable
   private static String toStringArray(final PsiType psiType) {
     if (psiType instanceof PsiArrayType) {
       return '[' + toStringArray(((PsiArrayType)psiType).getComponentType());
@@ -143,7 +145,7 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return null;
   }
 
-  @NotNull
+  @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiType> value, PsiElement element, ConvertContext context) {
     final PsiType psiType = value.getValue();
     final String s = value.getStringValue();

@@ -18,7 +18,8 @@ package org.jetbrains.java.generate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.generate.config.FilterPattern;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import com.intellij.openapi.diagnostic.Logger;
@@ -47,7 +48,7 @@ public class GenerateToStringUtils
 	 * @param pattern the filter pattern to filter out unwanted fields
 	 * @return fields available for this action after the filter process.
 	 */
-	@NotNull
+	@Nonnull
 	public static PsiField[] filterAvailableFields(PsiClass clazz, FilterPattern pattern)
 	{
 		if(log.isDebugEnabled())
@@ -82,8 +83,8 @@ public class GenerateToStringUtils
 	 * @param pattern the filter pattern to filter out unwanted fields
 	 * @return methods available for this action after the filter process.
 	 */
-	@NotNull
-	public static PsiMethod[] filterAvailableMethods(PsiClass clazz, @NotNull FilterPattern pattern)
+	@Nonnull
+	public static PsiMethod[] filterAvailableMethods(PsiClass clazz, @Nonnull FilterPattern pattern)
 	{
 		if(log.isDebugEnabled())
 		{

@@ -27,8 +27,8 @@ import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +37,7 @@ import java.util.Collections;
  * @author yole
  */
 public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
-  public boolean canProcessElement(@NotNull final PsiElement element) {
+  public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiDirectory;
   }
 
@@ -57,7 +57,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
   public void renameElement(final PsiElement element,
                             final String newName,
                             final UsageInfo[] usages,
-                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
+                            @javax.annotation.Nullable RefactoringElementListener listener) throws IncorrectOperationException {
     PsiDirectory aDirectory = (PsiDirectory) element;
     // rename all non-package statement references
     for (UsageInfo usage : usages) {
@@ -85,7 +85,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return newName;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Collection<PsiReference> findReferences(PsiElement element) {
     if (!RefactoringSettings.getInstance().RENAME_SEARCH_FOR_REFERENCES_FOR_DIRECTORY) {
@@ -94,7 +94,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return ReferencesSearch.search(element).findAll();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public PsiElement getElementToSearchInStringsAndComments(PsiElement element) {
     final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) element);

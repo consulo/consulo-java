@@ -32,8 +32,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableSearchUtils;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -41,13 +40,13 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("caught.exception.immediately.rethrown.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("caught.exception.immediately.rethrown.problem.descriptor");
   }
@@ -58,7 +57,7 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiTryStatement tryStatement = (PsiTryStatement)infos[0];
     final boolean removeTryCatch = tryStatement.getCatchSections().length == 1 && tryStatement.getFinallyBlock() == null &&
@@ -74,7 +73,7 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
       this.removeTryCatch = removeTryCatch;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       if (removeTryCatch) {
         return InspectionGadgetsBundle.message("remove.try.catch.quickfix");

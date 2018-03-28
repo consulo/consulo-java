@@ -31,7 +31,7 @@ import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.search.searches.DeepestSuperMethodsSearch;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,12 +40,12 @@ import java.util.Set;
 public class SuperMethodWarningUtil {
   private SuperMethodWarningUtil() {}
 
-  @NotNull
+  @Nonnull
   public static PsiMethod[] checkSuperMethods(final PsiMethod method, String actionString) {
     return checkSuperMethods(method, actionString, null);
   }
 
-  @NotNull
+  @Nonnull
   public static PsiMethod[] checkSuperMethods(final PsiMethod method, String actionString, Collection<PsiElement> ignore) {
     PsiClass aClass = method.getContainingClass();
     if (aClass == null) return new PsiMethod[]{method};
@@ -157,7 +157,7 @@ public class SuperMethodWarningUtil {
       }).createPopup().showInBestPositionFor(editor);
   }
 
-  public static int askWhetherShouldAnnotateBaseMethod(@NotNull PsiMethod method, @NotNull PsiMethod superMethod) {
+  public static int askWhetherShouldAnnotateBaseMethod(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod) {
     String implement = !method.hasModifierProperty(PsiModifier.ABSTRACT) && superMethod.hasModifierProperty(PsiModifier.ABSTRACT)
                        ? InspectionsBundle.message("inspection.annotate.quickfix.implements")
                        : InspectionsBundle.message("inspection.annotate.quickfix.overrides");

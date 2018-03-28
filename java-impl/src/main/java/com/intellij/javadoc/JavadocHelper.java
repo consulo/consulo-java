@@ -29,8 +29,7 @@ import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.javadoc.PsiDocToken;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +50,7 @@ public class JavadocHelper {
     = new Pair<JavadocParameterInfo, List<JavadocParameterInfo>>(null, Collections.<JavadocParameterInfo>emptyList());
   private static final JavadocHelper INSTANCE = new JavadocHelper();
   
-  @NotNull
+  @Nonnull
   public static JavadocHelper getInstance() {
     return INSTANCE;
   }
@@ -64,7 +63,7 @@ public class JavadocHelper {
    * @param project   target project
    */
   @SuppressWarnings("MethodMayBeStatic")
-  public void navigate(@NotNull LogicalPosition position, @NotNull Editor editor, @NotNull final Project project) {
+  public void navigate(@Nonnull LogicalPosition position, @Nonnull Editor editor, @Nonnull final Project project) {
     final Document document = editor.getDocument();
     final CaretModel caretModel = editor.getCaretModel();
     final int endLineOffset = document.getLineEndOffset(position.line);
@@ -92,10 +91,10 @@ public class JavadocHelper {
    * @return         logical position that points to the desired parameter description start location
    */
   @SuppressWarnings("MethodMayBeStatic")
-  @NotNull
-  public LogicalPosition calculateDescriptionStartPosition(@NotNull PsiFile psiFile,
-                                                           @NotNull Collection<JavadocParameterInfo> data,
-                                                           @NotNull JavadocHelper.JavadocParameterInfo anchor)
+  @Nonnull
+  public LogicalPosition calculateDescriptionStartPosition(@Nonnull PsiFile psiFile,
+                                                           @Nonnull Collection<JavadocParameterInfo> data,
+                                                           @Nonnull JavadocHelper.JavadocParameterInfo anchor)
   {
     int descriptionStartColumn = -1;
     int parameterNameEndColumn = -1;
@@ -131,8 +130,8 @@ public class JavadocHelper {
    *                      adjacent lines if any
    */
   @SuppressWarnings("MethodMayBeStatic")
-  @NotNull
-  public Pair<JavadocParameterInfo, List<JavadocParameterInfo>> parse(@NotNull PsiFile psiFile, @NotNull Editor editor, int offset) {
+  @Nonnull
+  public Pair<JavadocParameterInfo, List<JavadocParameterInfo>> parse(@Nonnull PsiFile psiFile, @Nonnull Editor editor, int offset) {
     List<JavadocParameterInfo> result = new ArrayList<JavadocParameterInfo>();
     final PsiElement elementAtCaret = psiFile.findElementAt(offset);
     if (elementAtCaret == null) {
@@ -186,8 +185,8 @@ public class JavadocHelper {
     return new Pair<JavadocParameterInfo, List<JavadocParameterInfo>>(anchorInfo, result);
   }
 
-  @Nullable
-  private static JavadocParameterInfo parse(@NotNull PsiElement element, @NotNull Editor editor) {
+  @javax.annotation.Nullable
+  private static JavadocParameterInfo parse(@Nonnull PsiElement element, @Nonnull Editor editor) {
     final PsiDocTag tag = PsiTreeUtil.getParentOfType(element, PsiDocTag.class, false);
     if (tag == null || !PARAM_TEXT.equals(tag.getName())) {
       return null;
@@ -237,12 +236,14 @@ public class JavadocHelper {
      *    *&#47;
      * </pre>
      */
-    @NotNull public final  LogicalPosition parameterNameEndPosition;
-    @Nullable public final LogicalPosition parameterDescriptionStartPosition;
+    @Nonnull
+	public final  LogicalPosition parameterNameEndPosition;
+    @javax.annotation.Nullable
+	public final LogicalPosition parameterDescriptionStartPosition;
     /** Last logical line occupied by the current javadoc parameter. */
     public final int lastLine;
 
-    public JavadocParameterInfo(@NotNull LogicalPosition parameterNameEndPosition,
+    public JavadocParameterInfo(@Nonnull LogicalPosition parameterNameEndPosition,
                                 LogicalPosition parameterDescriptionStartPosition,
                                 int lastLine)
     {

@@ -17,8 +17,8 @@ package com.siyeh.ig.psiutils;
 
 import static com.intellij.util.ObjectUtils.tryCast;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiDeclarationStatement;
@@ -39,20 +39,20 @@ import com.intellij.psi.util.TypeConversionUtil;
 public class CountingLoop
 {
 	final
-	@NotNull
+	@Nonnull
 	PsiLocalVariable myCounter;
 	final
-	@NotNull
+	@Nonnull
 	PsiLoopStatement myLoop;
 	final
-	@NotNull
+	@Nonnull
 	PsiExpression myInitializer;
 	final
-	@NotNull
+	@Nonnull
 	PsiExpression myBound;
 	final boolean myIncluding;
 
-	private CountingLoop(@NotNull PsiLoopStatement loop, @NotNull PsiLocalVariable counter, @NotNull PsiExpression initializer, @NotNull PsiExpression bound, boolean including)
+	private CountingLoop(@Nonnull PsiLoopStatement loop, @Nonnull PsiLocalVariable counter, @Nonnull PsiExpression initializer, @Nonnull PsiExpression bound, boolean including)
 	{
 		myInitializer = initializer;
 		myCounter = counter;
@@ -64,7 +64,7 @@ public class CountingLoop
 	/**
 	 * @return loop counter variable
 	 */
-	@NotNull
+	@Nonnull
 	public PsiLocalVariable getCounter()
 	{
 		return myCounter;
@@ -73,7 +73,7 @@ public class CountingLoop
 	/**
 	 * @return loop statement
 	 */
-	@NotNull
+	@Nonnull
 	public PsiLoopStatement getLoop()
 	{
 		return myLoop;
@@ -82,7 +82,7 @@ public class CountingLoop
 	/**
 	 * @return counter variable initial value
 	 */
-	@NotNull
+	@Nonnull
 	public PsiExpression getInitializer()
 	{
 		return myInitializer;
@@ -91,7 +91,7 @@ public class CountingLoop
 	/**
 	 * @return loop bound
 	 */
-	@NotNull
+	@Nonnull
 	public PsiExpression getBound()
 	{
 		return myBound;

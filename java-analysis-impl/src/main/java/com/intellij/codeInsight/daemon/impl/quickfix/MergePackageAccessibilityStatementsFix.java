@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaModule;
@@ -42,7 +42,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 	private final String myPackageName;
 	private final Role myRole;
 
-	protected MergePackageAccessibilityStatementsFix(@NotNull PsiJavaModule javaModule, @NotNull String packageName, @NotNull Role role)
+	protected MergePackageAccessibilityStatementsFix(@Nonnull PsiJavaModule javaModule, @Nonnull String packageName, @Nonnull Role role)
 	{
 		super(javaModule);
 		myPackageName = packageName;
@@ -50,7 +50,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -58,16 +58,16 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", getKeyword());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected String getReplacementText(@NotNull List<PsiPackageAccessibilityStatement> statementsToMerge)
+	protected String getReplacementText(@Nonnull List<PsiPackageAccessibilityStatement> statementsToMerge)
 	{
 		final List<String> moduleNames = getModuleNames(statementsToMerge);
 		if(!moduleNames.isEmpty())
@@ -77,8 +77,8 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 		return getKeyword() + " " + myPackageName + ";";
 	}
 
-	@NotNull
-	private static List<String> getModuleNames(@NotNull List<PsiPackageAccessibilityStatement> statements)
+	@Nonnull
+	private static List<String> getModuleNames(@Nonnull List<PsiPackageAccessibilityStatement> statements)
 	{
 		final List<String> result = new ArrayList<>();
 		for(PsiPackageAccessibilityStatement statement : statements)
@@ -93,15 +93,15 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 		return result;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected List<PsiPackageAccessibilityStatement> getStatementsToMerge(@NotNull PsiJavaModule javaModule)
+	protected List<PsiPackageAccessibilityStatement> getStatementsToMerge(@Nonnull PsiJavaModule javaModule)
 	{
 		return StreamSupport.stream(getStatements(javaModule, myRole).spliterator(), false).filter(statement -> myPackageName.equals(statement.getPackageName())).collect(Collectors.toList());
 	}
 
-	@Nullable
-	public static MergeModuleStatementsFix createFix(@Nullable PsiPackageAccessibilityStatement statement)
+	@javax.annotation.Nullable
+	public static MergeModuleStatementsFix createFix(@javax.annotation.Nullable PsiPackageAccessibilityStatement statement)
 	{
 		if(statement != null)
 		{
@@ -118,8 +118,8 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 		return null;
 	}
 
-	@NotNull
-	private static Iterable<PsiPackageAccessibilityStatement> getStatements(@NotNull PsiJavaModule javaModule, @NotNull Role role)
+	@Nonnull
+	private static Iterable<PsiPackageAccessibilityStatement> getStatements(@Nonnull PsiJavaModule javaModule, @Nonnull Role role)
 	{
 		switch(role)
 		{
@@ -132,7 +132,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 		return Collections.emptyList();
 	}
 
-	@NotNull
+	@Nonnull
 	private String getKeyword()
 	{
 		switch(myRole)

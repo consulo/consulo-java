@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.SimpleModificationTracker;
 import com.intellij.psi.ExternallyDefinedPsiElement;
 import com.intellij.psi.PsiClass;
@@ -43,13 +43,13 @@ public class ClassInnerStuffCache
 	private final PsiExtensibleClass myClass;
 	private final SimpleModificationTracker myTracker;
 
-	public ClassInnerStuffCache(@NotNull PsiExtensibleClass aClass)
+	public ClassInnerStuffCache(@Nonnull PsiExtensibleClass aClass)
 	{
 		myClass = aClass;
 		myTracker = new SimpleModificationTracker();
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiMethod[] getConstructors()
 	{
 		return CachedValuesManager.getCachedValue(myClass, new CachedValueProvider<PsiMethod[]>()
@@ -63,7 +63,7 @@ public class ClassInnerStuffCache
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiField[] getFields()
 	{
 		return CachedValuesManager.getCachedValue(myClass, new CachedValueProvider<PsiField[]>()
@@ -77,7 +77,7 @@ public class ClassInnerStuffCache
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiMethod[] getMethods()
 	{
 		return CachedValuesManager.getCachedValue(myClass, new CachedValueProvider<PsiMethod[]>()
@@ -91,7 +91,7 @@ public class ClassInnerStuffCache
 		});
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiClass[] getInnerClasses()
 	{
 		return CachedValuesManager.getCachedValue(myClass, new CachedValueProvider<PsiClass[]>()
@@ -123,7 +123,7 @@ public class ClassInnerStuffCache
 		}).get(name);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiMethod[] findMethodsByName(String name, boolean checkBases)
 	{
 		if(checkBases)
@@ -142,7 +142,7 @@ public class ClassInnerStuffCache
 		return methods == null ? PsiMethod.EMPTY_ARRAY : methods;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiClass findInnerClassByName(final String name, final boolean checkBases)
 	{
 		if(checkBases)
@@ -163,7 +163,7 @@ public class ClassInnerStuffCache
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiField[] getAllFields()
 	{
 		List<PsiField> own = myClass.getOwnFields();
@@ -171,7 +171,7 @@ public class ClassInnerStuffCache
 		return ArrayUtil.mergeCollections(own, ext, PsiField.ARRAY_FACTORY);
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiMethod[] getAllMethods()
 	{
 		List<PsiMethod> own = myClass.getOwnMethods();
@@ -179,7 +179,7 @@ public class ClassInnerStuffCache
 		return ArrayUtil.mergeCollections(own, ext, PsiMethod.ARRAY_FACTORY);
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiClass[] getAllInnerClasses()
 	{
 		List<PsiClass> own = myClass.getOwnInnerClasses();
@@ -187,7 +187,7 @@ public class ClassInnerStuffCache
 		return ArrayUtil.mergeCollections(own, ext, PsiClass.ARRAY_FACTORY);
 	}
 
-	@NotNull
+	@Nonnull
 	private Map<String, PsiField> getFieldsMap()
 	{
 		PsiField[] fields = getFields();
@@ -208,7 +208,7 @@ public class ClassInnerStuffCache
 		return cachedFields;
 	}
 
-	@NotNull
+	@Nonnull
 	private Map<String, PsiMethod[]> getMethodsMap()
 	{
 		PsiMethod[] methods = getMethods();
@@ -237,7 +237,7 @@ public class ClassInnerStuffCache
 		return cachedMethods;
 	}
 
-	@NotNull
+	@Nonnull
 	private Map<String, PsiClass> getInnerClassesMap()
 	{
 		PsiClass[] classes = getInnerClasses();

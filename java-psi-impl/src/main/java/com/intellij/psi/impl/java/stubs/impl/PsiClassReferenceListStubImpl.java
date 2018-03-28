@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElementFactory;
@@ -39,14 +40,14 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 	private final String[] myNames;
 	private PsiClassType[] myTypes;
 
-	public PsiClassReferenceListStubImpl(@NotNull JavaClassReferenceListElementType type, StubElement parent, @NotNull String[] names)
+	public PsiClassReferenceListStubImpl(@Nonnull JavaClassReferenceListElementType type, StubElement parent, @Nonnull String[] names)
 	{
 		super(parent, type);
 		ObjectUtils.assertAllElementsNotNull(names);
 		myNames = names;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiClassType[] getReferencedTypes()
 	{
@@ -111,14 +112,14 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 		return types.clone();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String[] getReferencedNames()
 	{
 		return myNames.clone();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiReferenceList.Role getRole()
 	{

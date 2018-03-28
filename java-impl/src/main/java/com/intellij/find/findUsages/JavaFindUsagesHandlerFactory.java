@@ -15,13 +15,14 @@
  */
 package com.intellij.find.findUsages;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.lang.java.JavaFindUsagesProvider;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author peter
@@ -33,7 +34,7 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
   private final JavaThrowFindUsagesOptions myFindThrowOptions;
   private final JavaVariableFindUsagesOptions myFindVariableOptions;
 
-  public static JavaFindUsagesHandlerFactory getInstance(@NotNull Project project) {
+  public static JavaFindUsagesHandlerFactory getInstance(@Nonnull Project project) {
     return ContainerUtil.findInstance(Extensions.getExtensions(EP_NAME, project), JavaFindUsagesHandlerFactory.class);
   }
 
@@ -46,12 +47,12 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
   }
 
   @Override
-  public boolean canFindUsages(@NotNull final PsiElement element) {
+  public boolean canFindUsages(@Nonnull final PsiElement element) {
     return new JavaFindUsagesProvider().canFindUsagesFor(element);
   }
 
   @Override
-  public FindUsagesHandler createFindUsagesHandler(@NotNull final PsiElement element, final boolean forHighlightUsages) {
+  public FindUsagesHandler createFindUsagesHandler(@Nonnull final PsiElement element, final boolean forHighlightUsages) {
     if (element instanceof PsiDirectory) {
       final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)element);
       return psiPackage == null ? null : new JavaFindUsagesHandler(psiPackage, this);

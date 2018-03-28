@@ -46,8 +46,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -128,7 +128,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
     return new IntroduceParameterObjectUsageViewDescriptor(method);
   }
@@ -168,7 +168,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     return showConflicts(conflicts, refUsages.get());
   }
 
-  public void findUsages(@NotNull List<FixableUsageInfo> usages) {
+  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
     if (myUseExistingClass && existingClass != null) {
       myExistingClassCompatibleConstructor = existingClassIsCompatible(existingClass, parameters);
     }

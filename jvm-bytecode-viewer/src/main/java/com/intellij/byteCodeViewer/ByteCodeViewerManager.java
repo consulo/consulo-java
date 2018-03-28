@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.util.Textifier;
 import org.jetbrains.org.objectweb.asm.util.TraceClassVisitor;
@@ -88,7 +88,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     return new ByteCodeViewerComponent(myProject, createActions());
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected String getTitle(PsiElement element) {
     PsiClass aClass = getContainingClass(element);
     if (aClass == null) return null;
@@ -135,11 +135,11 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
   }
 
   @Override
-  protected void doUpdateComponent(@NotNull PsiElement element) {
+  protected void doUpdateComponent(@Nonnull PsiElement element) {
     doUpdateComponent(element, getByteCode(element));
   }
 
-  protected void doUpdateComponent(@NotNull PsiElement element, final String newText) {
+  protected void doUpdateComponent(@Nonnull PsiElement element, final String newText) {
     final Content content = myToolWindow.getContentManager().getSelectedContent();
     if (content != null) {
       updateByteCode(element, (ByteCodeViewerComponent)content.getComponent(), content, newText);
@@ -147,7 +147,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
   }
 
   @Nullable
-  public static String getByteCode(@NotNull PsiElement psiElement) {
+  public static String getByteCode(@Nonnull PsiElement psiElement) {
     PsiClass containingClass = getContainingClass(psiElement);
     //todo show popup
     if (containingClass == null) return null;

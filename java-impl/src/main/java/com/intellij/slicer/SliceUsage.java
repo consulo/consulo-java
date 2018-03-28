@@ -17,7 +17,8 @@ package com.intellij.slicer;
 
 import gnu.trove.TObjectHashingStrategy;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -39,14 +40,14 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 	public final SliceAnalysisParams params;
 	private final PsiSubstitutor mySubstitutor;
 	protected final int indexNesting; // 0 means bare expression 'x', 1 means x[?], 2 means x[?][?] etc
-	@NotNull
+	@Nonnull
 	protected final String syntheticField; // "" means no field, otherwise it's a name of fake field of container, e.g. "keys" for Map
 
-	public SliceUsage(@NotNull PsiElement element,
-			@NotNull SliceUsage parent,
-			@NotNull PsiSubstitutor substitutor,
+	public SliceUsage(@Nonnull PsiElement element,
+			@Nonnull SliceUsage parent,
+			@Nonnull PsiSubstitutor substitutor,
 			int indexNesting,
-			@NotNull String syntheticField)
+			@Nonnull String syntheticField)
 	{
 		super(new UsageInfo(element));
 		myParent = parent;
@@ -58,7 +59,7 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 	}
 
 	// root usage
-	private SliceUsage(@NotNull PsiElement element, @NotNull SliceAnalysisParams params)
+	private SliceUsage(@Nonnull PsiElement element, @Nonnull SliceAnalysisParams params)
 	{
 		super(new UsageInfo(element));
 		myParent = null;
@@ -68,13 +69,13 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 		syntheticField = "";
 	}
 
-	@NotNull
-	public static SliceUsage createRootUsage(@NotNull PsiElement element, @NotNull SliceAnalysisParams params)
+	@Nonnull
+	public static SliceUsage createRootUsage(@Nonnull PsiElement element, @Nonnull SliceAnalysisParams params)
 	{
 		return new SliceUsage(element, params);
 	}
 
-	public void processChildren(@NotNull Processor<SliceUsage> processor)
+	public void processChildren(@Nonnull Processor<SliceUsage> processor)
 	{
 		final PsiElement element = ApplicationManager.getApplication().runReadAction(new Computable<PsiElement>()
 		{
@@ -125,13 +126,13 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 		return myParent;
 	}
 
-	@NotNull
+	@Nonnull
 	public AnalysisScope getScope()
 	{
 		return params.scope;
 	}
 
-	@NotNull
+	@Nonnull
 	SliceUsage copy()
 	{
 		PsiElement element = getUsageInfo().getElement();
@@ -139,7 +140,7 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 				syntheticField);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiSubstitutor getSubstitutor()
 	{
 		return mySubstitutor;

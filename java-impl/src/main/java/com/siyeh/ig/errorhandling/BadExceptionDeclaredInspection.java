@@ -19,10 +19,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
@@ -81,19 +81,19 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ProhibitedExceptionDeclared";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("bad.exception.declared.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("bad.exception.declared.problem.descriptor");
   }
@@ -136,7 +136,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
   private class BadExceptionDeclaredVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (ignoreTestCases) {
         final PsiClass containingClass = method.getContainingClass();

@@ -26,8 +26,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -37,13 +37,13 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
   public boolean ignorePrivateMethods = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.date.calendar.field.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String type = (String)infos[0];
     return InspectionGadgetsBundle.message("return.date.calendar.field.problem.descriptor", type);
@@ -69,7 +69,7 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
       myType = type;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("return.date.calendar.field.quickfix", myType);
@@ -99,7 +99,7 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
   private class ReturnOfDateFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReturnStatement(@NotNull PsiReturnStatement statement) {
+    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       final PsiExpression returnValue = statement.getReturnValue();
       if (!(returnValue instanceof PsiReferenceExpression)) {

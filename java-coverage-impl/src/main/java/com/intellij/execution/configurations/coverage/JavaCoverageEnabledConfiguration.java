@@ -21,10 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.coverage.CoverageRunner;
 import com.intellij.coverage.IDEACoverageRunner;
 import com.intellij.coverage.JavaCoverageEngine;
@@ -62,7 +62,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     setCoverageRunner(CoverageRunner.getInstance(IDEACoverageRunner.class));
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static JavaCoverageEnabledConfiguration getFrom(final RunConfigurationBase configuration) {
     final CoverageEnabledConfiguration coverageEnabledConfiguration = getOrCreate(configuration);
     if (coverageEnabledConfiguration instanceof JavaCoverageEnabledConfiguration) {
@@ -91,7 +91,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
   }
 
 
-  @NotNull
+  @Nonnull
   public JavaCoverageEngine getCoverageProvider() {
     return myCoverageProvider;
   }
@@ -100,7 +100,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     return myCoveragePatterns;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String [] getPatterns() {
     if (myCoveragePatterns != null) {
       List<String> patterns = new ArrayList<String>();
@@ -193,7 +193,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String getCoverageFilePath() {
     if (myCoverageFilePath != null ) {
       return myCoverageFilePath;

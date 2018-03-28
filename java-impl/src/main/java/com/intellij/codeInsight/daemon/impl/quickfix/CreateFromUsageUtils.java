@@ -24,9 +24,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeUtil;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -303,7 +305,7 @@ public class CreateFromUsageUtils {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiClass createClass(final PsiJavaCodeReferenceElement referenceElement,
                                      final CreateClassKind classKind,
                                      final String superClassName) {
@@ -356,7 +358,7 @@ public class CreateFromUsageUtils {
     return createClass(classKind, targetDirectory, name, manager, referenceElement, sourceFile, superClassName);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiJavaPackage findTargetPackage(PsiElement qualifierElement, PsiManager manager, PsiFile sourceFile) {
     PsiJavaPackage aPackage = null;
     if (qualifierElement instanceof PsiJavaPackage) {
@@ -538,7 +540,7 @@ public class CreateFromUsageUtils {
     final List<PsiVariable> list = new ArrayList<PsiVariable>();
     VariablesProcessor varproc = new VariablesProcessor("", true, list){
       @Override
-      public boolean execute(@NotNull PsiElement element, ResolveState state) {
+      public boolean execute(@Nonnull PsiElement element, ResolveState state) {
         if(!(element instanceof PsiField) ||
            JavaPsiFacade.getInstance(element.getProject()).getResolveHelper().isAccessible((PsiField)element, expression, null)) {
           return super.execute(element, state);
@@ -690,7 +692,7 @@ public class CreateFromUsageUtils {
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiType[] guessType(PsiExpression expression, final boolean allowVoidType) {
     final PsiManager manager = expression.getManager();
     final GlobalSearchScope resolveScope = expression.getResolveScope();
@@ -972,10 +974,10 @@ public class CreateFromUsageUtils {
     return false;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getQualifiedName(final PsiClass aClass) {
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      @Nullable
+      @javax.annotation.Nullable
       @Override
       public String compute() {
         return aClass.getQualifiedName();
@@ -983,7 +985,7 @@ public class CreateFromUsageUtils {
     });
   }
 
-  private static boolean hasCorrectModifiers(@Nullable final PsiMember member, final boolean staticAccess) {
+  private static boolean hasCorrectModifiers(@javax.annotation.Nullable final PsiMember member, final boolean staticAccess) {
     if (member == null) {
       return false;
     }
@@ -1017,7 +1019,7 @@ public class CreateFromUsageUtils {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public LookupElement[] calculateLookupItems(ExpressionContext context) {
       Project project = context.getProject();
       int offset = context.getStartOffset();

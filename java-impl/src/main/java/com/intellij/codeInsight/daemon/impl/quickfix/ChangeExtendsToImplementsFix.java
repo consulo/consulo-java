@@ -19,7 +19,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -40,7 +41,7 @@ public class ChangeExtendsToImplementsFix extends ExtendsListFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return myName;
   }

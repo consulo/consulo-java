@@ -30,7 +30,7 @@ import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.refactoring.IntroduceTargetChooser;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -38,23 +38,23 @@ import java.util.List;
  * @author ignatov
  */
 public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTemplate {
-  protected ExpressionPostfixTemplateWithChooser(@NotNull String name, @NotNull String example) {
+  protected ExpressionPostfixTemplateWithChooser(@Nonnull String name, @Nonnull String example) {
     super(name, example);
   }
 
-  protected ExpressionPostfixTemplateWithChooser(@NotNull String name,
-                                                 @NotNull String key,
-                                                 @NotNull String example) {
+  protected ExpressionPostfixTemplateWithChooser(@Nonnull String name,
+                                                 @Nonnull String key,
+                                                 @Nonnull String example) {
     super(name, key, example);
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
     return !getExpressions(context, copyDocument, newOffset).isEmpty();
   }
 
   @Override
-  public void expand(@NotNull PsiElement context, @NotNull final Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull final Editor editor) {
     List<PsiExpression> expressions = getExpressions(context, editor.getDocument(), editor.getCaretModel().getOffset());
 
     if (expressions.isEmpty()) {
@@ -67,7 +67,7 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
       IntroduceTargetChooser.showChooser(
         editor, expressions,
         new Pass<PsiExpression>() {
-          public void pass(@NotNull final PsiExpression e) {
+          public void pass(@Nonnull final PsiExpression e) {
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
               @Override
               public void run() {
@@ -86,8 +86,8 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
     }
   }
 
-  @NotNull
-  protected List<PsiExpression> getExpressions(@NotNull PsiElement context, @NotNull Document document, final int offset) {
+  @Nonnull
+  protected List<PsiExpression> getExpressions(@Nonnull PsiElement context, @Nonnull Document document, final int offset) {
     List<PsiExpression> expressions = ContainerUtil.filter(IntroduceVariableBase.collectExpressions(context.getContainingFile(), document,
                                                                                                     Math.max(offset - 1, 0), false),
                                                            new Condition<PsiExpression>() {
@@ -100,19 +100,19 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
     return ContainerUtil.filter(expressions.isEmpty() ? maybeTopmostExpression(context) : expressions, getTypeCondition());
   }
 
-  @NotNull
+  @Nonnull
   @SuppressWarnings("unchecked")
   protected Condition<PsiExpression> getTypeCondition() {
     return Condition.TRUE;
   }
 
-  @NotNull
-  private static List<PsiExpression> maybeTopmostExpression(@NotNull PsiElement context) {
+  @Nonnull
+  private static List<PsiExpression> maybeTopmostExpression(@Nonnull PsiElement context) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     PsiType type = expression != null ? expression.getType() : null;
     if (type == null || PsiType.VOID.equals(type)) return ContainerUtil.emptyList();
     return ContainerUtil.createMaybeSingletonList(expression);
   }
 
-  protected abstract void doIt(@NotNull Editor editor, @NotNull PsiExpression expression);
+  protected abstract void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression);
 }

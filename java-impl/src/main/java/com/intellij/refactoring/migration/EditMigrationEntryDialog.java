@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
@@ -115,7 +114,7 @@ public class EditMigrationEntryDialog extends DialogWrapper
 		final LanguageTextField.DocumentCreator documentCreator = new LanguageTextField.DocumentCreator()
 		{
 			@Override
-			public Document createDocument(String value, @Nullable Language language, Project project)
+			public Document createDocument(String value, @javax.annotation.Nullable Language language, Project project)
 			{
 				PsiPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
 				final JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment("", defaultPackage, true, true);

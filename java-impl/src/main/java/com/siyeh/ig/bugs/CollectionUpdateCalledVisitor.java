@@ -17,8 +17,7 @@ package com.siyeh.ig.bugs;
 
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -29,13 +28,13 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
   private boolean updated = false;
   private final PsiVariable variable;
 
-  CollectionUpdateCalledVisitor(@Nullable PsiVariable variable, Set<String> updateNames) {
+  CollectionUpdateCalledVisitor(@javax.annotation.Nullable PsiVariable variable, Set<String> updateNames) {
     this.variable = variable;
     this.updateNames = updateNames;
   }
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!updated) {
       super.visitElement(element);
     }
@@ -52,7 +51,7 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @NotNull PsiMethodCallExpression call) {
+    @Nonnull PsiMethodCallExpression call) {
     super.visitMethodCallExpression(call);
     if (updated) {
       return;

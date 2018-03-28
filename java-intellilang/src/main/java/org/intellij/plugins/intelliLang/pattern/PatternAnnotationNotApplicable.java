@@ -15,6 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.pattern;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
@@ -25,11 +27,10 @@ import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.intellij.plugins.intelliLang.util.RemoveAnnotationFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class PatternAnnotationNotApplicable extends LocalInspectionTool {
 
-  @NotNull
+  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
@@ -38,18 +39,18 @@ public class PatternAnnotationNotApplicable extends LocalInspectionTool {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.PATTERN_VALIDATION;
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Pattern Annotation not applicable";
   }
 
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final String annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getPatternAnnotationClass();
 
@@ -89,7 +90,7 @@ public class PatternAnnotationNotApplicable extends LocalInspectionTool {
     holder.registerProblem(annotation, "Pattern Annotation is only applicable to elements of type String", new RemoveAnnotationFix(this));
   }
 
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "PatternNotApplicable";

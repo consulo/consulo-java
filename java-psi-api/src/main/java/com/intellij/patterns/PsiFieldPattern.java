@@ -17,7 +17,6 @@ package com.intellij.patterns;
 
 import com.intellij.psi.PsiField;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author peter
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class PsiFieldPattern extends PsiMemberPattern<PsiField, PsiFieldPattern>{
   public PsiFieldPattern() {
     super(new InitialPatternCondition<PsiField>(PsiField.class) {
-      public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
+      public boolean accepts(@javax.annotation.Nullable final Object o, final ProcessingContext context) {
         return o instanceof PsiField;
       }
     });

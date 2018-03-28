@@ -15,8 +15,8 @@
  */
 package com.intellij.pom.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
@@ -38,6 +38,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	JDK_1_7("1.7", "Java 7", JavaCoreBundle.message("jdk.1.7.language.level.description"), "1.7", "7"),
 	JDK_1_8("1.8", "Java 8", JavaCoreBundle.message("jdk.1.8.language.level.description"), "1.8", "8"),
 	JDK_1_9("1.9", "Java 9", JavaCoreBundle.message("jdk.1.9.language.level.description"), "9", "1.9"),
+	JDK_10(JavaCoreBundle.message("jdk.10.language.level.description"), "10", "1.10"),
 	JDK_X("1.10", "Java X", JavaCoreBundle.message("jdk.X.language.level.description"), "");
 
 	public static final LanguageLevel HIGHEST = JDK_1_9;
@@ -71,7 +72,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 		return myCompilerComplianceOptions[0];
 	}
 
-	@NotNull
+	@Nonnull
 	public JavaLanguageVersion toLangVersion()
 	{
 		return myLangVersion;
@@ -93,7 +94,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 		return this;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -110,13 +111,13 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 		return ContainerUtil.find(values(), level -> ArrayUtil.contains(compilerComplianceOption, level.myCompilerComplianceOptions));
 	}
 
-	@NotNull
+	@Nonnull
 	public String getShortText()
 	{
 		return myShortText;
 	}
 
-	@NotNull
+	@Nonnull
 	public String getFullText()
 	{
 		return myFullText;

@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
@@ -24,23 +24,23 @@ import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 
 public interface DfaMemoryState
 {
-	@NotNull
+	@Nonnull
 	DfaMemoryState createCopy();
 
-	@NotNull
+	@Nonnull
 	DfaMemoryState createClosureState();
 
 	DfaValue pop();
 
 	DfaValue peek();
 
-	void push(@NotNull DfaValue value);
+	void push(@Nonnull DfaValue value);
 
 	void emptyStack();
 
 	void setVarValue(DfaVariableValue var, DfaValue value);
 
-	boolean applyInstanceofOrNull(@NotNull DfaRelationValue dfaCond);
+	boolean applyInstanceofOrNull(@Nonnull DfaRelationValue dfaCond);
 
 	boolean applyCondition(DfaValue dfaCond);
 
@@ -55,8 +55,8 @@ public interface DfaMemoryState
 	 * @param <T>      a type of the fact value
 	 * @return a fact about value, if known
 	 */
-	@Nullable
-	<T> T getValueFact(@NotNull DfaFactType<T> factType, @NotNull DfaValue value);
+	@javax.annotation.Nullable
+	<T> T getValueFact(@Nonnull DfaFactType<T> factType, @Nonnull DfaValue value);
 
 	void flushFields();
 
@@ -68,8 +68,8 @@ public interface DfaMemoryState
 
 	boolean isNotNull(DfaValue dfaVar);
 
-	@Nullable
-	DfaConstValue getConstantValue(@NotNull DfaVariableValue value);
+	@javax.annotation.Nullable
+	DfaConstValue getConstantValue(@Nonnull DfaVariableValue value);
 
 	/**
 	 * Ephemeral means a state that was created when considering a method contract and checking if one of its arguments is null.

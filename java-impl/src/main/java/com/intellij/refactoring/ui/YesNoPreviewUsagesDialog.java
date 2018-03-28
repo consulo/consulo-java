@@ -26,7 +26,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.MultiLineLabelUI;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.refactoring.RefactoringBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,7 +81,7 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
     return panel;
   }
 
-  @NotNull
+  @Nonnull
   protected Action[] createActions() {
     if(myHelpID != null){
       return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};

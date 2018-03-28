@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.naming.ConventionInspection;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class JUnitAbstractTestClassNamingConventionInspection
   extends ConventionInspection {
@@ -34,7 +34,7 @@ public class JUnitAbstractTestClassNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 64;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "junit.abstract.test.class.naming.convention.display.name");
@@ -51,7 +51,7 @@ public class JUnitAbstractTestClassNamingConventionInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     if (className.length() < getMinLength()) {

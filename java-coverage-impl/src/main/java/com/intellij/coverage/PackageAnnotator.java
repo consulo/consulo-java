@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtil;
@@ -154,7 +154,7 @@ public class PackageAnnotator
 			final String rootPackageVMName = qualifiedName.replaceAll("\\.", "/");
 			final VirtualFile output = myCoverageManager.doInReadActionIfProjectOpen(new Computable<VirtualFile>()
 			{
-				@Nullable
+				@javax.annotation.Nullable
 				public VirtualFile compute()
 				{
 					return ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());

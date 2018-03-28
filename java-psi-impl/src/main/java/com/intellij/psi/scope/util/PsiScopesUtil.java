@@ -19,8 +19,8 @@ package com.intellij.psi.scope.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.util.Comparing;
@@ -47,12 +47,12 @@ public class PsiScopesUtil
 	{
 	}
 
-	public static boolean treeWalkUp(@NotNull PsiScopeProcessor processor, @NotNull PsiElement entrance, @Nullable PsiElement maxScope)
+	public static boolean treeWalkUp(@Nonnull PsiScopeProcessor processor, @Nonnull PsiElement entrance, @Nullable PsiElement maxScope)
 	{
 		return treeWalkUp(processor, entrance, maxScope, ResolveState.initial());
 	}
 
-	public static boolean treeWalkUp(@NotNull final PsiScopeProcessor processor, @NotNull final PsiElement entrance, @Nullable final PsiElement maxScope, @NotNull final ResolveState state)
+	public static boolean treeWalkUp(@Nonnull final PsiScopeProcessor processor, @Nonnull final PsiElement entrance, @Nullable final PsiElement maxScope, @Nonnull final ResolveState state)
 	{
 		if(!entrance.isValid())
 		{
@@ -93,7 +93,7 @@ public class PsiScopesUtil
 		return true;
 	}
 
-	public static boolean walkChildrenScopes(@NotNull PsiElement thisElement, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, PsiElement place)
+	public static boolean walkChildrenScopes(@Nonnull PsiElement thisElement, @Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, PsiElement place)
 	{
 		PsiElement child = null;
 		if(lastParent != null && lastParent.getParent() == thisElement)
@@ -167,12 +167,12 @@ public class PsiScopesUtil
 		}
 	}
 
-	public static boolean resolveAndWalk(@NotNull PsiScopeProcessor processor, @NotNull PsiJavaCodeReferenceElement ref, @Nullable PsiElement maxScope)
+	public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor, @Nonnull PsiJavaCodeReferenceElement ref, @Nullable PsiElement maxScope)
 	{
 		return resolveAndWalk(processor, ref, maxScope, false);
 	}
 
-	public static boolean resolveAndWalk(@NotNull PsiScopeProcessor processor, @NotNull PsiJavaCodeReferenceElement ref, @Nullable PsiElement maxScope, boolean incompleteCode)
+	public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor, @Nonnull PsiJavaCodeReferenceElement ref, @Nullable PsiElement maxScope, boolean incompleteCode)
 	{
 		final PsiElement qualifier = ref.getQualifier();
 		final PsiElement classNameElement = ref.getReferenceNameElement();
@@ -260,7 +260,7 @@ public class PsiScopesUtil
 		return true;
 	}
 
-	public static void setupAndRunProcessor(@NotNull MethodsProcessor processor, @NotNull PsiCallExpression call, boolean dummyImplicitConstructor) throws MethodProcessorSetupFailedException
+	public static void setupAndRunProcessor(@Nonnull MethodsProcessor processor, @Nonnull PsiCallExpression call, boolean dummyImplicitConstructor) throws MethodProcessorSetupFailedException
 	{
 		if(call instanceof PsiMethodCallExpression)
 		{
@@ -548,7 +548,7 @@ public class PsiScopesUtil
 		return false;
 	}
 
-	private static boolean processQualifierType(@NotNull final PsiType type,
+	private static boolean processQualifierType(@Nonnull final PsiType type,
 			final MethodsProcessor processor,
 			PsiManager manager,
 			PsiMethodCallExpression call) throws MethodProcessorSetupFailedException
@@ -580,9 +580,9 @@ public class PsiScopesUtil
 		return true;
 	}
 
-	private static boolean processQualifierResult(@NotNull JavaResolveResult qualifierResult,
-			@NotNull MethodsProcessor processor,
-			@NotNull PsiMethodCallExpression methodCall) throws MethodProcessorSetupFailedException
+	private static boolean processQualifierResult(@Nonnull JavaResolveResult qualifierResult,
+			@Nonnull MethodsProcessor processor,
+			@Nonnull PsiMethodCallExpression methodCall) throws MethodProcessorSetupFailedException
 	{
 		PsiElement resolve = qualifierResult.getElement();
 

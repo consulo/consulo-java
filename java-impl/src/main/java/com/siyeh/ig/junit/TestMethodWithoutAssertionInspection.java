@@ -25,12 +25,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.openapi.util.InvalidDataException;
@@ -67,19 +67,19 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "JUnitTestMethodWithNoAssertions";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("test.method.without.assertion.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "test.method.without.assertion.problem.descriptor");
@@ -100,13 +100,13 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@NotNull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(assertionMethods, classNames, methodNamePatterns);
   }
 
   @Override
-  public void writeSettings(@NotNull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     assertionMethods = formatString(classNames, methodNamePatterns);
     super.writeSettings(element);
   }
@@ -120,7 +120,7 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (!TestUtils.isJUnitTestMethod(method)) {
         return;
@@ -197,14 +197,14 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
     private boolean containsAssertion = false;
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!containsAssertion) {
         super.visitElement(element);
       }
     }
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
       if (containsAssertion) {
         return;
       }

@@ -15,11 +15,11 @@
  */
 package com.intellij.lang.jvm;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public interface JvmAnnotatedElement extends JvmElement
 {
 
-	@NotNull
+	@Nonnull
 	JvmAnnotation[] getAnnotations();
 }

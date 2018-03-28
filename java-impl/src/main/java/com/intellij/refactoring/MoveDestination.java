@@ -24,7 +24,7 @@ import com.intellij.psi.PsiJavaPackage;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -57,7 +57,7 @@ public interface MoveDestination {
 
   @Nullable
   String verify(PsiFile source);
-  @Nullable
+  @javax.annotation.Nullable
   String verify(PsiDirectory source);
   @Nullable
   String verify(PsiJavaPackage source);

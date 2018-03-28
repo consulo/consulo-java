@@ -17,9 +17,11 @@ package com.intellij.psi;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -37,8 +39,8 @@ public interface JVMElementFactory
 	 * @return the created class instance.
 	 * @throws com.intellij.util.IncorrectOperationException if <code>name</code> is not a valid Java identifier.
 	 */
-	@NotNull
-	PsiClass createClass(@NonNls @NotNull String name) throws IncorrectOperationException;
+	@Nonnull
+	PsiClass createClass(@NonNls @Nonnull String name) throws IncorrectOperationException;
 
 	/**
 	 * Creates an empty interface with the specified name.
@@ -47,8 +49,8 @@ public interface JVMElementFactory
 	 * @return the created interface instance.
 	 * @throws IncorrectOperationException if <code>name</code> is not a valid Java identifier.
 	 */
-	@NotNull
-	PsiClass createInterface(@NonNls @NotNull String name) throws IncorrectOperationException;
+	@Nonnull
+	PsiClass createInterface(@NonNls @Nonnull String name) throws IncorrectOperationException;
 
 	/**
 	 * Creates an empty enum with the specified name.
@@ -57,8 +59,8 @@ public interface JVMElementFactory
 	 * @return the created enum instance.
 	 * @throws IncorrectOperationException if <code>name</code> is not a valid Java identifier.
 	 */
-	@NotNull
-	PsiClass createEnum(@NotNull @NonNls String name) throws IncorrectOperationException;
+	@Nonnull
+	PsiClass createEnum(@Nonnull @NonNls String name) throws IncorrectOperationException;
 
 	/**
 	 * Creates a field with the specified name and type.
@@ -69,8 +71,8 @@ public interface JVMElementFactory
 	 * @throws IncorrectOperationException <code>name</code> is not a valid Java identifier
 	 *                                     or <code>type</code> represents an invalid type.
 	 */
-	@NotNull
-	PsiField createField(@NotNull @NonNls String name, @NotNull PsiType type) throws IncorrectOperationException;
+	@Nonnull
+	PsiField createField(@Nonnull @NonNls String name, @Nonnull PsiType type) throws IncorrectOperationException;
 
 	/**
 	 * Creates an empty method with the specified name and return type.
@@ -81,11 +83,11 @@ public interface JVMElementFactory
 	 * @throws IncorrectOperationException <code>name</code> is not a valid Java identifier
 	 *                                     or <code>type</code> represents an invalid type.
 	 */
-	@NotNull
-	PsiMethod createMethod(@NotNull @NonNls String name, PsiType returnType) throws IncorrectOperationException;
+	@Nonnull
+	PsiMethod createMethod(@Nonnull @NonNls String name, PsiType returnType) throws IncorrectOperationException;
 
-	@NotNull
-	PsiMethod createMethod(@NotNull @NonNls String name,
+	@Nonnull
+	PsiMethod createMethod(@Nonnull @NonNls String name,
 			PsiType returnType,
 			PsiElement context) throws IncorrectOperationException;
 
@@ -94,7 +96,7 @@ public interface JVMElementFactory
 	 *
 	 * @return the created constructor instance.
 	 */
-	@NotNull
+	@Nonnull
 	PsiMethod createConstructor();
 
 	/**
@@ -103,7 +105,7 @@ public interface JVMElementFactory
 	 * @return the created initializer block instance.
 	 * @throws IncorrectOperationException in case of an internal error.
 	 */
-	@NotNull
+	@Nonnull
 	PsiClassInitializer createClassInitializer() throws IncorrectOperationException;
 
 	/**
@@ -115,10 +117,10 @@ public interface JVMElementFactory
 	 * @throws IncorrectOperationException <code>name</code> is not a valid Java identifier
 	 *                                     or <code>type</code> represents an invalid type.
 	 */
-	@NotNull
-	PsiParameter createParameter(@NotNull @NonNls String name, PsiType type) throws IncorrectOperationException;
+	@Nonnull
+	PsiParameter createParameter(@Nonnull @NonNls String name, PsiType type) throws IncorrectOperationException;
 
-	PsiParameter createParameter(@NotNull @NonNls String name,
+	PsiParameter createParameter(@Nonnull @NonNls String name,
 			PsiType type,
 			PsiElement context) throws IncorrectOperationException;
 
@@ -130,19 +132,19 @@ public interface JVMElementFactory
 	 * @return the created parameter list.
 	 * @throws IncorrectOperationException if some of the parameter names or types are invalid.
 	 */
-	@NotNull
-	PsiParameterList createParameterList(@NotNull @NonNls String[] names,
-			@NotNull PsiType[] types) throws IncorrectOperationException;
+	@Nonnull
+	PsiParameterList createParameterList(@Nonnull @NonNls String[] names,
+			@Nonnull PsiType[] types) throws IncorrectOperationException;
 
-	@NotNull
+	@Nonnull
 	PsiMethod createMethodFromText(String text, @Nullable PsiElement context);
 
-	@NotNull
-	PsiAnnotation createAnnotationFromText(@NotNull @NonNls String annotationText,
+	@Nonnull
+	PsiAnnotation createAnnotationFromText(@Nonnull @NonNls String annotationText,
 			@Nullable PsiElement context) throws IncorrectOperationException;
 
-	@NotNull
-	PsiElement createExpressionFromText(@NotNull @NonNls String text,
+	@Nonnull
+	PsiElement createExpressionFromText(@Nonnull @NonNls String text,
 			@Nullable PsiElement context) throws IncorrectOperationException;
 
 	/**
@@ -151,7 +153,7 @@ public interface JVMElementFactory
 	 * @param type the type for which reference element should be created
 	 * @return the reference element
 	 */
-	@NotNull
+	@Nonnull
 	PsiElement createReferenceElementByType(PsiClassType type);
 
 	/**
@@ -159,7 +161,7 @@ public interface JVMElementFactory
 	 *
 	 * @return the empty type parameter list
 	 */
-	@NotNull
+	@Nonnull
 	PsiTypeParameterList createTypeParameterList();
 
 	/**
@@ -169,7 +171,7 @@ public interface JVMElementFactory
 	 * @param superTypes the super types of the type parameter
 	 * @return the new type parameter
 	 */
-	@NotNull
+	@Nonnull
 	PsiTypeParameter createTypeParameter(String name, PsiClassType[] superTypes);
 
 	/**
@@ -178,8 +180,8 @@ public interface JVMElementFactory
 	 * @param aClass the class for which the class type is created.
 	 * @return the class type instance.
 	 */
-	@NotNull
-	PsiClassType createType(@NotNull PsiClass aClass);
+	@Nonnull
+	PsiClassType createType(@Nonnull PsiClass aClass);
 
 	/**
 	 * Creates an empty annotation type with the specified name.
@@ -188,8 +190,8 @@ public interface JVMElementFactory
 	 * @return the created annotation type instance.
 	 * @throws com.intellij.util.IncorrectOperationException if <code>name</code> is not a valid Java identifier.
 	 */
-	@NotNull
-	PsiClass createAnnotationType(@NotNull @NonNls String name) throws IncorrectOperationException;
+	@Nonnull
+	PsiClass createAnnotationType(@Nonnull @NonNls String name) throws IncorrectOperationException;
 
 	/**
 	 * Creates an empty constructor with a given name.
@@ -197,10 +199,10 @@ public interface JVMElementFactory
 	 * @param name the name of the constructor to create.
 	 * @return the created constructor instance.
 	 */
-	@NotNull
-	PsiMethod createConstructor(@NotNull @NonNls String name);
+	@Nonnull
+	PsiMethod createConstructor(@Nonnull @NonNls String name);
 
-	PsiMethod createConstructor(@NotNull @NonNls String name, PsiElement context);
+	PsiMethod createConstructor(@Nonnull @NonNls String name, PsiElement context);
 
 	/**
 	 * Creates a class type for the specified class, using the specified substitutor
@@ -210,28 +212,28 @@ public interface JVMElementFactory
 	 * @param substitutor the substitutor to use.
 	 * @return the class type instance.
 	 */
-	@NotNull
-	PsiClassType createType(@NotNull PsiClass resolve, @NotNull PsiSubstitutor substitutor);
+	@Nonnull
+	PsiClassType createType(@Nonnull PsiClass resolve, @Nonnull PsiSubstitutor substitutor);
 
 	/*
 	   additional languageLevel parameter to memorize language level for allowing/prohibiting boxing/unboxing
 	  */
-	@NotNull
-	PsiClassType createType(@NotNull PsiClass resolve,
-			@NotNull PsiSubstitutor substitutor,
-			@NotNull LanguageLevel languageLevel);
+	@Nonnull
+	PsiClassType createType(@Nonnull PsiClass resolve,
+			@Nonnull PsiSubstitutor substitutor,
+			@Nonnull LanguageLevel languageLevel);
 
-	@NotNull
-	PsiClassType createType(@NotNull PsiClass resolve,
-			@NotNull PsiSubstitutor substitutor,
-			@NotNull LanguageLevel languageLevel,
-			@NotNull PsiAnnotation[] annotations);
+	@Nonnull
+	PsiClassType createType(@Nonnull PsiClass resolve,
+			@Nonnull PsiSubstitutor substitutor,
+			@Nonnull LanguageLevel languageLevel,
+			@Nonnull PsiAnnotation[] annotations);
 
-	@NotNull
-	PsiClassType createType(@NotNull PsiClass aClass, PsiType parameters);
+	@Nonnull
+	PsiClassType createType(@Nonnull PsiClass aClass, PsiType parameters);
 
-	@NotNull
-	PsiClassType createType(@NotNull PsiClass aClass, PsiType... parameters);
+	@Nonnull
+	PsiClassType createType(@Nonnull PsiClass aClass, PsiType... parameters);
 
 	/**
 	 * Creates a substitutor for the specified class which replaces all type parameters
@@ -240,8 +242,8 @@ public interface JVMElementFactory
 	 * @param owner the class or method for which the substitutor is created.
 	 * @return the substitutor instance.
 	 */
-	@NotNull
-	PsiSubstitutor createRawSubstitutor(@NotNull PsiTypeParameterListOwner owner);
+	@Nonnull
+	PsiSubstitutor createRawSubstitutor(@Nonnull PsiTypeParameterListOwner owner);
 
 	/**
 	 * Creates a substitutor which uses the specified mapping between type parameters and types.
@@ -249,8 +251,8 @@ public interface JVMElementFactory
 	 * @param map the type parameter to type map used by the substitutor.
 	 * @return the substitutor instance.
 	 */
-	@NotNull
-	PsiSubstitutor createSubstitutor(@NotNull Map<PsiTypeParameter, PsiType> map);
+	@Nonnull
+	PsiSubstitutor createSubstitutor(@Nonnull Map<PsiTypeParameter, PsiType> map);
 
 	/**
 	 * Returns the primitive type instance for the specified type name.
@@ -260,7 +262,7 @@ public interface JVMElementFactory
 	 * primitive type name.
 	 */
 	@Nullable
-	PsiPrimitiveType createPrimitiveType(@NotNull String text);
+	PsiPrimitiveType createPrimitiveType(@Nonnull String text);
 
 	/**
 	 * The same as {@link #createTypeByFQClassName(String, com.intellij.psi.search.GlobalSearchScope)}
@@ -269,8 +271,8 @@ public interface JVMElementFactory
 	 * @param qName the full-qualified name of the class to create the reference to.
 	 * @return the class type instance.
 	 */
-	@NotNull
-	PsiClassType createTypeByFQClassName(@NotNull @NonNls String qName);
+	@Nonnull
+	PsiClassType createTypeByFQClassName(@Nonnull @NonNls String qName);
 
 	/**
 	 * Creates a class type referencing a class with the specified class name in the specified
@@ -280,14 +282,14 @@ public interface JVMElementFactory
 	 * @param resolveScope the scope in which the class is searched.
 	 * @return the class type instance.
 	 */
-	@NotNull
-	PsiClassType createTypeByFQClassName(@NotNull @NonNls String qName, @NotNull GlobalSearchScope resolveScope);
+	@Nonnull
+	PsiClassType createTypeByFQClassName(@Nonnull @NonNls String qName, @Nonnull GlobalSearchScope resolveScope);
 
 	/**
 	 * Creates doc comment from text
 	 */
-	@NotNull
-	PsiDocComment createDocCommentFromText(@NotNull String text);
+	@Nonnull
+	PsiDocComment createDocCommentFromText(@Nonnull String text);
 
 	/**
 	 * Checks whether name is a valid class name in the current language
@@ -295,7 +297,7 @@ public interface JVMElementFactory
 	 * @param name name to checks
 	 * @return true if name is a valid name
 	 */
-	boolean isValidClassName(@NotNull String name);
+	boolean isValidClassName(@Nonnull String name);
 
 	/**
 	 * Checks whether name is a valid method name in the current language
@@ -303,7 +305,7 @@ public interface JVMElementFactory
 	 * @param name name to checks
 	 * @return true if name is a valid name
 	 */
-	boolean isValidMethodName(@NotNull String name);
+	boolean isValidMethodName(@Nonnull String name);
 
 	/**
 	 * Checks whether name is a valid parameter name in the current language
@@ -311,7 +313,7 @@ public interface JVMElementFactory
 	 * @param name name to checks
 	 * @return true if name is a valid name
 	 */
-	boolean isValidParameterName(@NotNull String name);
+	boolean isValidParameterName(@Nonnull String name);
 
 	/**
 	 * Checks whether name is a valid field name in the current language
@@ -319,7 +321,7 @@ public interface JVMElementFactory
 	 * @param name name to checks
 	 * @return true if name is a valid name
 	 */
-	boolean isValidFieldName(@NotNull String name);
+	boolean isValidFieldName(@Nonnull String name);
 
 	/**
 	 * Checks whether name is a valid local variable name in the current language
@@ -327,6 +329,6 @@ public interface JVMElementFactory
 	 * @param name name to checks
 	 * @return true if name is a valid name
 	 */
-	boolean isValidLocalVariableName(@NotNull String name);
+	boolean isValidLocalVariableName(@Nonnull String name);
 }
 

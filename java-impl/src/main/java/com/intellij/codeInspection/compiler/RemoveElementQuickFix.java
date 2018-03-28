@@ -20,29 +20,29 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class RemoveElementQuickFix implements LocalQuickFix {
   private final String myName;
 
-  public RemoveElementQuickFix(@NotNull @Nls final String name) {
+  public RemoveElementQuickFix(@Nonnull @Nls final String name) {
     myName = name;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return myName;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return myName;
   }
 
   @Override
-  public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
     final PsiElement element = descriptor.getPsiElement();
     if (element != null) {
       element.delete();

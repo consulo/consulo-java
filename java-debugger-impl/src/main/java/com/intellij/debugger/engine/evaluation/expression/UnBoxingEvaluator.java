@@ -18,8 +18,8 @@ package com.intellij.debugger.engine.evaluation.expression;
 import java.util.Collections;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.openapi.diagnostic.Logger;
@@ -63,7 +63,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return TYPES_TO_CONVERSION_METHOD_MAP.containsKey(typeName);
 	}
 
-	public UnBoxingEvaluator(@NotNull Evaluator operand)
+	public UnBoxingEvaluator(@Nonnull Evaluator operand)
 	{
 		myOperand = DisableGC.create(operand);
 	}
@@ -73,7 +73,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return unbox(myOperand.evaluate(context), context);
 	}
 
-	public static Object unbox(@Nullable Object value, EvaluationContextImpl context) throws EvaluateException
+	public static Object unbox(@javax.annotation.Nullable Object value, EvaluationContextImpl context) throws EvaluateException
 	{
 		if(value == null)
 		{
@@ -109,7 +109,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return context.getDebugProcess().invokeMethod(context, value, method, Collections.emptyList());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PrimitiveValue getInnerPrimitiveValue(ObjectReference value)
 	{
 		ReferenceType type = value.referenceType();

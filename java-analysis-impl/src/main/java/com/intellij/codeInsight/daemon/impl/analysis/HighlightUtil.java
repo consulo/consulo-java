@@ -28,11 +28,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.ContainerProvider;
 import com.intellij.codeInsight.ExceptionUtil;
@@ -175,8 +177,8 @@ public class HighlightUtil extends HighlightUtilBase
 	{
 	}
 
-	@Nullable
-	private static String getIncompatibleModifier(String modifier, @Nullable PsiModifierList modifierList, @NotNull Map<String, Set<String>> incompatibleModifiersHash)
+	@javax.annotation.Nullable
+	private static String getIncompatibleModifier(String modifier, @Nullable PsiModifierList modifierList, @Nonnull Map<String, Set<String>> incompatibleModifiersHash)
 	{
 		if(modifierList == null)
 		{
@@ -248,7 +250,7 @@ public class HighlightUtil extends HighlightUtilBase
 	 * make element protected/package-private/public suggestion
 	 * for private method in the interface it should add default modifier as well
 	 */
-	static void registerAccessQuickFixAction(@NotNull PsiMember refElement, @NotNull PsiJavaCodeReferenceElement place, @Nullable HighlightInfo errorResult, final PsiElement fileResolveScope)
+	static void registerAccessQuickFixAction(@Nonnull PsiMember refElement, @Nonnull PsiJavaCodeReferenceElement place, @javax.annotation.Nullable HighlightInfo errorResult, final PsiElement fileResolveScope)
 	{
 		if(errorResult == null)
 		{
@@ -328,8 +330,8 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 	}
 
-	@Nullable
-	private static PsiClass getPackageLocalClassInTheMiddle(@NotNull PsiElement place)
+	@javax.annotation.Nullable
+	private static PsiClass getPackageLocalClassInTheMiddle(@Nonnull PsiElement place)
 	{
 		if(place instanceof PsiReferenceExpression)
 		{
@@ -360,8 +362,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkInstanceOfApplicable(@NotNull PsiInstanceOfExpression expression)
+	@javax.annotation.Nullable
+	static HighlightInfo checkInstanceOfApplicable(@Nonnull PsiInstanceOfExpression expression)
 	{
 		PsiExpression operand = expression.getOperand();
 		PsiTypeElement typeElement = expression.getCheckType();
@@ -391,8 +393,8 @@ public class HighlightUtil extends HighlightUtilBase
 	 * - The erasures of all the listed types must be pairwise different.
 	 * - No two listed types may be subtypes of different parameterization of the same generic interface.
 	 */
-	@Nullable
-	static HighlightInfo checkIntersectionInTypeCast(@NotNull PsiTypeCastExpression expression, @NotNull LanguageLevel languageLevel, @NotNull PsiFile file)
+	@javax.annotation.Nullable
+	static HighlightInfo checkIntersectionInTypeCast(@Nonnull PsiTypeCastExpression expression, @Nonnull LanguageLevel languageLevel, @Nonnull PsiFile file)
 	{
 		PsiTypeElement castTypeElement = expression.getCastType();
 		if(castTypeElement != null && isIntersection(castTypeElement, castTypeElement.getType()))
@@ -467,8 +469,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return castType instanceof PsiClassType && PsiTreeUtil.getChildrenOfType(castTypeElement, PsiTypeElement.class) != null;
 	}
 
-	@Nullable
-	static HighlightInfo checkInconvertibleTypeCast(@NotNull PsiTypeCastExpression expression)
+	@javax.annotation.Nullable
+	static HighlightInfo checkInconvertibleTypeCast(@Nonnull PsiTypeCastExpression expression)
 	{
 		final PsiTypeElement castTypeElement = expression.getCastType();
 		if(castTypeElement == null)
@@ -494,8 +496,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkVariableExpected(@NotNull PsiExpression expression)
+	@javax.annotation.Nullable
+	static HighlightInfo checkVariableExpected(@Nonnull PsiExpression expression)
 	{
 		PsiExpression lValue;
 		if(expression instanceof PsiAssignmentExpression)
@@ -522,8 +524,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkAssignmentOperatorApplicable(@NotNull PsiAssignmentExpression assignment)
+	@javax.annotation.Nullable
+	static HighlightInfo checkAssignmentOperatorApplicable(@Nonnull PsiAssignmentExpression assignment)
 	{
 		PsiJavaToken operationSign = assignment.getOperationSign();
 		IElementType eqOpSign = operationSign.getTokenType();
@@ -551,8 +553,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkAssignmentCompatibleTypes(@NotNull PsiAssignmentExpression assignment)
+	@javax.annotation.Nullable
+	static HighlightInfo checkAssignmentCompatibleTypes(@Nonnull PsiAssignmentExpression assignment)
 	{
 		PsiExpression lExpr = assignment.getLExpression();
 		PsiExpression rExpr = assignment.getRExpression();
@@ -597,7 +599,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return highlightInfo;
 	}
 
-	private static void registerChangeVariableTypeFixes(@NotNull PsiExpression expression, @NotNull PsiType type, @Nullable final PsiExpression lExpr, @Nullable HighlightInfo highlightInfo)
+	private static void registerChangeVariableTypeFixes(@Nonnull PsiExpression expression, @Nonnull PsiType type, @javax.annotation.Nullable final PsiExpression lExpr, @javax.annotation.Nullable HighlightInfo highlightInfo)
 	{
 		if(highlightInfo == null || !(expression instanceof PsiReferenceExpression))
 		{
@@ -626,7 +628,7 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 	}
 
-	private static boolean isCastIntentionApplicable(@NotNull PsiExpression expression, @Nullable PsiType toType)
+	private static boolean isCastIntentionApplicable(@Nonnull PsiExpression expression, @javax.annotation.Nullable PsiType toType)
 	{
 		while(expression instanceof PsiTypeCastExpression || expression instanceof PsiParenthesizedExpression)
 		{
@@ -648,8 +650,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkVariableInitializerType(@NotNull PsiVariable variable)
+	@javax.annotation.Nullable
+	static HighlightInfo checkVariableInitializerType(@Nonnull PsiVariable variable)
 	{
 		PsiExpression initializer = variable.getInitializer();
 		// array initializer checked in checkArrayInitializerApplicable
@@ -671,15 +673,15 @@ public class HighlightUtil extends HighlightUtilBase
 		return highlightInfo;
 	}
 
-	@Nullable
-	static HighlightInfo checkAssignability(@Nullable PsiType lType, @Nullable PsiType rType, @Nullable PsiExpression expression, @NotNull PsiElement elementToHighlight)
+	@javax.annotation.Nullable
+	static HighlightInfo checkAssignability(@Nullable PsiType lType, @Nullable PsiType rType, @Nullable PsiExpression expression, @Nonnull PsiElement elementToHighlight)
 	{
 		TextRange textRange = elementToHighlight.getTextRange();
 		return checkAssignability(lType, rType, expression, textRange, 0);
 	}
 
-	@Nullable
-	private static HighlightInfo checkAssignability(@Nullable PsiType lType, @Nullable PsiType rType, @Nullable PsiExpression expression, @NotNull TextRange textRange, int navigationShift)
+	@javax.annotation.Nullable
+	private static HighlightInfo checkAssignability(@javax.annotation.Nullable PsiType lType, @javax.annotation.Nullable PsiType rType, @javax.annotation.Nullable PsiExpression expression, @Nonnull TextRange textRange, int navigationShift)
 	{
 		if(lType == rType)
 		{
@@ -719,8 +721,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkReturnStatementType(@NotNull PsiReturnStatement statement)
+	@javax.annotation.Nullable
+	static HighlightInfo checkReturnStatementType(@Nonnull PsiReturnStatement statement)
 	{
 		PsiMethod method = null;
 		PsiLambdaExpression lambda = null;
@@ -815,7 +817,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return errorResult;
 	}
 
-	private static void registerCollectionToArrayFixAction(@Nullable HighlightInfo info, @Nullable PsiType fromType, @Nullable PsiType toType, @NotNull PsiExpression expression)
+	private static void registerCollectionToArrayFixAction(@Nullable HighlightInfo info, @javax.annotation.Nullable PsiType fromType, @javax.annotation.Nullable PsiType toType, @Nonnull PsiExpression expression)
 	{
 		if(toType instanceof PsiArrayType)
 		{
@@ -832,28 +834,28 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 	}
 
-	@NotNull
-	public static String getUnhandledExceptionsDescriptor(@NotNull final Collection<PsiClassType> unhandled)
+	@Nonnull
+	public static String getUnhandledExceptionsDescriptor(@Nonnull final Collection<PsiClassType> unhandled)
 	{
 		return getUnhandledExceptionsDescriptor(unhandled, null);
 	}
 
-	@NotNull
-	private static String getUnhandledExceptionsDescriptor(@NotNull final Collection<PsiClassType> unhandled, @Nullable final String source)
+	@Nonnull
+	private static String getUnhandledExceptionsDescriptor(@Nonnull final Collection<PsiClassType> unhandled, @javax.annotation.Nullable final String source)
 	{
 		final String exceptions = formatTypes(unhandled);
 		return source != null ? JavaErrorMessages.message("unhandled.close.exceptions", exceptions, unhandled.size(), source) : JavaErrorMessages.message("unhandled.exceptions", exceptions,
 		unhandled.size());
 	}
 
-	@NotNull
-	private static String formatTypes(@NotNull Collection<PsiClassType> unhandled)
+	@Nonnull
+	private static String formatTypes(@Nonnull Collection<PsiClassType> unhandled)
 	{
 		return StringUtil.join(unhandled, JavaHighlightUtil::formatType, ", ");
 	}
 
-	@Nullable
-	static HighlightInfo checkVariableAlreadyDefined(@NotNull PsiVariable variable)
+	@javax.annotation.Nullable
+	static HighlightInfo checkVariableAlreadyDefined(@Nonnull PsiVariable variable)
 	{
 		if(variable instanceof ExternallyDefinedPsiElement)
 		{
@@ -924,7 +926,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	private static boolean checkSameNames(@NotNull PsiVariable variable)
+	private static boolean checkSameNames(@Nonnull PsiVariable variable)
 	{
 		PsiElement scope = variable.getParent();
 		PsiElement[] children = scope.getChildren();
@@ -945,8 +947,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return false;
 	}
 
-	@Nullable
-	static HighlightInfo checkUnderscore(@NotNull PsiIdentifier identifier, @NotNull LanguageLevel languageLevel)
+	@javax.annotation.Nullable
+	static HighlightInfo checkUnderscore(@Nonnull PsiIdentifier identifier, @Nonnull LanguageLevel languageLevel)
 	{
 		if("_".equals(identifier.getText()))
 		{
@@ -969,26 +971,26 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@NotNull
-	public static String formatClass(@NotNull PsiClass aClass)
+	@Nonnull
+	public static String formatClass(@Nonnull PsiClass aClass)
 	{
 		return formatClass(aClass, true);
 	}
 
-	@NotNull
-	public static String formatClass(@NotNull PsiClass aClass, boolean fqn)
+	@Nonnull
+	public static String formatClass(@Nonnull PsiClass aClass, boolean fqn)
 	{
 		return PsiFormatUtil.formatClass(aClass, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_ANONYMOUS_CLASS_VERBOSE | (fqn ? PsiFormatUtilBase.SHOW_FQ_NAME : 0));
 	}
 
-	@NotNull
-	private static String formatField(@NotNull PsiField field)
+	@Nonnull
+	private static String formatField(@Nonnull PsiField field)
 	{
 		return PsiFormatUtil.formatVariable(field, PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_NAME, PsiSubstitutor.EMPTY);
 	}
 
 	@Nullable
-	static HighlightInfo checkUnhandledExceptions(@NotNull final PsiElement element, @Nullable TextRange textRange)
+	static HighlightInfo checkUnhandledExceptions(@Nonnull final PsiElement element, @javax.annotation.Nullable TextRange textRange)
 	{
 		final List<PsiClassType> unhandledExceptions = ExceptionUtil.getUnhandledExceptions(element);
 		if(unhandledExceptions.isEmpty())
@@ -1013,7 +1015,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static HighlightInfo checkUnhandledCloserExceptions(@NotNull PsiResourceListElement resource)
+	static HighlightInfo checkUnhandledCloserExceptions(@Nonnull PsiResourceListElement resource)
 	{
 		List<PsiClassType> unhandled = ExceptionUtil.getUnhandledCloserExceptions(resource, null);
 		if(unhandled.isEmpty())
@@ -1061,8 +1063,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return HighlightInfoType.UNHANDLED_EXCEPTION;
 	}
 
-	@Nullable
-	static HighlightInfo checkBreakOutsideLoop(@NotNull PsiBreakStatement statement)
+	@javax.annotation.Nullable
+	static HighlightInfo checkBreakOutsideLoop(@Nonnull PsiBreakStatement statement)
 	{
 		if(statement.getLabelIdentifier() == null)
 		{
@@ -1081,7 +1083,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkContinueOutsideLoop(@NotNull PsiContinueStatement statement)
+	static HighlightInfo checkContinueOutsideLoop(@Nonnull PsiContinueStatement statement)
 	{
 		if(statement.getLabelIdentifier() == null)
 		{
@@ -1109,7 +1111,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static HighlightInfo checkIllegalModifierCombination(@NotNull PsiKeyword keyword, @NotNull PsiModifierList modifierList)
+	static HighlightInfo checkIllegalModifierCombination(@Nonnull PsiKeyword keyword, @Nonnull PsiModifierList modifierList)
 	{
 		@PsiModifier.ModifierConstant String modifier = keyword.getText();
 		String incompatible = getIncompatibleModifier(modifier, modifierList);
@@ -1159,14 +1161,14 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static String getIncompatibleModifier(String modifier, @NotNull PsiModifierList modifierList)
+	static String getIncompatibleModifier(String modifier, @Nonnull PsiModifierList modifierList)
 	{
 		Map<String, Set<String>> incompatibleModifierMap = getIncompatibleModifierMap(modifierList.getParent());
 		return incompatibleModifierMap != null ? getIncompatibleModifier(modifier, modifierList, incompatibleModifierMap) : null;
 	}
 
-	@Nullable
-	static HighlightInfo checkNotAllowedModifier(@NotNull PsiKeyword keyword, @NotNull PsiModifierList modifierList)
+	@javax.annotation.Nullable
+	static HighlightInfo checkNotAllowedModifier(@Nonnull PsiKeyword keyword, @Nonnull PsiModifierList modifierList)
 	{
 		PsiElement modifierOwner = modifierList.getParent();
 		Map<String, Set<String>> incompatibleModifierMap = getIncompatibleModifierMap(modifierOwner);
@@ -1284,8 +1286,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	public static HighlightInfo checkLiteralExpressionParsingError(@NotNull PsiLiteralExpression expression, LanguageLevel level, PsiFile file)
+	@javax.annotation.Nullable
+	public static HighlightInfo checkLiteralExpressionParsingError(@Nonnull PsiLiteralExpression expression, LanguageLevel level, PsiFile file)
 	{
 		PsiElement literal = expression.getFirstChild();
 		assert literal instanceof PsiJavaToken : literal;
@@ -1570,8 +1572,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkMustBeBoolean(@NotNull PsiExpression expr, PsiType type)
+	@javax.annotation.Nullable
+	static HighlightInfo checkMustBeBoolean(@Nonnull PsiExpression expr, PsiType type)
 	{
 		PsiElement parent = expr.getParent();
 		if(parent instanceof PsiIfStatement || parent instanceof PsiWhileStatement || parent instanceof PsiForStatement && expr.equals(((PsiForStatement) parent).getCondition()) || parent instanceof
@@ -1605,8 +1607,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@NotNull
-	static Set<PsiClassType> collectUnhandledExceptions(@NotNull final PsiTryStatement statement)
+	@Nonnull
+	static Set<PsiClassType> collectUnhandledExceptions(@Nonnull final PsiTryStatement statement)
 	{
 		final Set<PsiClassType> thrownTypes = ContainerUtil.newHashSet();
 
@@ -1625,8 +1627,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return thrownTypes;
 	}
 
-	@Nullable
-	static List<HighlightInfo> checkExceptionThrownInTry(@NotNull final PsiParameter parameter, @NotNull final Set<PsiClassType> thrownTypes)
+	@javax.annotation.Nullable
+	static List<HighlightInfo> checkExceptionThrownInTry(@Nonnull final PsiParameter parameter, @Nonnull final Set<PsiClassType> thrownTypes)
 	{
 		final PsiElement declarationScope = parameter.getDeclarationScope();
 		if(!(declarationScope instanceof PsiCatchSection))
@@ -1648,8 +1650,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	private static HighlightInfo checkSimpleCatchParameter(@NotNull final PsiParameter parameter, @NotNull final Collection<PsiClassType> thrownTypes, @NotNull final PsiClassType caughtType)
+	@javax.annotation.Nullable
+	private static HighlightInfo checkSimpleCatchParameter(@Nonnull final PsiParameter parameter, @Nonnull final Collection<PsiClassType> thrownTypes, @Nonnull final PsiClassType caughtType)
 	{
 		if(ExceptionUtil.isUncheckedExceptionOrSuperclass(caughtType))
 		{
@@ -1670,8 +1672,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return errorResult;
 	}
 
-	@NotNull
-	private static List<HighlightInfo> checkMultiCatchParameter(@NotNull final PsiParameter parameter, @NotNull final Collection<PsiClassType> thrownTypes)
+	@Nonnull
+	private static List<HighlightInfo> checkMultiCatchParameter(@Nonnull final PsiParameter parameter, @Nonnull final Collection<PsiClassType> thrownTypes)
 	{
 		final List<PsiTypeElement> typeElements = PsiUtil.getParameterTypeElements(parameter);
 		final List<HighlightInfo> highlights = new ArrayList<>(typeElements.size());
@@ -1706,8 +1708,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static Collection<HighlightInfo> checkWithImprovedCatchAnalysis(@NotNull PsiParameter parameter, @NotNull Collection<PsiClassType> thrownInTryStatement, @NotNull PsiFile containingFile)
+	@javax.annotation.Nullable
+	static Collection<HighlightInfo> checkWithImprovedCatchAnalysis(@Nonnull PsiParameter parameter, @Nonnull Collection<PsiClassType> thrownInTryStatement, @Nonnull PsiFile containingFile)
 	{
 		final PsiElement scope = parameter.getDeclarationScope();
 		if(!(scope instanceof PsiCatchSection))
@@ -1788,8 +1790,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkNotAStatement(@NotNull PsiStatement statement)
+	@javax.annotation.Nullable
+	static HighlightInfo checkNotAStatement(@Nonnull PsiStatement statement)
 	{
 		if(!PsiUtil.isStatement(statement) && !PsiUtilCore.hasErrorElementChild(statement))
 		{
@@ -1812,8 +1814,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkSwitchSelectorType(@NotNull PsiSwitchStatement statement, @NotNull LanguageLevel level)
+	@javax.annotation.Nullable
+	static HighlightInfo checkSwitchSelectorType(@Nonnull PsiSwitchStatement statement, @Nonnull LanguageLevel level)
 	{
 		PsiExpression expression = statement.getExpression();
 		if(expression == null)
@@ -1879,7 +1881,7 @@ public class HighlightUtil extends HighlightUtilBase
 		STRING
 	}
 
-	private static SelectorKind getSwitchSelectorKind(@NotNull PsiType type)
+	private static SelectorKind getSwitchSelectorKind(@Nonnull PsiType type)
 	{
 		if(TypeConversionUtil.getTypeRank(type) <= TypeConversionUtil.INT_RANK)
 		{
@@ -1902,8 +1904,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkPolyadicOperatorApplicable(@NotNull PsiPolyadicExpression expression)
+	@javax.annotation.Nullable
+	static HighlightInfo checkPolyadicOperatorApplicable(@Nonnull PsiPolyadicExpression expression)
 	{
 		PsiExpression[] operands = expression.getOperands();
 
@@ -1926,8 +1928,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkUnaryOperatorApplicable(@Nullable PsiJavaToken token, @Nullable PsiExpression expression)
+	@javax.annotation.Nullable
+	static HighlightInfo checkUnaryOperatorApplicable(@javax.annotation.Nullable PsiJavaToken token, @Nullable PsiExpression expression)
 	{
 		if(token != null && expression != null && !TypeConversionUtil.isUnaryOperatorApplicable(token, expression))
 		{
@@ -1950,7 +1952,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static HighlightInfo checkThisOrSuperExpressionInIllegalContext(@NotNull PsiExpression expr, @Nullable PsiJavaCodeReferenceElement qualifier, @NotNull LanguageLevel languageLevel)
+	static HighlightInfo checkThisOrSuperExpressionInIllegalContext(@Nonnull PsiExpression expr, @javax.annotation.Nullable PsiJavaCodeReferenceElement qualifier, @Nonnull LanguageLevel languageLevel)
 	{
 		if(expr instanceof PsiSuperExpression)
 		{
@@ -2075,7 +2077,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	static HighlightInfo checkUnqualifiedSuperInDefaultMethod(@NotNull LanguageLevel languageLevel, @NotNull PsiReferenceExpression expr, PsiExpression qualifier)
+	static HighlightInfo checkUnqualifiedSuperInDefaultMethod(@Nonnull LanguageLevel languageLevel, @Nonnull PsiReferenceExpression expr, PsiExpression qualifier)
 	{
 		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_8) && qualifier instanceof PsiSuperExpression)
 		{
@@ -2100,15 +2102,15 @@ public class HighlightUtil extends HighlightUtilBase
 		return method != null && method.hasModifierProperty(PsiModifier.DEFAULT);
 	}
 
-	private static HighlightInfo thisNotFoundInInterfaceInfo(@NotNull PsiExpression expr)
+	private static HighlightInfo thisNotFoundInInterfaceInfo(@Nonnull PsiExpression expr)
 	{
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expr).descriptionAndTooltip("Cannot find symbol variable this").create();
 	}
 
-	private static boolean resolvesToImmediateSuperInterface(@NotNull PsiExpression expr,
-			@Nullable PsiJavaCodeReferenceElement qualifier,
-			@NotNull PsiClass aClass,
-			@NotNull LanguageLevel languageLevel)
+	private static boolean resolvesToImmediateSuperInterface(@Nonnull PsiExpression expr,
+			@javax.annotation.Nullable PsiJavaCodeReferenceElement qualifier,
+			@Nonnull PsiClass aClass,
+			@Nonnull LanguageLevel languageLevel)
 	{
 		if(!(expr instanceof PsiSuperExpression) || qualifier == null || !languageLevel.isAtLeast(LanguageLevel.JDK_1_8))
 		{
@@ -2123,15 +2125,15 @@ public class HighlightUtil extends HighlightUtilBase
 		return superClass != null && aClass.equals(superClass) && PsiUtil.getEnclosingStaticElement(expr, PsiTreeUtil.getParentOfType(expr, PsiClass.class)) == null;
 	}
 
-	@NotNull
-	static String buildProblemWithStaticDescription(@NotNull PsiElement refElement)
+	@Nonnull
+	static String buildProblemWithStaticDescription(@Nonnull PsiElement refElement)
 	{
 		String type = LanguageFindUsages.INSTANCE.forLanguage(JavaLanguage.INSTANCE).getType(refElement);
 		String name = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
 		return JavaErrorMessages.message("non.static.symbol.referenced.from.static.context", type, name);
 	}
 
-	static void registerStaticProblemQuickFixAction(@NotNull PsiElement refElement, HighlightInfo errorResult, @NotNull PsiJavaCodeReferenceElement place)
+	static void registerStaticProblemQuickFixAction(@Nonnull PsiElement refElement, HighlightInfo errorResult, @Nonnull PsiJavaCodeReferenceElement place)
 	{
 		if(refElement instanceof PsiModifierListOwner)
 		{
@@ -2149,7 +2151,7 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 	}
 
-	private static boolean isInstanceReference(@NotNull PsiJavaCodeReferenceElement place)
+	private static boolean isInstanceReference(@Nonnull PsiJavaCodeReferenceElement place)
 	{
 		PsiElement qualifier = place.getQualifier();
 		if(qualifier == null)
@@ -2173,14 +2175,14 @@ public class HighlightUtil extends HighlightUtilBase
 		return qname == null || !Character.isLowerCase(qname.charAt(0));
 	}
 
-	@NotNull
-	static String buildProblemWithAccessDescription(@NotNull final PsiElement reference, @NotNull final JavaResolveResult result)
+	@Nonnull
+	static String buildProblemWithAccessDescription(@Nonnull final PsiElement reference, @Nonnull final JavaResolveResult result)
 	{
 		return buildProblemWithAccessDescription(reference, result, ObjectUtils.notNull(result.getElement()));
 	}
 
-	@NotNull
-	private static String buildProblemWithAccessDescription(@NotNull final PsiElement reference, @NotNull final JavaResolveResult result, @NotNull final PsiElement resolved)
+	@Nonnull
+	private static String buildProblemWithAccessDescription(@Nonnull final PsiElement reference, @Nonnull final JavaResolveResult result, @Nonnull final PsiElement resolved)
 	{
 		assert resolved instanceof PsiModifierListOwner : resolved;
 		PsiModifierListOwner refElement = (PsiModifierListOwner) resolved;
@@ -2237,7 +2239,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static HighlightInfo checkValidArrayAccessExpression(@NotNull PsiArrayAccessExpression arrayAccessExpression)
+	static HighlightInfo checkValidArrayAccessExpression(@Nonnull PsiArrayAccessExpression arrayAccessExpression)
 	{
 		final PsiExpression arrayExpression = arrayAccessExpression.getArrayExpression();
 		final PsiType arrayExpressionType = arrayExpression.getType();
@@ -2255,8 +2257,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkCatchParameterIsThrowable(@NotNull final PsiParameter parameter)
+	@javax.annotation.Nullable
+	static HighlightInfo checkCatchParameterIsThrowable(@Nonnull final PsiParameter parameter)
 	{
 		if(parameter.getDeclarationScope() instanceof PsiCatchSection)
 		{
@@ -2266,8 +2268,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkTryResourceIsAutoCloseable(@NotNull PsiResourceListElement resource)
+	@javax.annotation.Nullable
+	static HighlightInfo checkTryResourceIsAutoCloseable(@Nonnull PsiResourceListElement resource)
 	{
 		PsiType type = resource.getType();
 		if(type == null)
@@ -2286,7 +2288,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static HighlightInfo checkResourceVariableIsFinal(@NotNull PsiResourceExpression resource)
+	static HighlightInfo checkResourceVariableIsFinal(@Nonnull PsiResourceExpression resource)
 	{
 		PsiExpression expression = resource.getExpression();
 
@@ -2327,7 +2329,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(text).create();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static Collection<HighlightInfo> checkArrayInitializer(final PsiExpression initializer, PsiType type)
 	{
 		if(!(initializer instanceof PsiArrayInitializerExpression))
@@ -2370,7 +2372,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	private static HighlightInfo checkArrayInitializerCompatibleTypes(@NotNull PsiExpression initializer, final PsiType componentType)
+	private static HighlightInfo checkArrayInitializerCompatibleTypes(@Nonnull PsiExpression initializer, final PsiType componentType)
 	{
 		PsiType initializerType = initializer.getType();
 		if(initializerType == null)
@@ -2382,8 +2384,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return checkAssignability(componentType, initializerType, expression, initializer);
 	}
 
-	@Nullable
-	static HighlightInfo checkExpressionRequired(@NotNull PsiReferenceExpression expression, @NotNull JavaResolveResult resultForIncompleteCode)
+	@javax.annotation.Nullable
+	static HighlightInfo checkExpressionRequired(@Nonnull PsiReferenceExpression expression, @Nonnull JavaResolveResult resultForIncompleteCode)
 	{
 		if(expression.getNextSibling() instanceof PsiErrorElement)
 		{
@@ -2410,7 +2412,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static HighlightInfo checkArrayInitializerApplicable(@NotNull PsiArrayInitializerExpression expression)
+	static HighlightInfo checkArrayInitializerApplicable(@Nonnull PsiArrayInitializerExpression expression)
 	{
 	/*
     JLS 10.6 Array Initializers
@@ -2437,8 +2439,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkCaseStatement(@NotNull PsiSwitchLabelStatement statement)
+	@javax.annotation.Nullable
+	static HighlightInfo checkCaseStatement(@Nonnull PsiSwitchLabelStatement statement)
 	{
 		PsiSwitchStatement switchStatement = statement.getEnclosingSwitchStatement();
 		if(switchStatement == null)
@@ -2564,8 +2566,8 @@ public class HighlightUtil extends HighlightUtilBase
 	/**
 	 * see JLS 8.3.2.3
 	 */
-	@Nullable
-	static HighlightInfo checkIllegalForwardReferenceToField(@NotNull PsiReferenceExpression expression, @NotNull PsiField referencedField)
+	@javax.annotation.Nullable
+	static HighlightInfo checkIllegalForwardReferenceToField(@Nonnull PsiReferenceExpression expression, @Nonnull PsiField referencedField)
 	{
 		Boolean isIllegalForwardReference = isIllegalForwardReferenceToField(expression, referencedField, false);
 		if(isIllegalForwardReference == null)
@@ -2576,7 +2578,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(description).create();
 	}
 
-	public static Boolean isIllegalForwardReferenceToField(@NotNull PsiReferenceExpression expression, @NotNull PsiField referencedField, boolean acceptQualified)
+	public static Boolean isIllegalForwardReferenceToField(@Nonnull PsiReferenceExpression expression, @Nonnull PsiField referencedField, boolean acceptQualified)
 	{
 		PsiClass containingClass = referencedField.getContainingClass();
 		if(containingClass == null)
@@ -2652,7 +2654,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	private static PsiClassInitializer findParentClassInitializer(@Nullable PsiElement element)
+	private static PsiClassInitializer findParentClassInitializer(@javax.annotation.Nullable PsiElement element)
 	{
 		while(element != null)
 		{
@@ -2671,7 +2673,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkIllegalType(@Nullable PsiTypeElement typeElement)
+	static HighlightInfo checkIllegalType(@javax.annotation.Nullable PsiTypeElement typeElement)
 	{
 		if(typeElement == null || typeElement.getParent() instanceof PsiTypeElement)
 		{
@@ -2699,8 +2701,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkIllegalVoidType(@NotNull PsiKeyword type)
+	@javax.annotation.Nullable
+	static HighlightInfo checkIllegalVoidType(@Nonnull PsiKeyword type)
 	{
 		if(!PsiKeyword.VOID.equals(type.getText()))
 		{
@@ -2748,8 +2750,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(type).descriptionAndTooltip(description).create();
 	}
 
-	@Nullable
-	static HighlightInfo checkMemberReferencedBeforeConstructorCalled(@NotNull PsiElement expression, PsiElement resolved, @NotNull PsiFile containingFile)
+	@javax.annotation.Nullable
+	static HighlightInfo checkMemberReferencedBeforeConstructorCalled(@Nonnull PsiElement expression, PsiElement resolved, @Nonnull PsiFile containingFile)
 	{
 		PsiClass referencedClass;
 		@NonNls String resolvedName;
@@ -2888,11 +2890,11 @@ public class HighlightUtil extends HighlightUtilBase
 		return checkReferenceToOurInstanceInsideThisOrSuper(expression, referencedClass, resolvedName, containingFile);
 	}
 
-	@Nullable
-	private static HighlightInfo checkReferenceToOurInstanceInsideThisOrSuper(@NotNull final PsiElement expression,
-			@NotNull PsiClass referencedClass,
+	@javax.annotation.Nullable
+	private static HighlightInfo checkReferenceToOurInstanceInsideThisOrSuper(@Nonnull final PsiElement expression,
+			@Nonnull PsiClass referencedClass,
 			final String resolvedName,
-			@NotNull PsiFile containingFile)
+			@Nonnull PsiFile containingFile)
 	{
 		if(PsiTreeUtil.getParentOfType(expression, PsiReferenceParameterList.class) != null)
 		{
@@ -2983,14 +2985,14 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	private static HighlightInfo createMemberReferencedError(@NonNls final String resolvedName, @NotNull TextRange textRange)
+	private static HighlightInfo createMemberReferencedError(@NonNls final String resolvedName, @Nonnull TextRange textRange)
 	{
 		String description = JavaErrorMessages.message("member.referenced.before.constructor.called", resolvedName);
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(textRange).descriptionAndTooltip(description).create();
 	}
 
-	@Nullable
-	static HighlightInfo checkImplicitThisReferenceBeforeSuper(@NotNull PsiClass aClass, @NotNull JavaSdkVersion javaSdkVersion)
+	@javax.annotation.Nullable
+	static HighlightInfo checkImplicitThisReferenceBeforeSuper(@Nonnull PsiClass aClass, @Nonnull JavaSdkVersion javaSdkVersion)
 	{
 		if(javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_7))
 		{
@@ -3027,7 +3029,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	private static boolean isSuperCalledInConstructor(@NotNull final PsiMethod constructor)
+	private static boolean isSuperCalledInConstructor(@Nonnull final PsiMethod constructor)
 	{
 		final PsiCodeBlock body = constructor.getBody();
 		if(body == null)
@@ -3045,7 +3047,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return element != null;
 	}
 
-	private static boolean thisOrSuperReference(@Nullable PsiExpression qualifierExpression, PsiClass aClass)
+	private static boolean thisOrSuperReference(@javax.annotation.Nullable PsiExpression qualifierExpression, PsiClass aClass)
 	{
 		if(qualifierExpression == null)
 		{
@@ -3074,7 +3076,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkLabelWithoutStatement(@NotNull PsiLabeledStatement statement)
+	static HighlightInfo checkLabelWithoutStatement(@Nonnull PsiLabeledStatement statement)
 	{
 		if(statement.getStatement() == null)
 		{
@@ -3086,7 +3088,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkLabelAlreadyInUse(@NotNull PsiLabeledStatement statement)
+	static HighlightInfo checkLabelAlreadyInUse(@Nonnull PsiLabeledStatement statement)
 	{
 		PsiIdentifier identifier = statement.getLabelIdentifier();
 		String text = identifier.getText();
@@ -3109,7 +3111,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkUnclosedComment(@NotNull PsiComment comment)
+	static HighlightInfo checkUnclosedComment(@Nonnull PsiComment comment)
 	{
 		if(!(comment instanceof PsiDocComment) && comment.getTokenType() != JavaTokenType.C_STYLE_COMMENT)
 		{
@@ -3127,7 +3129,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static Collection<HighlightInfo> checkCatchTypeIsDisjoint(@NotNull final PsiParameter parameter)
+	static Collection<HighlightInfo> checkCatchTypeIsDisjoint(@Nonnull final PsiParameter parameter)
 	{
 		if(!(parameter.getType() instanceof PsiDisjunctionType))
 		{
@@ -3170,8 +3172,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static Collection<HighlightInfo> checkExceptionAlreadyCaught(@NotNull final PsiParameter parameter)
+	@javax.annotation.Nullable
+	static Collection<HighlightInfo> checkExceptionAlreadyCaught(@Nonnull final PsiParameter parameter)
 	{
 		final PsiElement scope = parameter.getDeclarationScope();
 		if(!(scope instanceof PsiCatchSection))
@@ -3229,7 +3231,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return result.isEmpty() ? null : result;
 	}
 
-	private static boolean checkMultipleTypes(final PsiClass catchClass, @NotNull final List<PsiType> upperCatchTypes)
+	private static boolean checkMultipleTypes(final PsiClass catchClass, @Nonnull final List<PsiType> upperCatchTypes)
 	{
 		for(int i = upperCatchTypes.size() - 1; i >= 0; i--)
 		{
@@ -3249,7 +3251,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkTernaryOperatorConditionIsBoolean(@NotNull PsiExpression expression, PsiType type)
+	static HighlightInfo checkTernaryOperatorConditionIsBoolean(@Nonnull PsiExpression expression, PsiType type)
 	{
 		if(expression.getParent() instanceof PsiConditionalExpression && ((PsiConditionalExpression) expression.getParent()).getCondition() == expression && !TypeConversionUtil.isBooleanType(type))
 		{
@@ -3259,8 +3261,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkStatementPrependedWithCaseInsideSwitch(@NotNull PsiSwitchStatement statement)
+	@javax.annotation.Nullable
+	static HighlightInfo checkStatementPrependedWithCaseInsideSwitch(@Nonnull PsiSwitchStatement statement)
 	{
 		PsiCodeBlock body = statement.getBody();
 		if(body != null)
@@ -3278,7 +3280,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkAssertOperatorTypes(@NotNull PsiExpression expression, @Nullable PsiType type)
+	static HighlightInfo checkAssertOperatorTypes(@Nonnull PsiExpression expression, @javax.annotation.Nullable PsiType type)
 	{
 		if(type == null)
 		{
@@ -3308,8 +3310,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkSynchronizedExpressionType(@NotNull PsiExpression expression, @Nullable PsiType type, @NotNull PsiFile containingFile)
+	@javax.annotation.Nullable
+	static HighlightInfo checkSynchronizedExpressionType(@Nonnull PsiExpression expression, @javax.annotation.Nullable PsiType type, @Nonnull PsiFile containingFile)
 	{
 		if(type == null)
 		{
@@ -3328,8 +3330,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkConditionalExpressionBranchTypesMatch(@NotNull final PsiExpression expression, PsiType type)
+	@javax.annotation.Nullable
+	static HighlightInfo checkConditionalExpressionBranchTypesMatch(@Nonnull final PsiExpression expression, PsiType type)
 	{
 		PsiElement parent = expression.getParent();
 		if(!(parent instanceof PsiConditionalExpression))
@@ -3363,7 +3365,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@SuppressWarnings("StringContatenationInLoop")
-	static HighlightInfo createIncompatibleTypeHighlightInfo(final PsiType lType, final PsiType rType, @NotNull final TextRange textRange, int navigationShift)
+	static HighlightInfo createIncompatibleTypeHighlightInfo(final PsiType lType, final PsiType rType, @Nonnull final TextRange textRange, int navigationShift)
 	{
 		PsiType lType1 = lType;
 		PsiType rType1 = rType;
@@ -3426,10 +3428,10 @@ public class HighlightUtil extends HighlightUtilBase
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(textRange).description(description).escapedToolTip(toolTip).navigationShift(navigationShift).create();
 	}
 
-	@Nullable
-	static HighlightInfo checkSingleImportClassConflict(@NotNull PsiImportStatement statement,
-			@NotNull Map<String, Pair<PsiImportStaticReferenceElement, PsiClass>> importedClasses,
-			@NotNull PsiFile containingFile)
+	@javax.annotation.Nullable
+	static HighlightInfo checkSingleImportClassConflict(@Nonnull PsiImportStatement statement,
+			@Nonnull Map<String, Pair<PsiImportStaticReferenceElement, PsiClass>> importedClasses,
+			@Nonnull PsiFile containingFile)
 	{
 		if(statement.isOnDemand())
 		{
@@ -3463,7 +3465,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return "<font color='" + color + "'><b>" + getFQName(type, true) + "</b></font>";
 	}
 
-	private static String getFQName(@Nullable PsiType type, boolean longName)
+	private static String getFQName(@javax.annotation.Nullable PsiType type, boolean longName)
 	{
 		if(type == null)
 		{
@@ -3474,7 +3476,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkMustBeThrowable(@Nullable PsiType type, @NotNull PsiElement context, boolean addCastIntention)
+	static HighlightInfo checkMustBeThrowable(@javax.annotation.Nullable PsiType type, @Nonnull PsiElement context, boolean addCastIntention)
 	{
 		if(type == null)
 		{
@@ -3504,8 +3506,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	private static HighlightInfo checkMustBeThrowable(@Nullable PsiClass aClass, @NotNull PsiElement context)
+	@javax.annotation.Nullable
+	private static HighlightInfo checkMustBeThrowable(@javax.annotation.Nullable PsiClass aClass, @Nonnull PsiElement context)
 	{
 		if(aClass == null)
 		{
@@ -3516,8 +3518,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkLabelDefined(@Nullable PsiIdentifier labelIdentifier, @Nullable PsiStatement exitedStatement)
+	@javax.annotation.Nullable
+	static HighlightInfo checkLabelDefined(@javax.annotation.Nullable PsiIdentifier labelIdentifier, @javax.annotation.Nullable PsiStatement exitedStatement)
 	{
 		if(labelIdentifier == null)
 		{
@@ -3537,8 +3539,8 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
-	static HighlightInfo checkReference(@NotNull PsiJavaCodeReferenceElement ref, @NotNull JavaResolveResult result, @NotNull PsiFile containingFile, @NotNull LanguageLevel languageLevel)
+	@javax.annotation.Nullable
+	static HighlightInfo checkReference(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull JavaResolveResult result, @Nonnull PsiFile containingFile, @Nonnull LanguageLevel languageLevel)
 	{
 		PsiElement refName = ref.getReferenceNameElement();
 		if(!(refName instanceof PsiIdentifier) && !(refName instanceof PsiKeyword))
@@ -3643,8 +3645,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@NotNull
-	private static String format(@NotNull PsiElement element)
+	@Nonnull
+	private static String format(@Nonnull PsiElement element)
 	{
 		if(element instanceof PsiClass)
 		{
@@ -3671,8 +3673,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return element;
 	}
 
-	@Nullable
-	static HighlightInfo checkPackageAndClassConflict(@NotNull PsiJavaCodeReferenceElement ref, @NotNull PsiFile containingFile)
+	@javax.annotation.Nullable
+	static HighlightInfo checkPackageAndClassConflict(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiFile containingFile)
 	{
 		if(ref.isQualified() && getOuterReferenceParent(ref) instanceof PsiPackageStatement)
 		{
@@ -3696,8 +3698,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkElementInReferenceList(@NotNull PsiJavaCodeReferenceElement ref, @NotNull PsiReferenceList referenceList, @NotNull JavaResolveResult resolveResult)
+	@javax.annotation.Nullable
+	static HighlightInfo checkElementInReferenceList(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiReferenceList referenceList, @Nonnull JavaResolveResult resolveResult)
 	{
 		PsiElement resolved = resolveResult.getElement();
 		HighlightInfo highlightInfo = null;
@@ -3742,7 +3744,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	public static boolean isSerializationImplicitlyUsedField(@NotNull PsiField field)
+	public static boolean isSerializationImplicitlyUsedField(@Nonnull PsiField field)
 	{
 		final String name = field.getName();
 		if(!SERIAL_VERSION_UID_FIELD_NAME.equals(name) && !SERIAL_PERSISTENT_FIELDS_FIELD_NAME.equals(name))
@@ -3757,8 +3759,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return aClass == null || JavaHighlightUtil.isSerializable(aClass);
 	}
 
-	@Nullable
-	static HighlightInfo checkClassReferenceAfterQualifier(@NotNull final PsiReferenceExpression expression, final PsiElement resolved)
+	@javax.annotation.Nullable
+	static HighlightInfo checkClassReferenceAfterQualifier(@Nonnull final PsiReferenceExpression expression, final PsiElement resolved)
 	{
 		if(!(resolved instanceof PsiClass))
 		{
@@ -3783,7 +3785,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return info;
 	}
 
-	static void registerChangeVariableTypeFixes(@NotNull PsiVariable parameter, PsiType itemType, @Nullable PsiExpression expr, @NotNull HighlightInfo highlightInfo)
+	static void registerChangeVariableTypeFixes(@Nonnull PsiVariable parameter, PsiType itemType, @Nullable PsiExpression expr, @Nonnull HighlightInfo highlightInfo)
 	{
 		for(IntentionAction action : getChangeVariableTypeFixes(parameter, itemType))
 		{
@@ -3799,8 +3801,8 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 	}
 
-	@NotNull
-	public static List<IntentionAction> getChangeVariableTypeFixes(@NotNull PsiVariable parameter, PsiType itemType)
+	@Nonnull
+	public static List<IntentionAction> getChangeVariableTypeFixes(@Nonnull PsiVariable parameter, PsiType itemType)
 	{
 		if(itemType instanceof PsiMethodReferenceType)
 		{
@@ -3823,7 +3825,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	static HighlightInfo checkAnnotationMethodParameters(@NotNull PsiParameterList list)
+	static HighlightInfo checkAnnotationMethodParameters(@Nonnull PsiParameterList list)
 	{
 		final PsiElement parent = list.getParent();
 		if(PsiUtil.isAnnotationMethod(parent) && list.getParametersCount() > 0)
@@ -3836,8 +3838,8 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	static HighlightInfo checkForStatement(@NotNull PsiForStatement statement)
+	@javax.annotation.Nullable
+	static HighlightInfo checkForStatement(@Nonnull PsiForStatement statement)
 	{
 		PsiStatement init = statement.getInitialization();
 		if(init == null || init instanceof PsiEmptyStatement || init instanceof PsiDeclarationStatement && ArrayUtil.getFirstElement(((PsiDeclarationStatement) init).getDeclaredElements())
@@ -3855,7 +3857,7 @@ public class HighlightUtil extends HighlightUtilBase
 		QuickFixAction.registerQuickFixAction(info, getChangeParameterClassFix(lType, rType));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static IntentionAction getChangeParameterClassFix(PsiType lType, PsiType rType)
 	{
 		final PsiClass lClass = PsiUtil.resolveClassInClassTypeOnly(lType);
@@ -3952,8 +3954,8 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 	}
 
-	@Nullable
-	static HighlightInfo checkFeature(@NotNull PsiElement element, @NotNull Feature feature, @NotNull LanguageLevel level, @NotNull PsiFile file)
+	@javax.annotation.Nullable
+	static HighlightInfo checkFeature(@Nonnull PsiElement element, @Nonnull Feature feature, @Nonnull LanguageLevel level, @Nonnull PsiFile file)
 	{
 		if(file.getManager().isInProject(file) && !level.isAtLeast(feature.level))
 		{

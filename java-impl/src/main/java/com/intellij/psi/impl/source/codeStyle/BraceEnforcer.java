@@ -26,7 +26,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -107,7 +107,7 @@ public class BraceEnforcer extends JavaRecursiveElementVisitor {
     }
   }
 
-  private void replaceWithBlock(@NotNull PsiStatement statement, PsiStatement blockCandidate, boolean forceNewLine) {
+  private void replaceWithBlock(@Nonnull PsiStatement statement, PsiStatement blockCandidate, boolean forceNewLine) {
     if (!statement.isValid()) {
       LOG.assertTrue(false);
     }

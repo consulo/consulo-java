@@ -1,7 +1,7 @@
 package com.intellij.psi.impl.search;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.JavaPsiFacade;
@@ -24,14 +24,14 @@ import com.intellij.util.QueryExecutor;
 public class JavaOverridingMethodsSearcher implements QueryExecutor<PsiMethod, OverridingMethodsSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final OverridingMethodsSearch.SearchParameters p, @NotNull final Processor<PsiMethod> consumer)
+	public boolean execute(@Nonnull final OverridingMethodsSearch.SearchParameters p, @Nonnull final Processor<PsiMethod> consumer)
 	{
 		final PsiMethod method = p.getMethod();
 		final SearchScope scope = p.getScope();
 
 		final PsiClass parentClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public PsiClass compute()
 			{
@@ -47,7 +47,7 @@ public class JavaOverridingMethodsSearcher implements QueryExecutor<PsiMethod, O
 				PsiMethod found = ApplicationManager.getApplication().runReadAction(new Computable<PsiMethod>()
 				{
 					@Override
-					@Nullable
+					@javax.annotation.Nullable
 					public PsiMethod compute()
 					{
 						return findOverridingMethod(inheritor, parentClass, method);
@@ -60,8 +60,8 @@ public class JavaOverridingMethodsSearcher implements QueryExecutor<PsiMethod, O
 		return ClassInheritorsSearch.search(parentClass, scope, true).forEach(inheritorsProcessor);
 	}
 
-	@Nullable
-	private static PsiMethod findOverridingMethod(PsiClass inheritor, @NotNull PsiClass parentClass, PsiMethod method)
+	@javax.annotation.Nullable
+	private static PsiMethod findOverridingMethod(PsiClass inheritor, @Nonnull PsiClass parentClass, PsiMethod method)
 	{
 		String name = method.getName();
 		if(inheritor.findMethodsByName(name, false).length > 0)
@@ -89,8 +89,8 @@ public class JavaOverridingMethodsSearcher implements QueryExecutor<PsiMethod, O
 		return null;
 	}
 
-	@NotNull
-	private static MethodSignature getSuperSignature(PsiClass inheritor, @NotNull PsiClass parentClass, PsiMethod method)
+	@Nonnull
+	private static MethodSignature getSuperSignature(PsiClass inheritor, @Nonnull PsiClass parentClass, PsiMethod method)
 	{
 		PsiSubstitutor substitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(parentClass, inheritor, PsiSubstitutor.EMPTY, null);
 		// if null, we have EJB custom inheritance here and still check overriding

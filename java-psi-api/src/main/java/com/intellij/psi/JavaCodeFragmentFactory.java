@@ -15,9 +15,11 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 
@@ -39,8 +41,8 @@ public abstract class JavaCodeFragmentFactory
 	 *                     (see {@link PsiElement#isPhysical()}).
 	 * @return the created code fragment.
 	 */
-	@NotNull
-	public abstract PsiExpressionCodeFragment createExpressionCodeFragment(@NotNull String text, @Nullable PsiElement context, @Nullable final PsiType expectedType, boolean isPhysical);
+	@Nonnull
+	public abstract PsiExpressionCodeFragment createExpressionCodeFragment(@Nonnull String text, @javax.annotation.Nullable PsiElement context, @Nullable final PsiType expectedType, boolean isPhysical);
 
 	/**
 	 * Creates a Java code fragment from the text of a Java code block.
@@ -51,8 +53,8 @@ public abstract class JavaCodeFragmentFactory
 	 *                   (see {@link PsiElement#isPhysical()}).
 	 * @return the created code fragment.
 	 */
-	@NotNull
-	public abstract JavaCodeFragment createCodeBlockCodeFragment(@NotNull String text, @Nullable PsiElement context, boolean isPhysical);
+	@Nonnull
+	public abstract JavaCodeFragment createCodeBlockCodeFragment(@Nonnull String text, @javax.annotation.Nullable PsiElement context, boolean isPhysical);
 
 	/**
 	 * Flag for {@linkplain #createTypeCodeFragment(String, PsiElement, boolean, int)} - allows void type.
@@ -82,8 +84,8 @@ public abstract class JavaCodeFragmentFactory
 	 *                   (see {@link PsiElement#isPhysical()}).
 	 * @return the created code fragment.
 	 */
-	@NotNull
-	public abstract PsiTypeCodeFragment createTypeCodeFragment(@NotNull String text, @Nullable PsiElement context, boolean isPhysical);
+	@Nonnull
+	public abstract PsiTypeCodeFragment createTypeCodeFragment(@Nonnull String text, @javax.annotation.Nullable PsiElement context, boolean isPhysical);
 
 	/**
 	 * Creates a Java type code fragment from the text of the name of a Java type (the name
@@ -97,9 +99,9 @@ public abstract class JavaCodeFragmentFactory
 	 * @param flags      types allowed to present in text.
 	 * @return the created code fragment.
 	 */
-	@NotNull
-	public abstract PsiTypeCodeFragment createTypeCodeFragment(@NotNull String text,
-			@Nullable PsiElement context,
+	@Nonnull
+	public abstract PsiTypeCodeFragment createTypeCodeFragment(@Nonnull String text,
+			@javax.annotation.Nullable PsiElement context,
 			boolean isPhysical,
 			@MagicConstant(flags = {
 					ALLOW_VOID,
@@ -120,7 +122,7 @@ public abstract class JavaCodeFragmentFactory
 	 *                          reference target, otherwise only packages are
 	 * @return the created reference fragment.
 	 */
-	@NotNull
-	public abstract PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(@NotNull String text, @Nullable PsiElement context, boolean isPhysical, boolean isClassesAccepted);
+	@Nonnull
+	public abstract PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(@Nonnull String text, @javax.annotation.Nullable PsiElement context, boolean isPhysical, boolean isClassesAccepted);
 
 }

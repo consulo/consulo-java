@@ -19,8 +19,8 @@
  */
 package com.intellij.lang.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
@@ -33,7 +33,7 @@ import com.intellij.psi.PsiJavaFile;
 public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory
 {
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public StructureViewBuilder getStructureViewBuilder(final PsiFile psiFile)
 	{
 		if(!(psiFile instanceof PsiJavaFile))
@@ -43,8 +43,8 @@ public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory
 		return new TreeBasedStructureViewBuilder()
 		{
 			@Override
-			@NotNull
-			public StructureViewModel createStructureViewModel(@Nullable Editor editor)
+			@Nonnull
+			public StructureViewModel createStructureViewModel(@javax.annotation.Nullable Editor editor)
 			{
 				return new JavaFileTreeModel((PsiJavaFile) psiFile, editor);
 			}

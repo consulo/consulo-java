@@ -17,8 +17,8 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -44,7 +44,7 @@ public class ChangeToAppendFix implements IntentionAction {
     myAssignmentExpression = assignmentExpression;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("change.to.append.text",
@@ -53,14 +53,14 @@ public class ChangeToAppendFix implements IntentionAction {
                                                         new StringBuilder(myAssignmentExpression.getLExpression().getText())));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("change.to.append.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return JavaTokenType.PLUSEQ == myTokenType &&
            myAssignmentExpression.isValid() &&
            PsiManager.getInstance(project).isInProject(myAssignmentExpression) &&
@@ -75,7 +75,7 @@ public class ChangeToAppendFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiExpression appendExpression =
       buildAppendExpression(myAssignmentExpression.getLExpression(), myAssignmentExpression.getRExpression());

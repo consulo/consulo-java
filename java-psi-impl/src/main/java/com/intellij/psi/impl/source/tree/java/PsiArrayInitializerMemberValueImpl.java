@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaElementVisitor;
@@ -47,7 +48,7 @@ public class PsiArrayInitializerMemberValueImpl extends CompositePsiElement impl
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotationMemberValue[] getInitializers()
 	{
 		return getChildrenAsPsiElements(MEMBER_SET, PsiAnnotationMemberValue.ARRAY_FACTORY);
@@ -110,7 +111,7 @@ public class PsiArrayInitializerMemberValueImpl extends CompositePsiElement impl
 	}
 
 	@Override
-	public void deleteChildInternal(@NotNull ASTNode child)
+	public void deleteChildInternal(@Nonnull ASTNode child)
 	{
 		if(MEMBER_SET.contains(child.getElementType()))
 		{
@@ -121,7 +122,7 @@ public class PsiArrayInitializerMemberValueImpl extends CompositePsiElement impl
 	}
 
 	@Override
-	public final void accept(@NotNull PsiElementVisitor visitor)
+	public final void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

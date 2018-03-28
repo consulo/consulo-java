@@ -1,6 +1,6 @@
 package consulo.java.manifest.lang.headerparser;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
@@ -11,7 +11,7 @@ import com.intellij.psi.PsiElement;
  * @since 14:32/27.04.13
  */
 public class HeaderUtil {
-	public static HeaderParser getHeaderParser(@NotNull HeaderValuePart manifestHeaderValue) {
+	public static HeaderParser getHeaderParser(@Nonnull HeaderValuePart manifestHeaderValue) {
     Header manifestHeader = findHeader(manifestHeaderValue);
     String headerName = manifestHeader != null ? manifestHeader.getName() : null;
     return getHeaderParser(headerName);

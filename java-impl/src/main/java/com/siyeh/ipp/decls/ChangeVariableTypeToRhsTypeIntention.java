@@ -20,19 +20,20 @@
  */
 package com.siyeh.ipp.decls;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Bas Leijdekkers
  */
 public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ChangeVariableTypeToRhsTypePredicate();
@@ -50,7 +51,7 @@ public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention 
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiElement parent = element.getParent();
     if (!(parent instanceof PsiVariable)) {
       return;

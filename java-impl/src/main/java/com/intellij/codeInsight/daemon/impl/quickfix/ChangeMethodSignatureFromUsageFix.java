@@ -21,9 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.codeInsight.JavaTargetElementUtilEx;
@@ -73,10 +73,10 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
   ParameterInfoImpl[] myNewParametersInfo;
   private static final Logger LOG = Logger.getInstance(ChangeMethodSignatureFromUsageFix.class);
 
-  public ChangeMethodSignatureFromUsageFix(@NotNull PsiMethod targetMethod,
-                                           @NotNull PsiExpression[] expressions,
-                                           @NotNull PsiSubstitutor substitutor,
-                                           @NotNull PsiElement context,
+  public ChangeMethodSignatureFromUsageFix(@Nonnull PsiMethod targetMethod,
+                                           @Nonnull PsiExpression[] expressions,
+                                           @Nonnull PsiSubstitutor substitutor,
+                                           @Nonnull PsiElement context,
                                            boolean changeAllUsages, int minUsagesNumberToShowDialog) {
     myTargetMethod = targetMethod;
     myExpressions = expressions;
@@ -87,7 +87,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     final String shortText = getShortText();
     if (shortText != null) return shortText;
@@ -97,7 +97,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
                                   formatTypesList(myNewParametersInfo, myContext));
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private String getShortText() {
     final StringBuilder buf = new StringBuilder();
     final HashSet<ParameterInfoImpl> newParams = new HashSet<ParameterInfoImpl>();
@@ -123,7 +123,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
     return "<html> Change signature of " + targetMethodName + "(" + buf.toString() + ")</html>";
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String formatTypesList(ParameterInfoImpl[] infos, PsiElement context) {
     if (infos == null) return null;
     StringBuilder result = new StringBuilder();
@@ -142,13 +142,13 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("change.method.signature.from.usage.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) return false;
     for (PsiExpression expression : myExpressions) {
       if (!expression.isValid()) return false;
@@ -171,7 +171,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
   }
 
   @Override
-  public void invoke(@NotNull final Project project, Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     final PsiMethod method = SuperMethodWarningUtil.checkSuperMethod(myTargetMethod, RefactoringBundle.message("to.refactor"));
@@ -229,7 +229,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
         method.getReturnType(),
         newParametersInfo){
         @Override
-        @NotNull
+        @Nonnull
         protected UsageInfo[] findUsages() {
           return changeAllUsages ? super.findUsages() : UsageInfo.EMPTY_ARRAY;
         }

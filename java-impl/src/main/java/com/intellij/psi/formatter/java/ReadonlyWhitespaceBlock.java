@@ -19,8 +19,8 @@ package com.intellij.psi.formatter.java;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
@@ -48,35 +48,35 @@ public class ReadonlyWhitespaceBlock implements Block
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TextRange getTextRange()
 	{
 		return myRange;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<Block> getSubBlocks()
 	{
 		return Collections.emptyList();
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public Wrap getWrap()
 	{
 		return myWrap;
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public Indent getIndent()
 	{
 		return myIndent;
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public Alignment getAlignment()
 	{
 		return myAlignment;
@@ -84,13 +84,13 @@ public class ReadonlyWhitespaceBlock implements Block
 
 	@Override
 	@Nullable
-	public Spacing getSpacing(Block child1, @NotNull Block child2)
+	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return null;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		return ChildAttributes.DELEGATE_TO_NEXT_CHILD;

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.EvaluatingComputable;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.util.Range;
@@ -27,12 +27,12 @@ public interface MethodFilter
 {
 	boolean locationMatches(DebugProcessImpl process, Location location) throws EvaluateException;
 
-	default boolean locationMatches(DebugProcessImpl process, Location location, @NotNull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
+	default boolean locationMatches(DebugProcessImpl process, Location location, @Nonnull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
 	{
 		return locationMatches(process, location);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	Range<Integer> getCallingExpressionLines();
 
 	default int onReached(SuspendContextImpl context, RequestHint hint)

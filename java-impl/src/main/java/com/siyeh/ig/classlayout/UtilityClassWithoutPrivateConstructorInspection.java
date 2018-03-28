@@ -23,8 +23,8 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
@@ -57,19 +57,19 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
   public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("utility.class.without.private.constructor.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("utility.class.without.private.constructor.problem.descriptor");
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
@@ -81,7 +81,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     return panel;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> fixes = new ArrayList();
@@ -103,7 +103,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
 
   private static class CreateEmptyPrivateConstructor extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("utility.class.without.private.constructor.create.quickfix");
     }
@@ -147,7 +147,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
 
   private static class MakeConstructorPrivateFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("utility.class.without.private.constructor.make.quickfix");
     }
@@ -181,7 +181,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
   private class UtilityClassWithoutPrivateConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
         return;
@@ -261,7 +261,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   static PsiMethod getNullArgConstructor(PsiClass aClass) {
     final PsiMethod[] constructors = aClass.getConstructors();
     for (final PsiMethod constructor : constructors) {

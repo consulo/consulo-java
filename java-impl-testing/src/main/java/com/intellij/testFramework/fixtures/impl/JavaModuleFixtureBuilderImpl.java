@@ -22,8 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -63,15 +64,15 @@ abstract class JavaModuleFixtureBuilderImpl<T extends ModuleFixture> extends Mod
       mySdk = sdk;
     }
 
-    @NotNull
+    @Nonnull
     @Override
-    public NamedPointer<Sdk> create(@NotNull String name) {
+    public NamedPointer<Sdk> create(@Nonnull String name) {
       return new NamedPointerImpl<Sdk>(mySdk);
     }
 
-    @NotNull
+    @Nonnull
     @Override
-    public NamedPointer<Sdk> create(@NotNull Sdk value) {
+    public NamedPointer<Sdk> create(@Nonnull Sdk value) {
       return new NamedPointerImpl<Sdk>(mySdk);
     }
   }

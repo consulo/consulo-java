@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -22,29 +24,27 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MakeFieldFinalFix;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "NonFinalFieldReferenceInEquals";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.equals.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.equals.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     return MakeFieldFinalFix.buildFix(field);
@@ -58,7 +58,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (MethodUtils.isEquals(method)) {
         method.accept(new JavaRecursiveElementVisitor() {
 
@@ -69,7 +69,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
 
           @Override
           public void visitReferenceExpression(
-            @NotNull PsiReferenceExpression expression) {
+            @Nonnull PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
             final PsiElement element = expression.resolve();
             if (!(element instanceof PsiField)) {

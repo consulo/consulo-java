@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.project.Project;
@@ -31,14 +31,14 @@ public class JVMElementFactories extends LanguageExtension<JVMElementFactoryProv
     super("consulo.java.generation.topLevelFactory");
   }
 
-  @Nullable
-  public static JVMElementFactory getFactory(@NotNull Language language, @NotNull Project project) {
+  @javax.annotation.Nullable
+  public static JVMElementFactory getFactory(@Nonnull Language language, @Nonnull Project project) {
     final JVMElementFactoryProvider provider = INSTANCE.forLanguage(language);
     return provider != null? provider.getFactory(project) : null;
   }
 
-  @NotNull
-  public static JVMElementFactory requireFactory(@NotNull Language language, @NotNull Project project) {
+  @Nonnull
+  public static JVMElementFactory requireFactory(@Nonnull Language language, @Nonnull Project project) {
     final JVMElementFactory factory = getFactory(language, project);
     assert factory != null : language;
     return factory;

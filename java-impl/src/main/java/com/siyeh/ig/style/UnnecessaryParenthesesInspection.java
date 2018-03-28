@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,13 +40,13 @@ public class UnnecessaryParenthesesInspection extends BaseInspection {
   public boolean ignoreParenthesesOnLambdaParameter = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.parentheses.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.parentheses.problem.descriptor");
   }
@@ -68,7 +68,7 @@ public class UnnecessaryParenthesesInspection extends BaseInspection {
 
   private class UnnecessaryParenthesesFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.parentheses.remove.quickfix");
     }

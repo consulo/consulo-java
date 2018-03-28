@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
 import org.jacoco.core.analysis.IClassCoverage;
@@ -19,8 +21,6 @@ import org.jacoco.core.data.ExecutionDataReader;
 import org.jacoco.core.data.ExecutionDataStore;
 import org.jacoco.core.data.ISessionInfoVisitor;
 import org.jacoco.core.data.SessionInfo;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -39,7 +39,7 @@ import consulo.roots.impl.TestContentFolderTypeProvider;
 public class JaCoCoCoverageRunner extends JavaCoverageRunner
 {
 	@Override
-	public ProjectData loadCoverageData(@NotNull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite)
+	public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @javax.annotation.Nullable CoverageSuite baseCoverageSuite)
 	{
 		final ProjectData data = new ProjectData();
 		try
@@ -57,7 +57,7 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner
 		return data;
 	}
 
-	private static void loadExecutionData(@NotNull final File sessionDataFile, ProjectData data, @NotNull Project project) throws IOException
+	private static void loadExecutionData(@Nonnull final File sessionDataFile, ProjectData data, @Nonnull Project project) throws IOException
 	{
 		final ExecutionDataStore executionDataStore = new ExecutionDataStore();
 		FileInputStream fis = null;

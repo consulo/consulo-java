@@ -15,9 +15,9 @@
  */
 package com.intellij.spi.psi;
 
+import javax.annotation.Nonnull;
+
 import consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
@@ -36,7 +36,7 @@ import com.intellij.util.IncorrectOperationException;
  * User: anna
  */
 public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement implements PsiReference {
-  public SPIPackageOrClassReferenceElement(@NotNull ASTNode node) {
+  public SPIPackageOrClassReferenceElement(@Nonnull ASTNode node) {
     super(node);
   }
 
@@ -51,7 +51,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return new TextRange(last.getStartOffsetInParent(), getTextLength());
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getCanonicalText() {
     return getText();
@@ -65,7 +65,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return replace(firstChild.getElements().get(0));
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public PsiElement resolve() {
     PsiPackage aPackage = JavaPsiFacade.getInstance(getProject()).findPackage(getText());
@@ -76,7 +76,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
   }
 
   @Override
-  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (element instanceof PsiPackage) {
       return handleElementRename(((PsiPackage)element).getQualifiedName());
     } else if (element instanceof PsiClass) {
@@ -106,7 +106,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return this;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Object[] getVariants() {
     return ArrayUtil.EMPTY_OBJECT_ARRAY;

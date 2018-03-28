@@ -18,7 +18,6 @@ package com.intellij.ide.projectView.impl.nodes;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.PsiClassChildrenSource;
 import com.intellij.ide.projectView.ViewSettings;
@@ -265,7 +264,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiFile parentFileOf(final PsiClass psiClass)
 	{
 		return psiClass.getContainingClass() == null ? psiClass.getContainingFile() : null;

@@ -15,10 +15,10 @@
  */
 package com.intellij.debugger;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfile;
@@ -37,7 +37,7 @@ public class DefaultDebugUIEnvironment implements DebugUIEnvironment
 	private final ExecutionEnvironment myExecutionEnvironment;
 	private final DebugEnvironment myModelEnvironment;
 
-	public DefaultDebugUIEnvironment(@NotNull ExecutionEnvironment environment, RunProfileState state, RemoteConnection remoteConnection,
+	public DefaultDebugUIEnvironment(@Nonnull ExecutionEnvironment environment, RunProfileState state, RemoteConnection remoteConnection,
 			boolean pollConnection)
 	{
 		myExecutionEnvironment = environment;
@@ -74,7 +74,7 @@ public class DefaultDebugUIEnvironment implements DebugUIEnvironment
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public RunProfile getRunProfile()
 	{
 		return myExecutionEnvironment.getRunProfile();

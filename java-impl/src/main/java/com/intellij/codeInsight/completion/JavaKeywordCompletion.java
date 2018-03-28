@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.TailTypes;
@@ -84,7 +84,7 @@ public class JavaKeywordCompletion
 
 	static final NotNullLazyValue<ElementFilter> END_OF_BLOCK = new AtomicNotNullLazyValue<ElementFilter>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		protected ElementFilter compute()
 		{
@@ -119,7 +119,7 @@ public class JavaKeywordCompletion
 
 	private static final NotNullLazyValue<ElementFilter> CLASS_BODY = new AtomicNotNullLazyValue<ElementFilter>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		protected ElementFilter compute()
 		{
@@ -136,7 +136,7 @@ public class JavaKeywordCompletion
 
 	static final NotNullLazyValue<ElementPattern<PsiElement>> DECLARATION_START = new NotNullLazyValue<ElementPattern<PsiElement>>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		protected ElementPattern<PsiElement> compute()
 		{

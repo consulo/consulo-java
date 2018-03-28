@@ -1,5 +1,8 @@
+import javax.annotation.Nonnull;
+
 class Test {
-    @org.jetbrains.annotations.NotNull Object d;
+    @Nonnull
+	Object d;
 
     public boolean equals(Object o) {
         if (this == o) return true;

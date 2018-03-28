@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -51,20 +51,20 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
   public boolean ignoreIntegerCharCasts = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "NumericCastThatLosesPrecision";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "cast.that.loses.precision.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType operandType = (PsiType)infos[0];
     return InspectionGadgetsBundle.message("cast.that.loses.precision.problem.descriptor", operandType.getPresentableText());
@@ -85,7 +85,7 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(@NotNull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
       final PsiType castType = expression.getType();
       if (!ClassUtils.isPrimitiveNumericType(castType)) {
         return;

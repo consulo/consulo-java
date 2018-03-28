@@ -18,7 +18,8 @@ package com.intellij.psi.impl.source.resolve;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
@@ -40,7 +41,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 	private static final String[] DEFAULT_PACKAGES = {CommonClassNames.DEFAULT_PACKAGE};
 
 	private final String myClassName;
-	@NotNull
+	@Nonnull
 	private final PsiFile myContainingFile;
 	private final PsiElement myPlace;
 	private final PsiResolveHelper myResolveHelper;
@@ -51,7 +52,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 	private JavaResolveResult[] myResult = JavaResolveResult.EMPTY_ARRAY;
 	private PsiElement myCurrentFileContext;
 
-	public ClassResolverProcessor(@NotNull String className, @NotNull PsiElement startPlace, @NotNull PsiFile containingFile)
+	public ClassResolverProcessor(@Nonnull String className, @Nonnull PsiElement startPlace, @Nonnull PsiFile containingFile)
 	{
 		myClassName = className;
 		myContainingFile = containingFile;
@@ -82,7 +83,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 		myResolveHelper = JavaPsiFacade.getInstance(containingFile.getProject()).getResolveHelper();
 	}
 
-	@NotNull
+	@Nonnull
 	public JavaResolveResult[] getResult()
 	{
 		if(myResult != null)
@@ -111,7 +112,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 	}
 
 	@Override
-	public String getName(@NotNull ResolveState state)
+	public String getName(@Nonnull ResolveState state)
 	{
 		return myClassName;
 	}
@@ -123,7 +124,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 	}
 
 	@Override
-	public void handleEvent(@NotNull PsiScopeProcessor.Event event, Object associated)
+	public void handleEvent(@Nonnull PsiScopeProcessor.Event event, Object associated)
 	{
 		if(event == JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT)
 		{
@@ -165,7 +166,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 		return file instanceof PsiJavaFile && ((PsiJavaFile) file).getPackageName().equals(packageName);
 	}
 
-	private Domination dominates(@NotNull PsiClass aClass, boolean accessible, @NotNull String fqName, @NotNull ClassCandidateInfo info)
+	private Domination dominates(@Nonnull PsiClass aClass, boolean accessible, @Nonnull String fqName, @Nonnull ClassCandidateInfo info)
 	{
 		final PsiClass otherClass = info.getElement();
 		String otherQName = otherClass.getQualifiedName();
@@ -272,7 +273,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 	}
 
 	@Override
-	public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		if(!(element instanceof PsiClass))
 		{
@@ -336,7 +337,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 	}
 
 	@Override
-	public <T> T getHint(@NotNull Key<T> hintKey)
+	public <T> T getHint(@Nonnull Key<T> hintKey)
 	{
 		if(hintKey == ElementClassHint.KEY || hintKey == NameHint.KEY)
 		{

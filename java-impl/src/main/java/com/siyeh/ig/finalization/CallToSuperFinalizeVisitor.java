@@ -15,17 +15,18 @@
  */
 package com.siyeh.ig.finalization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
 
 class CallToSuperFinalizeVisitor extends JavaRecursiveElementVisitor {
 
   private boolean callToSuperFinalizeFound = false;
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!callToSuperFinalizeFound) {
       super.visitElement(element);
     }
@@ -44,7 +45,7 @@ class CallToSuperFinalizeVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @NotNull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     if (callToSuperFinalizeFound) {
       return;
     }

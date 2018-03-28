@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
 
@@ -25,14 +26,14 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   public ThisPassedAsArgumentVisitor() {}
 
   @Override
-  public void visitElement(@NotNull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!passed) {
       super.visitElement(element);
     }
   }
 
   @Override
-  public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+  public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
     if (passed) {
       return;
     }
@@ -48,7 +49,7 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitNewExpression(@NotNull PsiNewExpression newExpression) {
+  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

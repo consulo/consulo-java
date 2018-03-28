@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -37,8 +38,8 @@ import javax.swing.text.Document;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.InspectionManager;
@@ -355,7 +356,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  public void writeSettings(@NotNull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     super.writeSettings(node);
     if (myIgnoreSimpleAccessors) {
       final Element option = new Element(IGNORE_ACCESSORS_ATTR_NAME);
@@ -365,7 +366,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  public void readSettings(@NotNull Element node) throws InvalidDataException {
+  public void readSettings(@Nonnull Element node) throws InvalidDataException {
     super.readSettings(node);
     final Element ignoreAccessorsTag = node.getChild(IGNORE_ACCESSORS_ATTR_NAME);
     if (ignoreAccessorsTag != null) {
@@ -373,12 +374,12 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
   }
 
-  private static ProblemDescriptor createDescriptor(@NotNull PsiElement element, String template, InspectionManager manager,
+  private static ProblemDescriptor createDescriptor(@Nonnull PsiElement element, String template, InspectionManager manager,
                                                     boolean onTheFly) {
     return manager.createProblemDescriptor(element, template, onTheFly, (LocalQuickFix [])null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
   }
 
-  private static ProblemDescriptor createDescriptor(@NotNull PsiElement element, String template, @NotNull LocalQuickFix fix,
+  private static ProblemDescriptor createDescriptor(@Nonnull PsiElement element, String template, @Nonnull LocalQuickFix fix,
                                                     InspectionManager manager, boolean onTheFly) {
     return manager.createProblemDescriptor(element, template, fix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, onTheFly);
   }
@@ -396,13 +397,13 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.javadoc.problem.add.tag", myTag, myValue);
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
       try {
         final PsiDocCommentOwner owner = PsiTreeUtil.getParentOfType(descriptor.getEndElement(), PsiDocCommentOwner.class);
@@ -447,14 +448,14 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return InspectionsBundle.message("inspection.javadoc.problem.add.tag.family");
     }
   }
   @Override
   @Nullable
-  public ProblemDescriptor[] checkClass(@NotNull PsiClass psiClass, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass psiClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     if (psiClass instanceof PsiAnonymousClass) return null;
    // if (psiClass instanceof JspClass) return null;
     if (psiClass instanceof PsiTypeParameter) return null;
@@ -557,8 +558,8 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @Nullable
-  public ProblemDescriptor[] checkField(@NotNull PsiField psiField, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  @javax.annotation.Nullable
+  public ProblemDescriptor[] checkField(@Nonnull PsiField psiField, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     if (IGNORE_DEPRECATED && (psiField.isDeprecated() || psiField.getContainingClass().isDeprecated())) {
       return null;
     }
@@ -587,7 +588,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkMethod(@NotNull PsiMethod psiMethod, @NotNull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     //if (psiMethod instanceof JspHolderMethod) return null;
     if (IGNORE_DEPRECATED && (psiMethod.isDeprecated() || psiMethod.getContainingClass().isDeprecated())) {
       return null;
@@ -789,7 +790,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   private void processThrowsTags(final PsiDocTag[] tags,
                                  final Map<PsiClassType, PsiClass> declaredExceptions,
                                  final InspectionManager mananger,
-                                 @NotNull final ArrayList<ProblemDescriptor> problems, boolean isOnTheFly) {
+                                 @Nonnull final ArrayList<ProblemDescriptor> problems, boolean isOnTheFly) {
     for (PsiDocTag tag : tags) {
       if ("throws".equals(tag.getName()) || "exception".equals(tag.getName())) {
         final PsiDocTagValue value = tag.getValueElement();
@@ -852,7 +853,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.javadoc.problem.add.param.tag", myName);
     }
@@ -1227,19 +1228,19 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.javadoc.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return InspectionsBundle.message("group.names.javadoc.issues");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
@@ -1256,19 +1257,19 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return JavaQuickFixBundle.message("add.doctag.to.custom.tags", myTag);
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
      return JavaQuickFixBundle.message("fix.javadoc.family");
    }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       if (myTag == null) return;
       if (myAdditionalJavadocTags.length() > 0) {
         myAdditionalJavadocTags += "," + myTag;

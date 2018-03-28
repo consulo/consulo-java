@@ -17,8 +17,8 @@ package com.intellij.compiler.impl.javaCompiler;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
@@ -30,19 +30,19 @@ public interface BackendCompiler
 {
 	ExtensionPointName<BackendCompilerEP> EP_NAME = ExtensionPointName.create("consulo.java.backendCompiler");
 
-	@NotNull
+	@Nonnull
 	String getPresentableName();
 
-	@Nullable
-	OutputParser createErrorParser(@NotNull String outputDir, Process process);
+	@javax.annotation.Nullable
+	OutputParser createErrorParser(@Nonnull String outputDir, Process process);
 
-	@Nullable
-	OutputParser createOutputParser(@NotNull String outputDir);
+	@javax.annotation.Nullable
+	OutputParser createOutputParser(@Nonnull String outputDir);
 
 	boolean checkCompiler(final CompileScope scope);
 
-	@NotNull
-	Process launchProcess( @NotNull ModuleChunk chunk, @NotNull String outputDir, @NotNull CompileContext compileContext) throws IOException;
+	@Nonnull
+	Process launchProcess( @Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
 
 	void compileFinished();
 }

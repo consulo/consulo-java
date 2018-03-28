@@ -19,6 +19,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -31,15 +33,15 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.AddSingleMemberStaticImportAction");
   private static final Key<PsiElement> TEMP_REFERENT_USER_DATA = new Key<PsiElement>("TEMP_REFERENT_USER_DATA");
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.add.single.member.static.import.family");
   }
@@ -51,7 +53,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
    * @return            not-null qualified name of the class which method may be statically imported if any; <code>null</code> otherwise
    */
   @Nullable
-  public static String getStaticImportClass(@NotNull PsiElement element) {
+  public static String getStaticImportClass(@Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return null;
     if (element instanceof PsiIdentifier) {
       final PsiElement parent = element.getParent();
@@ -106,7 +108,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
     return parameterList != null && parameterList.getFirstChild() != null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass getResolvedClass(PsiElement element, PsiMember resolved) {
     PsiClass aClass = resolved.getContainingClass();
     if (aClass != null && !PsiUtil.isAccessible(aClass, element, null)) {
@@ -122,7 +124,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     String classQName = getStaticImportClass(element);
     if (classQName != null) {
       setText(CodeInsightBundle.message("intention.add.single.member.static.import.text", classQName));
@@ -229,7 +231,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     invoke(element.getContainingFile(), element);
   }
 }

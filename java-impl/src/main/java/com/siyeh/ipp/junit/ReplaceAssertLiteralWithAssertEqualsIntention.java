@@ -24,7 +24,7 @@ import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ImportUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ReplaceAssertLiteralWithAssertEqualsIntention extends MutablyNamedIntention {
 
@@ -56,13 +56,13 @@ public class ReplaceAssertLiteralWithAssertEqualsIntention extends MutablyNamedI
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new AssertLiteralPredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) {
+  public void processIntention(@Nonnull PsiElement element) {
     final PsiMethodCallExpression call = (PsiMethodCallExpression)element;
     final PsiReferenceExpression methodExpression = call.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();

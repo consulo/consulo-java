@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.ArrayUtil;
 
@@ -34,7 +34,7 @@ public class FileObject
 	private byte[] myContent;
 	private int myClassId = -1;
 
-	public FileObject(@NotNull File file, @NotNull byte[] content)
+	public FileObject(@Nonnull File file, @Nonnull byte[] content)
 	{
 		myFile = file;
 		myContent = content;

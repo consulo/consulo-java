@@ -18,8 +18,8 @@ package com.intellij.ide.structureView.impl.java;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
@@ -45,13 +45,13 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	private static final Collection<NodeProvider> NODE_PROVIDERS = Arrays.asList(new JavaInheritedMembersNodeProvider(), new JavaAnonymousClassesNodeProvider(), new JavaLambdaNodeProvider());
 	private String myPlace;
 
-	public JavaFileTreeModel(@NotNull PsiClassOwner file, @Nullable Editor editor)
+	public JavaFileTreeModel(@Nonnull PsiClassOwner file, @Nullable Editor editor)
 	{
 		super(editor, file);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Filter[] getFilters()
 	{
 		return new Filter[]{
@@ -60,7 +60,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Collection<NodeProvider> getNodeProviders()
 	{
@@ -68,7 +68,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Grouper[] getGroupers()
 	{
 		return new Grouper[]{
@@ -78,7 +78,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public StructureViewTreeElement getRoot()
 	{
 		return new JavaFileTreeElement(getPsiFile());
@@ -91,7 +91,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Sorter[] getSorters()
 	{
 		return new Sorter[]{
@@ -152,7 +152,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected Class[] getSuitableClasses()
 	{
 		return new Class[]{
@@ -165,7 +165,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	}
 
 	@Override
-	public void setPlace(@NotNull String place)
+	public void setPlace(@Nonnull String place)
 	{
 		myPlace = place;
 	}

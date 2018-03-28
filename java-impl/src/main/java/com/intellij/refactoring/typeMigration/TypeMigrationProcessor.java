@@ -24,7 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -99,7 +100,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 		final TypeMigrationProcessor processor = new TypeMigrationProcessor(project, roots, migrationTypeFunction, rules, allowDependentRoots)
 		{
 			@Override
-			public void performRefactoring(@NotNull final UsageInfo[] usages)
+			public void performRefactoring(@Nonnull final UsageInfo[] usages)
 			{
 				super.performRefactoring(usages);
 				if(editor != null)
@@ -154,15 +155,15 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 	}
 
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected UsageViewDescriptor createUsageViewDescriptor(@NotNull UsageInfo[] usages)
+	protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages)
 	{
 		return new TypeMigrationViewDescriptor(myRoots[0]);
 	}
 
 	@Override
-	protected boolean preprocessUsages(@NotNull Ref<UsageInfo[]> refUsages)
+	protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages)
 	{
 		if(hasFailedConversions())
 		{
@@ -197,7 +198,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void previewRefactoring(@NotNull final UsageInfo[] usages)
+	protected void previewRefactoring(@Nonnull final UsageInfo[] usages)
 	{
 		MigrationPanel panel = new MigrationPanel(myRoots, myLabeler, myProject, isPreviewUsages());
 		String name;
@@ -256,7 +257,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 		return text;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public UsageInfo[] findUsages()
 	{
@@ -275,13 +276,13 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void refreshElements(@NotNull PsiElement[] elements)
+	protected void refreshElements(@Nonnull PsiElement[] elements)
 	{
 		myRoots = elements;
 	}
 
 	@Override
-	public void performRefactoring(@NotNull UsageInfo[] usages)
+	public void performRefactoring(@Nonnull UsageInfo[] usages)
 	{
 		change(usages, myLabeler, myProject);
 	}
@@ -350,7 +351,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 		return myLabeler;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getCommandName()
 	{

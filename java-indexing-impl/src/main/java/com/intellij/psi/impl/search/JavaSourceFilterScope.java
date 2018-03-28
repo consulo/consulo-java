@@ -16,8 +16,8 @@
 
 package com.intellij.psi.impl.search;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -31,10 +31,10 @@ import com.intellij.psi.search.GlobalSearchScope;
  */
 public class JavaSourceFilterScope extends DelegatingGlobalSearchScope
 {
-	@Nullable
+	@javax.annotation.Nullable
 	private final ProjectFileIndex myIndex;
 
-	public JavaSourceFilterScope(@NotNull final GlobalSearchScope delegate)
+	public JavaSourceFilterScope(@Nonnull final GlobalSearchScope delegate)
 	{
 		super(delegate);
 
@@ -50,7 +50,7 @@ public class JavaSourceFilterScope extends DelegatingGlobalSearchScope
 	}
 
 	@Override
-	public boolean contains(@NotNull final VirtualFile file)
+	public boolean contains(@Nonnull final VirtualFile file)
 	{
 		if(!super.contains(file))
 		{

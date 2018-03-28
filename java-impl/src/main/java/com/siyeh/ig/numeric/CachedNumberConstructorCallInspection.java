@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,14 +43,14 @@ public class CachedNumberConstructorCallInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "cached.number.constructor.call.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "cached.number.constructor.call.problem.descriptor");
@@ -80,7 +80,7 @@ public class CachedNumberConstructorCallInspection
       this.className = className;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "cached.number.constructor.call.quickfix", className);
@@ -104,7 +104,7 @@ public class CachedNumberConstructorCallInspection
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       if (!PsiUtil.isLanguageLevel5OrHigher(expression)) {
         return;
       }

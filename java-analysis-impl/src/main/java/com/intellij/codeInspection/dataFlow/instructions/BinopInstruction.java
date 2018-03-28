@@ -26,8 +26,8 @@ import static com.intellij.psi.JavaTokenType.LT;
 import static com.intellij.psi.JavaTokenType.NE;
 import static com.intellij.psi.JavaTokenType.PLUS;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -50,7 +50,7 @@ public class BinopInstruction extends BranchingInstruction
 	private final IElementType myOperationSign;
 	private final Project myProject;
 
-	public BinopInstruction(IElementType opSign, @Nullable PsiElement psiAnchor, @NotNull Project project)
+	public BinopInstruction(IElementType opSign, @javax.annotation.Nullable PsiElement psiAnchor, @Nonnull Project project)
 	{
 		super(psiAnchor);
 		myProject = project;

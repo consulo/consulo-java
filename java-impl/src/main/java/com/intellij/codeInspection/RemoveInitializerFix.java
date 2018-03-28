@@ -18,7 +18,7 @@ package com.intellij.codeInspection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableFix;
 import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
@@ -41,14 +41,14 @@ public class RemoveInitializerFix implements LocalQuickFix
 	private static final Logger LOG = Logger.getInstance("#" + RemoveInitializerFix.class.getName());
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		return InspectionsBundle.message("inspection.unused.assignment.remove.quickfix");
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiInitializer = descriptor.getPsiElement();
 		if(!(psiInitializer instanceof PsiExpression))
@@ -114,7 +114,7 @@ public class RemoveInitializerFix implements LocalQuickFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return getName();

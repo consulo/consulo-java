@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Ref;
@@ -49,7 +49,7 @@ public class PsiMethodReferenceUtil
 		return false;
 	}
 
-	public static boolean isResolvedBySecondSearch(@NotNull PsiMethodReferenceExpression methodRef, @Nullable MethodSignature signature, boolean varArgs, boolean isStatic, int parametersCount)
+	public static boolean isResolvedBySecondSearch(@Nonnull PsiMethodReferenceExpression methodRef, @Nullable MethodSignature signature, boolean varArgs, boolean isStatic, int parametersCount)
 	{
 		if(signature == null)
 		{
@@ -222,8 +222,8 @@ public class PsiMethodReferenceUtil
 		return false;
 	}
 
-	@NotNull
-	public static QualifierResolveResult getQualifierResolveResult(@NotNull PsiMethodReferenceExpression methodReferenceExpression)
+	@Nonnull
+	public static QualifierResolveResult getQualifierResolveResult(@Nonnull PsiMethodReferenceExpression methodReferenceExpression)
 	{
 		PsiClass containingClass = null;
 		PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;
@@ -274,7 +274,7 @@ public class PsiMethodReferenceUtil
 		return new QualifierResolveResult(containingClass, substitutor, false);
 	}
 
-	public static boolean isStaticallyReferenced(@NotNull PsiMethodReferenceExpression methodReferenceExpression)
+	public static boolean isStaticallyReferenced(@Nonnull PsiMethodReferenceExpression methodReferenceExpression)
 	{
 		final PsiExpression qualifierExpression = methodReferenceExpression.getQualifierExpression();
 		if(qualifierExpression != null)
@@ -312,7 +312,7 @@ public class PsiMethodReferenceUtil
 		return null;
 	}
 
-	private static PsiType replaceArrayType(PsiType type, @NotNull PsiElement context)
+	private static PsiType replaceArrayType(PsiType type, @Nonnull PsiElement context)
 	{
 		if(type instanceof PsiArrayType)
 		{

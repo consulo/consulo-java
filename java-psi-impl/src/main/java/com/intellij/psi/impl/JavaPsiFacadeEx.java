@@ -19,8 +19,8 @@
  */
 package com.intellij.psi.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
@@ -32,18 +32,18 @@ import com.intellij.psi.search.GlobalSearchScope;
 public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 {
 	@TestOnly
-	public static JavaPsiFacadeEx getInstanceEx(@NotNull Project project)
+	public static JavaPsiFacadeEx getInstanceEx(@Nonnull Project project)
 	{
 		return (JavaPsiFacadeEx) getInstance(project);
 	}
 
 	@TestOnly
-	@Nullable
-	public PsiClass findClass(@NotNull String qualifiedName)
+	@javax.annotation.Nullable
+	public PsiClass findClass(@Nonnull String qualifiedName)
 	{
 		return findClass(qualifiedName, GlobalSearchScope.allScope(getProject()));
 	}
 
 	@TestOnly
-	public abstract void setAssertOnFileLoadingFilter(@NotNull VirtualFileFilter filter, @NotNull Disposable parentDisposable);
+	public abstract void setAssertOnFileLoadingFilter(@Nonnull VirtualFileFilter filter, @Nonnull Disposable parentDisposable);
 }

@@ -19,7 +19,7 @@ import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -118,7 +118,7 @@ public class ToStringRenderer extends NodeRendererImpl implements OnDemandRender
 		return XDebuggerUIConstants.COLLECTING_DATA_MESSAGE;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getLinkText()
 	{

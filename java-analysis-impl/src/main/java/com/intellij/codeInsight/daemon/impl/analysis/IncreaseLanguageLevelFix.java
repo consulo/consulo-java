@@ -15,10 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
+import javax.annotation.Nonnull;
+
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.extension.JavaMutableModuleExtension;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
@@ -52,14 +54,14 @@ public class IncreaseLanguageLevelFix implements IntentionAction
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		return CodeInsightBundle.message("set.language.level.to.0", myLevel.getDescription());
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return CodeInsightBundle.message("set.language.level");
@@ -77,7 +79,7 @@ public class IncreaseLanguageLevelFix implements IntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file)
+	public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file)
 	{
 		final VirtualFile virtualFile = file.getVirtualFile();
 		if(virtualFile == null)
@@ -101,7 +103,7 @@ public class IncreaseLanguageLevelFix implements IntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
 	{
 		final VirtualFile virtualFile = file.getVirtualFile();
 		LOG.assertTrue(virtualFile != null);

@@ -15,7 +15,6 @@
  */
 package com.intellij.refactoring.util.duplicates;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiStatement;
@@ -27,6 +26,6 @@ import com.intellij.util.IncorrectOperationException;
 public interface ReturnValue {
   boolean isEquivalent(ReturnValue other);
 
-  @Nullable
+  @javax.annotation.Nullable
   PsiStatement createReplacement(final PsiMethod extractedMethod, PsiMethodCallExpression methodCallExpression) throws IncorrectOperationException;
 }

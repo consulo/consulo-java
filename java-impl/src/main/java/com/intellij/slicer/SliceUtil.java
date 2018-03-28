@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.Flow;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.DfaUtil;
 import com.intellij.openapi.progress.ProgressManager;
@@ -52,12 +52,12 @@ import com.intellij.util.Processor;
  */
 public class SliceUtil
 {
-	public static boolean processUsagesFlownDownTo(@NotNull PsiElement expression,
-			@NotNull Processor<SliceUsage> processor,
-			@NotNull SliceUsage parent,
-			@NotNull PsiSubstitutor parentSubstitutor,
+	public static boolean processUsagesFlownDownTo(@Nonnull PsiElement expression,
+			@Nonnull Processor<SliceUsage> processor,
+			@Nonnull SliceUsage parent,
+			@Nonnull PsiSubstitutor parentSubstitutor,
 			int indexNesting,
-			@NotNull String syntheticField)
+			@Nonnull String syntheticField)
 	{
 		assert indexNesting >= 0 : indexNesting;
 		expression = simplify(expression);
@@ -276,7 +276,7 @@ public class SliceUtil
 		return AnnotationUtil.findAnnotationInHierarchy(parameters[paramIndex], Flow.class);
 	}
 
-	private static PsiElement simplify(@NotNull PsiElement expression)
+	private static PsiElement simplify(@Nonnull PsiElement expression)
 	{
 		if(expression instanceof PsiParenthesizedExpression)
 		{
@@ -289,12 +289,12 @@ public class SliceUtil
 		return expression;
 	}
 
-	private static boolean handToProcessor(@NotNull PsiElement expression,
-			@NotNull Processor<SliceUsage> processor,
-			@NotNull SliceUsage parent,
-			@NotNull PsiSubstitutor substitutor,
+	private static boolean handToProcessor(@Nonnull PsiElement expression,
+			@Nonnull Processor<SliceUsage> processor,
+			@Nonnull SliceUsage parent,
+			@Nonnull PsiSubstitutor substitutor,
 			int indexNesting,
-			@NotNull String syntheticField)
+			@Nonnull String syntheticField)
 	{
 		final PsiElement realExpression = expression.getParent() instanceof DummyHolder ? expression.getParent().getContext() : expression;
 		assert realExpression != null;
@@ -309,10 +309,10 @@ public class SliceUtil
 		return true;
 	}
 
-	private static boolean processMethodReturnValue(@NotNull final PsiMethodCallExpression methodCallExpr,
-			@NotNull final Processor<SliceUsage> processor,
-			@NotNull final SliceUsage parent,
-			@NotNull final PsiSubstitutor parentSubstitutor)
+	private static boolean processMethodReturnValue(@Nonnull final PsiMethodCallExpression methodCallExpr,
+			@Nonnull final Processor<SliceUsage> processor,
+			@Nonnull final SliceUsage parent,
+			@Nonnull final PsiSubstitutor parentSubstitutor)
 	{
 		final JavaResolveResult resolved = methodCallExpr.resolveMethodGenerics();
 		PsiElement r = resolved.getElement();
@@ -401,10 +401,10 @@ public class SliceUtil
 		return result[0];
 	}
 
-	private static boolean processFieldUsages(@NotNull final PsiField field,
-			@NotNull final SliceUsage parent,
-			@NotNull final PsiSubstitutor parentSubstitutor,
-			@NotNull final Processor<SliceUsage> processor)
+	private static boolean processFieldUsages(@Nonnull final PsiField field,
+			@Nonnull final SliceUsage parent,
+			@Nonnull final PsiSubstitutor parentSubstitutor,
+			@Nonnull final Processor<SliceUsage> processor)
 	{
 		if(field.hasInitializer())
 		{
@@ -468,28 +468,28 @@ public class SliceUtil
 		});
 	}
 
-	@NotNull
-	public static SliceUsage createSliceUsage(@NotNull PsiElement element,
-			@NotNull SliceUsage parent,
-			@NotNull PsiSubstitutor substitutor,
+	@Nonnull
+	public static SliceUsage createSliceUsage(@Nonnull PsiElement element,
+			@Nonnull SliceUsage parent,
+			@Nonnull PsiSubstitutor substitutor,
 			int indexNesting,
-			@NotNull String syntheticField)
+			@Nonnull String syntheticField)
 	{
 		return new SliceUsage(simplify(element), parent, substitutor, indexNesting, syntheticField);
 	}
 
-	@NotNull
-	public static SliceUsage createTooComplexDFAUsage(@NotNull PsiElement element, @NotNull SliceUsage parent, @NotNull PsiSubstitutor substitutor)
+	@Nonnull
+	public static SliceUsage createTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor)
 	{
 		return new SliceTooComplexDFAUsage(simplify(element), parent, substitutor);
 	}
 
-	private static boolean processParameterUsages(@NotNull final PsiParameter parameter,
-			@NotNull final SliceUsage parent,
-			@NotNull final PsiSubstitutor parentSubstitutor,
+	private static boolean processParameterUsages(@Nonnull final PsiParameter parameter,
+			@Nonnull final SliceUsage parent,
+			@Nonnull final PsiSubstitutor parentSubstitutor,
 			final int indexNesting,
-			@NotNull final String syntheticField,
-			@NotNull final Processor<SliceUsage> processor)
+			@Nonnull final String syntheticField,
+			@Nonnull final Processor<SliceUsage> processor)
 	{
 		PsiElement declarationScope = parameter.getDeclarationScope();
 		if(declarationScope instanceof PsiForeachStatement)
@@ -662,12 +662,12 @@ public class SliceUtil
 		return true;
 	}
 
-	private static void addContainerReferences(@NotNull PsiVariable variable,
-			@NotNull final Processor<SliceUsage> processor,
-			@NotNull final SliceUsage parent,
-			@NotNull final PsiSubstitutor parentSubstitutor,
+	private static void addContainerReferences(@Nonnull PsiVariable variable,
+			@Nonnull final Processor<SliceUsage> processor,
+			@Nonnull final SliceUsage parent,
+			@Nonnull final PsiSubstitutor parentSubstitutor,
 			final int indexNesting,
-			@NotNull final String syntheticField)
+			@Nonnull final String syntheticField)
 	{
 		if(indexNesting != 0)
 		{
@@ -691,12 +691,12 @@ public class SliceUtil
 		}
 	}
 
-	private static boolean addContainerItemModification(@NotNull PsiExpression expression,
-			@NotNull Processor<SliceUsage> processor,
-			@NotNull SliceUsage parent,
-			@NotNull PsiSubstitutor parentSubstitutor,
+	private static boolean addContainerItemModification(@Nonnull PsiExpression expression,
+			@Nonnull Processor<SliceUsage> processor,
+			@Nonnull SliceUsage parent,
+			@Nonnull PsiSubstitutor parentSubstitutor,
 			int indexNesting,
-			@NotNull String syntheticField)
+			@Nonnull String syntheticField)
 	{
 		PsiElement parentElement = expression.getParent();
 		if(parentElement instanceof PsiArrayAccessExpression &&
@@ -726,7 +726,7 @@ public class SliceUtil
 			SliceUsage parent,
 			PsiSubstitutor parentSubstitutor,
 			int indexNesting,
-			@NotNull String syntheticField)
+			@Nonnull String syntheticField)
 	{
 		assert indexNesting != 0;
 		JavaResolveResult result = call.resolveMethodGenerics();
@@ -819,8 +819,8 @@ public class SliceUtil
 		return indexNesting + nestingDelta;
 	}
 
-	@NotNull
-	private static PsiSubstitutor removeRawMappingsLeftFromResolve(@NotNull PsiSubstitutor substitutor)
+	@Nonnull
+	private static PsiSubstitutor removeRawMappingsLeftFromResolve(@Nonnull PsiSubstitutor substitutor)
 	{
 		Map<PsiTypeParameter, PsiType> map = null;
 		for(Map.Entry<PsiTypeParameter, PsiType> entry : substitutor.getSubstitutionMap().entrySet())
@@ -843,8 +843,8 @@ public class SliceUtil
 		return PsiSubstitutorImpl.createSubstitutor(newMap);
 	}
 
-	@Nullable
-	private static PsiSubstitutor unify(@NotNull PsiSubstitutor substitutor, @NotNull PsiSubstitutor parentSubstitutor, @NotNull Project project)
+	@javax.annotation.Nullable
+	private static PsiSubstitutor unify(@Nonnull PsiSubstitutor substitutor, @Nonnull PsiSubstitutor parentSubstitutor, @Nonnull Project project)
 	{
 		Map<PsiTypeParameter, PsiType> newMap = new THashMap<PsiTypeParameter, PsiType>(substitutor.getSubstitutionMap());
 

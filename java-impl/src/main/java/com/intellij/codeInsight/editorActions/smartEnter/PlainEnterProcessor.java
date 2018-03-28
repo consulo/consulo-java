@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.DataManager;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -170,7 +170,7 @@ public class PlainEnterProcessor implements EnterProcessor
 	 * is pointed to correct position there, i.e. no additional processing is required;
 	 * {@code false} otherwise
 	 */
-	private static boolean processExistingBlankLine(@NotNull Editor editor, @Nullable PsiCodeBlock codeBlock, @Nullable PsiElement element)
+	private static boolean processExistingBlankLine(@Nonnull Editor editor, @Nullable PsiCodeBlock codeBlock, @Nullable PsiElement element)
 	{
 		PsiWhiteSpace whiteSpace = null;
 		if(codeBlock == null)

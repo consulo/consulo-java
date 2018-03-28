@@ -15,28 +15,29 @@
  */
 package com.siyeh.ig.j2me;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class RecordStoreResourceInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "RecordStoreOpenedButNotSafelyClosed";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "recordstore.opened.not.safely.closed.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -55,7 +56,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isRecordStoreFactoryMethod(expression)) {
         return;
@@ -121,7 +122,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
     }
 
     private static boolean isRecordStoreFactoryMethod(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
@@ -155,7 +156,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!containsClose) {
         super.visitElement(element);
       }
@@ -163,7 +164,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       if (containsClose) {
         return;
       }

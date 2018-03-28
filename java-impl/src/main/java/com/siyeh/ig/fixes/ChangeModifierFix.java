@@ -23,7 +23,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ChangeModifierFix extends InspectionGadgetsFix {
 
@@ -33,7 +33,7 @@ public class ChangeModifierFix extends InspectionGadgetsFix {
     this.modifierText = modifierText;
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("change.modifier.quickfix",
                                            modifierText);

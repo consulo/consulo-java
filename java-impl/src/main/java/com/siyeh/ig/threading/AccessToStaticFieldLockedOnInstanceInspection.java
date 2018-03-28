@@ -23,8 +23,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.ui.UiUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -33,13 +33,13 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
   @SuppressWarnings("PublicField") public OrderedSet<String> ignoredClasses = new OrderedSet();
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("access.to.static.field.locked.on.instance.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("access.to.static.field.locked.on.instance.problem.descriptor");
   }
@@ -58,7 +58,7 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
   private class AccessToStaticFieldLockedOnInstanceVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@NotNull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       boolean isLockedOnInstance = false;
       boolean isLockedOnClass = false;

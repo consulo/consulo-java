@@ -25,14 +25,14 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 import java.util.ArrayList;
 
 public class AdapterToListenerIntention extends MutablyNamedIntention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new AdapterToListenerPredicate();
@@ -46,7 +46,7 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiElement parent = element.getParent();
     final PsiElement grandParent = parent.getParent();
@@ -124,8 +124,8 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
   }
 
   private static void removeCallsToSuperMethodFromMethod(
-    @NotNull PsiMethod overridingMethod,
-    @NotNull PsiClass superClass) {
+    @Nonnull PsiMethod overridingMethod,
+    @Nonnull PsiClass superClass) {
     final PsiCodeBlock body = overridingMethod.getBody();
     if (body == null) {
       return;
@@ -165,8 +165,8 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
     }
   }
 
-  private static void implementMethodInClass(@NotNull PsiMethod method,
-                                             @NotNull PsiClass aClass) {
+  private static void implementMethodInClass(@Nonnull PsiMethod method,
+                                             @Nonnull PsiClass aClass) {
     final PsiMethod newMethod = (PsiMethod)aClass.add(method);
     final PsiDocComment comment = newMethod.getDocComment();
     if (comment != null) {

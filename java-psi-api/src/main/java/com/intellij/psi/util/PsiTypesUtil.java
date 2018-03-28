@@ -21,10 +21,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -97,13 +99,13 @@ public class PsiTypesUtil
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getDefaultValueOfType(PsiType type)
 	{
 		return getDefaultValueOfType(type, false);
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getDefaultValueOfType(PsiType type, boolean customDefaultValues)
 	{
 		if(type instanceof PsiArrayType)
@@ -172,7 +174,7 @@ public class PsiTypesUtil
 	 * @return boxed type name if available; same value otherwise
 	 */
 	@Contract("null -> null; !null -> !null")
-	@Nullable
+	@javax.annotation.Nullable
 	public static String boxIfPossible(final String type)
 	{
 		if(type == null)
@@ -183,19 +185,19 @@ public class PsiTypesUtil
 		return s == null ? type : s;
 	}
 
-	@Nullable
-	public static PsiClass getPsiClass(@Nullable PsiType psiType)
+	@javax.annotation.Nullable
+	public static PsiClass getPsiClass(@javax.annotation.Nullable PsiType psiType)
 	{
 		return psiType instanceof PsiClassType ? ((PsiClassType) psiType).resolve() : null;
 	}
 
-	public static PsiClassType getClassType(@NotNull PsiClass psiClass)
+	public static PsiClassType getClassType(@Nonnull PsiClass psiClass)
 	{
 		return JavaPsiFacade.getElementFactory(psiClass.getProject()).createType(psiClass);
 	}
 
-	@Nullable
-	public static PsiClassType getLowestUpperBoundClassType(@NotNull final PsiDisjunctionType type)
+	@javax.annotation.Nullable
+	public static PsiClassType getLowestUpperBoundClassType(@Nonnull final PsiDisjunctionType type)
 	{
 		final PsiType lub = type.getLeastUpperBound();
 		if(lub instanceof PsiClassType)
@@ -219,7 +221,7 @@ public class PsiTypesUtil
 		return null;
 	}
 
-	public static PsiType patchMethodGetClassReturnType(@NotNull PsiMethodReferenceExpression methodExpression, @NotNull PsiMethod method)
+	public static PsiType patchMethodGetClassReturnType(@Nonnull PsiMethodReferenceExpression methodExpression, @Nonnull PsiMethod method)
 	{
 		if(isGetClass(method))
 		{
@@ -229,11 +231,11 @@ public class PsiTypesUtil
 		return null;
 	}
 
-	public static PsiType patchMethodGetClassReturnType(@NotNull PsiExpression call,
-			@NotNull PsiReferenceExpression methodExpression,
-			@NotNull PsiMethod method,
-			@Nullable Condition<IElementType> condition,
-			@NotNull LanguageLevel languageLevel)
+	public static PsiType patchMethodGetClassReturnType(@Nonnull PsiExpression call,
+			@Nonnull PsiReferenceExpression methodExpression,
+			@Nonnull PsiMethod method,
+			@javax.annotation.Nullable Condition<IElementType> condition,
+			@Nonnull LanguageLevel languageLevel)
 	{
 		//JLS3 15.8.2
 		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_5) && isGetClass(method))
@@ -272,8 +274,8 @@ public class PsiTypesUtil
 		return false;
 	}
 
-	@Nullable
-	public static PsiType createJavaLangClassType(@NotNull PsiElement context, @Nullable PsiType qualifierType, boolean captureTopLevelWildcards)
+	@javax.annotation.Nullable
+	public static PsiType createJavaLangClassType(@Nonnull PsiElement context, @javax.annotation.Nullable PsiType qualifierType, boolean captureTopLevelWildcards)
 	{
 		if(qualifierType != null)
 		{
@@ -295,7 +297,7 @@ public class PsiTypesUtil
 	 * Return type explicitly declared in parent
 	 */
 	@Nullable
-	public static PsiType getExpectedTypeByParent(@NotNull PsiElement element)
+	public static PsiType getExpectedTypeByParent(@Nonnull PsiElement element)
 	{
 		final PsiElement parent = PsiUtil.skipParenthesizedExprUp(element.getParent());
 		if(parent instanceof PsiVariable)
@@ -362,7 +364,7 @@ public class PsiTypesUtil
 	 * @param element element inside method or lambda to determine the return type of
 	 * @return the return type or null if cannot be determined
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getMethodReturnType(PsiElement element)
 	{
 		final PsiElement methodOrLambda = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiLambdaExpression.class);
@@ -395,11 +397,11 @@ public class PsiTypesUtil
 		return true;
 	}
 
-	public static boolean hasUnresolvedComponents(@NotNull PsiType type)
+	public static boolean hasUnresolvedComponents(@Nonnull PsiType type)
 	{
 		return type.accept(new PsiTypeVisitor<Boolean>()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitClassType(PsiClassType classType)
 			{
@@ -421,14 +423,14 @@ public class PsiTypesUtil
 				return super.visitClassType(classType);
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitArrayType(PsiArrayType arrayType)
 			{
 				return arrayType.getComponentType().accept(this);
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
 			public Boolean visitWildcardType(PsiWildcardType wildcardType)
 			{
@@ -459,8 +461,8 @@ public class PsiTypesUtil
 		return parameterType;
 	}
 
-	@NotNull
-	public static PsiTypeParameter[] filterUnusedTypeParameters(@NotNull PsiTypeParameter[] typeParameters, final PsiType... types)
+	@Nonnull
+	public static PsiTypeParameter[] filterUnusedTypeParameters(@Nonnull PsiTypeParameter[] typeParameters, final PsiType... types)
 	{
 		if(typeParameters.length == 0)
 		{
@@ -475,8 +477,8 @@ public class PsiTypesUtil
 		return searcher.getTypeParameters().toArray(PsiTypeParameter.EMPTY_ARRAY);
 	}
 
-	@NotNull
-	public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, @NotNull PsiTypeParameter[] typeParameters)
+	@Nonnull
+	public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, @Nonnull PsiTypeParameter[] typeParameters)
 	{
 		return filterUnusedTypeParameters(typeParameters, superReturnTypeInBaseClassType);
 	}

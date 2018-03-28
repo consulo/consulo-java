@@ -1,28 +1,7 @@
 /*
  * Copyright (c) 2005 JetBrains s.r.o. All Rights Reserved.
  */
-package com.intellij.codeInsight.template;
-
-
-import com.intellij.JavaTestUtil
-import com.intellij.codeInsight.CodeInsightSettings
-import com.intellij.codeInsight.lookup.LookupManager
-import com.intellij.codeInsight.lookup.impl.LookupImpl
-import com.intellij.codeInsight.lookup.impl.LookupManagerImpl
-import com.intellij.codeInsight.template.macro.ClassNameCompleteMacro
-import com.intellij.codeInsight.template.macro.CompleteMacro
-import com.intellij.openapi.application.AccessToken
-import com.intellij.openapi.application.WriteAction
-import com.intellij.openapi.command.CommandProcessor
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.impl.DocumentImpl
-import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
-import com.intellij.util.containers.ContainerUtil
-import org.jetbrains.annotations.NotNull
-import com.intellij.codeInsight.template.impl.*
+package com.intellij.codeInsight.template
 
 /**
  * @author spleaner

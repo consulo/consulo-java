@@ -28,7 +28,7 @@ import com.intellij.refactoring.ui.MemberSelectionPanel;
 import com.intellij.refactoring.ui.MemberSelectionTable;
 import com.intellij.refactoring.ui.RefactoringDialog;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,7 +68,7 @@ public class RemoveMiddlemanDialog extends RefactoringDialog {
     final MemberSelectionTable table = selectionPanel.getTable();
     table.setMemberInfoModel(new DelegatingMemberInfoModel<PsiMember, MemberInfo>(table.getMemberInfoModel()) {
       @Override
-      public int checkForProblems(@NotNull final MemberInfo member) {
+      public int checkForProblems(@Nonnull final MemberInfo member) {
         return hasSuperMethods(member) ? ERROR : OK;
       }
 

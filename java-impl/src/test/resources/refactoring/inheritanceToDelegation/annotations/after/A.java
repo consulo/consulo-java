@@ -1,9 +1,9 @@
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 class A {
     @Nullable
-    public Object methodFromA(@NotNull String s) {
+    public Object methodFromA(@Nonnull String s) {
         return null;
     }
 }

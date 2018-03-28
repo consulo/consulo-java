@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -26,8 +28,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.LightPlatformTestCase;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * User: anna
@@ -75,7 +77,7 @@ public abstract class AbstractJavaInplaceIntroduceTest extends AbstractInplaceIn
   }
 
   public interface MyIntroduceHandler {
-    boolean invokeImpl(Project project, @NotNull PsiExpression selectedExpr, Editor editor);
+    boolean invokeImpl(Project project, @Nonnull PsiExpression selectedExpr, Editor editor);
     boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor);
     AbstractInplaceIntroducer getInplaceIntroducer();
   }

@@ -15,9 +15,10 @@
  */
 package com.intellij.refactoring.encapsulateFields;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiReference;
 import com.intellij.usageView.UsageInfo;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Max Medvedev
@@ -25,12 +26,12 @@ import org.jetbrains.annotations.NotNull;
 public class EncapsulateFieldUsageInfo extends UsageInfo {
   private final FieldDescriptor myFieldDescriptor;
 
-  public EncapsulateFieldUsageInfo(PsiReference ref, @NotNull FieldDescriptor descriptor) {
+  public EncapsulateFieldUsageInfo(PsiReference ref, @Nonnull FieldDescriptor descriptor) {
     super(ref);
     myFieldDescriptor = descriptor;
   }
 
-  @NotNull
+  @Nonnull
   public FieldDescriptor getFieldDescriptor() {
     return myFieldDescriptor;
   }

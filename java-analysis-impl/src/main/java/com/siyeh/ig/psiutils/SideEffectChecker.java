@@ -20,8 +20,8 @@ import gnu.trove.THashSet;
 import java.util.*;
 import java.util.function.Predicate;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
 import com.intellij.codeInspection.dataFlow.MethodContract;
 import com.intellij.psi.*;
@@ -42,28 +42,28 @@ public class SideEffectChecker
 	{
 	}
 
-	public static boolean mayHaveSideEffects(@NotNull PsiExpression exp)
+	public static boolean mayHaveSideEffects(@Nonnull PsiExpression exp)
 	{
 		final SideEffectsVisitor visitor = new SideEffectsVisitor(null);
 		exp.accept(visitor);
 		return visitor.mayHaveSideEffects();
 	}
 
-	public static boolean mayHaveSideEffects(@NotNull PsiElement element, Predicate<PsiMethodCallExpression> shouldIgnoreCall)
+	public static boolean mayHaveSideEffects(@Nonnull PsiElement element, Predicate<PsiMethodCallExpression> shouldIgnoreCall)
 	{
 		final SideEffectsVisitor visitor = new SideEffectsVisitor(null, shouldIgnoreCall);
 		element.accept(visitor);
 		return visitor.mayHaveSideEffects();
 	}
 
-	public static boolean checkSideEffects(@NotNull PsiExpression element, @NotNull List<PsiElement> sideEffects)
+	public static boolean checkSideEffects(@Nonnull PsiExpression element, @Nonnull List<PsiElement> sideEffects)
 	{
 		final SideEffectsVisitor visitor = new SideEffectsVisitor(sideEffects);
 		element.accept(visitor);
 		return visitor.mayHaveSideEffects();
 	}
 
-	public static List<PsiExpression> extractSideEffectExpressions(@NotNull PsiExpression element)
+	public static List<PsiExpression> extractSideEffectExpressions(@Nonnull PsiExpression element)
 	{
 		List<PsiElement> list = new ArrayList<>();
 		element.accept(new SideEffectsVisitor(list));
@@ -73,7 +73,7 @@ public class SideEffectChecker
 	private static class SideEffectsVisitor extends JavaRecursiveElementWalkingVisitor
 	{
 		private
-		@Nullable
+		@javax.annotation.Nullable
 		final List<PsiElement> mySideEffects;
 		boolean found;
 		final Predicate<PsiMethodCallExpression> myIgnoredCallPredicate;
@@ -83,7 +83,7 @@ public class SideEffectChecker
 			this(sideEffects, call -> false);
 		}
 
-		SideEffectsVisitor(@Nullable List<PsiElement> sideEffects, Predicate<PsiMethodCallExpression> predicate)
+		SideEffectsVisitor(@javax.annotation.Nullable List<PsiElement> sideEffects, Predicate<PsiMethodCallExpression> predicate)
 		{
 			myIgnoredCallPredicate = predicate;
 			mySideEffects = sideEffects;
@@ -103,13 +103,13 @@ public class SideEffectChecker
 		}
 
 		@Override
-		public void visitAssignmentExpression(@NotNull PsiAssignmentExpression expression)
+		public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression)
 		{
 			addSideEffect(expression);
 		}
 
 		@Override
-		public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression)
+		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 		{
 			if(!myIgnoredCallPredicate.test(expression))
 			{
@@ -137,7 +137,7 @@ public class SideEffectChecker
 		}
 
 		@Override
-		public void visitNewExpression(@NotNull PsiNewExpression expression)
+		public void visitNewExpression(@Nonnull PsiNewExpression expression)
 		{
 			if(!isSideEffectFreeConstructor(expression))
 			{
@@ -148,7 +148,7 @@ public class SideEffectChecker
 		}
 
 		@Override
-		public void visitPostfixExpression(@NotNull PsiPostfixExpression expression)
+		public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression)
 		{
 			final IElementType tokenType = expression.getOperationTokenType();
 			if(tokenType.equals(JavaTokenType.PLUSPLUS) || tokenType.equals(JavaTokenType.MINUSMINUS))
@@ -160,7 +160,7 @@ public class SideEffectChecker
 		}
 
 		@Override
-		public void visitPrefixExpression(@NotNull PsiPrefixExpression expression)
+		public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression)
 		{
 			final IElementType tokenType = expression.getOperationTokenType();
 			if(tokenType.equals(JavaTokenType.PLUSPLUS) || tokenType.equals(JavaTokenType.MINUSMINUS))
@@ -235,7 +235,7 @@ public class SideEffectChecker
 		return ControlFlowAnalyzer.getMethodContracts(method).stream().anyMatch(mc -> mc.returnValue == MethodContract.ValueConstraint.THROW_EXCEPTION);
 	}
 
-	private static boolean isSideEffectFreeConstructor(@NotNull PsiNewExpression newExpression)
+	private static boolean isSideEffectFreeConstructor(@Nonnull PsiNewExpression newExpression)
 	{
 		PsiJavaCodeReferenceElement classReference = newExpression.getClassReference();
 		PsiClass aClass = classReference == null ? null : (PsiClass) classReference.resolve();

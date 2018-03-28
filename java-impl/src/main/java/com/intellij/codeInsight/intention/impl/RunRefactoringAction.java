@@ -22,7 +22,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.BaseRefactoringIntentionAction;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,25 +39,25 @@ public class RunRefactoringAction extends BaseRefactoringIntentionAction {
     myCommandName = commandName;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return myCommandName;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public final String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     return true;
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     myHandler.invoke(project, editor, element.getContainingFile(), null);
   }
 

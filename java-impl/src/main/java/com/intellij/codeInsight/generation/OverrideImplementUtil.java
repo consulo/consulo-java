@@ -23,12 +23,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.Nonnull;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.CodeInsightBundle;
@@ -108,7 +109,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 	 * @param toCopyJavaDoc true if copy JavaDoc from method declaration
 	 * @return list of method prototypes
 	 */
-	@NotNull
+	@Nonnull
 	public static List<PsiMethod> overrideOrImplementMethod(PsiClass aClass, PsiMethod method, boolean toCopyJavaDoc) throws IncorrectOperationException
 	{
 		final PsiClass containingClass = method.getContainingClass();
@@ -328,7 +329,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		}
 	}
 
-	public static void annotate(@NotNull PsiMethod result, String fqn, String... annosToRemove) throws IncorrectOperationException
+	public static void annotate(@Nonnull PsiMethod result, String fqn, String... annosToRemove) throws IncorrectOperationException
 	{
 		Project project = result.getProject();
 		AddAnnotationFix fix = new AddAnnotationFix(fqn, result, annosToRemove);
@@ -338,7 +339,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public static List<PsiGenerationInfo<PsiMethod>> overrideOrImplementMethods(PsiClass aClass,
 			Collection<PsiMethodMember> candidates,
 			boolean toCopyJavaDoc,
@@ -356,7 +357,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		return convert2GenerationInfos(methods);
 	}
 
-	@NotNull
+	@Nonnull
 	public static List<PsiMethod> overrideOrImplementMethodCandidates(PsiClass aClass,
 			Collection<CandidateInfo> candidates,
 			boolean toCopyJavaDoc,
@@ -401,7 +402,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		return new PsiGenerationInfo<PsiMethod>(s);
 	}
 
-	@NotNull
+	@Nonnull
 	public static String callSuper(PsiMethod superMethod, PsiMethod overriding)
 	{
 		@NonNls StringBuilder buffer = new StringBuilder();
@@ -557,7 +558,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		new WriteCommandAction(project, aClass.getContainingFile())
 		{
 			@Override
-			protected void run(@NotNull final Result result) throws Throwable
+			protected void run(@Nonnull final Result result) throws Throwable
 			{
 				overrideOrImplementMethodsInRightPlace(editor, aClass, selectedElements, chooser.isCopyJavadoc(), chooser.isInsertOverrideAnnotation());
 			}
@@ -567,7 +568,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 	/**
 	 * @param candidates, secondary should allow modifications
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public static MemberChooser<PsiMethodMember> showOverrideImplementChooser(Editor editor,
 			final PsiElement aClass,
 			final boolean toImplement,
@@ -736,7 +737,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		return null;
 	}
 
-	public static List<PsiGenerationInfo<PsiMethod>> overrideOrImplement(PsiClass psiClass, @NotNull PsiMethod baseMethod) throws IncorrectOperationException
+	public static List<PsiGenerationInfo<PsiMethod>> overrideOrImplement(PsiClass psiClass, @Nonnull PsiMethod baseMethod) throws IncorrectOperationException
 	{
 		FileEditorManager fileEditorManager = FileEditorManager.getInstance(baseMethod.getProject());
 		List<PsiGenerationInfo<PsiMethod>> results = new ArrayList<PsiGenerationInfo<PsiMethod>>();
@@ -768,7 +769,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass getContextClass(Project project, Editor editor, PsiFile file, boolean allowInterface)
 	{
 		PsiDocumentManager.getInstance(project).commitAllDocuments();

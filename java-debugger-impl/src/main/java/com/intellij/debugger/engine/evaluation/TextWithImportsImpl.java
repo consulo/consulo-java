@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine.evaluation;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.fileTypes.FileType;
@@ -42,7 +42,7 @@ public final class TextWithImportsImpl implements TextWithImports
 
 	private static final char SEPARATOR = 13;
 
-	public TextWithImportsImpl(@NotNull PsiElement expression)
+	public TextWithImportsImpl(@Nonnull PsiElement expression)
 	{
 		myKind = CodeFragmentKind.EXPRESSION;
 		final String text = expression.getText();
@@ -62,7 +62,7 @@ public final class TextWithImportsImpl implements TextWithImports
 		}
 	}
 
-	public TextWithImportsImpl(CodeFragmentKind kind, @NotNull String text, @NotNull String imports, @Nullable FileType fileType)
+	public TextWithImportsImpl(CodeFragmentKind kind, @Nonnull String text, @Nonnull String imports, @javax.annotation.Nullable FileType fileType)
 	{
 		myKind = kind;
 		myText = text;
@@ -70,7 +70,7 @@ public final class TextWithImportsImpl implements TextWithImports
 		myFileType = fileType;
 	}
 
-	public TextWithImportsImpl(CodeFragmentKind kind, @NotNull String text)
+	public TextWithImportsImpl(CodeFragmentKind kind, @Nonnull String text)
 	{
 		myKind = kind;
 		Trinity<String, String, FileType> trinity = parseExternalForm(text);
@@ -99,7 +99,7 @@ public final class TextWithImportsImpl implements TextWithImports
 
 	@Override
 	public
-	@NotNull
+	@Nonnull
 	String getImports()
 	{
 		return myImports;
@@ -158,8 +158,8 @@ public final class TextWithImportsImpl implements TextWithImports
 		return myFileType;
 	}
 
-	@Nullable
-	public static XExpression toXExpression(@Nullable TextWithImports text)
+	@javax.annotation.Nullable
+	public static XExpression toXExpression(@javax.annotation.Nullable TextWithImports text)
 	{
 		if(text != null && !text.getText().isEmpty())
 		{
@@ -192,7 +192,7 @@ public final class TextWithImportsImpl implements TextWithImports
 		throw new IllegalStateException("Unknown mode " + mode);
 	}
 
-	public static TextWithImports fromXExpression(@Nullable XExpression expression)
+	public static TextWithImports fromXExpression(@javax.annotation.Nullable XExpression expression)
 	{
 		if(expression == null)
 		{

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Nonnull;
 import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -36,8 +37,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.debugger.memory.component.InstancesTracker;
 import com.intellij.debugger.memory.tracking.TrackerForNewInstances;
 import com.intellij.debugger.memory.tracking.TrackingType;
@@ -91,7 +92,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 	private volatile List<ReferenceType> myItems = Collections.unmodifiableList(new ArrayList<>());
 	private boolean myIsShowCounts = true;
 
-	public ClassesTable(@NotNull InstancesTracker tracker, @NotNull ClassesFilteredView parent, boolean onlyWithDiff, boolean onlyWithInstances, boolean onlyTracked)
+	public ClassesTable(@Nonnull InstancesTracker tracker, @Nonnull ClassesFilteredView parent, boolean onlyWithDiff, boolean onlyWithInstances, boolean onlyTracked)
 	{
 		setModel(myModel);
 
@@ -144,19 +145,19 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		myCountProvider = new ReferenceCountProvider()
 		{
 			@Override
-			public int getTotalCount(@NotNull ReferenceType ref)
+			public int getTotalCount(@Nonnull ReferenceType ref)
 			{
 				return (int) myCounts.get(ref).myCurrentCount;
 			}
 
 			@Override
-			public int getDiffCount(@NotNull ReferenceType ref)
+			public int getDiffCount(@Nonnull ReferenceType ref)
 			{
 				return (int) myCounts.get(ref).diff();
 			}
 
 			@Override
-			public int getNewInstancesCount(@NotNull ReferenceType ref)
+			public int getNewInstancesCount(@Nonnull ReferenceType ref)
 			{
 				TrackerForNewInstances strategy = myParent.getStrategy(ref);
 				return strategy == null || !strategy.isReady() ? -1 : strategy.getCount();
@@ -167,11 +168,11 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 	public interface ReferenceCountProvider
 	{
 
-		int getTotalCount(@NotNull ReferenceType ref);
+		int getTotalCount(@Nonnull ReferenceType ref);
 
-		int getDiffCount(@NotNull ReferenceType ref);
+		int getDiffCount(@Nonnull ReferenceType ref);
 
-		int getNewInstancesCount(@NotNull ReferenceType ref);
+		int getNewInstancesCount(@Nonnull ReferenceType ref);
 	}
 
 	@Nullable
@@ -187,8 +188,8 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		return null;
 	}
 
-	@Nullable
-	ReferenceType getClassByName(@NotNull String name)
+	@javax.annotation.Nullable
+	ReferenceType getClassByName(@Nonnull String name)
 	{
 		for(ReferenceType ref : myItems)
 		{
@@ -247,7 +248,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		}
 	}
 
-	public void updateClassesOnly(@NotNull List<ReferenceType> classes)
+	public void updateClassesOnly(@Nonnull List<ReferenceType> classes)
 	{
 		myIsShowCounts = false;
 		final LinkedHashMap<ReferenceType, Long> class2Count = new LinkedHashMap<>();
@@ -255,7 +256,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		updateCountsInternal(class2Count);
 	}
 
-	public void updateContent(@NotNull Map<ReferenceType, Long> class2Count)
+	public void updateContent(@Nonnull Map<ReferenceType, Long> class2Count)
 	{
 		myIsShowCounts = true;
 		updateCountsInternal(class2Count);
@@ -271,7 +272,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		myModel.show();
 	}
 
-	private void updateCountsInternal(@NotNull Map<ReferenceType, Long> class2Count)
+	private void updateCountsInternal(@Nonnull Map<ReferenceType, Long> class2Count)
 	{
 		final ReferenceType selectedClass = myModel.getSelectedClassBeforeHide();
 		int newSelectedIndex = -1;
@@ -501,7 +502,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		}
 
 		@Override
-		public int compareTo(@NotNull DiffValue o)
+		public int compareTo(@Nonnull DiffValue o)
 		{
 			return Long.compare(diff(), o.diff());
 		}
@@ -524,13 +525,13 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 			}
 		}
 
-		protected abstract void addText(@NotNull Object value, boolean isSelected, int row);
+		protected abstract void addText(@Nonnull Object value, boolean isSelected, int row);
 	}
 
 	private class MyClassColumnRenderer extends MyTableCellRenderer
 	{
 		@Override
-		protected void addText(@NotNull Object value, boolean isSelected, int row)
+		protected void addText(@Nonnull Object value, boolean isSelected, int row)
 		{
 			String presentation = ((ReferenceType) value).name();
 			append(" ");
@@ -553,7 +554,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 	private abstract class MyNumericRenderer extends MyTableCellRenderer
 	{
 		@Override
-		protected void addText(@NotNull Object value, boolean isSelected, int row)
+		protected void addText(@Nonnull Object value, boolean isSelected, int row)
 		{
 			if(myIsShowCounts)
 			{
@@ -562,13 +563,13 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 			}
 		}
 
-		abstract void appendText(@NotNull Object value, int row);
+		abstract void appendText(@Nonnull Object value, int row);
 	}
 
 	private class MyCountColumnRenderer extends MyNumericRenderer
 	{
 		@Override
-		void appendText(@NotNull Object value, int row)
+		void appendText(@Nonnull Object value, int row)
 		{
 			append(value.toString());
 		}
@@ -579,7 +580,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		private final SimpleTextAttributes myClickableCellAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_UNDERLINE, JBColor.BLUE);
 
 		@Override
-		void appendText(@NotNull Object value, int row)
+		void appendText(@Nonnull Object value, int row)
 		{
 			TrackingType trackingType = getTrackingType(row);
 			if(trackingType != null)

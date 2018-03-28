@@ -16,7 +16,7 @@
 package com.intellij.psi.controlFlow;
 
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -26,14 +26,14 @@ import java.util.List;
 public interface ControlFlow {
   ControlFlow EMPTY = new ControlFlowImpl();
 
-  @NotNull
+  @Nonnull
   List<Instruction> getInstructions();
 
   int getSize();
 
-  int getStartOffset(@NotNull PsiElement element);
+  int getStartOffset(@Nonnull PsiElement element);
 
-  int getEndOffset(@NotNull PsiElement element);
+  int getEndOffset(@Nonnull PsiElement element);
 
   PsiElement getElement(int offset);
 

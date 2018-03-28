@@ -15,7 +15,8 @@
  */
 package com.intellij.spi.parsing;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiBuilder;
@@ -47,7 +48,7 @@ public class SPIParserDefinition implements ParserDefinition {
   private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
   private static final Logger LOG = Logger.getInstance("#" + SPIParserDefinition.class.getName());
 
-  @NotNull
+  @Nonnull
   @Override
   public Lexer createLexer(LanguageVersion languageVersion) {
     return new SPILexer();
@@ -56,7 +57,7 @@ public class SPIParserDefinition implements ParserDefinition {
   @Override
   public PsiParser createParser(LanguageVersion languageVersion) {
     return new PsiParser() {
-      @NotNull
+      @Nonnull
       @Override
       public ASTNode parse(IElementType root, PsiBuilder builder, LanguageVersion languageVersion) {
         final PsiBuilder.Marker rootMarker = builder.mark();
@@ -76,25 +77,25 @@ public class SPIParserDefinition implements ParserDefinition {
     return SPI_FILE_ELEMENT_TYPE;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public TokenSet getWhitespaceTokens(LanguageVersion languageVersion) {
     return WHITE_SPACES;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public TokenSet getCommentTokens(LanguageVersion languageVersion) {
     return TokenSet.create(JavaTokenType.END_OF_LINE_COMMENT);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public TokenSet getStringLiteralElements(LanguageVersion languageVersion) {
     return TokenSet.EMPTY;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiElement createElement(ASTNode node) {
     final IElementType elementType = node.getElementType();

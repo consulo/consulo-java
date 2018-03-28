@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.CodeInsightServicesUtil;
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.editor.Editor;
@@ -39,11 +39,11 @@ public class NotExpressionPostfixTemplate extends ExpressionPostfixTemplateWithC
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expression) {
+  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
     expression.replace(CodeInsightServicesUtil.invertCondition(expression));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected Condition<PsiExpression> getTypeCondition() {
     return BOOLEAN_TYPE_CONDITION;

@@ -23,8 +23,9 @@ package com.intellij.analysis;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -61,8 +62,8 @@ public class JavaAnalysisScope extends AnalysisScope
 	}
 
 	@Override
-	@NotNull
-	public AnalysisScope getNarrowedComplementaryScope(@NotNull Project defaultProject)
+	@Nonnull
+	public AnalysisScope getNarrowedComplementaryScope(@Nonnull Project defaultProject)
 	{
 		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(defaultProject).getFileIndex();
 		final HashSet<Module> modules = new HashSet<Module>();
@@ -104,7 +105,7 @@ public class JavaAnalysisScope extends AnalysisScope
 	}
 
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getShortenName()
 	{
@@ -115,7 +116,7 @@ public class JavaAnalysisScope extends AnalysisScope
 		return super.getShortenName();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
@@ -139,7 +140,7 @@ public class JavaAnalysisScope extends AnalysisScope
 	}
 
 	@Override
-	public boolean accept(@NotNull Processor<VirtualFile> processor)
+	public boolean accept(@Nonnull Processor<VirtualFile> processor)
 	{
 		if(myElement instanceof PsiJavaPackage)
 		{
@@ -166,7 +167,7 @@ public class JavaAnalysisScope extends AnalysisScope
 		return super.accept(processor);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SearchScope toSearchScope()
 	{

@@ -12,7 +12,7 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.execution.process.BaseOSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.UnixProcessManager;
@@ -68,7 +68,7 @@ class ProcessProxyImpl implements ProcessProxy
 	}
 
 	@Override
-	public void attach(@NotNull ProcessHandler processHandler)
+	public void attach(@Nonnull ProcessHandler processHandler)
 	{
 		processHandler.putUserData(KEY, this);
 		execute(() ->

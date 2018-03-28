@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.actions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.util.Range;
@@ -31,7 +31,7 @@ public class LambdaSmartStepTarget extends SmartStepTarget
 	private final int myOrdinal;
 
 	public LambdaSmartStepTarget(
-			@NotNull PsiLambdaExpression lambda,
+			@Nonnull PsiLambdaExpression lambda,
 			@Nullable String label,
 			@Nullable PsiElement highlightElement,
 			int ordinal,

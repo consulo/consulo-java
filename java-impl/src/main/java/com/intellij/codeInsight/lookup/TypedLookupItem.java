@@ -17,7 +17,6 @@ package com.intellij.codeInsight.lookup;
 
 import com.intellij.openapi.util.ClassConditionKey;
 import com.intellij.psi.PsiType;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author peter
@@ -25,6 +24,6 @@ import org.jetbrains.annotations.Nullable;
 public interface TypedLookupItem {
   ClassConditionKey<TypedLookupItem> CLASS_CONDITION_KEY = ClassConditionKey.create(TypedLookupItem.class);
 
-  @Nullable 
+  @javax.annotation.Nullable
   PsiType getType();
 }

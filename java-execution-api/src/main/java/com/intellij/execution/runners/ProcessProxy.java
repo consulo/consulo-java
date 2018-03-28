@@ -15,12 +15,13 @@
  */
 package com.intellij.execution.runners;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.process.ProcessHandler;
 
 public interface ProcessProxy
 {
-	void attach(@NotNull ProcessHandler processHandler);
+	void attach(@Nonnull ProcessHandler processHandler);
 
 	default boolean canSendBreak()
 	{

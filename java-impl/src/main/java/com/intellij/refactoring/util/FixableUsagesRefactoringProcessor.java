@@ -24,7 +24,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.xml.util.XmlUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +52,7 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
   }
 
 
-  @NotNull
+  @Nonnull
   protected final UsageInfo[] findUsages() {
     final List<FixableUsageInfo> usages = Collections.synchronizedList(new ArrayList<FixableUsageInfo>());
     findUsages(usages);
@@ -61,7 +61,7 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
     return usageArray;
   }
 
-  protected abstract void findUsages(@NotNull List<FixableUsageInfo> usages);
+  protected abstract void findUsages(@Nonnull List<FixableUsageInfo> usages);
 
   protected static void checkConflicts(final Ref<UsageInfo[]> refUsages, final MultiMap<PsiElement,String> conflicts) {
     for (UsageInfo info : refUsages.get()) {

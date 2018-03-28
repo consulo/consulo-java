@@ -1,53 +1,55 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Main {
-  @NotNull
-  private Object test1(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test1(@Nonnull Object defVal, @Nullable final Object val) {
     return defVal;
   }
-  @NotNull
-  private Object test11(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test11(@Nonnull Object defVal, @Nullable final Object val) {
     if (val != null) {
       return val;
     }
     return defVal;
   }
-  @NotNull
-  private Object test5(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test5(@Nonnull Object defVal, @Nullable final Object val) {
     if (defVal == val) {
       return val;
     }
     return defVal;
   }
-  @NotNull
-  private Object test6(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test6(@Nonnull Object defVal, @Nullable final Object val) {
     if (val == defVal) {
       return val;
     }
     return defVal;
   }
-  @NotNull
-  private Object test7(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test7(@Nonnull Object defVal, @Nullable final Object val) {
     if (<warning descr="Method invocation 'val.equals(defVal)' may produce 'java.lang.NullPointerException'">val.equals(defVal)</warning>) {
       return defVal;
     }
     return defVal;
   }
-  @NotNull
-  private Object test8(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test8(@Nonnull Object defVal, @javax.annotation.Nullable final Object val) {
     if (defVal.equals(val)) {
       return val;
     }
     return defVal;
   }
-  @NotNull private Object test9(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test9(@Nonnull Object defVal, @javax.annotation.Nullable final Object val) {
     if (equals(val)) {
       return val;
     }
     return defVal;
   }
-  @NotNull private Object test10(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private Object test10(@Nonnull Object defVal, @Nullable final Object val) {
     if (val != null) {
       return val;
     }
@@ -57,8 +59,8 @@ public class Main {
     return defVal;
   }
 
-  @NotNull
-  private static Object test(@NotNull Object defVal, @Nullable final Object val) {
+  @Nonnull
+  private static Object test(@Nonnull Object defVal, @javax.annotation.Nullable final Object val) {
     if (val != null) {
       return val;
     }

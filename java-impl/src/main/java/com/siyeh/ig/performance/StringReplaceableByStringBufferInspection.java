@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -32,20 +32,20 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
   public boolean onlyWarnOnLoop = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "NonConstantStringShouldBeStringBuffer";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "string.replaceable.by.string.buffer.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "string.replaceable.by.string.buffer.problem.descriptor");
@@ -68,7 +68,7 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
 
     @Override
     public void visitLocalVariable(
-      @NotNull PsiLocalVariable variable) {
+      @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock =
         PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);

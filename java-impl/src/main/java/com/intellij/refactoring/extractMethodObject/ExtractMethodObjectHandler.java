@@ -20,6 +20,8 @@
  */
 package com.intellij.refactoring.extractMethodObject;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -42,12 +44,11 @@ import com.intellij.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.duplicates.DuplicatesImpl;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class ExtractMethodObjectHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance("#" + ExtractMethodObjectHandler.class.getName());
 
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
     ExtractMethodHandler.selectAndPass(project, editor, file, new Pass<PsiElement[]>() {
       public void pass(final PsiElement[] selectedValue) {
         invokeOnElements(project, editor, file, selectedValue);
@@ -55,7 +56,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
     });
   }
 
-  private void invokeOnElements(@NotNull final Project project, @NotNull final Editor editor, @NotNull PsiFile file, @NotNull PsiElement[] elements) {
+  private void invokeOnElements(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull PsiElement[] elements) {
     if (elements.length == 0) {
         String message = RefactoringBundle
           .getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.a.set.of.statements.or.an.expression"));
@@ -80,10 +81,10 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
     }
   }
 
-  public static void run(@NotNull final Project project,
-                  @NotNull final Editor editor,
-                  @NotNull final ExtractMethodObjectProcessor processor,
-                  @NotNull final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor) {
+  public static void run(@Nonnull final Project project,
+                  @Nonnull final Editor editor,
+                  @Nonnull final ExtractMethodObjectProcessor processor,
+                  @Nonnull final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor) {
     final int offset = editor.getCaretModel().getOffset();
     final RangeMarker marker = editor.getDocument().createRangeMarker(new TextRange(offset, offset));
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
@@ -130,7 +131,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
     editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
   }
 
-  public void invoke(@NotNull final Project project, @NotNull final PsiElement[] elements, final DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
     throw new UnsupportedOperationException();
   }
 }

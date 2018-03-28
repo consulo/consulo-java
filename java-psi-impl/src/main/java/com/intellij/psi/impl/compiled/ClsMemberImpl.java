@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.psi.PsiDocCommentOwner;
@@ -37,7 +38,7 @@ public abstract class ClsMemberImpl<T extends PsiMemberStub> extends ClsReposito
 		super(stub);
 		myDocComment = !stub.isDeprecated() ? null : new AtomicNotNullLazyValue<PsiDocComment>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected PsiDocComment compute()
 			{
@@ -46,7 +47,7 @@ public abstract class ClsMemberImpl<T extends PsiMemberStub> extends ClsReposito
 		};
 		myNameIdentifier = new AtomicNotNullLazyValue<PsiIdentifier>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected PsiIdentifier compute()
 			{
@@ -62,14 +63,14 @@ public abstract class ClsMemberImpl<T extends PsiMemberStub> extends ClsReposito
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiIdentifier getNameIdentifier()
 	{
 		return myNameIdentifier.getValue();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		//noinspection ConstantConditions
@@ -77,7 +78,7 @@ public abstract class ClsMemberImpl<T extends PsiMemberStub> extends ClsReposito
 	}
 
 	@Override
-	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
 	{
 		PsiImplUtil.setName(getNameIdentifier(), name);
 		return this;

@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.j2me;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ArrayLengthInLoopConditionInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "array.length.in.loop.condition.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "array.length.in.loop.condition.problem.descriptor");
@@ -44,7 +45,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@NotNull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -54,7 +55,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
     }
 
     @Override
-    public void visitWhileStatement(@NotNull PsiWhileStatement statement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -65,7 +66,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
 
     @Override
     public void visitDoWhileStatement(
-      @NotNull PsiDoWhileStatement statement) {
+      @Nonnull PsiDoWhileStatement statement) {
       super.visitDoWhileStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -80,7 +81,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
 
           @Override
           public void visitReferenceExpression(
-            @NotNull PsiReferenceExpression expression) {
+            @Nonnull PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
             final String name = expression.getReferenceName();
             if (!HardcodedMethodConstants.LENGTH.equals(name)) {

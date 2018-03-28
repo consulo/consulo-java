@@ -25,7 +25,8 @@
 
 package org.osmorc.manifest.lang.headerparser.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import com.intellij.openapi.module.Module;
@@ -43,7 +44,7 @@ import com.intellij.psi.util.ClassKind;
 public class BundleActivatorParser extends AbstractHeaderParserImpl {
 
   @Override
-  public PsiReference[] getReferences(@NotNull HeaderValuePart headerValuePart) {
+  public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
     if (headerValuePart.getParent() instanceof Clause) {
       final Module module = ModuleUtil.findModuleForPsiElement(headerValuePart);
       JavaClassReferenceProvider provider;
@@ -68,7 +69,7 @@ public class BundleActivatorParser extends AbstractHeaderParserImpl {
   }
 
   @Override
-  public boolean isAcceptable(@NotNull Object o) {
+  public boolean isAcceptable(@Nonnull Object o) {
     return o instanceof PsiClass;
   }
 }

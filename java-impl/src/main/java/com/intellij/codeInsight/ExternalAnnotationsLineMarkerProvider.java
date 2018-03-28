@@ -16,13 +16,11 @@
 package com.intellij.codeInsight;
 
 import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.List;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -35,7 +33,6 @@ import com.intellij.codeInsight.intention.impl.DeannotateIntentionAction;
 import com.intellij.codeInsight.javadoc.JavaDocInfoGenerator;
 import com.intellij.codeInsight.javadoc.NonCodeAnnotationGenerator;
 import com.intellij.codeInspection.dataFlow.EditContractIntention;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.actions.ApplyIntentionAction;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -73,9 +70,9 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 				JavaDocInfoGenerator.generateSignature(owner));
 	};
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public LineMarkerInfo getLineMarkerInfo(@NotNull final PsiElement element)
+	public LineMarkerInfo getLineMarkerInfo(@Nonnull final PsiElement element)
 	{
 		PsiModifierListOwner owner = getAnnotationOwner(element);
 		if(owner == null)
@@ -95,7 +92,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 	}
 
 	@Nullable
-	static PsiModifierListOwner getAnnotationOwner(@Nullable PsiElement element)
+	static PsiModifierListOwner getAnnotationOwner(@javax.annotation.Nullable PsiElement element)
 	{
 		if(element == null)
 		{
@@ -122,14 +119,14 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 	}
 
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
 		return "External annotations";
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Icon getIcon()
 	{
@@ -170,7 +167,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 			}
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor)
 		{
 			final DefaultActionGroup group = new DefaultActionGroup();

@@ -28,6 +28,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -35,8 +36,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -125,19 +126,19 @@ public class VisibilityInspection extends GlobalJavaInspectionTool {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
@@ -415,11 +416,11 @@ public class VisibilityInspection extends GlobalJavaInspectionTool {
       addin.fillIgnoreList(manager, processor);
     }
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@NotNull final RefEntity refEntity) {
+      @Override public void visitElement(@Nonnull final RefEntity refEntity) {
         if (!(refEntity instanceof RefElement)) return;
         if (processor.getDescriptions(refEntity) == null) return;
         refEntity.accept(new RefJavaVisitor() {
-          @Override public void visitField(@NotNull final RefField refField) {
+          @Override public void visitField(@Nonnull final RefField refField) {
             if (refField.getAccessModifier() != PsiModifier.PRIVATE) {
               globalContext.enqueueFieldUsagesProcessor(refField, new GlobalJavaInspectionContext.UsagesProcessor() {
                 @Override
@@ -431,7 +432,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool {
             }
           }
 
-          @Override public void visitMethod(@NotNull final RefMethod refMethod) {
+          @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
             if (!refMethod.isExternalOverride() && refMethod.getAccessModifier() != PsiModifier.PRIVATE &&
                 !(refMethod instanceof RefImplicitConstructor)) {
               globalContext.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor() {
@@ -471,7 +472,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool {
             }
           }
 
-          @Override public void visitClass(@NotNull final RefClass refClass) {
+          @Override public void visitClass(@Nonnull final RefClass refClass) {
             if (!refClass.isAnonymous()) {
               globalContext.enqueueDerivedClassesProcessor(refClass, new GlobalJavaInspectionContext.DerivedClassesProcessor() {
                 @Override
@@ -497,7 +498,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool {
     return false;
   }
 
-  private static void ignoreElement(@NotNull ProblemDescriptionsProcessor processor, @NotNull RefEntity refElement){
+  private static void ignoreElement(@Nonnull ProblemDescriptionsProcessor processor, @Nonnull RefEntity refElement){
     processor.ignoreElement(refElement);
 
     if (refElement instanceof RefClass) {
@@ -542,19 +543,19 @@ public class VisibilityInspection extends GlobalJavaInspectionTool {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.visibility.accept.quickfix");
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) return;
       final PsiModifierListOwner element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiModifierListOwner.class);
       if (element != null) {

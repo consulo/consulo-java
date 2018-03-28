@@ -15,15 +15,16 @@
  */
 package com.intellij.debugger.impl.descriptors.data;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.Field;
-import org.jetbrains.annotations.NotNull;
 
 public final class StaticFieldData extends DescriptorData<FieldDescriptorImpl>{
   private final Field myField;
 
-  public StaticFieldData(@NotNull Field field) {
+  public StaticFieldData(@Nonnull Field field) {
     myField = field;
   }
 

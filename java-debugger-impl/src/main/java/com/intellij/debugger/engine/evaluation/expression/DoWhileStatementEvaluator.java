@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -28,7 +29,7 @@ public class DoWhileStatementEvaluator extends LoopEvaluator
 {
 	private final Evaluator myConditionEvaluator;
 
-	public DoWhileStatementEvaluator(@NotNull Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName)
+	public DoWhileStatementEvaluator(@Nonnull Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName)
 	{
 		super(labelName, bodyEvaluator);
 		myConditionEvaluator = DisableGC.create(conditionEvaluator);

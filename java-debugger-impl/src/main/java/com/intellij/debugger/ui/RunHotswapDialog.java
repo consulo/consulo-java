@@ -25,7 +25,7 @@ import com.intellij.openapi.ui.MultiLineLabelUI;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.ui.OptionsDialog;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,7 +99,7 @@ public class RunHotswapDialog extends OptionsDialog {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   protected Action[] createActions(){
     setOKButtonText(CommonBundle.getYesButtonText());
     setCancelButtonText(CommonBundle.getNoButtonText());

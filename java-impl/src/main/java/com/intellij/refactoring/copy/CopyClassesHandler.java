@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.ide.util.EditorHelper;
@@ -75,7 +75,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return convertToTopLevelClasses(elements, fromUpdate, null, null) != null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static Map<PsiFile, PsiClass[]> convertToTopLevelClasses(final PsiElement[] elements,
                                                                    final boolean fromUpdate,
                                                                    String relativePath,
@@ -124,7 +124,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String normalizeRelativeMap(Map<PsiFile, String> relativeMap) {
     String vector = null;
     for (String relativePath : relativeMap.values()) {
@@ -313,7 +313,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-   @Nullable
+   @javax.annotation.Nullable
   public static PsiElement doCopyClasses(final Map<PsiFile, PsiClass[]> fileToClasses,
                                          final String copyClassName,
                                          final PsiDirectory targetDirectory,
@@ -321,9 +321,9 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
      return doCopyClasses(fileToClasses, null, copyClassName, targetDirectory, project);
    }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiElement doCopyClasses(final Map<PsiFile, PsiClass[]> fileToClasses,
-                                         @Nullable HashMap<PsiFile, String> map, final String copyClassName,
+                                         @javax.annotation.Nullable HashMap<PsiFile, String> map, final String copyClassName,
                                          final PsiDirectory targetDirectory,
                                          final Project project) throws IncorrectOperationException {
     PsiElement newElement = null;
@@ -407,7 +407,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return newElement != null ? newElement : createdFiles.size() > 0 ? createdFiles.get(0) : null;
   }
 
-  private static PsiFile copy(@NotNull PsiFile file, PsiDirectory directory, String name, String relativePath, int[] choice) {
+  private static PsiFile copy(@Nonnull PsiFile file, PsiDirectory directory, String name, String relativePath, int[] choice) {
     final String fileName = getNewFileName(file, name);
     if (relativePath != null && !relativePath.isEmpty()) {
       return buildRelativeDir(directory, relativePath).findOrCreateTargetDirectory().copyFileFrom(fileName, file);
@@ -429,9 +429,9 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return file.getName();
   }
 
-  @NotNull
-  private static MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper buildRelativeDir(final @NotNull PsiDirectory directory,
-                                                                                           final @NotNull String relativePath) {
+  @Nonnull
+  private static MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper buildRelativeDir(final @Nonnull PsiDirectory directory,
+                                                                                           final @Nonnull String relativePath) {
     MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper current = null;
     for (String pathElement : relativePath.split("/")) {
       if (current == null) {
@@ -453,7 +453,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return classCopy;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass findByName(PsiClass[] classes, String name) {
     if (name != null) {
       for (PsiClass aClass : classes) {
@@ -478,7 +478,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
    }
 
 
-  private static void decodeRefs(@NotNull PsiElement element, final Map<PsiClass, PsiElement> oldToNewMap, final Set<PsiElement> rebindExpressions) {
+  private static void decodeRefs(@Nonnull PsiElement element, final Map<PsiClass, PsiElement> oldToNewMap, final Set<PsiElement> rebindExpressions) {
     element.accept(new JavaRecursiveElementVisitor(){
       @Override
       public void visitReferenceExpression(PsiReferenceExpression expression) {
@@ -519,7 +519,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass[] getTopLevelClasses(PsiElement element) {
     while (true) {
       if (element == null || element instanceof PsiFile) break;

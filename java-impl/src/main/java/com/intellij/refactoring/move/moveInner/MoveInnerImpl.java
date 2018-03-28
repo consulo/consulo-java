@@ -27,7 +27,6 @@ import com.intellij.psi.*;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.move.MoveCallback;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.Nullable;
 
 public class MoveInnerImpl {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveInner.MoveInnerImpl");
@@ -56,7 +55,7 @@ public class MoveInnerImpl {
   /**
    * must be called in atomic action
    */
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiElement getTargetContainer(PsiClass innerClass, final boolean chooseIfNotUnderSource) {
     final PsiClass outerClass = innerClass.getContainingClass();
     assert outerClass != null; // Only inner classes allowed.

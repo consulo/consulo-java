@@ -33,7 +33,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -55,13 +55,13 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     myDelegateMethodInfos = memberInfos;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
     return new RemoveMiddlemanUsageViewDescriptor(field);
   }
 
 
-  public void findUsages(@NotNull List<FixableUsageInfo> usages) {
+  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
     for (final MemberInfo memberInfo : myDelegateMethodInfos) {
       if (!memberInfo.isChecked()) continue;
       final PsiMethod method = (PsiMethod)memberInfo.getMember();

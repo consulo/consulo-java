@@ -16,13 +16,13 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 final class HFinal implements HResult {
-  @NotNull
+  @Nonnull
   final Value value;
 
-  HFinal(@NotNull Value value) {
+  HFinal(@Nonnull Value value) {
     this.value = value;
   }
 

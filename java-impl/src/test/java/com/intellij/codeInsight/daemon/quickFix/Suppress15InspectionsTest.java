@@ -16,6 +16,8 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
 import com.intellij.codeInspection.deprecation.DeprecationInspection;
@@ -26,7 +28,6 @@ import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspec
 import com.intellij.codeInspection.unneededThrows.RedundantThrowsDeclaration;
 import com.intellij.codeInspection.unusedParameters.UnusedParametersInspection;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import org.jetbrains.annotations.NotNull;
 
 
 public class Suppress15InspectionsTest extends LightQuickFixTestCase {
@@ -36,7 +37,7 @@ public class Suppress15InspectionsTest extends LightQuickFixTestCase {
     enableInspectionTool(new GlobalInspectionToolWrapper(new UnusedParametersInspection()));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

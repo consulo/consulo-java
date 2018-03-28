@@ -15,12 +15,13 @@
  */
 package com.intellij.codeInspection.nullable;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAnnotation;
-import org.jetbrains.annotations.NotNull;
 
 /**
 * User: anna
@@ -43,20 +44,20 @@ class ChangeNullableDefaultsFix implements LocalQuickFix {
     myNullableName = nullable;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return "Make \"" + (myNotNullName != null ? myNotNullName : myNullableName) + "\" default annotation";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getName();
   }
 
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     if (myNotNullName != null) {
       myManager.setDefaultNotNull(myNotNullName);
     } else {

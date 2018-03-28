@@ -17,7 +17,7 @@ package com.intellij.debugger.engine;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -44,7 +44,7 @@ public class ContextUtil
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.PositionUtil");
 
 	@Nullable
-	public static SourcePosition getSourcePosition(@Nullable final StackFrameContext context)
+	public static SourcePosition getSourcePosition(@javax.annotation.Nullable final StackFrameContext context)
 	{
 		if(context == null)
 		{
@@ -164,7 +164,7 @@ public class ContextUtil
 	}
 
 	@Nullable
-	public static PsiElement getContextElement(@Nullable SourcePosition position)
+	public static PsiElement getContextElement(@javax.annotation.Nullable SourcePosition position)
 	{
 		return position == null ? null : position.getElementAt();
 	}

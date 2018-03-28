@@ -19,8 +19,8 @@ import static com.intellij.psi.SyntaxTraverser.psiTraverser;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaElementVisitor;
@@ -36,31 +36,31 @@ import com.intellij.util.containers.ContainerUtil;
 
 public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<PsiPackageAccessibilityStatementStub> implements PsiPackageAccessibilityStatement
 {
-	public PsiPackageAccessibilityStatementImpl(@NotNull PsiPackageAccessibilityStatementStub stub)
+	public PsiPackageAccessibilityStatementImpl(@Nonnull PsiPackageAccessibilityStatementStub stub)
 	{
 		super(stub, stub.getStubType());
 	}
 
-	public PsiPackageAccessibilityStatementImpl(@NotNull ASTNode node)
+	public PsiPackageAccessibilityStatementImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Role getRole()
 	{
 		return JavaPackageAccessibilityStatementElementType.typeToRole(getElementType());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiJavaCodeReferenceElement getPackageReference()
 	{
 		return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getPackageName()
 	{
@@ -76,14 +76,14 @@ public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<Psi
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Iterable<PsiJavaModuleReferenceElement> getModuleReferences()
 	{
 		return psiTraverser().children(this).filter(PsiJavaModuleReferenceElement.class);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<String> getModuleNames()
 	{
@@ -104,7 +104,7 @@ public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<Psi
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

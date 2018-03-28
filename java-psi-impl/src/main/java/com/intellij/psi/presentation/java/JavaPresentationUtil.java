@@ -17,7 +17,6 @@ package com.intellij.psi.presentation.java;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
@@ -98,7 +97,7 @@ public class JavaPresentationUtil {
     };
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getJavaSymbolContainerText(final PsiElement element) {
     final String result;
     PsiElement container = PsiTreeUtil.getParentOfType(element, PsiMember.class, PsiFile.class);

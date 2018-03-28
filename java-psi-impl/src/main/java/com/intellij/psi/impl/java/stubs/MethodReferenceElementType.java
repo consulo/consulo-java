@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -39,7 +40,7 @@ public class MethodReferenceElementType extends FunctionalExpressionElementType<
 	//prevents cyclic static variables initialization
 	private final static NotNullLazyValue<TokenSet> EXCLUDE_FROM_PRESENTABLE_TEXT = new NotNullLazyValue<TokenSet>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		protected TokenSet compute()
 		{
@@ -53,25 +54,25 @@ public class MethodReferenceElementType extends FunctionalExpressionElementType<
 	}
 
 	@Override
-	public PsiMethodReferenceExpression createPsi(@NotNull ASTNode node)
+	public PsiMethodReferenceExpression createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiMethodReferenceExpressionImpl(node);
 	}
 
 	@Override
-	public PsiMethodReferenceExpression createPsi(@NotNull FunctionalExpressionStub<PsiMethodReferenceExpression> stub)
+	public PsiMethodReferenceExpression createPsi(@Nonnull FunctionalExpressionStub<PsiMethodReferenceExpression> stub)
 	{
 		return new PsiMethodReferenceExpressionImpl(stub);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
 		return new CompositeElement(this)
 		{
 			@Override
-			public void replaceChildInternal(@NotNull ASTNode child, @NotNull TreeElement newElement)
+			public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
 			{
 				if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) && ElementType.EXPRESSION_BIT_SET.contains(newElement.getElementType()))
 				{
@@ -107,9 +108,9 @@ public class MethodReferenceElementType extends FunctionalExpressionElementType<
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected String getPresentableText(@NotNull LighterAST tree, @NotNull LighterASTNode funExpr)
+	protected String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr)
 	{
 		return LightTreeUtil.toFilteredString(tree, funExpr, EXCLUDE_FROM_PRESENTABLE_TEXT.getValue());
 	}

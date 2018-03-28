@@ -3,7 +3,8 @@ package com.intellij.psi.impl.light;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
@@ -32,7 +33,7 @@ public class LightParameterListBuilder extends LightElement implements PsiParame
     return "Light parameter list";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiParameter[] getParameters() {
     if (myCachedParameters == null) {
@@ -58,7 +59,7 @@ public class LightParameterListBuilder extends LightElement implements PsiParame
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitParameterList(this);
     }

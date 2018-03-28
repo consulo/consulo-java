@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -41,7 +42,7 @@ public class JavaRequiresStatementElementType extends JavaStubElementType<PsiReq
 		super("REQUIRES_STATEMENT");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -49,13 +50,13 @@ public class JavaRequiresStatementElementType extends JavaStubElementType<PsiReq
 	}
 
 	@Override
-	public PsiRequiresStatement createPsi(@NotNull PsiRequiresStatementStub stub)
+	public PsiRequiresStatement createPsi(@Nonnull PsiRequiresStatementStub stub)
 	{
 		return getPsiFactory(stub).createRequiresStatement(stub);
 	}
 
 	@Override
-	public PsiRequiresStatement createPsi(@NotNull ASTNode node)
+	public PsiRequiresStatement createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiRequiresStatementImpl(node);
 	}
@@ -69,20 +70,20 @@ public class JavaRequiresStatementElementType extends JavaStubElementType<PsiReq
 	}
 
 	@Override
-	public void serialize(@NotNull PsiRequiresStatementStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiRequiresStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getModuleName());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiRequiresStatementStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiRequiresStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new PsiRequiresStatementStubImpl(parentStub, StringRef.toString(dataStream.readName()));
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiRequiresStatementStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiRequiresStatementStub stub, @Nonnull IndexSink sink)
 	{
 	}
 }

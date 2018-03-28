@@ -18,11 +18,11 @@ package com.siyeh.ig.classlayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.psi.*;
@@ -47,13 +47,13 @@ public class EmptyClassInspection extends BaseInspection {
   public boolean ignoreThrowables = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("empty.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Object element = infos[0];
     if (element instanceof PsiAnonymousClass) {
@@ -92,7 +92,7 @@ public class EmptyClassInspection extends BaseInspection {
     return panel;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final Object info = infos[0];
@@ -126,7 +126,7 @@ public class EmptyClassInspection extends BaseInspection {
     }
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       //don't call super, to prevent drilldown
     /*  if (JspPsiUtil.isInJspFile(aClass.getContainingFile())) {
         return;

@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiCatchSection;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
@@ -49,7 +49,7 @@ public class Trap
 			return myTryStatement;
 		}
 
-		@NotNull
+		@Nonnull
 		public Map<PsiCatchSection, ControlFlow.ControlFlowOffset> getClauses()
 		{
 			return myClauses;
@@ -94,7 +94,7 @@ public class Trap
 		this.myAnchor = anchor;
 	}
 
-	@NotNull
+	@Nonnull
 	public Collection<Integer> getPossibleTargets()
 	{
 		if(this instanceof TryCatch)

@@ -29,7 +29,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.HighlightUtils;
 import com.siyeh.ig.psiutils.ImportUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.*;
@@ -40,13 +40,13 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
   public boolean ignoreReferencesToLocalInnerClasses = false;
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unqualified.inner.class.access.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unqualified.inner.class.access.problem.descriptor");
@@ -65,7 +65,7 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
 
   private static class UnqualifiedInnerClassAccessFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unqualified.inner.class.access.quickfix");

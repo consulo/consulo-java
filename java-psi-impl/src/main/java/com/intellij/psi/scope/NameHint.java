@@ -17,7 +17,7 @@ package com.intellij.psi.scope;
 
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.ResolveState;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public interface NameHint {
   Key<NameHint> KEY = Key.create("NameHint");

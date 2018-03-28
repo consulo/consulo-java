@@ -27,7 +27,7 @@ package com.intellij.refactoring.memberPullUp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
@@ -58,7 +58,7 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 	private Project myProject;
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		int offset = editor.getCaretModel().getOffset();
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -90,7 +90,7 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, @NotNull PsiElement[] elements, DataContext dataContext)
+	public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		if(elements.length != 1)
 		{

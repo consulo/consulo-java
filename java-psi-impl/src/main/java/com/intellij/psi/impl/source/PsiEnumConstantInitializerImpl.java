@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -61,7 +62,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiJavaCodeReferenceElement getBaseClassReference() {
     PsiClass containingClass = getBaseClass();
     return new LightClassReference(getManager(), containingClass.getName(), containingClass);
@@ -76,13 +77,13 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiEnumConstant getEnumConstant() {
     return (PsiEnumConstant) getParent();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClassType getBaseClassType() {
     if (myCachedBaseType == null) {
       myCachedBaseType = JavaPsiFacade.getInstance(getProject()).getElementFactory().createType(getBaseClass());
@@ -106,7 +107,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  public boolean hasModifierProperty(@NotNull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return false;
   }
 
@@ -121,7 +122,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiClassType[] getSuperTypes() {
     return new PsiClassType[]{getBaseClassType()};
   }
@@ -152,7 +153,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitEnumConstantInitializer(this);
     }

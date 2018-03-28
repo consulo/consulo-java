@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -41,7 +42,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -109,7 +109,7 @@ class CompoundRendererConfigurable extends JPanel
 	private static final int EXPRESSION_TABLE_COLUMN = 1;
 	private static final int ONDEMAND_TABLE_COLUMN = 2;
 
-	public CompoundRendererConfigurable(@NotNull Disposable parentDisposable)
+	public CompoundRendererConfigurable(@Nonnull Disposable parentDisposable)
 	{
 		super(new CardLayout());
 
@@ -145,7 +145,7 @@ class CompoundRendererConfigurable extends JPanel
 		final ItemListener updateListener = new ItemListener()
 		{
 			@Override
-			public void itemStateChanged(@NotNull ItemEvent e)
+			public void itemStateChanged(@Nonnull ItemEvent e)
 			{
 				updateEnabledState();
 			}
@@ -157,7 +157,7 @@ class CompoundRendererConfigurable extends JPanel
 		myClassNameField = new ClassNameEditorWithBrowseButton(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(@NotNull ActionEvent e)
+			public void actionPerformed(@Nonnull ActionEvent e)
 			{
 				PsiClass psiClass = DebuggerUtils.getInstance().chooseClassDialog(DebuggerBundle.message("title.compound.renderer.configurable.choose.renderer.reference.type"), myProject);
 				if(psiClass != null)
@@ -171,7 +171,7 @@ class CompoundRendererConfigurable extends JPanel
 		myClassNameField.getEditorTextField().addFocusListener(new FocusAdapter()
 		{
 			@Override
-			public void focusLost(@NotNull FocusEvent e)
+			public void focusLost(@Nonnull FocusEvent e)
 			{
 				updateContext(myClassNameField.getText());
 			}
@@ -297,9 +297,9 @@ class CompoundRendererConfigurable extends JPanel
 		exprColumn.setCellEditor(editor);
 		exprColumn.setCellRenderer(new DefaultTableCellRenderer()
 		{
-			@NotNull
+			@Nonnull
 			@Override
-			public Component getTableCellRendererComponent(@NotNull JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+			public Component getTableCellRendererComponent(@Nonnull JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 			{
 				final TextWithImports textWithImports = (TextWithImports) value;
 				final String text = (textWithImports != null) ? textWithImports.getText() : "";
@@ -499,7 +499,7 @@ class CompoundRendererConfigurable extends JPanel
 			return true;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public Class getColumnClass(int columnIndex)
 		{
@@ -559,7 +559,7 @@ class CompoundRendererConfigurable extends JPanel
 			}
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getColumnName(int columnIndex)
 		{

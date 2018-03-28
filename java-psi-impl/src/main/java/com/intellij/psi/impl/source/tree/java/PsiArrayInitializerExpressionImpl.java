@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -23,7 +25,6 @@ import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.util.CharTable;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiArrayInitializerExpressionImpl extends ExpressionPsiElement implements PsiArrayInitializerExpression, Constants {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiArrayInitializerExpressionImpl");
@@ -33,7 +34,7 @@ public class PsiArrayInitializerExpressionImpl extends ExpressionPsiElement impl
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiExpression[] getInitializers(){
     return getChildrenAsPsiElements(EXPRESSION_BIT_SET, PsiExpression.ARRAY_FACTORY);
   }
@@ -98,7 +99,7 @@ public class PsiArrayInitializerExpressionImpl extends ExpressionPsiElement impl
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitArrayInitializerExpression(this);
     }

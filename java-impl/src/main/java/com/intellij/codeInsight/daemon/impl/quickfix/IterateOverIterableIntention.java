@@ -29,8 +29,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 
@@ -41,7 +40,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   private static final Logger LOG = Logger.getInstance("#" + IterateOverIterableIntention.class.getName());
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final TemplateImpl template = getTemplate();
     if (template != null) {
       int offset = editor.getCaretModel().getOffset();
@@ -68,19 +67,19 @@ public class IterateOverIterableIntention implements IntentionAction {
     return false;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static TemplateImpl getTemplate() {
     return TemplateSettings.getInstance().getTemplate("I", "surround");
   }
 
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Iterate";
   }
   
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiExpression getIterableExpression(Editor editor, PsiFile file) {
     final SelectionModel selectionModel = editor.getSelectionModel();
     if (selectionModel.hasSelection()) {
@@ -122,7 +121,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final TemplateImpl template = getTemplate();
     SelectionModel selectionModel = editor.getSelectionModel();
     if (!selectionModel.hasSelection()) {
@@ -139,7 +138,7 @@ public class IterateOverIterableIntention implements IntentionAction {
     return false;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();

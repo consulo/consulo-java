@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.cache;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.LighterASTTokenNode;
@@ -47,7 +48,7 @@ public class RecordUtil
 	{
 	}
 
-	public static boolean isDeprecatedByAnnotation(@NotNull LighterAST tree, @NotNull LighterASTNode modList)
+	public static boolean isDeprecatedByAnnotation(@Nonnull LighterAST tree, @Nonnull LighterASTNode modList)
 	{
 		for(final LighterASTNode child : tree.getChildren(modList))
 		{
@@ -72,7 +73,7 @@ public class RecordUtil
 		return false;
 	}
 
-	public static boolean isDeprecatedByDocComment(@NotNull LighterAST tree, @NotNull LighterASTNode comment)
+	public static boolean isDeprecatedByDocComment(@Nonnull LighterAST tree, @Nonnull LighterASTNode comment)
 	{
 		String text = LightTreeUtil.toFilteredString(tree, comment, null);
 		if(text.contains(DEPRECATED_TAG))
@@ -93,7 +94,7 @@ public class RecordUtil
 		return false;
 	}
 
-	public static int packModifierList(@NotNull LighterAST tree, @NotNull LighterASTNode modList)
+	public static int packModifierList(@Nonnull LighterAST tree, @Nonnull LighterASTNode modList)
 	{
 		int packed = 0;
 		for(final LighterASTNode child : tree.getChildren(modList))
@@ -103,14 +104,14 @@ public class RecordUtil
 		return packed;
 	}
 
-	@NotNull
-	public static String intern(@NotNull CharTable table, @NotNull LighterASTNode node)
+	@Nonnull
+	public static String intern(@Nonnull CharTable table, @Nonnull LighterASTNode node)
 	{
 		assert node instanceof LighterASTTokenNode : node;
 		return table.intern(((LighterASTTokenNode) node).getText()).toString();
 	}
 
-	public static boolean isStaticNonPrivateMember(@NotNull StubElement<?> stub)
+	public static boolean isStaticNonPrivateMember(@Nonnull StubElement<?> stub)
 	{
 		StubElement<PsiModifierList> type = stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
 		if(!(type instanceof PsiModifierListStub))

@@ -17,7 +17,7 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -48,19 +48,19 @@ import consulo.java.psi.impl.java.stub.PsiClassLevelDeclarationStatementStub;
  */
 public abstract class JavaClassElementType extends JavaStubElementType<PsiClassStub, PsiClass>
 {
-	public JavaClassElementType(@NotNull String id)
+	public JavaClassElementType(@Nonnull String id)
 	{
 		super(id);
 	}
 
 	@Override
-	public PsiClass createPsi(@NotNull final PsiClassStub stub)
+	public PsiClass createPsi(@Nonnull final PsiClassStub stub)
 	{
 		return getPsiFactory(stub).createClass(stub);
 	}
 
 	@Override
-	public PsiClass createPsi(@NotNull final ASTNode node)
+	public PsiClass createPsi(@Nonnull final ASTNode node)
 	{
 		if(node instanceof EnumConstantInitializerElement)
 		{
@@ -182,7 +182,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	}
 
 	@Override
-	public void serialize(@NotNull PsiClassStub stub, @NotNull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiClassStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeByte(((PsiClassStubImpl) stub).getFlags());
 		if(!stub.isAnonymous())
@@ -197,9 +197,9 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiClassStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiClassStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		byte flags = dataStream.readByte();
 		boolean isAnonymous = PsiClassStubImpl.isAnonymous(flags);
@@ -221,7 +221,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	}
 
 	@Override
-	public void indexStub(@NotNull PsiClassStub stub, @NotNull IndexSink sink)
+	public void indexStub(@Nonnull PsiClassStub stub, @Nonnull IndexSink sink)
 	{
 		boolean isAnonymous = stub.isAnonymous();
 		if(isAnonymous)
@@ -249,7 +249,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	}
 
 	@Override
-	public String getId(@NotNull final PsiClassStub stub)
+	public String getId(@Nonnull final PsiClassStub stub)
 	{
 		final String name = stub.getName();
 		return name != null ? name : super.getId(stub);

@@ -21,9 +21,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.jetbrains.org.objectweb.asm.Attribute;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.Opcodes;
@@ -107,12 +109,12 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	private boolean myIsPhysical = true;
 	private boolean myInvalidated;
 
-	public ClsFileImpl(@NotNull FileViewProvider viewProvider)
+	public ClsFileImpl(@Nonnull FileViewProvider viewProvider)
 	{
 		this(viewProvider, false);
 	}
 
-	private ClsFileImpl(@NotNull FileViewProvider viewProvider, boolean forDecompiling)
+	private ClsFileImpl(@Nonnull FileViewProvider viewProvider, boolean forDecompiling)
 	{
 		super(null);
 		myViewProvider = viewProvider;
@@ -128,7 +130,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public VirtualFile getVirtualFile()
 	{
 		return myViewProvider.getVirtualFile();
@@ -191,14 +193,14 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		return getVirtualFile().getName();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		PsiJavaModule module = getModuleDeclaration();
@@ -206,7 +208,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClass[] getClasses()
 	{
 		return getStub().getClasses();
@@ -262,7 +264,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getPackageName()
 	{
 		PsiPackageStatement statement = getPackageStatement();
@@ -288,21 +290,21 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getOnDemandImports(boolean includeImplicit, boolean checkIncludes)
 	{
 		return PsiJavaCodeReferenceElement.EMPTY_ARRAY;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClass[] getSingleClassImports(boolean checkIncludes)
 	{
 		return PsiClass.EMPTY_ARRAY;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String[] getImplicitlyImportedPackages()
 	{
 		return ArrayUtil.EMPTY_STRING_ARRAY;
@@ -315,7 +317,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiJavaCodeReferenceElement[] getImplicitlyImportedPackageReferences()
 	{
 		return PsiJavaCodeReferenceElement.EMPTY_ARRAY;
@@ -328,7 +330,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public LanguageLevel getLanguageLevel()
 	{
 		PsiClassHolderFileStub<?> stub = getStub();
@@ -352,7 +354,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
 	{
 		throw cannotModifyException(this);
 	}
@@ -370,7 +372,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		buffer.append(BANNER);
 
@@ -392,7 +394,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		PsiElement mirrorElement = SourceTreeToPsiMap.treeToPsiNotNull(element);
 		if(!(mirrorElement instanceof PsiJavaFile))
@@ -414,7 +416,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@SuppressWarnings("deprecation")
 	public PsiElement getNavigationElement()
 	{
@@ -538,7 +540,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -557,28 +559,28 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiFile getOriginalFile()
 	{
 		return this;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public FileType getFileType()
 	{
 		return JavaClassFileType.INSTANCE;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiFile[] getPsiRoots()
 	{
 		return new PsiFile[]{this};
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public FileViewProvider getViewProvider()
 	{
 		return myViewProvider;
@@ -591,14 +593,14 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClassHolderFileStub<?> getStub()
 	{
 		return (PsiClassHolderFileStub) getStubTree().getRoot();
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 		final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
@@ -618,7 +620,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 
 	@RequiredReadAction
 	@Override
-	@NotNull
+	@Nonnull
 	public StubTree getStubTree()
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
@@ -703,7 +705,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	public void putInfo(@NotNull Map<String, String> info)
+	public void putInfo(@Nonnull Map<String, String> info)
 	{
 		PsiFileImpl.putInfo(this, info);
 	}
@@ -731,8 +733,8 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 
 	// default decompiler implementation
 
-	@NotNull
-	public static CharSequence decompile(@NotNull VirtualFile file)
+	@Nonnull
+	public static CharSequence decompile(@Nonnull VirtualFile file)
 	{
 		PsiManager manager = PsiManager.getInstance(DefaultProjectFactory.getInstance().getDefaultProject());
 		final ClsFileImpl clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
@@ -741,8 +743,8 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		return buffer;
 	}
 
-	@Nullable
-	public static PsiJavaFileStub buildFileStub(@NotNull VirtualFile file, @NotNull byte[] bytes) throws ClsFormatException
+	@javax.annotation.Nullable
+	public static PsiJavaFileStub buildFileStub(@Nonnull VirtualFile file, @Nonnull byte[] bytes) throws ClsFormatException
 	{
 		try
 		{
@@ -801,12 +803,12 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 
 	static class FileContentPair extends Pair<VirtualFile, byte[]>
 	{
-		public FileContentPair(@NotNull VirtualFile file, @NotNull byte[] content)
+		public FileContentPair(@Nonnull VirtualFile file, @Nonnull byte[] content)
 		{
 			super(file, content);
 		}
 
-		@NotNull
+		@Nonnull
 		public byte[] getContent()
 		{
 			return second;
@@ -821,7 +823,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 
 	private static final InnerClassSourceStrategy<FileContentPair> STRATEGY = new InnerClassSourceStrategy<FileContentPair>()
 	{
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public FileContentPair findInnerClass(String innerName, FileContentPair outerClass)
 		{

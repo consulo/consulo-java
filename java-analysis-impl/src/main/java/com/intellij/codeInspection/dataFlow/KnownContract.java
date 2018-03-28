@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiMethod;
 
@@ -42,14 +42,14 @@ class KnownContract implements PreContract
 		return myContract;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body)
 	{
 		return Collections.singletonList(myContract);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PreContract negate()
 	{

@@ -26,27 +26,26 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class RandomDoubleForRandomIntegerInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UsingRandomNextDoubleForRandomInteger";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "random.double.for.random.integer.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "random.double.for.random.integer.problem.descriptor");
@@ -60,7 +59,7 @@ public class RandomDoubleForRandomIntegerInspection
   private static class RandomDoubleForRandomIntegerFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "random.double.for.random.integer.replace.quickfix");
@@ -119,7 +118,7 @@ public class RandomDoubleForRandomIntegerInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiReferenceExpression methodExpression =
         call.getMethodExpression();
@@ -180,7 +179,7 @@ public class RandomDoubleForRandomIntegerInspection
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   static PsiExpression getContainingExpression(PsiExpression expression) {
     PsiElement ancestor = expression.getParent();
     while (true) {

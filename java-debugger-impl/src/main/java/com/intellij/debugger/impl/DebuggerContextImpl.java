@@ -20,7 +20,7 @@
  */
 package com.intellij.debugger.impl;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.ContextUtil;
@@ -47,7 +47,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 
 	private boolean myInitialized;
 
-	@Nullable
+	@javax.annotation.Nullable
 	private final DebuggerSession myDebuggerSession;
 	private final DebugProcessImpl myDebugProcess;
 	private final SuspendContextImpl mySuspendContext;
@@ -58,9 +58,9 @@ public final class DebuggerContextImpl implements DebuggerContext
 	private PsiElement myContextElement;
 
 	private DebuggerContextImpl(
-			@Nullable DebuggerSession session,
-			@Nullable DebugProcessImpl debugProcess,
-			@Nullable SuspendContextImpl context,
+			@javax.annotation.Nullable DebuggerSession session,
+			@javax.annotation.Nullable DebugProcessImpl debugProcess,
+			@javax.annotation.Nullable SuspendContextImpl context,
 			ThreadReferenceProxyImpl threadProxy,
 			StackFrameProxyImpl frameProxy,
 			SourcePosition position,
@@ -85,7 +85,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 		return myDebuggerSession;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public DebugProcessImpl getDebugProcess()
 	{
@@ -140,7 +140,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 		return new EvaluationContextImpl(getSuspendContext(), getFrameProxy(), thisObject);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public EvaluationContextImpl createEvaluationContext()
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -161,7 +161,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 
 	public static DebuggerContextImpl createDebuggerContext(
 			@Nullable DebuggerSession session,
-			@Nullable SuspendContextImpl context,
+			@javax.annotation.Nullable SuspendContextImpl context,
 			ThreadReferenceProxyImpl threadProxy,
 			StackFrameProxyImpl frameProxy)
 	{

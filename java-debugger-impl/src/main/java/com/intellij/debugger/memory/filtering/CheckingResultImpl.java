@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.memory.filtering;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -28,26 +28,26 @@ public class CheckingResultImpl implements CheckingResult
 	private final Result myResult;
 	private final String myDescription;
 
-	private CheckingResultImpl(@NotNull Result result, @NotNull String description)
+	private CheckingResultImpl(@Nonnull Result result, @Nonnull String description)
 	{
 		myResult = result;
 		myDescription = description;
 	}
 
-	public static CheckingResult error(@NotNull String description)
+	public static CheckingResult error(@Nonnull String description)
 	{
 		return new CheckingResultImpl(Result.ERROR, description);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Result getResult()
 	{
 		return myResult;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFailureDescription()
 	{
 		return myDescription;

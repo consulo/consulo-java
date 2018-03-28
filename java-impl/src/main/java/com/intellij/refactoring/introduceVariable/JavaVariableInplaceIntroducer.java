@@ -42,8 +42,8 @@ import com.intellij.refactoring.rename.ResolveSnapshotProvider;
 import com.intellij.refactoring.rename.inplace.VariableInplaceRenamer;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.ui.NonFocusableCheckBox;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,7 +73,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
   public JavaVariableInplaceIntroducer(final Project project,
                                        final TypeExpression expression,
                                        final Editor editor,
-                                       @NotNull final PsiVariable elementToRename,
+                                       @Nonnull final PsiVariable elementToRename,
                                        final boolean cantChangeFinalModifier,
                                        final boolean hasTypeSuggestion,
                                        final RangeMarker exprMarker,

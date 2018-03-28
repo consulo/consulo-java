@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
@@ -33,8 +35,8 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements PsiMethodCallExpression {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl");
@@ -54,13 +56,13 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult resolveMethodGenerics() {
     return getMethodExpression().advancedResolve(false);
   }
 
   @Override
-  public void removeChild(@NotNull ASTNode child) {
+  public void removeChild(@Nonnull ASTNode child) {
     if (child == getArgumentList()) {
       LOG.error("Cannot delete argument list since it will break contract on argument list notnullity");
     }
@@ -68,7 +70,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiReferenceParameterList getTypeArgumentList() {
     PsiReferenceExpression expression = getMethodExpression();
     PsiReferenceParameterList result = expression.getParameterList();
@@ -78,19 +80,19 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getTypeArguments() {
     return getMethodExpression().getTypeParameters();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiReferenceExpression getMethodExpression() {
     return (PsiReferenceExpression)findChildByRoleAsPsiElement(ChildRole.METHOD_EXPRESSION);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiExpressionList getArgumentList() {
     PsiExpressionList list = (PsiExpressionList)findChildByRoleAsPsiElement(ChildRole.ARGUMENT_LIST);
     if (list != null) return list;
@@ -129,7 +131,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitMethodCallExpression(this);
     }
@@ -173,7 +175,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
     private static PsiType getResultType(PsiMethodCallExpression call,
                                          PsiReferenceExpression methodExpression,
                                          JavaResolveResult result,
-                                         @NotNull final LanguageLevel languageLevel) {
+                                         @Nonnull final LanguageLevel languageLevel) {
       final PsiMethod method = (PsiMethod)result.getElement();
       if (method == null) return null;
 

@@ -32,8 +32,7 @@ import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.containers.HashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -47,8 +46,8 @@ public class RefactoringHierarchyUtil {
   private RefactoringHierarchyUtil() {}
 
   public static boolean willBeInTargetClass(PsiElement place,
-                                            @NotNull Set<PsiMember> membersToMove,
-                                            @Nullable PsiClass targetClass,
+                                            @Nonnull Set<PsiMember> membersToMove,
+                                            @javax.annotation.Nullable PsiClass targetClass,
                                             boolean includeSubclasses) {
     PsiElement parent = place;
     while (parent != null) {
@@ -81,7 +80,7 @@ public class RefactoringHierarchyUtil {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiClass getNearestBaseClass(PsiClass subClass, boolean includeNonProject) {
     PsiClassType[] superTypes = subClass.getSuperTypes();
 
@@ -216,7 +215,7 @@ public class RefactoringHierarchyUtil {
     LOG.assertTrue(anInterface.isInterface());
     visited.add(anInterface);
     ClassInheritorsSearch.search(anInterface, false).forEach(new PsiElementProcessorAdapter<PsiClass>(new PsiElementProcessor<PsiClass>() {
-      public boolean execute(@NotNull PsiClass aClass) {
+      public boolean execute(@Nonnull PsiClass aClass) {
         if (!aClass.isInterface()) {
           result.add(aClass);
         }

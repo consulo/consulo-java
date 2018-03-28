@@ -27,7 +27,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
 import org.jetbrains.org.objectweb.asm.tree.JumpInsnNode;
 import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
@@ -60,12 +61,12 @@ class InOutAnalysis extends Analysis<Result> {
     internalResult = new Final(Value.Bot);
   }
 
-  @NotNull
+  @Nonnull
   Equation mkEquation(Result res) {
     return new Equation(aKey, res);
   }
 
-  @NotNull
+  @Nonnull
   protected Equation analyze() throws AnalyzerException
   {
     pendingPush(createStartState());

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
@@ -35,7 +36,6 @@ import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.ModulesComboBox;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.impl.CheckableRunConfigurationEditor;
@@ -263,7 +263,7 @@ public class AppletConfigurable extends SettingsEditor<AppletConfiguration> impl
 	}
 
 	@Override
-	public void applyEditorTo(@NotNull final AppletConfiguration configuration)
+	public void applyEditorTo(@Nonnull final AppletConfiguration configuration)
 	{
 		checkEditorData(configuration);
 		myTable.stopEditing();
@@ -272,7 +272,7 @@ public class AppletConfigurable extends SettingsEditor<AppletConfiguration> impl
 	}
 
 	@Override
-	public void resetEditorFrom(@NotNull final AppletConfiguration configuration)
+	public void resetEditorFrom(@Nonnull final AppletConfiguration configuration)
 	{
 		getClassNameComponent().setText(configuration.MAIN_CLASS_NAME);
 		String presentableHtmlName = configuration.HTML_FILE_NAME;
@@ -310,7 +310,7 @@ public class AppletConfigurable extends SettingsEditor<AppletConfiguration> impl
 
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JComponent createEditor()
 	{
 		return myWholePanel;

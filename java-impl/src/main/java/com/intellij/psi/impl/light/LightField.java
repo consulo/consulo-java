@@ -15,9 +15,11 @@
  */
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
@@ -37,7 +39,7 @@ public class LightField extends LightElement implements PsiField {
   private final PsiField myField;
   private final PsiClass myContainingClass;
 
-  public LightField(@NotNull final PsiManager manager, @NotNull final PsiField field, @NotNull final PsiClass containingClass) {
+  public LightField(@Nonnull final PsiManager manager, @Nonnull final PsiField field, @Nonnull final PsiClass containingClass) {
     super(manager, JavaLanguage.INSTANCE);
     myField = field;
     myContainingClass = containingClass;
@@ -48,7 +50,7 @@ public class LightField extends LightElement implements PsiField {
     throw new IncorrectOperationException("Not supported");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public SearchScope getUseScope() {
     return myField.getUseScope();
@@ -59,7 +61,7 @@ public class LightField extends LightElement implements PsiField {
     return myField.getName();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiIdentifier getNameIdentifier() {
     return myField.getNameIdentifier();
@@ -80,7 +82,7 @@ public class LightField extends LightElement implements PsiField {
     return myContainingClass;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiType getType() {
     return myField.getType();
@@ -112,7 +114,7 @@ public class LightField extends LightElement implements PsiField {
   }
 
   @Override
-  public PsiElement setName(@NonNls @NotNull final String name) throws IncorrectOperationException {
+  public PsiElement setName(@NonNls @Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Not supported");
   }
 
@@ -122,7 +124,7 @@ public class LightField extends LightElement implements PsiField {
   }
 
   @Override
-  public boolean hasModifierProperty(@NonNls @NotNull final String name) {
+  public boolean hasModifierProperty(@NonNls @Nonnull final String name) {
     return myField.hasModifierProperty(name);
   }
 

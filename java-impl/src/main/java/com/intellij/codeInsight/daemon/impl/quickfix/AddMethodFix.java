@@ -18,10 +18,10 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -40,6 +40,7 @@ import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.JavaQuickFixBundle;
 
 public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddMethodFix");
@@ -48,13 +49,13 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private String myText;
   private final List<String> myExceptions = new ArrayList<String>();
 
-  public AddMethodFix(@NotNull PsiMethod methodPrototype, @NotNull PsiClass implClass) {
+  public AddMethodFix(@Nonnull PsiMethod methodPrototype, @Nonnull PsiClass implClass) {
     super(implClass);
     myMethodPrototype = methodPrototype;
     setText(JavaQuickFixBundle.message("add.method.text", methodPrototype.getName(), implClass.getName()));
   }
 
-  public AddMethodFix(@NonNls @NotNull String methodText, @NotNull PsiClass implClass, @NotNull String... exceptions) {
+  public AddMethodFix(@NonNls @Nonnull String methodText, @Nonnull PsiClass implClass, @Nonnull String... exceptions) {
     this(createMethod(methodText, implClass), implClass);
     ContainerUtil.addAll(myExceptions, exceptions);
   }
@@ -78,27 +79,27 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     return result;
   }
 
-  protected void setText(@NotNull String text) {
+  protected void setText(@Nonnull String text) {
     myText = text;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return myText;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("add.method.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     final PsiClass myClass = (PsiClass)startElement;
 
     return myMethodPrototype != null
@@ -111,11 +112,11 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiClass myClass = (PsiClass)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
     PsiCodeBlock body;

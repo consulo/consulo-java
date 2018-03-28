@@ -6,7 +6,8 @@ package com.intellij.refactoring;
 
 import static org.junit.Assert.assertTrue;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiElement;
@@ -18,7 +19,7 @@ import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public class ExtractMethodObjectTest extends LightRefactoringTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

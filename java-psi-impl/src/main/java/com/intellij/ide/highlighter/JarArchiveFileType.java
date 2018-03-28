@@ -15,7 +15,8 @@
  */
 package com.intellij.ide.highlighter;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.fileTypes.ArchiveFileType;
 
 public class JarArchiveFileType extends ArchiveFileType
@@ -23,14 +24,14 @@ public class JarArchiveFileType extends ArchiveFileType
 	public static final String PROTOCOL = "jar";
 	public static final JarArchiveFileType INSTANCE = new JarArchiveFileType();
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getId()
 	{
 		return "JAR_ARCHIVE";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getProtocol()
 	{

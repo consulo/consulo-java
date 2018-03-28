@@ -17,8 +17,8 @@ package com.intellij.debugger.ui.impl.watch;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.ClassVisitor;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
@@ -155,7 +155,7 @@ public abstract class CompilingEvaluator implements ExpressionEvaluator
 
 	///////////////// Compiler stuff
 
-	@NotNull
-	protected abstract Collection<ClassObject> compile(@Nullable JavaSdkVersion debuggeeVersion) throws EvaluateException;
+	@Nonnull
+	protected abstract Collection<ClassObject> compile(@javax.annotation.Nullable JavaSdkVersion debuggeeVersion) throws EvaluateException;
 
 }

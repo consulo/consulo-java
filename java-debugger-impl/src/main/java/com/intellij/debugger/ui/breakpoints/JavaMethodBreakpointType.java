@@ -17,8 +17,8 @@ package com.intellij.debugger.ui.breakpoints;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.HelpID;
@@ -35,7 +35,7 @@ import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
  */
 public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMethodBreakpointProperties> implements JavaBreakpointType
 {
-	@NotNull
+	@Nonnull
 	public static JavaMethodBreakpointType getInstance()
 	{
 		return EXTENSION_POINT_NAME.findExtension(JavaMethodBreakpointType.class);
@@ -46,14 +46,14 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 		super("java-method", DebuggerBundle.message("method.breakpoints.tab.title"));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getEnabledIcon()
 	{
 		return AllIcons.Debugger.Db_method_breakpoint;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Icon getDisabledIcon()
 	{
@@ -103,28 +103,28 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 		return buffer.toString();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public XBreakpointCustomPropertiesPanel createCustomPropertiesPanel()
 	{
 		return new MethodBreakpointPropertiesPanel();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JavaMethodBreakpointProperties createProperties()
 	{
 		return new JavaMethodBreakpointProperties();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public JavaMethodBreakpointProperties createBreakpointProperties(@NotNull VirtualFile file, int line)
+	public JavaMethodBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line)
 	{
 		return new JavaMethodBreakpointProperties();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint)
 	{

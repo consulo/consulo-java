@@ -21,7 +21,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.util.containers.Stack;
 import gnu.trove.TObjectIntHashMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ class ControlFlowImpl implements ControlFlow {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public List<Instruction> getInstructions() {
     return myInstructions;
   }
@@ -75,7 +75,7 @@ class ControlFlowImpl implements ControlFlow {
   }
 
   @Override
-  public int getStartOffset(@NotNull PsiElement element) {
+  public int getStartOffset(@Nonnull PsiElement element) {
     int value = myElementToStartOffsetMap.get(element);
     if (value == 0){
       if (!myElementToStartOffsetMap.containsKey(element)) return -1;
@@ -84,7 +84,7 @@ class ControlFlowImpl implements ControlFlow {
   }
 
   @Override
-  public int getEndOffset(@NotNull PsiElement element) {
+  public int getEndOffset(@Nonnull PsiElement element) {
     int value = myElementToEndOffsetMap.get(element);
     if (value == 0){
       if (!myElementToEndOffsetMap.containsKey(element)) return -1;

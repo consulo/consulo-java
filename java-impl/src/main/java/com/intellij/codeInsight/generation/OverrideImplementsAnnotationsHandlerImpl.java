@@ -25,7 +25,7 @@ import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,8 +41,8 @@ public class OverrideImplementsAnnotationsHandlerImpl implements OverrideImpleme
   }
 
   @Override
-  @NotNull
-  public String[] annotationsToRemove(Project project, @NotNull final String fqName) {
+  @Nonnull
+  public String[] annotationsToRemove(Project project, @Nonnull final String fqName) {
     final NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
     if (manager.getNotNulls().contains(fqName)) {
       return ArrayUtil.toStringArray(manager.getNullables());

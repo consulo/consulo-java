@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.engine.DebuggerUtils;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Type;
@@ -26,7 +26,7 @@ public abstract class ReferenceRenderer extends TypeRenderer
 	{
 	}
 
-	protected ReferenceRenderer(@NotNull String className)
+	protected ReferenceRenderer(@Nonnull String className)
 	{
 		super(className);
 	}

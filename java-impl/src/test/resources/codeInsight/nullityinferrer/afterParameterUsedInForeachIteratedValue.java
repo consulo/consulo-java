@@ -1,8 +1,8 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 class Test {
-   void foo(@NotNull List requests){
+   void foo(@Nonnull List requests){
         for (Object request : requests) {
         }
     }

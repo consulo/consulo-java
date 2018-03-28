@@ -25,8 +25,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ExtractParameterAsLocalVariableFix;
 import com.siyeh.ig.psiutils.WellFormednessUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -39,14 +39,14 @@ public class AssignmentToForLoopParameterInspection
   public boolean m_checkForeachParameters = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.to.for.loop.parameter.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.to.for.loop.parameter.problem.descriptor");
@@ -80,7 +80,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;
@@ -92,7 +92,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitPrefixExpression(
-      @NotNull PsiPrefixExpression expression) {
+      @Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
@@ -109,7 +109,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitPostfixExpression(
-      @NotNull PsiPostfixExpression expression) {
+      @Nonnull PsiPostfixExpression expression) {
       super.visitPostfixExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&

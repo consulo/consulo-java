@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow.value;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
 
@@ -42,13 +42,13 @@ public class DfaInstanceofValue extends DfaValue
 		myNegated = negated;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiExpression getExpression()
 	{
 		return myExpression;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiType getCastType()
 	{
 		return myCastType;

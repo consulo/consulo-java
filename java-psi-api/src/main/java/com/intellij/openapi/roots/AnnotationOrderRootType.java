@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
@@ -30,7 +31,7 @@ import consulo.roots.OrderEntryWithTracking;
  */
 public class AnnotationOrderRootType extends OrderRootType
 {
-	@NotNull
+	@Nonnull
 	public static OrderRootType getInstance()
 	{
 		return getOrderRootType(AnnotationOrderRootType.class);
@@ -41,8 +42,8 @@ public class AnnotationOrderRootType extends OrderRootType
 		super("javaExternalAnnotations");
 	}
 
-	@NotNull
-	public static VirtualFile[] getFiles(@NotNull OrderEntry entry)
+	@Nonnull
+	public static VirtualFile[] getFiles(@Nonnull OrderEntry entry)
 	{
 		List<VirtualFile> result = new ArrayList<VirtualFile>();
 		RootPolicy<List<VirtualFile>> policy = new RootPolicy<List<VirtualFile>>()
@@ -61,8 +62,8 @@ public class AnnotationOrderRootType extends OrderRootType
 		return VfsUtilCore.toVirtualFileArray(result);
 	}
 
-	@NotNull
-	public static String[] getUrls(@NotNull OrderEntry entry)
+	@Nonnull
+	public static String[] getUrls(@Nonnull OrderEntry entry)
 	{
 		List<String> result = new ArrayList<String>();
 		RootPolicy<List<String>> policy = new RootPolicy<List<String>>()

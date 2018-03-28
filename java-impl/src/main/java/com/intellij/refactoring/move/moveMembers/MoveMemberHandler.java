@@ -17,8 +17,8 @@ package com.intellij.refactoring.move.moveMembers;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -35,23 +35,23 @@ public interface MoveMemberHandler
 	LanguageExtension<MoveMemberHandler> EP_NAME = new LanguageExtension<MoveMemberHandler>("consulo.java.refactoring.moveMemberHandler");
 
 	@Nullable
-	MoveMembersProcessor.MoveMembersUsageInfo getUsage(@NotNull PsiMember member, @NotNull PsiReference ref, @NotNull Set<PsiMember> membersToMove,
-			@NotNull PsiClass targetClass);
+	MoveMembersProcessor.MoveMembersUsageInfo getUsage(@Nonnull PsiMember member, @Nonnull PsiReference ref, @Nonnull Set<PsiMember> membersToMove,
+			@Nonnull PsiClass targetClass);
 
-	void checkConflictsOnUsage(@NotNull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
-			@Nullable PsiModifierList modifierListCopy, @NotNull PsiClass targetClass, @NotNull Set<PsiMember> membersToMove,
-			@NotNull MultiMap<PsiElement, String> conflicts);
+	void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @javax.annotation.Nullable String newVisibility,
+			@Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
+			@Nonnull MultiMap<PsiElement, String> conflicts);
 
-	void checkConflictsOnMember(@NotNull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
-			@NotNull PsiClass targetClass, @NotNull Set<PsiMember> membersToMove, @NotNull MultiMap<PsiElement, String> conflicts);
+	void checkConflictsOnMember(@Nonnull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
+			@Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts);
 
 	@Nullable
-	PsiElement getAnchor(@NotNull PsiMember member, @NotNull PsiClass targetClass, Set<PsiMember> membersToMove);
+	PsiElement getAnchor(@Nonnull PsiMember member, @Nonnull PsiClass targetClass, Set<PsiMember> membersToMove);
 
-	boolean changeExternalUsage(@NotNull MoveMembersOptions options, @NotNull MoveMembersProcessor.MoveMembersUsageInfo usage);
+	boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage);
 
-	@NotNull
-	PsiMember doMove(@NotNull MoveMembersOptions options, @NotNull PsiMember member, @Nullable PsiElement anchor, @NotNull PsiClass targetClass);
+	@Nonnull
+	PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, @javax.annotation.Nullable PsiElement anchor, @Nonnull PsiClass targetClass);
 
-	void decodeContextInfo(@NotNull PsiElement scope);
+	void decodeContextInfo(@Nonnull PsiElement scope);
 }

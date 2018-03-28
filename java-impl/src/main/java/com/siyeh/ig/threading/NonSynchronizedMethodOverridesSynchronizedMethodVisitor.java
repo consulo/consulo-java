@@ -25,12 +25,12 @@ package com.siyeh.ig.threading;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class NonSynchronizedMethodOverridesSynchronizedMethodVisitor extends BaseInspectionVisitor {
 
   @Override
-  public void visitMethod(@NotNull PsiMethod method) {
+  public void visitMethod(@Nonnull PsiMethod method) {
     //no call to super, so we don't drill into anonymous classes
     if (method.isConstructor()) {
       return;

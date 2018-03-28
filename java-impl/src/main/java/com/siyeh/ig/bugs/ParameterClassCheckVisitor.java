@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
@@ -26,13 +27,13 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 
 	private boolean checked;
 
-	ParameterClassCheckVisitor(@NotNull PsiParameter parameter)
+	ParameterClassCheckVisitor(@Nonnull PsiParameter parameter)
 	{
 		this.parameter = parameter;
 	}
 
 	@Override
-	public void visitElement(@NotNull PsiElement element)
+	public void visitElement(@Nonnull PsiElement element)
 	{
 		if(!checked)
 		{
@@ -41,7 +42,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression)
+	public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 	{
 		if(checked)
 		{
@@ -150,7 +151,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitInstanceOfExpression(@NotNull PsiInstanceOfExpression expression)
+	public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression expression)
 	{
 		if(checked)
 		{

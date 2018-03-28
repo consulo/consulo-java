@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.TailType;
@@ -39,7 +39,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix
 
 	private final SmartPsiElementPointer myMethodReferenceExpression;
 
-	public CreateMethodFromMethodReferenceFix(@NotNull PsiMethodReferenceExpression methodRef)
+	public CreateMethodFromMethodReferenceFix(@Nonnull PsiMethodReferenceExpression methodRef)
 	{
 		myMethodReferenceExpression = SmartPointerManager.getInstance(methodRef.getProject())
 				.createSmartPsiElementPointer(methodRef);
@@ -87,7 +87,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected List<PsiClass> getTargetClasses(PsiElement element)
 	{
 		List<PsiClass> targets = super.getTargetClasses(element);
@@ -186,7 +186,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("create.method.from.usage.family");

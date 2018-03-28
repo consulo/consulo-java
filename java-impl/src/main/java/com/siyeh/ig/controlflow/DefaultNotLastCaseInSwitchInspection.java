@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiSwitchLabelStatement;
@@ -22,17 +24,16 @@ import com.intellij.psi.PsiSwitchStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class DefaultNotLastCaseInSwitchInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "default.not.last.case.in.switch.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "default.not.last.case.in.switch.problem.descriptor");
@@ -47,7 +48,7 @@ public class DefaultNotLastCaseInSwitchInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @NotNull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {

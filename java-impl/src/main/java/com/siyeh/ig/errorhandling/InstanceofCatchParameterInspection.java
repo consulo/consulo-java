@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class InstanceofCatchParameterInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instanceof.catch.parameter.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "instanceof.catch.parameter.problem.descriptor");
@@ -45,7 +46,7 @@ public class InstanceofCatchParameterInspection extends BaseInspection {
 
     @Override
     public void visitInstanceOfExpression(
-      @NotNull PsiInstanceOfExpression exp) {
+      @Nonnull PsiInstanceOfExpression exp) {
       super.visitInstanceOfExpression(exp);
       if (!ControlFlowUtils.isInCatchBlock(exp)) {
         return;

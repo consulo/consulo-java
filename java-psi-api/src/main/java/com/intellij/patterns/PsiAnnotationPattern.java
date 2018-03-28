@@ -15,8 +15,9 @@
  */
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiArrayInitializerMemberValue;
 import com.intellij.psi.PsiElement;
@@ -37,7 +38,7 @@ public class PsiAnnotationPattern extends PsiElementPattern<PsiAnnotation, PsiAn
 		return with(new PatternCondition<PsiAnnotation>("qName")
 		{
 			@Override
-			public boolean accepts(@NotNull final PsiAnnotation psiAnnotation, final ProcessingContext context)
+			public boolean accepts(@Nonnull final PsiAnnotation psiAnnotation, final ProcessingContext context)
 			{
 				return pattern.getCondition().accepts(psiAnnotation.getQualifiedName(), context);
 			}
@@ -49,14 +50,14 @@ public class PsiAnnotationPattern extends PsiElementPattern<PsiAnnotation, PsiAn
 		return qName(StandardPatterns.string().equalTo(qname));
 	}
 
-	public PsiAnnotationPattern insideAnnotationAttribute(@NotNull final String attributeName, @NotNull final ElementPattern<PsiAnnotation> parentAnnoPattern)
+	public PsiAnnotationPattern insideAnnotationAttribute(@Nonnull final String attributeName, @Nonnull final ElementPattern<PsiAnnotation> parentAnnoPattern)
 	{
 		return with(new PatternCondition<PsiAnnotation>("insideAnnotationAttribute")
 		{
 			final PsiNameValuePairPattern attrPattern = PsiJavaPatterns.psiNameValuePair().withName(attributeName).withSuperParent(2, parentAnnoPattern);
 
 			@Override
-			public boolean accepts(@NotNull PsiAnnotation annotation, ProcessingContext context)
+			public boolean accepts(@Nonnull PsiAnnotation annotation, ProcessingContext context)
 			{
 				PsiElement attr = getParent(annotation);
 				if(attr instanceof PsiArrayInitializerMemberValue)

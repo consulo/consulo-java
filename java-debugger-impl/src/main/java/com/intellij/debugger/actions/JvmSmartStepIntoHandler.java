@@ -21,8 +21,8 @@ import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.AnonymousClassMethodFilter;
 import com.intellij.debugger.engine.BasicStepMethodFilter;
@@ -49,7 +49,7 @@ public abstract class JvmSmartStepIntoHandler
 {
 	public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create("consulo.java.debugger.jvmSmartStepIntoHandler");
 
-	@NotNull
+	@Nonnull
 	public abstract List<SmartStepTarget> findSmartStepTargets(SourcePosition position);
 
 	public abstract boolean isAvailable(SourcePosition position);
@@ -125,7 +125,7 @@ public abstract class JvmSmartStepIntoHandler
 	 * @param stepTarget
 	 * @return SmartStepFilter
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	protected MethodFilter createMethodFilter(SmartStepTarget stepTarget)
 	{
 		if(stepTarget instanceof MethodSmartStepTarget)

@@ -17,9 +17,9 @@ package consulo.java.module.extension;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -50,7 +50,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 	private LazyValueBySdk<LanguageLevel> myLanguageLevelValue;
 
-	public JavaModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer moduleRootLayer)
+	public JavaModuleExtensionImpl(@Nonnull String id, @Nonnull ModuleRootLayer moduleRootLayer)
 	{
 		super(id, moduleRootLayer);
 		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer, id);
@@ -62,7 +62,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 	@RequiredReadAction
 	@Override
-	public void commit(@NotNull JavaModuleExtensionImpl mutableModuleExtension)
+	public void commit(@Nonnull JavaModuleExtensionImpl mutableModuleExtension)
 	{
 		super.commit(mutableModuleExtension);
 
@@ -72,13 +72,13 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public LanguageLevel getLanguageLevel()
 	{
 		return myLanguageLevel.isNull() ? myLanguageLevelValue.getValue() : myLanguageLevel.get();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public LanguageLevel getLanguageLevelNoDefault()
 	{
@@ -86,47 +86,47 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public SpecialDirLocation getSpecialDirLocation()
 	{
 		return mySpecialDirLocation;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Sdk getSdkForCompilation()
 	{
 		return getSdk();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getBytecodeVersion()
 	{
 		return myBytecodeVersion;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Set<VirtualFile> getCompilationClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
+	public Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk)
 	{
 		return moduleChunk.getCompilationClasspathFiles(JavaSdk.getInstance());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Set<VirtualFile> getCompilationBootClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
+	public Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk)
 	{
 		return moduleChunk.getCompilationBootClasspathFiles(JavaSdk.getInstance());
 	}
 
-	@NotNull
+	@Nonnull
 	public ModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel()
 	{
 		return myLanguageLevel;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Class<? extends SdkType> getSdkTypeClass()
 	{
@@ -134,7 +134,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	}
 
 	@Override
-	protected void getStateImpl(@NotNull Element element)
+	protected void getStateImpl(@Nonnull Element element)
 	{
 		super.getStateImpl(element);
 
@@ -151,7 +151,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 	@RequiredReadAction
 	@Override
-	protected void loadStateImpl(@NotNull Element element)
+	protected void loadStateImpl(@Nonnull Element element)
 	{
 		super.loadStateImpl(element);
 

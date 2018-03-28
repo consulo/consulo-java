@@ -19,8 +19,8 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
@@ -59,22 +59,22 @@ public class JavaResolveUtil
 		return scope;
 	}
 
-	public static boolean isAccessible(@NotNull PsiMember member,
+	public static boolean isAccessible(@Nonnull PsiMember member,
 			@Nullable PsiClass memberClass,
 			@Nullable PsiModifierList modifierList,
-			@NotNull PsiElement place,
+			@Nonnull PsiElement place,
 			@Nullable PsiClass accessObjectClass,
 			@Nullable PsiElement fileResolveScope)
 	{
 		return isAccessible(member, memberClass, modifierList, place, accessObjectClass, fileResolveScope, place.getContainingFile());
 	}
 
-	public static boolean isAccessible(@NotNull PsiMember member,
-			@Nullable PsiClass memberClass,
+	public static boolean isAccessible(@Nonnull PsiMember member,
+			@javax.annotation.Nullable PsiClass memberClass,
 			@Nullable PsiModifierList modifierList,
-			@NotNull PsiElement place,
-			@Nullable PsiClass accessObjectClass,
-			@Nullable PsiElement fileResolveScope,
+			@Nonnull PsiElement place,
+			@javax.annotation.Nullable PsiClass accessObjectClass,
+			@javax.annotation.Nullable PsiElement fileResolveScope,
 			@Nullable PsiFile placeFile)
 	{
 		if(modifierList == null || isInJavaDoc(place))
@@ -248,7 +248,7 @@ public class JavaResolveUtil
 		return false;
 	}
 
-	private static PsiClass getTopLevelClass(@NotNull PsiElement place, PsiClass memberClass)
+	private static PsiClass getTopLevelClass(@Nonnull PsiElement place, PsiClass memberClass)
 	{
 		PsiClass lastClass = null;
 		Boolean isAtLeast17 = null;
@@ -301,7 +301,7 @@ public class JavaResolveUtil
 		return true;
 	}
 
-	public static void substituteResults(@NotNull final PsiJavaCodeReferenceElement ref, @NotNull JavaResolveResult[] result)
+	public static void substituteResults(@Nonnull final PsiJavaCodeReferenceElement ref, @Nonnull JavaResolveResult[] result)
 	{
 		if(result.length > 0 && result[0].getElement() instanceof PsiClass)
 		{
@@ -314,7 +314,7 @@ public class JavaResolveUtil
 					PsiSubstitutor substitutor = resolveResult.getSubstitutor();
 					result[i] = new CandidateInfo(resolveResult, substitutor)
 					{
-						@NotNull
+						@Nonnull
 						@Override
 						public PsiSubstitutor getSubstitutor()
 						{
@@ -327,12 +327,12 @@ public class JavaResolveUtil
 		}
 	}
 
-	@NotNull
-	public static <T extends PsiPolyVariantReference> JavaResolveResult[] resolveWithContainingFile(@NotNull T ref,
-			@NotNull ResolveCache.PolyVariantContextResolver<T> resolver,
+	@Nonnull
+	public static <T extends PsiPolyVariantReference> JavaResolveResult[] resolveWithContainingFile(@Nonnull T ref,
+			@Nonnull ResolveCache.PolyVariantContextResolver<T> resolver,
 			boolean needToPreventRecursion,
 			boolean incompleteCode,
-			@NotNull PsiFile containingFile)
+			@Nonnull PsiFile containingFile)
 	{
 		boolean valid = containingFile.isValid();
 		if(!valid)

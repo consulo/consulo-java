@@ -18,7 +18,7 @@ package com.intellij.ide.projectView.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.ide.projectView.SelectableTreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;

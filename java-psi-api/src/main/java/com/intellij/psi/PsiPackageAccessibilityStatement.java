@@ -17,8 +17,8 @@ package com.intellij.psi;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a package access control statement ({@code exports} or {@code opens}) of a Java module declaration.
@@ -35,18 +35,18 @@ public interface PsiPackageAccessibilityStatement extends PsiStatement
 		OPENS
 	}
 
-	@NotNull
+	@Nonnull
 	Role getRole();
 
 	@Nullable
 	PsiJavaCodeReferenceElement getPackageReference();
 
-	@Nullable
+	@javax.annotation.Nullable
 	String getPackageName();
 
-	@NotNull
+	@Nonnull
 	Iterable<PsiJavaModuleReferenceElement> getModuleReferences();
 
-	@NotNull
+	@Nonnull
 	List<String> getModuleNames();
 }

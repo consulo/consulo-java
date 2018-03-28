@@ -17,10 +17,9 @@ package com.siyeh.ig.abstraction;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.CommonProblemDescriptor;
 import com.intellij.codeInspection.GlobalInspectionContext;
@@ -76,13 +75,13 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 	static final Key<SmartPsiElementPointer<PsiClass>> MARKER = Key.create("STATIC_METHOD_USED_IN_ONE_CLASS");
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("static.method.only.used.in.one.class.display.name");
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JComponent createOptionsPanel()
 	{
@@ -93,9 +92,9 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		return panel;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public CommonProblemDescriptor[] checkElement(@NotNull RefEntity refEntity, @NotNull AnalysisScope scope, @NotNull InspectionManager manager, @NotNull GlobalInspectionContext globalContext)
+	public CommonProblemDescriptor[] checkElement(@Nonnull RefEntity refEntity, @Nonnull AnalysisScope scope, @Nonnull InspectionManager manager, @Nonnull GlobalInspectionContext globalContext)
 	{
 		if(!(refEntity instanceof RefMethod))
 		{
@@ -164,8 +163,8 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		return new ProblemDescriptor[]{createProblemDescriptor(manager, psiMethod.getNameIdentifier(), psiClass)};
 	}
 
-	@NotNull
-	static ProblemDescriptor createProblemDescriptor(@NotNull InspectionManager manager, PsiElement problemElement, PsiClass usageClass)
+	@Nonnull
+	static ProblemDescriptor createProblemDescriptor(@Nonnull InspectionManager manager, PsiElement problemElement, PsiClass usageClass)
 	{
 		final String message = (usageClass instanceof PsiAnonymousClass) ? InspectionGadgetsBundle.message("static.method.only.used.in.one.anonymous.class.problem.descriptor", ((PsiAnonymousClass)
 				usageClass).getBaseClassReference().getText()) : InspectionGadgetsBundle.message("static.method.only.used.in.one.class.problem.descriptor", usageClass.getName());
@@ -173,14 +172,14 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 	}
 
 	@Override
-	public boolean queryExternalUsagesRequests(@NotNull final InspectionManager manager,
-			@NotNull final GlobalInspectionContext globalContext,
-			@NotNull final ProblemDescriptionsProcessor problemDescriptionsProcessor)
+	public boolean queryExternalUsagesRequests(@Nonnull final InspectionManager manager,
+			@Nonnull final GlobalInspectionContext globalContext,
+			@Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor)
 	{
 		globalContext.getRefManager().iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@NotNull RefEntity refEntity)
+			public void visitElement(@Nonnull RefEntity refEntity)
 			{
 				if(refEntity instanceof RefMethod)
 				{
@@ -323,7 +322,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		 * @return the class the specified method is used from, or null if it is
 		 * used from 0 or more than 1 other classes.
 		 */
-		@Nullable
+		@javax.annotation.Nullable
 		public PsiClass findUsageClass(final PsiMethod method)
 		{
 			ProgressManager.getInstance().runProcess(() ->
@@ -338,7 +337,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public LocalInspectionTool getSharedLocalInspectionTool()
 	{
@@ -354,7 +353,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		protected String buildErrorString(Object... infos)
 		{
 			final PsiClass usageClass = (PsiClass) infos[0];
@@ -363,7 +362,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		}
 
 		@Override
-		@Nullable
+		@javax.annotation.Nullable
 		protected InspectionGadgetsFix buildFix(Object... infos)
 		{
 			final PsiClass usageClass = (PsiClass) infos[0];
@@ -382,20 +381,20 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public String getFamilyName()
 			{
 				return InspectionGadgetsBundle.message("static.method.only.used.in.one.class.quickfix");
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
 			public RefactoringActionHandler getHandler()
 			{
 				return RefactoringActionHandlerFactory.getInstance().createMoveHandler();
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
 			public DataContext enhanceDataContext(DataContext context)
 			{

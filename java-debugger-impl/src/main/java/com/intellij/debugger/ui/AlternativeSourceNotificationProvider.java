@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 import javax.swing.JList;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.JavaStackFrame;
@@ -71,7 +71,7 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 		myProject = project;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Key<EditorNotificationPanel> getKey()
 	{
@@ -80,7 +80,7 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 
 	@Nullable
 	@Override
-	public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor)
+	public EditorNotificationPanel createNotificationPanel(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor)
 	{
 		if(!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE)
 		{

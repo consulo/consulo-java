@@ -16,8 +16,8 @@
 
 package com.intellij.lang.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -38,7 +38,7 @@ public class JavaImportOptimizer implements ImportOptimizer
 	private static final Logger LOG = Logger.getInstance("#com.intellij.lang.java.JavaImportOptimizer");
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Runnable processFile(final PsiFile file)
 	{
 		if(!(file instanceof PsiJavaFile))
@@ -82,7 +82,7 @@ public class JavaImportOptimizer implements ImportOptimizer
 				}
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public String getUserNotificationInfo()
 			{

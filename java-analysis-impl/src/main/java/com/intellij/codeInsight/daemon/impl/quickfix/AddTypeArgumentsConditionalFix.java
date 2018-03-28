@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -51,14 +51,14 @@ public class AddTypeArgumentsConditionalFix implements IntentionAction
 		myMethod = method;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
 		return "Add explicit type arguments";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -66,7 +66,7 @@ public class AddTypeArgumentsConditionalFix implements IntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		if(mySubstitutor.isValid() && myExpression.isValid() && myMethod.isValid())
 		{
@@ -76,7 +76,7 @@ public class AddTypeArgumentsConditionalFix implements IntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		final PsiTypeParameter[] typeParameters = myMethod.getTypeParameters();
 		final String typeArguments = "<" + StringUtil.join(typeParameters, new Function<PsiTypeParameter, String>()
@@ -125,7 +125,7 @@ public class AddTypeArgumentsConditionalFix implements IntentionAction
 		return true;
 	}
 
-	public static void register(HighlightInfo highlightInfo, PsiExpression expression, @NotNull PsiType lType)
+	public static void register(HighlightInfo highlightInfo, PsiExpression expression, @Nonnull PsiType lType)
 	{
 		if(lType != PsiType.NULL && expression instanceof PsiConditionalExpression)
 		{

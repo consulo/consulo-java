@@ -18,8 +18,8 @@ package com.intellij.openapi.roots.ui.configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.projectWizard.importSources.JavaSourceRootDetectionUtil;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
@@ -48,8 +48,8 @@ public class JavaVfsSourceRootDetectionUtil {
    * @param progressIndicator
    * @return a list of found source roots within directory. If no source roots are found, a empty list is returned.
    */
-  @NotNull
-  public static List<VirtualFile> suggestRoots(@NotNull VirtualFile dir, @NotNull final ProgressIndicator progressIndicator) {
+  @Nonnull
+  public static List<VirtualFile> suggestRoots(@Nonnull VirtualFile dir, @Nonnull final ProgressIndicator progressIndicator) {
     if (!dir.isDirectory()) {
       return ContainerUtil.emptyList();
     }
@@ -58,9 +58,9 @@ public class JavaVfsSourceRootDetectionUtil {
     final ArrayList<VirtualFile> foundDirectories = new ArrayList<VirtualFile>();
     try {
       VfsUtilCore.visitChildrenRecursively(dir, new VirtualFileVisitor() {
-        @NotNull
+        @Nonnull
         @Override
-        public Result visitFileEx(@NotNull VirtualFile file) {
+        public Result visitFileEx(@Nonnull VirtualFile file) {
           progressIndicator.checkCanceled();
 
           if (file.isDirectory()) {

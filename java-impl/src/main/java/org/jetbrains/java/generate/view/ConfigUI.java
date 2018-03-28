@@ -33,7 +33,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.intellij.lang.regexp.RegExpLanguage;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.generate.config.Config;
 import org.jetbrains.java.generate.config.DuplicationPolicy;
 import org.jetbrains.java.generate.config.InsertWhere;
@@ -283,7 +282,7 @@ public class ConfigUI extends JPanel
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String emptyToNull(final String s)
 	{
 		if(s != null && s.length() == 0)

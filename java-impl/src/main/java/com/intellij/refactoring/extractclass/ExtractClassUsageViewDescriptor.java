@@ -20,7 +20,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.psi.MyUsageViewUtil;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {
     private final PsiClass aClass;
@@ -39,7 +39,7 @@ class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {
         return RefactorJBundle.message("extracting.from.class");
     }
 
-    @NotNull
+    @Nonnull
     public PsiElement[] getElements() {
         return new PsiElement[]{aClass};
     }

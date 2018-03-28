@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.intention.AddAnnotationFix;
@@ -55,7 +55,7 @@ public class NullityInferrer
 		myPointerManager = SmartPointerManager.getInstance(project);
 	}
 
-	private boolean expressionIsNeverNull(@Nullable PsiExpression expression)
+	private boolean expressionIsNeverNull(@javax.annotation.Nullable PsiExpression expression)
 	{
 		if(expression == null)
 		{
@@ -77,14 +77,14 @@ public class NullityInferrer
 		return visitor.isSometimesNull();
 	}
 
-	private boolean methodNeverReturnsNull(@NotNull PsiMethod method)
+	private boolean methodNeverReturnsNull(@Nonnull PsiMethod method)
 	{
 		final MethodNeverReturnsNullVisitor visitor = new MethodNeverReturnsNullVisitor();
 		method.accept(visitor);
 		return visitor.getNeverReturnsNull();
 	}
 
-	private boolean variableNeverAssignedNull(@NotNull PsiVariable variable)
+	private boolean variableNeverAssignedNull(@Nonnull PsiVariable variable)
 	{
 		final PsiExpression initializer = variable.getInitializer();
 		if(initializer != null)
@@ -120,7 +120,7 @@ public class NullityInferrer
 		return true;
 	}
 
-	private boolean variableSometimesAssignedNull(@NotNull PsiVariable variable)
+	private boolean variableSometimesAssignedNull(@Nonnull PsiVariable variable)
 	{
 		final PsiExpression initializer = variable.getInitializer();
 		if(initializer != null && expressionIsSometimesNull(initializer))
@@ -149,7 +149,7 @@ public class NullityInferrer
 		return false;
 	}
 
-	public void collect(@NotNull PsiFile file)
+	public void collect(@Nonnull PsiFile file)
 	{
 		int prevNumAnnotationsAdded;
 		int pass = 0;
@@ -246,17 +246,17 @@ public class NullityInferrer
 		return false;
 	}
 
-	private void registerNullableAnnotation(@NotNull PsiModifierListOwner method)
+	private void registerNullableAnnotation(@Nonnull PsiModifierListOwner method)
 	{
 		registerAnnotation(method, true);
 	}
 
-	private void registerNotNullAnnotation(@NotNull PsiModifierListOwner method)
+	private void registerNotNullAnnotation(@Nonnull PsiModifierListOwner method)
 	{
 		registerAnnotation(method, false);
 	}
 
-	private void registerAnnotation(@NotNull PsiModifierListOwner method, boolean isNullable)
+	private void registerAnnotation(@Nonnull PsiModifierListOwner method, boolean isNullable)
 	{
 		final SmartPsiElementPointer<PsiModifierListOwner> methodPointer = myPointerManager.createSmartPsiElementPointer(method);
 		if(isNullable)
@@ -272,7 +272,7 @@ public class NullityInferrer
 
 	private static class NullableUsageInfo extends UsageInfo
 	{
-		private NullableUsageInfo(@NotNull PsiElement element)
+		private NullableUsageInfo(@Nonnull PsiElement element)
 		{
 			super(element);
 		}
@@ -280,7 +280,7 @@ public class NullityInferrer
 
 	private static class NotNullUsageInfo extends UsageInfo
 	{
-		private NotNullUsageInfo(@NotNull PsiElement element)
+		private NotNullUsageInfo(@Nonnull PsiElement element)
 		{
 			super(element);
 		}
@@ -310,13 +310,13 @@ public class NullityInferrer
 		private boolean neverNull = true;
 
 		@Override
-		public void visitLiteralExpression(@NotNull PsiLiteralExpression expression)
+		public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression)
 		{
 			neverNull = !"null".equals(expression.getText());
 		}
 
 		@Override
-		public void visitAssignmentExpression(@NotNull PsiAssignmentExpression expression)
+		public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression)
 		{
 			neverNull = expressionIsNeverNull(expression.getRExpression());
 		}
@@ -327,7 +327,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitConditionalExpression(@NotNull PsiConditionalExpression expression)
+		public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression)
 		{
 			final PsiExpression condition = expression.getCondition();
 			final PsiExpression thenExpression = expression.getThenExpression();
@@ -342,7 +342,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitParenthesizedExpression(@NotNull PsiParenthesizedExpression expression)
+		public void visitParenthesizedExpression(@Nonnull PsiParenthesizedExpression expression)
 		{
 			neverNull = expressionIsNeverNull(expression.getExpression());
 		}
@@ -354,7 +354,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitReferenceExpression(@NotNull PsiReferenceExpression expression)
+		public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression)
 		{
 			final PsiElement referent = expression.resolve();
 			if(referent instanceof PsiVariable)
@@ -370,7 +370,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression)
+		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 		{
 			final PsiMethod method = expression.resolveMethod();
 			neverNull = method != null && isNotNull(method);
@@ -425,13 +425,13 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitLiteralExpression(@NotNull PsiLiteralExpression expression)
+		public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression)
 		{
 			sometimesNull = "null".equals(expression.getText());
 		}
 
 		@Override
-		public void visitAssignmentExpression(@NotNull PsiAssignmentExpression expression)
+		public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression)
 		{
 			sometimesNull = expressionIsSometimesNull(expression.getRExpression());
 		}
@@ -442,7 +442,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitConditionalExpression(@NotNull PsiConditionalExpression expression)
+		public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression)
 		{
 			final PsiExpression condition = expression.getCondition();
 			final PsiExpression thenExpression = expression.getThenExpression();
@@ -457,7 +457,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitReferenceExpression(@NotNull PsiReferenceExpression expression)
+		public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression)
 		{
 			final PsiElement referent = expression.resolve();
 			if(referent instanceof PsiVariable)
@@ -471,7 +471,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression)
+		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 		{
 			final PsiMethod method = expression.resolveMethod();
 			if(method != null)
@@ -502,7 +502,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitReturnStatement(@NotNull PsiReturnStatement statement)
+		public void visitReturnStatement(@Nonnull PsiReturnStatement statement)
 		{
 			super.visitReturnStatement(statement);
 			final PsiExpression value = statement.getReturnValue();
@@ -555,7 +555,7 @@ public class NullityInferrer
 	{
 
 		@Override
-		public void visitMethod(@NotNull PsiMethod method)
+		public void visitMethod(@Nonnull PsiMethod method)
 		{
 			super.visitMethod(method);
 			if(method.isConstructor() || method.getReturnType() instanceof PsiPrimitiveType)
@@ -642,7 +642,7 @@ public class NullityInferrer
 
 
 		@Override
-		public void visitLocalVariable(@NotNull PsiLocalVariable variable)
+		public void visitLocalVariable(@Nonnull PsiLocalVariable variable)
 		{
 			super.visitLocalVariable(variable);
 			if(variable.getType() instanceof PsiPrimitiveType || isNotNull(variable) || isNullable(variable))
@@ -662,7 +662,7 @@ public class NullityInferrer
 
 
 		@Override
-		public void visitParameter(@NotNull PsiParameter parameter)
+		public void visitParameter(@Nonnull PsiParameter parameter)
 		{
 			super.visitParameter(parameter);
 			if(parameter.getType() instanceof PsiPrimitiveType || isNotNull(parameter) || isNullable(parameter))
@@ -854,7 +854,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitField(@NotNull PsiField field)
+		public void visitField(@Nonnull PsiField field)
 		{
 			super.visitField(field);
 			if(field instanceof PsiEnumConstant)

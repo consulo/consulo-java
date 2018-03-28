@@ -23,8 +23,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -34,14 +34,14 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   public boolean ignoreNonEmtpyLoops = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "while.loop.spins.on.field.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "while.loop.spins.on.field.problem.descriptor");
@@ -63,7 +63,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   private class WhileLoopSpinsOnFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitWhileStatement(@NotNull PsiWhileStatement statement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       final PsiStatement body = statement.getBody();
       if (ignoreNonEmtpyLoops && !statementIsEmpty(body)) {
@@ -80,7 +80,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
       registerStatementError(statement);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiField getFieldIfSimpleFieldComparison(PsiExpression condition) {
       condition = PsiUtil.deparenthesizeExpression(condition);
       if (condition == null) {
@@ -117,7 +117,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
       return null;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiField getFieldIfSimpleFieldAccess(PsiExpression expression) {
       expression = PsiUtil.deparenthesizeExpression(expression);
       if (expression == null) {

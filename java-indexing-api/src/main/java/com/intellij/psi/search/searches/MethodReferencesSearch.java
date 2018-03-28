@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.search.searches;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.DumbAwareSearchParameters;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
@@ -56,10 +56,10 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 		private final SearchRequestCollector myOptimizer;
 		private final boolean isSharedOptimizer;
 
-		public SearchParameters(@NotNull PsiMethod method,
-				@NotNull SearchScope scope,
+		public SearchParameters(@Nonnull PsiMethod method,
+				@Nonnull SearchScope scope,
 				boolean strictSignatureSearch,
-				@Nullable SearchRequestCollector optimizer)
+				@javax.annotation.Nullable SearchRequestCollector optimizer)
 		{
 			myMethod = method;
 			myScope = scope;
@@ -69,18 +69,18 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 			myProject = PsiUtilCore.getProjectInReadAction(method);
 		}
 
-		public SearchParameters(@NotNull PsiMethod method, @NotNull SearchScope scope, final boolean strict)
+		public SearchParameters(@Nonnull PsiMethod method, @Nonnull SearchScope scope, final boolean strict)
 		{
 			this(method, scope, strict, null);
 		}
 
-		@NotNull
+		@Nonnull
 		public Project getProject()
 		{
 			return myProject;
 		}
 
-		@NotNull
+		@Nonnull
 		public PsiMethod getMethod()
 		{
 			return myMethod;
@@ -111,13 +111,13 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 		 * #getEffectiveSearchScope()}.
 		 */
 		@Deprecated
-		@NotNull
+		@Nonnull
 		public SearchScope getScope()
 		{
 			return getScopeDeterminedByUser();
 		}
 
-		@NotNull
+		@Nonnull
 		public SearchScope getEffectiveSearchScope()
 		{
 			SearchScope accessScope = PsiSearchHelper.SERVICE.getInstance(myMethod.getProject()).getUseScope(myMethod);
@@ -130,7 +130,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 		super("consulo.java");
 	}
 
-	public static Query<PsiReference> search(@NotNull PsiMethod method,
+	public static Query<PsiReference> search(@Nonnull PsiMethod method,
 			SearchScope scope,
 			final boolean strictSignatureSearch)
 	{
@@ -140,7 +140,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 	public static void searchOptimized(final PsiMethod method,
 			SearchScope scope,
 			final boolean strictSignatureSearch,
-			@NotNull SearchRequestCollector collector,
+			@Nonnull SearchRequestCollector collector,
 			final Processor<PsiReference> processor)
 	{
 		searchOptimized(method, scope, strictSignatureSearch, collector, false, new PairProcessor<PsiReference,
@@ -191,7 +191,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 		return search(method, true);
 	}
 
-	private static UniqueResultsQuery<PsiReference, ReferenceDescriptor> uniqueResults(@NotNull Query<PsiReference>
+	private static UniqueResultsQuery<PsiReference, ReferenceDescriptor> uniqueResults(@Nonnull Query<PsiReference>
 			composite)
 	{
 		return new UniqueResultsQuery<PsiReference, ReferenceDescriptor>(composite, ContainerUtil.<ReferenceDescriptor>canonicalStrategy(), ReferenceDescriptor.MAPPER);

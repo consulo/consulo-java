@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethod;
@@ -52,7 +53,7 @@ class SideEffectFilter implements PreContract
 		return contracts;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	@RequiredReadAction
 	public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body)

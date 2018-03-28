@@ -15,9 +15,9 @@
  */
 package com.intellij.ide.highlighter;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import consulo.java.JavaIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.fileTypes.FileType;
@@ -31,19 +31,19 @@ public class JavaClassFileType implements FileType {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getId() {
     return "CLASS";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDescription() {
     return IdeBundle.message("filetype.description.class");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDefaultExtension() {
     return "class";
   }
@@ -64,7 +64,7 @@ public class JavaClassFileType implements FileType {
   }
 
   @Override
-  public String getCharset(@NotNull VirtualFile file, final byte[] content) {
+  public String getCharset(@Nonnull VirtualFile file, final byte[] content) {
     return null;
   }
 }

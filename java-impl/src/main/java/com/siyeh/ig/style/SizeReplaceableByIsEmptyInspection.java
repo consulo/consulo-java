@@ -35,8 +35,8 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.ui.UiUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,13 +50,13 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   public OrderedSet<String> ignoredTypes = new OrderedSet();
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("size.replaceable.by.isempty.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("expression.can.be.replaced.problem.descriptor", infos[0]);
   }
@@ -85,7 +85,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   private static class SizeReplaceableByIsEmptyFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("size.replaceable.by.isempty.quickfix");
     }
@@ -184,7 +184,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       return null;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private String getIsEmptyCall(PsiMethodCallExpression callExpression) {
       final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
       final String referenceName = methodExpression.getReferenceName();

@@ -17,7 +17,8 @@ package com.intellij.refactoring.move.moveClassesOrPackages;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -27,5 +28,5 @@ public abstract class MoveAllClassesInFileHandler
 	public static ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME =
 			new ExtensionPointName<MoveAllClassesInFileHandler>("consulo.java.refactoring.moveAllClassesInFileHandler");
 
-	public abstract void processMoveAllClassesInFile(@NotNull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove);
+	public abstract void processMoveAllClassesInFile(@Nonnull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove);
 }

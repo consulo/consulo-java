@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassOwner;
@@ -31,19 +31,19 @@ import com.intellij.psi.util.PsiModificationTracker;
 
 public class JavaCodeBlockModificationListener extends PsiTreeChangePreprocessorBase
 {
-	public JavaCodeBlockModificationListener(@NotNull PsiManager psiManager)
+	public JavaCodeBlockModificationListener(@Nonnull PsiManager psiManager)
 	{
 		super(psiManager);
 	}
 
 	@Override
-	protected boolean acceptsEvent(@NotNull PsiTreeChangeEventImpl event)
+	protected boolean acceptsEvent(@Nonnull PsiTreeChangeEventImpl event)
 	{
 		return event.getFile() instanceof PsiClassOwner;
 	}
 
 	@Override
-	protected boolean isOutOfCodeBlock(@NotNull PsiElement element)
+	protected boolean isOutOfCodeBlock(@Nonnull PsiElement element)
 	{
 		for(PsiElement e : SyntaxTraverser.psiApi().parents(element))
 		{
@@ -68,7 +68,7 @@ public class JavaCodeBlockModificationListener extends PsiTreeChangePreprocessor
 	}
 
 	@Override
-	protected boolean isOutOfCodeBlock(@NotNull PsiFileSystemItem file)
+	protected boolean isOutOfCodeBlock(@Nonnull PsiFileSystemItem file)
 	{
 		if(file instanceof PsiModifiableCodeBlock)
 		{
@@ -78,7 +78,7 @@ public class JavaCodeBlockModificationListener extends PsiTreeChangePreprocessor
 	}
 
 	@Override
-	protected void onTreeChanged(@NotNull PsiTreeChangeEventImpl event)
+	protected void onTreeChanged(@Nonnull PsiTreeChangeEventImpl event)
 	{
 		PsiModificationTracker tracker = myPsiManager.getModificationTracker();
 		long cur = tracker.getOutOfCodeBlockModificationCount();

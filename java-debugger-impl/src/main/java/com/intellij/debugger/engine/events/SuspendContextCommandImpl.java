@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine.events;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
@@ -32,7 +32,7 @@ public abstract class SuspendContextCommandImpl extends DebuggerCommandImpl
 
 	private final SuspendContextImpl mySuspendContext;
 
-	protected SuspendContextCommandImpl(@Nullable SuspendContextImpl suspendContext)
+	protected SuspendContextCommandImpl(@javax.annotation.Nullable SuspendContextImpl suspendContext)
 	{
 		mySuspendContext = suspendContext;
 	}
@@ -46,7 +46,7 @@ public abstract class SuspendContextCommandImpl extends DebuggerCommandImpl
 		throw new AbstractMethodError();
 	}
 
-	public void contextAction(@NotNull SuspendContextImpl suspendContext) throws Exception
+	public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
 	{
 		//noinspection deprecation
 		contextAction();

@@ -23,7 +23,8 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -49,7 +50,7 @@ public class FileHeaderChecker
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.defaultFileTemplateUsage.FileHeaderChecker");
 
-	static ProblemDescriptor checkFileHeader(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean onTheFly)
+	static ProblemDescriptor checkFileHeader(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean onTheFly)
 	{
 		TIntObjectHashMap<String> offsetToProperty = new TIntObjectHashMap<>();
 		FileTemplate defaultTemplate = FileTemplateManager.getInstance(file.getProject()).getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
@@ -97,7 +98,7 @@ public class FileHeaderChecker
 		ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix()
 		{
 			@Override
-			public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+			public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 			{
 				PsiElement element = descriptor.getPsiElement();
 				if(element == null)

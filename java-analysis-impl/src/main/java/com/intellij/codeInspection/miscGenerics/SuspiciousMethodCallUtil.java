@@ -20,8 +20,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
 import com.intellij.util.containers.IntArrayList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -86,11 +86,11 @@ public class SuspiciousMethodCallUtil {
   }
 
   @Nullable
-  public static String getSuspiciousMethodCallMessage(@NotNull PsiMethodCallExpression methodCall,
+  public static String getSuspiciousMethodCallMessage(@Nonnull PsiMethodCallExpression methodCall,
                                                       PsiType argType,
                                                       boolean reportConvertibleMethodCalls,
-                                                      @NotNull List<PsiMethod> patternMethods,
-                                                      @NotNull IntArrayList indices) {
+                                                      @Nonnull List<PsiMethod> patternMethods,
+                                                      @Nonnull IntArrayList indices) {
     final PsiReferenceExpression methodExpression = methodCall.getMethodExpression();
     final PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (qualifier == null || qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression) return null;

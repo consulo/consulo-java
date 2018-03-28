@@ -15,11 +15,12 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.psi.PsiCatchSection;
 import com.intellij.psi.PsiCodeBlock;
@@ -46,7 +47,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
   public boolean m_ignoreTestCases = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unused.catch.parameter.display.name");
@@ -66,7 +67,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final boolean namedIgnoreButUsed = ((Boolean)infos[0]).booleanValue();
     if (namedIgnoreButUsed) {
@@ -96,7 +97,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
   private class UnusedCatchParameterVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@NotNull PsiTryStatement statement) {
+    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
       if (m_ignoreTestCases && TestUtils.isInTestCode(statement)) {
         return;

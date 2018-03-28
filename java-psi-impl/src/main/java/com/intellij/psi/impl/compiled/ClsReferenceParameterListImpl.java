@@ -15,11 +15,12 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ClsReferenceParameterListImpl extends ClsElementImpl implements PsiReferenceParameterList {
   @NonNls private static final String EXTENDS_PREFIX = "?extends";
@@ -56,18 +57,18 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) { }
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) { }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException { }
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException { }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiTypeElement[] getTypeParameterElements() {
     return myTypeParameters;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiType[] getTypeArguments() {
     PsiType[] cachedTypes = myTypeParametersCachedTypes;
@@ -81,7 +82,7 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
     return cachedTypes;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiElement[] getChildren() {
     return myTypeParameters;

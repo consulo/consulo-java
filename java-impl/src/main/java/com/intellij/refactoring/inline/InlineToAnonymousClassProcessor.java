@@ -32,8 +32,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -51,7 +50,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
 
   protected InlineToAnonymousClassProcessor(Project project,
                                             PsiClass psiClass,
-                                            @Nullable final PsiCall callToInline,
+                                            @javax.annotation.Nullable final PsiCall callToInline,
                                             boolean inlineThisOnly,
                                             final boolean searchInComments,
                                             final boolean searchInNonJavaFiles) {
@@ -64,12 +63,12 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     mySearchInNonJavaFiles = searchInNonJavaFiles;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InlineViewDescriptor(myClass);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     if (myInlineThisOnly) {
       return new UsageInfo[] { new UsageInfo(myCallToInline) };
@@ -137,7 +136,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
   public MultiMap<PsiElement, String> getConflicts(final UsageInfo[] usages) {
     final MultiMap<PsiElement, String> result = new MultiMap<PsiElement, String>();
     ReferencedElementsCollector collector = new ReferencedElementsCollector() {
-      protected void checkAddMember(@NotNull final PsiMember member) {
+      protected void checkAddMember(@Nonnull final PsiMember member) {
         if (PsiTreeUtil.isAncestor(myClass, member, false)) {
           return;
         }
@@ -283,7 +282,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiClassType getSuperType(final PsiClass aClass) {
     PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
 

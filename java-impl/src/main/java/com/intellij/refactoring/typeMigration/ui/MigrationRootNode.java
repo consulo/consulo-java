@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
@@ -53,7 +53,7 @@ public class MigrationRootNode extends AbstractTreeNode<TypeMigrationLabeler> im
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<? extends AbstractTreeNode> getChildren()
 	{
 		if(myCachedChildren == null)

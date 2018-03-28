@@ -22,8 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -32,13 +31,13 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   @SuppressWarnings("PublicField") public boolean warnOnAllPossiblyLiterals = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("synchronized.on.literal.object.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final String typeText = ((PsiType)infos[0]).getPresentableText();
     final int message = ((Integer)infos[1]).intValue();
@@ -54,7 +53,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("synchronized.on.literal.object.warn.on.all.option"),
@@ -69,7 +68,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   private class SynchronizeOnLiteralVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSynchronizedStatement(@NotNull PsiSynchronizedStatement statement) {
+    public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {

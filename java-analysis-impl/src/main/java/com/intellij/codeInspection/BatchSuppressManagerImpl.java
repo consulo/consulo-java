@@ -20,15 +20,15 @@ import com.intellij.codeInsight.daemon.impl.actions.*;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifierListOwner;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
 public class BatchSuppressManagerImpl implements BatchSuppressManager {
-  @NotNull
+  @Nonnull
   @Override
-  public SuppressQuickFix[] createBatchSuppressActions(@NotNull HighlightDisplayKey displayKey) {
+  public SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey displayKey) {
     return new SuppressQuickFix[] {
         new SuppressByJavaCommentFix(displayKey),
         new SuppressLocalWithCommentFix(displayKey),
@@ -41,53 +41,53 @@ public class BatchSuppressManagerImpl implements BatchSuppressManager {
   }
 
   @Override
-  public boolean isSuppressedFor(@NotNull final PsiElement element, final String toolId) {
+  public boolean isSuppressedFor(@Nonnull final PsiElement element, final String toolId) {
     return JavaSuppressionUtil.getElementToolSuppressedIn(element, toolId) != null;
   }
 
   @Override
   @Nullable
-  public PsiElement getElementMemberSuppressedIn(@NotNull final PsiDocCommentOwner owner, final String inspectionToolID) {
+  public PsiElement getElementMemberSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
     return JavaSuppressionUtil.getElementMemberSuppressedIn(owner, inspectionToolID);
   }
 
   @Override
   @Nullable
-  public PsiElement getAnnotationMemberSuppressedIn(@NotNull final PsiModifierListOwner owner, final String inspectionToolID) {
+  public PsiElement getAnnotationMemberSuppressedIn(@Nonnull final PsiModifierListOwner owner, final String inspectionToolID) {
     return JavaSuppressionUtil.getAnnotationMemberSuppressedIn(owner, inspectionToolID);
   }
 
   @Override
   @Nullable
-  public PsiElement getDocCommentToolSuppressedIn(@NotNull final PsiDocCommentOwner owner, final String inspectionToolID) {
+  public PsiElement getDocCommentToolSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
     return JavaSuppressionUtil.getDocCommentToolSuppressedIn(owner, inspectionToolID);
   }
 
   @Override
-  @NotNull
-  public Collection<String> getInspectionIdsSuppressedInAnnotation(@NotNull final PsiModifierListOwner owner) {
+  @Nonnull
+  public Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull final PsiModifierListOwner owner) {
     return JavaSuppressionUtil.getInspectionIdsSuppressedInAnnotation(owner);
   }
 
   @Override
   @Nullable
-  public String getSuppressedInspectionIdsIn(@NotNull PsiElement element) {
+  public String getSuppressedInspectionIdsIn(@Nonnull PsiElement element) {
     return JavaSuppressionUtil.getSuppressedInspectionIdsIn(element);
   }
 
   @Override
-  @Nullable
-  public PsiElement getElementToolSuppressedIn(@NotNull final PsiElement place, final String toolId) {
+  @javax.annotation.Nullable
+  public PsiElement getElementToolSuppressedIn(@Nonnull final PsiElement place, final String toolId) {
     return JavaSuppressionUtil.getElementToolSuppressedIn(place, toolId);
   }
 
   @Override
-  public boolean canHave15Suppressions(@NotNull final PsiElement file) {
+  public boolean canHave15Suppressions(@Nonnull final PsiElement file) {
     return JavaSuppressionUtil.canHave15Suppressions(file);
   }
 
   @Override
-  public boolean alreadyHas14Suppressions(@NotNull final PsiDocCommentOwner commentOwner) {
+  public boolean alreadyHas14Suppressions(@Nonnull final PsiDocCommentOwner commentOwner) {
     return JavaSuppressionUtil.alreadyHas14Suppressions(commentOwner);
   }
 }

@@ -15,13 +15,14 @@
  */
 package com.siyeh.ig.naming;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiTypeParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
 
 public class TypeParameterNamingConventionInspection
   extends ConventionInspection {
@@ -29,7 +30,7 @@ public class TypeParameterNamingConventionInspection
   private static final int DEFAULT_MIN_LENGTH = 1;
   private static final int DEFAULT_MAX_LENGTH = 1;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.parameter.naming.convention.display.name");
@@ -43,7 +44,7 @@ public class TypeParameterNamingConventionInspection
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String parameterName = (String)infos[0];
     if (parameterName.length() < getMinLength()) {

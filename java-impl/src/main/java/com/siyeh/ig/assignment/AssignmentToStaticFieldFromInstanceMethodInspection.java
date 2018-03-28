@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.assignment;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -22,18 +24,17 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.WellFormednessUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class AssignmentToStaticFieldFromInstanceMethodInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.to.static.field.from.instance.method.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.to.static.field.from.instance.method.problem.descriptor");
@@ -48,7 +49,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;
       }
@@ -58,7 +59,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
     @Override
     public void visitPrefixExpression(
-      @NotNull PsiPrefixExpression expression) {
+      @Nonnull PsiPrefixExpression expression) {
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
           !tokenType.equals(JavaTokenType.MINUSMINUS)) {
@@ -73,7 +74,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
     @Override
     public void visitPostfixExpression(
-      @NotNull PsiPostfixExpression expression) {
+      @Nonnull PsiPostfixExpression expression) {
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
           !tokenType.equals(JavaTokenType.MINUSMINUS)) {

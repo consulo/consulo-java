@@ -20,7 +20,8 @@
  */
 package com.intellij.codeInsight.generation;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
 
@@ -28,6 +29,6 @@ public interface OverrideImplementsAnnotationsHandler {
   ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME = ExtensionPointName.create("consulo.java.overrideImplementsAnnotationsHandler");
 
   String[] getAnnotations(Project project);
-  @NotNull
-  String [] annotationsToRemove(Project project, @NotNull String fqName);
+  @Nonnull
+  String [] annotationsToRemove(Project project, @Nonnull String fqName);
 }

@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.MemberImplementorExplorer;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -29,20 +30,20 @@ public class OverrideImplementExploreUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.OverrideImplementExploreUtil");
 
-	@NotNull
+	@Nonnull
 	public static Collection<CandidateInfo> getMethodsToOverrideImplement(PsiClass aClass, boolean toImplement)
 	{
 		return getMapToOverrideImplement(aClass, toImplement).values();
 	}
 
-	@NotNull
-	public static Collection<MethodSignature> getMethodSignaturesToImplement(@NotNull PsiClass aClass)
+	@Nonnull
+	public static Collection<MethodSignature> getMethodSignaturesToImplement(@Nonnull PsiClass aClass)
 	{
 		return getMapToOverrideImplement(aClass, true).keySet();
 	}
 
-	@NotNull
-	public static Collection<MethodSignature> getMethodSignaturesToOverride(@NotNull PsiClass aClass)
+	@Nonnull
+	public static Collection<MethodSignature> getMethodSignaturesToOverride(@Nonnull PsiClass aClass)
 	{
 		if(aClass.isAnnotationType())
 		{
@@ -51,13 +52,13 @@ public class OverrideImplementExploreUtil
 		return getMapToOverrideImplement(aClass, false).keySet();
 	}
 
-	@NotNull
+	@Nonnull
 	public static Map<MethodSignature, CandidateInfo> getMapToOverrideImplement(PsiClass aClass, boolean toImplement)
 	{
 		return getMapToOverrideImplement(aClass, toImplement, true);
 	}
 
-	@NotNull
+	@Nonnull
 	public static Map<MethodSignature, CandidateInfo> getMapToOverrideImplement(PsiClass aClass, boolean toImplement, boolean skipImplemented)
 	{
 		Map<MethodSignature, PsiMethod> abstracts = new LinkedHashMap<MethodSignature, PsiMethod>();

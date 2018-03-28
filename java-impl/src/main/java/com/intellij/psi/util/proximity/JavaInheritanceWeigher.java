@@ -18,9 +18,9 @@ package com.intellij.psi.util.proximity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -42,7 +42,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher
 {
 	private static final NotNullLazyKey<Set<String>, ProximityLocation> PLACE_SUPER_CLASSES = NotNullLazyKey.create("PLACE_SUPER_CLASSES", new NotNullFunction<ProximityLocation, Set<String>>()
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public Set<String> fun(ProximityLocation location)
 		{
@@ -63,7 +63,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher
 	});
 
 	@Override
-	public Comparable weigh(@NotNull final PsiElement element, @NotNull final ProximityLocation location)
+	public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location)
 	{
 		if(location.getPosition() == null || !(element instanceof PsiClass))
 		{
@@ -100,7 +100,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiClass findPlaceClass(PsiElement element, PsiElement position)
 	{
 		if(position.getParent() instanceof PsiReferenceExpression)
@@ -122,7 +122,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher
 		return PsiTreeUtil.getContextOfType(element, PsiClass.class, false);
 	}
 
-	private static boolean isTooGeneral(@Nullable final PsiClass element)
+	private static boolean isTooGeneral(@javax.annotation.Nullable final PsiClass element)
 	{
 		if(element == null)
 		{

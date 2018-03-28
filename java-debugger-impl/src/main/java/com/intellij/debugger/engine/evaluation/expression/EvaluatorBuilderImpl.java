@@ -26,8 +26,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
@@ -72,7 +72,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 		return ourInstance;
 	}
 
-	public static ExpressionEvaluator build(final TextWithImports text, @Nullable PsiElement contextElement, @Nullable final SourcePosition position, @NotNull Project project) throws
+	public static ExpressionEvaluator build(final TextWithImports text, @Nullable PsiElement contextElement, @Nullable final SourcePosition position, @Nonnull Project project) throws
 			EvaluateException
 	{
 		CodeFragmentFactory factory = DebuggerUtilsEx.findAppropriateCodeFragmentFactory(text, contextElement);
@@ -529,9 +529,9 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 		private static Evaluator createBinaryEvaluator(Evaluator lResult,
 				PsiType lType,
 				Evaluator rResult,
-				@NotNull PsiType rType,
-				@NotNull IElementType operation,
-				@NotNull PsiType expressionExpectedType)
+				@Nonnull PsiType rType,
+				@Nonnull IElementType operation,
+				@Nonnull PsiType expressionExpectedType)
 		{
 			// handle unboxing if necessary
 			if(isUnboxingInBinaryExpressionApplicable(lType, rType, operation))

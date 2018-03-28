@@ -19,7 +19,7 @@
  */
 package com.intellij.internal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -58,7 +58,7 @@ public class StaticIconFieldsAction extends AnAction {
 
     ProgressManager.getInstance().run(new Task.Backgroundable(project, "Searching icons usages") {
       @Override
-      public void run(@NotNull ProgressIndicator indicator) {
+      public void run(@Nonnull ProgressIndicator indicator) {
         JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
         GlobalSearchScope all = GlobalSearchScope.allScope(project);
         PsiClass allIcons = facade.findClass("com.intellij.icons.AllIcons", all);

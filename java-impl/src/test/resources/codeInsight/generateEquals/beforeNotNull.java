@@ -1,3 +1,6 @@
+import javax.annotation.Nonnull;
+
 class Test {
-    @org.jetbrains.annotations.NotNull Object d;
+    @Nonnull
+	Object d;
 }

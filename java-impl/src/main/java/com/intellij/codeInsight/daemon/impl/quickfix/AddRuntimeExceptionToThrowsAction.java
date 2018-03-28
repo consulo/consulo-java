@@ -17,7 +17,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
@@ -46,13 +47,13 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("add.runtime.exception.to.throws.text");
   }
 
   @Override
-  public void invoke(@NotNull final Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     PsiDocumentManager.getInstance(project).commitAllDocuments();
@@ -75,7 +76,7 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     PsiClassType exception = getRuntimeExceptionAtCaret(editor, file);
     if (exception == null) return false;
@@ -106,7 +107,7 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
 
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("add.runtime.exception.to.throws.family");
   }

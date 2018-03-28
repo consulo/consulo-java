@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -23,7 +25,6 @@ import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiExpressionListImpl extends CompositePsiElement implements PsiExpressionList {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiExpressionListImpl");
@@ -33,13 +34,13 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiExpression[] getExpressions() {
     return getChildrenAsPsiElements(ElementType.EXPRESSION_BIT_SET, PsiExpression.ARRAY_FACTORY);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getExpressionTypes() {
     PsiExpression[] expressions = getExpressions();
     PsiType[] types = new PsiType[expressions.length];
@@ -146,7 +147,7 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
       ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
       if (next != null && next.getElementType() == JavaTokenType.COMMA) {
@@ -163,7 +164,7 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitExpressionList(this);
     }

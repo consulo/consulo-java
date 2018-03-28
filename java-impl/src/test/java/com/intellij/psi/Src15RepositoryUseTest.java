@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileFilter;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -329,7 +329,7 @@ public class Src15RepositoryUseTest extends PsiTestCase {
     getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
   }
 
-  @NotNull
+  @Nonnull
   private PsiClass findClass(final String name) {
     PsiClass aClass = myJavaFacade.findClass(name, GlobalSearchScope.moduleScope(myModule));
     assertNotNull(name, aClass);

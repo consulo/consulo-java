@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents the call of a Java method or constructor.
@@ -29,7 +29,7 @@ public interface PsiCallExpression extends PsiExpression, PsiCall {
    *
    * @return the type argument list, or an empty list if no type arguments are specified.
    */
-  @NotNull
+  @Nonnull
   PsiReferenceParameterList getTypeArgumentList();
 
   /**
@@ -37,6 +37,6 @@ public interface PsiCallExpression extends PsiExpression, PsiCall {
    *
    * @return the array of type arguments, or an empty array if no type arguments are specified.
    */
-  @NotNull
+  @Nonnull
   PsiType[] getTypeArguments();
 }

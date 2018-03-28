@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -190,7 +189,7 @@ public final class EnumerationChildrenRenderer extends TypeRenderer implements C
 		myChildren = children;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static EnumerationChildrenRenderer getCurrent(ValueDescriptorImpl valueDescriptor)
 	{
 		Renderer renderer = valueDescriptor.getLastRenderer();

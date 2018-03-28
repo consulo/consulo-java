@@ -21,7 +21,7 @@ import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -30,11 +30,11 @@ import java.util.List;
  */
 public class JavaReferenceImporter implements ReferenceImporter {
   @Override
-  public boolean autoImportReferenceAtCursor(@NotNull final Editor editor, @NotNull final PsiFile file) {
+  public boolean autoImportReferenceAtCursor(@Nonnull final Editor editor, @Nonnull final PsiFile file) {
     return autoImportReferenceAtCursor(editor, file, false);
   }
 
-  public static boolean autoImportReferenceAtCursor(@NotNull Editor editor, @NotNull PsiFile file, final boolean allowCaretNearRef) {
+  public static boolean autoImportReferenceAtCursor(@Nonnull Editor editor, @Nonnull PsiFile file, final boolean allowCaretNearRef) {
     if (!file.getViewProvider().getLanguages().contains(JavaLanguage.INSTANCE)) {
       return false;
     }
@@ -60,7 +60,7 @@ public class JavaReferenceImporter implements ReferenceImporter {
   }
 
   @Override
-  public boolean autoImportReferenceAt(@NotNull Editor editor, @NotNull PsiFile file, int offset) {
+  public boolean autoImportReferenceAt(@Nonnull Editor editor, @Nonnull PsiFile file, int offset) {
     if (!file.getViewProvider().getLanguages().contains(JavaLanguage.INSTANCE)) {
       return false;
     }

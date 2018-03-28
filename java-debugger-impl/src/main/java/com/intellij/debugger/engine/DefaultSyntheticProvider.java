@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import consulo.internal.com.sun.jdi.TypeComponent;
 import consulo.internal.com.sun.jdi.VirtualMachine;
@@ -26,12 +27,12 @@ import consulo.internal.com.sun.jdi.VirtualMachine;
 public class DefaultSyntheticProvider implements SyntheticTypeComponentProvider
 {
 	@Override
-	public boolean isSynthetic(@NotNull TypeComponent typeComponent)
+	public boolean isSynthetic(@Nonnull TypeComponent typeComponent)
 	{
 		return checkIsSynthetic(typeComponent);
 	}
 
-	public static boolean checkIsSynthetic(@NotNull TypeComponent typeComponent)
+	public static boolean checkIsSynthetic(@Nonnull TypeComponent typeComponent)
 	{
 		String name = typeComponent.name();
 		if(DebuggerUtilsEx.isLambdaName(name))

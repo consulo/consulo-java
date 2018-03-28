@@ -20,17 +20,17 @@ import com.intellij.psi.PsiField;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ConstantDeclaredInInterfaceInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.declared.in.interface.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "constant.declared.in.interface.problem.descriptor");
@@ -44,7 +44,7 @@ public class ConstantDeclaredInInterfaceInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       //no call to super, so we don't drill into anonymous classes
       final PsiClass containingClass = field.getContainingClass();
       if (containingClass == null) {

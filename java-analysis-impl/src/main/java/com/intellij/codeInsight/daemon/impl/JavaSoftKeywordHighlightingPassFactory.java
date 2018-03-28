@@ -16,8 +16,8 @@
 
 package com.intellij.codeInsight.daemon.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.codeHighlighting.TextEditorHighlightingPassFactory;
 import com.intellij.codeHighlighting.TextEditorHighlightingPassRegistrar;
@@ -40,9 +40,9 @@ public class JavaSoftKeywordHighlightingPassFactory extends AbstractProjectCompo
 		registrar.registerTextEditorHighlightingPass(this, null, null, false, -1);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public TextEditorHighlightingPass createHighlightingPass(@NotNull PsiFile file, @NotNull Editor editor)
+	public TextEditorHighlightingPass createHighlightingPass(@Nonnull PsiFile file, @Nonnull Editor editor)
 	{
 		if(file instanceof PsiJavaFile && ((PsiJavaFile) file).getLanguageLevel().isAtLeast(LanguageLevel.JDK_1_9))
 		{

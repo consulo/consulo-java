@@ -30,8 +30,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.diagnostic.logging.OutputFileUtil;
 import com.intellij.execution.configurations.*;
@@ -118,24 +118,24 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 		super(environment);
 	}
 
-	@NotNull
+	@Nonnull
 	protected abstract String getFrameworkName();
 
-	@NotNull
+	@Nonnull
 	protected abstract String getFrameworkId();
 
 	protected abstract void passTempFile(ParametersList parametersList, String tempFilePath);
 
-	@NotNull
+	@Nonnull
 	protected abstract T getConfiguration();
 
-	@Nullable
+	@javax.annotation.Nullable
 	protected abstract TestSearchScope getScope();
 
-	@NotNull
+	@Nonnull
 	protected abstract String getForkMode();
 
-	@NotNull
+	@Nonnull
 	protected abstract OSProcessHandler createHandler(Executor executor) throws ExecutionException;
 
 	public SearchForTestsTask createSearchingForTestsTask()
@@ -165,9 +165,9 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 		return commandLine;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException
+	public ExecutionResult execute(@Nonnull Executor executor, @Nonnull ProgramRunner runner) throws ExecutionException
 	{
 		final RunnerSettings runnerSettings = getRunnerSettings();
 
@@ -195,7 +195,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 		handler.addProcessListener(new ProcessAdapter()
 		{
 			@Override
-			public void startNotified(@NotNull ProcessEvent event)
+			public void startNotified(@Nonnull ProcessEvent event)
 			{
 				if(getConfiguration().isSaveOutputToFile())
 				{
@@ -205,7 +205,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 			}
 
 			@Override
-			public void processTerminated(@NotNull ProcessEvent event)
+			public void processTerminated(@Nonnull ProcessEvent event)
 			{
 				Runnable runnable = () ->
 				{
@@ -300,7 +300,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 
 	private ServerSocket myForkSocket = null;
 
-	@Nullable
+	@javax.annotation.Nullable
 	public ServerSocket getForkSocket()
 	{
 		if(myForkSocket == null && (!Comparing.strEqual(getForkMode(), "none") || forkPerModule()) && getRunnerSettings() != null)

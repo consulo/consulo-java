@@ -20,7 +20,7 @@ import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.filters.FilterUtil;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 
 /**

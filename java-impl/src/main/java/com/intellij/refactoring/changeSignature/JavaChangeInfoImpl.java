@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
@@ -80,7 +80,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
                     PsiMethod method,
                     String newName,
                     CanonicalTypes.Type newType,
-                    @NotNull ParameterInfoImpl[] newParms,
+                    @Nonnull ParameterInfoImpl[] newParms,
                     ThrownExceptionInfo[] newExceptions,
                     boolean generateDelegate,
                     Set<PsiMethod> propagateParametersMethods,
@@ -97,7 +97,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
                             PsiMethod method,
                             String newName,
                             CanonicalTypes.Type newType,
-                            @NotNull ParameterInfoImpl[] newParms,
+                            @Nonnull ParameterInfoImpl[] newParms,
                             ThrownExceptionInfo[] newExceptions,
                             boolean generateDelegate,
                             Set<PsiMethod> propagateParametersMethods,
@@ -222,7 +222,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     }
   }
 
-  @NotNull
+  @Nonnull
   public JavaParameterInfo[] getNewParameters() {
     return newParms;
   }
@@ -303,7 +303,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     return result.toArray(new ParameterInfoImpl[result.size()]);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiExpression getValue(int i, PsiCallExpression expr) throws IncorrectOperationException {
     if (defaultValues[i] != null) return defaultValues[i];
     return newParms[i].getValue(expr);
@@ -349,12 +349,12 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     return isGenerateDelegate;
   }
 
-  @NotNull
+  @Nonnull
   public String[] getOldParameterNames() {
     return oldParameterNames;
   }
 
-  @NotNull
+  @Nonnull
   public String[] getOldParameterTypes() {
     return oldParameterTypes;
   }

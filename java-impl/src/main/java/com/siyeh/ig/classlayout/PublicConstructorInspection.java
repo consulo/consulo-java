@@ -16,9 +16,11 @@
 
 package com.siyeh.ig.classlayout;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -46,14 +48,14 @@ public class PublicConstructorInspection extends BaseInspection
 {
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("public.constructor.display.name");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String buildErrorString(Object... infos)
 	{
@@ -83,7 +85,7 @@ public class PublicConstructorInspection extends BaseInspection
 	private class ReplaceConstructorWithFactoryMethodFix extends InspectionGadgetsFix
 	{
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getName()
 		{

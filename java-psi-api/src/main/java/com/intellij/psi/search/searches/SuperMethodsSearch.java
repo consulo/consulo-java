@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.search.searches;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
@@ -31,7 +31,8 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
   public static class SearchParameters {
     private final PsiMethod myMethod;
     //null means any class would be matched
-    @Nullable private final PsiClass myClass;
+    @javax.annotation.Nullable
+	private final PsiClass myClass;
     private final boolean myCheckBases;
     private final boolean myAllowStaticMethod;
 
@@ -67,7 +68,7 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
     super("consulo.java");
   }
 
-  public static Query<MethodSignatureBackedByPsiMethod> search(final PsiMethod derivedMethod, @Nullable final PsiClass psiClass, boolean checkBases, boolean allowStaticMethod) {
+  public static Query<MethodSignatureBackedByPsiMethod> search(final PsiMethod derivedMethod, @javax.annotation.Nullable final PsiClass psiClass, boolean checkBases, boolean allowStaticMethod) {
     final SearchParameters parameters = new SearchParameters(derivedMethod, psiClass, checkBases, allowStaticMethod);
     return SUPER_METHODS_SEARCH_INSTANCE.createUniqueResultsQuery(parameters, MethodSignatureUtil.METHOD_BASED_HASHING_STRATEGY);
   }

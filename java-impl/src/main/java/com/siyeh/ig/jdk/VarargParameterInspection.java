@@ -28,27 +28,27 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
 public class VarargParameterInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "VariableArgumentMethod";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("variable.argument.method.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("variable.argument.method.problem.descriptor");
   }
@@ -61,7 +61,7 @@ public class VarargParameterInspection extends BaseInspection {
 
   private static class VarargParameterFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("variable.argument.method.quickfix");
     }
@@ -148,7 +148,7 @@ public class VarargParameterInspection extends BaseInspection {
   private static class VarargParameterVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() < 1) {
         return;

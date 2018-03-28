@@ -15,10 +15,11 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Maxim.Medvedev
@@ -26,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 public class JavaExpressionWrapper implements IntroduceParameterData.ExpressionWrapper {
   private final PsiExpression myExpression;
 
-  public JavaExpressionWrapper(@NotNull PsiExpression expression) {
+  public JavaExpressionWrapper(@Nonnull PsiExpression expression) {
     myExpression = expression;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return myExpression.getText();
@@ -41,7 +42,7 @@ public class JavaExpressionWrapper implements IntroduceParameterData.ExpressionW
     return myExpression.getType();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiElement getExpression() {
     return myExpression;

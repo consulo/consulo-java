@@ -17,7 +17,8 @@ package com.intellij.psi.impl.search;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
@@ -41,7 +42,7 @@ public class MethodSuperSearcher implements QueryExecutor<MethodSignatureBackedB
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.MethodSuperSearcher");
 
 	@Override
-	public boolean execute(@NotNull final SuperMethodsSearch.SearchParameters queryParameters, @NotNull final Processor<MethodSignatureBackedByPsiMethod> consumer)
+	public boolean execute(@Nonnull final SuperMethodsSearch.SearchParameters queryParameters, @Nonnull final Processor<MethodSignatureBackedByPsiMethod> consumer)
 	{
 		final PsiClass parentClass = queryParameters.getPsiClass();
 		final PsiMethod method = queryParameters.getMethod();

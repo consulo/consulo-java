@@ -21,9 +21,11 @@
  */
 package com.intellij.debugger.engine;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.jdi.StackFrameProxy;
@@ -61,7 +63,7 @@ public class RequestHint
 	private final int myFrameCount;
 	private boolean mySteppedOut = false;
 
-	@Nullable
+	@javax.annotation.Nullable
 	private final MethodFilter myMethodFilter;
 	private boolean myTargetMethodMatched = false;
 
@@ -69,7 +71,7 @@ public class RequestHint
 	private boolean myResetIgnoreFilters = false;
 	private boolean myRestoreBreakpoints = false;
 
-	public RequestHint(final ThreadReferenceProxyImpl stepThread, final SuspendContextImpl suspendContext, @NotNull MethodFilter methodFilter)
+	public RequestHint(final ThreadReferenceProxyImpl stepThread, final SuspendContextImpl suspendContext, @Nonnull MethodFilter methodFilter)
 	{
 		this(stepThread, suspendContext, StepRequest.STEP_LINE, StepRequest.STEP_INTO, methodFilter);
 	}
@@ -96,7 +98,7 @@ public class RequestHint
 					StepRequest.STEP_OVER,
 					StepRequest.STEP_OUT
 			}) int depth,
-			@Nullable MethodFilter methodFilter)
+			@javax.annotation.Nullable MethodFilter methodFilter)
 	{
 		mySize = stepSize;
 		myDepth = depth;
@@ -125,7 +127,7 @@ public class RequestHint
 				}
 
 				@Override
-				@NotNull
+				@Nonnull
 				public DebugProcess getDebugProcess()
 				{
 					return suspendContext.getDebugProcess();

@@ -15,24 +15,25 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.ex.InspectionToolWrapper;
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 
 public class RemoveRedundantUncheckedSuppressionTest extends LightQuickFixTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     final PossibleHeapPollutionVarargsInspection varargsInspection = new PossibleHeapPollutionVarargsInspection();
     final UncheckedWarningLocalInspection warningLocalInspection = new UncheckedWarningLocalInspection();
     final RedundantSuppressInspection inspection = new RedundantSuppressInspection(){
       @Override
-      protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, @NotNull InspectionManager manager) {
+      protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, @Nonnull InspectionManager manager) {
         return new InspectionToolWrapper[]{
           new LocalInspectionToolWrapper(varargsInspection),
           new LocalInspectionToolWrapper(warningLocalInspection)
@@ -43,30 +44,30 @@ public class RemoveRedundantUncheckedSuppressionTest extends LightQuickFixTestCa
     return new LocalInspectionTool[] {
       new LocalInspectionTool() {
         @Nls
-        @NotNull
+        @Nonnull
         @Override
         public String getGroupDisplayName() {
           return inspection.getGroupDisplayName();
         }
 
         @Nls
-        @NotNull
+        @Nonnull
         @Override
         public String getDisplayName() {
           return inspection.getDisplayName();
         }
 
-        @NotNull
+        @Nonnull
         @Override
         public String getShortName() {
           return inspection.getShortName();
         }
 
-        @NotNull
+        @Nonnull
         @Override
-        public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder,
+        public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
                                               boolean isOnTheFly,
-                                              @NotNull LocalInspectionToolSession session) {
+                                              @Nonnull LocalInspectionToolSession session) {
           return new JavaElementVisitor() {
             @Override
             public void visitClass(PsiClass aClass) {

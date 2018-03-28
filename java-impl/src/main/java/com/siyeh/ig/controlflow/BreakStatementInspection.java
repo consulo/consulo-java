@@ -15,21 +15,22 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class BreakStatementInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("break.statement.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "statement.problem.descriptor");
@@ -43,7 +44,7 @@ public class BreakStatementInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitBreakStatement(@NotNull PsiBreakStatement statement) {
+    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
       super.visitBreakStatement(statement);
       final PsiSwitchStatement switchStatement =
         PsiTreeUtil.getParentOfType(statement,

@@ -30,8 +30,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -46,7 +46,7 @@ public class JUnitRuleInspection extends BaseInspection {
   public boolean REPORT_CLASS_RULE_PROBLEMS = true;
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("junit.rule.display.name");
@@ -61,7 +61,7 @@ public class JUnitRuleInspection extends BaseInspection {
     return panel;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return (String)infos[0];
@@ -143,7 +143,7 @@ public class JUnitRuleInspection extends BaseInspection {
       }
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return myName;

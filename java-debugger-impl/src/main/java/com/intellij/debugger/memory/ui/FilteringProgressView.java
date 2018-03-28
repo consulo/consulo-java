@@ -18,8 +18,8 @@ package com.intellij.debugger.memory.ui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.memory.filtering.FilteringResult;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.JBProgressBar;
@@ -55,7 +55,7 @@ class FilteringProgressView extends BorderLayoutPanel
 		addToCenter(myProgressPanel);
 	}
 
-	void addStopActionListener(@NotNull Runnable listener)
+	void addStopActionListener(@Nonnull Runnable listener)
 	{
 		myStopButton.addMouseListener(new MouseAdapter()
 		{
@@ -90,7 +90,7 @@ class FilteringProgressView extends BorderLayoutPanel
 		setProgressBarVisible(true);
 	}
 
-	void complete(@NotNull FilteringResult reason)
+	void complete(@Nonnull FilteringResult reason)
 	{
 		if(!myIsInProcess)
 		{

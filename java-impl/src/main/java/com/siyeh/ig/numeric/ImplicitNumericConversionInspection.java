@@ -31,8 +31,8 @@ import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import gnu.trove.TObjectIntHashMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -63,7 +63,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   public boolean ignoreConstantConversions = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("implicit.numeric.conversion.display.name");
   }
@@ -81,7 +81,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[1];
     final PsiType expectedType = (PsiType)infos[2];
@@ -112,7 +112,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       }
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return m_name;
     }
@@ -220,7 +220,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       return operand instanceof PsiLiteralExpression;
     }
 
-    private static boolean isIntegral(@Nullable PsiType expressionType) {
+    private static boolean isIntegral(@javax.annotation.Nullable PsiType expressionType) {
       return PsiType.INT.equals(expressionType) || PsiType.LONG.equals(expressionType);
     }
 

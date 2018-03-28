@@ -1,26 +1,29 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 class B {
-    public void f(@NotNull String p){}
-    @NotNull
-    public String nn(@Nullable String param) {
+    public void f(@Nonnull String p){}
+    @Nonnull
+    public String nn(@javax.annotation.Nullable String param) {
         return "";
     }
 }
          
 public class Y extends B {
-    @NotNull @Nullable String s;
+    @Nonnull
+	@javax.annotation.Nullable
+	String s;
     public void f(String p){}
        
           
-    public String nn(@NotNull String param) { 
+    public String nn(@Nonnull String param) {
         return "";
     }
-    void p(@NotNull @Nullable String p2){}
+    void p(@Nonnull @javax.annotation.Nullable String p2){}
 
 
-    @Nullable int f;
-    @NotNull void vf(){}
-    void t(@NotNull double d){}
+    @javax.annotation.Nullable
+	int f;
+    @Nonnull
+	void vf(){}
+    void t(@Nonnull double d){}
 }

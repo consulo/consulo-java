@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
@@ -206,7 +205,7 @@ public class ExtractSuperClassUtil {
     return factory.createReferenceElementByType(type);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiTypeParameter findTypeParameterInDerived(final PsiClass aClass, final String name) {
     for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(aClass)) {
       if (name.equals(typeParameter.getName())) return typeParameter;

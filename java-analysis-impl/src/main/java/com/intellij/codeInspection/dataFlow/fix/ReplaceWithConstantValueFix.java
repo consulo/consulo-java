@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow.fix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -40,14 +41,14 @@ public class ReplaceWithConstantValueFix implements LocalQuickFix
 		myReplacementText = replacementText;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
 		return "Replace with '" + myPresentableName + "'";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -55,7 +56,7 @@ public class ReplaceWithConstantValueFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		PsiElement problemElement = descriptor.getPsiElement();
 		if(problemElement == null)

@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -63,7 +64,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiJavaCodeReferenceElement getBaseClassReference()
 	{
 		final PsiElement baseRef = getFirstChild();
@@ -72,7 +73,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClassType getBaseClassType()
 	{
 		final PsiClassStub stub = getGreenStub();
@@ -152,7 +153,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		return name.equals(PsiModifier.FINAL);
 	}
@@ -206,7 +207,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -224,7 +225,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		if(lastParent instanceof PsiExpressionList)
 		{

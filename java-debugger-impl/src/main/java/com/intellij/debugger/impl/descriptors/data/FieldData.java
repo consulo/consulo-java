@@ -19,13 +19,13 @@ import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public final class FieldData extends DescriptorData<FieldDescriptorImpl>{
   private final ObjectReference myObjRef;
   private final Field myField;
 
-  public FieldData(@NotNull ObjectReference objRef, @NotNull Field field) {
+  public FieldData(@Nonnull ObjectReference objRef, @Nonnull Field field) {
     myObjRef = objRef;
     myField = field;
   }

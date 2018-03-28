@@ -19,7 +19,6 @@ package consulo.java.compiler.bytecodeProcessing;
 import java.io.File;
 import java.io.IOException;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.cache.Cache;
 import com.intellij.compiler.cache.JavaDependencyCache;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
@@ -37,7 +36,7 @@ public interface JavaBytecodeProcessor
 {
 	CompositeExtensionPointName<JavaBytecodeProcessor> EP_NAME = CompositeExtensionPointName.applicationPoint("consulo.java.bytecodeCompilerProcessor", JavaBytecodeProcessor.class);
 
-	@Nullable
+	@javax.annotation.Nullable
 	byte[] processClassFile(CompileContext compileContext,
 			Module affectedModule,
 			JavaDependencyCache dependencyCache,

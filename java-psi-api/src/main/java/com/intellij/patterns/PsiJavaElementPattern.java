@@ -15,9 +15,11 @@
  */
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
@@ -35,7 +37,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 		super(aClass);
 	}
 
-	public PsiJavaElementPattern(@NotNull final InitialPatternCondition<T> condition)
+	public PsiJavaElementPattern(@Nonnull final InitialPatternCondition<T> condition)
 	{
 		super(condition);
 	}
@@ -56,12 +58,12 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 				().qName(annotationQualifiedName))));
 	}
 
-	public Self annotationParam(@NotNull ElementPattern<PsiAnnotation> annotation)
+	public Self annotationParam(@Nonnull ElementPattern<PsiAnnotation> annotation)
 	{
 		return withParent(PsiJavaPatterns.psiNameValuePair().withParent(PlatformPatterns.psiElement(PsiAnnotationParameterList.class).withParent(annotation)));
 	}
 
-	public Self annotationParam(String parameterName, @NotNull ElementPattern<PsiAnnotation> annotation)
+	public Self annotationParam(String parameterName, @Nonnull ElementPattern<PsiAnnotation> annotation)
 	{
 		return withParent(PsiJavaPatterns.psiNameValuePair().withName(parameterName).withParent(PlatformPatterns.psiElement(PsiAnnotationParameterList.class).withParent(annotation)));
 	}
@@ -78,7 +80,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 		return insideAnnotationParam(annotationQualifiedName, VALUE);
 	}
 
-	public Self insideAnnotationParam(@NotNull String annotationQualifiedName)
+	public Self insideAnnotationParam(@Nonnull String annotationQualifiedName)
 	{
 		return insideAnnotationParam(StandardPatterns.string().equalTo(annotationQualifiedName));
 	}
@@ -93,7 +95,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 		return with(new PatternCondition<T>("nameIdentifierOf")
 		{
 			@Override
-			public boolean accepts(@NotNull final T t, final ProcessingContext context)
+			public boolean accepts(@Nonnull final T t, final ProcessingContext context)
 			{
 				if(!(t instanceof PsiIdentifier))
 				{
@@ -127,7 +129,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 		return with(new PatternCondition<T>("methodCallParameter")
 		{
 			@Override
-			public boolean accepts(@NotNull final T literal, final ProcessingContext context)
+			public boolean accepts(@Nonnull final T literal, final ProcessingContext context)
 			{
 				final PsiElement parent = literal.getParent();
 				if(parent instanceof PsiExpressionList)
@@ -146,7 +148,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 		});
 	}
 
-	public Self methodCallParameter(@NotNull final ElementPattern<? extends PsiMethod> methodPattern)
+	public Self methodCallParameter(@Nonnull final ElementPattern<? extends PsiMethod> methodPattern)
 	{
 		//noinspection unchecked
 		final PsiNamePatternCondition nameCondition = ContainerUtil.findInstance(methodPattern.getCondition().getConditions(), PsiNamePatternCondition.class);
@@ -154,7 +156,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 		return with(new PatternCondition<T>("methodCallParameter")
 		{
 			@Override
-			public boolean accepts(@NotNull final T literal, final ProcessingContext context)
+			public boolean accepts(@Nonnull final T literal, final ProcessingContext context)
 			{
 				final PsiElement parent = literal.getParent();
 				return parent instanceof PsiExpressionList && checkCall(context, (PsiExpressionList) parent, methodPattern, nameCondition);
@@ -190,7 +192,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 		return with(new PatternCondition<T>("constructorParameter")
 		{
 			@Override
-			public boolean accepts(@NotNull final T literal, final ProcessingContext context)
+			public boolean accepts(@Nonnull final T literal, final ProcessingContext context)
 			{
 				final PsiElement parent = literal.getParent();
 				if(parent instanceof PsiExpressionList)
@@ -231,7 +233,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
 			super(aClass);
 		}
 
-		public Capture(@NotNull final InitialPatternCondition<T> condition)
+		public Capture(@Nonnull final InitialPatternCondition<T> condition)
 		{
 			super(condition);
 		}

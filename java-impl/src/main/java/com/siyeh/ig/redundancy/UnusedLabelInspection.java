@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.redundancy;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -23,12 +25,11 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class UnusedLabelInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unused.label.display.name");
   }
@@ -44,7 +45,7 @@ public class UnusedLabelInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unused.label.problem.descriptor");
@@ -58,7 +59,7 @@ public class UnusedLabelInspection extends BaseInspection {
   private static class UnusedLabelFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unused.label.remove.quickfix");
@@ -112,7 +113,7 @@ public class UnusedLabelInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (found) {
         return;
       }
@@ -121,7 +122,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitContinueStatement(
-      @NotNull PsiContinueStatement continueStatement) {
+      @Nonnull PsiContinueStatement continueStatement) {
       if (found) {
         return;
       }
@@ -135,7 +136,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitBreakStatement(
-      @NotNull PsiBreakStatement breakStatement) {
+      @Nonnull PsiBreakStatement breakStatement) {
       if (found) {
         return;
       }

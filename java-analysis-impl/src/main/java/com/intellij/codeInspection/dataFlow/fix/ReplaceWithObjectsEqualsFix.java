@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInspection.dataFlow.fix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -48,7 +50,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -56,7 +58,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -64,7 +66,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		PsiMethodCallExpression call = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
 		if(call == null)
@@ -84,7 +86,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Nullable
-	public static ReplaceWithObjectsEqualsFix createFix(@NotNull PsiMethodCallExpression call, @NotNull PsiReferenceExpression methodExpression)
+	public static ReplaceWithObjectsEqualsFix createFix(@Nonnull PsiMethodCallExpression call, @Nonnull PsiReferenceExpression methodExpression)
 	{
 		if(!"equals".equals(methodExpression.getReferenceName()) || call.getArgumentList().getExpressions().length != 1 || !PsiUtil.getLanguageLevel(call).isAtLeast(LanguageLevel.JDK_1_7))
 		{

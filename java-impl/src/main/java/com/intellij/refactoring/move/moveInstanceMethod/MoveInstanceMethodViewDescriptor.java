@@ -15,13 +15,14 @@
  */
 package com.intellij.refactoring.move.moveInstanceMethod;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiVariable;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -41,7 +42,7 @@ public class MoveInstanceMethodViewDescriptor extends UsageViewDescriptorAdapter
     myTargetClass = targetClass;
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myMethod, myTargetVariable, myTargetClass};
   }

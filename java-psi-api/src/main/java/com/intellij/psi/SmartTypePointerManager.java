@@ -19,7 +19,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 
@@ -28,6 +29,6 @@ public abstract class SmartTypePointerManager {
     return ServiceManager.getService(project, SmartTypePointerManager.class);
   }
 
-  @NotNull
-  public abstract SmartTypePointer createSmartTypePointer(@NotNull PsiType type);
+  @Nonnull
+  public abstract SmartTypePointer createSmartTypePointer(@Nonnull PsiType type);
 }

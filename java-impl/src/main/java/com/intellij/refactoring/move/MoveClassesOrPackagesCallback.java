@@ -24,7 +24,7 @@ package com.intellij.refactoring.move;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.refactoring.MoveDestination;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public interface MoveClassesOrPackagesCallback extends MoveCallback {
 

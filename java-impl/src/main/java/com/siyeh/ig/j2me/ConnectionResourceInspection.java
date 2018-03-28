@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.j2me;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
@@ -22,22 +24,21 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ConnectionResourceInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConnectionOpenedButNotSafelyClosed";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "connection.opened.not.safely.closed.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String text = type.getPresentableText();
@@ -54,7 +55,7 @@ public class ConnectionResourceInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isConnectionFactoryMethod(expression)) {
         return;
@@ -140,7 +141,7 @@ public class ConnectionResourceInspection extends BaseInspection {
     }
 
     private static boolean isConnectionFactoryMethod(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
@@ -173,7 +174,7 @@ public class ConnectionResourceInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (containsClose) {
         return;
       }
@@ -182,7 +183,7 @@ public class ConnectionResourceInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       if (containsClose) {
         return;
       }

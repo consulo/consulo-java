@@ -24,8 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.NavigationItem;
@@ -55,7 +55,7 @@ public class DefaultSymbolNavigationContributor implements ChooseByNameContribut
 	private static final Logger LOGGER = Logger.getInstance(DefaultSymbolNavigationContributor.class);
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String[] getNames(Project project, boolean includeNonProjectItems)
 	{
 		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(project);
@@ -67,7 +67,7 @@ public class DefaultSymbolNavigationContributor implements ChooseByNameContribut
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public NavigationItem[] getItemsByName(String name, final String pattern, Project project, boolean includeNonProjectItems)
 	{
 		GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
@@ -124,7 +124,7 @@ public class DefaultSymbolNavigationContributor implements ChooseByNameContribut
 	}
 
 	@Override
-	public void processNames(@NotNull Processor<String> processor, @NotNull GlobalSearchScope scope, @Nullable IdFilter filter)
+	public void processNames(@Nonnull Processor<String> processor, @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter)
 	{
 		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(scope.getProject());
 		cache.processAllClassNames(processor, scope, filter);
@@ -133,8 +133,8 @@ public class DefaultSymbolNavigationContributor implements ChooseByNameContribut
 	}
 
 	@Override
-	public void processElementsWithName(@NotNull String name, @NotNull final Processor<NavigationItem> processor,
-			@NotNull FindSymbolParameters parameters)
+	public void processElementsWithName(@Nonnull String name, @Nonnull final Processor<NavigationItem> processor,
+			@Nonnull FindSymbolParameters parameters)
 	{
 
 		GlobalSearchScope scope = parameters.getSearchScope();

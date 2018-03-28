@@ -1,10 +1,11 @@
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.originInfo.OriginInfoAwareElement;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -33,19 +34,19 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 	private volatile Icon myBaseIcon = PlatformIcons.VARIABLE_ICON;
 	private String myOriginInfo;
 
-	public LightVariableBuilder(@NotNull String name, @NotNull String type, @NotNull PsiElement navigationElement)
+	public LightVariableBuilder(@Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement)
 	{
 		this(name, JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type,
 				navigationElement), navigationElement);
 	}
 
-	public LightVariableBuilder(@NotNull String name, @NotNull PsiType type, @NotNull PsiElement navigationElement)
+	public LightVariableBuilder(@Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement navigationElement)
 	{
 		this(navigationElement.getManager(), name, type, JavaLanguage.INSTANCE);
 		setNavigationElement(navigationElement);
 	}
 
-	public LightVariableBuilder(PsiManager manager, @NotNull String name, @NotNull PsiType type, Language language)
+	public LightVariableBuilder(PsiManager manager, @Nonnull String name, @Nonnull PsiType type, Language language)
 	{
 		super(manager, language);
 		myName = name;
@@ -59,7 +60,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 		return "LightVariableBuilder:" + getName();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType getType()
 	{
@@ -67,7 +68,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiModifierList getModifierList()
 	{
 		return myModifierList;
@@ -86,12 +87,12 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NonNls @NotNull String name)
+	public boolean hasModifierProperty(@NonNls @Nonnull String name)
 	{
 		return myModifierList.hasModifierProperty(name);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -134,7 +135,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 	}
 
 	@Override
-	public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException
+	public PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException
 	{
 		throw new UnsupportedOperationException("setName is not implemented yet in com.intellij.psi.impl.light" +
 				".LightVariableBuilder");
@@ -147,7 +148,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 		return (T) this;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public String getOriginInfo()
 	{

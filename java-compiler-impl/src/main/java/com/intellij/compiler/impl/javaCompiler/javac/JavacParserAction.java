@@ -17,7 +17,7 @@ package com.intellij.compiler.impl.javaCompiler.javac;
 
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.ParserAction;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.io.File;
 import java.util.regex.Matcher;

@@ -31,7 +31,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupManager;
@@ -85,7 +85,7 @@ public class JavaParameterTableModel extends ParameterTableModelBase<ParameterIn
   }
 
   @Override
-  protected ParameterTableModelItemBase<ParameterInfoImpl> createRowItem(@Nullable ParameterInfoImpl parameterInfo) {
+  protected ParameterTableModelItemBase<ParameterInfoImpl> createRowItem(@javax.annotation.Nullable ParameterInfoImpl parameterInfo) {
     if (parameterInfo == null) {
       parameterInfo = new ParameterInfoImpl(-1);
     }

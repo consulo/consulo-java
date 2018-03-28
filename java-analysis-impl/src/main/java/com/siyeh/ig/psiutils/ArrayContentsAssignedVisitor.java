@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 
@@ -25,13 +25,13 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
   private boolean assigned = false;
   private final PsiVariable variable;
 
-  public ArrayContentsAssignedVisitor(@NotNull PsiVariable variable) {
+  public ArrayContentsAssignedVisitor(@Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
   @Override
   public void visitAssignmentExpression(
-    @NotNull PsiAssignmentExpression assignment) {
+    @Nonnull PsiAssignmentExpression assignment) {
     if (assigned) {
       return;
     }
@@ -54,7 +54,7 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPrefixExpression(
-    @NotNull PsiPrefixExpression expression) {
+    @Nonnull PsiPrefixExpression expression) {
     if (assigned) {
       return;
     }
@@ -82,7 +82,7 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPostfixExpression(
-    @NotNull PsiPostfixExpression expression) {
+    @Nonnull PsiPostfixExpression expression) {
     if (assigned) {
       return;
     }
@@ -108,7 +108,7 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiExpression getDeepArrayExpression(
     PsiExpression expression) {
     if (!(expression instanceof PsiArrayAccessExpression)) {

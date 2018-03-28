@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpressionList;
 import com.intellij.psi.PsiLiteralExpression;
@@ -31,9 +31,9 @@ import com.intellij.util.ProcessingContext;
  */
 abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider
 {
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context)
+	public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context)
 	{
 		if(element instanceof PsiLiteralExpression)
 		{
@@ -59,6 +59,6 @@ abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider
 		return PsiReference.EMPTY_ARRAY;
 	}
 
-	@Nullable
-	protected abstract PsiReference[] getReferencesByMethod(@NotNull PsiLiteralExpression literalArgument, @NotNull PsiReferenceExpression methodReference, @NotNull ProcessingContext context);
+	@javax.annotation.Nullable
+	protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
 }

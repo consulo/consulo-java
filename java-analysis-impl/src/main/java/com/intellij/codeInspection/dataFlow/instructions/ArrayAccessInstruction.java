@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -29,25 +30,25 @@ import com.intellij.psi.PsiArrayAccessExpression;
 public class ArrayAccessInstruction extends Instruction
 {
 	private final
-	@NotNull
+	@Nonnull
 	DfaValue myValue;
 	private final
-	@NotNull
+	@Nonnull
 	PsiArrayAccessExpression myExpression;
 
-	public ArrayAccessInstruction(@NotNull DfaValue value, @NotNull PsiArrayAccessExpression expression)
+	public ArrayAccessInstruction(@Nonnull DfaValue value, @Nonnull PsiArrayAccessExpression expression)
 	{
 		myValue = value;
 		myExpression = expression;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaValue getValue()
 	{
 		return myValue;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiArrayAccessExpression getExpression()
 	{
 		return myExpression;

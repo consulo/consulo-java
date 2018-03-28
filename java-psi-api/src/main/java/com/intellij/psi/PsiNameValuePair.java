@@ -17,8 +17,8 @@ package com.intellij.psi;
 
 import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a single element-value pair of an annotation parameter list.
@@ -34,7 +34,7 @@ public interface PsiNameValuePair extends PsiElement {
   PsiNameValuePair[] EMPTY_ARRAY = new PsiNameValuePair[0];
 
   ArrayFactory<PsiNameValuePair> ARRAY_FACTORY = new ArrayFactory<PsiNameValuePair>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiNameValuePair[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiNameValuePair[count];
@@ -68,5 +68,6 @@ public interface PsiNameValuePair extends PsiElement {
   @Nullable
   PsiAnnotationMemberValue getValue();
 
-  @NotNull PsiAnnotationMemberValue setValue(@NotNull PsiAnnotationMemberValue newValue);
+  @Nonnull
+  PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue);
 }

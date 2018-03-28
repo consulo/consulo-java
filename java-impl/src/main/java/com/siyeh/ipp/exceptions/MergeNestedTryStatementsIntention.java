@@ -19,7 +19,7 @@ import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -28,14 +28,14 @@ import java.util.List;
  */
 public class MergeNestedTryStatementsIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new NestedTryStatementsPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiTryStatement tryStatement1 = (PsiTryStatement)element.getParent();
     final StringBuilder newTryStatement = new StringBuilder("try ");
     final PsiResourceList list1 = tryStatement1.getResourceList();

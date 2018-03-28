@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.search.searches;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMember;
@@ -63,29 +64,29 @@ public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierL
     return INSTANCE.createQuery(new Parameters(annotationClass, scope, types));
   }
 
-  public static <T extends PsiModifierListOwner> Query<T> searchElements(@NotNull PsiClass annotationClass,
-                                                                         @NotNull SearchScope scope,
+  public static <T extends PsiModifierListOwner> Query<T> searchElements(@Nonnull PsiClass annotationClass,
+                                                                         @Nonnull SearchScope scope,
                                                                          Class<? extends T>... types) {
     return new InstanceofQuery<T>(createDelegateQuery(annotationClass, scope, types), types);
   }
 
-  public static Query<PsiClass> searchPsiClasses(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiClass> searchPsiClasses(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiClass.class);
   }
 
-  public static Query<PsiMethod> searchPsiMethods(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiMethod> searchPsiMethods(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiMethod.class);
   }
 
-  public static Query<PsiMember> searchPsiMembers(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiMember> searchPsiMembers(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiMember.class);
   }
 
-  public static Query<PsiField> searchPsiFields(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiField> searchPsiFields(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiField.class);
   }
 
-  public static Query<PsiParameter> searchPsiParameters(@NotNull PsiClass annotationClass, @NotNull SearchScope scope) {
+  public static Query<PsiParameter> searchPsiParameters(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiParameter.class);
   }
 }

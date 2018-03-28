@@ -21,9 +21,9 @@ import static com.intellij.psi.PsiType.getTypeByName;
 import java.util.EnumSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.JvmTypeParameter;
@@ -37,15 +37,15 @@ class PsiJvmConversionHelper
 
 	private static final Logger LOG = Logger.getInstance(PsiJvmConversionHelper.class);
 
-	@NotNull
-	static PsiAnnotation[] getListAnnotations(@NotNull PsiModifierListOwner modifierListOwner)
+	@Nonnull
+	static PsiAnnotation[] getListAnnotations(@Nonnull PsiModifierListOwner modifierListOwner)
 	{
 		PsiModifierList list = modifierListOwner.getModifierList();
 		return list == null ? PsiAnnotation.EMPTY_ARRAY : list.getAnnotations();
 	}
 
-	@NotNull
-	static JvmModifier[] getListModifiers(@NotNull PsiModifierListOwner modifierListOwner)
+	@Nonnull
+	static JvmModifier[] getListModifiers(@Nonnull PsiModifierListOwner modifierListOwner)
 	{
 		final Set<JvmModifier> result = EnumSet.noneOf(JvmModifier.class);
 		for(@NonNls String modifier : PsiModifier.MODIFIERS)
@@ -64,8 +64,8 @@ class PsiJvmConversionHelper
 		return result.toArray(JvmModifier.EMPTY_ARRAY);
 	}
 
-	@NotNull
-	static JvmClassKind getJvmClassKind(@NotNull PsiClass psiClass)
+	@Nonnull
+	static JvmClassKind getJvmClassKind(@Nonnull PsiClass psiClass)
 	{
 		if(psiClass.isAnnotationType())
 		{
@@ -82,8 +82,8 @@ class PsiJvmConversionHelper
 		return JvmClassKind.CLASS;
 	}
 
-	@Nullable
-	static JvmReferenceType getClassSuperType(@NotNull PsiClass psiClass)
+	@javax.annotation.Nullable
+	static JvmReferenceType getClassSuperType(@Nonnull PsiClass psiClass)
 	{
 		if(psiClass.isInterface())
 		{
@@ -119,8 +119,8 @@ class PsiJvmConversionHelper
 		return extendsTypes[0];
 	}
 
-	@NotNull
-	static JvmReferenceType[] getClassInterfaces(@NotNull PsiClass psiClass)
+	@Nonnull
+	static JvmReferenceType[] getClassInterfaces(@Nonnull PsiClass psiClass)
 	{
 		if(psiClass instanceof PsiAnonymousClass)
 		{
@@ -148,17 +148,17 @@ class PsiJvmConversionHelper
 	{
 
 		private final
-		@NotNull
+		@Nonnull
 		PsiSubstitutor mySubstitutor;
 
-		PsiJvmSubstitutor(@NotNull PsiSubstitutor substitutor)
+		PsiJvmSubstitutor(@Nonnull PsiSubstitutor substitutor)
 		{
 			mySubstitutor = substitutor;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
-		public JvmType substitute(@NotNull JvmTypeParameter typeParameter)
+		public JvmType substitute(@Nonnull JvmTypeParameter typeParameter)
 		{
 			if(!(typeParameter instanceof PsiTypeParameter))
 			{

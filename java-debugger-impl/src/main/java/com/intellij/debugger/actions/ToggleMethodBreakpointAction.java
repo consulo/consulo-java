@@ -16,7 +16,6 @@
 
 package com.intellij.debugger.actions;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
@@ -87,7 +86,7 @@ public class ToggleMethodBreakpointAction extends AnAction
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PlaceInDocument getPlace(AnActionEvent event)
 	{
 		final Project project = event.getData(CommonDataKeys.PROJECT);
@@ -139,7 +138,7 @@ public class ToggleMethodBreakpointAction extends AnAction
 		return method != null ? new PlaceInDocument(document, method.getTextOffset()) : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiMethod findMethod(Project project, Editor editor)
 	{
 		if(editor == null)

@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.light;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElement;
@@ -34,25 +35,25 @@ public class LightParameter extends LightVariableBuilder<LightVariableBuilder> i
   private final PsiElement myDeclarationScope;
   private final boolean myVarArgs;
 
-  public LightParameter(@NotNull String name, @NotNull PsiType type, PsiElement declarationScope, Language language) {
+  public LightParameter(@Nonnull String name, @Nonnull PsiType type, PsiElement declarationScope, Language language) {
     this(name, type, declarationScope, language, type instanceof PsiEllipsisType);
   }
 
-  public LightParameter(@NotNull String name, @NotNull PsiType type, PsiElement declarationScope, Language language, boolean isVarArgs) {
+  public LightParameter(@Nonnull String name, @Nonnull PsiType type, PsiElement declarationScope, Language language, boolean isVarArgs) {
     super(declarationScope.getManager(), name, type, language);
     myName = name;
     myDeclarationScope = declarationScope;
     myVarArgs = isVarArgs;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiElement getDeclarationScope() {
     return myDeclarationScope;
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParameter(this);
     }
@@ -68,7 +69,7 @@ public class LightParameter extends LightVariableBuilder<LightVariableBuilder> i
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return myName;
   }

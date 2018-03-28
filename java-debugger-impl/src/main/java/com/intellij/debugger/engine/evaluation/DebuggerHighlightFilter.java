@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine.evaluation;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoFilter;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
@@ -24,7 +24,7 @@ import com.intellij.psi.PsiFile;
 public class DebuggerHighlightFilter implements HighlightInfoFilter
 {
 	@Override
-	public boolean accept(@NotNull HighlightInfo highlightInfo, PsiFile file)
+	public boolean accept(@Nonnull HighlightInfo highlightInfo, PsiFile file)
 	{
 		return highlightInfo.type != HighlightInfoType.UNHANDLED_EXCEPTION ||
 				file == null ||

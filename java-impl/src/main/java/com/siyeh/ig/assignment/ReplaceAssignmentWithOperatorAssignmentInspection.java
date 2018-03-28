@@ -17,8 +17,8 @@ package com.siyeh.ig.assignment;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -52,20 +52,20 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
   public boolean ignoreObscureOperators = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "AssignmentReplaceableWithOperatorAssignment";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.replaceable.with.operator.assignment.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression lhs = (PsiExpression)infos[0];
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)infos[1];
@@ -143,13 +143,13 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
         signText);
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return m_name;
     }
 
     @Override
-    public void doFix(@NotNull Project project, ProblemDescriptor descriptor)
+    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiAssignmentExpression)) {
@@ -183,7 +183,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
   private class ReplaceAssignmentWithOperatorAssignmentVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitAssignmentExpression(@NotNull PsiAssignmentExpression assignment) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
       super.visitAssignmentExpression(assignment);
       final IElementType assignmentTokenType = assignment.getOperationTokenType();
       if (!assignmentTokenType.equals(JavaTokenType.EQ)) {

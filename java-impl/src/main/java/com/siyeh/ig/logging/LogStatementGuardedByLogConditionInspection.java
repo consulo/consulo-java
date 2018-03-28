@@ -36,8 +36,7 @@ import com.siyeh.ig.ui.TextField;
 import com.siyeh.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,13 +65,13 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.problem.descriptor");
   }
@@ -94,14 +93,14 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new LogStatementGuardedByLogConditionFix();
   }
 
   private class LogStatementGuardedByLogConditionFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.quickfix");
     }
@@ -165,7 +164,7 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
       }
     }
 
-    private boolean isSameLogMethodCall(PsiStatement statement, @NotNull String methodName) {
+    private boolean isSameLogMethodCall(PsiStatement statement, @Nonnull String methodName) {
       if (statement == null) {
         return false;
       }
@@ -250,7 +249,7 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
       }
     }
 
-    private boolean isLogGuardCheck(@Nullable PsiExpression expression, String logMethodName) {
+    private boolean isLogGuardCheck(@javax.annotation.Nullable PsiExpression expression, String logMethodName) {
       if (expression instanceof PsiMethodCallExpression) {
         final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
         final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
@@ -280,13 +279,13 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   }
 
   @Override
-  public void readSettings(@NotNull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerMethodAndconditionMethodNames, logMethodNameList, logConditionMethodNameList);
   }
 
   @Override
-  public void writeSettings(@NotNull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     loggerMethodAndconditionMethodNames = formatString(logMethodNameList, logConditionMethodNameList);
     super.writeSettings(element);
   }

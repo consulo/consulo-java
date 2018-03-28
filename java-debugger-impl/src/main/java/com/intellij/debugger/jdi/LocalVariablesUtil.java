@@ -21,7 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.org.objectweb.asm.MethodVisitor;
 import org.jetbrains.org.objectweb.asm.Opcodes;
 import com.intellij.debugger.SourcePosition;
@@ -156,7 +156,7 @@ public class LocalVariablesUtil
 		ourInitializationOkSet = success;
 	}
 
-	public static Map<DecompiledLocalVariable, Value> fetchValues(@NotNull StackFrameProxyImpl frameProxy, DebugProcess process, boolean full) throws Exception
+	public static Map<DecompiledLocalVariable, Value> fetchValues(@Nonnull StackFrameProxyImpl frameProxy, DebugProcess process, boolean full) throws Exception
 	{
 		Map<DecompiledLocalVariable, Value> map = new LinkedHashMap<>(); // LinkedHashMap for correct order
 
@@ -297,7 +297,7 @@ public class LocalVariablesUtil
 		throw new NoSuchMethodException(aClass.getName() + "." + methodName);
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<DecompiledLocalVariable> collectVariablesFromBytecode(VirtualMachineProxyImpl vm, Location location, MultiMap<Integer, String> namesMap)
 	{
 		if(!vm.canGetBytecodes())
@@ -361,8 +361,8 @@ public class LocalVariablesUtil
 		return Collections.emptyList();
 	}
 
-	@NotNull
-	private static MultiMap<Integer, String> calcNames(@NotNull final StackFrameContext context, final int firstLocalsSlot)
+	@Nonnull
+	private static MultiMap<Integer, String> calcNames(@Nonnull final StackFrameContext context, final int firstLocalsSlot)
 	{
 		SourcePosition position = ContextUtil.getSourcePosition(context);
 		if(position != null)

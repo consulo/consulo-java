@@ -18,7 +18,7 @@ package com.intellij.refactoring.inline;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.lang.java.JavaLanguage;
@@ -246,7 +246,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiCall findCallToInline(final Editor editor)
 	{
 		PsiCall callToInline = null;
@@ -262,7 +262,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		return callToInline;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static String getCannotInlineMessage(final PsiClass psiClass)
 	{
 		if(psiClass instanceof PsiTypeParameter)

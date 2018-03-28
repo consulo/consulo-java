@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.lang.java.JavaLanguage;
@@ -32,14 +34,14 @@ import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class AssignFieldFromParameterAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(AssignFieldFromParameterAction.class);
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     final PsiType type = FieldFromParameterUtils.getType(myParameter);
     final PsiClass targetClass = PsiTreeUtil.getParentOfType(myParameter, PsiClass.class);
@@ -55,13 +57,13 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.assign.field.from.parameter.family");
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) return;
 
@@ -76,8 +78,8 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
   }
 
   @Nullable
-  private static PsiField findFieldToAssign(@NotNull Project project,
-                                            @NotNull PsiParameter myParameter) {
+  private static PsiField findFieldToAssign(@Nonnull Project project,
+                                            @Nonnull PsiParameter myParameter) {
     final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
     final String parameterName = myParameter.getName();
     final String propertyName = styleManager.variableNameToPropertyName(parameterName, VariableKind.PARAMETER);
@@ -99,10 +101,10 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
     return field;
   }
 
-  public static void addFieldAssignmentStatement(@NotNull Project project,
-                                                 @NotNull PsiField field,
-                                                 @NotNull PsiParameter parameter,
-                                                 @NotNull Editor editor) throws IncorrectOperationException {
+  public static void addFieldAssignmentStatement(@Nonnull Project project,
+                                                 @Nonnull PsiField field,
+                                                 @Nonnull PsiParameter parameter,
+                                                 @Nonnull Editor editor) throws IncorrectOperationException {
     final PsiMethod method = (PsiMethod)parameter.getDeclarationScope();
     final PsiCodeBlock methodBody = method.getBody();
     if (methodBody == null) return;

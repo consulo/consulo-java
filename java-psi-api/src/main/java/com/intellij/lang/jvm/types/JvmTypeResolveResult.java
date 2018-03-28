@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.jvm.types;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.jvm.JvmTypeDeclaration;
 
 /**
@@ -24,9 +24,9 @@ import com.intellij.lang.jvm.JvmTypeDeclaration;
 public interface JvmTypeResolveResult
 {
 
-	@NotNull
+	@Nonnull
 	JvmTypeDeclaration getDeclaration();
 
-	@NotNull
+	@Nonnull
 	JvmSubstitutor getSubstitutor();
 }

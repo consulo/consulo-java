@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -26,7 +28,6 @@ import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStatement, Constants {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiIfStatementImpl");
@@ -41,7 +42,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (child == getElseBranch()) {
       ASTNode elseKeyword = findChildByRole(ChildRole.ELSE_KEYWORD);
       if (elseKeyword != null) {
@@ -77,7 +78,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void setElseBranch(@NotNull PsiStatement statement) throws IncorrectOperationException {
+  public void setElseBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException {
     PsiStatement elseBranch = getElseBranch();
     if (elseBranch != null) elseBranch.delete();
     PsiKeyword elseElement = getElseElement();
@@ -90,7 +91,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
     addRange(ifStatement.getElseElement(), ifStatement.getLastChild());
   }
   @Override
-  public void setThenBranch(@NotNull PsiStatement statement) throws IncorrectOperationException {
+  public void setThenBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException {
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
     ASTNode keyword = findChildByRole(ChildRole.IF_KEYWORD);
     LOG.assertTrue(keyword != null);
@@ -183,7 +184,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitIfStatement(this);
     }

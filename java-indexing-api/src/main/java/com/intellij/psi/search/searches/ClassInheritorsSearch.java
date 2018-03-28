@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.search.searches;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.util.Computable;
@@ -45,17 +46,17 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 		private final boolean myIncludeAnonymous;
 		private final Condition<String> myNameCondition;
 
-		public SearchParameters(@NotNull final PsiClass aClass, @NotNull SearchScope scope, final boolean checkDeep, final boolean checkInheritance, boolean includeAnonymous)
+		public SearchParameters(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope, final boolean checkDeep, final boolean checkInheritance, boolean includeAnonymous)
 		{
 			this(aClass, scope, checkDeep, checkInheritance, includeAnonymous, Conditions.<String>alwaysTrue());
 		}
 
-		public SearchParameters(@NotNull final PsiClass aClass,
-				@NotNull SearchScope scope,
+		public SearchParameters(@Nonnull final PsiClass aClass,
+				@Nonnull SearchScope scope,
 				final boolean checkDeep,
 				final boolean checkInheritance,
 				boolean includeAnonymous,
-				@NotNull final Condition<String> nameCondition)
+				@Nonnull final Condition<String> nameCondition)
 		{
 			myClass = aClass;
 			myScope = scope;
@@ -65,13 +66,13 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 			myNameCondition = nameCondition;
 		}
 
-		@NotNull
+		@Nonnull
 		public PsiClass getClassToProcess()
 		{
 			return myClass;
 		}
 
-		@NotNull
+		@Nonnull
 		public Condition<String> getNameCondition()
 		{
 			return myNameCondition;
@@ -103,12 +104,12 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 		super("consulo.java");
 	}
 
-	public static Query<PsiClass> search(@NotNull final PsiClass aClass, @NotNull SearchScope scope, final boolean checkDeep, final boolean checkInheritance, boolean includeAnonymous)
+	public static Query<PsiClass> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope, final boolean checkDeep, final boolean checkInheritance, boolean includeAnonymous)
 	{
 		return search(new SearchParameters(aClass, scope, checkDeep, checkInheritance, includeAnonymous));
 	}
 
-	public static Query<PsiClass> search(@NotNull SearchParameters parameters)
+	public static Query<PsiClass> search(@Nonnull SearchParameters parameters)
 	{
 		return INSTANCE.createUniqueResultsQuery(parameters, ContainerUtil.<SmartPsiElementPointer<PsiClass>>canonicalStrategy(), new Function<PsiClass, SmartPsiElementPointer<PsiClass>>()
 		{
@@ -127,17 +128,17 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 		});
 	}
 
-	public static Query<PsiClass> search(@NotNull final PsiClass aClass, @NotNull SearchScope scope, final boolean checkDeep, final boolean checkInheritance)
+	public static Query<PsiClass> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope, final boolean checkDeep, final boolean checkInheritance)
 	{
 		return search(aClass, scope, checkDeep, checkInheritance, true);
 	}
 
-	public static Query<PsiClass> search(@NotNull final PsiClass aClass, @NotNull SearchScope scope, final boolean checkDeep)
+	public static Query<PsiClass> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope, final boolean checkDeep)
 	{
 		return search(aClass, scope, checkDeep, true);
 	}
 
-	public static Query<PsiClass> search(@NotNull final PsiClass aClass, final boolean checkDeep)
+	public static Query<PsiClass> search(@Nonnull final PsiClass aClass, final boolean checkDeep)
 	{
 		return search(aClass, ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>()
 		{
@@ -153,7 +154,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 		}), checkDeep);
 	}
 
-	public static Query<PsiClass> search(@NotNull PsiClass aClass)
+	public static Query<PsiClass> search(@Nonnull PsiClass aClass)
 	{
 		return search(aClass, true);
 	}

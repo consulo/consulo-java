@@ -17,7 +17,7 @@ package com.intellij.codeInsight.completion;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.completion.scope.CompletionElement;
 import com.intellij.codeInsight.completion.scope.JavaCompletionProcessor;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -66,7 +66,7 @@ class SuperCalls
 		return set;
 	}
 
-	@NotNull
+	@Nonnull
 	private static LookupElement withQualifiedSuper(final String className, LookupElement item)
 	{
 		return PrioritizedLookupElement.withExplicitProximity(new LookupElementDecorator<LookupElement>(item)

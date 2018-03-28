@@ -17,8 +17,8 @@ package com.intellij.debugger;
 
 import java.util.Comparator;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.impl.AlternativeJreClassFinder;
 import com.intellij.debugger.impl.DebuggerManagerImpl;
 import com.intellij.debugger.settings.DebuggerSettings;
@@ -48,12 +48,12 @@ public class DefaultDebugEnvironment implements DebugEnvironment
 	private final RunProfileState state;
 	private final boolean myNeedParametersSet;
 
-	public DefaultDebugEnvironment(@NotNull ExecutionEnvironment environment, @NotNull RunProfileState state, RemoteConnection remoteConnection, boolean pollConnection)
+	public DefaultDebugEnvironment(@Nonnull ExecutionEnvironment environment, @Nonnull RunProfileState state, RemoteConnection remoteConnection, boolean pollConnection)
 	{
 		this(environment, state, remoteConnection, pollConnection ? LOCAL_START_TIMEOUT : 0);
 	}
 
-	public DefaultDebugEnvironment(@NotNull ExecutionEnvironment environment, @NotNull RunProfileState state, RemoteConnection remoteConnection, long pollTimeout)
+	public DefaultDebugEnvironment(@Nonnull ExecutionEnvironment environment, @Nonnull RunProfileState state, RemoteConnection remoteConnection, long pollTimeout)
 	{
 		this.environment = environment;
 		this.state = state;
@@ -64,7 +64,7 @@ public class DefaultDebugEnvironment implements DebugEnvironment
 		myNeedParametersSet = remoteConnection.isServerMode() && remoteConnection.isUseSockets() && "0".equals(remoteConnection.getAddress());
 	}
 
-	private static GlobalSearchScope createSearchScope(@NotNull Project project, @Nullable RunProfile runProfile)
+	private static GlobalSearchScope createSearchScope(@Nonnull Project project, @javax.annotation.Nullable RunProfile runProfile)
 	{
 		GlobalSearchScope scope = SearchScopeProvider.createSearchScope(project, runProfile);
 		if(scope.equals(GlobalSearchScope.allScope(project)))
@@ -77,7 +77,7 @@ public class DefaultDebugEnvironment implements DebugEnvironment
 						(super::compare);
 
 				@Override
-				public int compare(@NotNull VirtualFile file1, @NotNull VirtualFile file2)
+				public int compare(@Nonnull VirtualFile file1, @Nonnull VirtualFile file2)
 				{
 					return myScopeComparator.compare(file1, file2);
 				}
@@ -97,7 +97,7 @@ public class DefaultDebugEnvironment implements DebugEnvironment
 		return state.execute(environment.getExecutor(), environment.getRunner());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public GlobalSearchScope getSearchScope()
 	{
@@ -128,14 +128,14 @@ public class DefaultDebugEnvironment implements DebugEnvironment
 		return environment.getRunProfile().getName();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Sdk getAlternativeJre()
 	{
 		return AlternativeJreClassFinder.getAlternativeJre(environment.getRunProfile());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Sdk getRunJre()
 	{

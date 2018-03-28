@@ -34,7 +34,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,7 +63,7 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
     myJavaDocPolicy = javaDocPolicy;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new ExtractSuperClassViewDescriptor(myTargetDirectory, myClass, myMemberInfos);
   }
@@ -102,7 +102,7 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
     return false;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     PsiReference[] refs = ReferencesSearch.search(myClass, GlobalSearchScope.projectScope(myProject), false).toArray(new PsiReference[0]);
     final ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
@@ -175,9 +175,9 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
     return RefactoringBundle.message("extract.subclass.command");
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected Collection<? extends PsiElement> getElementsToWrite(@NotNull final UsageViewDescriptor descriptor) {
+  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
     return ((ExtractSuperClassViewDescriptor) descriptor).getMembersToMakeWritable();
   }
 }

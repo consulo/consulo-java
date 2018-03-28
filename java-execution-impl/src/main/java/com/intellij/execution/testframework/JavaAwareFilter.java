@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.testframework;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
 import com.intellij.execution.junit2.info.MethodLocation;
@@ -33,7 +34,7 @@ public class JavaAwareFilter
 	{
 	}
 
-	public static Filter METHOD(@NotNull final Project project, @NotNull final GlobalSearchScope searchScope)
+	public static Filter METHOD(@Nonnull final Project project, @Nonnull final GlobalSearchScope searchScope)
 	{
 		return new Filter()
 		{

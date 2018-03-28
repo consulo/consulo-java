@@ -36,8 +36,7 @@ import com.intellij.psi.search.SearchScope;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -47,7 +46,7 @@ public class EmptyDirectoryInspection extends BaseGlobalInspection {
   public boolean onlyReportDirectoriesUnderSourceRoots = false;
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("empty.directory.display.name");
@@ -111,7 +110,7 @@ public class EmptyDirectoryInspection extends BaseGlobalInspection {
     });
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getPathRelativeToModule(VirtualFile file, Project project) {
     final ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
     final Application application = ApplicationManager.getApplication();
@@ -140,21 +139,21 @@ public class EmptyDirectoryInspection extends BaseGlobalInspection {
       this.name = name;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message(
         "empty.directories.delete.quickfix", name);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull CommonProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
       final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
       if (file == null) {
         return;

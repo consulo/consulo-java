@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -27,8 +29,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.tree.TreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * This class handles a use-case when reformatted text conflicts with 'use tab' code style setting. E.g. target text uses
@@ -45,18 +47,18 @@ import org.jetbrains.annotations.Nullable;
 public class TabPostFormatProcessor implements PostFormatProcessor {
 
   @Override
-  public PsiElement processElement(@NotNull PsiElement source, @NotNull CodeStyleSettings settings) {
+  public PsiElement processElement(@Nonnull PsiElement source, @Nonnull CodeStyleSettings settings) {
     doProcess(source, TextRange.from(source.getTextRange().getStartOffset(), source.getTextLength()), settings);
     return source;
   }
 
   @Override
-  public TextRange processText(@NotNull PsiFile source, @NotNull TextRange rangeToReformat, @NotNull CodeStyleSettings settings) {
+  public TextRange processText(@Nonnull PsiFile source, @Nonnull TextRange rangeToReformat, @Nonnull CodeStyleSettings settings) {
     return doProcess(source, rangeToReformat, settings);
   }
 
-  @NotNull
-  private static TextRange doProcess(@NotNull PsiElement source, @NotNull TextRange range, @NotNull CodeStyleSettings settings) {
+  @Nonnull
+  private static TextRange doProcess(@Nonnull PsiElement source, @Nonnull TextRange range, @Nonnull CodeStyleSettings settings) {
     ASTNode node = source.getNode();
     if (node == null) {
       return range;
@@ -81,10 +83,10 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     return processViaPsi(node, range, new TreeHelperImpl(), useTabs, smartTabs, tabWidth);
   }
 
-  @NotNull
-  static TextRange processViaPsi(@NotNull ASTNode node,
-                                 @NotNull TextRange range,
-                                 @NotNull TreeHelper treeHelper,
+  @Nonnull
+  static TextRange processViaPsi(@Nonnull ASTNode node,
+                                 @Nonnull TextRange range,
+                                 @Nonnull TreeHelper treeHelper,
                                  boolean useTabs,
                                  boolean smartTabs,
                                  int tabWidth)
@@ -107,9 +109,9 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     return range;
   }
   
-  @NotNull
-  static TextRange processViaDocument(@NotNull Document document,
-                                      @NotNull TextRange range,
+  @Nonnull
+  static TextRange processViaDocument(@Nonnull Document document,
+                                      @Nonnull TextRange range,
                                       boolean useTabs,
                                       boolean useSmartTabs,
                                       int tabWidth)
@@ -145,8 +147,8 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
    * @return          given text range if no modification to the target line's indent space has been performed:
    *                  adjusted range that points to semantically the same region otherwise
    */
-  @NotNull
-  private static TextRange processSpaces(@NotNull Helper helper, @NotNull TextRange range, int tabWidth) {
+  @Nonnull
+  private static TextRange processSpaces(@Nonnull Helper helper, @Nonnull TextRange range, int tabWidth) {
     CharSequence indent = helper.getCurrentLineIndent();
     int start = Math.max(0, range.getStartOffset() - helper.getCurrentLineStartOffset());
     int end = Math.min(indent.length(), range.getEndOffset() - helper.getCurrentLineStartOffset());
@@ -181,8 +183,8 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
    * @return          given text range if no modification to the target line's indent space has been performed:
    *                  adjusted range that points to semantically the same region otherwise
    */
-  @NotNull
-  private static TextRange processTabs(@NotNull Helper helper, @NotNull TextRange range, int tabWidth) {
+  @Nonnull
+  private static TextRange processTabs(@Nonnull Helper helper, @Nonnull TextRange range, int tabWidth) {
     CharSequence indent = helper.getCurrentLineIndent();
     int start = Math.max(0, range.getStartOffset() - helper.getCurrentLineStartOffset());
     int end = Math.min(indent.length(), range.getEndOffset() - helper.getCurrentLineStartOffset());
@@ -230,8 +232,8 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
    *                  adjusted range that points to semantically the same region otherwise
    */
   @SuppressWarnings("AssignmentToForLoopParameter")
-  @NotNull
-  private static TextRange processSmartTabs(@NotNull Helper helper, @NotNull TextRange range, int tabWidth) {
+  @Nonnull
+  private static TextRange processSmartTabs(@Nonnull Helper helper, @Nonnull TextRange range, int tabWidth) {
     // Adjust current line indent. The general idea is to replace white spaces by tab symbols if that maps to the previous line indent.
     CharSequence prevLineIndent = helper.getPrevLineIndent();
     if (prevLineIndent == null) {
@@ -307,12 +309,14 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     /**
      * @return    previous line indent space if current line is not the first one; <code>null</code> otherwise
      */
-    @Nullable CharSequence getPrevLineIndent();
+    @javax.annotation.Nullable
+	CharSequence getPrevLineIndent();
     
     int getCurrentLineStartOffset();
 
     /** @return    current line's indent space */
-    @NotNull CharSequence getCurrentLineIndent();
+    @Nonnull
+	CharSequence getCurrentLineIndent();
 
     /**
      * Asks current helper to modify target line's indent space.
@@ -323,16 +327,17 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
      *                 consideration line start offset at the document)
      * @param newText  replacement text
      */
-    void replace(int start, int end, @NotNull String newText);
+    void replace(int start, int end, @Nonnull String newText);
   }
   
   private static class DocumentHelper implements Helper {
     
-    @NotNull private final Document myDocument;
+    @Nonnull
+	private final Document myDocument;
     private int myLine;
     private int myLineStartOffset;
 
-    DocumentHelper(@NotNull Document document, int line) {
+    DocumentHelper(@Nonnull Document document, int line) {
       myDocument = document;
       setLine(line);
     }
@@ -361,7 +366,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
       return myLineStartOffset;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public CharSequence getCurrentLineIndent() {
       int end = myDocument.getLineEndOffset(myLine);
@@ -376,7 +381,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     }
 
     @Override
-    public void replace(int start, int end, @NotNull String newText) {
+    public void replace(int start, int end, @Nonnull String newText) {
       myDocument.replaceString(myLineStartOffset + start, myLineStartOffset + end, newText);
     }
 
@@ -388,12 +393,13 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
   
   private static class AstHelper implements Helper {
 
-    @NotNull private final TreeHelper myHelper;
+    @Nonnull
+	private final TreeHelper myHelper;
     @Nullable private      ASTNode    myCurrentIndentHolder;
 
     private int myLineStartOffset;
 
-    AstHelper(@NotNull ASTNode startNode, @NotNull TreeHelper helper) {
+    AstHelper(@Nonnull ASTNode startNode, @Nonnull TreeHelper helper) {
       myHelper = helper;
       myCurrentIndentHolder = myHelper.firstLeaf(startNode);
       if (startNode.getStartOffset() <= 0) {
@@ -436,7 +442,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     }
 
     @SuppressWarnings("UnusedAssignment")
-    @NotNull
+    @Nonnull
     @Override
     public CharSequence getCurrentLineIndent() {
       if (myCurrentIndentHolder == null || myLineStartOffset < 0) {
@@ -454,7 +460,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     }
 
     @Override
-    public void replace(int start, int end, @NotNull String newText) {
+    public void replace(int start, int end, @Nonnull String newText) {
       if (myCurrentIndentHolder != null) {
         myHelper.replace(newText, TextRange.create(start, end).shiftRight(getCurrentLineStartOffset()), myCurrentIndentHolder);
       }
@@ -484,7 +490,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     }
 
     @Nullable
-    private ASTNode prevIndentNode(@NotNull ASTNode current) {
+    private ASTNode prevIndentNode(@Nonnull ASTNode current) {
       for (ASTNode candidate = myHelper.prevLeaf(current); candidate != null; candidate = myHelper.prevLeaf(candidate)) {
         if (candidate.getStartOffset() <= 0 || StringUtil.contains(candidate.getChars(), 0, candidate.getTextLength(), '\n')) {
           return candidate;
@@ -495,39 +501,39 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
   }
 
   interface TreeHelper {
-    @Nullable
-    ASTNode prevLeaf(@NotNull ASTNode current);
+    @javax.annotation.Nullable
+    ASTNode prevLeaf(@Nonnull ASTNode current);
 
     @Nullable
-    ASTNode nextLeaf(@NotNull ASTNode current);
+    ASTNode nextLeaf(@Nonnull ASTNode current);
 
     @Nullable
-    ASTNode firstLeaf(@NotNull ASTNode startNode);
+    ASTNode firstLeaf(@Nonnull ASTNode startNode);
 
-    void replace(@NotNull String newText, @NotNull TextRange range, @NotNull ASTNode leaf);
+    void replace(@Nonnull String newText, @Nonnull TextRange range, @Nonnull ASTNode leaf);
   }
 
   private static class TreeHelperImpl implements TreeHelper {
 
     @Override
-    public ASTNode prevLeaf(@NotNull ASTNode current) {
+    public ASTNode prevLeaf(@Nonnull ASTNode current) {
       return TreeUtil.prevLeaf(current);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     @Override
-    public ASTNode nextLeaf(@NotNull ASTNode current) {
+    public ASTNode nextLeaf(@Nonnull ASTNode current) {
       return TreeUtil.nextLeaf(current);
     }
 
     @Nullable
     @Override
-    public ASTNode firstLeaf(@NotNull ASTNode startNode) {
+    public ASTNode firstLeaf(@Nonnull ASTNode startNode) {
       return TreeUtil.findFirstLeaf(startNode);
     }
 
     @Override
-    public void replace(@NotNull String newText, @NotNull TextRange range, @NotNull ASTNode leaf) {
+    public void replace(@Nonnull String newText, @Nonnull TextRange range, @Nonnull ASTNode leaf) {
       FormatterUtil.replaceInnerWhiteSpace(newText, leaf, range);
     }
   }

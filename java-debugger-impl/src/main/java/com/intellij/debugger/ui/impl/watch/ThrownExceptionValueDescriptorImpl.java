@@ -24,7 +24,7 @@ import com.intellij.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * User: lex
@@ -32,10 +32,10 @@ import org.jetbrains.annotations.NotNull;
  * Time: 5:08:07 PM
  */
 public class ThrownExceptionValueDescriptorImpl extends ValueDescriptorImpl{
-  @NotNull
+  @Nonnull
   private final ObjectReference myExceptionObj;
 
-  public ThrownExceptionValueDescriptorImpl(Project project, @NotNull ObjectReference exceptionObj) {
+  public ThrownExceptionValueDescriptorImpl(Project project, @Nonnull ObjectReference exceptionObj) {
     super(project);
     myExceptionObj = exceptionObj;
     // deliberately force default renderer as it does not invoke methods for rendering
@@ -51,7 +51,7 @@ public class ThrownExceptionValueDescriptorImpl extends ValueDescriptorImpl{
     return "Exception";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Type getType() {
     return myExceptionObj.referenceType();

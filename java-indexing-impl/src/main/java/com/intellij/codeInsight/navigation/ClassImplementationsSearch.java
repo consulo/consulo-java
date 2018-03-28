@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.navigation;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
@@ -30,7 +31,7 @@ import com.intellij.util.QueryExecutor;
 public class ClassImplementationsSearch implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull DefinitionsScopedSearch.SearchParameters queryParameters, @NotNull Processor<PsiElement> consumer)
+	public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<PsiElement> consumer)
 	{
 		final PsiElement sourceElement = queryParameters.getElement();
 		return !(sourceElement instanceof PsiClass) || processImplementations((PsiClass) sourceElement, consumer, queryParameters.getScope());

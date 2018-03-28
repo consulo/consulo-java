@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
@@ -47,7 +47,6 @@ import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<FunctionalExpressionStub<PsiMethodReferenceExpression>> implements PsiMethodReferenceExpression
@@ -55,12 +54,12 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiMethodReferenceExpressionImpl");
 	private static final MethodReferenceResolver RESOLVER = new MethodReferenceResolver();
 
-	public PsiMethodReferenceExpressionImpl(@NotNull FunctionalExpressionStub<PsiMethodReferenceExpression> stub)
+	public PsiMethodReferenceExpressionImpl(@Nonnull FunctionalExpressionStub<PsiMethodReferenceExpression> stub)
 	{
 		super(stub, JavaStubElementTypes.METHOD_REFERENCE);
 	}
 
-	public PsiMethodReferenceExpressionImpl(@NotNull ASTNode node)
+	public PsiMethodReferenceExpressionImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
@@ -72,7 +71,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 		return qualifier instanceof PsiTypeElement ? (PsiTypeElement) qualifier : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiType getFunctionalInterfaceType()
 	{
@@ -292,7 +291,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 	}
 
 	@Override
-	public void processVariants(@NotNull final PsiScopeProcessor processor)
+	public void processVariants(@Nonnull final PsiScopeProcessor processor)
 	{
 		final FilterScopeProcessor proc = new FilterScopeProcessor(ElementClassFilter.METHOD, processor);
 		PsiScopesUtil.resolveAndWalk(proc, this, null, true);
@@ -321,7 +320,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JavaResolveResult[] multiResolve(boolean incompleteCode)
 	{
@@ -354,7 +353,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText()
 	{
@@ -390,7 +389,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 	}
 
 	@Override
-	public void accept(@NotNull final PsiElementVisitor visitor)
+	public void accept(@Nonnull final PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -403,7 +402,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		CheckUtil.checkWritable(this);
 
@@ -547,7 +546,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 	}
 
 	@Override
-	public PsiElement bindToElementViaStaticImport(@NotNull final PsiClass qualifierClass) throws IncorrectOperationException
+	public PsiElement bindToElementViaStaticImport(@Nonnull final PsiClass qualifierClass) throws IncorrectOperationException
 	{
 		throw new IncorrectOperationException();
 	}
@@ -576,7 +575,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 		return this;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JavaResolveResult advancedResolve(boolean incompleteCode)
 	{
@@ -597,7 +596,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 		return PsiTreeUtil.getChildOfType(this, PsiReferenceParameterList.class);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType[] getTypeParameters()
 	{

@@ -15,12 +15,13 @@
  */
 package com.siyeh.ipp.opassign;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntention {
 
@@ -35,12 +36,12 @@ public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntentio
     return IntentionPowerPackBundle.message("replace.assignment.with.operator.assignment.intention.name", operator);
   }
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ReplaceableWithOperatorAssignmentPredicate();
   }
 
-  public void processIntention(@NotNull PsiElement element){
+  public void processIntention(@Nonnull PsiElement element){
     final PsiAssignmentExpression expression = (PsiAssignmentExpression)element;
     final PsiExpression rhs = expression.getRExpression();
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)PsiUtil.deparenthesizeExpression(rhs);

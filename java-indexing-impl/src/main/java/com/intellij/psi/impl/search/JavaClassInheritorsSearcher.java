@@ -17,7 +17,8 @@ package com.intellij.psi.impl.search;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.application.ReadActionProcessor;
@@ -50,7 +51,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.JavaClassInheritorsSearcher");
 
 	@Override
-	public void processQuery(@NotNull ClassInheritorsSearch.SearchParameters parameters, @NotNull Processor<PsiClass> consumer)
+	public void processQuery(@Nonnull ClassInheritorsSearch.SearchParameters parameters, @Nonnull Processor<PsiClass> consumer)
 	{
 		final PsiClass baseClass = parameters.getClassToProcess();
 		final SearchScope searchScope = parameters.getScope();
@@ -80,10 +81,10 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 		}
 	}
 
-	private static void processInheritors(@NotNull final Processor<PsiClass> consumer,
-			@NotNull final PsiClass baseClass,
-			@NotNull final SearchScope searchScope,
-			@NotNull final ClassInheritorsSearch.SearchParameters parameters)
+	private static void processInheritors(@Nonnull final Processor<PsiClass> consumer,
+			@Nonnull final PsiClass baseClass,
+			@Nonnull final SearchScope searchScope,
+			@Nonnull final ClassInheritorsSearch.SearchParameters parameters)
 	{
 		if(baseClass instanceof PsiAnonymousClass || isFinal(baseClass))
 		{
@@ -187,7 +188,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 		}
 	}
 
-	private static boolean isJavaLangObject(@NotNull final PsiClass baseClass)
+	private static boolean isJavaLangObject(@Nonnull final PsiClass baseClass)
 	{
 		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
 		{
@@ -199,7 +200,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 		});
 	}
 
-	private static boolean isFinal(@NotNull final PsiClass baseClass)
+	private static boolean isFinal(@Nonnull final PsiClass baseClass)
 	{
 		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
 		{

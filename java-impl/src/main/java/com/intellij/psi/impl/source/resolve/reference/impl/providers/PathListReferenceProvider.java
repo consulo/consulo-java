@@ -16,6 +16,8 @@
 
 package com.intellij.psi.impl.source.resolve.reference.impl.providers;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ElementManipulator;
@@ -26,7 +28,6 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.util.text.CharFilter;
 import com.intellij.openapi.util.TextRange;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author davdeev
@@ -34,8 +35,8 @@ import org.jetbrains.annotations.NotNull;
 public class PathListReferenceProvider extends PsiReferenceProviderBase {
 
   @Override
-  @NotNull
-  public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context) {
+  @Nonnull
+  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
     return getReferencesByElement(element);
   }
 
@@ -43,7 +44,7 @@ public class PathListReferenceProvider extends PsiReferenceProviderBase {
     return true;
   }
 
-  public PsiReference[] getReferencesByElement(@NotNull PsiElement element) {
+  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element) {
 
     PsiReference[] result = PsiReference.EMPTY_ARRAY;
     final ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(element);

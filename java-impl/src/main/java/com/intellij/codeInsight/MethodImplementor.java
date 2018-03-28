@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.generation.GenerationInfo;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
@@ -31,12 +31,12 @@ public interface MethodImplementor extends MemberImplementorExplorer
 {
 	ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create("consulo.java.methodImplementor");
 
-	@NotNull
+	@Nonnull
 	PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
 
 	@Nullable
 	GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);
 
-	@NotNull
+	@Nonnull
 	Consumer<PsiMethod> createDecorator(PsiClass targetClass, PsiMethod baseMethod, boolean toCopyJavaDoc, boolean insertOverrideIfPossible);
 }

@@ -5,7 +5,7 @@ import static com.intellij.util.ObjectUtils.assertNotNull;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -46,20 +46,20 @@ public class JavaGlobalMemberLookupElement extends LookupElement implements Stat
 		myImportInsertion = importInsertion;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiMember getObject()
 	{
 		return myHelper.getMember();
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiClass getContainingClass()
 	{
 		return assertNotNull(myHelper.getContainingClass());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getLookupString()
 	{

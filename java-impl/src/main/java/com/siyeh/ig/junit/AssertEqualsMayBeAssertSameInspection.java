@@ -25,18 +25,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ImportUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AssertEqualsMayBeAssertSameInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("assertequals.may.be.assertsame.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("assertequals.may.be.assertsame.problem.descriptor");
   }
@@ -48,7 +48,7 @@ public class AssertEqualsMayBeAssertSameInspection extends BaseInspection {
 
   private static class AssertEqualsMayBeAssertSameFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("assertequals.may.be.assertsame.quickfix");
     }

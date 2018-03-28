@@ -32,13 +32,13 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
 public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
     if (!PsiUtil.getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_7)) return false;
 
@@ -62,7 +62,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
     if (variable == null) return;
     final PsiExpression initializer = variable.getInitializer();
@@ -112,7 +112,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     }
   }
 
-  private static List<PsiElement> moveStatements(@NotNull PsiElement first, PsiElement last, PsiTryStatement statement) {
+  private static List<PsiElement> moveStatements(@Nonnull PsiElement first, PsiElement last, PsiTryStatement statement) {
     PsiCodeBlock tryBlock = statement.getTryBlock();
     assert tryBlock != null : statement.getText();
     PsiElement parent = statement.getParent();
@@ -162,13 +162,13 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     return toFormat;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.surround.resource.with.ARM.block");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return getFamilyName();

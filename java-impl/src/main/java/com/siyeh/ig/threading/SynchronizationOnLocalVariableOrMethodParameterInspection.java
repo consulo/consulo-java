@@ -15,13 +15,14 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.InspectionGadgetsBundle;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 public class SynchronizationOnLocalVariableOrMethodParameterInspection extends BaseInspection {
 
@@ -31,7 +32,7 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
   public boolean reportMethodParameters = true;
 
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("synchronization.on.local.variable.or.method.parameter.display.name");
   }
@@ -40,7 +41,7 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
     return true;
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Boolean localVariable = (Boolean)infos[0];
     if (localVariable.booleanValue()) {

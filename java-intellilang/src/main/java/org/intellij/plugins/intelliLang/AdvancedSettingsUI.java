@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -30,8 +31,6 @@ import javax.swing.JRadioButton;
 
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -56,7 +55,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable
 	private AdvancedSettingsPanel myPanel;
 	private final Project myProject;
 
-	public AdvancedSettingsUI(@NotNull final Project project, Configuration configuration)
+	public AdvancedSettingsUI(@Nonnull final Project project, Configuration configuration)
 	{
 		myProject = project;
 		myConfiguration = configuration.getAdvancedConfiguration();
@@ -107,14 +106,14 @@ public class AdvancedSettingsUI implements SearchableConfigurable
 		return "reference.settings.injection.advanced";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getId()
 	{
 		return "IntelliLang.Advanced";
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Runnable enableSearch(String option)
 	{
@@ -280,7 +279,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable
 			return false;
 		}
 
-		@NotNull
+		@Nonnull
 		private Configuration.InstrumentationType getInstrumentation()
 		{
 			if(myNoInstrumentation.isSelected())
@@ -312,7 +311,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable
 			myConfiguration.setSourceModificationAllowed(mySourceModificationAllowedCheckBox.isSelected());
 		}
 
-		@NotNull
+		@Nonnull
 		private Configuration.DfaOption getDfaOption()
 		{
 			if(myDfaOff.isSelected())
@@ -349,7 +348,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable
 			mySourceModificationAllowedCheckBox.setSelected(myConfiguration.isSourceModificationAllowed());
 		}
 
-		private void setDfaOption(@NotNull final Configuration.DfaOption dfaOption)
+		private void setDfaOption(@Nonnull final Configuration.DfaOption dfaOption)
 		{
 			switch(dfaOption)
 			{

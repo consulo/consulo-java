@@ -15,9 +15,9 @@
  */
 package com.intellij.usages.impl.rules;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.navigation.NavigationItemFileStatus;
 import com.intellij.openapi.actionSystem.DataSink;
@@ -48,7 +48,7 @@ import consulo.ide.IconDescriptorUpdaters;
  */
 public class ClassGroupingRule implements UsageGroupingRule {
   @Override
-  public UsageGroup groupUsage(@NotNull Usage usage) {
+  public UsageGroup groupUsage(@Nonnull Usage usage) {
     if (!(usage instanceof PsiElementUsage)) {
       return null;
     }
@@ -111,7 +111,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     private final String myQName;
     private final Icon myIcon;
 
-    public ClassUsageGroup(@NotNull PsiClass aClass) {
+    public ClassUsageGroup(@Nonnull PsiClass aClass) {
       myQName = aClass.getQualifiedName();
       myText = createText(aClass);
       myClassPointer = SmartPointerManager.getInstance(aClass.getProject()).createSmartPsiElementPointer(aClass);
@@ -138,7 +138,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getText(UsageView view) {
       return myText;
     }

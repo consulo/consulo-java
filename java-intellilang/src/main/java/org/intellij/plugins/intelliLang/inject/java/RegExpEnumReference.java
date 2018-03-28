@@ -25,8 +25,8 @@ import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.plugins.intelliLang.util.RegExpUtil;
 import org.intellij.plugins.intelliLang.util.StringLiteralReference;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Set;
 
@@ -37,12 +37,12 @@ import java.util.Set;
 final class RegExpEnumReference extends StringLiteralReference {
   private final String myPattern;
 
-  public RegExpEnumReference(PsiLiteralExpression expression, @NotNull String pattern) {
+  public RegExpEnumReference(PsiLiteralExpression expression, @Nonnull String pattern) {
     super(expression);
     myPattern = pattern;
   }
 
-  @NotNull
+  @Nonnull
   public Object[] getVariants() {
     final Set<String> values = getEnumValues();
     if (values == null || values.size() == 0) {
@@ -65,7 +65,7 @@ final class RegExpEnumReference extends StringLiteralReference {
     return values != null ? values.contains(getValue()) ? myValue : null : null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private Set<String> getEnumValues() {
     return RegExpUtil.getEnumValues(myValue.getProject(), myPattern);
   }

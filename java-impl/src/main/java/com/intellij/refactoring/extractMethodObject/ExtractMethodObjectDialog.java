@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
 
+import javax.annotation.Nonnull;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
@@ -30,7 +31,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.help.HelpManager;
@@ -162,7 +162,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	protected Action[] createActions()
 	{
 		return new Action[]{

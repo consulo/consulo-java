@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.actions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.Range;
@@ -30,9 +30,9 @@ public class MethodSmartStepTarget extends SmartStepTarget
 	private final PsiMethod myMethod;
 
 	public MethodSmartStepTarget(
-			@NotNull PsiMethod method,
-			@Nullable String label,
-			@Nullable PsiElement highlightElement,
+			@Nonnull PsiMethod method,
+			@javax.annotation.Nullable String label,
+			@javax.annotation.Nullable PsiElement highlightElement,
 			boolean needBreakpointRequest,
 			Range<Integer> lines)
 	{
@@ -40,7 +40,7 @@ public class MethodSmartStepTarget extends SmartStepTarget
 		myMethod = method;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiMethod getMethod()
 	{
 		return myMethod;

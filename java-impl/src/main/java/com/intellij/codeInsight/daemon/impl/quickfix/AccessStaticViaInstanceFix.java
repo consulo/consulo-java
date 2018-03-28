@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
@@ -45,14 +45,14 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   private final boolean myOnTheFly;
   private final String myText;
 
-  public AccessStaticViaInstanceFix(@NotNull PsiReferenceExpression expression, @NotNull JavaResolveResult result, boolean onTheFly) {
+  public AccessStaticViaInstanceFix(@Nonnull PsiReferenceExpression expression, @Nonnull JavaResolveResult result, boolean onTheFly) {
     super(expression);
     myOnTheFly = onTheFly;
     PsiMember member = (PsiMember)result.getElement();
     myText = calcText(member, result.getSubstitutor());
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return myText;
@@ -68,17 +68,17 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("access.static.via.class.reference.family");
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiReferenceExpression myExpression = (PsiReferenceExpression)startElement;
 
     if (!myExpression.isValid()) return;

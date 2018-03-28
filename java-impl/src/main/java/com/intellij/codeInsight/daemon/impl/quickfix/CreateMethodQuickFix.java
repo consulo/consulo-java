@@ -15,9 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -29,11 +33,7 @@ import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
+import consulo.java.JavaQuickFixBundle;
 
 public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   protected final String mySignature;
@@ -46,7 +46,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     PsiClass myTargetClass = (PsiClass)getStartElement();
     String signature = myTargetClass == null ? "" :
@@ -60,17 +60,17 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.method.from.usage.family");
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     PsiClass myTargetClass = (PsiClass)startElement;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myTargetClass.getContainingFile())) return;
 
@@ -87,7 +87,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
     CreateMethodFromUsageFix.doCreate(myTargetClass, method, arguments, PsiSubstitutor.EMPTY, ExpectedTypeInfo.EMPTY_ARRAY, method);
   }
 
-  private PsiMethod createMethod(@NotNull PsiClass myTargetClass) {
+  private PsiMethod createMethod(@Nonnull PsiClass myTargetClass) {
     Project project = myTargetClass.getProject();
     JVMElementFactory elementFactory = JVMElementFactories.getFactory(myTargetClass.getLanguage(), project);
     if (elementFactory == null) {
@@ -97,8 +97,8 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
     return elementFactory.createMethodFromText(methodText, null);
   }
 
-  @Nullable
-  public static CreateMethodQuickFix createFix(@NotNull PsiClass targetClass, @NonNls final String signature, @NonNls final String body) {
+  @javax.annotation.Nullable
+  public static CreateMethodQuickFix createFix(@Nonnull PsiClass targetClass, @NonNls final String signature, @NonNls final String body) {
     CreateMethodQuickFix fix = new CreateMethodQuickFix(targetClass, signature, body);
     try {
       fix.createMethod(targetClass);

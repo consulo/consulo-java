@@ -19,8 +19,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderEntry;
@@ -41,8 +42,8 @@ public class FindClassUtil
 	 * @param qualifiedName the full-qualified name of the class to find.
 	 * @return the modules that contain the given class in dependencies or libraries.
 	 */
-	@NotNull
-	public static Collection<Module> findModulesWithClass(@NotNull Project project, @NonNls @NotNull String qualifiedName)
+	@Nonnull
+	public static Collection<Module> findModulesWithClass(@Nonnull Project project, @NonNls @Nonnull String qualifiedName)
 	{
 		GlobalSearchScope allScope = GlobalSearchScope.allScope(project);
 		JavaPsiFacade facade = JavaPsiFacade.getInstance(project);

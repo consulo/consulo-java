@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -28,8 +30,6 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
 import com.intellij.util.NullableFunction;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements PsiPolyadicExpression {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiPolyadicExpressionImpl");
@@ -39,13 +39,13 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public IElementType getOperationTokenType() {
     return ((PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN)).getTokenType();
   }
 
   @Override
-  public PsiJavaToken getTokenBeforeOperand(@NotNull PsiExpression operand) {
+  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
     PsiElement element = operand;
     while(element != null) {
       if (getChildRole(element.getNode()) == ChildRole.OPERATION_SIGN) return (PsiJavaToken)element;
@@ -66,7 +66,7 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
     }
   };
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiType doGetType(PsiPolyadicExpressionImpl param) {
     PsiExpression[] operands = param.getOperands();
     PsiType lType = null;
@@ -112,7 +112,7 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
 
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitPolyadicExpression(this);
     }
@@ -121,7 +121,7 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiExpression[] getOperands() {
     PsiExpression[] operands = cachedOperands;

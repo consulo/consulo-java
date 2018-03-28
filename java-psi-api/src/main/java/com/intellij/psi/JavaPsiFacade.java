@@ -15,9 +15,9 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
@@ -36,7 +36,7 @@ public abstract class JavaPsiFacade
 		return INSTANCE_KEY.getValue(project);
 	}
 
-	public static PsiElementFactory getElementFactory(@NotNull Project project)
+	public static PsiElementFactory getElementFactory(@Nonnull Project project)
 	{
 		return getInstance(project).getElementFactory();
 	}
@@ -49,8 +49,8 @@ public abstract class JavaPsiFacade
 	 * @param scope         the scope to search.
 	 * @return the PSI class, or null if no class with such name is found.
 	 */
-	@Nullable
-	public abstract PsiClass findClass(@NonNls @NotNull String qualifiedName, @NotNull GlobalSearchScope scope);
+	@javax.annotation.Nullable
+	public abstract PsiClass findClass(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
 	/**
 	 * Searches the specified scope within the project for classes with the specified full-qualified
@@ -60,8 +60,8 @@ public abstract class JavaPsiFacade
 	 * @param scope         the scope to search.
 	 * @return the array of found classes, or an empty array if no classes are found.
 	 */
-	@NotNull
-	public abstract PsiClass[] findClasses(@NonNls @NotNull String qualifiedName, @NotNull GlobalSearchScope scope);
+	@Nonnull
+	public abstract PsiClass[] findClasses(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
 	/**
 	 * Searches the project for the package with the specified full-qualified name and returns one
@@ -70,11 +70,11 @@ public abstract class JavaPsiFacade
 	 * @param qualifiedName the full-qualified name of the package to find.
 	 * @return the PSI package, or null if no package with such name is found.
 	 */
-	@Nullable
-	public abstract PsiJavaPackage findPackage(@NonNls @NotNull String qualifiedName);
+	@javax.annotation.Nullable
+	public abstract PsiJavaPackage findPackage(@NonNls @Nonnull String qualifiedName);
 
-	@NotNull
-	public abstract PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope);
+	@Nonnull
+	public abstract PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope);
 
 	/**
 	 * Returns the element factory for the project, which can be used to
@@ -82,7 +82,7 @@ public abstract class JavaPsiFacade
 	 *
 	 * @return the element factory instance.
 	 */
-	@NotNull
+	@Nonnull
 	public abstract PsiElementFactory getElementFactory();
 
 	/**
@@ -93,7 +93,7 @@ public abstract class JavaPsiFacade
 	 *
 	 * @return the parser facade.
 	 */
-	@NotNull
+	@Nonnull
 	public abstract PsiJavaParserFacade getParserFacade();
 
 	/**
@@ -102,7 +102,7 @@ public abstract class JavaPsiFacade
 	 *
 	 * @return the resolve helper instance.
 	 */
-	@NotNull
+	@Nonnull
 	public abstract PsiResolveHelper getResolveHelper();
 
 	/**
@@ -111,7 +111,7 @@ public abstract class JavaPsiFacade
 	 *
 	 * @return the name helper instance.
 	 */
-	@NotNull
+	@Nonnull
 	@Deprecated
 	@DeprecationInfo(value = "Use PsiNameHelper#getInstance(Project)", until = "2.0")
 	public abstract PsiNameHelper getNameHelper();
@@ -121,7 +121,7 @@ public abstract class JavaPsiFacade
 	 *
 	 * @return the evaluator instance.
 	 */
-	@NotNull
+	@Nonnull
 	public abstract PsiConstantEvaluationHelper getConstantEvaluationHelper();
 
 	/**
@@ -131,7 +131,7 @@ public abstract class JavaPsiFacade
 	 * @param packageName the package name to check.
 	 * @return true if it is part of the package prefix, false otherwise.
 	 */
-	public abstract boolean isPartOfPackagePrefix(@NotNull String packageName);
+	public abstract boolean isPartOfPackagePrefix(@Nonnull String packageName);
 
 	/**
 	 * Checks if the specified PSI element belongs to the specified package.
@@ -140,7 +140,7 @@ public abstract class JavaPsiFacade
 	 * @param aPackage the package to check.
 	 * @return true if the element belongs to the package, false otherwise.
 	 */
-	public abstract boolean isInPackage(@NotNull PsiElement element, @NotNull PsiJavaPackage aPackage);
+	public abstract boolean isInPackage(@Nonnull PsiElement element, @Nonnull PsiJavaPackage aPackage);
 
 	/**
 	 * Checks if the specified PSI elements belong to the same package.
@@ -149,8 +149,8 @@ public abstract class JavaPsiFacade
 	 * @param element2 the second element to check.
 	 * @return true if the elements are in the same package, false otherwise.
 	 */
-	public abstract boolean arePackagesTheSame(@NotNull PsiElement element1, @NotNull PsiElement element2);
+	public abstract boolean arePackagesTheSame(@Nonnull PsiElement element1, @Nonnull PsiElement element2);
 
-	@NotNull
+	@Nonnull
 	public abstract Project getProject();
 }

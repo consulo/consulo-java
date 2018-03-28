@@ -35,8 +35,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -48,18 +48,18 @@ import java.util.Set;
 public class RefactoringConflictsUtil {
   private RefactoringConflictsUtil() { }
 
-  public static void analyzeAccessibilityConflicts(@NotNull Set<PsiMember> membersToMove,
-                                                   @NotNull PsiClass targetClass,
-                                                   @NotNull MultiMap<PsiElement, String> conflicts,
+  public static void analyzeAccessibilityConflicts(@Nonnull Set<PsiMember> membersToMove,
+                                                   @Nonnull PsiClass targetClass,
+                                                   @Nonnull MultiMap<PsiElement, String> conflicts,
                                                    @Nullable String newVisibility) {
     analyzeAccessibilityConflicts(membersToMove, targetClass, conflicts, newVisibility, targetClass, null);
   }
 
-  public static void analyzeAccessibilityConflicts(@NotNull Set<PsiMember> membersToMove,
+  public static void analyzeAccessibilityConflicts(@Nonnull Set<PsiMember> membersToMove,
                                                    @Nullable PsiClass targetClass,
-                                                   @NotNull MultiMap<PsiElement, String> conflicts,
+                                                   @Nonnull MultiMap<PsiElement, String> conflicts,
                                                    @Nullable String newVisibility,
-                                                   @NotNull PsiElement context,
+                                                   @Nonnull PsiElement context,
                                                    @Nullable Set<PsiMethod> abstractMethods) {
     if (VisibilityUtil.ESCALATE_VISIBILITY.equals(newVisibility)) { //Still need to check for access object
       newVisibility = PsiModifier.PUBLIC;
@@ -71,11 +71,11 @@ public class RefactoringConflictsUtil {
     }
   }
 
-  public static void checkAccessibilityConflicts(@NotNull PsiMember member,
+  public static void checkAccessibilityConflicts(@Nonnull PsiMember member,
                                                  @PsiModifier.ModifierConstant @Nullable String newVisibility,
                                                  @Nullable PsiClass targetClass,
-                                                 @NotNull Set<PsiMember> membersToMove,
-                                                 @NotNull MultiMap<PsiElement, String> conflicts) {
+                                                 @Nonnull Set<PsiMember> membersToMove,
+                                                 @Nonnull MultiMap<PsiElement, String> conflicts) {
     PsiModifierList modifierListCopy = member.getModifierList();
     if (modifierListCopy != null) {
       modifierListCopy = (PsiModifierList)modifierListCopy.copy();
@@ -94,22 +94,22 @@ public class RefactoringConflictsUtil {
     checkAccessibilityConflicts(member, modifierListCopy, targetClass, membersToMove, conflicts);
   }
 
-  public static void checkAccessibilityConflicts(@NotNull PsiMember member,
+  public static void checkAccessibilityConflicts(@Nonnull PsiMember member,
                                                  @Nullable PsiModifierList modifierListCopy,
                                                  @Nullable PsiClass targetClass,
-                                                 @NotNull Set<PsiMember> membersToMove,
-                                                 @NotNull MultiMap<PsiElement, String> conflicts) {
+                                                 @Nonnull Set<PsiMember> membersToMove,
+                                                 @Nonnull MultiMap<PsiElement, String> conflicts) {
     for (PsiReference psiReference : ReferencesSearch.search(member)) {
       checkAccessibilityConflicts(psiReference, member, modifierListCopy, targetClass, membersToMove, conflicts);
     }
   }
 
-  public static void checkAccessibilityConflicts(@NotNull PsiReference reference,
-                                                 @NotNull PsiMember member,
+  public static void checkAccessibilityConflicts(@Nonnull PsiReference reference,
+                                                 @Nonnull PsiMember member,
                                                  @Nullable PsiModifierList modifierListCopy,
                                                  @Nullable PsiClass targetClass,
-                                                 @NotNull Set<PsiMember> membersToMove,
-                                                 @NotNull MultiMap<PsiElement, String> conflicts) {
+                                                 @Nonnull Set<PsiMember> membersToMove,
+                                                 @Nonnull MultiMap<PsiElement, String> conflicts) {
     JavaPsiFacade manager = JavaPsiFacade.getInstance(member.getProject());
     PsiElement ref = reference.getElement();
     if (!RefactoringHierarchyUtil.willBeInTargetClass(ref, membersToMove, targetClass, false)) {
@@ -136,10 +136,10 @@ public class RefactoringConflictsUtil {
 
   public static void checkUsedElements(PsiMember member,
                                        PsiElement scope,
-                                       @NotNull Set<PsiMember> membersToMove,
+                                       @Nonnull Set<PsiMember> membersToMove,
                                        @Nullable Set<PsiMethod> abstractMethods,
                                        @Nullable PsiClass targetClass,
-                                       @NotNull PsiElement context,
+                                       @Nonnull PsiElement context,
                                        MultiMap<PsiElement, String> conflicts) {
     final Set<PsiMember> moving = new HashSet<PsiMember>(membersToMove);
     if (abstractMethods != null) {
@@ -190,7 +190,7 @@ public class RefactoringConflictsUtil {
   }
 
   public static void checkAccessibility(PsiMember refMember,
-                                        @NotNull PsiElement newContext,
+                                        @Nonnull PsiElement newContext,
                                         @Nullable PsiClass accessClass,
                                         PsiMember member,
                                         MultiMap<PsiElement, String> conflicts) {

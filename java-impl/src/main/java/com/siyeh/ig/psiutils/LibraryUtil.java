@@ -15,9 +15,11 @@
  */
 package com.siyeh.ig.psiutils;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class LibraryUtil {
 
@@ -30,12 +32,12 @@ public class LibraryUtil {
   }
 
   public static boolean callOnLibraryMethod(
-    @NotNull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiMethod method = expression.resolveMethod();
     return method instanceof PsiCompiledElement;
   }
 
-  public static boolean isOverrideOfLibraryMethod(@NotNull PsiMethod method) {
+  public static boolean isOverrideOfLibraryMethod(@Nonnull PsiMethod method) {
     final PsiMethod[] superMethods = method.findSuperMethods();
     for (PsiMethod superMethod : superMethods) {
       final PsiClass containingClass = superMethod.getContainingClass();
@@ -50,7 +52,7 @@ public class LibraryUtil {
   }
 
   public static boolean isOverrideOfLibraryMethodParameter(
-    @Nullable PsiVariable variable) {
+    @javax.annotation.Nullable PsiVariable variable) {
     if (!(variable instanceof PsiParameter)) {
       return false;
     }

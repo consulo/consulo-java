@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -47,7 +49,7 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -55,7 +57,7 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -63,14 +65,14 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		return PsiUtil.isLanguageLevel9OrHigher(file) && startElement instanceof PsiJavaModule && startElement.getManager().isInProject(startElement) && getLBrace((PsiJavaModule) startElement) !=
 				null;
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @javax.annotation.Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		PsiJavaModule module = (PsiJavaModule) startElement;
 
@@ -92,15 +94,15 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
 		return true;
 	}
 
-	@Nullable
-	private static PsiElement findAddingPlace(@NotNull PsiJavaModule module)
+	@javax.annotation.Nullable
+	private static PsiElement findAddingPlace(@Nonnull PsiJavaModule module)
 	{
 		PsiElement addingPlace = ContainerUtil.iterateAndGetLastItem(module.getRequires());
 		return addingPlace != null ? addingPlace : getLBrace(module);
 	}
 
 	@Nullable
-	private static PsiElement getLBrace(@NotNull PsiJavaModule module)
+	private static PsiElement getLBrace(@Nonnull PsiJavaModule module)
 	{
 		PsiJavaModuleReferenceElement nameElement = module.getNameIdentifier();
 		for(PsiElement element = nameElement.getNextSibling(); element != null; element = element.getNextSibling())

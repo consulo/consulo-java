@@ -20,22 +20,22 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class StringTokenizerInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "UseOfStringTokenizer";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.stringtokenizer.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.stringtokenizer.problem.descriptor");
@@ -48,7 +48,7 @@ public class StringTokenizerInspection extends BaseInspection {
   private static class StringTokenizerVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final PsiType type = variable.getType();
       final PsiType deepComponentType = type.getDeepComponentType();

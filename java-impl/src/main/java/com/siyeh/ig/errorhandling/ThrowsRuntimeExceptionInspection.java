@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.lang.LanguageDocumentation;
 import com.intellij.lang.documentation.CodeDocumentationProvider;
@@ -32,23 +34,22 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 public class ThrowsRuntimeExceptionInspection extends BaseInspection {
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("throws.runtime.exception.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("throws.runtime.exception.problem.descriptor");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final String exceptionName = (String)infos[0];
@@ -69,7 +70,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
       myExceptionName = exceptionName;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("throws.runtime.exception.move.quickfix", myExceptionName);
@@ -113,7 +114,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
       element.delete();
     }
 
-    public static boolean isApplicable(@NotNull PsiJavaCodeReferenceElement reference) {
+    public static boolean isApplicable(@Nonnull PsiJavaCodeReferenceElement reference) {
       final PsiElement parent = reference.getParent();
       final PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethod)) {
@@ -160,7 +161,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
       myClassName = className;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("throws.runtime.exception.quickfix", myClassName);

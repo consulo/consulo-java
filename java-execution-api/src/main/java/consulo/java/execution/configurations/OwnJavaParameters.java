@@ -21,9 +21,11 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.ParametersList;
@@ -138,7 +140,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters
 		return getValidJdkToRunModule(module, false);
 	}
 
-	@NotNull
+	@Nonnull
 	public static Sdk getValidJdkToRunModule(final Module module, boolean productionOnly) throws CantRunException
 	{
 		Sdk jdk = getJdkToRunModule(module, productionOnly);
@@ -181,8 +183,8 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters
 		return findLatestVersion(moduleSdk, sdksFromDependencies);
 	}
 
-	@NotNull
-	private static Sdk findLatestVersion(@NotNull Sdk mainSdk, @NotNull Set<Sdk> sdks)
+	@Nonnull
+	private static Sdk findLatestVersion(@Nonnull Sdk mainSdk, @Nonnull Set<Sdk> sdks)
 	{
 		Sdk result = mainSdk;
 		for(Sdk sdk : sdks)

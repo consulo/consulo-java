@@ -17,8 +17,8 @@ package com.intellij.refactoring.extractMethod;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
@@ -64,7 +64,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 	public static final String REFACTORING_NAME = RefactoringBundle.message("extract.method.title");
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext)
+	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		if(dataContext != null)
 		{
@@ -78,7 +78,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext)
 	{
 		final Pass<PsiElement[]> callback = new Pass<PsiElement[]>()
 		{
@@ -91,7 +91,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		selectAndPass(project, editor, file, callback);
 	}
 
-	public static void selectAndPass(@NotNull final Project project, @NotNull final Editor editor, @NotNull final PsiFile file, @NotNull final Pass<PsiElement[]> callback)
+	public static void selectAndPass(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final Pass<PsiElement[]> callback)
 	{
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
 		if(!editor.getSelectionModel().hasSelection())
@@ -163,7 +163,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		});
 	}
 
-	private static boolean invokeOnElements(final Project project, final Editor editor, @NotNull final ExtractMethodProcessor processor, final boolean directTypes)
+	private static boolean invokeOnElements(final Project project, final Editor editor, @Nonnull final ExtractMethodProcessor processor, final boolean directTypes)
 	{
 		if(!CommonRefactoringUtil.checkReadOnlyStatus(project, processor.getTargetClass().getContainingFile()))
 		{
@@ -178,7 +178,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		return false;
 	}
 
-	public static void run(@NotNull final Project project, final Editor editor, final ExtractMethodProcessor processor)
+	public static void run(@Nonnull final Project project, final Editor editor, final ExtractMethodProcessor processor)
 	{
 		CommandProcessor.getInstance().executeCommand(project, new Runnable()
 		{
@@ -204,13 +204,13 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		}, REFACTORING_NAME, null);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static ExtractMethodProcessor getProcessor(final PsiElement[] elements,
 			final Project project,
 			final PsiFile file,
 			final Editor editor,
 			final boolean showErrorMessages,
-			final @Nullable Pass<ExtractMethodProcessor> pass)
+			final @javax.annotation.Nullable Pass<ExtractMethodProcessor> pass)
 	{
 		if(elements == null || elements.length == 0)
 		{
@@ -271,18 +271,18 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static ExtractMethodProcessor getProcessor(final Project project, final PsiElement[] elements, final PsiFile file, final boolean openEditor)
 	{
 		return getProcessor(elements, project, file, openEditor ? openEditor(project, file) : null, false, null);
 	}
 
-	public static boolean invokeOnElements(final Project project, @NotNull final ExtractMethodProcessor processor, final PsiFile file, final boolean directTypes)
+	public static boolean invokeOnElements(final Project project, @Nonnull final ExtractMethodProcessor processor, final PsiFile file, final boolean directTypes)
 	{
 		return invokeOnElements(project, openEditor(project, file), processor, directTypes);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static Editor openEditor(final Project project, final PsiFile file)
 	{
 		final VirtualFile virtualFile = file.getVirtualFile();

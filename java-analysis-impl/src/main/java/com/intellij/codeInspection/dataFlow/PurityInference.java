@@ -26,8 +26,8 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.RETURN_STATEMENT
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.util.RecursionManager;
@@ -47,7 +47,7 @@ import com.intellij.util.containers.ContainerUtil;
 public class PurityInference
 {
 
-	public static boolean inferPurity(@NotNull PsiMethodImpl method)
+	public static boolean inferPurity(@Nonnull PsiMethodImpl method)
 	{
 		if(!InferenceFromSourceUtil.shouldInferFromSource(method) || PsiType.VOID.equals(method.getReturnType()) || method.isConstructor())
 		{
@@ -98,12 +98,12 @@ public class PurityInference
 			}
 		}
 
-		private boolean isCall(@NotNull LighterASTNode element, IElementType type)
+		private boolean isCall(@Nonnull LighterASTNode element, IElementType type)
 		{
 			return type == NEW_EXPRESSION && LightTreeUtil.firstChildOfType(tree, element, EXPRESSION_LIST) != null || type == METHOD_CALL_EXPRESSION;
 		}
 
-		private boolean isMutatingOperation(@NotNull LighterASTNode element)
+		private boolean isMutatingOperation(@Nonnull LighterASTNode element)
 		{
 			return LightTreeUtil.firstChildOfType(tree, element, JavaTokenType.PLUSPLUS) != null || LightTreeUtil.firstChildOfType(tree, element, JavaTokenType.MINUSMINUS) != null;
 		}

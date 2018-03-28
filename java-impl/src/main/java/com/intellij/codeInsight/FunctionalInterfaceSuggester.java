@@ -22,8 +22,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.java15api.Java15APIUsageInspectionBase;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -70,7 +70,7 @@ public class FunctionalInterfaceSuggester
 			"gnu.trove.TObjectObjectProcedure",
 	};
 
-	public static Collection<? extends PsiType> suggestFunctionalInterfaces(final @NotNull PsiFunctionalExpression expression)
+	public static Collection<? extends PsiType> suggestFunctionalInterfaces(final @Nonnull PsiFunctionalExpression expression)
 	{
 		final PsiType qualifierType = expression instanceof PsiMethodReferenceExpression ? PsiMethodReferenceUtil.getQualifierType((PsiMethodReferenceExpression) expression) : null;
 		return suggestFunctionalInterfaces(expression, new NullableFunction<PsiClass, PsiType>()
@@ -84,7 +84,7 @@ public class FunctionalInterfaceSuggester
 		});
 	}
 
-	public static Collection<? extends PsiType> suggestFunctionalInterfaces(final @NotNull PsiMethod method)
+	public static Collection<? extends PsiType> suggestFunctionalInterfaces(final @Nonnull PsiMethod method)
 	{
 		if(method.isConstructor())
 		{
@@ -93,7 +93,7 @@ public class FunctionalInterfaceSuggester
 
 		return suggestFunctionalInterfaces(method, new NullableFunction<PsiClass, PsiType>()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public PsiType fun(PsiClass aClass)
 			{
@@ -173,7 +173,7 @@ public class FunctionalInterfaceSuggester
 		});
 	}
 
-	private static <T extends PsiElement> Collection<? extends PsiType> suggestFunctionalInterfaces(final @NotNull T element, final NullableFunction<PsiClass, PsiType> acceptanceChecker)
+	private static <T extends PsiElement> Collection<? extends PsiType> suggestFunctionalInterfaces(final @Nonnull T element, final NullableFunction<PsiClass, PsiType> acceptanceChecker)
 	{
 		final Project project = element.getProject();
 		final Set<PsiType> types = new HashSet<PsiType>();
@@ -222,7 +222,7 @@ public class FunctionalInterfaceSuggester
 		return typesToSuggest;
 	}
 
-	private static PsiType composeAcceptableType(@NotNull PsiClass interface2Consider, @NotNull PsiFunctionalExpression expression, PsiType qualifierType)
+	private static PsiType composeAcceptableType(@Nonnull PsiClass interface2Consider, @Nonnull PsiFunctionalExpression expression, PsiType qualifierType)
 	{
 		final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(interface2Consider.getProject());
 		final PsiType type = elementFactory.createType(interface2Consider, PsiSubstitutor.EMPTY);

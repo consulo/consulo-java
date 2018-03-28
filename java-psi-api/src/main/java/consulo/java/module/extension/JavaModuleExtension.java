@@ -17,8 +17,8 @@ package consulo.java.module.extension;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -35,30 +35,30 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 	/**
 	 * @return user set language version or resolved language version from sdk
 	 */
-	@NotNull
+	@Nonnull
 	LanguageLevel getLanguageLevel();
 
 	/**
 	 * @return user set language version. If version is not set return null
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	default LanguageLevel getLanguageLevelNoDefault()
 	{
 		return getLanguageLevel();
 	}
 
-	@NotNull
+	@Nonnull
 	SpecialDirLocation getSpecialDirLocation();
 
-	@Nullable
+	@javax.annotation.Nullable
 	Sdk getSdkForCompilation();
 
-	@NotNull
-	Set<VirtualFile> getCompilationClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk);
+	@Nonnull
+	Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
 
-	@NotNull
-	Set<VirtualFile> getCompilationBootClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk);
+	@Nonnull
+	Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
 
-	@Nullable
+	@javax.annotation.Nullable
 	String getBytecodeVersion();
 }

@@ -15,11 +15,12 @@
  */
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  *  @author dsl
@@ -31,7 +32,7 @@ public abstract class ImplicitVariableImpl extends LightVariableBase implements 
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitImplicitVariable(this);
     }
@@ -50,7 +51,7 @@ public abstract class ImplicitVariableImpl extends LightVariableBase implements 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public SearchScope getUseScope() {
     return new LocalSearchScope(getDeclarationScope());
   }

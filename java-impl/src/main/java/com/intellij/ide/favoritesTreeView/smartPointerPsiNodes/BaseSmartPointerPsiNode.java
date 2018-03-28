@@ -18,9 +18,9 @@ package com.intellij.ide.favoritesTreeView.smartPointerPsiNodes;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ProjectViewNodeDecorator;
@@ -53,7 +53,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public final Collection<AbstractTreeNode> getChildren() {
     PsiElement value = getPsiElement();
     if (value == null) return new ArrayList<AbstractTreeNode>();
@@ -61,7 +61,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
     return getChildrenImpl();
   }
 
-  @NotNull
+  @Nonnull
   protected abstract Collection<AbstractTreeNode> getChildrenImpl();
 
   protected boolean isMarkReadOnly() {
@@ -125,7 +125,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
   }
 
   @Override
-  public boolean contains(@NotNull VirtualFile file) {
+  public boolean contains(@Nonnull VirtualFile file) {
     if (getPsiElement() == null) return false;
     PsiFile containingFile = getPsiElement().getContainingFile();
     return file.equals(containingFile.getVirtualFile());

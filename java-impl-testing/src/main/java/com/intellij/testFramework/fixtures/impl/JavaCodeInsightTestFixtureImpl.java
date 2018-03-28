@@ -15,8 +15,9 @@
  */
 package com.intellij.testFramework.fixtures.impl;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -49,7 +50,7 @@ public class JavaCodeInsightTestFixtureImpl extends CodeInsightTestFixtureImpl i
   }
 
   @Override
-  public PsiClass addClass(@NotNull @NonNls final String classText) {
+  public PsiClass addClass(@Nonnull @NonNls final String classText) {
     assertInitialized();
     final PsiClass psiClass = addClass(getTempDirPath(), classText);
     final VirtualFile file = psiClass.getContainingFile().getVirtualFile();
@@ -57,7 +58,7 @@ public class JavaCodeInsightTestFixtureImpl extends CodeInsightTestFixtureImpl i
     return psiClass;
   }
 
-  private PsiClass addClass(@NonNls final String rootPath, @NotNull @NonNls final String classText) {
+  private PsiClass addClass(@NonNls final String rootPath, @Nonnull @NonNls final String classText) {
     final String qName =
       ApplicationManager.getApplication().runReadAction(new Computable<String>() {
         public String compute() {
@@ -76,16 +77,16 @@ public class JavaCodeInsightTestFixtureImpl extends CodeInsightTestFixtureImpl i
   }
 
   @Override
-  @NotNull
-  public PsiClass findClass(@NotNull @NonNls final String name) {
+  @Nonnull
+  public PsiClass findClass(@Nonnull @NonNls final String name) {
     final PsiClass aClass = getJavaFacade().findClass(name, ProjectScope.getProjectScope(getProject()));
     Assert.assertNotNull("Class " + name + " not found", aClass);
     return aClass;
   }
 
   @Override
-  @NotNull
-  public PsiJavaPackage findPackage(@NotNull @NonNls final String name) {
+  @Nonnull
+  public PsiJavaPackage findPackage(@Nonnull @NonNls final String name) {
     final PsiJavaPackage aPackage = getJavaFacade().findPackage(name);
     Assert.assertNotNull("Package " + name + " not found", aPackage);
     return aPackage;

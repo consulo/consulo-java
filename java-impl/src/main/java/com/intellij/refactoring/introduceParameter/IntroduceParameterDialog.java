@@ -36,7 +36,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -85,16 +85,16 @@ public class IntroduceParameterDialog extends RefactoringDialog {
   private final IntroduceParameterSettingsPanel myPanel;
   private boolean myHasWriteAccess = false;
 
-  IntroduceParameterDialog(@NotNull Project project,
-                           @NotNull List<UsageInfo> classMembersList,
+  IntroduceParameterDialog(@Nonnull Project project,
+                           @Nonnull List<UsageInfo> classMembersList,
                            PsiExpression[] occurences,
                            PsiLocalVariable onLocalVariable,
                            PsiExpression onExpression,
-                           @NotNull NameSuggestionsGenerator generator,
-                           @NotNull TypeSelectorManager typeSelectorManager,
-                           @NotNull PsiMethod methodToSearchFor,
-                           @NotNull PsiMethod methodToReplaceIn,
-                           @NotNull TIntArrayList parametersToRemove,
+                           @Nonnull NameSuggestionsGenerator generator,
+                           @Nonnull TypeSelectorManager typeSelectorManager,
+                           @Nonnull PsiMethod methodToSearchFor,
+                           @Nonnull PsiMethod methodToReplaceIn,
+                           @Nonnull TIntArrayList parametersToRemove,
                            final boolean mustBeFinal) {
     super(project, true);
     myPanel = new IntroduceParameterSettingsPanel(onLocalVariable, onExpression, methodToReplaceIn, parametersToRemove);

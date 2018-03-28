@@ -26,8 +26,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.temporary.on.conversion.from.string.display.name");
@@ -64,7 +63,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String replacementString =
       calculateReplacementExpression(
@@ -74,7 +73,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
       replacementString);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @NonNls
   static String calculateReplacementExpression(
     PsiMethodCallExpression expression) {
@@ -117,7 +116,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public InspectionGadgetsFix buildFix(Object... infos) {
     final String replacementExpression =
       calculateReplacementExpression(
@@ -141,7 +140,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
       m_name = name;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return m_name;
     }
@@ -186,7 +185,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

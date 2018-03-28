@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.ExpectedTypeInfo;
@@ -78,7 +78,7 @@ public class PreferByKindWeigher extends LookupElementWeigher
 		myExpectedTypes = expectedTypes;
 	}
 
-	@NotNull
+	@Nonnull
 	private static Condition<PsiClass> createSuitabilityCondition(final PsiElement position)
 	{
 		if(IN_CATCH_TYPE.accepts(position) || IN_MULTI_CATCH_TYPE.accepts(position))
@@ -152,9 +152,9 @@ public class PreferByKindWeigher extends LookupElementWeigher
 		improbableKeyword,
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public MyResult weigh(@NotNull LookupElement item)
+	public MyResult weigh(@Nonnull LookupElement item)
 	{
 		final Object object = item.getObject();
 
@@ -271,7 +271,7 @@ public class PreferByKindWeigher extends LookupElementWeigher
 		return MyResult.normal;
 	}
 
-	@NotNull
+	@Nonnull
 	private ThreeState isProbableKeyword(String keyword)
 	{
 		if(PsiKeyword.RETURN.equals(keyword))

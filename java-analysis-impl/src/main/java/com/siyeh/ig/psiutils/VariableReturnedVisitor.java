@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -24,12 +25,13 @@ import com.intellij.psi.PsiVariable;
 
 class VariableReturnedVisitor extends JavaRecursiveElementVisitor {
 
-  @NotNull private final PsiVariable variable;
+  @Nonnull
+  private final PsiVariable variable;
   private final boolean myBuilderPattern;
 
   private boolean returned = false;
 
-  public VariableReturnedVisitor(@NotNull PsiVariable variable, boolean builderPattern) {
+  public VariableReturnedVisitor(@Nonnull PsiVariable variable, boolean builderPattern) {
     this.variable = variable;
     myBuilderPattern = builderPattern;
   }
@@ -43,7 +45,7 @@ class VariableReturnedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReturnStatement(@NotNull PsiReturnStatement returnStatement) {
+  public void visitReturnStatement(@Nonnull PsiReturnStatement returnStatement) {
     if (returned) {
       return;
     }

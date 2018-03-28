@@ -26,8 +26,8 @@ import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.MutableTreeNode;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
@@ -129,7 +129,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		return myText;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getMarkupTooltipText()
 	{
 		return myMarkupTooltipText;
@@ -293,7 +293,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		myProperties.put(key, data);
 	}
 
-	@NotNull
+	@Nonnull
 	public static DebuggerTreeNodeImpl createNodeNoUpdate(DebuggerTree tree, NodeDescriptor descriptor)
 	{
 		DebuggerTreeNodeImpl node = new DebuggerTreeNodeImpl(tree, descriptor);
@@ -301,7 +301,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		return node;
 	}
 
-	@NotNull
+	@Nonnull
 	protected static DebuggerTreeNodeImpl createNode(DebuggerTree tree, NodeDescriptorImpl descriptor, EvaluationContextImpl evaluationContext)
 	{
 		final DebuggerTreeNodeImpl node = new DebuggerTreeNodeImpl(tree, descriptor);

@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.RecursionGuard;
@@ -57,7 +57,7 @@ public interface PsiResolveHelper
 	 * @param place        place where constructor is invoked (used for checking access)
 	 * @return the result of the resolve, or {@link JavaResolveResult#EMPTY} if the resolve failed.
 	 */
-	@NotNull
+	@Nonnull
 	JavaResolveResult resolveConstructor(PsiClassType type, PsiExpressionList argumentList, PsiElement place);
 
 	/**
@@ -70,10 +70,10 @@ public interface PsiResolveHelper
 	 * @param place        place where constructor is invoked (used for checking access)
 	 * @return the result of the resolve, or {@link JavaResolveResult#EMPTY} if the resolve failed.
 	 */
-	@NotNull
-	JavaResolveResult[] multiResolveConstructor(@NotNull PsiClassType type,
-			@NotNull PsiExpressionList argumentList,
-			@NotNull PsiElement place);
+	@Nonnull
+	JavaResolveResult[] multiResolveConstructor(@Nonnull PsiClassType type,
+			@Nonnull PsiExpressionList argumentList,
+			@Nonnull PsiElement place);
 
 	/**
 	 * Resolves a call expression and returns an array of possible resolve results.
@@ -83,8 +83,8 @@ public interface PsiResolveHelper
 	 *                                 can be returned as a candidate for the resolve.
 	 * @return the array of resolve results.
 	 */
-	@NotNull
-	CandidateInfo[] getReferencedMethodCandidates(@NotNull PsiCallExpression call, boolean dummyImplicitConstructor);
+	@Nonnull
+	CandidateInfo[] getReferencedMethodCandidates(@Nonnull PsiCallExpression call, boolean dummyImplicitConstructor);
 
 	/**
 	 * Resolves a call expression and returns an array of possible resolve results.
@@ -95,8 +95,8 @@ public interface PsiResolveHelper
 	 * @param checkVarargs             true if varargs method should lead to 2 candidates in the result array
 	 * @return the array of resolve results.
 	 */
-	@NotNull
-	CandidateInfo[] getReferencedMethodCandidates(@NotNull PsiCallExpression call,
+	@Nonnull
+	CandidateInfo[] getReferencedMethodCandidates(@Nonnull PsiCallExpression call,
 			boolean dummyImplicitConstructor,
 			boolean checkVarargs);
 
@@ -109,7 +109,7 @@ public interface PsiResolveHelper
 	 * @return the resolve result, or null if the resolve was not successful.
 	 */
 	@Nullable
-	PsiClass resolveReferencedClass(@NotNull String referenceText, PsiElement context);
+	PsiClass resolveReferencedClass(@Nonnull String referenceText, PsiElement context);
 
 	/**
 	 * Resolves a reference to a variable, given the text of the reference and the context
@@ -120,7 +120,7 @@ public interface PsiResolveHelper
 	 * @return the resolve result, or null if the resolve was not successful.
 	 */
 	@Nullable
-	PsiVariable resolveReferencedVariable(@NotNull String referenceText, PsiElement context);
+	PsiVariable resolveReferencedVariable(@Nonnull String referenceText, PsiElement context);
 
 	/**
 	 * Resolves a reference to a variable, given the text of the reference and the context
@@ -132,50 +132,50 @@ public interface PsiResolveHelper
 	 * in a given context.
 	 */
 	@Nullable
-	PsiVariable resolveAccessibleReferencedVariable(@NotNull String referenceText, PsiElement context);
+	PsiVariable resolveAccessibleReferencedVariable(@Nonnull String referenceText, PsiElement context);
 
-	boolean isAccessible(@NotNull PsiMember member,
+	boolean isAccessible(@Nonnull PsiMember member,
 			@Nullable PsiModifierList modifierList,
-			@NotNull PsiElement place,
+			@Nonnull PsiElement place,
 			@Nullable PsiClass accessObjectClass,
-			@Nullable PsiElement currentFileResolveScope);
+			@javax.annotation.Nullable PsiElement currentFileResolveScope);
 
-	boolean isAccessible(@NotNull PsiMember member, @NotNull PsiElement place, @Nullable PsiClass accessObjectClass);
+	boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @javax.annotation.Nullable PsiClass accessObjectClass);
 
 	/**
 	 * @return {@link PsiType#NULL} iff no type could be inferred
 	 * null         iff the type inferred is raw
 	 * inferred type otherwise
 	 */
-	PsiType inferTypeForMethodTypeParameter(@NotNull PsiTypeParameter typeParameter,
-			@NotNull PsiParameter[] parameters,
-			@NotNull PsiExpression[] arguments,
-			@NotNull PsiSubstitutor partialSubstitutor,
+	PsiType inferTypeForMethodTypeParameter(@Nonnull PsiTypeParameter typeParameter,
+			@Nonnull PsiParameter[] parameters,
+			@Nonnull PsiExpression[] arguments,
+			@Nonnull PsiSubstitutor partialSubstitutor,
 			@Nullable PsiElement parent,
-			@NotNull ParameterTypeInferencePolicy policy);
+			@Nonnull ParameterTypeInferencePolicy policy);
 
-	@NotNull
-	PsiSubstitutor inferTypeArguments(@NotNull PsiTypeParameter[] typeParameters,
-			@NotNull PsiParameter[] parameters,
-			@NotNull PsiExpression[] arguments,
-			@NotNull PsiSubstitutor partialSubstitutor,
-			@NotNull PsiElement parent,
-			@NotNull ParameterTypeInferencePolicy policy);
+	@Nonnull
+	PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
+			@Nonnull PsiParameter[] parameters,
+			@Nonnull PsiExpression[] arguments,
+			@Nonnull PsiSubstitutor partialSubstitutor,
+			@Nonnull PsiElement parent,
+			@Nonnull ParameterTypeInferencePolicy policy);
 
-	@NotNull
-	PsiSubstitutor inferTypeArguments(@NotNull PsiTypeParameter[] typeParameters,
-			@NotNull PsiParameter[] parameters,
-			@NotNull PsiExpression[] arguments,
-			@NotNull PsiSubstitutor partialSubstitutor,
-			@NotNull PsiElement parent,
-			@NotNull ParameterTypeInferencePolicy policy,
-			@NotNull LanguageLevel languageLevel);
+	@Nonnull
+	PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
+			@Nonnull PsiParameter[] parameters,
+			@Nonnull PsiExpression[] arguments,
+			@Nonnull PsiSubstitutor partialSubstitutor,
+			@Nonnull PsiElement parent,
+			@Nonnull ParameterTypeInferencePolicy policy,
+			@Nonnull LanguageLevel languageLevel);
 
-	@NotNull
-	PsiSubstitutor inferTypeArguments(@NotNull PsiTypeParameter[] typeParameters,
-			@NotNull PsiType[] leftTypes,
-			@NotNull PsiType[] rightTypes,
-			@NotNull LanguageLevel languageLevel);
+	@Nonnull
+	PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
+			@Nonnull PsiType[] leftTypes,
+			@Nonnull PsiType[] rightTypes,
+			@Nonnull LanguageLevel languageLevel);
 
 	PsiType getSubstitutionForTypeParameter(PsiTypeParameter typeParam,
 			PsiType param,

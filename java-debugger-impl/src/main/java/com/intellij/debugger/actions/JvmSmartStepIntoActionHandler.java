@@ -28,11 +28,11 @@ import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.xdebugger.impl.actions.DebuggerActionHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JvmSmartStepIntoActionHandler extends DebuggerActionHandler {
-  public void perform(@NotNull final Project project, final AnActionEvent event) {
+  public void perform(@Nonnull final Project project, final AnActionEvent event) {
     final DebuggerContextImpl debuggerContext = (DebuggerManagerEx.getInstanceEx(project)).getContext();
     final DebuggerSession session = debuggerContext.getDebuggerSession();
     if (session != null) {
@@ -40,7 +40,7 @@ public class JvmSmartStepIntoActionHandler extends DebuggerActionHandler {
     }
   }
 
-  private static void doStep(final @NotNull Project project, final @Nullable SourcePosition position, final @NotNull DebuggerSession session) {
+  private static void doStep(final @Nonnull Project project, final @Nullable SourcePosition position, final @Nonnull DebuggerSession session) {
     final VirtualFile file = position != null ? position.getFile().getVirtualFile() : null;
     final FileEditor fileEditor = file != null? FileEditorManager.getInstance(project).getSelectedEditor(file) : null;
     if (fileEditor instanceof TextEditor) {
@@ -51,7 +51,7 @@ public class JvmSmartStepIntoActionHandler extends DebuggerActionHandler {
     session.stepInto(true, null);
   }
 
-  public boolean isEnabled(@NotNull final Project project, final AnActionEvent event) {
+  public boolean isEnabled(@Nonnull final Project project, final AnActionEvent event) {
     final DebuggerContextImpl context = (DebuggerManagerEx.getInstanceEx(project)).getContext();
     DebuggerSession debuggerSession = context.getDebuggerSession();
     final boolean isPaused = debuggerSession != null && debuggerSession.isPaused();

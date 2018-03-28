@@ -17,7 +17,7 @@ package com.intellij.psi.impl;
 
 import com.intellij.psi.PsiConstantEvaluationHelper;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author Serega.Vasiliev

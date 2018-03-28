@@ -20,8 +20,8 @@ import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Denis Zhdanov
@@ -125,13 +125,13 @@ public class JavaSurroundWithTest extends LightCodeInsightTestCase {
     doTest(getTestName(false), new JavaWithNullCheckSurrounder());
   }
 
-  private void doTest(@NotNull String fileName, final Surrounder surrounder) {
+  private void doTest(@Nonnull String fileName, final Surrounder surrounder) {
     configureByFile(BASE_PATH + fileName + ".java");
     SurroundWithHandler.invoke(getProject(), getEditor(), getFile(), surrounder);
     checkResultByFile(BASE_PATH + fileName + "_after.java");
   }
 
-  private void doTestWithTemplateFinish(@NotNull String fileName, final Surrounder surrounder, @Nullable String textToType)
+  private void doTestWithTemplateFinish(@Nonnull String fileName, final Surrounder surrounder, @Nullable String textToType)
     throws Exception {
     TemplateManagerImpl.setTemplateTesting(getProject(), getTestRootDisposable());
     configureByFile(BASE_PATH + fileName + ".java");

@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
@@ -65,7 +65,7 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
 	public static final CustomizationKey<Boolean> JVM_FORMAT = new CustomizationKey<Boolean>("JVM_FORMAT");
 	public static final CustomizationKey<Boolean> ALLOW_DOLLAR_NAMES = new CustomizationKey<Boolean>("ALLOW_DOLLAR_NAMES");
 	public static final CustomizationKey<String> DEFAULT_PACKAGE = new CustomizationKey<String>("DEFAULT_PACKAGE");
-	@Nullable
+	@javax.annotation.Nullable
 	private Map<CustomizationKey, Object> myOptions;
 
 	private boolean myAllowEmpty;
@@ -105,46 +105,46 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
 		option.putValue(myOptions, value);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public <T> T getOption(CustomizationKey<T> option)
 	{
 		return myOptions == null ? null : (T) myOptions.get(option);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public GlobalSearchScope getScope(Project project)
 	{
 		return null;
 	}
 
-	@NotNull
-	public PsiFile getContextFile(@NotNull PsiElement element)
+	@Nonnull
+	public PsiFile getContextFile(@Nonnull PsiElement element)
 	{
 		return element.getContainingFile();
 	}
 
 	@Nullable
-	public PsiClass getContextClass(@NotNull PsiElement element)
+	public PsiClass getContextClass(@Nonnull PsiElement element)
 	{
 		return null;
 	}
 
 	@Override
-	@NotNull
-	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
+	@Nonnull
+	public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context)
 	{
 		return getReferencesByElement(element);
 	}
 
-	public PsiReference[] getReferencesByElement(@NotNull PsiElement element)
+	public PsiReference[] getReferencesByElement(@Nonnull PsiElement element)
 	{
 		final int offsetInElement = ElementManipulators.getOffsetInElement(element);
 		final String text = ElementManipulators.getValueText(element);
 		return getReferencesByString(text, element, offsetInElement);
 	}
 
-	@NotNull
-	public PsiReference[] getReferencesByString(String str, @NotNull PsiElement position, int offsetInPosition)
+	@Nonnull
+	public PsiReference[] getReferencesByString(String str, @Nonnull PsiElement position, int offsetInPosition)
 	{
 		if(myAllowEmpty && StringUtil.isEmpty(str))
 		{
@@ -194,7 +194,7 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
 	}
 
 	@Override
-	public void setOptions(@Nullable Map<CustomizationKey, Object> options)
+	public void setOptions(@javax.annotation.Nullable Map<CustomizationKey, Object> options)
 	{
 		myOptions = options;
 	}

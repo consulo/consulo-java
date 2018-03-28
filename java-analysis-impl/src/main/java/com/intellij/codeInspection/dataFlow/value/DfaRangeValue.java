@@ -18,8 +18,8 @@ package com.intellij.codeInspection.dataFlow.value;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.psi.PsiType;
 
@@ -30,7 +30,7 @@ public class DfaRangeValue extends DfaValue
 {
 	private final LongRangeSet myValue;
 
-	DfaRangeValue(DfaValueFactory factory, @NotNull LongRangeSet value)
+	DfaRangeValue(DfaValueFactory factory, @Nonnull LongRangeSet value)
 	{
 		super(factory);
 		myValue = value;
@@ -68,14 +68,14 @@ public class DfaRangeValue extends DfaValue
 		 * @param type type to create a range-value from
 		 * @return DfaRangeValue representing range of given type
 		 */
-		@Nullable
+		@javax.annotation.Nullable
 		public DfaRangeValue create(PsiType type)
 		{
 			LongRangeSet domain = LongRangeSet.fromType(type);
 			return domain == null ? null : create(domain);
 		}
 
-		@NotNull
+		@Nonnull
 		public DfaRangeValue create(LongRangeSet value)
 		{
 			return myValues.computeIfAbsent(value, val -> new DfaRangeValue(myFactory, val));

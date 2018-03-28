@@ -15,11 +15,11 @@
  */
 package com.intellij.execution.jar;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.application.options.ModulesComboBox;
 import com.intellij.execution.ui.CommonJavaParametersPanel;
 import com.intellij.execution.ui.DefaultJreSelector;
@@ -55,7 +55,7 @@ public class JarApplicationConfigurable extends SettingsEditor<JarApplicationCon
 		myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
 	}
 
-	public void applyEditorTo(@NotNull final JarApplicationConfiguration configuration) throws ConfigurationException
+	public void applyEditorTo(@Nonnull final JarApplicationConfiguration configuration) throws ConfigurationException
 	{
 		myCommonProgramParameters.applyTo(configuration);
 		configuration.setAlternativeJrePath(myJrePathEditor.getJrePathOrName());
@@ -64,7 +64,7 @@ public class JarApplicationConfigurable extends SettingsEditor<JarApplicationCon
 		configuration.setModule(myModuleComponent.getComponent().getSelectedModule());
 	}
 
-	public void resetEditorFrom(@NotNull final JarApplicationConfiguration configuration)
+	public void resetEditorFrom(@Nonnull final JarApplicationConfiguration configuration)
 	{
 		myCommonProgramParameters.reset(configuration);
 		myJarPathComponent.getComponent().setText(FileUtil.toSystemDependentName(configuration.getJarPath()));
@@ -72,7 +72,7 @@ public class JarApplicationConfigurable extends SettingsEditor<JarApplicationCon
 		myModuleComponent.getComponent().setSelectedModule(configuration.getModule());
 	}
 
-	@NotNull
+	@Nonnull
 	public JComponent createEditor()
 	{
 		return myWholePanel;

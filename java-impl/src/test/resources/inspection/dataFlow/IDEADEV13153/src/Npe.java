@@ -1,11 +1,9 @@
-import org.jetbrains.annotations.*;
-
-import java.util.*;
+import javax.annotation.Nonnull;
 
 class Test {
    void foo() {
      String[] data = new String[] {"abs", "def"};
-     for (@NotNull String foo: data) {
+     for (@Nonnull String foo: data) {
        assert foo != null; // Condition always true
      }
    }

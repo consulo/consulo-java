@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.completion;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -55,7 +55,7 @@ class RecursionWeigher extends LookupElementWeigher
 
 	public RecursionWeigher(PsiElement position,
 			CompletionType completionType,
-			@NotNull PsiReferenceExpression reference,
+			@Nonnull PsiReferenceExpression reference,
 			@Nullable PsiMethodCallExpression expression,
 			ExpectedTypeInfo[] expectedInfos)
 	{
@@ -117,9 +117,9 @@ class RecursionWeigher extends LookupElementWeigher
 		recursive,
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public Result weigh(@NotNull LookupElement element)
+	public Result weigh(@Nonnull LookupElement element)
 	{
 		final Object object = element.getObject();
 		if(!(object instanceof PsiMethod || object instanceof PsiVariable || object instanceof PsiExpression))
@@ -189,7 +189,7 @@ class RecursionWeigher extends LookupElementWeigher
 		return Result.normal;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private String getSetterPropertyName(@Nullable PsiMethod calledMethod)
 	{
 		if(PropertyUtil.isSimplePropertySetter(calledMethod))
@@ -237,8 +237,8 @@ class RecursionWeigher extends LookupElementWeigher
 		return myCallQualifier instanceof PsiReferenceExpression && object.equals(((PsiReferenceExpression) myCallQualifier).advancedResolve(true).getElement());
 	}
 
-	@NotNull
-	public static PsiMethod findDeepestSuper(@NotNull final PsiMethod method)
+	@Nonnull
+	public static PsiMethod findDeepestSuper(@Nonnull final PsiMethod method)
 	{
 		CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<>();
 		MethodDeepestSuperSearcher.processDeepestSuperMethods(method, processor);

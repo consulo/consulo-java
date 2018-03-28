@@ -18,7 +18,8 @@ package com.intellij.util.xml.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
@@ -45,13 +46,13 @@ import com.intellij.util.xml.highlighting.DomHighlightingHelper;
 public class ExtendsClassChecker extends DomCustomAnnotationChecker<ExtendClass>{
   private static final GenericValueReferenceProvider ourProvider = new GenericValueReferenceProvider();
 
-  @NotNull
+  @Nonnull
   public Class<ExtendClass> getAnnotationClass() {
     return ExtendClass.class;
   }
 
-  public List<DomElementProblemDescriptor> checkForProblems(@NotNull final ExtendClass extend, @NotNull final DomElement _element, @NotNull final DomElementAnnotationHolder holder,
-                            @NotNull final DomHighlightingHelper helper) {
+  public List<DomElementProblemDescriptor> checkForProblems(@Nonnull final ExtendClass extend, @Nonnull final DomElement _element, @Nonnull final DomElementAnnotationHolder holder,
+                            @Nonnull final DomHighlightingHelper helper) {
     if (!(_element instanceof GenericDomValue)) return Collections.emptyList();
     GenericDomValue element = (GenericDomValue)_element;
 
@@ -74,7 +75,7 @@ public class ExtendsClassChecker extends DomCustomAnnotationChecker<ExtendClass>
     return Collections.emptyList();
   }
 
-  @NotNull
+  @Nonnull
   public static List<DomElementProblemDescriptor> checkExtendClass(final GenericDomValue element, final PsiClass value, final String name,
                                                                    final boolean instantiatable, final boolean canBeDecorator, final boolean allowInterface,
                                                                    final boolean allowNonPublic,

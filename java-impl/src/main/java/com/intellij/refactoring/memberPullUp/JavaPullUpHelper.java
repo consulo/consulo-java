@@ -24,7 +24,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
@@ -621,7 +620,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo>
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiStatement hasCommonInitializer(PsiStatement commonInitializer,
 			PsiMethod subConstructor,
 			PsiField field,

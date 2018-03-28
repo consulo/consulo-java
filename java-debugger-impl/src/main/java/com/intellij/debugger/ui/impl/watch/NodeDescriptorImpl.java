@@ -29,7 +29,7 @@ import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.InconsistentDebugInfoException;
 import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.ObjectReference;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

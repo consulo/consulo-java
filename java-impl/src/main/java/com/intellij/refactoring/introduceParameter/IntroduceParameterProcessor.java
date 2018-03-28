@@ -55,8 +55,7 @@ import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
 import gnu.trove.TIntArrayList;
 import gnu.trove.TIntProcedure;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -85,9 +84,9 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
   /**
    * if expressionToSearch is null, search for localVariable
    */
-  public IntroduceParameterProcessor(@NotNull Project project,
+  public IntroduceParameterProcessor(@Nonnull Project project,
                                      PsiMethod methodToReplaceIn,
-                                     @NotNull PsiMethod methodToSearchFor,
+                                     @Nonnull PsiMethod methodToSearchFor,
                                      PsiExpression parameterInitializer,
                                      PsiExpression expressionToSearch,
                                      PsiLocalVariable localVariable,
@@ -98,7 +97,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
                                      boolean declareFinal,
                                      boolean generateDelegate,
                                      PsiType forcedType,
-                                     @NotNull TIntArrayList parametersToRemove) {
+                                     @Nonnull TIntArrayList parametersToRemove) {
     super(project);
 
     myMethodToReplaceIn = methodToReplaceIn;
@@ -121,12 +120,12 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     myInitializerWrapper = expressionToSearch == null ? null : new JavaExpressionWrapper(expressionToSearch);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new IntroduceParameterViewDescriptor(myMethodToSearchFor);
   }
 
-  @NotNull
+  @Nonnull
   public PsiType getForcedType() {
     return myForcedType;
   }
@@ -143,7 +142,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     myReplaceFieldsWithGetters = replaceFieldsWithGetters;
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
 
@@ -539,7 +538,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     return RefactoringBundle.message("introduce.parameter.command", DescriptiveNameUtil.getDescriptiveName(myMethodToReplaceIn));
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiParameter getAnchorParameter(PsiMethod methodToReplaceIn) {
     PsiParameterList parameterList = methodToReplaceIn.getParameterList();
     final PsiParameter anchorParameter;
@@ -560,7 +559,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     return myMethodToReplaceIn;
   }
 
-  @NotNull
+  @Nonnull
   public PsiMethod getMethodToSearchFor() {
     return myMethodToSearchFor;
   }
@@ -569,7 +568,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     return myInitializerWrapper;
   }
 
-  @NotNull
+  @Nonnull
   public String getParameterName() {
     return myParameterName;
   }
@@ -582,12 +581,12 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     return myGenerateDelegate;
   }
 
-  @NotNull
+  @Nonnull
   public TIntArrayList getParametersToRemove() {
     return myParametersToRemove;
   }
 
-  @NotNull
+  @Nonnull
   public Project getProject() {
     return myProject;
   }

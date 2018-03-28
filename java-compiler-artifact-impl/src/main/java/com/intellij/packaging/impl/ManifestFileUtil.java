@@ -27,8 +27,8 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.CommonBundle;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
@@ -87,14 +87,14 @@ public class ManifestFileUtil
 	{
 	}
 
-	@Nullable
-	public static VirtualFile findManifestFile(@NotNull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
+	@javax.annotation.Nullable
+	public static VirtualFile findManifestFile(@Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
 	{
 		return ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_PATH, context, artifactType);
 	}
 
-	@Nullable
-	public static VirtualFile suggestManifestFileDirectory(@NotNull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
+	@javax.annotation.Nullable
+	public static VirtualFile suggestManifestFileDirectory(@Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
 	{
 		final VirtualFile metaInfDir = ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_DIR_NAME, context, artifactType);
 		if(metaInfDir != null)
@@ -107,7 +107,7 @@ public class ManifestFileUtil
 		ArtifactUtil.processElementsWithSubstitutions(root.getChildren(), context, artifactType, PackagingElementPath.EMPTY, new PackagingElementProcessor<PackagingElement<?>>()
 		{
 			@Override
-			public boolean process(@NotNull PackagingElement<?> element, @NotNull PackagingElementPath path)
+			public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path)
 			{
 				if(element instanceof FileCopyPackagingElement)
 				{
@@ -140,8 +140,8 @@ public class ManifestFileUtil
 		return suggestBaseDir(project, sourceFile.get());
 	}
 
-	@Nullable
-	public static VirtualFile suggestManifestFileDirectory(@NotNull Project project, @Nullable Module module)
+	@javax.annotation.Nullable
+	public static VirtualFile suggestManifestFileDirectory(@Nonnull Project project, @javax.annotation.Nullable Module module)
 	{
 		OrderEnumerator enumerator = module != null ? OrderEnumerator.orderEntries(module) : OrderEnumerator.orderEntries(project);
 		final VirtualFile[] files = enumerator.withoutDepModules().withoutLibraries().withoutSdk().productionOnly().sources().getRoots();
@@ -153,8 +153,8 @@ public class ManifestFileUtil
 	}
 
 
-	@Nullable
-	private static VirtualFile suggestBaseDir(@NotNull Project project, final @Nullable VirtualFile file)
+	@javax.annotation.Nullable
+	private static VirtualFile suggestBaseDir(@Nonnull Project project, final @javax.annotation.Nullable VirtualFile file)
 	{
 		final VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
 		if(file == null && contentRoots.length > 0)
@@ -176,7 +176,7 @@ public class ManifestFileUtil
 		return project.getBaseDir();
 	}
 
-	public static Manifest readManifest(@NotNull VirtualFile manifestFile)
+	public static Manifest readManifest(@Nonnull VirtualFile manifestFile)
 	{
 		try
 		{
@@ -198,7 +198,7 @@ public class ManifestFileUtil
 		}
 	}
 
-	public static void updateManifest(@NotNull VirtualFile file, final @Nullable String mainClass, final @Nullable List<String> classpath, final boolean replaceValues)
+	public static void updateManifest(@Nonnull VirtualFile file, final @javax.annotation.Nullable String mainClass, final @javax.annotation.Nullable List<String> classpath, final boolean replaceValues)
 	{
 		final Manifest manifest = readManifest(file);
 		final Attributes mainAttributes = manifest.getMainAttributes();
@@ -262,8 +262,8 @@ public class ManifestFileUtil
 		}
 	}
 
-	@NotNull
-	public static ManifestFileConfiguration createManifestFileConfiguration(@NotNull VirtualFile manifestFile)
+	@Nonnull
+	public static ManifestFileConfiguration createManifestFileConfiguration(@Nonnull VirtualFile manifestFile)
 	{
 		final String path = manifestFile.getPath();
 		Manifest manifest = readManifest(manifestFile);
@@ -283,7 +283,7 @@ public class ManifestFileUtil
 		final PackagingElementProcessor<PackagingElement<?>> processor = new PackagingElementProcessor<PackagingElement<?>>()
 		{
 			@Override
-			public boolean process(@NotNull PackagingElement<?> element, @NotNull PackagingElementPath path)
+			public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path)
 			{
 				if(element instanceof FileCopyPackagingElement)
 				{
@@ -309,7 +309,7 @@ public class ManifestFileUtil
 		return classpath;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static VirtualFile showDialogAndCreateManifest(final ArtifactEditorContext context, final CompositePackagingElement<?> element)
 	{
 		FileChooserDescriptor descriptor = createDescriptorForManifestDirectory();
@@ -323,8 +323,8 @@ public class ManifestFileUtil
 		return createManifestFile(file, context.getProject());
 	}
 
-	@Nullable
-	public static VirtualFile createManifestFile(final @NotNull VirtualFile directory, final @NotNull Project project)
+	@javax.annotation.Nullable
+	public static VirtualFile createManifestFile(final @Nonnull VirtualFile directory, final @Nonnull Project project)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		final Ref<IOException> exc = Ref.create(null);
@@ -377,7 +377,7 @@ public class ManifestFileUtil
 		return descriptor;
 	}
 
-	public static void addManifestFileToLayout(final @NotNull String path, final @NotNull ArtifactEditorContext context, final @NotNull CompositePackagingElement<?> element)
+	public static void addManifestFileToLayout(final @Nonnull String path, final @Nonnull ArtifactEditorContext context, final @Nonnull CompositePackagingElement<?> element)
 	{
 		context.editLayout(context.getArtifact(), new Runnable()
 		{
@@ -392,8 +392,8 @@ public class ManifestFileUtil
 		});
 	}
 
-	@Nullable
-	public static PsiClass selectMainClass(Project project, final @Nullable String initialClassName)
+	@javax.annotation.Nullable
+	public static PsiClass selectMainClass(Project project, final @javax.annotation.Nullable String initialClassName)
 	{
 		final TreeClassChooserFactory chooserFactory = TreeClassChooserFactory.getInstance(project);
 		final GlobalSearchScope searchScope = GlobalSearchScope.allScope(project);

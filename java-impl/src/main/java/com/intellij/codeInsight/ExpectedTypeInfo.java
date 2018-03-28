@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 
@@ -40,7 +41,7 @@ public interface ExpectedTypeInfo
 
 	PsiMethod getCalledMethod();
 
-	@NotNull
+	@Nonnull
 	PsiType getType();
 
 	PsiType getDefaultType();
@@ -52,9 +53,9 @@ public interface ExpectedTypeInfo
 
 	String toString();
 
-	@NotNull
-	ExpectedTypeInfo[] intersect(@NotNull ExpectedTypeInfo info);
+	@Nonnull
+	ExpectedTypeInfo[] intersect(@Nonnull ExpectedTypeInfo info);
 
-	@NotNull
+	@Nonnull
 	TailType getTailType();
 }

@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.DeleteUnnecessaryStatementFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -33,12 +33,12 @@ public class UnnecessaryContinueInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public boolean ignoreInThenBranch = false;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.continue.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.continue.problem.descriptor");
   }
@@ -63,7 +63,7 @@ public class UnnecessaryContinueInspection extends BaseInspection {
   private class UnnecessaryContinueVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitContinueStatement(@NotNull PsiContinueStatement statement) {
+    public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
       /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;
       }   */

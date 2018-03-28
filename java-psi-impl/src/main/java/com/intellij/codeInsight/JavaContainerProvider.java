@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMember;
@@ -27,7 +28,7 @@ import com.intellij.psi.PsiTypeParameter;
 public class JavaContainerProvider implements ContainerProvider
 {
 	@Override
-	public PsiElement getContainer(@NotNull PsiElement item)
+	public PsiElement getContainer(@Nonnull PsiElement item)
 	{
 		if(item instanceof PsiTypeParameter)
 		{

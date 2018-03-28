@@ -19,7 +19,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.lang.properties.references.PropertyReference;
@@ -53,12 +54,12 @@ public class PropertiesReferenceProvider extends PsiReferenceProvider {
   }
 
   @Override
-  public boolean acceptsTarget(@NotNull PsiElement target) {
+  public boolean acceptsTarget(@Nonnull PsiElement target) {
     return target instanceof IProperty;
   }
 
-  @NotNull
-  public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context) {
+  @Nonnull
+  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
     Object value = null;
     String bundleName = null;
     boolean propertyRefWithPrefix = false;

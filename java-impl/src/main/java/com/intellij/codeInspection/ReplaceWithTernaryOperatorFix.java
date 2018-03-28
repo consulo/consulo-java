@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.SelectInEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.Navigatable;
@@ -37,18 +38,18 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 	private final String myText;
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		return InspectionsBundle.message("inspection.replace.ternary.quickfix", myText);
 	}
 
-	public ReplaceWithTernaryOperatorFix(@NotNull PsiExpression expressionToAssert)
+	public ReplaceWithTernaryOperatorFix(@Nonnull PsiExpression expressionToAssert)
 	{
 		myText = ParenthesesUtils.getText(expressionToAssert, ParenthesesUtils.BINARY_AND_PRECEDENCE);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -56,7 +57,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		PsiElement element = descriptor.getPsiElement();
 		while(true)
@@ -94,8 +95,8 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 		}
 	}
 
-	@NotNull
-	private static PsiConditionalExpression replaceWithConditionalExpression(@NotNull Project project, @NotNull String condition, @NotNull PsiExpression expression, @NotNull String defaultValue)
+	@Nonnull
+	private static PsiConditionalExpression replaceWithConditionalExpression(@Nonnull Project project, @Nonnull String condition, @Nonnull PsiExpression expression, @Nonnull String defaultValue)
 	{
 		final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 
@@ -106,7 +107,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 		return (PsiConditionalExpression) expression.replace(codeStyleManager.reformat(conditionalExpression));
 	}
 
-	public static boolean isAvailable(@NotNull PsiExpression qualifier, @NotNull PsiExpression expression)
+	public static boolean isAvailable(@Nonnull PsiExpression qualifier, @Nonnull PsiExpression expression)
 	{
 		if(!qualifier.isValid() || qualifier.getText() == null)
 		{
@@ -116,7 +117,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 		return !(expression.getParent() instanceof PsiExpressionStatement) && !PsiUtil.isAccessedForWriting(expression);
 	}
 
-	private static String suggestDefaultValue(@NotNull PsiExpression expression)
+	private static String suggestDefaultValue(@Nonnull PsiExpression expression)
 	{
 		PsiType type = expression.getType();
 		return PsiTypesUtil.getDefaultValueOfType(type);
@@ -124,7 +125,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 
 	public static class ReplaceMethodRefWithTernaryOperatorFix implements LocalQuickFix
 	{
-		@NotNull
+		@Nonnull
 		@Override
 		public String getFamilyName()
 		{
@@ -132,7 +133,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			PsiMethodReferenceExpression element = ObjectUtils.tryCast(descriptor.getPsiElement(), PsiMethodReferenceExpression.class);
 			if(element == null)

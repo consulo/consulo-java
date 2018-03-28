@@ -18,8 +18,8 @@ package com.intellij.codeInsight.completion;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -72,7 +72,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return myForcedPresentableName;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public PsiType getType()
 	{
@@ -91,7 +91,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return this;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getLookupString()
 	{
@@ -118,7 +118,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		myForcedPresentableName = forcedPresentableName;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiClass getObject()
 	{
@@ -175,8 +175,8 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 			LookupElement item,
 			PsiClass psiClass,
 			boolean diamond,
-			@NotNull String locationString,
-			@NotNull PsiSubstitutor substitutor)
+			@Nonnull String locationString,
+			@Nonnull PsiSubstitutor substitutor)
 	{
 		if(!(psiClass instanceof PsiTypeParameter))
 		{
@@ -210,7 +210,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return " (" + myPackageDisplayName + ")";
 	}
 
-	private static String getName(final PsiClass psiClass, final LookupElement item, boolean diamond, @NotNull PsiSubstitutor substitutor)
+	private static String getName(final PsiClass psiClass, final LookupElement item, boolean diamond, @Nonnull PsiSubstitutor substitutor)
 	{
 		String forced = item instanceof JavaPsiClassReferenceElement ? ((JavaPsiClassReferenceElement) item).getForcedPresentableName() : item instanceof PsiTypeLookupItem ? ((PsiTypeLookupItem)
 				item).getForcedPresentableName() : null;
@@ -237,8 +237,8 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return StringUtil.notNullize(name);
 	}
 
-	@Nullable
-	private static String formatTypeParameters(@NotNull final PsiSubstitutor substitutor, final PsiTypeParameter[] params)
+	@javax.annotation.Nullable
+	private static String formatTypeParameters(@Nonnull final PsiSubstitutor substitutor, final PsiTypeParameter[] params)
 	{
 		final boolean space = showSpaceAfterComma(params[0]);
 		StringBuilder buffer = new StringBuilder();

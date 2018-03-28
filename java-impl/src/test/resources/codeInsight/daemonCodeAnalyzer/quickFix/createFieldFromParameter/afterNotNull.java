@@ -1,13 +1,13 @@
 // "Create Field for Parameter 'name'" "true"
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class TestBefore {
 
-    @NotNull
+    @Nonnull
     private final String myName;
 
-    public TestBefore(@NotNull String name) {
+    public TestBefore(@Nonnull String name) {
         super();
         myName = name;
     }

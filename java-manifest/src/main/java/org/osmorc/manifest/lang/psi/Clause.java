@@ -24,10 +24,12 @@
  */
 package org.osmorc.manifest.lang.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.psi.stub.ClauseStub;
 
 /**
@@ -49,7 +51,7 @@ public interface Clause extends PsiElement, StubBasedPsiElement<ClauseStub> {
    *
    * @return the directives of this clause
    */
-  @NotNull
+  @Nonnull
   Directive[] getDirectives();
 
   /**
@@ -59,7 +61,7 @@ public interface Clause extends PsiElement, StubBasedPsiElement<ClauseStub> {
    * @return the directive, or null if there is no such directive
    */
   @Nullable
-  Directive getDirectiveByName(@NotNull String name);
+  Directive getDirectiveByName(@Nonnull String name);
 
   /**
    * Same as {@link #getText()} but filters out line breaks and trims whitespace around it.

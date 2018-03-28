@@ -17,7 +17,8 @@ package com.intellij.javadoc;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -78,9 +79,9 @@ public class JavadocNavigationDelegate extends EditorNavigationDelegateAdapter
 	 * @param editor current editor
 	 * @return processing result
 	 */
-	@NotNull
+	@Nonnull
 	@Override
-	public Result navigateToLineEnd(@NotNull Editor editor, @NotNull DataContext dataContext)
+	public Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull DataContext dataContext)
 	{
 		if(!CodeInsightSettings.getInstance().SMART_END_ACTION)
 		{
@@ -107,7 +108,7 @@ public class JavadocNavigationDelegate extends EditorNavigationDelegateAdapter
 		return navigateToLineEnd(editor, psiFile);
 	}
 
-	public static Result navigateToLineEnd(@NotNull Editor editor, @NotNull PsiFile psiFile)
+	public static Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull PsiFile psiFile)
 	{
 		final Document document = editor.getDocument();
 		final CaretModel caretModel = editor.getCaretModel();

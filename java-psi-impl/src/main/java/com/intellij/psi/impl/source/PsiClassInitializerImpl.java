@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -24,7 +26,6 @@ import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitializerStub> implements PsiClassInitializer {
   public PsiClassInitializerImpl(final PsiClassInitializerStub stub) {
@@ -53,18 +54,18 @@ public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitiali
   }
 
   @Override
-  public boolean hasModifierProperty(@NotNull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiCodeBlock getBody(){
     return (PsiCodeBlock)((CompositeElement)getNode()).findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitClassInitializer(this);
     }
@@ -78,7 +79,7 @@ public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitiali
   }
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     return lastParent == null || PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
   }

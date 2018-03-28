@@ -15,11 +15,12 @@
  */
 package com.intellij.execution.application;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
@@ -52,13 +53,13 @@ public class ApplicationConfigurationType implements ConfigurationType
 			}
 
 			@Override
-			public boolean isApplicable(@NotNull Project project)
+			public boolean isApplicable(@Nonnull Project project)
 			{
 				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
 			}
 
 			@Override
-			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration)
+			public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration)
 			{
 				((ModuleBasedConfiguration) configuration).onNewConfigurationCreated();
 			}
@@ -121,7 +122,7 @@ public class ApplicationConfigurationType implements ConfigurationType
 
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getId()
 	{

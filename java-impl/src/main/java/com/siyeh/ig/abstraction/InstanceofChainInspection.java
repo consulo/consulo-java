@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.LibraryUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -31,20 +31,20 @@ public class InstanceofChainInspection extends BaseInspection {
   public boolean ignoreInstanceofOnLibraryClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ChainOfInstanceofChecks";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "chain.of.instanceof.checks.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "chain.of.instanceof.checks.problem.descriptor");
@@ -68,7 +68,7 @@ public class InstanceofChainInspection extends BaseInspection {
 
     @Override
     public void visitIfStatement(
-      @NotNull PsiIfStatement statement) {
+      @Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {

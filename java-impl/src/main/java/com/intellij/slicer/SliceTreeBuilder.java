@@ -22,7 +22,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -64,10 +64,10 @@ public class SliceTreeBuilder extends AbstractTreeBuilder {
     }
   };
 
-  public SliceTreeBuilder(@NotNull JTree tree,
-                          @NotNull Project project,
+  public SliceTreeBuilder(@Nonnull JTree tree,
+                          @Nonnull Project project,
                           boolean dataFlowToThis,
-                          @NotNull SliceNode rootNode,
+                          @Nonnull SliceNode rootNode,
                           boolean splitByLeafExpressions) {
     super(tree, (DefaultTreeModel)tree.getModel(), new SliceTreeStructure(project, rootNode), SLICE_NODE_COMPARATOR, false);
     this.dataFlowToThis = dataFlowToThis;

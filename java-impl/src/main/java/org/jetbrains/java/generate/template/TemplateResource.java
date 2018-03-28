@@ -17,7 +17,7 @@ package org.jetbrains.java.generate.template;
 
 import java.io.Serializable;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * A template contains the method body and the filename of the resource where
@@ -150,7 +150,7 @@ public class TemplateResource implements Serializable
 		return getMethodBody(template);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String getMethodBody(String template)
 	{
 		String signature = getMethodSignature(template);

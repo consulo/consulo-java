@@ -19,7 +19,8 @@ import static com.intellij.util.ObjectUtils.notNull;
 
 import java.util.Properties;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
@@ -64,21 +65,21 @@ public class JavaTemplateUtil
 	{
 	}
 
-	public static void setClassAndMethodNameProperties(@NotNull Properties properties, @NotNull PsiClass aClass, @NotNull PsiMethod method)
+	public static void setClassAndMethodNameProperties(@Nonnull Properties properties, @Nonnull PsiClass aClass, @Nonnull PsiMethod method)
 	{
 		properties.setProperty(FileTemplate.ATTRIBUTE_CLASS_NAME, notNull(aClass.getQualifiedName(), ""));
 		properties.setProperty(FileTemplate.ATTRIBUTE_SIMPLE_CLASS_NAME, notNull(aClass.getName(), ""));
 		properties.setProperty(FileTemplate.ATTRIBUTE_METHOD_NAME, method.getName());
 	}
 
-	@NotNull
-	public static String getPackageName(@NotNull PsiDirectory directory)
+	@Nonnull
+	public static String getPackageName(@Nonnull PsiDirectory directory)
 	{
 		PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
 		return aPackage != null ? aPackage.getQualifiedName() : "";
 	}
 
-	public static void setPackageNameAttribute(@NotNull Properties properties, @NotNull PsiDirectory directory)
+	public static void setPackageNameAttribute(@Nonnull Properties properties, @Nonnull PsiDirectory directory)
 	{
 		properties.setProperty(FileTemplate.ATTRIBUTE_PACKAGE_NAME, getPackageName(directory));
 	}

@@ -19,7 +19,8 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.containers.ContainerUtil;
@@ -41,7 +42,7 @@ class NegatingContract implements PreContract
 		return negated;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body)
 	{

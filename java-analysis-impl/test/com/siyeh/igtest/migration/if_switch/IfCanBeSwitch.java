@@ -1,4 +1,4 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 class IfCanBeSwitch {
   void m1(int i) {  // ok

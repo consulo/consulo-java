@@ -24,8 +24,8 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -40,12 +40,12 @@ public class PushInstruction extends Instruction
 	private final PsiExpression myPlace;
 	private final boolean myReferenceWrite;
 
-	public PushInstruction(@Nullable DfaValue value, PsiExpression place)
+	public PushInstruction(@javax.annotation.Nullable DfaValue value, PsiExpression place)
 	{
 		this(value, place, false);
 	}
 
-	public PushInstruction(@Nullable DfaValue value, PsiExpression place, final boolean isReferenceWrite)
+	public PushInstruction(@javax.annotation.Nullable DfaValue value, PsiExpression place, final boolean isReferenceWrite)
 	{
 		myValue = value != null ? value : DfaUnknownValue.getInstance();
 		myPlace = place;
@@ -57,7 +57,7 @@ public class PushInstruction extends Instruction
 		return myReferenceWrite;
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaValue getValue()
 	{
 		return myValue;

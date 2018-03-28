@@ -26,7 +26,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -38,19 +38,19 @@ public class JavaTypeParameterListElementType extends JavaStubElementType<PsiTyp
     super("TYPE_PARAMETER_LIST", true);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new TypeParameterListElement();
   }
 
   @Override
-  public PsiTypeParameterList createPsi(@NotNull final PsiTypeParameterListStub stub) {
+  public PsiTypeParameterList createPsi(@Nonnull final PsiTypeParameterListStub stub) {
     return getPsiFactory(stub).createTypeParameterList(stub);
   }
 
   @Override
-  public PsiTypeParameterList createPsi(@NotNull final ASTNode node) {
+  public PsiTypeParameterList createPsi(@Nonnull final ASTNode node) {
     return new PsiTypeParameterListImpl(node);
   }
 
@@ -62,16 +62,16 @@ public class JavaTypeParameterListElementType extends JavaStubElementType<PsiTyp
   }
 
   @Override
-  public void serialize(@NotNull final PsiTypeParameterListStub stub, @NotNull final StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull final PsiTypeParameterListStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiTypeParameterListStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiTypeParameterListStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     return new PsiTypeParameterListStubImpl(parentStub);
   }
 
   @Override
-  public void indexStub(@NotNull final PsiTypeParameterListStub stub, @NotNull final IndexSink sink) {
+  public void indexStub(@Nonnull final PsiTypeParameterListStub stub, @Nonnull final IndexSink sink) {
   }
 }

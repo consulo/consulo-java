@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.generation;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
@@ -37,13 +37,13 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	private final boolean myMergeIfExists;
 	private static final Logger LOG = Logger.getInstance("#" + PsiGenerationInfo.class.getName());
 
-	public PsiGenerationInfo(@NotNull final T member)
+	public PsiGenerationInfo(@Nonnull final T member)
 	{
 		myMember = member;
 		myMergeIfExists = true;
 	}
 
-	public PsiGenerationInfo(@NotNull T member, boolean mergeIfExists)
+	public PsiGenerationInfo(@Nonnull T member, boolean mergeIfExists)
 	{
 		myMember = member;
 		myMergeIfExists = mergeIfExists;
@@ -56,7 +56,7 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	}
 
 	@Override
-	public void insert(@NotNull final PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
+	public void insert(@Nonnull final PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
 	{
 		final PsiMember existingMember;
 		if(myMember instanceof PsiField)

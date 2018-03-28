@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.jvm.types;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.jvm.JvmAnnotation;
 
 /**
@@ -31,6 +31,6 @@ public interface JvmType
 	 * @return type annotations
 	 * @see java.lang.reflect.AnnotatedType#getAnnotations
 	 */
-	@NotNull
+	@Nonnull
 	JvmAnnotation[] getAnnotations();
 }

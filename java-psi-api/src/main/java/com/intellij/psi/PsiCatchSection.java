@@ -16,8 +16,7 @@
 package com.intellij.psi;
 
 import com.intellij.util.ArrayFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ public interface PsiCatchSection extends PsiElement {
   PsiCatchSection[] EMPTY_ARRAY = new PsiCatchSection[0];
 
   ArrayFactory<PsiCatchSection> ARRAY_FACTORY = new ArrayFactory<PsiCatchSection>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiCatchSection[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiCatchSection[count];
@@ -45,7 +44,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the parameter for the called variable, or null if none is specified.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiParameter getParameter();
 
   /**
@@ -53,7 +52,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the code block, or null if the section is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiCodeBlock getCatchBlock();
 
   /**
@@ -61,7 +60,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the type, or null if the section is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiType getCatchType();
 
   /**
@@ -74,7 +73,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the types, or empty list if the section is incomplete.
    */
-  @NotNull
+  @Nonnull
   List<PsiType> getPreciseCatchTypes();
 
   /**
@@ -82,12 +81,12 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the statement instance.
    */
-  @NotNull
+  @Nonnull
   PsiTryStatement getTryStatement();
 
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaToken getRParenth();
 
-  @Nullable
+  @javax.annotation.Nullable
   PsiJavaToken getLParenth();
 }

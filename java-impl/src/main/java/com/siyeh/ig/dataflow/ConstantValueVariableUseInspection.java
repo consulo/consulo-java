@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.dataflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,20 +28,20 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class ConstantValueVariableUseInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.value.variable.use.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "constant.value.variable.use.problem.descriptor");
@@ -63,7 +65,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "replace.reference.with.expression.quickfix",
@@ -113,7 +115,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
       checkCondition(condition, body);
     }
 
-    private boolean checkCondition(@Nullable PsiExpression condition,
+    private boolean checkCondition(@javax.annotation.Nullable PsiExpression condition,
                                    @Nullable PsiStatement body) {
       if (body == null) {
         return false;
@@ -147,9 +149,9 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     private boolean checkConstantValueVariableUse(
-      @Nullable PsiExpression expression,
-      @NotNull PsiExpression constantExpression,
-      @NotNull PsiElement body) {
+      @javax.annotation.Nullable PsiExpression expression,
+      @Nonnull PsiExpression constantExpression,
+      @Nonnull PsiElement body) {
       final PsiType constantType = constantExpression.getType();
       if (PsiType.DOUBLE.equals(constantType)) {
         final Object result = ExpressionUtils.computeConstantExpression(
@@ -186,18 +188,18 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
   private static class VariableReadVisitor
     extends JavaRecursiveElementVisitor {
 
-    @NotNull
+    @Nonnull
     private final PsiVariable variable;
     private boolean read = false;
     private boolean written = false;
     private PsiReferenceExpression reference = null;
 
-    VariableReadVisitor(@NotNull PsiVariable variable) {
+    VariableReadVisitor(@Nonnull PsiVariable variable) {
       this.variable = variable;
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (read || written) {
         return;
       }
@@ -206,7 +208,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression assignment) {
+      @Nonnull PsiAssignmentExpression assignment) {
       if (read || written) {
         return;
       }
@@ -234,7 +236,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitPrefixExpression(
-      @NotNull PsiPrefixExpression prefixExpression) {
+      @Nonnull PsiPrefixExpression prefixExpression) {
       if (read || written) {
         return;
       }
@@ -259,7 +261,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitPostfixExpression(
-      @NotNull PsiPostfixExpression postfixExpression) {
+      @Nonnull PsiPostfixExpression postfixExpression) {
       if (read || written) {
         return;
       }
@@ -283,7 +285,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     @Override
-    public void visitVariable(@NotNull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       if (read || written) {
         return;
       }
@@ -301,7 +303,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       if (read || written) {
         return;
       }
@@ -322,7 +324,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @NotNull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
       if (read || written) {
         return;
       }
@@ -367,7 +369,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitReturnStatement(
-      @NotNull PsiReturnStatement returnStatement) {
+      @Nonnull PsiReturnStatement returnStatement) {
       if (read || written) {
         return;
       }
@@ -429,7 +431,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression expression) {
+      @Nonnull PsiReferenceExpression expression) {
       if (used) {
         return;
       }

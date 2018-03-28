@@ -24,8 +24,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ExtractParameterAsLocalVariableFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -36,14 +36,14 @@ public class AssignmentToMethodParameterInspection
   public boolean ignoreTransformationOfOriginalParameter = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.to.method.parameter.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.to.method.parameter.problem.descriptor");
@@ -72,7 +72,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final PsiExpression lhs = expression.getLExpression();
       final PsiParameter parameter = getMethodParameter(lhs);
@@ -105,7 +105,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitPrefixExpression(
-      @NotNull PsiPrefixExpression expression) {
+      @Nonnull PsiPrefixExpression expression) {
       if (ignoreTransformationOfOriginalParameter) {
         return;
       }
@@ -128,7 +128,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitPostfixExpression(
-      @NotNull PsiPostfixExpression expression) {
+      @Nonnull PsiPostfixExpression expression) {
       if (ignoreTransformationOfOriginalParameter) {
         return;
       }
@@ -146,7 +146,7 @@ public class AssignmentToMethodParameterInspection
       registerError(operand);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiParameter getMethodParameter(PsiExpression expression) {
       if (!(expression instanceof PsiReferenceExpression)) {
         return null;

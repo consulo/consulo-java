@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,18 +30,18 @@ import java.util.Set;
 public class MethodOverridesPackageLocalMethodInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MethodOverridesPrivateMethodOfSuperclass";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "method.overrides.package.local.method.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "method.overrides.package.local.method.problem.descriptor");
@@ -63,7 +63,7 @@ public class MethodOverridesPackageLocalMethodInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;

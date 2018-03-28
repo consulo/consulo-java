@@ -18,8 +18,8 @@ package com.intellij.debugger.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.actions.DebuggerActions;
@@ -97,14 +97,14 @@ public class JavaDebugProcess extends XDebugProcess
 	private final XBreakpointHandler<?>[] myBreakpointHandlers;
 	private final NodeManagerImpl myNodeManager;
 
-	public static JavaDebugProcess create(@NotNull final XDebugSession session, final DebuggerSession javaSession)
+	public static JavaDebugProcess create(@Nonnull final XDebugSession session, final DebuggerSession javaSession)
 	{
 		JavaDebugProcess res = new JavaDebugProcess(session, javaSession);
 		javaSession.getProcess().setXDebugProcess(res);
 		return res;
 	}
 
-	protected JavaDebugProcess(@NotNull final XDebugSession session, final DebuggerSession javaSession)
+	protected JavaDebugProcess(@Nonnull final XDebugSession session, final DebuggerSession javaSession)
 	{
 		super(session);
 		myJavaSession = javaSession;
@@ -128,7 +128,7 @@ public class JavaDebugProcess extends XDebugProcess
 		myJavaSession.getContextManager().addListener(new DebuggerContextListener()
 		{
 			@Override
-			public void changeEvent(@NotNull final DebuggerContextImpl newContext, DebuggerSession.Event event)
+			public void changeEvent(@Nonnull final DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
 				if(event == DebuggerSession.Event.PAUSE || event == DebuggerSession.Event.CONTEXT || event == DebuggerSession.Event.REFRESH && myJavaSession.isPaused())
 				{
@@ -281,7 +281,7 @@ public class JavaDebugProcess extends XDebugProcess
 		return myJavaSession;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public XDebuggerEditorsProvider getEditorsProvider()
 	{
@@ -332,12 +332,12 @@ public class JavaDebugProcess extends XDebugProcess
 	}
 
 	@Override
-	public void runToPosition(@NotNull XSourcePosition position)
+	public void runToPosition(@Nonnull XSourcePosition position)
 	{
 		myJavaSession.runToCursor(position, false);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public XBreakpointHandler<?>[] getBreakpointHandlers()
 	{
@@ -357,7 +357,7 @@ public class JavaDebugProcess extends XDebugProcess
 		return myJavaSession.getProcess().getProcessHandler();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ExecutionConsole createConsole()
 	{
@@ -369,22 +369,22 @@ public class JavaDebugProcess extends XDebugProcess
 		return super.createConsole();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public XDebugTabLayouter createTabLayouter()
 	{
 		return new XDebugTabLayouter()
 		{
 			@Override
-			public void registerAdditionalContent(@NotNull RunnerLayoutUi ui)
+			public void registerAdditionalContent(@Nonnull RunnerLayoutUi ui)
 			{
 				registerThreadsPanel(ui);
 				registerMemoryViewPanel(ui);
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
-			public Content registerConsoleContent(@NotNull RunnerLayoutUi ui, @NotNull ExecutionConsole console)
+			public Content registerConsoleContent(@Nonnull RunnerLayoutUi ui, @Nonnull ExecutionConsole console)
 			{
 				Content content = null;
 				if(console instanceof ExecutionConsoleEx)
@@ -399,7 +399,7 @@ public class JavaDebugProcess extends XDebugProcess
 				return content;
 			}
 
-			private void registerThreadsPanel(@NotNull RunnerLayoutUi ui)
+			private void registerThreadsPanel(@Nonnull RunnerLayoutUi ui)
 			{
 				final ThreadsPanel panel = new ThreadsPanel(myJavaSession.getProject(), getDebuggerStateManager());
 				final Content threadsContent = ui.createContent(DebuggerContentInfo.THREADS_CONTENT, panel, XDebuggerBundle.message("debugger.session.tab.threads.title"), AllIcons.Debugger.Threads,
@@ -430,7 +430,7 @@ public class JavaDebugProcess extends XDebugProcess
 				}, threadsContent);
 			}
 
-			private void registerMemoryViewPanel(@NotNull RunnerLayoutUi ui)
+			private void registerMemoryViewPanel(@Nonnull RunnerLayoutUi ui)
 			{
 				final XDebugSession session = getSession();
 				final DebugProcessImpl process = myJavaSession.getProcess();
@@ -473,7 +473,7 @@ public class JavaDebugProcess extends XDebugProcess
 	}
 
 	@Override
-	public void registerAdditionalActions(@NotNull DefaultActionGroup leftToolbar, @NotNull DefaultActionGroup topToolbar, @NotNull DefaultActionGroup settings)
+	public void registerAdditionalActions(@Nonnull DefaultActionGroup leftToolbar, @Nonnull DefaultActionGroup topToolbar, @Nonnull DefaultActionGroup settings)
 	{
 		Constraints beforeRunner = new Constraints(Anchor.BEFORE, "Runner.Layout");
 		leftToolbar.add(AnSeparator.getInstance(), beforeRunner);
@@ -526,7 +526,7 @@ public class JavaDebugProcess extends XDebugProcess
 
 		@RequiredDispatchThread
 		@Override
-		public void update(@NotNull final AnActionEvent e)
+		public void update(@Nonnull final AnActionEvent e)
 		{
 			super.update(e);
 			final Presentation presentation = e.getPresentation();

@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.QuickFix;
@@ -51,7 +52,7 @@ import com.intellij.util.text.CharArrayUtil;
 public class JavaDocCommentFixer implements DocCommentFixer
 {
 
-	@NotNull
+	@Nonnull
 	private static final String PARAM_TAG = "@param";
 
 	/**
@@ -72,17 +73,17 @@ public class JavaDocCommentFixer implements DocCommentFixer
 	 *   }
 	 * </pre>
 	 */
-	@NotNull
+	@Nonnull
 	private static final Set<String> CARET_ANCHOR_TAGS = ContainerUtilRt.newHashSet(PARAM_TAG, "@throws", "@return");
 
-	@NotNull
+	@Nonnull
 	private static final Comparator<PsiElement> COMPARATOR = (e1, e2) -> e2.getTextRange().getEndOffset() - e1.getTextRange().getEndOffset();
 
-	@NotNull
+	@Nonnull
 	private static final String PARAM_TAG_NAME = "param";
 
 	@Override
-	public void fixComment(@NotNull Project project, @NotNull Editor editor, @NotNull PsiComment comment)
+	public void fixComment(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiComment comment)
 	{
 		if(!(comment instanceof PsiDocComment))
 		{
@@ -138,7 +139,7 @@ public class JavaDocCommentFixer implements DocCommentFixer
 		locateCaret(docComment, editor, file);
 	}
 
-	@NotNull
+	@Nonnull
 	private static JavaDocLocalInspection getDocLocalInspection()
 	{
 		JavaDocLocalInspection localInspection = new JavaDocLocalInspection();
@@ -167,7 +168,7 @@ public class JavaDocCommentFixer implements DocCommentFixer
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void fixReferenceProblems(@NotNull ProblemDescriptor[] problems, @NotNull Project project)
+	private static void fixReferenceProblems(@Nonnull ProblemDescriptor[] problems, @Nonnull Project project)
 	{
 		for(ProblemDescriptor problem : problems)
 		{
@@ -190,7 +191,7 @@ public class JavaDocCommentFixer implements DocCommentFixer
 	 * @param project  current project
 	 */
 	@SuppressWarnings("unchecked")
-	private static void fixCommonProblems(@NotNull ProblemDescriptor[] problems, @NotNull PsiComment comment, @NotNull final Document document, @NotNull Project project)
+	private static void fixCommonProblems(@Nonnull ProblemDescriptor[] problems, @Nonnull PsiComment comment, @Nonnull final Document document, @Nonnull Project project)
 	{
 		List<PsiElement> toRemove = new ArrayList<>();
 		for(ProblemDescriptor problem : problems)
@@ -265,7 +266,7 @@ public class JavaDocCommentFixer implements DocCommentFixer
 		psiDocumentManager.commitDocument(document);
 	}
 
-	private static void ensureContentOrdered(@NotNull PsiDocComment comment, @NotNull Document document)
+	private static void ensureContentOrdered(@Nonnull PsiDocComment comment, @Nonnull Document document)
 	{
 		//region Parse existing doc comment parameters.
 		List<String> current = new ArrayList<>();
@@ -341,8 +342,8 @@ public class JavaDocCommentFixer implements DocCommentFixer
 		//endregion
 	}
 
-	@NotNull
-	private static Pair<TextRange, String> parseTagValue(@NotNull PsiDocTag tag, @NotNull Document document)
+	@Nonnull
+	private static Pair<TextRange, String> parseTagValue(@Nonnull PsiDocTag tag, @Nonnull Document document)
 	{
 		PsiDocTagValue valueElement = tag.getValueElement();
 		assert valueElement != null;
@@ -360,7 +361,7 @@ public class JavaDocCommentFixer implements DocCommentFixer
 		return Pair.create(TextRange.create(startOffset, endOffset), text.subSequence(startOffset, endOffset).toString());
 	}
 
-	private static void locateCaret(@NotNull PsiDocComment comment, @NotNull Editor editor, @NotNull PsiFile file)
+	private static void locateCaret(@Nonnull PsiDocComment comment, @Nonnull Editor editor, @Nonnull PsiFile file)
 	{
 		Document document = editor.getDocument();
 		int lineToNavigate = -1;

@@ -20,7 +20,7 @@
 package com.intellij.psi.impl.java.stubs;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 
@@ -30,7 +30,7 @@ public interface PsiClassStub<T extends PsiClass> extends PsiMemberStub<T> {
   String getQualifiedName();
 
   @NonNls 
-  @Nullable
+  @javax.annotation.Nullable
   String getBaseClassReferenceText();
 
   boolean isDeprecated();

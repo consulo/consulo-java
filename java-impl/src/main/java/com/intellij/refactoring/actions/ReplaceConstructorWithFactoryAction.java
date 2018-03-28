@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.psi.PsiClass;
@@ -22,7 +24,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.replaceConstructorWithFactory.ReplaceConstructorWithFactoryHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -32,13 +33,13 @@ public class ReplaceConstructorWithFactoryAction extends BaseRefactoringAction {
     return false;
   }
 
-  protected boolean isEnabledOnElements(@NotNull PsiElement[] elements) {
+  protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     return elements.length == 1 &&
            (elements[0] instanceof PsiMethod && ((PsiMethod)elements[0]).isConstructor() || elements[0] instanceof PsiClass)
            && elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE);
   }
 
-  protected RefactoringActionHandler getHandler(@NotNull DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new ReplaceConstructorWithFactoryHandler();
   }
 }

@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -27,7 +29,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiTryStatement;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class MoveCatchUpFix implements IntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.DeleteCatchFix");
@@ -35,13 +36,13 @@ public class MoveCatchUpFix implements IntentionAction {
   private final PsiCatchSection myCatchSection;
   private final PsiCatchSection myMoveBeforeSection;
 
-  public MoveCatchUpFix(@NotNull PsiCatchSection catchSection, @NotNull PsiCatchSection moveBeforeSection) {
+  public MoveCatchUpFix(@Nonnull PsiCatchSection catchSection, @Nonnull PsiCatchSection moveBeforeSection) {
     this.myCatchSection = catchSection;
     myMoveBeforeSection = moveBeforeSection;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("move.catch.up.text",
                                   JavaHighlightUtil.formatType(myCatchSection.getCatchType()),
@@ -49,13 +50,13 @@ public class MoveCatchUpFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("move.catch.up.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myCatchSection.isValid()
            && myCatchSection.getManager().isInProject(myCatchSection)
            && myMoveBeforeSection.isValid()
@@ -69,7 +70,7 @@ public class MoveCatchUpFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myCatchSection.getContainingFile())) return;
     try {
       PsiTryStatement statement = myCatchSection.getTryStatement();

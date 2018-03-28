@@ -17,8 +17,8 @@ package consulo.java.compiler.impl.javaCompiler;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.openapi.compiler.CompilerPaths;
@@ -38,9 +38,9 @@ import consulo.compiler.roots.CompilerPathsImpl;
 public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider
 {
 
-  @NotNull
+  @Nonnull
   @Override
-  public String[] getOutputDirectories(@NotNull Project project, @NotNull Module module) {
+  public String[] getOutputDirectories(@Nonnull Project project, @Nonnull Module module) {
     JavaCompilerConfiguration javaCompilerConfiguration = JavaCompilerConfiguration.getInstance(project);
     if (!javaCompilerConfiguration.getAnnotationProcessingConfiguration(module).isEnabled()) {
       return ArrayUtil.EMPTY_STRING_ARRAY;

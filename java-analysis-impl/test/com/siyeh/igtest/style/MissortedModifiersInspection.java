@@ -1,7 +1,7 @@
 package com.siyeh.igtest.style;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.Hashtable;
 
@@ -39,7 +39,7 @@ final public class MissortedModifiersInspection
     public
     @Nullable
     // commment
-    @NotNull
+    @Nonnull
     int //@Temporal(TemporalType.DATE)
     x() {return -1;}
 }

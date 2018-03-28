@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.methodmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 class ReturnPointCountVisitor extends JavaRecursiveElementVisitor {
 
@@ -29,12 +30,12 @@ class ReturnPointCountVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitAnonymousClass(@NotNull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
     // no call to super, to keep it from drilling into anonymous classes
   }
 
   @Override
-  public void visitReturnStatement(@NotNull PsiReturnStatement statement) {
+  public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
     super.visitReturnStatement(statement);
     if (ignoreGuardClauses && previousWasGuardClause) {
       return;

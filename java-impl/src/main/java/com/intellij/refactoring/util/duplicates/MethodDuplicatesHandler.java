@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.analysis.AnalysisUIOptions;
 import com.intellij.analysis.BaseAnalysisActionDialog;
@@ -70,14 +70,14 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 	private static final Logger LOG = Logger.getInstance("#" + MethodDuplicatesHandler.class.getName());
 
 	@Override
-	public boolean isAvailableForQuickList(@NotNull Editor editor, @NotNull PsiFile file, @NotNull DataContext dataContext)
+	public boolean isAvailableForQuickList(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext)
 	{
 		final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
 		return getCannotRefactorMessage(PsiTreeUtil.getParentOfType(element, PsiMember.class)) == null;
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext)
 	{
 		final int offset = editor.getCaretModel().getOffset();
 		final PsiElement element = file.findElementAt(offset);
@@ -100,7 +100,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 			ProgressManager.getInstance().run(new Task.Backgroundable(project, "Locate duplicates", true)
 			{
 				@Override
-				public void run(@NotNull ProgressIndicator indicator)
+				public void run(@Nonnull ProgressIndicator indicator)
 				{
 					indicator.setIndeterminate(true);
 					invokeOnScope(project, member, dlg.getScope(AnalysisUIOptions.getInstance(project), scope, project, module));
@@ -109,7 +109,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String getCannotRefactorMessage(PsiMember member)
 	{
 		if(member == null)
@@ -351,7 +351,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 		return duplicatesFinder.findDuplicates(file);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static DuplicatesFinder createDuplicatesFinder(PsiMember member)
 	{
 		PsiElement[] pattern;
@@ -413,7 +413,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext)
+	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		throw new UnsupportedOperationException();
 	}

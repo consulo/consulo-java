@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.util.TextRange;
@@ -46,16 +46,16 @@ public class JavaClassReferenceSet
 	private final int myStartInElement;
 	private final JavaClassReferenceProvider myProvider;
 
-	public JavaClassReferenceSet(@NotNull String str, @NotNull PsiElement element, int startInElement, final boolean isStatic, @NotNull JavaClassReferenceProvider provider)
+	public JavaClassReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, final boolean isStatic, @Nonnull JavaClassReferenceProvider provider)
 	{
 		this(str, element, startInElement, isStatic, provider, null);
 	}
 
-	private JavaClassReferenceSet(@NotNull String str,
-			@NotNull PsiElement element,
+	private JavaClassReferenceSet(@Nonnull String str,
+			@Nonnull PsiElement element,
 			int startInElement,
 			final boolean isStatic,
-			@NotNull JavaClassReferenceProvider provider,
+			@Nonnull JavaClassReferenceProvider provider,
 			JavaClassReferenceSet context)
 	{
 		myStartInElement = startInElement;
@@ -63,20 +63,20 @@ public class JavaClassReferenceSet
 		reparse(str, element, isStatic, context);
 	}
 
-	@NotNull
+	@Nonnull
 	public JavaClassReferenceProvider getProvider()
 	{
 		return myProvider;
 	}
 
-	@NotNull
+	@Nonnull
 	public TextRange getRangeInElement()
 	{
 		PsiReference[] references = getReferences();
 		return new TextRange(references[0].getRangeInElement().getStartOffset(), references[references.length - 1].getRangeInElement().getEndOffset());
 	}
 
-	private void reparse(@NotNull String str, @NotNull PsiElement element, final boolean isStaticImport, JavaClassReferenceSet context)
+	private void reparse(@Nonnull String str, @Nonnull PsiElement element, final boolean isStaticImport, JavaClassReferenceSet context)
 	{
 		myElement = element;
 		myContext = context;
@@ -226,8 +226,8 @@ public class JavaClassReferenceSet
 		myReferences = referencesList.toArray(new JavaClassReference[referencesList.size()]);
 	}
 
-	@NotNull
-	protected JavaClassReference createReference(final int referenceIndex, @NotNull String subreferenceText, @NotNull TextRange textRange, final boolean staticImport)
+	@Nonnull
+	protected JavaClassReference createReference(final int referenceIndex, @Nonnull String subreferenceText, @Nonnull TextRange textRange, final boolean staticImport)
 	{
 		return new JavaClassReference(this, textRange, referenceIndex, subreferenceText, staticImport);
 	}
@@ -243,7 +243,7 @@ public class JavaClassReferenceSet
 		return isAllowDollarInNames() ? c == DOLLAR : c == DOT;
 	}
 
-	public void reparse(@NotNull PsiElement element, @NotNull TextRange range)
+	public void reparse(@Nonnull PsiElement element, @Nonnull TextRange range)
 	{
 		final String text = range.substring(element.getText());
 		reparse(text, element, false, myContext);
@@ -254,7 +254,7 @@ public class JavaClassReferenceSet
 		return myReferences[index];
 	}
 
-	@NotNull
+	@Nonnull
 	public JavaClassReference[] getAllReferences()
 	{
 		JavaClassReference[] result = myReferences;
@@ -283,13 +283,13 @@ public class JavaClassReferenceSet
 		return myProvider.isSoft();
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiElement getElement()
 	{
 		return myElement;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiReference[] getReferences()
 	{
 		return myReferences;
@@ -302,7 +302,7 @@ public class JavaClassReferenceSet
 	}
 
 	@SuppressWarnings({"UnresolvedPropertyKey"})
-	@NotNull
+	@Nonnull
 	public String getUnresolvedMessagePattern(int index)
 	{
 		if(canReferencePackage(index))

@@ -18,8 +18,9 @@ package com.siyeh.ig.numeric;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.project.Project;
@@ -56,13 +57,13 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
@@ -76,7 +77,7 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
 
   private static class UnnecessaryExplicitNumericCastFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.quickfix");

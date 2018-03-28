@@ -15,9 +15,11 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiAnnotation;
@@ -42,7 +44,7 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
 	private final ClsAnnotationParameterListImpl myParameterList;
 
 	@SuppressWarnings("AbstractMethodCallInConstructor")
-	ClsAnnotationValueImpl(@NotNull ClsElementImpl parent)
+	ClsAnnotationValueImpl(@Nonnull ClsElementImpl parent)
 	{
 		myParent = parent;
 		myReferenceElement = createReference();
@@ -54,14 +56,14 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
 	protected abstract ClsJavaCodeReferenceElementImpl createReference();
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		buffer.append("@").append(myReferenceElement.getCanonicalText());
 		myParameterList.appendMirrorText(indentLevel, buffer);
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, null);
 
@@ -71,7 +73,7 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return new PsiElement[]{
@@ -87,7 +89,7 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -100,14 +102,14 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotationParameterList getParameterList()
 	{
 		return myParameterList;
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public String getQualifiedName()
 	{
 		return myReferenceElement != null ? myReferenceElement.getCanonicalText() : null;

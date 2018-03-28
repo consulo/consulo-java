@@ -17,23 +17,24 @@ package com.intellij.debugger.memory.utils;
 
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 class NamesUtils
 {
-	@NotNull
-	static String getUniqueName(@NotNull ObjectReference ref)
+	@Nonnull
+	static String getUniqueName(@Nonnull ObjectReference ref)
 	{
 		String shortName = StringUtil.getShortName(ref.referenceType().name());
 		String name = shortName.replace("[]", "Array");
 		return String.format("%s@%d", name, ref.uniqueID());
 	}
 
-	@NotNull
-	static String getArrayUniqueName(@NotNull ArrayReference ref)
+	@Nonnull
+	static String getArrayUniqueName(@Nonnull ArrayReference ref)
 	{
 		String shortName = StringUtil.getShortName(ref.referenceType().name());
 		int length = ref.length();

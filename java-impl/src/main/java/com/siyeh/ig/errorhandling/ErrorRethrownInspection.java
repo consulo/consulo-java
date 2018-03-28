@@ -22,24 +22,24 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ErrorRethrownInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ErrorNotRethrown";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("error.rethrown.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "error.rethrown.problem.descriptor");
@@ -54,7 +54,7 @@ public class ErrorRethrownInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@NotNull PsiTryStatement statement) {
+    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
       final PsiCatchSection[] catchSections =
         statement.getCatchSections();

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testIntegration.JavaTestFramework;
 import com.intellij.testIntegration.TestFramework;
 import com.intellij.testIntegration.TestIntegrationUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,19 +40,19 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
   private static final Logger LOG = Logger.getInstance("#" + MoveInitializerToSetUpMethodAction.class.getName());
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.move.initializer.to.set.up");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final boolean isAvailable = super.isAvailable(project, editor, element) && TestIntegrationUtils.isTest(element);
     if (isAvailable) {
       final PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
@@ -76,15 +76,15 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
     return false;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected Collection<String> getUnsuitableModifiers() {
     return Arrays.asList(PsiModifier.STATIC, PsiModifier.FINAL);
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  protected Collection<PsiMethod> getOrCreateMethods(@NotNull Project project, @NotNull Editor editor, PsiFile file, @NotNull PsiClass aClass) {
+  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
     final PsiMethod setUpMethod = TestFrameworks.getInstance().findOrCreateSetUpMethod(aClass);
     return setUpMethod == null ? Collections.<PsiMethod>emptyList() : Arrays.asList(setUpMethod);
   }

@@ -15,7 +15,7 @@
  */
 package com.intellij.execution;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.execution.configurations.ConfigurationWithAlternativeJre;
 
 public interface CommonJavaRunConfigurationParameters extends CommonProgramRunConfigurationParameters, ConfigurationWithAlternativeJre

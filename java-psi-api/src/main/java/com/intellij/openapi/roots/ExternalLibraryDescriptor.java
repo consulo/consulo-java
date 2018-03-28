@@ -17,8 +17,8 @@ package com.intellij.openapi.roots;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -35,7 +35,7 @@ public abstract class ExternalLibraryDescriptor
 		this(libraryGroupId, libraryArtifactId, null, null);
 	}
 
-	public ExternalLibraryDescriptor(@NotNull String libraryGroupId, @NotNull String libraryArtifactId, @Nullable String minVersion, @Nullable String maxVersion)
+	public ExternalLibraryDescriptor(@Nonnull String libraryGroupId, @Nonnull String libraryArtifactId, @Nullable String minVersion, @Nullable String maxVersion)
 	{
 		myLibraryGroupId = libraryGroupId;
 		myLibraryArtifactId = libraryArtifactId;
@@ -43,13 +43,13 @@ public abstract class ExternalLibraryDescriptor
 		myMaxVersion = maxVersion;
 	}
 
-	@NotNull
+	@Nonnull
 	public String getLibraryGroupId()
 	{
 		return myLibraryGroupId;
 	}
 
-	@NotNull
+	@Nonnull
 	public String getLibraryArtifactId()
 	{
 		return myLibraryArtifactId;
@@ -61,7 +61,7 @@ public abstract class ExternalLibraryDescriptor
 		return myMinVersion;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public String getMaxVersion()
 	{
 		return myMaxVersion;
@@ -72,6 +72,6 @@ public abstract class ExternalLibraryDescriptor
 		return myLibraryArtifactId;
 	}
 
-	@NotNull
+	@Nonnull
 	public abstract List<String> getLibraryClassesRoots();
 }

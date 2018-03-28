@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.editorActions.moveUpDown;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.lang.java.JavaLanguage;
@@ -37,14 +38,14 @@ class StatementMover extends LineMover {
   private PsiElement statementToSurroundWithCodeBlock;
 
   @Override
-  public void beforeMove(@NotNull final Editor editor, @NotNull final MoveInfo info, final boolean down) {
+  public void beforeMove(@Nonnull final Editor editor, @Nonnull final MoveInfo info, final boolean down) {
     super.beforeMove(editor, info, down);
     if (statementToSurroundWithCodeBlock != null) {
       surroundWithCodeBlock(info, down);
     }
   }
 
-  private void surroundWithCodeBlock(@NotNull final MoveInfo info, final boolean down) {
+  private void surroundWithCodeBlock(@Nonnull final MoveInfo info, final boolean down) {
     try {
       final Document document = PsiDocumentManager.getInstance(statementToSurroundWithCodeBlock.getProject()).getDocument(statementToSurroundWithCodeBlock.getContainingFile());
       int startOffset = document.getLineStartOffset(info.toMove.startLine);
@@ -80,7 +81,7 @@ class StatementMover extends LineMover {
   }
 
   @Override
-  public boolean checkAvailable(@NotNull final Editor editor, @NotNull final PsiFile file, @NotNull final MoveInfo info, final boolean down) {
+  public boolean checkAvailable(@Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final MoveInfo info, final boolean down) {
     //if (!(file instanceof PsiJavaFile)) return false;
     final boolean available = super.checkAvailable(editor, file, info, down);
     if (!available) return false;
@@ -133,7 +134,7 @@ class StatementMover extends LineMover {
 
     return destLine;
   }
-  private boolean calcInsertOffset(@NotNull PsiFile file, @NotNull Editor editor, @NotNull LineRange range, @NotNull final MoveInfo info, final boolean down) {
+  private boolean calcInsertOffset(@Nonnull PsiFile file, @Nonnull Editor editor, @Nonnull LineRange range, @Nonnull final MoveInfo info, final boolean down) {
     int destLine = getDestLineForAnon(file, editor, range, info, down);
 
     int startLine = down ? range.endLine : range.startLine - 1;
@@ -206,7 +207,7 @@ class StatementMover extends LineMover {
     return false;
   }
 
-  private boolean checkMovingInsideOutside(PsiFile file, final Editor editor, LineRange range, @NotNull final MoveInfo info, final boolean down) {
+  private boolean checkMovingInsideOutside(PsiFile file, final Editor editor, LineRange range, @Nonnull final MoveInfo info, final boolean down) {
     final int offset = editor.getCaretModel().getOffset();
 
     PsiElement elementAtOffset = file.getViewProvider().findElementAt(offset, JavaLanguage.INSTANCE);

@@ -15,8 +15,8 @@
  */
 package com.intellij.lang.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightMethodBuilder;
@@ -149,7 +149,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider
 		return true;
 	}
 
-	public static boolean mayRenameInplace(@NotNull PsiElement elementToRename, final PsiElement nameSuggestionContext)
+	public static boolean mayRenameInplace(@Nonnull PsiElement elementToRename, final PsiElement nameSuggestionContext)
 	{
 		if(isDisableRefactoringForLightElement(elementToRename))
 		{
@@ -182,7 +182,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider
 		return PsiTreeUtil.isAncestor(containingFile, scopeElements[0], false);
 	}
 
-	public static boolean isDisableRefactoringForLightElement(@Nullable PsiElement element)
+	public static boolean isDisableRefactoringForLightElement(@javax.annotation.Nullable PsiElement element)
 	{
 		if(element instanceof LightMethodBuilder)
 		{

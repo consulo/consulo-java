@@ -18,10 +18,10 @@ package com.intellij.execution.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.ModuleDescriptionsComboBox;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.JavaExecutionUtil;
@@ -136,7 +136,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
 	}
 
 	@Override
-	public void applyEditorTo(@NotNull final ApplicationConfiguration configuration) throws ConfigurationException
+	public void applyEditorTo(@Nonnull final ApplicationConfiguration configuration) throws ConfigurationException
 	{
 		myCommonJavaParametersPanel.applyTo(configuration);
 		myModuleSelector.applyTo(configuration);
@@ -154,7 +154,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
 	}
 
 	@Override
-	public void resetEditorFrom(@NotNull final ApplicationConfiguration configuration)
+	public void resetEditorFrom(@Nonnull final ApplicationConfiguration configuration)
 	{
 		myCommonJavaParametersPanel.reset(configuration);
 		myModuleSelector.reset(configuration);
@@ -193,7 +193,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JComponent createEditor()
 	{
 		return myRootPanel;

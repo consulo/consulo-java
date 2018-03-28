@@ -30,13 +30,12 @@ import com.intellij.refactoring.move.MoveHandlerDelegate;
 import com.intellij.refactoring.move.moveClassesOrPackages.JavaMoveClassesOrPackagesHandler;
 import com.intellij.refactoring.move.moveMembers.MoveMembersHandler;
 import com.intellij.refactoring.util.RadioUpDownListener;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
-  public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
+  public boolean canMove(final PsiElement[] elements, @javax.annotation.Nullable final PsiElement targetContainer) {
     if (elements.length != 1) return false;
     PsiElement element = elements [0];
     return isStaticInnerClass(element) &&
@@ -125,7 +124,7 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
       return panel;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public MoveHandlerDelegate getRefactoringHandler() {
       if (myRbMoveInner.isSelected()) {
         return new MoveInnerToUpperHandler();

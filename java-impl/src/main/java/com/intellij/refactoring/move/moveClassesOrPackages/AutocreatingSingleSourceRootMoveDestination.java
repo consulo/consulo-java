@@ -31,8 +31,8 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -42,7 +42,7 @@ import java.util.Collection;
 public class AutocreatingSingleSourceRootMoveDestination extends AutocreatingMoveDestination {
   private final VirtualFile mySourceRoot;
 
-  public AutocreatingSingleSourceRootMoveDestination(PackageWrapper targetPackage, @NotNull VirtualFile sourceRoot) {
+  public AutocreatingSingleSourceRootMoveDestination(PackageWrapper targetPackage, @Nonnull VirtualFile sourceRoot) {
     super(targetPackage);
     mySourceRoot = sourceRoot;
   }

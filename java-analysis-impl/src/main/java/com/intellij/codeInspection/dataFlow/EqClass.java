@@ -20,7 +20,7 @@ import gnu.trove.TIntProcedure;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
@@ -97,7 +97,7 @@ class EqClass extends SortedIntSet
 		return result;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	DfaValue findConstant(boolean wrapped)
 	{
 		for(DfaValue value : getMemberValues())

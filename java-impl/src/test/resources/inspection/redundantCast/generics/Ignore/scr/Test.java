@@ -1,5 +1,5 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 class CastPreventsNPEDetection {
     @Nullable Object getParent() {
@@ -13,7 +13,7 @@ class CastPreventsNPEDetection {
 }
 
 class ChildCastImpl extends CastPreventsNPEDetection {
-    @NotNull
+    @Nonnull
     @Override
     Object getParent() {
         return super.getParent();    //To change body of overridden methods use File | Settings | File Templates.

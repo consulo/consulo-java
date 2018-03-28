@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,13 +36,13 @@ public class CastToConcreteClassInspection extends BaseInspection {
   public boolean ignoreInEquals = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("cast.to.concrete.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiType type= (PsiType)infos[0];
     return InspectionGadgetsBundle.message("cast.to.concrete.class.problem.descriptor", type.getPresentableText());
@@ -64,7 +64,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
   private class CastToConcreteClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(@NotNull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       final PsiTypeElement typeElement = expression.getCastType();
       if (typeElement == null) {

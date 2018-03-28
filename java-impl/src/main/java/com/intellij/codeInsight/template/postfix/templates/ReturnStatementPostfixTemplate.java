@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -25,7 +25,7 @@ public class ReturnStatementPostfixTemplate extends JavaStatementWrapPostfixTemp
     super("return", "return expr;", JAVA_PSI_INFO, IS_NON_VOID);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getHead() {
     return "return ";

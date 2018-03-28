@@ -15,16 +15,17 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiTryStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class EmptyTryBlockInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("empty.try.block.display.name");
   }
@@ -33,7 +34,7 @@ public class EmptyTryBlockInspection extends BaseInspection {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.try.block.problem.descriptor");
@@ -47,7 +48,7 @@ public class EmptyTryBlockInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@NotNull PsiTryStatement statement) {
+    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
       /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

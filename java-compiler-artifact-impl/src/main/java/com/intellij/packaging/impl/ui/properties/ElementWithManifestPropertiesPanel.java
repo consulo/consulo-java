@@ -26,8 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.ui.Messages;
@@ -175,7 +175,7 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
 				.getManifestFilePath(), getConfiguredManifestPath()));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private String getConfiguredManifestPath()
 	{
 		final String path = myManifestPathField.getText();
@@ -199,13 +199,13 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JComponent createComponent()
 	{
 		return myMainPanel;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private String getConfiguredMainClass()
 	{
 		final String className = myMainClassField.getText();

@@ -15,8 +15,9 @@
  */
 package com.siyeh.ipp.commutative;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionList;
@@ -47,7 +48,7 @@ public class FlipCommutativeMethodCallIntention extends MutablyNamedIntention {
     }
   }
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new FlipCommutativeMethodCallPredicate();
   }

@@ -28,8 +28,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.InstanceOfUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -39,14 +39,14 @@ public class OverlyStrongTypeCastInspection extends BaseInspection {
   public boolean ignoreInMatchingInstanceof = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "overly.strong.type.cast.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiType expectedType = (PsiType)infos[0];
     final String typeText = expectedType.getPresentableText();
@@ -70,7 +70,7 @@ public class OverlyStrongTypeCastInspection extends BaseInspection {
 
   private static class OverlyStrongCastFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "overly.strong.type.cast.weaken.quickfix");
@@ -112,7 +112,7 @@ public class OverlyStrongTypeCastInspection extends BaseInspection {
 
     @Override
     public void visitTypeCastExpression(
-      @NotNull PsiTypeCastExpression expression) {
+      @Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       final PsiExpression operand = expression.getOperand();
       if (operand == null) {

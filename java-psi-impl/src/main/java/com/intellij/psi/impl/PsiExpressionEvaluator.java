@@ -18,7 +18,6 @@ package com.intellij.psi.impl;
 import com.intellij.psi.PsiConstantEvaluationHelper;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
-import org.jetbrains.annotations.Nullable;
 
 public class PsiExpressionEvaluator implements ConstantExpressionEvaluator {
 
@@ -28,7 +27,7 @@ public class PsiExpressionEvaluator implements ConstantExpressionEvaluator {
   }
 
   @Override
-  public Object computeExpression(PsiElement expression, boolean throwExceptionOnOverflow, @Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
+  public Object computeExpression(PsiElement expression, boolean throwExceptionOnOverflow, @javax.annotation.Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
     return expression instanceof PsiExpression ? JavaConstantExpressionEvaluator.computeConstantExpression((PsiExpression)expression, null, throwExceptionOnOverflow, auxEvaluator) : null;
   }
 }

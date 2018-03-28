@@ -15,11 +15,12 @@
  */
 package com.siyeh.ig.migration;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -48,7 +49,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	public boolean onlyReportSuperfluouslyBoxed = false;
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("unnecessary.boxing.display.name");
@@ -60,7 +61,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 		return true;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public JComponent createOptionsPanel()
 	{
@@ -68,7 +69,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("unnecessary.boxing.problem.descriptor");
@@ -84,14 +85,14 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	{
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("unnecessary.boxing.remove.quickfix");
 		}
 
 		@Override
-		public void doFix(@NotNull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException
+		public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException
 		{
 			final PsiCallExpression expression = (PsiCallExpression) descriptor.getPsiElement();
 			final PsiExpressionList argumentList = expression.getArgumentList();
@@ -128,7 +129,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 		}
 
 		@Nullable
-		private static String getUnboxedExpressionText(@NotNull PsiExpression unboxedExpression, @NotNull PsiExpression boxedExpression)
+		private static String getUnboxedExpressionText(@Nonnull PsiExpression unboxedExpression, @Nonnull PsiExpression boxedExpression)
 		{
 			final PsiType boxedType = boxedExpression.getType();
 			if(boxedType == null)
@@ -200,7 +201,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitNewExpression(@NotNull PsiNewExpression expression)
+		public void visitNewExpression(@Nonnull PsiNewExpression expression)
 		{
 			super.visitNewExpression(expression);
 			final PsiExpressionList argumentList = expression.getArgumentList();
@@ -375,7 +376,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 			return unboxedType != null && unboxedType.isAssignableFrom(lhsType);
 		}
 
-		private boolean isSameMethodCalledWithoutBoxing(@NotNull PsiCallExpression methodCallExpression, @NotNull PsiExpression boxingExpression, @NotNull PsiExpression boxedExpression)
+		private boolean isSameMethodCalledWithoutBoxing(@Nonnull PsiCallExpression methodCallExpression, @Nonnull PsiExpression boxingExpression, @Nonnull PsiExpression boxedExpression)
 		{
 			final PsiMethod originalMethod = methodCallExpression.resolveMethod();
 			if(originalMethod == null)

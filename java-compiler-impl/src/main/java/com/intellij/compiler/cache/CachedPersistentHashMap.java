@@ -18,7 +18,6 @@ package com.intellij.compiler.cache;
 import java.io.File;
 import java.io.IOException;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.io.DataExternalizer;
@@ -65,7 +64,7 @@ public class CachedPersistentHashMap<Key, Value> extends PersistentHashMap<Key, 
     super.doAppendData(key, appender);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   protected Value doGet(Key key) throws IOException {
     Value value = myCache.get(key);
     if (value == null) {

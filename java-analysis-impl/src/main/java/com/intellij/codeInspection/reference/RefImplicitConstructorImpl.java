@@ -24,7 +24,7 @@
  */
 package com.intellij.codeInspection.reference;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;

@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection.inheritance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.LowPriorityAction;
@@ -24,26 +26,25 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
 public class ChangeSuperClassFix implements LocalQuickFix {
-  @NotNull
+  @Nonnull
   private final PsiClass myNewSuperClass;
-  @NotNull
+  @Nonnull
   private final PsiClass myOldSuperClass;
   private final int myPercent;
 
-  public ChangeSuperClassFix(@NotNull final PsiClass newSuperClass, final int percent, @NotNull final PsiClass oldSuperClass) {
+  public ChangeSuperClassFix(@Nonnull final PsiClass newSuperClass, final int percent, @Nonnull final PsiClass oldSuperClass) {
     myNewSuperClass = newSuperClass;
     myOldSuperClass = oldSuperClass;
     myPercent = percent;
   }
 
-  @NotNull
+  @Nonnull
   @TestOnly
   public PsiClass getNewSuperClass() {
     return myNewSuperClass;
@@ -54,20 +55,20 @@ public class ChangeSuperClassFix implements LocalQuickFix {
     return myPercent;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return String.format("Make extends '%s' - %s%%", myNewSuperClass.getQualifiedName(), myPercent);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return GroupNames.INHERITANCE_GROUP_NAME;
   }
 
   @Override
-  public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor problemDescriptor) {
+  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor problemDescriptor) {
     changeSuperClass((PsiClass)problemDescriptor.getPsiElement(), myOldSuperClass, myNewSuperClass);
   }
 
@@ -77,9 +78,9 @@ public class ChangeSuperClassFix implements LocalQuickFix {
    * 1. not checks that myOldSuperClass is really super of aClass
    * 2. not checks that myNewSuperClass not exists in currently existed supers
    */
-  private static void changeSuperClass(@NotNull final PsiClass aClass,
-                                       @NotNull final PsiClass oldSuperClass,
-                                       @NotNull final PsiClass newSuperClass) {
+  private static void changeSuperClass(@Nonnull final PsiClass aClass,
+                                       @Nonnull final PsiClass oldSuperClass,
+                                       @Nonnull final PsiClass newSuperClass) {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(aClass)) return;
 
     new WriteCommandAction.Simple(newSuperClass.getProject(), aClass.getContainingFile()) {
@@ -121,7 +122,7 @@ public class ChangeSuperClassFix implements LocalQuickFix {
   }
 
   public static class LowPriority extends ChangeSuperClassFix implements LowPriorityAction {
-    public LowPriority(@NotNull final PsiClass newSuperClass, final int percent, @NotNull final PsiClass oldSuperClass) {
+    public LowPriority(@Nonnull final PsiClass newSuperClass, final int percent, @Nonnull final PsiClass oldSuperClass) {
       super(newSuperClass, percent, oldSuperClass);
     }
   }

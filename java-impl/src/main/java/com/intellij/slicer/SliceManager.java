@@ -18,7 +18,8 @@ package com.intellij.slicer;
 import java.awt.Font;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.analysis.AnalysisUIOptions;
 import com.intellij.ide.impl.ContentManagerWatcher;
 import com.intellij.openapi.Disposable;
@@ -63,54 +64,54 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
 		public AnalysisUIOptions analysisUIOptions = new AnalysisUIOptions();
 	}
 
-	public static SliceManager getInstance(@NotNull Project project)
+	public static SliceManager getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, SliceManager.class);
 	}
 
-	public SliceManager(@NotNull Project project, PsiManager psiManager)
+	public SliceManager(@Nonnull Project project, PsiManager psiManager)
 	{
 		myProject = project;
 	}
 
-	@NotNull
-	private Disposable addPsiListener(@NotNull final ProgressIndicator indicator)
+	@Nonnull
+	private Disposable addPsiListener(@Nonnull final ProgressIndicator indicator)
 	{
 		Disposable disposable = Disposer.newDisposable();
 		PsiManager.getInstance(myProject).addPsiTreeChangeListener(new PsiTreeChangeAdapter()
 		{
 			@Override
-			public void beforeChildAddition(@NotNull PsiTreeChangeEvent event)
+			public void beforeChildAddition(@Nonnull PsiTreeChangeEvent event)
 			{
 				indicator.cancel();
 			}
 
 			@Override
-			public void beforeChildRemoval(@NotNull PsiTreeChangeEvent event)
+			public void beforeChildRemoval(@Nonnull PsiTreeChangeEvent event)
 			{
 				indicator.cancel();
 			}
 
 			@Override
-			public void beforeChildReplacement(@NotNull PsiTreeChangeEvent event)
+			public void beforeChildReplacement(@Nonnull PsiTreeChangeEvent event)
 			{
 				indicator.cancel();
 			}
 
 			@Override
-			public void beforeChildMovement(@NotNull PsiTreeChangeEvent event)
+			public void beforeChildMovement(@Nonnull PsiTreeChangeEvent event)
 			{
 				indicator.cancel();
 			}
 
 			@Override
-			public void beforeChildrenChange(@NotNull PsiTreeChangeEvent event)
+			public void beforeChildrenChange(@Nonnull PsiTreeChangeEvent event)
 			{
 				indicator.cancel();
 			}
 
 			@Override
-			public void beforePropertyChange(@NotNull PsiTreeChangeEvent event)
+			public void beforePropertyChange(@Nonnull PsiTreeChangeEvent event)
 			{
 				indicator.cancel();
 			}
@@ -140,7 +141,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
 		return myForthContentManager;
 	}
 
-	public void slice(@NotNull PsiElement element, boolean dataFlowToThis, @NotNull SliceHandler handler)
+	public void slice(@Nonnull PsiElement element, boolean dataFlowToThis, @Nonnull SliceHandler handler)
 	{
 		String dialogTitle = getElementDescription((dataFlowToThis ? BACK_TOOLWINDOW_ID : FORTH_TOOLWINDOW_ID) + " ", element, null);
 
@@ -156,7 +157,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
 		createToolWindow(dataFlowToThis, rootNode, false, getElementDescription(null, element, null));
 	}
 
-	public void createToolWindow(boolean dataFlowToThis, @NotNull SliceRootNode rootNode, boolean splitByLeafExpressions, @NotNull String displayName)
+	public void createToolWindow(boolean dataFlowToThis, @Nonnull SliceRootNode rootNode, boolean splitByLeafExpressions, @Nonnull String displayName)
 	{
 		final SliceToolwindowSettings sliceToolwindowSettings = SliceToolwindowSettings.getInstance(myProject);
 		final ContentManager contentManager = getContentManager(dataFlowToThis);
@@ -226,7 +227,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
 		return f.deriveFont(f.getStyle(), Math.max(11, f.getSize() - 2));
 	}
 
-	public void runInterruptibly(@NotNull ProgressIndicator progress, @NotNull Runnable onCancel, @NotNull Runnable runnable) throws ProcessCanceledException
+	public void runInterruptibly(@Nonnull ProgressIndicator progress, @Nonnull Runnable onCancel, @Nonnull Runnable runnable) throws ProcessCanceledException
 	{
 		Disposable disposable = addPsiListener(progress);
 		try

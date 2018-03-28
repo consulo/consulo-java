@@ -15,10 +15,11 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
 
 class StringVariableIsAppendedToVisitor extends JavaRecursiveElementVisitor {
 
@@ -35,7 +36,7 @@ class StringVariableIsAppendedToVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssignmentExpression(
-    @NotNull PsiAssignmentExpression assignment) {
+    @Nonnull PsiAssignmentExpression assignment) {
     if (appendedTo) {
       return;
     }

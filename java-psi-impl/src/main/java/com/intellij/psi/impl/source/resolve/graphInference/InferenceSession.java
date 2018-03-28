@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source.resolve.graphInference;
 
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
@@ -175,12 +175,12 @@ public class InferenceSession
 		initBounds(typeParams);
 	}
 
-	public static PsiType getUpperBound(@NotNull PsiClass psiClass)
+	public static PsiType getUpperBound(@Nonnull PsiClass psiClass)
 	{
 		return psiClass.getUserData(UPPER_BOUND);
 	}
 
-	public static PsiType getLowerBound(@NotNull PsiClass psiClass)
+	public static PsiType getLowerBound(@Nonnull PsiClass psiClass)
 	{
 		return psiClass.getUserData(LOWER_BOUND);
 	}
@@ -355,7 +355,7 @@ public class InferenceSession
 		return true;
 	}
 
-	private static PsiTypeParameterListOwner getTypeParameterOwner(@NotNull PsiMethod method, PsiElement gParent)
+	private static PsiTypeParameterListOwner getTypeParameterOwner(@Nonnull PsiMethod method, PsiElement gParent)
 	{
 		PsiTypeParameterListOwner owner = null;
 		if(method.getTypeParameters().length > 0 && gParent instanceof PsiCallExpression && ((PsiCallExpression) gParent).getTypeArgumentList().getTypeParameterElements().length == 0)
@@ -383,7 +383,7 @@ public class InferenceSession
 		return false;
 	}
 
-	private static PsiType getParameterType(PsiParameter[] parameters, int i, @Nullable PsiSubstitutor substitutor, boolean varargs)
+	private static PsiType getParameterType(PsiParameter[] parameters, int i, @javax.annotation.Nullable PsiSubstitutor substitutor, boolean varargs)
 	{
 		if(substitutor == null)
 		{
@@ -392,39 +392,39 @@ public class InferenceSession
 		return substitutor.substitute(PsiTypesUtil.getParameterType(parameters, i, varargs));
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiSubstitutor infer()
 	{
 		return infer(null, null, null);
 	}
 
 
-	public PsiSubstitutor collectAdditionalAndInfer(@NotNull PsiParameter[] parameters,
-			@NotNull PsiExpression[] args,
-			@NotNull MethodCandidateInfo.CurrentCandidateProperties properties,
-			@NotNull PsiSubstitutor psiSubstitutor)
+	public PsiSubstitutor collectAdditionalAndInfer(@Nonnull PsiParameter[] parameters,
+			@Nonnull PsiExpression[] args,
+			@Nonnull MethodCandidateInfo.CurrentCandidateProperties properties,
+			@Nonnull PsiSubstitutor psiSubstitutor)
 	{
 		return performGuardedInference(parameters, args, myContext, properties, psiSubstitutor);
 	}
 
-	@NotNull
-	public PsiSubstitutor infer(@Nullable PsiParameter[] parameters, @Nullable PsiExpression[] args, @Nullable PsiElement parent)
+	@Nonnull
+	public PsiSubstitutor infer(@Nullable PsiParameter[] parameters, @javax.annotation.Nullable PsiExpression[] args, @javax.annotation.Nullable PsiElement parent)
 	{
 		return infer(parameters, args, parent, getCurrentProperties(parent));
 	}
 
-	@NotNull
-	public PsiSubstitutor infer(@Nullable PsiParameter[] parameters, @Nullable PsiExpression[] args, @Nullable PsiElement parent, @Nullable MethodCandidateInfo.CurrentCandidateProperties properties)
+	@Nonnull
+	public PsiSubstitutor infer(@javax.annotation.Nullable PsiParameter[] parameters, @javax.annotation.Nullable PsiExpression[] args, @javax.annotation.Nullable PsiElement parent, @javax.annotation.Nullable MethodCandidateInfo.CurrentCandidateProperties properties)
 	{
 		return performGuardedInference(parameters, args, parent, properties, PsiSubstitutor.EMPTY);
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiSubstitutor performGuardedInference(@Nullable PsiParameter[] parameters,
-			@Nullable PsiExpression[] args,
-			@Nullable PsiElement parent,
-			@Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
-			@NotNull PsiSubstitutor initialSubstitutor)
+			@javax.annotation.Nullable PsiExpression[] args,
+			@javax.annotation.Nullable PsiElement parent,
+			@javax.annotation.Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
+			@Nonnull PsiSubstitutor initialSubstitutor)
 	{
 		try
 		{
@@ -448,11 +448,11 @@ public class InferenceSession
 		}
 	}
 
-	private void doInfer(@Nullable PsiParameter[] parameters,
-			@Nullable PsiExpression[] args,
-			@Nullable PsiElement parent,
+	private void doInfer(@javax.annotation.Nullable PsiParameter[] parameters,
+			@javax.annotation.Nullable PsiExpression[] args,
+			@javax.annotation.Nullable PsiElement parent,
 			@Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
-			@NotNull PsiSubstitutor initialSubstitutor)
+			@Nonnull PsiSubstitutor initialSubstitutor)
 	{
 		if(!repeatInferencePhases())
 		{
@@ -1194,7 +1194,7 @@ public class InferenceSession
 		return collectDependencies(type, null);
 	}
 
-	public boolean collectDependencies(@Nullable PsiType type, @Nullable final Set<InferenceVariable> dependencies)
+	public boolean collectDependencies(@Nullable PsiType type, @javax.annotation.Nullable final Set<InferenceVariable> dependencies)
 	{
 		return collectDependencies(type, dependencies, new Function<PsiClassType, InferenceVariable>()
 		{
@@ -1206,7 +1206,7 @@ public class InferenceSession
 		});
 	}
 
-	public static boolean collectDependencies(@Nullable PsiType type, @Nullable final Set<InferenceVariable> dependencies, final Function<PsiClassType, InferenceVariable> fun)
+	public static boolean collectDependencies(@javax.annotation.Nullable PsiType type, @javax.annotation.Nullable final Set<InferenceVariable> dependencies, final Function<PsiClassType, InferenceVariable> fun)
 	{
 		if(type == null)
 		{
@@ -1214,28 +1214,28 @@ public class InferenceSession
 		}
 		final Boolean isProper = type.accept(new PsiTypeVisitor<Boolean>()
 		{
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitType(PsiType type)
 			{
 				return true;
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType)
 			{
 				return true;
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitArrayType(PsiArrayType arrayType)
 			{
 				return arrayType.getComponentType().accept(this);
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitWildcardType(PsiWildcardType wildcardType)
 			{
@@ -1247,7 +1247,7 @@ public class InferenceSession
 				return bound.accept(this);
 			}
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public Boolean visitClassType(PsiClassType classType)
 			{
@@ -1379,7 +1379,7 @@ public class InferenceSession
 		return false;
 	}
 
-	private void resolveBounds(final Collection<InferenceVariable> inferenceVariables, @NotNull PsiSubstitutor substitutor)
+	private void resolveBounds(final Collection<InferenceVariable> inferenceVariables, @Nonnull PsiSubstitutor substitutor)
 	{
 		final Collection<InferenceVariable> allVars = new ArrayList<>(inferenceVariables);
 		while(!allVars.isEmpty())
@@ -1506,7 +1506,7 @@ public class InferenceSession
 		return substitutor;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiSubstitutor resolveSubset(Collection<InferenceVariable> vars, PsiSubstitutor substitutor)
 	{
 		if(myErased)
@@ -1626,7 +1626,7 @@ public class InferenceSession
 		registerIncompatibleErrorMessage("no instance(s) of type variable(s) " + variablesEnumeration + " exist so that " + incompatibleTypesMessage);
 	}
 
-	public void registerIncompatibleErrorMessage(@NotNull String incompatibleBoundsMessage)
+	public void registerIncompatibleErrorMessage(@Nonnull String incompatibleBoundsMessage)
 	{
 		if(myErrorMessages == null)
 		{
@@ -1923,7 +1923,7 @@ public class InferenceSession
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	private Set<InferenceVariable> getOutputVariables(Set<ConstraintFormula> constraintFormulas)
 	{
 		final Set<InferenceVariable> outputVariables = new HashSet<>();
@@ -2164,7 +2164,7 @@ public class InferenceSession
 		return isFunctionalTypeMoreSpecific(sType, tType, null, arg);
 	}
 
-	private static boolean isFunctionalTypeMoreSpecific(PsiType sType, PsiType tType, @Nullable InferenceSession session, PsiExpression... args)
+	private static boolean isFunctionalTypeMoreSpecific(PsiType sType, PsiType tType, @javax.annotation.Nullable InferenceSession session, PsiExpression... args)
 	{
 		final PsiType capturedSType = sType;//todo capture of Si session != null && sType != null ? PsiUtil.captureToplevelWildcards(sType, session.myContext) : sType;
 		final PsiClassType.ClassResolveResult sResult = PsiUtil.resolveGenericsClassInType(capturedSType);
@@ -2188,7 +2188,7 @@ public class InferenceSession
 	}
 
 	protected static boolean argConstraints(PsiExpression arg,
-			@Nullable InferenceSession session,
+			@javax.annotation.Nullable InferenceSession session,
 			PsiMethod sInterfaceMethod,
 			PsiSubstitutor sSubstitutor,
 			PsiMethod tInterfaceMethod,
@@ -2401,7 +2401,7 @@ public class InferenceSession
 		myRestoreNameSubstitution = myRestoreNameSubstitution.putAll(restoreNamesSubstitution);
 	}
 
-	public PsiType substituteWithInferenceVariables(@Nullable PsiType type)
+	public PsiType substituteWithInferenceVariables(@javax.annotation.Nullable PsiType type)
 	{
 		return myInferenceSubstitution.substitute(type);
 	}

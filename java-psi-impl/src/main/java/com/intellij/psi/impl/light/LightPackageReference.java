@@ -21,7 +21,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class LightPackageReference extends LightElement implements PsiJavaCodeReferenceElement {
   private final String myPackageName;
@@ -50,13 +50,13 @@ public class LightPackageReference extends LightElement implements PsiJavaCodeRe
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode){
     return new CandidateInfo(resolve(), PsiSubstitutor.EMPTY);
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode){
     final JavaResolveResult result = advancedResolve(incompleteCode);
     if(result != JavaResolveResult.EMPTY) return new JavaResolveResult[]{result};
@@ -79,7 +79,7 @@ public class LightPackageReference extends LightElement implements PsiJavaCodeRe
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getCanonicalText(){
     return getText();
   }
@@ -101,13 +101,13 @@ public class LightPackageReference extends LightElement implements PsiJavaCodeRe
   }
 
   @Override
-  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
     //TODO?
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceElement(this);
     }
@@ -127,7 +127,7 @@ public class LightPackageReference extends LightElement implements PsiJavaCodeRe
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Object[] getVariants() {
     throw new RuntimeException("Variants are not available for light references");
   }
@@ -183,7 +183,7 @@ public class LightPackageReference extends LightElement implements PsiJavaCodeRe
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getTypeParameters() {
     return PsiType.EMPTY_ARRAY;
   }

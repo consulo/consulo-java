@@ -18,12 +18,12 @@ package com.siyeh.ipp.initialization;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class SplitDeclarationAndInitializationPredicate
   implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@NotNull PsiElement element) {
+  public boolean satisfiedBy(@Nonnull PsiElement element) {
     final PsiElement parent = element.getParent();
     if (!(parent instanceof PsiField)) {
       return false;

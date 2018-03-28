@@ -19,7 +19,7 @@ import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Comparator;
 
@@ -73,12 +73,12 @@ public class KindSorter implements Sorter {
     return false;
   }
 
-  @NotNull
+  @Nonnull
   public ActionPresentation getPresentation() {
     throw new IllegalStateException();
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return ID;
   }

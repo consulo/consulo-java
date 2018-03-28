@@ -18,7 +18,8 @@ package com.intellij.codeInsight.template.postfix.templates;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -29,17 +30,17 @@ public class SynchronizedStatementPostfixTemplate extends JavaStatementWrapPostf
   }
 
   @Override
-  protected void afterExpand(@NotNull PsiElement newStatement, @NotNull Editor editor) {
+  protected void afterExpand(@Nonnull PsiElement newStatement, @Nonnull Editor editor) {
     JavaPostfixTemplatesUtils.formatPsiCodeBlock(newStatement, editor);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getHead() {
     return "synchronized (";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTail() {
     return ") {\nst;\n}";

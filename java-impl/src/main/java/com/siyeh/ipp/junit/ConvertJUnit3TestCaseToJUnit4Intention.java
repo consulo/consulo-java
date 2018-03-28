@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.junit;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
@@ -22,18 +24,17 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertJUnit3TestCaseToJUnit4Predicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiElement parent = element.getParent();
     if (!(parent instanceof PsiClass)) {
       return;
@@ -100,9 +101,10 @@ public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
 
   private static class SuperLifeCycleCallRemover extends JavaRecursiveElementVisitor {
 
-    @NotNull private final String myLifeCycleMethodName;
+    @Nonnull
+	private final String myLifeCycleMethodName;
 
-    private SuperLifeCycleCallRemover(@NotNull String lifeCycleMethodName) {
+    private SuperLifeCycleCallRemover(@Nonnull String lifeCycleMethodName) {
       myLifeCycleMethodName = lifeCycleMethodName;
     }
 

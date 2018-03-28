@@ -15,19 +15,22 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * User: cdr
  */
 public interface PsiPolyadicExpression extends PsiExpression {
-  @NotNull PsiExpression[] getOperands();
+  @Nonnull
+  PsiExpression[] getOperands();
 
-  @NotNull
+  @Nonnull
   IElementType getOperationTokenType();
 
   @Nullable
-  PsiJavaToken getTokenBeforeOperand(@NotNull PsiExpression operand);
+  PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand);
 }

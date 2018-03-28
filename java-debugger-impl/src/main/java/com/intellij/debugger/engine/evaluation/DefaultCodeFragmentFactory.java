@@ -17,8 +17,8 @@ package com.intellij.debugger.engine.evaluation;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionService;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -120,7 +120,7 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory
 					final RuntimeTypeEvaluator worker = new RuntimeTypeEvaluator(null, expression, debuggerContext, ProgressManager.getInstance().getProgressIndicator())
 					{
 						@Override
-						protected void typeCalculationFinished(@Nullable PsiType type)
+						protected void typeCalculationFinished(@javax.annotation.Nullable PsiType type)
 						{
 							nameRef.set(type);
 							semaphore.up();
@@ -151,7 +151,7 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public LanguageFileType getFileType()
 	{
 		return JavaFileType.INSTANCE;

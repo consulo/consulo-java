@@ -19,7 +19,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class SwitchPredicate implements PsiElementPredicate {
 
@@ -39,7 +39,7 @@ class SwitchPredicate implements PsiElementPredicate {
     return checkSwitchStatement((PsiSwitchStatement)parent);
   }
 
-  public static boolean checkSwitchStatement(@NotNull PsiSwitchStatement switchStatement) {
+  public static boolean checkSwitchStatement(@Nonnull PsiSwitchStatement switchStatement) {
     final PsiExpression expression = switchStatement.getExpression();
     if (expression == null) {
       return false;

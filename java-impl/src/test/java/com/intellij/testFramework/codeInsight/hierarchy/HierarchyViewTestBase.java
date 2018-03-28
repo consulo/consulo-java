@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
@@ -53,7 +53,7 @@ public abstract class HierarchyViewTestBase extends CodeInsightTestCase {
     }
   }
 
-  private static String dump(final HierarchyTreeStructure treeStructure, @Nullable HierarchyNodeDescriptor descriptor, int level) {
+  private static String dump(final HierarchyTreeStructure treeStructure, @javax.annotation.Nullable HierarchyNodeDescriptor descriptor, int level) {
     StringBuilder s = new StringBuilder();
     dump(treeStructure, descriptor, level, s);
     return s.toString();

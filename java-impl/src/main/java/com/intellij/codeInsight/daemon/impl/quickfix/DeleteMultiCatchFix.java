@@ -25,36 +25,36 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
 public class DeleteMultiCatchFix implements IntentionAction {
   private final PsiTypeElement myTypeElement;
 
-  public DeleteMultiCatchFix(@NotNull PsiTypeElement typeElement) {
+  public DeleteMultiCatchFix(@Nonnull PsiTypeElement typeElement) {
     myTypeElement = typeElement;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myTypeElement.getType()));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("delete.catch.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myTypeElement.isValid() && PsiManager.getInstance(project).isInProject(myTypeElement.getContainingFile());
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(myTypeElement.getContainingFile())) return;
 
     final PsiElement parentType = myTypeElement.getParent();

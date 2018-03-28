@@ -24,7 +24,7 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.find.FindSettings;
 import com.intellij.ide.util.scopeChooser.ScopeChooserCombo;
 import com.intellij.openapi.diagnostic.Logger;
@@ -73,7 +73,7 @@ public class MigrationDialog extends DialogWrapper
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected Action[] createActions()
 	{
 		return new Action[]{

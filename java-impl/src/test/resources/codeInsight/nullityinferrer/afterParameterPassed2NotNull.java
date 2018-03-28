@@ -1,10 +1,10 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.Nonnull;
 
 class Test {
-  void foo(@NotNull String s) {
+  void foo(@Nonnull String s) {
   }
 
-  void bar(@NotNull String str) {
+  void bar(@Nonnull String str) {
     foo(str);
   }
 }

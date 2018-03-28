@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInsight.hint;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 
 public class ClassDeclarationRangeHandler implements DeclarationRangeHandler {
   @Override
-  @NotNull
-  public TextRange getDeclarationRange(@NotNull final PsiElement container) {
+  @Nonnull
+  public TextRange getDeclarationRange(@Nonnull final PsiElement container) {
     PsiClass aClass = (PsiClass)container;
     if (aClass instanceof PsiAnonymousClass){
       PsiConstructorCall call = (PsiConstructorCall)aClass.getParent();

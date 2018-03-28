@@ -21,7 +21,7 @@ package com.intellij.psi.impl.java.stubs.index;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.search.JavaSourceFilterScope;
@@ -40,7 +40,7 @@ public class JavaMethodParameterTypesIndex extends StringStubIndexExtension<PsiM
 		return ourInstance;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public StubIndexKey<String, PsiMethod> getKey()
 	{
@@ -48,9 +48,9 @@ public class JavaMethodParameterTypesIndex extends StringStubIndexExtension<PsiM
 	}
 
 	@Override
-	public Collection<PsiMethod> get(@NotNull final String s,
-			@NotNull final Project project,
-			@NotNull final GlobalSearchScope scope)
+	public Collection<PsiMethod> get(@Nonnull final String s,
+			@Nonnull final Project project,
+			@Nonnull final GlobalSearchScope scope)
 	{
 		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiMethod.class);
 	}

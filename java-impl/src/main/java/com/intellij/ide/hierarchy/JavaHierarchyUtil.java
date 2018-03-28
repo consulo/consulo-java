@@ -22,7 +22,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassOwner;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 
@@ -33,7 +32,7 @@ public class JavaHierarchyUtil {
   private JavaHierarchyUtil() {
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static String getPackageName(final PsiClass psiClass) {
     final PsiFile file = psiClass.getContainingFile();
     if (file instanceof PsiClassOwner){

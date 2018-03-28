@@ -20,7 +20,7 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.*;
 import com.intellij.codeInsight.runner.JavaMainMethodProvider;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * @author mike

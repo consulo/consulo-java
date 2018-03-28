@@ -22,8 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.lang.java.JavaLanguage;
@@ -616,7 +616,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
 	}
 
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiExpression createActualArgument(JavaChangeInfo changeInfo,
 			final PsiExpressionList list,
 			final JavaParameterInfo info,
@@ -674,7 +674,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
 				}
 
 				@Override
-				public boolean execute(@NotNull PsiElement pe, ResolveState state)
+				public boolean execute(@Nonnull PsiElement pe, ResolveState state)
 				{
 					super.execute(pe, state);
 					return size() < 2;
@@ -798,7 +798,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
 	}
 
 	@Override
-	public void registerConflictResolvers(List<ResolveSnapshotProvider.ResolveSnapshot> snapshots, @NotNull ResolveSnapshotProvider resolveSnapshotProvider, UsageInfo[] usages, ChangeInfo changeInfo)
+	public void registerConflictResolvers(List<ResolveSnapshotProvider.ResolveSnapshot> snapshots, @Nonnull ResolveSnapshotProvider resolveSnapshotProvider, UsageInfo[] usages, ChangeInfo changeInfo)
 	{
 		snapshots.add(resolveSnapshotProvider.createSnapshot(changeInfo.getMethod()));
 		for(UsageInfo usage : usages)

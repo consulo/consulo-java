@@ -18,8 +18,8 @@ package com.intellij.psi.impl.source;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -112,7 +112,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return type == TokenType.DUMMY_HOLDER || type == JavaElementType.DUMMY_ELEMENT;
 	}
 
-	public int getKind(@NotNull PsiFile containingFile)
+	public int getKind(@Nonnull PsiFile containingFile)
 	{
 		if(!containingFile.isValid())
 		{ // optimization to avoid relatively expensive this.isValid check
@@ -238,7 +238,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	public void deleteChildInternal(@NotNull ASTNode child)
+	public void deleteChildInternal(@Nonnull ASTNode child)
 	{
 		if(getChildRole(child) == ChildRole.QUALIFIER)
 		{
@@ -315,21 +315,21 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getCanonicalText()
 	{
 		return getCanonicalText(false, null, getContainingFile());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText(boolean annotated, @Nullable PsiAnnotation[] annotations)
 	{
 		return getCanonicalText(annotated, annotations, getContainingFile());
 	}
 
-	@NotNull
-	private String getCanonicalText(boolean annotated, @Nullable PsiAnnotation[] annotations, @NotNull PsiFile containingFile)
+	@Nonnull
+	private String getCanonicalText(boolean annotated, @javax.annotation.Nullable PsiAnnotation[] annotations, @Nonnull PsiFile containingFile)
 	{
 		switch(getKind(containingFile))
 		{
@@ -415,9 +415,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	{
 		private static final OurGenericsResolver INSTANCE = new OurGenericsResolver();
 
-		@NotNull
+		@Nonnull
 		@Override
-		public ResolveResult[] resolve(@NotNull PsiJavaReference ref, @NotNull PsiFile containingFile, boolean incompleteCode)
+		public ResolveResult[] resolve(@Nonnull PsiJavaReference ref, @Nonnull PsiFile containingFile, boolean incompleteCode)
 		{
 			PsiJavaCodeReferenceElementImpl referenceElement = (PsiJavaCodeReferenceElementImpl) ref;
 			int kind = referenceElement.getKind(containingFile);
@@ -441,7 +441,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult advancedResolve(final boolean incompleteCode)
 	{
 		final JavaResolveResult[] results = multiResolve(incompleteCode);
@@ -449,7 +449,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavaResolveResult[] multiResolve(boolean incompleteCode)
 	{
 		return PsiImplUtil.multiResolveImpl(this, incompleteCode, OurGenericsResolver.INSTANCE);
@@ -465,8 +465,8 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return subst;
 	}
 
-	@NotNull
-	private JavaResolveResult[] resolve(final int kind, @NotNull PsiFile containingFile)
+	@Nonnull
+	private JavaResolveResult[] resolve(final int kind, @Nonnull PsiFile containingFile)
 	{
 		switch(kind)
 		{
@@ -622,7 +622,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull final PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		PsiFile containingFile = getContainingFile();
 		CheckUtil.checkWritable(containingFile);
@@ -692,7 +692,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return new IncorrectOperationException("Cannot bind to " + element);
 	}
 
-	private PsiElement bindToClass(@NotNull PsiClass aClass, @NotNull PsiFile containingFile) throws IncorrectOperationException
+	private PsiElement bindToClass(@Nonnull PsiClass aClass, @Nonnull PsiFile containingFile) throws IncorrectOperationException
 	{
 		String qName = aClass.getQualifiedName();
 		Project project = containingFile.getProject();
@@ -757,7 +757,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return annotations;
 	}
 
-	private boolean isFullyQualified(@NotNull PsiFile containingFile)
+	private boolean isFullyQualified(@Nonnull PsiFile containingFile)
 	{
 		int kind = getKind(containingFile);
 		switch(kind)
@@ -798,7 +798,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return SourceTreeToPsiMap.<PsiJavaCodeReferenceElementImpl>treeToPsiNotNull(qualifier).isFullyQualified(containingFile);
 	}
 
-	private PsiElement bindToPackage(@NotNull PsiPackage aPackage) throws IncorrectOperationException
+	private PsiElement bindToPackage(@Nonnull PsiPackage aPackage) throws IncorrectOperationException
 	{
 		final String qName = aPackage.getQualifiedName();
 		if(qName.isEmpty())
@@ -818,7 +818,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return isReferenceTo(element, containingFile);
 	}
 
-	private boolean isReferenceTo(PsiElement element, @NotNull PsiFile containingFile)
+	private boolean isReferenceTo(PsiElement element, @Nonnull PsiFile containingFile)
 	{
 		switch(getKind(containingFile))
 		{
@@ -919,7 +919,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	public void fullyQualify(@NotNull final PsiClass targetClass)
+	public void fullyQualify(@Nonnull final PsiClass targetClass)
 	{
 		final int kind = getKind(getContainingFile());
 		if(kind != CLASS_NAME_KIND && kind != CLASS_OR_PACKAGE_NAME_KIND && kind != CLASS_IN_QUALIFIED_NEW_KIND)
@@ -951,7 +951,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Object[] getVariants()
 	{
 		final ElementFilter filter;
@@ -994,7 +994,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	public void processVariants(@NotNull final PsiScopeProcessor processor)
+	public void processVariants(@Nonnull final PsiScopeProcessor processor)
 	{
 		final OrFilter filter = new OrFilter();
 		if(isInCode() && !(getParent() instanceof PsiImportStatement) && !(getParent() instanceof PsiReferenceList))
@@ -1155,7 +1155,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getTypeParameters()
 	{
 		final PsiReferenceParameterList parameterList = getParameterList();
@@ -1173,7 +1173,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	public final void accept(@NotNull final PsiElementVisitor visitor)
+	public final void accept(@Nonnull final PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

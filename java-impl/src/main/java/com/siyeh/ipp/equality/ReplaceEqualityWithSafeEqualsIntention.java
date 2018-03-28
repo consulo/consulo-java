@@ -16,7 +16,7 @@
 package com.siyeh.ipp.equality;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiElement;
@@ -30,7 +30,7 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class ReplaceEqualityWithSafeEqualsIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ObjectEqualityPredicate();
   }

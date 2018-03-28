@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -33,8 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.highlighting.HighlightManager;
@@ -119,7 +118,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
 	private final MessageBus myBus;
 
-	public ExternalAnnotationsManagerImpl(@NotNull final Project project, final PsiManager psiManager)
+	public ExternalAnnotationsManagerImpl(@Nonnull final Project project, final PsiManager psiManager)
 	{
 		super(psiManager);
 		myBus = project.getMessageBus();
@@ -138,7 +137,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		Disposer.register(myPsiManager.getProject(), () -> VirtualFileManager.getInstance().removeVirtualFileListener(fileListener));
 	}
 
-	public static boolean areExternalAnnotationsApplicable(@NotNull PsiModifierListOwner owner)
+	public static boolean areExternalAnnotationsApplicable(@Nonnull PsiModifierListOwner owner)
 	{
 		if(!owner.isPhysical())
 		{
@@ -151,7 +150,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		return CodeStyleSettingsManager.getSettings(owner.getProject()).USE_EXTERNAL_ANNOTATIONS;
 	}
 
-	private void notifyAfterAnnotationChanging(@NotNull PsiModifierListOwner owner, @NotNull String annotationFQName, boolean successful)
+	private void notifyAfterAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful)
 	{
 		myBus.syncPublisher(TOPIC).afterExternalAnnotationChanging(owner, annotationFQName, successful);
 		((PsiModificationTrackerImpl) myPsiManager.getModificationTracker()).incCounter();
@@ -164,7 +163,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	@Override
-	public void annotateExternally(@NotNull final PsiModifierListOwner listOwner, @NotNull final String annotationFQName, @NotNull final PsiFile fromFile, @Nullable final PsiNameValuePair[] value)
+	public void annotateExternally(@Nonnull final PsiModifierListOwner listOwner, @Nonnull final String annotationFQName, @Nonnull final PsiFile fromFile, @javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		Application application = ApplicationManager.getApplication();
 		application.assertIsDispatchThread();
@@ -222,8 +221,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		}
 	}
 
-	@Nullable
-	protected List<XmlFile> findExternalAnnotationsXmlFiles(@NotNull PsiModifierListOwner listOwner)
+	@javax.annotation.Nullable
+	protected List<XmlFile> findExternalAnnotationsXmlFiles(@Nonnull PsiModifierListOwner listOwner)
 	{
 		List<PsiFile> psiFiles = findExternalAnnotationsFiles(listOwner);
 		if(psiFiles == null)
@@ -241,13 +240,13 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		return xmlFiles;
 	}
 
-	private boolean setupRootAndAnnotateExternally(@NotNull final OrderEntry entry,
-			@NotNull final Project project,
-			@NotNull final PsiModifierListOwner listOwner,
-			@NotNull final String annotationFQName,
-			@NotNull final PsiFile fromFile,
-			@NotNull final String packageName,
-			@Nullable final PsiNameValuePair[] value)
+	private boolean setupRootAndAnnotateExternally(@Nonnull final OrderEntry entry,
+			@Nonnull final Project project,
+			@Nonnull final PsiModifierListOwner listOwner,
+			@Nonnull final String annotationFQName,
+			@Nonnull final PsiFile fromFile,
+			@Nonnull final String packageName,
+			@javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
 		descriptor.setTitle(ProjectBundle.message("external.annotations.root.chooser.title", entry.getPresentableName()));
@@ -261,7 +260,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		new WriteCommandAction(project)
 		{
 			@Override
-			protected void run(@NotNull final Result result) throws Throwable
+			protected void run(@Nonnull final Result result) throws Throwable
 			{
 				appendChosenAnnotationsRoot(entry, newRoot);
 				XmlFile xmlFileInRoot = findXmlFileInRoot(findExternalAnnotationsXmlFiles(listOwner), newRoot);
@@ -289,8 +288,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		return true;
 	}
 
-	@Nullable
-	private static XmlFile findXmlFileInRoot(@Nullable List<XmlFile> xmlFiles, @NotNull VirtualFile root)
+	@javax.annotation.Nullable
+	private static XmlFile findXmlFileInRoot(@javax.annotation.Nullable List<XmlFile> xmlFiles, @Nonnull VirtualFile root)
 	{
 		if(xmlFiles != null)
 		{
@@ -309,13 +308,13 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		return null;
 	}
 
-	private void chooseRootAndAnnotateExternally(@NotNull final PsiModifierListOwner listOwner,
-			@NotNull final String annotationFQName,
-			@NotNull final PsiFile fromFile,
-			@NotNull final Project project,
-			@NotNull final String packageName,
-			@NotNull VirtualFile[] roots,
-			@Nullable final PsiNameValuePair[] value)
+	private void chooseRootAndAnnotateExternally(@Nonnull final PsiModifierListOwner listOwner,
+			@Nonnull final String annotationFQName,
+			@Nonnull final PsiFile fromFile,
+			@Nonnull final Project project,
+			@Nonnull final String packageName,
+			@Nonnull VirtualFile[] roots,
+			@javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		if(roots.length > 1)
 		{
@@ -328,15 +327,15 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 				}
 
 				@Override
-				public PopupStep onChosen(@NotNull final VirtualFile file, final boolean finalChoice)
+				public PopupStep onChosen(@Nonnull final VirtualFile file, final boolean finalChoice)
 				{
 					annotateExternally(file, listOwner, project, packageName, annotationFQName, fromFile, value);
 					return FINAL_CHOICE;
 				}
 
-				@NotNull
+				@Nonnull
 				@Override
-				public String getTextFor(@NotNull final VirtualFile value)
+				public String getTextFor(@Nonnull final VirtualFile value)
 				{
 					return value.getPresentableUrl();
 				}
@@ -354,20 +353,20 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		}
 	}
 
-	@NotNull
-	private static VirtualFile[] filterByReadOnliness(@NotNull VirtualFile[] files)
+	@Nonnull
+	private static VirtualFile[] filterByReadOnliness(@Nonnull VirtualFile[] files)
 	{
 		List<VirtualFile> result = ContainerUtil.filter(files, file -> file.isInLocalFileSystem());
 		return VfsUtilCore.toVirtualFileArray(result);
 	}
 
-	private void annotateExternally(@NotNull final VirtualFile root,
-			@NotNull final PsiModifierListOwner listOwner,
-			@NotNull final Project project,
-			@NotNull final String packageName,
-			@NotNull final String annotationFQName,
-			@NotNull final PsiFile fromFile,
-			@Nullable final PsiNameValuePair[] value)
+	private void annotateExternally(@Nonnull final VirtualFile root,
+			@Nonnull final PsiModifierListOwner listOwner,
+			@Nonnull final Project project,
+			@Nonnull final String packageName,
+			@Nonnull final String annotationFQName,
+			@Nonnull final PsiFile fromFile,
+			@javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		List<XmlFile> xmlFiles = findExternalAnnotationsXmlFiles(listOwner);
 
@@ -383,7 +382,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		new WriteCommandAction(project)
 		{
 			@Override
-			protected void run(@NotNull final Result result) throws Throwable
+			protected void run(@Nonnull final Result result) throws Throwable
 			{
 				if(existingXml != null)
 				{
@@ -425,7 +424,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	@Override
-	public boolean deannotate(@NotNull final PsiModifierListOwner listOwner, @NotNull final String annotationFQN)
+	public boolean deannotate(@Nonnull final PsiModifierListOwner listOwner, @Nonnull final String annotationFQN)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		return processExistingExternalAnnotations(listOwner, annotationFQN, annotationTag ->
@@ -444,7 +443,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	@Override
-	public boolean editExternalAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull final String annotationFQN, @Nullable final PsiNameValuePair[] value)
+	public boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull final String annotationFQN, @javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		return processExistingExternalAnnotations(listOwner, annotationFQN, annotationTag ->
@@ -454,7 +453,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		});
 	}
 
-	private boolean processExistingExternalAnnotations(@NotNull final PsiModifierListOwner listOwner, @NotNull final String annotationFQN, @NotNull final Processor<XmlTag> annotationTagProcessor)
+	private boolean processExistingExternalAnnotations(@Nonnull final PsiModifierListOwner listOwner, @Nonnull final String annotationFQN, @Nonnull final Processor<XmlTag> annotationTagProcessor)
 	{
 		try
 		{
@@ -537,8 +536,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	@Override
-	@NotNull
-	public AnnotationPlace chooseAnnotationsPlace(@NotNull final PsiElement element)
+	@Nonnull
+	public AnnotationPlace chooseAnnotationsPlace(@Nonnull final PsiElement element)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		if(!element.isPhysical())
@@ -615,7 +614,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		return AnnotationPlace.IN_CODE;
 	}
 
-	private void appendChosenAnnotationsRoot(@NotNull final OrderEntry entry, @NotNull final VirtualFile vFile)
+	private void appendChosenAnnotationsRoot(@Nonnull final OrderEntry entry, @Nonnull final VirtualFile vFile)
 	{
 		if(entry instanceof LibraryOrderEntry)
 		{
@@ -636,11 +635,11 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		dropCache();
 	}
 
-	private void annotateExternally(@NotNull final PsiModifierListOwner listOwner,
-			@NotNull final String annotationFQName,
-			@Nullable final XmlFile xmlFile,
-			@NotNull final PsiFile codeUsageFile,
-			@Nullable final PsiNameValuePair[] values)
+	private void annotateExternally(@Nonnull final PsiModifierListOwner listOwner,
+			@Nonnull final String annotationFQName,
+			@javax.annotation.Nullable final XmlFile xmlFile,
+			@Nonnull final PsiFile codeUsageFile,
+			@javax.annotation.Nullable final PsiNameValuePair[] values)
 	{
 		if(xmlFile == null)
 		{
@@ -715,7 +714,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		}
 	}
 
-	private static void sortItems(@NotNull XmlFile xmlFile)
+	private static void sortItems(@Nonnull XmlFile xmlFile)
 	{
 		XmlDocument document = xmlFile.getDocument();
 		if(document == null)
@@ -770,8 +769,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	@NonNls
-	@NotNull
-	private static String createAnnotationTag(@NotNull String annotationFQName, @Nullable PsiNameValuePair[] values)
+	@Nonnull
+	private static String createAnnotationTag(@Nonnull String annotationFQName, @javax.annotation.Nullable PsiNameValuePair[] values)
 	{
 		@NonNls String text;
 		if(values != null && values.length != 0)
@@ -788,8 +787,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		return text;
 	}
 
-	@Nullable
-	private XmlFile createAnnotationsXml(@NotNull VirtualFile root, @NonNls @NotNull String packageName)
+	@javax.annotation.Nullable
+	private XmlFile createAnnotationsXml(@Nonnull VirtualFile root, @NonNls @Nonnull String packageName)
 	{
 		final String[] dirs = packageName.split("[\\.]");
 		for(String dir : dirs)
@@ -837,7 +836,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	@Override
-	protected void duplicateError(@NotNull PsiFile file, @NotNull String externalName, @NotNull String text)
+	protected void duplicateError(@Nonnull PsiFile file, @Nonnull String externalName, @Nonnull String text)
 	{
 		String message = text + "; for signature: '" + externalName + "' in the file " + file.getVirtualFile().getPresentableUrl();
 		LogMessageEx.error(LOG, message, file.getText());
@@ -863,14 +862,14 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		protected String getCancelActionName()
 		{
 			return CommonBundle.getCancelButtonText();
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		@SuppressWarnings({"NonStaticInitializer"})
 		protected Action[] createActions()
 		{
@@ -938,31 +937,31 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 		}
 
 		@Override
-		public void contentsChanged(@NotNull VirtualFileEvent event)
+		public void contentsChanged(@Nonnull VirtualFileEvent event)
 		{
 			processEvent(event);
 		}
 
 		@Override
-		public void fileCreated(@NotNull VirtualFileEvent event)
+		public void fileCreated(@Nonnull VirtualFileEvent event)
 		{
 			processEvent(event);
 		}
 
 		@Override
-		public void fileDeleted(@NotNull VirtualFileEvent event)
+		public void fileDeleted(@Nonnull VirtualFileEvent event)
 		{
 			processEvent(event);
 		}
 
 		@Override
-		public void fileMoved(@NotNull VirtualFileMoveEvent event)
+		public void fileMoved(@Nonnull VirtualFileMoveEvent event)
 		{
 			processEvent(event);
 		}
 
 		@Override
-		public void fileCopied(@NotNull VirtualFileCopyEvent event)
+		public void fileCopied(@Nonnull VirtualFileCopyEvent event)
 		{
 			processEvent(event);
 		}

@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.ui;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.extensions.ExtensionPointName;
 import consulo.annotations.DeprecationInfo;
 
@@ -31,6 +32,6 @@ public interface JreProvider {
 
   ExtensionPointName<JreProvider> EP_NAME = new ExtensionPointName<JreProvider>("consulo.java.jreProvider");
   
-  @NotNull
+  @Nonnull
   String getJrePath();
 }

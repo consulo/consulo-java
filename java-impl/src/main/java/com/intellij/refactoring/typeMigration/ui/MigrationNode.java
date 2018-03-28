@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
@@ -81,7 +81,7 @@ public class MigrationNode extends AbstractTreeNode<TypeMigrationUsageInfo> impl
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<? extends AbstractTreeNode> getChildren()
 	{
 		if(myCachedChildren == null)

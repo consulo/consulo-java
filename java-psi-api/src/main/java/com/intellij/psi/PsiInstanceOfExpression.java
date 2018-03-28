@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java <code>instanceof</code> expression.
@@ -27,7 +27,7 @@ public interface PsiInstanceOfExpression extends PsiExpression {
    *
    * @return the checked expression.
    */
-  @NotNull
+  @Nonnull
   PsiExpression getOperand();
 
   /**

@@ -16,11 +16,10 @@
 package com.intellij.debugger.ui.tree;
 
 import com.intellij.debugger.engine.StackFrameContext;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
 public interface StackFrameDescriptor extends NodeDescriptor, StackFrameContext {
-  @Nullable
+  @javax.annotation.Nullable
   Color getBackgroundColor();
 }

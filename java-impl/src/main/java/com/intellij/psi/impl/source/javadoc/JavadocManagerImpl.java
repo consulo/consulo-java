@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
@@ -78,7 +78,7 @@ public class JavadocManagerImpl implements JavadocManager
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JavadocTagInfo[] getTagInfos(PsiElement context)
 	{
 		List<JavadocTagInfo> result = new ArrayList<>();
@@ -95,7 +95,7 @@ public class JavadocManagerImpl implements JavadocManager
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public JavadocTagInfo getTagInfo(String name)
 	{
 		for(JavadocTagInfo info : myInfos)

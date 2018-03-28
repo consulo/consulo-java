@@ -24,7 +24,8 @@
  */
 package org.osmorc.manifest.lang;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.Language;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
 import consulo.lang.LanguageVersion;
@@ -47,7 +48,7 @@ public class ManifestLanguage extends Language
 		return "Manifest";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected LanguageVersion[] findVersions()
 	{

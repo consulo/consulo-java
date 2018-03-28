@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.typeMigration;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
 import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
@@ -43,13 +43,13 @@ public class TypeConversionDescriptorBase
 	/**
 	 * @return converted expression type or null if not known
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiType conversionType()
 	{
 		return null;
 	}
 
-	public PsiExpression replace(PsiExpression expression, @NotNull TypeEvaluator evaluator) throws IncorrectOperationException
+	public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException
 	{
 		return expression;
 	}

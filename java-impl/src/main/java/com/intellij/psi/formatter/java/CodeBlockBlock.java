@@ -18,8 +18,8 @@ package com.intellij.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
@@ -70,7 +70,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	 * @param baseNode  base AST node
 	 * @return alignment strategy to use for the given node
 	 */
-	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, @NotNull CommonCodeStyleSettings settings)
+	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, @Nonnull CommonCodeStyleSettings settings)
 	{
 		if(baseNode.getElementType() != JavaElementType.CLASS || !settings.ALIGN_MULTILINE_EXTENDS_LIST)
 		{
@@ -209,7 +209,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		final SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, childAlignment, getSettings(), myJavaSettings, indent, childWrap)
 		{
 			@Override
-			@NotNull
+			@Nonnull
 			public ChildAttributes getChildAttributes(final int newChildIndex)
 			{
 				IElementType prevElementType = null;
@@ -315,7 +315,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		if(isAfter(newChildIndex, new IElementType[]{

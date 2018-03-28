@@ -15,7 +15,7 @@
  */
 package com.intellij.testFramework.fixtures;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
@@ -51,7 +51,7 @@ public abstract class JavaTestFixtureFactory {
   public static TestFixtureBuilder<IdeaProjectTestFixture> createFixtureBuilder() {
     return IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder();
   }
-  public static TestFixtureBuilder<IdeaProjectTestFixture> createFixtureBuilder(@NotNull String name) {
+  public static TestFixtureBuilder<IdeaProjectTestFixture> createFixtureBuilder(@Nonnull String name) {
     return IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder(name);
   }
 }

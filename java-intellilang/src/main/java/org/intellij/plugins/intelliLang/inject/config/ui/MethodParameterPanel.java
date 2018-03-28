@@ -41,7 +41,7 @@ import javax.swing.tree.TreePath;
 
 import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -171,7 +171,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     myParamsTable.updateUI();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiType getClassType() {
     final Document document = myClassField.getEditorTextField().getDocument();
     final PsiDocumentManager dm = PsiDocumentManager.getInstance(getProject());
@@ -315,7 +315,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     myAdvancedPanel = new AdvancedPanel(getProject(), getOrigInjection());    
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private Boolean isNodeSelected(final DefaultMutableTreeNode o) {
     final Object userObject = o.getUserObject();
     if (userObject instanceof PsiMethod) {

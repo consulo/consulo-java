@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
@@ -79,7 +79,7 @@ public class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
     setLanguageLevel(LanguageLevel.JDK_1_4);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{
@@ -225,7 +225,7 @@ public class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
   public void testUnusedNonPrivateMembers2() {
     ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
     EntryPoint extension = new EntryPoint() {
-      @NotNull
+      @Nonnull
       @Override
       public String getDisplayName() {
         return "duh";
@@ -305,7 +305,7 @@ public class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
 
   public static class MyAnnotator implements Annotator {
     @Override
-    public void annotate(@NotNull PsiElement psiElement, @NotNull final AnnotationHolder holder) {
+    public void annotate(@Nonnull PsiElement psiElement, @Nonnull final AnnotationHolder holder) {
       psiElement.accept(new XmlElementVisitor() {
         @Override public void visitXmlTag(XmlTag tag) {
           XmlAttribute attribute = tag.getAttribute("aaa", "");

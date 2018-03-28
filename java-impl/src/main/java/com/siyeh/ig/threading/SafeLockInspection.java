@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -22,24 +24,23 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class SafeLockInspection extends BaseInspection { // todo extend ResourceInspection?
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "LockAcquiredButNotSafelyReleased";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("safe.lock.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -58,7 +59,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isLockAcquireMethod(expression)) {
         return;
@@ -174,14 +175,14 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
     private final PsiVariable variable;
     private final LockType type;
 
-    private UnlockVisitor(@NotNull PsiVariable variable,
-                          @NotNull LockType type) {
+    private UnlockVisitor(@Nonnull PsiVariable variable,
+                          @Nonnull LockType type) {
       this.variable = variable;
       this.type = type;
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!containsUnlock) {
         super.visitElement(element);
       }
@@ -189,7 +190,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       if (containsUnlock) {
         return;
       }

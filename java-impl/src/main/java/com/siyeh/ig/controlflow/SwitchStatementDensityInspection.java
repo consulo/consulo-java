@@ -21,7 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SwitchUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -33,7 +33,7 @@ public class SwitchStatementDensityInspection extends BaseInspection {
   public int m_limit = DEFAULT_DENSITY_LIMIT;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("switch.statement.density.display.name");
   }
@@ -44,7 +44,7 @@ public class SwitchStatementDensityInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer intDensity = (Integer)infos[0];
     return InspectionGadgetsBundle.message("switch.statement.density.problem.descriptor", intDensity);
@@ -58,7 +58,7 @@ public class SwitchStatementDensityInspection extends BaseInspection {
   private class SwitchStatementDensityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSwitchStatement(@NotNull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {
         return;
@@ -75,7 +75,7 @@ public class SwitchStatementDensityInspection extends BaseInspection {
       registerStatementError(statement, Integer.valueOf(intDensity));
     }
 
-    private double calculateDensity(@NotNull PsiCodeBlock body, int branchCount) {
+    private double calculateDensity(@Nonnull PsiCodeBlock body, int branchCount) {
       final StatementCountVisitor visitor = new StatementCountVisitor();
       body.accept(visitor);
       return (double)branchCount / (double)visitor.getStatementCount();
@@ -87,7 +87,7 @@ public class SwitchStatementDensityInspection extends BaseInspection {
     private int statementCount = 0;
 
     @Override
-    public void visitStatement(@NotNull PsiStatement statement) {
+    public void visitStatement(@Nonnull PsiStatement statement) {
       super.visitStatement(statement);
       if (statement instanceof PsiSwitchLabelStatement || statement instanceof PsiBreakStatement) {
         return;

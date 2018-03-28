@@ -19,8 +19,8 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.psi.PsiClass;
@@ -38,13 +38,13 @@ public class FeatureEnvyInspection extends BaseInspection {
   public boolean ignoreTestCases = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("feature.envy.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String className = element.getName();
@@ -69,7 +69,7 @@ public class FeatureEnvyInspection extends BaseInspection {
   private class FeatureEnvyVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (ignoreTestCases) {
         final PsiClass containingClass = method.getContainingClass();
         if (containingClass != null &&

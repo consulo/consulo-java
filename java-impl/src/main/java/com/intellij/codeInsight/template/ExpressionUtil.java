@@ -24,7 +24,7 @@ import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.text.BlockSupport;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
  /**
   * @author mike
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
    private ExpressionUtil() {
    }
 
-   @Nullable
+   @javax.annotation.Nullable
    public static String[] getNames(final ExpressionContext context) {
      final Project project = context.getProject();
      final int offset = context.getStartOffset();

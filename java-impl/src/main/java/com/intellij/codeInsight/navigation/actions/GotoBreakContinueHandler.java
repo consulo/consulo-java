@@ -19,7 +19,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.openapi.diagnostic.Logger;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yole
@@ -28,7 +27,7 @@ public class GotoBreakContinueHandler extends GotoDeclarationHandlerBase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.navigation.actions.GotoBreakContinueHandler"); 
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiElement getGotoDeclarationTarget(final PsiElement elementAt, Editor editor) {
     if (elementAt instanceof PsiKeyword) {
       IElementType type = ((PsiKeyword)elementAt).getTokenType();

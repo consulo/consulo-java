@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents the list of type arguments specified on a Java reference.
@@ -29,7 +29,7 @@ public interface PsiReferenceParameterList extends PsiElement {
    *
    * @return the array of type elements.
    */
-  @NotNull
+  @Nonnull
   PsiTypeElement[] getTypeParameterElements();
 
   /**
@@ -37,6 +37,6 @@ public interface PsiReferenceParameterList extends PsiElement {
    *
    * @return the array of types.
    */
-  @NotNull
+  @Nonnull
   PsiType[] getTypeArguments();
 }

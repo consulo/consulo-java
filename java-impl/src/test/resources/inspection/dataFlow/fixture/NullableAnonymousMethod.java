@@ -1,10 +1,10 @@
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class Bar {
 
     void navigateTo() {
         Computable c = new Computable() {
-            @Nullable  
+            @javax.annotation.Nullable
             public Object compute() {
                 return null;
             }

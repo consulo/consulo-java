@@ -15,10 +15,9 @@
  */
 package com.intellij.codeInsight.completion.util;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -41,12 +40,12 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   private final PsiType myType;
   private final String myPresentableText;
 
-  public PsiTypeCanonicalLookupElement(@NotNull final PsiType type) {
+  public PsiTypeCanonicalLookupElement(@Nonnull final PsiType type) {
     myType = type;
     myPresentableText = myType.getPresentableText();
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Object getObject() {
     final PsiClass psiClass = getPsiClass();
@@ -56,7 +55,7 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
     return super.getObject();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public PsiClass getPsiClass() {
     return PsiUtil.resolveClassInType(myType);
   }
@@ -71,7 +70,7 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getLookupString() {
     return myPresentableText;
   }

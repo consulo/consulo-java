@@ -19,8 +19,8 @@ import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
@@ -44,12 +44,12 @@ class MethodReturnTypeProvider implements CompletionProvider
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result)
 	{
 		addProbableReturnTypes(parameters, result);
 	}
 
-	static void addProbableReturnTypes(@NotNull CompletionParameters parameters, final Consumer<LookupElement> consumer)
+	static void addProbableReturnTypes(@Nonnull CompletionParameters parameters, final Consumer<LookupElement> consumer)
 	{
 		final PsiElement position = parameters.getPosition();
 		PsiMethod method = PsiTreeUtil.getParentOfType(position, PsiMethod.class);
@@ -59,7 +59,7 @@ class MethodReturnTypeProvider implements CompletionProvider
 		{
 			private Set<PsiType> myProcessed = ContainerUtil.newHashSet();
 
-			@Nullable
+			@javax.annotation.Nullable
 			@Override
 			public PsiType visitType(PsiType type)
 			{
@@ -78,7 +78,7 @@ class MethodReturnTypeProvider implements CompletionProvider
 		}
 	}
 
-	private static PsiType[] getReturnTypeCandidates(@NotNull PsiMethod method)
+	private static PsiType[] getReturnTypeCandidates(@Nonnull PsiMethod method)
 	{
 		PsiType lub = null;
 		boolean hasVoid = false;

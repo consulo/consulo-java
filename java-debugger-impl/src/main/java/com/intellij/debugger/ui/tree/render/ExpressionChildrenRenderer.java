@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -93,7 +92,7 @@ public class ExpressionChildrenRenderer extends TypeRenderer implements Children
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static NodeRenderer getLastChildrenRenderer(ValueDescriptor descriptor)
 	{
 		return descriptor.getUserData(LAST_CHILDREN_RENDERER);

@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.EncapsulateVariableFix;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,20 +37,20 @@ public class UseOfAnotherObjectsPrivateFieldInspection
   public boolean ignoreEquals = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "AccessingNonPublicFieldOfAnotherObject";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "accessing.non.public.field.of.another.object.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "accessing.non.public.field.of.another.object.problem.descriptor");
@@ -83,7 +83,7 @@ public class UseOfAnotherObjectsPrivateFieldInspection
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression expression) {
+      @Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       final PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier == null || qualifier instanceof PsiThisExpression) {

@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -38,7 +40,7 @@ public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentio
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		PsiBinaryExpression comparisonExpr = (PsiBinaryExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("a==b", startElement);
 		PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) startElement;
@@ -51,7 +53,7 @@ public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentio
 		CodeStyleManager.getInstance(project).reformat(assignmentExpression.replace(comparisonExpr));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -59,7 +61,7 @@ public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentio
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{

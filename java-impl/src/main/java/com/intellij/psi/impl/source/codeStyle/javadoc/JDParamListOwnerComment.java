@@ -26,8 +26,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.util.containers.ContainerUtilRt;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -35,13 +35,13 @@ public class JDParamListOwnerComment extends JDComment
 {
 	protected List<NameDesc> myParamsList;
 
-	public JDParamListOwnerComment(@NotNull CommentFormatter formatter)
+	public JDParamListOwnerComment(@Nonnull CommentFormatter formatter)
 	{
 		super(formatter);
 	}
 
 	@Override
-	protected void generateSpecial(@NotNull String prefix, @NotNull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 		if(myParamsList != null)
 		{
@@ -58,13 +58,13 @@ public class JDParamListOwnerComment extends JDComment
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public NameDesc getParameter(@Nullable String name)
 	{
 		return getNameDesc(name, myParamsList);
 	}
 
-	public void addParameter(@NotNull String name, @Nullable String description)
+	public void addParameter(@Nonnull String name, @Nullable String description)
 	{
 		if(myParamsList == null)
 		{
@@ -93,7 +93,7 @@ public class JDParamListOwnerComment extends JDComment
 	/**
 	 * Generates parameters or exceptions
 	 */
-	protected void generateList(@NotNull String prefix, @NotNull StringBuilder sb, @NotNull List<NameDesc> list, @NotNull String tag,
+	protected void generateList(@Nonnull String prefix, @Nonnull StringBuilder sb, @Nonnull List<NameDesc> list, @Nonnull String tag,
 			boolean align_comments, boolean generate_empty_tags, boolean wrapDescription)
 	{
 		CodeStyleSettings settings = myFormatter.getSettings();

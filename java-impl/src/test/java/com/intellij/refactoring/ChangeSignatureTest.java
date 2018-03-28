@@ -19,9 +19,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.*;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
@@ -415,14 +417,14 @@ public class ChangeSignatureTest extends LightRefactoringTestCase
 		doTest(null, null, "void", new SimpleParameterGen(), new SimpleExceptionsGen(), false);
 	}
 
-	private void doTest(@Nullable String newReturnType, ParameterInfoImpl[] parameterInfos, final boolean generateDelegate) throws Exception
+	private void doTest(@javax.annotation.Nullable String newReturnType, ParameterInfoImpl[] parameterInfos, final boolean generateDelegate) throws Exception
 	{
 		doTest(null, null, newReturnType, parameterInfos, new ThrownExceptionInfo[0], generateDelegate);
 	}
 
 	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
-			@Nullable String newName,
-			@Nullable String newReturnType,
+			@javax.annotation.Nullable String newName,
+			@javax.annotation.Nullable String newReturnType,
 			ParameterInfoImpl[] parameterInfo,
 			ThrownExceptionInfo[] exceptionInfo,
 			final boolean generateDelegate) throws Exception
@@ -430,18 +432,18 @@ public class ChangeSignatureTest extends LightRefactoringTestCase
 		doTest(newVisibility, newName, newReturnType, new SimpleParameterGen(parameterInfo), new SimpleExceptionsGen(exceptionInfo), generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
-			@Nullable String newName,
-			@Nullable @NonNls String newReturnType,
+	private void doTest(@PsiModifier.ModifierConstant @javax.annotation.Nullable String newVisibility,
+			@javax.annotation.Nullable String newName,
+			@javax.annotation.Nullable @NonNls String newReturnType,
 			GenParams gen,
 			final boolean generateDelegate) throws Exception
 	{
 		doTest(newVisibility, newName, newReturnType, gen, new SimpleExceptionsGen(), generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
+	private void doTest(@PsiModifier.ModifierConstant @javax.annotation.Nullable String newVisibility,
 			@Nullable String newName,
-			@Nullable String newReturnType,
+			@javax.annotation.Nullable String newReturnType,
 			GenParams genParams,
 			GenExceptions genExceptions,
 			final boolean generateDelegate) throws Exception
@@ -551,7 +553,7 @@ public class ChangeSignatureTest extends LightRefactoringTestCase
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

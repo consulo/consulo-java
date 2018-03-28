@@ -17,7 +17,7 @@ package com.intellij.refactoring.util.duplicates;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 

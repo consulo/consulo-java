@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -38,9 +39,9 @@ import com.intellij.psi.tree.TokenSet;
 
 public class JavaLightStubBuilder extends LightStubBuilder
 {
-	@NotNull
+	@Nonnull
 	@Override
-	protected StubElement createStubForFile(@NotNull PsiFile file, @NotNull LighterAST tree)
+	protected StubElement createStubForFile(@Nonnull PsiFile file, @Nonnull LighterAST tree)
 	{
 		if(!(file instanceof PsiJavaFile))
 		{
@@ -61,7 +62,7 @@ public class JavaLightStubBuilder extends LightStubBuilder
 	}
 
 	@Override
-	public boolean skipChildProcessingWhenBuildingStubs(@NotNull ASTNode parent, @NotNull ASTNode node)
+	public boolean skipChildProcessingWhenBuildingStubs(@Nonnull ASTNode parent, @Nonnull ASTNode node)
 	{
 		IElementType parentType = parent.getElementType();
 		IElementType nodeType = node.getElementType();
@@ -82,12 +83,12 @@ public class JavaLightStubBuilder extends LightStubBuilder
 	}
 
 	@Override
-	protected boolean skipChildProcessingWhenBuildingStubs(@NotNull LighterAST tree, @NotNull LighterASTNode parent, @NotNull LighterASTNode node)
+	protected boolean skipChildProcessingWhenBuildingStubs(@Nonnull LighterAST tree, @Nonnull LighterASTNode parent, @Nonnull LighterASTNode node)
 	{
 		return checkByTypes(parent.getTokenType(), node.getTokenType()) || isCodeBlockWithoutStubs(node);
 	}
 
-	public static boolean isCodeBlockWithoutStubs(@NotNull LighterASTNode node)
+	public static boolean isCodeBlockWithoutStubs(@Nonnull LighterASTNode node)
 	{
 		if(node.getTokenType() == JavaElementType.CODE_BLOCK && node instanceof LighterLazyParseableNode)
 		{

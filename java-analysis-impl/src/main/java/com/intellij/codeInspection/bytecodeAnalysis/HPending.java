@@ -18,13 +18,13 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 final class HPending implements HResult {
-  @NotNull
+  @Nonnull
   final HComponent[] delta; // sum
 
-  HPending(@NotNull HComponent[] delta) {
+  HPending(@Nonnull HComponent[] delta) {
     this.delta = delta;
   }
 
@@ -42,7 +42,7 @@ final class HPending implements HResult {
     return Arrays.hashCode(delta);
   }
 
-  @NotNull
+  @Nonnull
   HPending copy() {
     HComponent[] delta1 = new HComponent[delta.length];
     for (int i = 0; i < delta.length; i++) {

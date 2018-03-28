@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.psi.PsiElement;
 
@@ -35,11 +36,11 @@ public abstract class BaseJavaLocalInspectionTool extends AbstractBaseJavaLocalI
   }
 
   @Override
-  public boolean isSuppressedFor(@NotNull PsiElement element) {
+  public boolean isSuppressedFor(@Nonnull PsiElement element) {
     return isSuppressedFor(element, this);
   }
 
-  public static boolean isSuppressedFor(@NotNull PsiElement element, @NotNull LocalInspectionTool tool) {
+  public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
     return BaseJavaBatchLocalInspectionTool.isSuppressedFor(element, tool);
   }
 }

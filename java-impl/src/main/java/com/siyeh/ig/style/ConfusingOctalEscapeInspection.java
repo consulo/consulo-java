@@ -15,29 +15,30 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiLiteralExpression;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ConfusingOctalEscapeInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConfusingOctalEscapeSequence";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("confusing.octal.escape.sequence.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("confusing.octal.escape.sequence.problem.descriptor");
   }
@@ -50,7 +51,7 @@ public class ConfusingOctalEscapeInspection extends BaseInspection {
   private static class ConfusingOctalEscapeVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLiteralExpression(@NotNull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       if (!ExpressionUtils.hasStringType(expression)) {
         return;

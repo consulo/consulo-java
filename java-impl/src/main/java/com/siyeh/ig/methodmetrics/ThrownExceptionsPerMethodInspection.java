@@ -15,28 +15,29 @@
  */
 package com.siyeh.ig.methodmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReferenceList;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ThrownExceptionsPerMethodInspection
   extends MethodMetricInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "thrown.exceptions.per.method.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MethodWithTooExceptionsDeclared";
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer exceptionCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -61,7 +62,7 @@ public class ThrownExceptionsPerMethodInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

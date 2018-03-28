@@ -15,8 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiMethodMember;
@@ -28,46 +32,46 @@ import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiEnumConstant;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
+import consulo.java.JavaQuickFixBundle;
 
 public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   public ImplementMethodsFix(PsiElement aClass) {
     super(aClass);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("implement.methods.fix");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("implement.methods.fix");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     PsiElement myPsiElement = startElement;
     return myPsiElement.isValid() && myPsiElement.getManager().isInProject(myPsiElement);
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") final Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable final Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiElement myPsiElement = startElement;
 
     if (editor == null || !FileModificationService.getInstance().prepareFileForWrite(myPsiElement.getContainingFile())) return;
@@ -101,7 +105,7 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
   }
 
 
-  @Nullable
+  @javax.annotation.Nullable
   protected static MemberChooser<PsiMethodMember> chooseMethodsToImplement(Editor editor,
                                                                            PsiElement startElement,
                                                                            PsiClass aClass,

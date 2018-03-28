@@ -19,7 +19,7 @@ import gnu.trove.TIntObjectHashMap;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Stores instruction keys (such a key is offset + call stack), compares sub-stacks instead of whole stacks in the following way:
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 class InstructionKeySet
 {
 	private final
-	@NotNull
+	@Nonnull
 	Node myRoot;
 
 	InstructionKeySet(int initialCapacity)
@@ -44,12 +44,12 @@ class InstructionKeySet
 		this.myRoot = new Node(initialCapacity);
 	}
 
-	void add(@NotNull InstructionKey key)
+	void add(@Nonnull InstructionKey key)
 	{
 		myRoot.add(key.getOffset(), key.getCallStack(), 0);
 	}
 
-	boolean contains(@NotNull InstructionKey key)
+	boolean contains(@Nonnull InstructionKey key)
 	{
 		return myRoot.contains(key.getOffset(), key.getCallStack(), 0);
 	}
@@ -71,7 +71,7 @@ class InstructionKeySet
 			super(Math.max(initialCapacity, 2));
 		}
 
-		private void add(int offset, @NotNull int[] stack, int level)
+		private void add(int offset, @Nonnull int[] stack, int level)
 		{
 			if(level < stack.length)
 			{
@@ -92,7 +92,7 @@ class InstructionKeySet
 			}
 		}
 
-		private boolean contains(int offset, @NotNull int[] stack, int level)
+		private boolean contains(int offset, @Nonnull int[] stack, int level)
 		{
 			if(level < stack.length)
 			{

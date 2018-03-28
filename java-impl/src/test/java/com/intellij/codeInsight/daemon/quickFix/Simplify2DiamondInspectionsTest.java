@@ -15,14 +15,15 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ExplicitTypeCanBeDiamondInspection;
 import com.intellij.codeInspection.LocalInspectionTool;
-import org.jetbrains.annotations.NotNull;
 
 
 //todo test3 should be checked if it compiles - as now javac infers Object instead of String?!
 public class Simplify2DiamondInspectionsTest extends LightQuickFixTestCase {
-  @NotNull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

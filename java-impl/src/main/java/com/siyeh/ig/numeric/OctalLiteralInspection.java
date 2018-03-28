@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.numeric;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -22,24 +24,23 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class OctalLiteralInspection extends BaseInspection {
   @Pattern(VALID_ID_PATTERN)
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OctalInteger";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("octal.literal.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "octal.literal.problem.descriptor");
@@ -50,7 +51,7 @@ public class OctalLiteralInspection extends BaseInspection {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return new InspectionGadgetsFix[]{
@@ -68,7 +69,7 @@ public class OctalLiteralInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @NotNull PsiLiteralExpression literal) {
+      @Nonnull PsiLiteralExpression literal) {
       super.visitLiteralExpression(literal);
       final PsiType type = literal.getType();
       if (type == null) {

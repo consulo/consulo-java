@@ -19,8 +19,8 @@ import static com.intellij.psi.impl.compiled.ClsFileImpl.EMPTY_ATTRIBUTES;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.ClassVisitor;
 import org.jetbrains.org.objectweb.asm.Opcodes;
@@ -46,18 +46,18 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 {
 	private static final Key<Boolean> IS_INNER_CLASS = Key.create("java.is.inner.class.key");
 
-	public ClassFileViewProvider(@NotNull PsiManager manager, @NotNull VirtualFile file)
+	public ClassFileViewProvider(@Nonnull PsiManager manager, @Nonnull VirtualFile file)
 	{
 		this(manager, file, true);
 	}
 
-	public ClassFileViewProvider(@NotNull PsiManager manager, @NotNull VirtualFile file, boolean eventSystemEnabled)
+	public ClassFileViewProvider(@Nonnull PsiManager manager, @Nonnull VirtualFile file, boolean eventSystemEnabled)
 	{
 		super(manager, file, eventSystemEnabled, JavaLanguage.INSTANCE, JavaClassFileType.INSTANCE);
 	}
 
 	@Override
-	protected PsiFile createFile(@NotNull Project project, @NotNull VirtualFile file, @NotNull FileType fileType)
+	protected PsiFile createFile(@Nonnull Project project, @Nonnull VirtualFile file, @Nonnull FileType fileType)
 	{
 		FileIndexFacade fileIndex = ServiceManager.getService(project, FileIndexFacade.class);
 		if(!fileIndex.isInLibraryClasses(file) && fileIndex.isInSource(file) || fileIndex.isExcludedFile(file))
@@ -81,17 +81,17 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 		return null;
 	}
 
-	public static boolean isInnerClass(@NotNull VirtualFile file)
+	public static boolean isInnerClass(@Nonnull VirtualFile file)
 	{
 		return detectInnerClass(file, null);
 	}
 
-	public static boolean isInnerClass(@NotNull VirtualFile file, @NotNull byte[] content)
+	public static boolean isInnerClass(@Nonnull VirtualFile file, @Nonnull byte[] content)
 	{
 		return detectInnerClass(file, content);
 	}
 
-	private static boolean detectInnerClass(VirtualFile file, @Nullable byte[] content)
+	private static boolean detectInnerClass(VirtualFile file, @javax.annotation.Nullable byte[] content)
 	{
 		String name = file.getNameWithoutExtension();
 		int p = name.lastIndexOf('$', name.length() - 2);
@@ -144,9 +144,9 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 		return isInner;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public SingleRootFileViewProvider createCopy(@NotNull VirtualFile copy)
+	public SingleRootFileViewProvider createCopy(@Nonnull VirtualFile copy)
 	{
 		return new ClassFileViewProvider(getManager(), copy, false);
 	}
@@ -158,7 +158,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 	}
 
 	@Override
-	public PsiElement findElementAt(int offset, @NotNull Language language)
+	public PsiElement findElementAt(int offset, @Nonnull Language language)
 	{
 		PsiFile file = getPsi(language);
 		if(file instanceof PsiCompiledFile)
@@ -176,7 +176,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 
 	@Nullable
 	@Override
-	public PsiReference findReferenceAt(int offset, @NotNull Language language)
+	public PsiReference findReferenceAt(int offset, @Nonnull Language language)
 	{
 		PsiFile file = getPsi(language);
 		if(file instanceof PsiCompiledFile)

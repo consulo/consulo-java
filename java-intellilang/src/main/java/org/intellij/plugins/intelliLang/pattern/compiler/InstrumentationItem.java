@@ -17,7 +17,8 @@ package org.intellij.plugins.intelliLang.pattern.compiler;
 
 import java.io.File;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.compiler.ValidityState;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -28,20 +29,20 @@ class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 	private final VirtualFile myClassFile;
 	private final boolean myJDK6;
 
-	public InstrumentationItem(@NotNull VirtualFile classFile, boolean jdk6)
+	public InstrumentationItem(@Nonnull VirtualFile classFile, boolean jdk6)
 	{
 		myJDK6 = jdk6;
 		myClassFile = classFile;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public File getFile()
 	{
 		return VfsUtilCore.virtualToIoFile(myClassFile);
 	}
 
-	@NotNull
+	@Nonnull
 	public VirtualFile getClassFile()
 	{
 		return myClassFile;

@@ -23,19 +23,19 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ParameterNamingConventionInspection extends ConventionInspection {
 
   private static final int DEFAULT_MIN_LENGTH = 1;
   private static final int DEFAULT_MAX_LENGTH = 20;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MethodParameterNamingConvention";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "parameter.naming.convention.display.name");
@@ -49,7 +49,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String parametername = (String)infos[0];
     if (parametername.length() < getMinLength()) {
@@ -86,7 +86,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitParameter(@NotNull PsiParameter variable) {
+    public void visitParameter(@Nonnull PsiParameter variable) {
       final PsiElement scope = variable.getDeclarationScope();
       if (scope instanceof PsiCatchSection ||
           scope instanceof PsiForeachStatement) {

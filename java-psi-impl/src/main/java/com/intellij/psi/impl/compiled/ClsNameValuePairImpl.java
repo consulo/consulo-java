@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiElement;
@@ -35,7 +35,7 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair
 	private final ClsIdentifierImpl myNameIdentifier;
 	private final PsiAnnotationMemberValue myMemberValue;
 
-	ClsNameValuePairImpl(@NotNull ClsElementImpl parent, @Nullable String name, @NotNull PsiAnnotationMemberValue value)
+	ClsNameValuePairImpl(@Nonnull ClsElementImpl parent, @Nullable String name, @Nonnull PsiAnnotationMemberValue value)
 	{
 		myParent = parent;
 		myNameIdentifier = name != null ? new ClsIdentifierImpl(this, name) : null;
@@ -43,14 +43,14 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		appendText(myNameIdentifier, 0, buffer, " = ");
 		appendText(myMemberValue, 0, buffer);
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, null);
 
@@ -60,7 +60,7 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		if(myNameIdentifier != null)
@@ -83,7 +83,7 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -120,8 +120,8 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair
 	}
 
 	@Override
-	@NotNull
-	public PsiAnnotationMemberValue setValue(@NotNull PsiAnnotationMemberValue newValue)
+	@Nonnull
+	public PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue)
 	{
 		throw cannotModifyException(this);
 	}

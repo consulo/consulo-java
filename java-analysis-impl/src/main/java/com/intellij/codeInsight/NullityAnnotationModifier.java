@@ -17,8 +17,8 @@ package com.intellij.codeInsight;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
@@ -31,9 +31,9 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class NullityAnnotationModifier extends TypeAnnotationModifier
 {
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public TypeAnnotationProvider modifyAnnotations(@NotNull PsiType inferenceVariableType, @NotNull PsiClassType boundType)
+	public TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType)
 	{
 		PsiAnnotation[] annotations = inferenceVariableType.getAnnotations();
 		for(PsiAnnotation annotation : annotations)
@@ -48,7 +48,7 @@ public class NullityAnnotationModifier extends TypeAnnotationModifier
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	private static TypeAnnotationProvider removeAnnotation(PsiAnnotation[] annotations, PsiAnnotation annotation)
 	{
 		List<PsiAnnotation> list = ContainerUtil.newArrayList(annotations);
@@ -62,7 +62,7 @@ public class NullityAnnotationModifier extends TypeAnnotationModifier
 		return () -> array;
 	}
 
-	private static boolean isMatchingAnnotation(@NotNull PsiClassType boundType, PsiAnnotation annotation, String qName)
+	private static boolean isMatchingAnnotation(@Nonnull PsiClassType boundType, PsiAnnotation annotation, String qName)
 	{
 		NullableNotNullManager manager = NullableNotNullManager.getInstance(annotation.getProject());
 		return (manager.getNullables().contains(qName) || manager.getNotNulls().contains(qName)) && boundType.findAnnotation(qName) != null;

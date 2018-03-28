@@ -23,8 +23,8 @@ import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.psi.*;
 import com.intellij.util.containers.IntArrayList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -37,14 +37,14 @@ public class SuspiciousCollectionsMethodCallsInspection extends BaseLocalInspect
   public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionsBundle.message("report.suspicious.but.possibly.correct.method.calls"), this, "REPORT_CONVERTIBLE_METHOD_CALLS");
   }
 
   @Override
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
     final List<PsiMethod> patternMethods = new ArrayList<PsiMethod>();
     final IntArrayList indices = new IntArrayList();
     return new JavaElementVisitor() {
@@ -66,19 +66,19 @@ public class SuspiciousCollectionsMethodCallsInspection extends BaseLocalInspect
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.BUGS_GROUP_NAME;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "SuspiciousMethodCalls";
   }

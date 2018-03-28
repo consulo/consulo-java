@@ -15,8 +15,9 @@
  */
 package com.intellij.patterns;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
@@ -33,7 +34,7 @@ public class PsiClassPattern extends PsiMemberPattern<PsiClass, PsiClassPattern>
 
   public PsiClassPattern inheritorOf(final boolean strict, final PsiClassPattern pattern) {
     return with(new PatternCondition<PsiClass>("inheritorOf") {
-      public boolean accepts(@NotNull PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull PsiClass psiClass, final ProcessingContext context) {
         return isInheritor(psiClass, pattern, context, !strict);
       }
     });
@@ -51,7 +52,7 @@ public class PsiClassPattern extends PsiMemberPattern<PsiClass, PsiClassPattern>
 
   public PsiClassPattern inheritorOf(final boolean strict, final String className) {
     return with(new PatternCondition<PsiClass>("inheritorOf") {
-      public boolean accepts(@NotNull PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull PsiClass psiClass, final ProcessingContext context) {
         return InheritanceUtil.isInheritor(psiClass, strict, className);
       }
     });
@@ -59,20 +60,20 @@ public class PsiClassPattern extends PsiMemberPattern<PsiClass, PsiClassPattern>
 
   public PsiClassPattern isInterface() {
     return with(new PatternCondition<PsiClass>("isInterface") {
-      public boolean accepts(@NotNull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         return psiClass.isInterface();
       }
     });}
   public PsiClassPattern isAnnotationType() {
     return with(new PatternCondition<PsiClass>("isAnnotationType") {
-      public boolean accepts(@NotNull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         return psiClass.isAnnotationType();
       }
     });}
 
   public PsiClassPattern withMethod(final boolean checkDeep, final ElementPattern<? extends PsiMethod> memberPattern) {
     return with(new PatternCondition<PsiClass>("withMethod") {
-      public boolean accepts(@NotNull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         for (PsiMethod method : (checkDeep ? psiClass.getAllMethods() : psiClass.getMethods())) {
           if (memberPattern.accepts(method, context)) {
             return true;
@@ -84,7 +85,7 @@ public class PsiClassPattern extends PsiMemberPattern<PsiClass, PsiClassPattern>
   }
   public PsiClassPattern withField(final boolean checkDeep, final ElementPattern<? extends PsiField> memberPattern) {
     return with(new PatternCondition<PsiClass>("withField") {
-      public boolean accepts(@NotNull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         for (PsiField field : (checkDeep ? psiClass.getAllFields() : psiClass.getFields())) {
           if (memberPattern.accepts(field, context)) {
             return true;
@@ -97,22 +98,22 @@ public class PsiClassPattern extends PsiMemberPattern<PsiClass, PsiClassPattern>
 
    public PsiClassPattern nonAnnotationType() {
     return with(new PatternCondition<PsiClass>("nonAnnotationType") {
-      public boolean accepts(@NotNull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         return !psiClass.isAnnotationType();
       }
     });
   }
 
-  public PsiClassPattern withQualifiedName(@NonNls @NotNull final String qname) {
+  public PsiClassPattern withQualifiedName(@NonNls @Nonnull final String qname) {
     return with(new PatternCondition<PsiClass>("withQualifiedName") {
-      public boolean accepts(@NotNull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         return qname.equals(psiClass.getQualifiedName());
       }
     });
   }
-  public PsiClassPattern withQualifiedName(@NonNls @NotNull final ElementPattern<String> qname) {
+  public PsiClassPattern withQualifiedName(@NonNls @Nonnull final ElementPattern<String> qname) {
     return with(new PatternCondition<PsiClass>("withQualifiedName") {
-      public boolean accepts(@NotNull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         return qname.accepts(psiClass.getQualifiedName(), context);
       }
     });

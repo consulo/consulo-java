@@ -32,7 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
@@ -50,7 +50,7 @@ import com.intellij.ui.UIBundle;
 class ClassFilterEditorAddDialog extends DialogWrapper {
   private final Project myProject;
   private TextFieldWithBrowseButton myClassName;
-  @Nullable
+  @javax.annotation.Nullable
   private final String myHelpId;
 
   public ClassFilterEditorAddDialog(Project project, @Nullable String helpId) {
@@ -119,7 +119,7 @@ class ClassFilterEditorAddDialog extends DialogWrapper {
     return "#com.intellij.debugger.ui.breakpoints.BreakpointsConfigurationDialogFactory.BreakpointsConfigurationDialog.AddFieldBreakpointDialog";
   }
 
-  @Override @Nullable
+  @Override @javax.annotation.Nullable
   protected String getHelpId() {
     return myHelpId;
   }

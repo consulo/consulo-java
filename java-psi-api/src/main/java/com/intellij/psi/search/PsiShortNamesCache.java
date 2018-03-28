@@ -15,9 +15,11 @@
  */
 package com.intellij.psi.search;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
@@ -57,8 +59,8 @@ public abstract class PsiShortNamesCache
 	 * @param name the name of the files to find.
 	 * @return the list of files in the project which have the specified name.
 	 */
-	@NotNull
-	public PsiFile[] getFilesByName(@NotNull String name)
+	@Nonnull
+	public PsiFile[] getFilesByName(@Nonnull String name)
 	{
 		return PsiFile.EMPTY_ARRAY;
 	}
@@ -68,7 +70,7 @@ public abstract class PsiShortNamesCache
 	 *
 	 * @return the list of all file names in the project.
 	 */
-	@NotNull
+	@Nonnull
 	public String[] getAllFileNames()
 	{
 		return ArrayUtil.EMPTY_STRING_ARRAY;
@@ -81,8 +83,8 @@ public abstract class PsiShortNamesCache
 	 * @param scope the scope in which classes are searched.
 	 * @return the list of found classes.
 	 */
-	@NotNull
-	public abstract PsiClass[] getClassesByName(@NotNull @NonNls String name, @NotNull GlobalSearchScope scope);
+	@Nonnull
+	public abstract PsiClass[] getClassesByName(@Nonnull @NonNls String name, @Nonnull GlobalSearchScope scope);
 
 	/**
 	 * Returns the list of names of all classes in the project and
@@ -90,7 +92,7 @@ public abstract class PsiShortNamesCache
 	 *
 	 * @return the list of all class names.
 	 */
-	@NotNull
+	@Nonnull
 	public abstract String[] getAllClassNames();
 
 	public boolean processAllClassNames(Processor<String> processor)
@@ -109,7 +111,7 @@ public abstract class PsiShortNamesCache
 	 *
 	 * @param dest the set to add the names to.
 	 */
-	public abstract void getAllClassNames(@NotNull HashSet<String> dest);
+	public abstract void getAllClassNames(@Nonnull HashSet<String> dest);
 
 	/**
 	 * Returns the list of all methods with the specified name in the specified scope.
@@ -118,20 +120,20 @@ public abstract class PsiShortNamesCache
 	 * @param scope the scope in which methods are searched.
 	 * @return the list of found methods.
 	 */
-	@NotNull
-	public abstract PsiMethod[] getMethodsByName(@NonNls @NotNull String name, @NotNull GlobalSearchScope scope);
+	@Nonnull
+	public abstract PsiMethod[] getMethodsByName(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope);
 
-	@NotNull
-	public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(@NonNls @NotNull String name, @NotNull GlobalSearchScope scope, int maxCount);
+	@Nonnull
+	public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
 
-	@NotNull
-	public abstract PsiField[] getFieldsByNameIfNotMoreThan(@NonNls @NotNull String name, @NotNull GlobalSearchScope scope, int maxCount);
+	@Nonnull
+	public abstract PsiField[] getFieldsByNameIfNotMoreThan(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
 
-	public abstract boolean processMethodsWithName(@NonNls @NotNull String name, @NotNull GlobalSearchScope scope,
-			@NotNull Processor<PsiMethod> processor);
+	public abstract boolean processMethodsWithName(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope,
+			@Nonnull Processor<PsiMethod> processor);
 
-	public abstract boolean processMethodsWithName(@NonNls @NotNull String name, @NotNull Processor<? super PsiMethod> processor,
-			@NotNull GlobalSearchScope scope, @Nullable IdFilter filter);
+	public abstract boolean processMethodsWithName(@NonNls @Nonnull String name, @Nonnull Processor<? super PsiMethod> processor,
+			@Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
 
 	public boolean processAllMethodNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter)
 	{
@@ -149,7 +151,7 @@ public abstract class PsiShortNamesCache
 	 *
 	 * @return the list of all method names.
 	 */
-	@NotNull
+	@Nonnull
 	public abstract String[] getAllMethodNames();
 
 	/**
@@ -158,7 +160,7 @@ public abstract class PsiShortNamesCache
 	 *
 	 * @param set the set to add the names to.
 	 */
-	public abstract void getAllMethodNames(@NotNull HashSet<String> set);
+	public abstract void getAllMethodNames(@Nonnull HashSet<String> set);
 
 	/**
 	 * Returns the list of all fields with the specified name in the specified scope.
@@ -167,8 +169,8 @@ public abstract class PsiShortNamesCache
 	 * @param scope the scope in which fields are searched.
 	 * @return the list of found fields.
 	 */
-	@NotNull
-	public abstract PsiField[] getFieldsByName(@NotNull @NonNls String name, @NotNull GlobalSearchScope scope);
+	@Nonnull
+	public abstract PsiField[] getFieldsByName(@Nonnull @NonNls String name, @Nonnull GlobalSearchScope scope);
 
 	/**
 	 * Returns the list of names of all fields in the project and
@@ -176,7 +178,7 @@ public abstract class PsiShortNamesCache
 	 *
 	 * @return the list of all field names.
 	 */
-	@NotNull
+	@Nonnull
 	public abstract String[] getAllFieldNames();
 
 	/**
@@ -185,11 +187,11 @@ public abstract class PsiShortNamesCache
 	 *
 	 * @param set the set to add the names to.
 	 */
-	public abstract void getAllFieldNames(@NotNull HashSet<String> set);
+	public abstract void getAllFieldNames(@Nonnull HashSet<String> set);
 
-	public abstract boolean processFieldsWithName(@NotNull String name, @NotNull Processor<? super PsiField> processor,
-			@NotNull GlobalSearchScope scope, @Nullable IdFilter filter);
+	public abstract boolean processFieldsWithName(@Nonnull String name, @Nonnull Processor<? super PsiField> processor,
+			@Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
 
-	public abstract boolean processClassesWithName(@NotNull String name, @NotNull Processor<? super PsiClass> processor,
-			@NotNull GlobalSearchScope scope, @Nullable IdFilter filter);
+	public abstract boolean processClassesWithName(@Nonnull String name, @Nonnull Processor<? super PsiClass> processor,
+			@Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
 }

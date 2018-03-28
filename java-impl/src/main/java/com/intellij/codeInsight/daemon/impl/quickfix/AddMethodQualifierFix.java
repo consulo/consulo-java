@@ -18,9 +18,9 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -53,7 +53,7 @@ public class AddMethodQualifierFix implements IntentionAction
 		myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	@RequiredReadAction
 	public String getText()
@@ -71,7 +71,7 @@ public class AddMethodQualifierFix implements IntentionAction
 		return text;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -80,7 +80,7 @@ public class AddMethodQualifierFix implements IntentionAction
 
 	@Override
 	@RequiredReadAction
-	public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file)
+	public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file)
 	{
 		final PsiMethodCallExpression element = myMethodCall.getElement();
 		if(element == null || !element.isValid())
@@ -143,7 +143,7 @@ public class AddMethodQualifierFix implements IntentionAction
 
 	@Override
 	@RequiredWriteAction
-	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
 	{
 		if(!FileModificationService.getInstance().preparePsiElementsForWrite(file))
 		{
@@ -181,7 +181,7 @@ public class AddMethodQualifierFix implements IntentionAction
 				return FINAL_CHOICE;
 			}
 
-			@NotNull
+			@Nonnull
 			@Override
 			public String getTextFor(final PsiVariable value)
 			{

@@ -17,7 +17,8 @@ package com.intellij.refactoring.typeMigration.rules;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
@@ -73,7 +74,7 @@ public class RootTypeConversionRule extends TypeConversionRule
 									return new TypeConversionDescriptorBase()
 									{
 										@Override
-										public PsiExpression replace(PsiExpression expression, @NotNull TypeEvaluator evaluator) throws IncorrectOperationException
+										public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException
 										{
 											final PsiMethodReferenceExpression methodReferenceExpression = (PsiMethodReferenceExpression) expression;
 											final PsiExpression qualifierExpression = methodReferenceExpression.getQualifierExpression();
@@ -203,7 +204,7 @@ public class RootTypeConversionRule extends TypeConversionRule
 	private static class MyStaticMethodConversionDescriptor extends TypeConversionDescriptorBase
 	{
 		private final
-		@NotNull
+		@Nonnull
 		String myTargetClassQName;
 
 		private MyStaticMethodConversionDescriptor(PsiClass replacer)
@@ -212,7 +213,7 @@ public class RootTypeConversionRule extends TypeConversionRule
 		}
 
 		@Override
-		public PsiExpression replace(PsiExpression expression, @NotNull TypeEvaluator evaluator) throws IncorrectOperationException
+		public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException
 		{
 			final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
 			final PsiExpression qualifierExpression = methodCallExpression.getMethodExpression().getQualifierExpression();

@@ -16,6 +16,8 @@
 
 package com.intellij.refactoring.rename;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -27,8 +29,8 @@ import com.intellij.psi.impl.beanProperties.BeanProperty;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.refactoring.RenameRefactoring;
 import com.intellij.refactoring.openapi.impl.JavaRenameRefactoringImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -43,20 +45,20 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
     return getProperty(dataContext) != null;
   }
 
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     performInvoke(editor, dataContext);
   }
 
-  public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     performInvoke(null, dataContext);
   }
 
-  private void performInvoke(@Nullable Editor editor, DataContext dataContext) {
+  private void performInvoke(@javax.annotation.Nullable Editor editor, DataContext dataContext) {
     final BeanProperty property = getProperty(dataContext);
     new PropertyRenameDialog(property, editor).show();
   }
 
-  public static void doRename(@NotNull final BeanProperty property, final String newName, final boolean searchInComments, boolean isPreview) {
+  public static void doRename(@Nonnull final BeanProperty property, final String newName, final boolean searchInComments, boolean isPreview) {
     final PsiElement psiElement = property.getPsiElement();
     final RenameRefactoring rename = new JavaRenameRefactoringImpl(psiElement.getProject(), psiElement, newName, searchInComments, false);
     rename.setPreviewUsages(isPreview);

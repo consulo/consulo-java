@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.JavaResolveResult;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiVariable;
@@ -23,7 +23,7 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 
 public class ResolveVariableUtil
 {
-	public static PsiVariable resolveVariable(@NotNull PsiJavaCodeReferenceElement ref, boolean[] problemWithAccess, boolean[] problemWithStatic)
+	public static PsiVariable resolveVariable(@Nonnull PsiJavaCodeReferenceElement ref, boolean[] problemWithAccess, boolean[] problemWithStatic)
 	{
 
     /*

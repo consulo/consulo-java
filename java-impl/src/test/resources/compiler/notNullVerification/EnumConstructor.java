@@ -1,11 +1,11 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public enum EnumConstructor {
     Value("label");
 
     private final String label;
 
-    EnumConstructor(@NotNull String label) {
+    EnumConstructor(@Nonnull String label) {
         this.label = label;
     }
 }

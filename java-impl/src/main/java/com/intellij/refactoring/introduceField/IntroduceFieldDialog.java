@@ -24,8 +24,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
@@ -142,7 +142,7 @@ class IntroduceFieldDialog extends DialogWrapper {
   }
 
 
-  @NotNull
+  @Nonnull
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
   }
@@ -222,7 +222,7 @@ class IntroduceFieldDialog extends DialogWrapper {
                                                   final PsiLocalVariable localVariable,
                                                   final PsiExpression initializerExpression,
                                                   final boolean isInvokedOnDeclaration,
-                                                  @Nullable final String enteredName,
+                                                  @javax.annotation.Nullable final String enteredName,
                                                   final PsiClass parentClass,
                                                   final Project project) {
     return new NameSuggestionsGenerator() {

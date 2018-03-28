@@ -24,8 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,13 +34,13 @@ public class UnpredictableBigDecimalConstructorCallInspection
   public boolean ignoreReferences = true;
   public boolean ignoreComplexLiterals = false;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unpredictable.big.decimal.constructor.call.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unpredictable.big.decimal.constructor.call.problem.descriptor");
@@ -87,7 +86,7 @@ public class UnpredictableBigDecimalConstructorCallInspection
       this.argumentText = argumentText;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unpredictable.big.decimal.constructor.call.quickfix",
@@ -165,7 +164,7 @@ public class UnpredictableBigDecimalConstructorCallInspection
       registerNewExpressionError(expression, expression);
     }
 
-    private boolean checkArguments(@Nullable PsiExpression firstArgument) {
+    private boolean checkArguments(@javax.annotation.Nullable PsiExpression firstArgument) {
       if (firstArgument == null) {
         return false;
       }

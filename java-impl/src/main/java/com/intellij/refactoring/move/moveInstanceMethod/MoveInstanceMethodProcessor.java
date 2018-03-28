@@ -22,8 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -91,7 +92,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor
 		myNewVisibility = newVisibility;
 	}
 
-	@NotNull
+	@Nonnull
 	protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages)
 	{
 		return new MoveInstanceMethodViewDescriptor(myMethod, myTargetVariable, myTargetClass);
@@ -165,7 +166,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor
 		return showConflicts(conflicts, usages);
 	}
 
-	@NotNull
+	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		final PsiManager manager = myMethod.getManager();
@@ -677,7 +678,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor
 		}
 	}
 
-	private String getParameterNameToCreate(@NotNull PsiClass aClass)
+	private String getParameterNameToCreate(@Nonnull PsiClass aClass)
 	{
 		return myOldClassParameterNames.get(aClass);
 	}

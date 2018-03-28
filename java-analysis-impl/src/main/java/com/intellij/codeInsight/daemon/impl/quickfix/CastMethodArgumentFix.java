@@ -23,7 +23,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.psi.PsiClassType;
@@ -40,7 +41,7 @@ public class CastMethodArgumentFix extends MethodArgumentFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     if (myArgList.getExpressions().length == 1) {
       return JavaQuickFixBundle.message("cast.single.parameter.text", JavaHighlightUtil.formatType(myToType));

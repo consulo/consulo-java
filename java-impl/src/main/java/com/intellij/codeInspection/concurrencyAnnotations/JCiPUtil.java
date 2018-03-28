@@ -19,8 +19,8 @@ import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocTag;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JCiPUtil {
   @NonNls
@@ -47,7 +47,7 @@ public class JCiPUtil {
     return visitor.isFound();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static String findGuardForMember(PsiMember member) {
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(member, GUARDED_BY);
     if (annotation != null) {
@@ -93,7 +93,7 @@ public class JCiPUtil {
     return text.startsWith("@GuardedBy") && text.contains("(") && text.contains(")");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static String getGuardValue(PsiAnnotation annotation) {
     final PsiAnnotationParameterList parameters = annotation.getParameterList();
     final PsiNameValuePair[] pairs = parameters.getAttributes();
@@ -110,7 +110,7 @@ public class JCiPUtil {
     return null;
   }
 
-  @NotNull
+  @Nonnull
   public static String getGuardValue(PsiDocTag tag) {
     final String text = tag.getText();
     return text.substring(text.indexOf((int)'(') + 1, text.indexOf((int)')')).trim();

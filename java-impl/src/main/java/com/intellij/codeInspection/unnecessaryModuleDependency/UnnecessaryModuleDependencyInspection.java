@@ -15,7 +15,7 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.util.Comparing;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,19 +62,19 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("unnecessary.module.dependency.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "UnnecessaryModuleDependencyInspection";
@@ -90,19 +90,19 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return "Remove dependency";
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull CommonProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
       final ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
       for (OrderEntry entry : model.getOrderEntries()) {
         if (entry instanceof ModuleOrderEntry) {

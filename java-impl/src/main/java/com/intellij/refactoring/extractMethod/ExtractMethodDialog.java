@@ -36,8 +36,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -178,7 +178,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 		return myCbChainedConstructor != null && myCbChainedConstructor.isSelected();
 	}
 
-	@NotNull
+	@Nonnull
 	protected Action[] createActions()
 	{
 		if(myHelpId != null)
@@ -307,7 +307,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private JPanel createReturnTypePanel()
 	{
 		if(TypeConversionUtil.isPrimitiveWrapper(myReturnType) && myNullness == Nullness.NULLABLE)

@@ -18,7 +18,7 @@ package com.intellij.psi.formatter.java.wrap;
 import com.intellij.formatting.Wrap;
 import com.intellij.psi.formatter.java.AbstractJavaBlock;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Defines contract for using predefined reserved wraps.

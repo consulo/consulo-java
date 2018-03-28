@@ -1,9 +1,7 @@
-import org.jetbrains.annotations.*;
-
 import java.util.*;
 
 class Test {
-    @Nullable
+    @javax.annotation.Nullable
     public String getString(String s) {
         return null;
     }

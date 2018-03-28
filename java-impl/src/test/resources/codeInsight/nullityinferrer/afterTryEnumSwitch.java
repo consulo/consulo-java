@@ -1,10 +1,10 @@
-import org.jetbrains.annotations.*;
+import javax.annotation.Nonnull;
 
 public class Infer {
     enum E {;
     }
 
-    void trySwitchEnum(@NotNull E e) {
+    void trySwitchEnum(@Nonnull E e) {
         switch (e) {
 
         }

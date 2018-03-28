@@ -17,8 +17,9 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.openapi.editor.Editor;
@@ -78,7 +79,7 @@ public class DeleteSideEffectsAwareFix implements IntentionAction, LowPriorityAc
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -86,7 +87,7 @@ public class DeleteSideEffectsAwareFix implements IntentionAction, LowPriorityAc
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -94,13 +95,13 @@ public class DeleteSideEffectsAwareFix implements IntentionAction, LowPriorityAc
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return !myMessage.isEmpty();
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		PsiExpressionStatement statement = myPointer.getElement();
 		if(statement == null)

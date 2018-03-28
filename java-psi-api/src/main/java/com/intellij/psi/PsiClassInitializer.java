@@ -15,8 +15,9 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.util.ArrayFactory;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a Java class initializer block.
@@ -28,7 +29,7 @@ public interface PsiClassInitializer extends PsiMember {
   PsiClassInitializer[] EMPTY_ARRAY = new PsiClassInitializer[0];
 
   ArrayFactory<PsiClassInitializer> ARRAY_FACTORY = new ArrayFactory<PsiClassInitializer>() {
-    @NotNull
+    @Nonnull
     @Override
     public PsiClassInitializer[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiClassInitializer[count];
@@ -40,6 +41,6 @@ public interface PsiClassInitializer extends PsiMember {
    *
    * @return the code block representing the contents of the class initializer block.
    */
-  @NotNull
+  @Nonnull
   PsiCodeBlock getBody();
 }

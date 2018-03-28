@@ -20,22 +20,23 @@
  */
 package com.intellij.refactoring.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class ReplaceMethodWithMethodObjectAction extends BaseRefactoringAction{
   protected boolean isAvailableInEditorOnly() {
     return true;
   }
 
-  protected boolean isEnabledOnElements(@NotNull final PsiElement[] elements) {
+  protected boolean isEnabledOnElements(@Nonnull final PsiElement[] elements) {
     return false;
   }
 
-  protected RefactoringActionHandler getHandler(@NotNull final DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@Nonnull final DataContext dataContext) {
     return new ExtractMethodObjectHandler();
   }
 }

@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -28,14 +28,14 @@ public interface PsiAnnotationOwner {
    *
    * @return the list of annotations.
    */
-  @NotNull
+  @Nonnull
   PsiAnnotation[] getAnnotations();
 
   /**
    * @return the list of annotations which are applicable to this owner
    *         (e.g. type annotations on method belong to its type element, not the method).
    */
-  @NotNull
+  @Nonnull
   PsiAnnotation[] getApplicableAnnotations();
 
   /**
@@ -46,7 +46,7 @@ public interface PsiAnnotationOwner {
    * @return the annotation instance, or null if no such annotation is found.
    */
   @Nullable
-  PsiAnnotation findAnnotation(@NotNull @NonNls String qualifiedName);
+  PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName);
 
   /**
    * Adds a new annotation to this owner. The annotation class name will be shortened. No attributes will be defined.
@@ -54,6 +54,6 @@ public interface PsiAnnotationOwner {
    * @param qualifiedName qualifiedName
    * @return newly added annotation
    */
-  @NotNull
-  PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName);
+  @Nonnull
+  PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName);
 }

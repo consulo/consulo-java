@@ -16,7 +16,7 @@
 package com.intellij.refactoring.ui;
 
 import com.intellij.psi.PsiType;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -28,5 +28,5 @@ public interface TypeSelectorManager {
 
   boolean isSuggestedType(final String fqName);
 
-  void typeSelected(@NotNull PsiType type);
+  void typeSelected(@Nonnull PsiType type);
 }

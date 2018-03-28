@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class ForLoopThatDoesntUseLoopVariableInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "for.loop.not.use.loop.variable.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean condition = ((Boolean)infos[0]).booleanValue();
     final boolean update = ((Boolean)infos[1]).booleanValue();
@@ -54,7 +55,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@NotNull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       if (conditionUsesInitializer(statement)) {
         if (!updateUsesInitializer(statement)) {
@@ -159,7 +160,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!used) {
         super.visitElement(element);
       }
@@ -167,7 +168,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression ref) {
+      @Nonnull PsiReferenceExpression ref) {
       if (used) {
         return;
       }

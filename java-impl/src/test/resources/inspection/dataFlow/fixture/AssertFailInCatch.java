@@ -1,4 +1,5 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.junit.Assert;
 
 class Test {
@@ -18,7 +19,8 @@ class Test {
     }
   }
 
-  private static @NotNull String createString() {
+  private static @Nonnull
+  String createString() {
     throw new NullPointerException();
   }
 }

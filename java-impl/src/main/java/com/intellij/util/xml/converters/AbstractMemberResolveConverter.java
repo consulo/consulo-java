@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
@@ -51,10 +51,10 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
   @Nullable
   protected abstract PsiClass getTargetClass(final ConvertContext context);
 
-  @NotNull
+  @Nonnull
   protected abstract PropertyMemberType[] getMemberTypes(final ConvertContext context);
 
-  @NotNull
+  @Nonnull
   protected PsiType getPsiType(final ConvertContext context) {
     return PsiType.getJavaLangObject(context.getPsiManager(), ProjectScope.getAllScope(context.getPsiManager().getProject()));
   }
@@ -101,7 +101,7 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
     return CodeInsightBundle.message("error.cannot.resolve.0.1", TypePresentationService.getInstance().getTypeName(parent), s);
   }
 
-  @NotNull
+  @Nonnull
   public Collection<? extends PsiMember> getVariants(final ConvertContext context) {
     final PsiClass psiClass = getTargetClass(context);
     if (psiClass == null) return Collections.emptyList();

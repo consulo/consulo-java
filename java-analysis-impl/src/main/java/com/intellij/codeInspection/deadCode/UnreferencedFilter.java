@@ -24,19 +24,20 @@
  */
 package com.intellij.codeInspection.deadCode;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.GlobalInspectionContext;
 import com.intellij.codeInspection.GlobalInspectionTool;
 import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
 import com.intellij.codeInspection.reference.*;
-import org.jetbrains.annotations.NotNull;
 
 public class UnreferencedFilter extends RefUnreachableFilter {
-  public UnreferencedFilter(@NotNull GlobalInspectionTool tool, @NotNull GlobalInspectionContext context) {
+  public UnreferencedFilter(@Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
     super(tool, context);
   }
 
   @Override
-  public int getElementProblemCount(@NotNull RefJavaElement refElement) {
+  public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
     if (refElement instanceof RefParameter) return 0;
     if (refElement.isEntry() || !((RefElementImpl)refElement).isSuspicious() || refElement.isSyntheticJSP()) return 0;
 

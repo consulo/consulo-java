@@ -35,7 +35,7 @@ import com.intellij.util.WalkingState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FactoryMap;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -113,7 +113,7 @@ public class SliceNullnessAnalyzer {
 
     ProgressManager.getInstance().run(new Task.Backgroundable(root.getProject(), "Expanding all nodes... (may very well take the whole day)", true) {
       @Override
-      public void run(@NotNull final ProgressIndicator indicator) {
+      public void run(@Nonnull final ProgressIndicator indicator) {
         NullAnalysisResult l = calcNullableLeaves(root, treeStructure, map);
         leafExpressions.set(l);
       }
@@ -159,13 +159,13 @@ public class SliceNullnessAnalyzer {
     return nulls.get(node).groupedByValue[group];
   }
 
-  @NotNull
-  public static NullAnalysisResult calcNullableLeaves(@NotNull final SliceNode root, @NotNull AbstractTreeStructure treeStructure,
+  @Nonnull
+  public static NullAnalysisResult calcNullableLeaves(@Nonnull final SliceNode root, @Nonnull AbstractTreeStructure treeStructure,
                                                        final Map<SliceNode, NullAnalysisResult> map) {
     final SliceLeafAnalyzer.SliceNodeGuide guide = new SliceLeafAnalyzer.SliceNodeGuide(treeStructure);
     WalkingState<SliceNode> walkingState = new WalkingState<SliceNode>(guide) {
       @Override
-      public void visit(@NotNull SliceNode element) {
+      public void visit(@Nonnull SliceNode element) {
         element.calculateDupNode();
         node(element, map).clear();
         SliceNode duplicate = element.getDuplicate();
@@ -198,7 +198,7 @@ public class SliceNullnessAnalyzer {
       }
 
       @Override
-      public void elementFinished(@NotNull SliceNode element) {
+      public void elementFinished(@Nonnull SliceNode element) {
         SliceNode parent = guide.getParent(element);
         if (parent != null) {
           node(parent, map).add(node(element, map));
@@ -210,7 +210,7 @@ public class SliceNullnessAnalyzer {
     return node(root, map);
   }
 
-  @NotNull
+  @Nonnull
   private static Nullness checkNullness(final PsiElement element) {
     // null
     PsiElement value = element;

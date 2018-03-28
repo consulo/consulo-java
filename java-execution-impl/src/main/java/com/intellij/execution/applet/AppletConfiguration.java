@@ -25,9 +25,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
@@ -94,7 +95,7 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
 	{
 		final JavaCommandLineState state = new JavaCommandLineState(env)
 		{
@@ -123,7 +124,7 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			protected OSProcessHandler startProcess() throws ExecutionException
 			{
 				final OSProcessHandler handler = super.startProcess();

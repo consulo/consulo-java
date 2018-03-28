@@ -15,10 +15,11 @@
  */
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
 public class LightIdentifier extends LightElement implements PsiIdentifier, PsiJavaToken {
   private final String myText;
@@ -39,7 +40,7 @@ public class LightIdentifier extends LightElement implements PsiIdentifier, PsiJ
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitIdentifier(this);
     }

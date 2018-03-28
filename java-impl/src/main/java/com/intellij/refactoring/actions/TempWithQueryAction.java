@@ -16,6 +16,8 @@
  */
 package com.intellij.refactoring.actions;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -23,22 +25,21 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLocalVariable;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.tempWithQuery.TempWithQueryHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class TempWithQueryAction extends BaseRefactoringAction{
   public boolean isAvailableInEditorOnly() {
     return true;
   }
 
-  public boolean isEnabledOnElements(@NotNull PsiElement[] elements) {
+  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     return false;
   }
 
-  public RefactoringActionHandler getHandler(@NotNull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new TempWithQueryHandler();
   }
 
-  protected boolean isAvailableOnElementInEditorAndFile(@NotNull final PsiElement element, @NotNull final Editor editor, @NotNull PsiFile file, @NotNull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     return element instanceof PsiLocalVariable && ((PsiLocalVariable) element).getInitializer() != null; 
   }
 }

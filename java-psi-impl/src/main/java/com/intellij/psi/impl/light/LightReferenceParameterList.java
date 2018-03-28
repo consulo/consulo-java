@@ -15,10 +15,11 @@
  */
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  *  @author dsl
@@ -58,7 +59,7 @@ public class LightReferenceParameterList extends LightElement implements PsiRefe
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceParameterList(this);
     }
@@ -78,13 +79,13 @@ public class LightReferenceParameterList extends LightElement implements PsiRefe
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiTypeElement[] getTypeParameterElements() {
     return myTypeElements;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType[] getTypeArguments() {
     return PsiImplUtil.typesByTypeElements(myTypeElements);
   }

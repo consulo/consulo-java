@@ -19,8 +19,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -58,7 +58,7 @@ public class WrapExpressionFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     final PsiMethod wrapper = myExpression.isValid() && myExpectedType != null ? findWrapper(myExpression.getType(), myExpectedType, myPrimitiveExpected) : null;
     final String methodPresentation = wrapper != null ? wrapper.getContainingClass().getName() + "." + wrapper.getName() : "";
@@ -66,7 +66,7 @@ public class WrapExpressionFix implements IntentionAction {
   }
 
   @Nullable
-  private static PsiMethod findWrapper(PsiType type, @NotNull PsiClassType expectedType, boolean primitiveExpected) {
+  private static PsiMethod findWrapper(PsiType type, @Nonnull PsiClassType expectedType, boolean primitiveExpected) {
     PsiClass aClass = expectedType.resolve();
     if (aClass != null) {
       PsiType expectedReturnType = expectedType;
@@ -96,13 +96,13 @@ public class WrapExpressionFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("wrap.expression.using.static.accessor.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myExpression.isValid()
            && myExpression.getManager().isInProject(myExpression)
            && myExpectedType != null
@@ -112,7 +112,7 @@ public class WrapExpressionFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiMethod wrapper = findWrapper(myExpression.getType(), myExpectedType, myPrimitiveExpected);
     assert wrapper != null;

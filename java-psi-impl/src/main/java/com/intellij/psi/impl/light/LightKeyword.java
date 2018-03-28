@@ -21,7 +21,7 @@ import com.intellij.lexer.Lexer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class LightKeyword extends LightElement implements PsiKeyword, PsiJavaToken {
   private final String myText;
@@ -44,7 +44,7 @@ public class LightKeyword extends LightElement implements PsiKeyword, PsiJavaTok
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitKeyword(this);
     }

@@ -24,6 +24,8 @@
  */
 package org.osmorc.manifest.lang.psi.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -31,7 +33,6 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.psi.AssignmentExpression;
 import org.osmorc.manifest.lang.psi.Directive;
@@ -43,11 +44,11 @@ import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
  */
 public abstract class AbstractAssignmentExpression extends ManifestElementBase<AssignmentExpressionStub> implements AssignmentExpression {
 
-  protected AbstractAssignmentExpression(AssignmentExpressionStub stub, @NotNull IStubElementType nodeType) {
+  protected AbstractAssignmentExpression(AssignmentExpressionStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public AbstractAssignmentExpression(@NotNull ASTNode node) {
+  public AbstractAssignmentExpression(@Nonnull ASTNode node) {
     super(node);
   }
 
@@ -66,7 +67,7 @@ public abstract class AbstractAssignmentExpression extends ManifestElementBase<A
   }
 
   @Override
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     PsiFile fromText = PsiFileFactory.getInstance(getProject())
       .createFileFromText("DUMMY.MF", ManifestFileType.INSTANCE, String.format("Dummy: dummy;%s:=%s\n", name, getValue()));
 
@@ -79,7 +80,7 @@ public abstract class AbstractAssignmentExpression extends ManifestElementBase<A
   }
 
   @Override
-  public void setValue(@NotNull String value) {
+  public void setValue(@Nonnull String value) {
     final String oldValue = getValue();
     String dummyTemplate;
     if(oldValue.endsWith("\n")) {

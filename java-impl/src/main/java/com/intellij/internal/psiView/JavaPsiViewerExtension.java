@@ -15,18 +15,19 @@
  */
 package com.intellij.internal.psiView;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Konstantin Bulenkov
  */
 public abstract class JavaPsiViewerExtension implements PsiViewerExtension{
-  @NotNull
+  @Nonnull
   public FileType getDefaultFileType() {
     return JavaFileType.INSTANCE;
   }

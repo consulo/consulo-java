@@ -15,20 +15,22 @@
  */
 package com.siyeh.ig.resources;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.BaseInspection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public abstract class ResourceInspection extends BaseInspection {
 
   @Nullable
   protected static PsiVariable getVariable(
-    @NotNull PsiElement element) {
+    @Nonnull PsiElement element) {
     if (element instanceof PsiAssignmentExpression) {
       final PsiAssignmentExpression assignment =
         (PsiAssignmentExpression)element;
@@ -61,7 +63,7 @@ public abstract class ResourceInspection extends BaseInspection {
     return parent;
   }
 
-  protected static boolean isSafelyClosed(@Nullable PsiVariable variable, PsiElement context, boolean insideTryAllowed) {
+  protected static boolean isSafelyClosed(@javax.annotation.Nullable PsiVariable variable, PsiElement context, boolean insideTryAllowed) {
     if (variable == null) {
       return false;
     }
@@ -105,8 +107,8 @@ public abstract class ResourceInspection extends BaseInspection {
   }
 
   protected static boolean isResourceClosedInFinally(
-    @NotNull PsiTryStatement tryStatement,
-    @NotNull PsiVariable variable) {
+    @Nonnull PsiTryStatement tryStatement,
+    @Nonnull PsiVariable variable) {
     final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     if (finallyBlock == null) {
       return false;
@@ -250,7 +252,7 @@ public abstract class ResourceInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@NotNull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!containsClose) {
         super.visitElement(element);
       }
@@ -258,7 +260,7 @@ public abstract class ResourceInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       if (containsClose) {
         return;
       }

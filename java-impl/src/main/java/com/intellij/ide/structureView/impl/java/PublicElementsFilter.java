@@ -15,6 +15,8 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentationData;
@@ -22,7 +24,6 @@ import com.intellij.ide.util.treeView.smartTree.Filter;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class PublicElementsFilter implements Filter{
   @NonNls public static final String ID = "SHOW_NON_PUBLIC";
@@ -36,12 +37,12 @@ public class PublicElementsFilter implements Filter{
     }
   }
 
-  @NotNull
+  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.structureview.show.non.public"), null, PlatformIcons.PRIVATE_ICON);
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return ID;
   }

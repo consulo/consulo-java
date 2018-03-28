@@ -21,7 +21,8 @@ package com.intellij.psi.impl.java.stubs.index;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.impl.search.JavaSourceFilterScope;
@@ -39,7 +40,7 @@ public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
 		return ourInstance;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public StubIndexKey<String, PsiAnnotation> getKey()
 	{
@@ -47,7 +48,7 @@ public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
 	}
 
 	@Override
-	public Collection<PsiAnnotation> get(@NotNull final String s, @NotNull final Project project, @NotNull final GlobalSearchScope scope)
+	public Collection<PsiAnnotation> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final GlobalSearchScope scope)
 	{
 		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
 	}

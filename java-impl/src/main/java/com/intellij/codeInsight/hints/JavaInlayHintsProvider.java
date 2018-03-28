@@ -9,8 +9,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.dataflow.SetUtil;
 import com.intellij.codeInsight.hints.settings.ParameterNameHintsSettings;
 import com.intellij.openapi.util.text.StringUtil;
@@ -29,7 +29,7 @@ import consulo.annotations.RequiredReadAction;
  */
 public class JavaInlayHintsProvider
 {
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	public static Set<InlayInfo> createHints(PsiCallExpression callExpression)
 	{
@@ -75,7 +75,7 @@ public class JavaInlayHintsProvider
 	}
 
 	@RequiredReadAction
-	@NotNull
+	@Nonnull
 	private static Set<InlayInfo> createHintsForResolvedMethod(PsiCallExpression callExpression, ResolveResult resolveResult)
 	{
 		PsiElement element = resolveResult.getElement();
@@ -91,7 +91,7 @@ public class JavaInlayHintsProvider
 	}
 
 	@RequiredReadAction
-	@NotNull
+	@Nonnull
 	private static Set<InlayInfo> createHintSet(CallInfo info, PsiSubstitutor substitutor)
 	{
 		List<CallArgumentInfo> args = info.getRegularArgs().stream().filter(it -> isAssignable(it, substitutor)).collect(Collectors.toList());
@@ -115,7 +115,7 @@ public class JavaInlayHintsProvider
 		return ContainerUtil.mapNotNull(ContainerUtil.filter(args, it -> isUnclearExpression(it.getArgument())), it -> createInlayInfo(it.getArgument(), it.getParameter()));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	private static InlayInfo getVarArgInlay(CallInfo info)
 	{
@@ -214,7 +214,7 @@ public class JavaInlayHintsProvider
 		return false;
 	}
 
-	private static String typeText(@NotNull PsiParameter psiParameter)
+	private static String typeText(@Nonnull PsiParameter psiParameter)
 	{
 		return psiParameter.getType().getCanonicalText();
 	}

@@ -15,23 +15,24 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "wait.while.holding.two.locks.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "wait.while.holding.two.locks.problem.descriptor");
@@ -65,7 +66,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-          @NotNull PsiMethodCallExpression expression) {
+          @Nonnull PsiMethodCallExpression expression) {
           super.visitMethodCallExpression(expression);
           if (m_numLocksHeld < 2) {
             return;
@@ -104,7 +105,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@NotNull PsiMethod method) {
+        public void visitMethod(@Nonnull PsiMethod method) {
           if (method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
             m_numLocksHeld++;
           }
@@ -116,7 +117,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
         @Override
         public void visitSynchronizedStatement(
-          @NotNull PsiSynchronizedStatement synchronizedStatement) {
+          @Nonnull PsiSynchronizedStatement synchronizedStatement) {
           m_numLocksHeld++;
           super.visitSynchronizedStatement(synchronizedStatement);
           m_numLocksHeld--;

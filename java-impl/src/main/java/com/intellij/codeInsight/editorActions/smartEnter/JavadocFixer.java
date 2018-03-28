@@ -3,8 +3,8 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.javadoc.JavadocHelper;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
@@ -34,7 +34,7 @@ public class JavadocFixer
 	 * @param psiFile PSI file for the document exposed via the given editor
 	 * @return <code>true</code> if smart completion was performed; <code>false</code> otherwise
 	 */
-	public boolean process(@NotNull Editor editor, @NotNull PsiFile psiFile)
+	public boolean process(@Nonnull Editor editor, @Nonnull PsiFile psiFile)
 	{
 		// Check parameter description completion.
 		final CaretModel caretModel = editor.getCaretModel();
@@ -95,7 +95,7 @@ public class JavadocFixer
 		return true;
 	}
 
-	private static void moveCaretToTheLineEndIfPossible(@NotNull Editor editor, int line)
+	private static void moveCaretToTheLineEndIfPossible(@Nonnull Editor editor, int line)
 	{
 		final Document document = editor.getDocument();
 		final CaretModel caretModel = editor.getCaretModel();
@@ -112,7 +112,7 @@ public class JavadocFixer
 	}
 
 	@Nullable
-	private static JavadocHelper.JavadocParameterInfo findNext(@NotNull Collection<JavadocHelper.JavadocParameterInfo> data, @NotNull JavadocHelper.JavadocParameterInfo anchor)
+	private static JavadocHelper.JavadocParameterInfo findNext(@Nonnull Collection<JavadocHelper.JavadocParameterInfo> data, @Nonnull JavadocHelper.JavadocParameterInfo anchor)
 	{
 		boolean returnNow = false;
 		for(JavadocHelper.JavadocParameterInfo info : data)

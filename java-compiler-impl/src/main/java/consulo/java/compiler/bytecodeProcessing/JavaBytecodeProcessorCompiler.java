@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.compiler.cache.Cache;
 import com.intellij.compiler.cache.JavaDependencyCache;
 import com.intellij.compiler.impl.ModuleChunk;
@@ -87,7 +87,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 			myValidityState = new TimestampValidityState(myFile.lastModified());
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public File getFile()
 		{
@@ -102,7 +102,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ProcessingItem[] getProcessingItems(CompileContext compileContext)
 	{
@@ -207,8 +207,8 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 		return processingItems;
 	}
 
-	@NotNull
-	public static InstrumentationClassFinder createClassFinder(@NotNull CompileContext context, @NotNull final Module module)
+	@Nonnull
+	public static InstrumentationClassFinder createClassFinder(@Nonnull CompileContext context, @Nonnull final Module module)
 	{
 		ModuleChunk moduleChunk = new ModuleChunk((CompileContextEx) context, new Chunk<>(module), Collections.<Module, List<VirtualFile>>emptyMap());
 
@@ -218,8 +218,8 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 		return new InstrumentationClassFinder(toUrls(compilationBootClasspath), toUrls(compilationClasspath));
 	}
 
-	@NotNull
-	private static URL[] toUrls(@NotNull Set<VirtualFile> files)
+	@Nonnull
+	private static URL[] toUrls(@Nonnull Set<VirtualFile> files)
 	{
 		List<URL> urls = new ArrayList<>(files.size());
 		for(VirtualFile file : files)
@@ -237,7 +237,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 		return urls.toArray(new URL[urls.size()]);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getDescription()
 	{

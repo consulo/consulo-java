@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaResolveResult;
 import com.intellij.psi.PsiElement;
@@ -56,7 +56,7 @@ public class JavaMethodResolveHelper
 	@Nullable
 	private final PsiType[] myArgumentTypes;
 
-	public JavaMethodResolveHelper(@NotNull final PsiElement argumentList,
+	public JavaMethodResolveHelper(@Nonnull final PsiElement argumentList,
 			PsiFile containingFile,
 			@Nullable final PsiType[] argumentTypes)
 	{
@@ -67,8 +67,8 @@ public class JavaMethodResolveHelper
 		myProcessor = new MethodResolverProcessor(argumentList, containingFile, new PsiConflictResolver[]{resolver})
 		{
 			@Override
-			protected MethodCandidateInfo createCandidateInfo(@NotNull final PsiMethod method,
-					@NotNull final PsiSubstitutor substitutor,
+			protected MethodCandidateInfo createCandidateInfo(@Nonnull final PsiMethod method,
+					@Nonnull final PsiSubstitutor substitutor,
 					final boolean staticProblem,
 					final boolean accessible,
 					final boolean varargs)
@@ -85,20 +85,20 @@ public class JavaMethodResolveHelper
 		};
 	}
 
-	protected MethodCandidateInfo createCandidateInfo(@NotNull PsiMethod method,
+	protected MethodCandidateInfo createCandidateInfo(@Nonnull PsiMethod method,
 			PsiSubstitutor substitutor,
 			boolean staticProblem,
 			PsiElement currentFileContext,
 			boolean accessProblem,
 			PsiElement argumentList,
 			PsiType[] argumentTypes,
-			@NotNull LanguageLevel languageLevel)
+			@Nonnull LanguageLevel languageLevel)
 	{
 		return new MethodCandidateInfo(method, substitutor, accessProblem, staticProblem, argumentList,
 				currentFileContext, argumentTypes, PsiType.EMPTY_ARRAY, languageLevel);
 	}
 
-	public void addMethod(@NotNull PsiMethod method, @NotNull PsiSubstitutor substitutor, boolean staticError)
+	public void addMethod(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor, boolean staticError)
 	{
 		if(myDuplicates.add(method.getSignature(substitutor)))
 		{
@@ -106,7 +106,7 @@ public class JavaMethodResolveHelper
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public ErrorType getResolveError()
 	{
 		final List<CandidateInfo> candidates = getCandidates();

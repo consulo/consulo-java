@@ -20,7 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -31,17 +31,17 @@ public class EmptyStatementBodyInspection extends BaseInspection {
    */
   public boolean m_reportEmptyBlocks = true;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "StatementWithEmptyBody";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("statement.with.empty.body.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("statement.with.empty.body.problem.descriptor");
   }
@@ -62,25 +62,25 @@ public class EmptyStatementBodyInspection extends BaseInspection {
   private class EmptyStatementVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitDoWhileStatement(@NotNull PsiDoWhileStatement statement) {
+    public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
       super.visitDoWhileStatement(statement);
       checkLoopStatement(statement);
     }
 
     @Override
-    public void visitWhileStatement(@NotNull PsiWhileStatement statement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       checkLoopStatement(statement);
     }
 
     @Override
-    public void visitForStatement(@NotNull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       checkLoopStatement(statement);
     }
 
     @Override
-    public void visitForeachStatement(@NotNull PsiForeachStatement statement) {
+    public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
       super.visitForeachStatement(statement);
       checkLoopStatement(statement);
     }
@@ -97,7 +97,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
     }
 
     @Override
-    public void visitIfStatement(@NotNull PsiIfStatement statement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       /*if (JspPsiUtil.isInJspFile(statement)) {
         return;

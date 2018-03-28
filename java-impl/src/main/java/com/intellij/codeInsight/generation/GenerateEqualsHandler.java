@@ -17,7 +17,8 @@ package com.intellij.codeInsight.generation;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.java.codeInsight.JavaCodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.generation.ui.GenerateEqualsWizard;
@@ -135,13 +136,13 @@ public class GenerateEqualsHandler extends GenerateMembersHandlerBase
 	}
 
 	@Override
-	protected boolean hasMembers(@NotNull PsiClass aClass)
+	protected boolean hasMembers(@Nonnull PsiClass aClass)
 	{
 		return hasNonStaticFields(aClass);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] originalMembers) throws IncorrectOperationException
 	{
 		Project project = aClass.getProject();

@@ -17,7 +17,7 @@ package com.siyeh.ipp.base;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public abstract class PsiElementEditorPredicate implements PsiElementPredicate {
   public abstract boolean satisfiedBy(PsiElement element, @Nullable Editor editor);

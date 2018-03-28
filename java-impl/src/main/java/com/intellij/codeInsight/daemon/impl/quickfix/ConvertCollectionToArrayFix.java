@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -41,7 +42,7 @@ public class ConvertCollectionToArrayFix implements IntentionAction
 	private final PsiExpression myCollectionExpression;
 	private final String myNewArrayText;
 
-	public ConvertCollectionToArrayFix(@NotNull PsiExpression collectionExpression, @NotNull PsiArrayType arrayType)
+	public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @Nonnull PsiArrayType arrayType)
 	{
 		myCollectionExpression = collectionExpression;
 
@@ -50,7 +51,7 @@ public class ConvertCollectionToArrayFix implements IntentionAction
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -58,7 +59,7 @@ public class ConvertCollectionToArrayFix implements IntentionAction
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -66,13 +67,13 @@ public class ConvertCollectionToArrayFix implements IntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return myCollectionExpression.isValid() && PsiManager.getInstance(project).isInProject(myCollectionExpression);
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 		String replacement = ParenthesesUtils.getText(myCollectionExpression, ParenthesesUtils.POSTFIX_PRECEDENCE) + ".toArray(" + myNewArrayText + ")";
@@ -85,7 +86,7 @@ public class ConvertCollectionToArrayFix implements IntentionAction
 		return true;
 	}
 
-	@NotNull
+	@Nonnull
 	private static String getArrayTypeText(PsiType componentType)
 	{
 		if(componentType instanceof PsiArrayType)

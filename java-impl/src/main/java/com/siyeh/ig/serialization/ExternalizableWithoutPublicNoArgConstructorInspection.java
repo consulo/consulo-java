@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.serialization;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.impl.quickfix.AddDefaultConstructorFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -42,13 +42,13 @@ import com.siyeh.ig.psiutils.ClassUtils;
 public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.problem.descriptor");
@@ -70,7 +70,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiMethod getNoArgConstructor(PsiClass aClass) {
     final PsiMethod[] constructors = aClass.getConstructors();
     for (PsiMethod constructor : constructors) {
@@ -85,7 +85,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   private static class MakeConstructorPublicFix extends InspectionGadgetsFix {
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.constructor.public");
     }
@@ -114,7 +114,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   private static class ExternalizableWithoutPublicNoArgConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isEnum() || aClass.isAnnotationType() || aClass instanceof PsiTypeParameter) {
         return;
       }

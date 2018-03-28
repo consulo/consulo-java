@@ -15,8 +15,8 @@
  */
 package com.intellij.analysis;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileStatusNotification;
@@ -39,12 +39,12 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
   protected abstract void analyzeClasses(final Project project, final AnalysisScope scope, ProgressIndicator indicator);
 
   @Override
-  protected void analyze(@NotNull final Project project, final AnalysisScope scope) {
+  protected void analyze(@Nonnull final Project project, final AnalysisScope scope) {
     FileDocumentManager.getInstance().saveAllDocuments();
 
     ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeBundle.message("analyzing.project"), true) {
       @Override
-      public void run(@NotNull final ProgressIndicator indicator) {
+      public void run(@Nonnull final ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
         indicator.setText(AnalysisScopeBundle.message("checking.class.files"));
 
@@ -85,7 +85,7 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
       }
 
       @Override
-      public void run(@NotNull final ProgressIndicator indicator) {
+      public void run(@Nonnull final ProgressIndicator indicator) {
         analyzeClasses(project, scope, indicator);
       }
     });

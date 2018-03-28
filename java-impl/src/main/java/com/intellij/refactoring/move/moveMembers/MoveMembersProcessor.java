@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.ide.util.EditorHelper;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -137,13 +137,13 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor
 		myCommandName = commandName.toString();
 	}
 
-	@NotNull
-	protected UsageViewDescriptor createUsageViewDescriptor(@NotNull UsageInfo[] usages)
+	@Nonnull
+	protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages)
 	{
 		return new MoveMemberViewDescriptor(PsiUtilCore.toPsiElementArray(myMembersToMove));
 	}
 
-	@NotNull
+	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		final List<UsageInfo> usagesList = new ArrayList<UsageInfo>();
@@ -176,7 +176,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor
 		return usageInfos;
 	}
 
-	protected void refreshElements(@NotNull PsiElement[] elements)
+	protected void refreshElements(@Nonnull PsiElement[] elements)
 	{
 		LOG.assertTrue(myMembersToMove.size() == elements.length);
 		myMembersToMove.clear();
@@ -198,7 +198,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor
 		return false;
 	}
 
-	protected void performRefactoring(@NotNull final UsageInfo[] usages)
+	protected void performRefactoring(@Nonnull final UsageInfo[] usages)
 	{
 		try
 		{
@@ -358,7 +358,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor
 		VisibilityUtil.fixVisibility(UsageViewUtil.toElements(infos), newMember, myNewVisibility);
 	}
 
-	protected boolean preprocessUsages(@NotNull Ref<UsageInfo[]> refUsages)
+	protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages)
 	{
 		final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
 		final UsageInfo[] usages = refUsages.get();
@@ -402,7 +402,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor
 	private static void analyzeConflictsOnUsages(UsageInfo[] usages,
 			Set<PsiMember> membersToMove,
 			String newVisibility,
-			@NotNull PsiClass targetClass,
+			@Nonnull PsiClass targetClass,
 			Map<PsiMember, PsiModifierList> modifierListCopies,
 			MultiMap<PsiElement, String> conflicts)
 	{

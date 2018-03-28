@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -29,13 +31,13 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class ManualArrayCopyInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "manual.array.copy.display.name");
@@ -47,7 +49,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "manual.array.copy.problem.descriptor");
@@ -73,7 +75,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("manual.array.copy.replace.quickfix");
     }
@@ -446,7 +448,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @NotNull PsiForStatement statement) {
+      @Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiStatement initialization = statement.getInitialization();
       if (!(initialization instanceof PsiDeclarationStatement)) {
@@ -549,9 +551,9 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     private static boolean expressionIsArrayCopy(
-      @Nullable PsiExpression expression,
-      @NotNull PsiVariable variable,
-      @Nullable PsiVariable variable2) {
+      @javax.annotation.Nullable PsiExpression expression,
+      @Nonnull PsiVariable variable,
+      @javax.annotation.Nullable PsiVariable variable2) {
       final PsiExpression strippedExpression =
         ParenthesesUtils.stripParentheses(expression);
       if (strippedExpression == null) {
@@ -602,7 +604,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     private static boolean areExpressionsCopyable(
-      @Nullable PsiExpression lhs, @Nullable PsiExpression rhs) {
+      @javax.annotation.Nullable PsiExpression lhs, @Nullable PsiExpression rhs) {
       if (lhs == null || rhs == null) {
         return false;
       }

@@ -18,9 +18,11 @@ package com.intellij.psi.impl.source.codeStyle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -42,7 +44,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 public class JavaReferenceAdjuster implements ReferenceAdjuster
 {
 	@Override
-	public ASTNode process(@NotNull ASTNode element,
+	public ASTNode process(@Nonnull ASTNode element,
 			boolean addImports,
 			boolean incompleteCode,
 			boolean useFqInJavadoc,
@@ -177,7 +179,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 	}
 
 	@Override
-	public ASTNode process(@NotNull ASTNode element, boolean addImports, boolean incompleteCode, Project project)
+	public ASTNode process(@Nonnull ASTNode element, boolean addImports, boolean incompleteCode, Project project)
 	{
 		final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
 		return process(element, addImports, incompleteCode, settings.USE_FQ_CLASS_NAMES_IN_JAVADOC,
@@ -217,7 +219,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 	}
 
 	@Override
-	public void processRange(@NotNull ASTNode element,
+	public void processRange(@Nonnull ASTNode element,
 			int startOffset,
 			int endOffset,
 			boolean useFqInJavadoc,
@@ -235,7 +237,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 	}
 
 	@Override
-	public void processRange(@NotNull ASTNode element, int startOffset, int endOffset, Project project)
+	public void processRange(@Nonnull ASTNode element, int startOffset, int endOffset, Project project)
 	{
 		final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
 		processRange(element, startOffset, endOffset, settings.USE_FQ_CLASS_NAMES_IN_JAVADOC,
@@ -293,12 +295,12 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 		}
 	}
 
-	@NotNull
-	private static ASTNode makeShortReference(@NotNull CompositeElement reference,
-			@NotNull PsiClass refClass,
+	@Nonnull
+	private static ASTNode makeShortReference(@Nonnull CompositeElement reference,
+			@Nonnull PsiClass refClass,
 			boolean addImports)
 	{
-		@NotNull final PsiJavaCodeReferenceElement psiReference = (PsiJavaCodeReferenceElement) reference.getPsi();
+		@Nonnull final PsiJavaCodeReferenceElement psiReference = (PsiJavaCodeReferenceElement) reference.getPsi();
 		final PsiQualifiedReferenceElement reference1 = getClassReferenceToShorten(refClass, addImports, psiReference);
 		if(reference1 != null)
 		{
@@ -308,9 +310,9 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 	}
 
 	@Nullable
-	public static PsiQualifiedReferenceElement getClassReferenceToShorten(@NotNull final PsiClass refClass,
+	public static PsiQualifiedReferenceElement getClassReferenceToShorten(@Nonnull final PsiClass refClass,
 			final boolean addImports,
-			@NotNull final PsiQualifiedReferenceElement reference)
+			@Nonnull final PsiQualifiedReferenceElement reference)
 	{
 		PsiClass parentClass = refClass.getContainingClass();
 		if(parentClass != null)
@@ -346,7 +348,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 		return reference;
 	}
 
-	private static boolean isSafeToShortenReference(@NotNull PsiElement psiReference, @NotNull PsiClass refClass)
+	private static boolean isSafeToShortenReference(@Nonnull PsiElement psiReference, @Nonnull PsiClass refClass)
 	{
 		return isSafeToShortenReference(refClass.getName(), psiReference, refClass);
 	}
@@ -373,7 +375,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	private static ASTNode replaceReferenceWithShort(PsiQualifiedReferenceElement reference)
 	{
 		ASTNode node = reference.getNode();
@@ -382,7 +384,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster
 		return node;
 	}
 
-	private static void deQualifyImpl(@NotNull CompositeElement reference)
+	private static void deQualifyImpl(@Nonnull CompositeElement reference)
 	{
 		ASTNode qualifier = reference.findChildByRole(ChildRole.QUALIFIER);
 		if(qualifier != null)

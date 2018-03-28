@@ -19,8 +19,8 @@ package consulo.json;
 import java.util.Collection;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -65,14 +65,14 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getId()
 	{
 		return "GSON";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPsiElementName()
 	{
@@ -80,9 +80,9 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	}
 
 	@RequiredReadAction
-	@NotNull
+	@Nonnull
 	@Override
-	public String getIdFromPsiElement(@NotNull PsiClass psiClass)
+	public String getIdFromPsiElement(@Nonnull PsiClass psiClass)
 	{
 		return psiClass.getQualifiedName();
 	}
@@ -90,15 +90,15 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	@RequiredReadAction
 	@Nullable
 	@Override
-	public PsiClass getPsiElementById(@NotNull String s, @NotNull Project project)
+	public PsiClass getPsiElementById(@Nonnull String s, @Nonnull Project project)
 	{
 		return JavaPsiFacade.getInstance(project).findClass(s, GlobalSearchScope.allScope(project));
 	}
 
 	@RequiredDispatchThread
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public PsiClass chooseElement(@NotNull Project project)
+	public PsiClass chooseElement(@Nonnull Project project)
 	{
 		TreeClassChooser classChooser = TreeClassChooserFactory.getInstance(project).createAllProjectScopeChooser("Choose class");
 		classChooser.showDialog();
@@ -107,13 +107,13 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 
 	@RequiredReadAction
 	@Override
-	public boolean isAvailable(@NotNull Project project)
+	public boolean isAvailable(@Nonnull Project project)
 	{
 		return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class) && getPsiElementById("com.google.gson.Gson", project) != null;
 	}
 
 	@Override
-	public void fillRootObject(@NotNull PsiClass psiClass, @NotNull JsonObjectDescriptor jsonObjectDescriptor)
+	public void fillRootObject(@Nonnull PsiClass psiClass, @Nonnull JsonObjectDescriptor jsonObjectDescriptor)
 	{
 		PropertyType type = toType(psiClass.getProject(), null, new PsiImmediateClassType(psiClass, PsiSubstitutor.EMPTY));
 
@@ -127,7 +127,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	}
 
 	@Nullable
-	private static PropertyType toType(@NotNull Project project, @Nullable PsiField field, @NotNull PsiType type)
+	private static PropertyType toType(@Nonnull Project project, @javax.annotation.Nullable PsiField field, @Nonnull PsiType type)
 	{
 		if(PsiType.BYTE.equals(type))
 		{
@@ -283,7 +283,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		return null;
 	}
 
-	private static void addIfNotNull(@NotNull JsonObjectDescriptor objectDescriptor, @Nullable PropertyType propertyType, @Nullable PsiField navElement)
+	private static void addIfNotNull(@Nonnull JsonObjectDescriptor objectDescriptor, @javax.annotation.Nullable PropertyType propertyType, @Nullable PsiField navElement)
 	{
 		if(propertyType == null)
 		{
@@ -321,8 +321,8 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		}
 	}
 
-	@NotNull
-	private static String getPropertyNameFromField(@NotNull PsiField field)
+	@Nonnull
+	private static String getPropertyNameFromField(@Nonnull PsiField field)
 	{
 		PsiAnnotation annotation = AnnotationUtil.findAnnotation(field, "com.google.gson.annotations.SerializedName");
 		if(annotation != null)

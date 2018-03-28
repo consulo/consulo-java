@@ -24,8 +24,8 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.descriptors.*;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -146,7 +146,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     }
   }
 
-  public void setContainer(@NotNull ConfigFileContainerImpl container) {
+  public void setContainer(@Nonnull ConfigFileContainerImpl container) {
     LOG.assertTrue(myContainer == null);
     myContainer = container;
     myContainer.updateDescriptors(myConfigFiles);

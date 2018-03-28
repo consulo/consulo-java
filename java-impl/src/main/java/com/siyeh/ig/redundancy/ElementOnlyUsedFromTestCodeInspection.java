@@ -25,8 +25,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class ElementOnlyUsedFromTestCodeInspection
   extends BaseGlobalInspection {
@@ -34,7 +33,7 @@ public class ElementOnlyUsedFromTestCodeInspection
   private static final Key<Boolean> ONLY_USED_FROM_TEST_CODE =
     Key.create("ONLY_USED_FROM_TEST_CODE");
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
@@ -42,12 +41,12 @@ public class ElementOnlyUsedFromTestCodeInspection
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public RefGraphAnnotator getAnnotator(RefManager refManager) {
     return new ElementOnlyUsedFromTestCodeAnnotator();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity, AnalysisScope scope, InspectionManager manager,
@@ -103,7 +102,7 @@ public class ElementOnlyUsedFromTestCodeInspection
     return null;
   }
 
-  private static boolean isInsideTestClass(@NotNull PsiElement e) {
+  private static boolean isInsideTestClass(@Nonnull PsiElement e) {
     final PsiClass aClass = getTopLevelParentClass(e);
     return aClass != null && TestFrameworks.getInstance().isTestClass(aClass);
   }
@@ -116,7 +115,7 @@ public class ElementOnlyUsedFromTestCodeInspection
            rootManager.getFileIndex().isInTestSourceContent(file);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiClass getTopLevelParentClass(PsiElement e) {
     PsiClass result = null;
     PsiElement parent = e.getParent();

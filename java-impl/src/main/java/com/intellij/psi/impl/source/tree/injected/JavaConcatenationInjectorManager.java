@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source.tree.injected;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.injection.ConcatenationAwareInjector;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
@@ -57,13 +57,13 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 		concatPoint.addExtensionPointListener(new ExtensionPointListener<ConcatenationAwareInjector>()
 		{
 			@Override
-			public void extensionAdded(@NotNull ConcatenationAwareInjector injector, @Nullable PluginDescriptor pluginDescriptor)
+			public void extensionAdded(@Nonnull ConcatenationAwareInjector injector, @Nullable PluginDescriptor pluginDescriptor)
 			{
 				registerConcatenationInjector(injector);
 			}
 
 			@Override
-			public void extensionRemoved(@NotNull ConcatenationAwareInjector injector, @Nullable PluginDescriptor pluginDescriptor)
+			public void extensionRemoved(@Nonnull ConcatenationAwareInjector injector, @Nullable PluginDescriptor pluginDescriptor)
 			{
 				unregisterConcatenationInjector(injector);
 			}
@@ -89,7 +89,7 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 		return myModificationCounter;
 	}
 
-	private static Pair<PsiElement, PsiElement[]> computeAnchorAndOperandsImpl(@NotNull PsiElement context)
+	private static Pair<PsiElement, PsiElement[]> computeAnchorAndOperandsImpl(@Nonnull PsiElement context)
 	{
 		PsiElement element = context;
 		PsiElement parent = context.getParent();
@@ -124,8 +124,8 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 		return Pair.create(anchor, operands);
 	}
 
-	private static MultiHostRegistrarImpl doCompute(@NotNull PsiFile containingFile, @NotNull Project project, @NotNull PsiElement anchor,
-			@NotNull PsiElement[] operands)
+	private static MultiHostRegistrarImpl doCompute(@Nonnull PsiFile containingFile, @Nonnull Project project, @Nonnull PsiElement anchor,
+			@Nonnull PsiElement[] operands)
 	{
 		MultiHostRegistrarImpl registrar = new MultiHostRegistrarImpl(project, containingFile, anchor);
 		JavaConcatenationInjectorManager concatenationInjectorManager = getInstance(project);
@@ -159,7 +159,7 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 		}
 
 		@Override
-		public void injectLanguages(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context)
+		public void injectLanguages(@Nonnull MultiHostRegistrar registrar, @Nonnull PsiElement context)
 		{
 			if(myManager.myConcatenationInjectors.isEmpty())
 			{
@@ -239,7 +239,7 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 			}
 		}
 
-		protected abstract Pair<PsiElement, PsiElement[]> computeAnchorAndOperands(@NotNull PsiElement context);
+		protected abstract Pair<PsiElement, PsiElement[]> computeAnchorAndOperands(@Nonnull PsiElement context);
 	}
 
 	public static class Concatenation2InjectorAdapter extends BaseConcatenation2InjectorAdapter implements MultiHostInjector
@@ -251,7 +251,7 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 		}
 
 		@Override
-		public Pair<PsiElement, PsiElement[]> computeAnchorAndOperands(@NotNull PsiElement context)
+		public Pair<PsiElement, PsiElement[]> computeAnchorAndOperands(@Nonnull PsiElement context)
 		{
 			return computeAnchorAndOperandsImpl(context);
 		}
@@ -259,13 +259,13 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 
 	private final List<ConcatenationAwareInjector> myConcatenationInjectors = ContainerUtil.createLockFreeCopyOnWriteList();
 
-	public void registerConcatenationInjector(@NotNull ConcatenationAwareInjector injector)
+	public void registerConcatenationInjector(@Nonnull ConcatenationAwareInjector injector)
 	{
 		myConcatenationInjectors.add(injector);
 		concatenationInjectorsChanged();
 	}
 
-	public boolean unregisterConcatenationInjector(@NotNull ConcatenationAwareInjector injector)
+	public boolean unregisterConcatenationInjector(@Nonnull ConcatenationAwareInjector injector)
 	{
 		boolean removed = myConcatenationInjectors.remove(injector);
 		concatenationInjectorsChanged();

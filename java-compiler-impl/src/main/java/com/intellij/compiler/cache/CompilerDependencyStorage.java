@@ -24,7 +24,7 @@ import com.intellij.util.io.KeyDescriptor;
 import com.intellij.util.io.PersistentHashMap;
 import gnu.trove.TIntHashSet;
 import gnu.trove.TIntProcedure;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.*;
 
@@ -67,7 +67,7 @@ public class CompilerDependencyStorage<Key> implements Flushable, Disposable {
     });
 
     myCache = new SLRUCache<Key, IntSet>(cacheSize * 2, cacheSize) {
-      @NotNull
+      @Nonnull
       public IntSet createValue(Key key) {
         return new IntSet(key);
       }

@@ -17,7 +17,6 @@ package com.intellij.psi.filters;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,7 +29,7 @@ public class FilterUtil{
   private FilterUtil() {
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiType getTypeByElement(PsiElement element, PsiElement context){
     //if(!element.isValid()) return null;
     if(element instanceof PsiType){
@@ -86,7 +85,7 @@ public class FilterUtil{
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiElement getPreviousElement(final PsiElement element, boolean skipReference){
     PsiElement prev = element;
     if(element != null){

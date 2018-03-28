@@ -23,7 +23,8 @@ import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_STREAM_STREAM;
 import java.util.Collection;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -104,10 +105,10 @@ class CollectConversion
 		private final String myLookupString;
 		private final String myTypeText;
 		private final String myMethodName;
-		@NotNull
+		@Nonnull
 		private final PsiType myExpectedType;
 
-		MyLookupElement(String methodName, @NotNull PsiType expectedType)
+		MyLookupElement(String methodName, @Nonnull PsiType expectedType)
 		{
 			myMethodName = methodName;
 			myExpectedType = expectedType;
@@ -115,7 +116,7 @@ class CollectConversion
 			myTypeText = myExpectedType.getPresentableText();
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public String getLookupString()
 		{
@@ -158,7 +159,7 @@ class CollectConversion
 			JavaCodeStyleManager.getInstance(context.getProject()).shortenClassReferences(args[0]);
 		}
 
-		@NotNull
+		@Nonnull
 		private String getInsertString()
 		{
 			return "collect(" + JAVA_UTIL_STREAM_COLLECTORS + "." + myMethodName + "())";

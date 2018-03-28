@@ -17,7 +17,8 @@ package com.intellij.codeInsight.generation;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
@@ -34,7 +35,7 @@ import com.intellij.openapi.components.StoragePathMacros;
 		})
 public class SetterTemplatesManager extends TemplatesManager
 {
-	@NotNull
+	@Nonnull
 	public static SetterTemplatesManager getInstance()
 	{
 		return ServiceManager.getService(SetterTemplatesManager.class);

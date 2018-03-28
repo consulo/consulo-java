@@ -15,7 +15,6 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.DumbService;
@@ -33,7 +32,7 @@ public abstract class SourcePositionHighlighter
 
 	public abstract TextRange getHighlightRange(SourcePosition sourcePosition);
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static TextRange getHighlightRangeFor(SourcePosition sourcePosition)
 	{
 		DumbService dumbService = DumbService.getInstance(sourcePosition.getFile().getProject());

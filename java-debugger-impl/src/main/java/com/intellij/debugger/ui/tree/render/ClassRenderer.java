@@ -20,10 +20,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
@@ -228,7 +228,7 @@ public class ClassRenderer extends NodeRendererImpl
 		builder.setChildren(children);
 	}
 
-	@NotNull
+	@Nonnull
 	protected FieldDescriptor createFieldDescriptor(ValueDescriptorImpl parentDescriptor,
 			NodeDescriptorFactory nodeDescriptorFactory,
 			ObjectReference objRef,
@@ -238,7 +238,7 @@ public class ClassRenderer extends NodeRendererImpl
 		return nodeDescriptorFactory.getFieldDescriptor(parentDescriptor, objRef, field);
 	}
 
-	protected boolean shouldDisplay(EvaluationContext context, @NotNull ObjectReference objInstance, @NotNull Field field)
+	protected boolean shouldDisplay(EvaluationContext context, @Nonnull ObjectReference objInstance, @Nonnull Field field)
 	{
 		final boolean isSynthetic = DebuggerUtils.isSynthetic(field);
 		if(!SHOW_SYNTHETICS && isSynthetic)
@@ -349,8 +349,8 @@ public class ClassRenderer extends NodeRendererImpl
 		LOG.assertTrue(false);
 	}
 
-	@Nullable
-	public static String getEnumConstantName(@NotNull ObjectReference objRef, ClassType classType)
+	@javax.annotation.Nullable
+	public static String getEnumConstantName(@Nonnull ObjectReference objRef, ClassType classType)
 	{
 		do
 		{

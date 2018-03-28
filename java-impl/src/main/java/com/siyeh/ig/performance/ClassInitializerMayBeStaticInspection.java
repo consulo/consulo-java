@@ -16,8 +16,9 @@
 
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
@@ -44,7 +45,7 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("class.initializer.may.be.static.problem.descriptor");
@@ -58,7 +59,7 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection
 
 	@Override
 	@Nls
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("class.initializer.may.be.static.display.name");

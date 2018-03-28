@@ -20,8 +20,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.dataFlow.HardcodedContracts;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -49,7 +50,7 @@ import one.util.streamex.StreamEx;
 public class NullableNotNullManagerImpl extends NullableNotNullManager implements PersistentStateComponent<Element>
 {
 	public static final List<String> DEFAULT_NOT_NULLS = Arrays.asList(
-			NotNull.class.getName(), "javax.annotation.Nonnull",
+			Nonnull.class.getName(), "javax.annotation.Nonnull",
 			"edu.umd.cs.findbugs.annotations.NonNull", "android.support.annotation.NonNull"
 	);
 
@@ -144,7 +145,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 		});
 	}
 
-	private static Nullness getNickNamedNullability(@NotNull PsiClass psiClass)
+	private static Nullness getNickNamedNullability(@Nonnull PsiClass psiClass)
 	{
 		if(AnnotationUtil.findAnnotation(psiClass, TYPE_QUALIFIER_NICKNAME) == null)
 		{
@@ -155,7 +156,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 		return nonNull != null ? extractNullityFromWhenValue(nonNull) : Nullness.UNKNOWN;
 	}
 
-	@NotNull
+	@Nonnull
 	private static Nullness extractNullityFromWhenValue(PsiAnnotation nonNull)
 	{
 		PsiAnnotationMemberValue when = nonNull.findAttributeValue("when");
@@ -179,7 +180,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 		return StreamEx.of(getAllNullabilityNickNames()).filter(c -> getNickNamedNullability(c) == nullness).map(PsiClass::getQualifiedName).toList();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected List<String> getNullablesWithNickNames()
 	{
@@ -187,7 +188,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 				PsiModificationTracker.MODIFICATION_COUNT));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected List<String> getNotNullsWithNickNames()
 	{

@@ -24,9 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
@@ -56,7 +58,7 @@ public class LambdaUtil
 	public static final ThreadLocal<Map<PsiElement, PsiType>> ourFunctionTypes = new ThreadLocal<Map<PsiElement, PsiType>>();
 	private static final Logger LOG = Logger.getInstance("#" + LambdaUtil.class.getName());
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiType getFunctionalInterfaceReturnType(PsiFunctionalExpression expr)
 	{
 		return getFunctionalInterfaceReturnType(expr.getFunctionalInterfaceType());
@@ -80,8 +82,8 @@ public class LambdaUtil
 	}
 
 	@Contract("null -> null")
-	@Nullable
-	public static PsiMethod getFunctionalInterfaceMethod(@Nullable PsiType functionalInterfaceType)
+	@javax.annotation.Nullable
+	public static PsiMethod getFunctionalInterfaceMethod(@javax.annotation.Nullable PsiType functionalInterfaceType)
 	{
 		return getFunctionalInterfaceMethod(PsiUtil.resolveGenericsClassInType(functionalInterfaceType));
 	}
@@ -97,7 +99,7 @@ public class LambdaUtil
 	}
 
 	@Nullable
-	public static PsiMethod getFunctionalInterfaceMethod(@NotNull PsiClassType.ClassResolveResult result)
+	public static PsiMethod getFunctionalInterfaceMethod(@Nonnull PsiClassType.ClassResolveResult result)
 	{
 		return getFunctionalInterfaceMethod(result.getElement());
 	}
@@ -114,7 +116,7 @@ public class LambdaUtil
 		return null;
 	}
 
-	public static PsiSubstitutor getSubstitutor(@NotNull PsiMethod method, @NotNull PsiClassType.ClassResolveResult resolveResult)
+	public static PsiSubstitutor getSubstitutor(@Nonnull PsiMethod method, @Nonnull PsiClassType.ClassResolveResult resolveResult)
 	{
 		final PsiClass derivedClass = resolveResult.getElement();
 		LOG.assertTrue(derivedClass != null);
@@ -216,7 +218,7 @@ public class LambdaUtil
 		{
 			return CachedValuesManager.getCachedValue(psiClass, new CachedValueProvider<MethodSignature>()
 			{
-				@Nullable
+				@javax.annotation.Nullable
 				@Override
 				public Result<MethodSignature> compute()
 				{
@@ -233,7 +235,7 @@ public class LambdaUtil
 	}
 
 	@Nullable
-	private static MethodSignature calcFunction(@NotNull PsiClass psiClass)
+	private static MethodSignature calcFunction(@Nonnull PsiClass psiClass)
 	{
 		if(hasManyOwnAbstractMethods(psiClass) || hasManyInheritedAbstractMethods(psiClass))
 		{
@@ -244,7 +246,7 @@ public class LambdaUtil
 		return functions != null && functions.size() == 1 ? functions.get(0) : null;
 	}
 
-	private static boolean hasManyOwnAbstractMethods(@NotNull PsiClass psiClass)
+	private static boolean hasManyOwnAbstractMethods(@Nonnull PsiClass psiClass)
 	{
 		int abstractCount = 0;
 		for(PsiMethod method : psiClass.getMethods())
@@ -267,7 +269,7 @@ public class LambdaUtil
 		return "equals".equals(methodName) || "hashCode".equals(methodName) || "toString".equals(methodName);
 	}
 
-	private static boolean hasManyInheritedAbstractMethods(@NotNull PsiClass psiClass)
+	private static boolean hasManyInheritedAbstractMethods(@Nonnull PsiClass psiClass)
 	{
 		final Set<String> abstractNames = ContainerUtil.newHashSet();
 		final Set<String> defaultNames = ContainerUtil.newHashSet();
@@ -691,7 +693,7 @@ public class LambdaUtil
 		return conjunct;
 	}
 
-	private static PsiType getFunctionalInterfaceTypeByContainingLambda(@NotNull PsiLambdaExpression parentLambda)
+	private static PsiType getFunctionalInterfaceTypeByContainingLambda(@Nonnull PsiLambdaExpression parentLambda)
 	{
 		final PsiType parentInterfaceType = parentLambda.getFunctionalInterfaceType();
 		return parentInterfaceType != null ? getFunctionalInterfaceReturnType(parentInterfaceType) : null;
@@ -759,19 +761,19 @@ public class LambdaUtil
 		return result;
 	}
 
-	public static boolean isValidQualifier4InterfaceStaticMethodCall(@NotNull PsiMethod method,
-			@NotNull PsiReferenceExpression methodReferenceExpression,
+	public static boolean isValidQualifier4InterfaceStaticMethodCall(@Nonnull PsiMethod method,
+			@Nonnull PsiReferenceExpression methodReferenceExpression,
 			@Nullable PsiElement scope,
-			@NotNull LanguageLevel languageLevel)
+			@Nonnull LanguageLevel languageLevel)
 	{
 		return getInvalidQualifier4StaticInterfaceMethodMessage(method, methodReferenceExpression, scope, languageLevel) == null;
 	}
 
 	@Nullable
-	public static String getInvalidQualifier4StaticInterfaceMethodMessage(@NotNull PsiMethod method,
-			@NotNull PsiReferenceExpression methodReferenceExpression,
+	public static String getInvalidQualifier4StaticInterfaceMethodMessage(@Nonnull PsiMethod method,
+			@Nonnull PsiReferenceExpression methodReferenceExpression,
 			@Nullable PsiElement scope,
-			@NotNull LanguageLevel languageLevel)
+			@Nonnull LanguageLevel languageLevel)
 	{
 		final PsiExpression qualifierExpression = methodReferenceExpression.getQualifierExpression();
 		final PsiClass containingClass = method.getContainingClass();
@@ -891,7 +893,7 @@ public class LambdaUtil
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	public static Map<PsiElement, PsiType> getFunctionalTypeMap()
 	{
 		Map<PsiElement, PsiType> map = ourFunctionTypes.get();
@@ -1088,7 +1090,7 @@ public class LambdaUtil
 		return top;
 	}
 
-	public static PsiCall copyTopLevelCall(@NotNull PsiCall call)
+	public static PsiCall copyTopLevelCall(@Nonnull PsiCall call)
 	{
 		PsiCall copyCall = (PsiCall) call.copy();
 		if(call instanceof PsiEnumConstant)
@@ -1169,7 +1171,7 @@ public class LambdaUtil
 	 * @param expression lambda body (expression)
 	 * @return lambda text
 	 */
-	public static String createLambda(@NotNull PsiVariable variable, @NotNull PsiExpression expression)
+	public static String createLambda(@Nonnull PsiVariable variable, @Nonnull PsiExpression expression)
 	{
 		return variable.getName() + " -> " + expression.getText();
 	}
@@ -1253,7 +1255,7 @@ public class LambdaUtil
 			return true;
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public Boolean visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType)
 		{

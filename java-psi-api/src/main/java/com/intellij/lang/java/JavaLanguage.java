@@ -17,7 +17,7 @@ package com.intellij.lang.java;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.Language;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.lang.LanguageVersion;
@@ -40,7 +40,7 @@ public class JavaLanguage extends Language
 		return "Java";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public LanguageVersion[] findVersions()
 	{

@@ -17,7 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import static com.intellij.patterns.StandardPatterns.or;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiJavaPatterns;
 import com.intellij.psi.PsiClass;
@@ -40,7 +41,7 @@ class ExpectedAnnotationsProvider implements CompletionProvider
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
 	{
 		final PsiElement element = parameters.getPosition();
 

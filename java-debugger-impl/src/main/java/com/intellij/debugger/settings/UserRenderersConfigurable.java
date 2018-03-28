@@ -19,6 +19,7 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +30,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.ui.tree.render.CompoundNodeRenderer;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
@@ -106,7 +106,7 @@ public final class UserRenderersConfigurable extends JPanel implements Configura
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JComponent getComponent()
 	{
 		return this;
@@ -127,7 +127,7 @@ public final class UserRenderersConfigurable extends JPanel implements Configura
 		myRendererChooser.addListSelectionListener(new ListSelectionListener()
 		{
 			@Override
-			public void valueChanged(@NotNull ListSelectionEvent e)
+			public void valueChanged(@Nonnull ListSelectionEvent e)
 			{
 				if(!e.getValueIsAdjusting())
 				{
@@ -175,7 +175,7 @@ public final class UserRenderersConfigurable extends JPanel implements Configura
 	}
 
 	@Override
-	public void apply(@NotNull NodeRendererSettings settings)
+	public void apply(@Nonnull NodeRendererSettings settings)
 	{
 		myRendererDataConfigurable.apply();
 		flushTo(settings.getCustomRenderers());
@@ -195,7 +195,7 @@ public final class UserRenderersConfigurable extends JPanel implements Configura
 	}
 
 	@Override
-	public boolean isModified(@NotNull NodeRendererSettings settings)
+	public boolean isModified(@Nonnull NodeRendererSettings settings)
 	{
 		if(myRendererDataConfigurable.isModified())
 		{
@@ -212,7 +212,7 @@ public final class UserRenderersConfigurable extends JPanel implements Configura
 	}
 
 	@Override
-	public void reset(@NotNull NodeRendererSettings settings)
+	public void reset(@Nonnull NodeRendererSettings settings)
 	{
 		myRendererChooser.removeAllElements();
 		final RendererConfiguration rendererConfiguration = settings.getCustomRenderers();

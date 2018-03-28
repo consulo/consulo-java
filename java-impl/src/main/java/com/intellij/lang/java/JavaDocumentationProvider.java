@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
 import com.intellij.codeInsight.documentation.PlatformDocumentationUtil;
@@ -170,7 +170,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 		return aPackage.getQualifiedName();
 	}
 
-	private static void generateOrderEntryAndPackageInfo(StringBuilder buffer, @NotNull PsiElement element)
+	private static void generateOrderEntryAndPackageInfo(StringBuilder buffer, @Nonnull PsiElement element)
 	{
 		PsiFile file = element.getContainingFile();
 
@@ -466,7 +466,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
 	@Nullable
 	@Override
-	public Pair<PsiElement, PsiComment> parseContext(@NotNull PsiElement startPoint)
+	public Pair<PsiElement, PsiComment> parseContext(@Nonnull PsiElement startPoint)
 	{
 		for(PsiElement e = startPoint; e != null; e = e.getParent())
 		{
@@ -675,35 +675,35 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 		return null;
 	}
 
-	@Nullable
-	public static String generateExternalJavadoc(@NotNull final PsiElement element)
+	@javax.annotation.Nullable
+	public static String generateExternalJavadoc(@Nonnull final PsiElement element)
 	{
 		List<String> docURLs = getExternalJavaDocUrl(element);
 		return generateExternalJavadoc(element, docURLs);
 	}
 
 	@Nullable
-	public static String generateExternalJavadoc(@NotNull final PsiElement element, @Nullable List<String> docURLs)
+	public static String generateExternalJavadoc(@Nonnull final PsiElement element, @Nullable List<String> docURLs)
 	{
 		final JavaDocInfoGenerator javaDocInfoGenerator = new JavaDocInfoGenerator(element.getProject(), element);
 		return generateExternalJavadoc(javaDocInfoGenerator, docURLs);
 	}
 
 	@Nullable
-	public static String generateExternalJavadoc(@NotNull final PsiElement element, @NotNull JavaDocInfoGenerator generator)
+	public static String generateExternalJavadoc(@Nonnull final PsiElement element, @Nonnull JavaDocInfoGenerator generator)
 	{
 		final List<String> docURLs = getExternalJavaDocUrl(element);
 		return generateExternalJavadoc(generator, docURLs);
 	}
 
 	@Nullable
-	private static String generateExternalJavadoc(@NotNull JavaDocInfoGenerator generator, @Nullable List<String> docURLs)
+	private static String generateExternalJavadoc(@Nonnull JavaDocInfoGenerator generator, @Nullable List<String> docURLs)
 	{
 		return JavaDocExternalFilter.filterInternalDocInfo(generator.generateDocInfo(docURLs));
 	}
 
 	@Nullable
-	private static String fetchExternalJavadoc(final PsiElement element, String fromUrl, @NotNull JavaDocExternalFilter filter)
+	private static String fetchExternalJavadoc(final PsiElement element, String fromUrl, @Nonnull JavaDocExternalFilter filter)
 	{
 		try
 		{
@@ -878,7 +878,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 	}
 
 	@Nullable
-	public static List<String> findUrlForClass(@NotNull PsiClass aClass)
+	public static List<String> findUrlForClass(@Nonnull PsiClass aClass)
 	{
 		String qName = aClass.getQualifiedName();
 		if(qName == null)
@@ -913,7 +913,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 	}
 
 	@Nullable
-	public static List<String> findUrlForVirtualFile(@NotNull Project project, @NotNull VirtualFile virtualFile, @NotNull String relPath)
+	public static List<String> findUrlForVirtualFile(@Nonnull Project project, @Nonnull VirtualFile virtualFile, @Nonnull String relPath)
 	{
 		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 		Module module = fileIndex.getModuleForFile(virtualFile);
@@ -943,7 +943,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static List<String> findUrlForPackage(PsiPackage aPackage)
 	{
 		String qName = aPackage.getQualifiedName();
@@ -990,7 +990,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
 	@Nullable
 	@Override
-	public PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement)
+	public PsiElement getCustomDocumentationElement(@Nonnull Editor editor, @Nonnull PsiFile file, @javax.annotation.Nullable PsiElement contextElement)
 	{
 		PsiDocComment docComment = PsiTreeUtil.getParentOfType(contextElement, PsiDocComment.class, false);
 		if(docComment != null && JavaDocUtil.isInsidePackageInfo(docComment))
@@ -1009,7 +1009,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 		return fetchExternalJavadoc(element, docURLs, new JavaDocExternalFilter(project));
 	}
 
-	public static String fetchExternalJavadoc(PsiElement element, List<String> docURLs, @NotNull JavaDocExternalFilter docFilter)
+	public static String fetchExternalJavadoc(PsiElement element, List<String> docURLs, @Nonnull JavaDocExternalFilter docFilter)
 	{
 		if(docURLs != null)
 		{

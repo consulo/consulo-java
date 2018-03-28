@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.smartPointers;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.ClassTypePointerFactory;
@@ -37,9 +37,9 @@ public class PsiClassReferenceTypePointerFactory implements ClassTypePointerFact
 {
 	private static final Logger LOG = Logger.getInstance(PsiClassReferenceTypePointerFactory.class);
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	public SmartTypePointer createClassTypePointer(@NotNull PsiClassType classType, @NotNull Project project)
+	public SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project)
 	{
 		if(classType instanceof PsiClassReferenceType)
 		{
@@ -55,7 +55,7 @@ public class PsiClassReferenceTypePointerFactory implements ClassTypePointerFact
 		private final String myReferenceText;
 		private final Project myProject;
 
-		ClassReferenceTypePointer(@NotNull PsiClassReferenceType type, Project project)
+		ClassReferenceTypePointer(@Nonnull PsiClassReferenceType type, Project project)
 		{
 			super(type);
 			myProject = project;

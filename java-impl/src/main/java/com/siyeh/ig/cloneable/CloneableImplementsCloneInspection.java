@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CloneUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,19 +37,19 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
   public boolean m_ignoreCloneableDueToInheritance = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CloneableClassWithoutClone";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("cloneable.class.without.clone.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("cloneable.class.without.clone.problem.descriptor");
   }
@@ -66,7 +66,7 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
   }
 
   private static class CreateCloneMethodFix extends InspectionGadgetsFix {
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("cloneable.class.without.clone.quickfix");
@@ -98,7 +98,7 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
   private class CloneableImplementsCloneVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;

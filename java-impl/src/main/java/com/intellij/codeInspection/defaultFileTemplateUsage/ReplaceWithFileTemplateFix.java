@@ -17,20 +17,20 @@ package com.intellij.codeInspection.defaultFileTemplateUsage;
 
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.InspectionsBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author cdr
  */
 public abstract class ReplaceWithFileTemplateFix implements LocalQuickFix {
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionsBundle.message("default.file.template.replace.with.actual.file.template");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getName();
   }

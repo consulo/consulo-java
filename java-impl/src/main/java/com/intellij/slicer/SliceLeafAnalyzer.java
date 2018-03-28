@@ -38,7 +38,7 @@ import com.intellij.util.containers.ConcurrentHashSet;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FactoryMap;
 import gnu.trove.TObjectHashingStrategy;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -97,9 +97,9 @@ public class SliceLeafAnalyzer {
     return filtered;
   }
 
-  private static void groupByValues(@NotNull Collection<PsiElement> leaves,
-                                    @NotNull SliceRootNode oldRoot,
-                                    @NotNull Map<SliceNode, Collection<PsiElement>> map) {
+  private static void groupByValues(@Nonnull Collection<PsiElement> leaves,
+                                    @Nonnull SliceRootNode oldRoot,
+                                    @Nonnull Map<SliceNode, Collection<PsiElement>> map) {
     assert oldRoot.myCachedChildren.size() == 1;
     SliceRootNode root = createTreeGroupedByValues(leaves, oldRoot, map);
 
@@ -109,7 +109,7 @@ public class SliceLeafAnalyzer {
     SliceManager.getInstance(root.getProject()).createToolWindow(true, root, true, description);
   }
 
-  @NotNull
+  @Nonnull
   public static SliceRootNode createTreeGroupedByValues(Collection<PsiElement> leaves, SliceRootNode oldRoot, final Map<SliceNode, Collection<PsiElement>> map) {
     SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
     SliceRootNode root = oldRoot.copy();
@@ -143,7 +143,7 @@ public class SliceLeafAnalyzer {
     return root;
   }
 
-  public static void startAnalyzeValues(@NotNull final AbstractTreeStructure treeStructure, @NotNull final Runnable finish) {
+  public static void startAnalyzeValues(@Nonnull final AbstractTreeStructure treeStructure, @Nonnull final Runnable finish) {
     final SliceRootNode root = (SliceRootNode)treeStructure.getRootElement();
     final Ref<Collection<PsiElement>> leafExpressions = Ref.create(null);
 
@@ -151,7 +151,7 @@ public class SliceLeafAnalyzer {
 
     ProgressManager.getInstance().run(new Task.Backgroundable(root.getProject(), "Expanding all nodes... (may very well take the whole day)", true) {
       @Override
-      public void run(@NotNull final ProgressIndicator indicator) {
+      public void run(@Nonnull final ProgressIndicator indicator) {
         Collection<PsiElement> l = calcLeafExpressions(root, treeStructure, map);
         leafExpressions.set(l);
       }
@@ -199,12 +199,12 @@ public class SliceLeafAnalyzer {
     private final AbstractTreeStructure myTreeStructure;
     // use tree structure because it's setting 'parent' fields in the process
 
-    SliceNodeGuide(@NotNull AbstractTreeStructure treeStructure) {
+    SliceNodeGuide(@Nonnull AbstractTreeStructure treeStructure) {
       myTreeStructure = treeStructure;
     }
 
     @Override
-    public SliceNode getNextSibling(@NotNull SliceNode element) {
+    public SliceNode getNextSibling(@Nonnull SliceNode element) {
       AbstractTreeNode parent = element.getParent();
       if (parent == null) return null;
 
@@ -212,20 +212,20 @@ public class SliceLeafAnalyzer {
     }
 
     @Override
-    public SliceNode getPrevSibling(@NotNull SliceNode element) {
+    public SliceNode getPrevSibling(@Nonnull SliceNode element) {
       AbstractTreeNode parent = element.getParent();
       if (parent == null) return null;
       return element.getPrev((List)parent.getChildren());
     }
 
     @Override
-    public SliceNode getFirstChild(@NotNull SliceNode element) {
+    public SliceNode getFirstChild(@Nonnull SliceNode element) {
       Object[] children = myTreeStructure.getChildElements(element);
       return children.length == 0 ? null : (SliceNode)children[0];
     }
 
     @Override
-    public SliceNode getParent(@NotNull SliceNode element) {
+    public SliceNode getParent(@Nonnull SliceNode element) {
       AbstractTreeNode parent = element.getParent();
       return parent instanceof SliceNode ? (SliceNode)parent : null;
     }
@@ -235,14 +235,14 @@ public class SliceLeafAnalyzer {
     return map.get(node);
   }
 
-  @NotNull
-  public static Collection<PsiElement> calcLeafExpressions(@NotNull final SliceNode root,
-                                                           @NotNull AbstractTreeStructure treeStructure,
-                                                           @NotNull final Map<SliceNode, Collection<PsiElement>> map) {
+  @Nonnull
+  public static Collection<PsiElement> calcLeafExpressions(@Nonnull final SliceNode root,
+                                                           @Nonnull AbstractTreeStructure treeStructure,
+                                                           @Nonnull final Map<SliceNode, Collection<PsiElement>> map) {
     final SliceNodeGuide guide = new SliceNodeGuide(treeStructure);
     WalkingState<SliceNode> walkingState = new WalkingState<SliceNode>(guide) {
       @Override
-      public void visit(@NotNull SliceNode element) {
+      public void visit(@Nonnull SliceNode element) {
         element.calculateDupNode();
         node(element, map).clear();
         SliceNode duplicate = element.getDuplicate();
@@ -267,7 +267,7 @@ public class SliceLeafAnalyzer {
       }
 
       @Override
-      public void elementFinished(@NotNull SliceNode element) {
+      public void elementFinished(@Nonnull SliceNode element) {
         SliceNode parent = guide.getParent(element);
         if (parent != null) {
           node(parent, map).addAll(node(element, map));

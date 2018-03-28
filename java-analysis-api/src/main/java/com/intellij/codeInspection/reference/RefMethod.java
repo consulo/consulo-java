@@ -17,8 +17,8 @@ package com.intellij.codeInspection.reference;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiModifierListOwner;
 
@@ -37,7 +37,8 @@ public interface RefMethod extends RefJavaElement {
    * @see com.intellij.psi.PsiMethod#findSuperMethods()
    * @see #hasSuperMethods
    */
-  @NotNull Collection<RefMethod> getSuperMethods();
+  @Nonnull
+  Collection<RefMethod> getSuperMethods();
 
   /**
    * Returns the collection of the overriding methods of this method in the
@@ -45,7 +46,8 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the collection of overriding methods.
    */
-  @NotNull Collection<RefMethod> getDerivedMethods();
+  @Nonnull
+  Collection<RefMethod> getDerivedMethods();
 
   /**
    * Checks if this method has a body (that is, not a method of an interface or an abstract
@@ -127,7 +129,8 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the method return value or null if it's different or impossible to determine.
    */
-  @Nullable String getReturnValueIfSame();
+  @javax.annotation.Nullable
+  String getReturnValueIfSame();
 
   /**
    * Returns the list of exceptions which are included in the <code>throws</code> list
@@ -143,7 +146,8 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the method parameters.
    */
-  @NotNull RefParameter[] getParameters();
+  @Nonnull
+  RefParameter[] getParameters();
 
   /**
    * Returns the class to which the method belongs.

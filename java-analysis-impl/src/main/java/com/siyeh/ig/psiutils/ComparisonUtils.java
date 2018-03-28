@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiPolyadicExpression;
@@ -65,7 +65,7 @@ public class ComparisonUtils {
     s_invertedComparisons.put(JavaTokenType.LE, ">");
   }
 
-  public static boolean isComparison(@Nullable PsiExpression expression) {
+  public static boolean isComparison(@javax.annotation.Nullable PsiExpression expression) {
     if (!(expression instanceof PsiPolyadicExpression)) {
       return false;
     }
@@ -82,7 +82,7 @@ public class ComparisonUtils {
     return s_swappedComparisons.get(tokenType);
   }
 
-  public static boolean isEqualityComparison(@NotNull PsiExpression expression) {
+  public static boolean isEqualityComparison(@Nonnull PsiExpression expression) {
     if (!(expression instanceof PsiPolyadicExpression)) {
       return false;
     }

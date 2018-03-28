@@ -15,7 +15,8 @@
  */
 package com.intellij.spellchecker;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.BatchSuppressManager;
 import com.intellij.codeInspection.SuppressManager;
@@ -37,7 +38,7 @@ public class JavaSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy
   private final LiteralExpressionTokenizer myLiteralExpressionTokenizer = new LiteralExpressionTokenizer();
   private final NamedElementTokenizer myNamedElementTokenizer = new NamedElementTokenizer();
 
-  @NotNull
+  @Nonnull
   @Override
   public Tokenizer getTokenizer(PsiElement element) {
     if (element instanceof PsiMethod) {
@@ -60,12 +61,12 @@ public class JavaSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy
   }
 
   @Override
-  public boolean isSuppressedFor(@NotNull PsiElement element, @NotNull String name) {
+  public boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull String name) {
     return SuppressManager.getInstance().isSuppressedFor(element, name);
   }
 
   @Override
-  public SuppressQuickFix[] getSuppressActions(@NotNull PsiElement element, @NotNull String name) {
+  public SuppressQuickFix[] getSuppressActions(@Nonnull PsiElement element, @Nonnull String name) {
     return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(name));
   }
 }

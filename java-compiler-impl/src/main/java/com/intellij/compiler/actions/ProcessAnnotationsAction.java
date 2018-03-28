@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.compiler.impl.FileSetCompileScope;
 import com.intellij.compiler.impl.ModuleCompileScope;
 import com.intellij.compiler.impl.javaCompiler.AnnotationProcessingCompiler;
@@ -87,7 +87,7 @@ public class ProcessAnnotationsAction extends CompileActionBase
 
 	@RequiredDispatchThread
 	@Override
-	public void update(@NotNull AnActionEvent event)
+	public void update(@Nonnull AnActionEvent event)
 	{
 		super.update(event);
 		Presentation presentation = event.getPresentation();
@@ -209,7 +209,7 @@ public class ProcessAnnotationsAction extends CompileActionBase
 		return MessageFormat.format(ActionsBundle.actionText(StringUtil.isEmpty(target) ? "RunAPT" : "RunAPT.1"), target);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static FileSetCompileScope getCompilableFiles(Project project, VirtualFile[] files)
 	{
 		if(files == null || files.length == 0)

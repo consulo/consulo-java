@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java enhanced <code>for</code>   statement.
@@ -29,7 +29,7 @@ public interface PsiForeachStatement extends PsiLoopStatement {
    *
    * @return the iteration parameter instance.
    */
-  @NotNull
+  @Nonnull
   PsiParameter getIterationParameter();
 
   /**
@@ -37,7 +37,7 @@ public interface PsiForeachStatement extends PsiLoopStatement {
    *
    * @return the iterated value expression instance, or null if the statement is incomplete.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getIteratedValue();
 
   /**
@@ -45,7 +45,7 @@ public interface PsiForeachStatement extends PsiLoopStatement {
    *
    * @return the opening parenthesis.
    */
-  @NotNull
+  @Nonnull
   PsiJavaToken getLParenth();
 
   /**

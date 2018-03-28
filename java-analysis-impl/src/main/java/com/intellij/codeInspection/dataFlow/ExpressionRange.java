@@ -16,7 +16,6 @@
 
 package com.intellij.codeInspection.dataFlow;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiExpression;
@@ -52,7 +51,7 @@ class ExpressionRange
 		return endOffset;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@RequiredReadAction
 	public PsiExpression restoreExpression(PsiCodeBlock scope)
 	{

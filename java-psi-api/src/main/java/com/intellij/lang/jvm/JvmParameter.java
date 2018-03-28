@@ -15,7 +15,8 @@
  */
 package com.intellij.lang.jvm;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.jvm.types.JvmType;
 
 /**
@@ -30,6 +31,6 @@ public interface JvmParameter extends JvmNamedElement, JvmModifiersOwner
 	 * @see java.lang.reflect.Parameter#getParameterizedType
 	 * @see java.lang.reflect.Parameter#getAnnotatedType
 	 */
-	@NotNull
+	@Nonnull
 	JvmType getType();
 }

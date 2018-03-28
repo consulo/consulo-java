@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.NoDataException;
 import com.intellij.debugger.PositionManager;
@@ -134,8 +134,8 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	@NotNull
-	public List<ReferenceType> getAllClasses(@NotNull SourcePosition classPosition) throws NoDataException
+	@Nonnull
+	public List<ReferenceType> getAllClasses(@Nonnull SourcePosition classPosition) throws NoDataException
 	{
 		checkSourcePositionFileType(classPosition);
 
@@ -159,7 +159,7 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 		return result;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Set<LanguageFileType> getAcceptedFileTypes()
 	{
@@ -176,8 +176,8 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	@NotNull
-	public List<Location> locationsOfLine(@NotNull final ReferenceType type, @NotNull final SourcePosition position) throws NoDataException
+	@Nonnull
+	public List<Location> locationsOfLine(@Nonnull final ReferenceType type, @Nonnull final SourcePosition position) throws NoDataException
 	{
 		List<Location> locations = locationsOfClassAt(type, position);
 		return locations != null ? locations : Collections.emptyList();
@@ -242,7 +242,7 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@NotNull final ClassPrepareRequestor requestor, @NotNull final SourcePosition position) throws NoDataException
+	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
 	{
 		checkSourcePositionFileType(position);
 

@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
@@ -58,13 +58,13 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator
 	}
 
 	@Override
-	public void evaluate(@NotNull final String expression, @NotNull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition)
+	public void evaluate(@Nonnull final String expression, @Nonnull final XEvaluationCallback callback, @javax.annotation.Nullable XSourcePosition expressionPosition)
 	{
 		evaluate(XExpressionImpl.fromText(expression), callback, expressionPosition);
 	}
 
 	@Override
-	public void evaluate(@NotNull final XExpression expression, @NotNull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition)
+	public void evaluate(@Nonnull final XExpression expression, @Nonnull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition)
 	{
 		myDebugProcess.getManagerThread().schedule(new DebuggerContextCommandImpl(myDebugProcess.getDebuggerContext(), myStackFrame.getStackFrameProxy().threadProxy())
 		{
@@ -152,7 +152,7 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator
 	}
 
 	@Override
-	public EvaluationMode getEvaluationMode(@NotNull String text, int startOffset, int endOffset, @Nullable PsiFile psiFile)
+	public EvaluationMode getEvaluationMode(@Nonnull String text, int startOffset, int endOffset, @Nullable PsiFile psiFile)
 	{
 		if(psiFile != null)
 		{

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,26 +27,25 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.InstanceOfUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class CastConflictsWithInstanceofInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "cast.conflicts.with.instanceof.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[0];
     return InspectionGadgetsBundle.message(
       "cast.conflicts.with.instanceof.problem.descriptor",  referenceExpression.getText());
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(final Object... infos) {
     final String castExpressionType = ((PsiTypeElement)infos[1]).getText();
@@ -64,7 +65,7 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(@NotNull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       final PsiTypeElement castType = expression.getCastType();
       if (castType == null) {
@@ -208,7 +209,7 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
       myCastType = castType;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("cast.conflicts.with.instanceof.quickfix1", myCastType, myInstanceofType);
     }
@@ -229,7 +230,7 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
       myCastType = castType;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("cast.conflicts.with.instanceof.quickfix2", myInstanceofType, myCastType);
     }

@@ -17,8 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementWeigher;
 import com.intellij.patterns.PsiMethodPattern;
@@ -46,14 +46,14 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 
 	// optimization: do not even create weigher if compiler indices aren't available for now
 	@Nullable
-	static PreferMostUsedWeigher create(@NotNull PsiElement position)
+	static PreferMostUsedWeigher create(@Nonnull PsiElement position)
 	{
 		return null;
 	}
 
 	@Nullable
 	@Override
-	public Integer weigh(@NotNull LookupElement element)
+	public Integer weigh(@Nonnull LookupElement element)
 	{
 		throw new UnsupportedOperationException();
 		/*final PsiElement psi = ObjectUtils.tryCast(element.getObject(), PsiElement.class);
@@ -78,7 +78,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 	}
 
 	//Objects.requireNonNull is an example
-	private static boolean looksLikeHelperMethodOrConst(@NotNull PsiElement element)
+	private static boolean looksLikeHelperMethodOrConst(@Nonnull PsiElement element)
 	{
 		if(!(element instanceof PsiMethod))
 		{
@@ -109,7 +109,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 		return false;
 	}
 
-	private static boolean isRawDeepTypeEqualToObject(@Nullable PsiType type)
+	private static boolean isRawDeepTypeEqualToObject(@javax.annotation.Nullable PsiType type)
 	{
 		if(type == null)
 		{

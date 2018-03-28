@@ -1,5 +1,5 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class X  {
     private final static String CON = "";
@@ -30,7 +30,7 @@ public class X  {
         set(hz());
     }
 
-    @NotNull
+    @Nonnull
     String nn() {
         return "";
     }
@@ -51,7 +51,7 @@ public class X  {
     void set(String d) {
         l = d;
     }
-    void setFromNN(@NotNull String d) {
+    void setFromNN(@Nonnull String d) {
         l = d;
     }
 }

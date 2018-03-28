@@ -16,7 +16,7 @@
 package com.intellij.refactoring.inline;
 
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 
@@ -37,7 +37,7 @@ public class ReferencedElementsCollector extends JavaRecursiveElementWalkingVisi
     }
   }
 
-  protected void checkAddMember(@NotNull final PsiMember member) {
+  protected void checkAddMember(@Nonnull final PsiMember member) {
     myReferencedMembers.add(member);
   }
 }

@@ -15,18 +15,19 @@
  */
 package com.intellij.debugger.impl.descriptors.data;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.ui.impl.watch.StaticDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import consulo.internal.com.sun.jdi.ReferenceType;
-import org.jetbrains.annotations.NotNull;
 
 public final class StaticData extends DescriptorData<StaticDescriptorImpl>{
   private static final Key STATIC = new Key("STATIC");
 
   private final ReferenceType myRefType;
 
-  public StaticData(@NotNull ReferenceType refType) {
+  public StaticData(@Nonnull ReferenceType refType) {
     myRefType = refType;
   }
 

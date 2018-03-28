@@ -25,7 +25,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,8 +46,8 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
   }
 
   @Override
-  @NotNull
-  public PsiReference[] getReferencesByString(String str, @NotNull final PsiElement position, int offsetInPosition){
+  @Nonnull
+  public PsiReference[] getReferencesByString(String str, @Nonnull final PsiElement position, int offsetInPosition){
     if (position instanceof XmlTag && ((XmlTag)position).getValue().getTextElements().length == 0) {
       return PsiReference.EMPTY_ARRAY; 
     }
@@ -64,7 +64,7 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
     }
 
     NotNullLazyValue<Set<String>> topLevelPackages = new NotNullLazyValue<Set<String>>() {
-      @NotNull
+      @Nonnull
       @Override
       protected Set<String> compute() {
         final Set<String> knownTopLevelPackages = new HashSet<String>();

@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.typeMigration.usageInfo;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 
 /**
@@ -25,7 +25,7 @@ public class OverriddenUsageInfo extends TypeMigrationUsageInfo
 {
 	private volatile String myMigrateMethodName;
 
-	public OverriddenUsageInfo(@NotNull PsiElement element)
+	public OverriddenUsageInfo(@Nonnull PsiElement element)
 	{
 		super(element);
 	}

@@ -24,7 +24,7 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.HighlightUtil;
 import com.siyeh.ipp.psiutils.ImportUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,13 +37,13 @@ import java.util.List;
 public class ReplaceFullyQualifiedNameWithImportIntention extends Intention {
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new FullyQualifiedNamePredicate();
   }
 
   @Override
-  public void processIntention(@NotNull PsiElement element) {
+  public void processIntention(@Nonnull PsiElement element) {
     PsiJavaCodeReferenceElement reference = (PsiJavaCodeReferenceElement)element;
     PsiElement target = reference.resolve();
     if (!(target instanceof PsiClass)) {

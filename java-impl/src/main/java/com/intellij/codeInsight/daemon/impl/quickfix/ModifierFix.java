@@ -15,8 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.undo.UndoUtil;
@@ -34,11 +38,7 @@ import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
+import consulo.java.JavaQuickFixBundle;
 
 public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.ModifierFix");
@@ -49,7 +49,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final String myName;
   private final SmartPsiElementPointer<PsiVariable> myVariable;
 
-  public ModifierFix(PsiModifierList modifierList, @PsiModifier.ModifierConstant @NotNull String modifier, boolean shouldHave, boolean showContainingClass) {
+  public ModifierFix(PsiModifierList modifierList, @PsiModifier.ModifierConstant @Nonnull String modifier, boolean shouldHave, boolean showContainingClass) {
     super(modifierList);
     myModifier = modifier;
     myShouldHave = shouldHave;
@@ -58,7 +58,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     myVariable = null;
   }
 
-  public ModifierFix(@NotNull PsiModifierListOwner owner, @PsiModifier.ModifierConstant @NotNull String modifier, boolean shouldHave, boolean showContainingClass) {
+  public ModifierFix(@Nonnull PsiModifierListOwner owner, @PsiModifier.ModifierConstant @Nonnull String modifier, boolean shouldHave, boolean showContainingClass) {
     super(owner.getModifierList());
     myModifier = modifier;
     myShouldHave = shouldHave;
@@ -69,7 +69,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     myVariable = variable == null ? null : SmartPointerManager.getInstance(owner.getProject()).createSmartPsiElementPointer(variable);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return myName;
@@ -105,16 +105,16 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.modifiers.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project,
+                             @Nonnull PsiFile file,
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     final PsiModifierList myModifierList = (PsiModifierList)startElement;
     PsiVariable variable = myVariable == null ? null : myVariable.getElement();
     return myModifierList.isValid() &&
@@ -133,11 +133,11 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   }
 
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
+                     @javax.annotation.Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiModifierList myModifierList = (PsiModifierList)startElement;
     final PsiVariable variable = myVariable == null ? null : myVariable.getElement();
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myModifierList)) return;
@@ -170,7 +170,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
       OverridingMethodsSearch.search((PsiMethod)owner, owner.getResolveScope(), true).forEach(new PsiElementProcessorAdapter<PsiMethod>(new PsiElementProcessor<PsiMethod>() {
           @Override
-          public boolean execute(@NotNull PsiMethod inheritor) {
+          public boolean execute(@Nonnull PsiMethod inheritor) {
             PsiModifierList list = inheritor.getModifierList();
             if (inheritor.getManager().isInProject(inheritor) && PsiUtil.getAccessLevel(list) < accessLevel) {
               modifierLists.add(list);

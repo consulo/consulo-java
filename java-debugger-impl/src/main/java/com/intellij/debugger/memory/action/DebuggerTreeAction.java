@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.memory.action;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorProvider;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
@@ -29,7 +29,7 @@ import consulo.internal.com.sun.jdi.Value;
 public abstract class DebuggerTreeAction extends XDebuggerTreeActionBase
 {
 	@Nullable
-	protected ObjectReference getObjectReference(@NotNull XValueNodeImpl node)
+	protected ObjectReference getObjectReference(@Nonnull XValueNodeImpl node)
 	{
 		XValue valueContainer = node.getValueContainer();
 		if(valueContainer instanceof NodeDescriptorProvider)

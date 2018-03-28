@@ -20,7 +20,7 @@ import com.intellij.psi.PsiTypeParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.LibraryUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,14 +28,14 @@ import java.util.Set;
 public class ClassInheritanceDepthInspection
   extends ClassMetricInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ClassTooDeepInInheritanceTree";
   }
 
   private static final int CLASS_INHERITANCE_LIMIT = 2;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("class.too.deep.display.name");
   }
@@ -49,7 +49,7 @@ public class ClassInheritanceDepthInspection
       "class.too.deep.inheritance.depth.limit.option");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer count = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -63,7 +63,7 @@ public class ClassInheritanceDepthInspection
   private class ClassNestingLevel extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // note: no call to super
       if (aClass.isEnum()) {
         return;

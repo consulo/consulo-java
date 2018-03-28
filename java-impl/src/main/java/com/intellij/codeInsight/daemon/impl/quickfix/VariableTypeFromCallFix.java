@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -28,34 +29,34 @@ public class VariableTypeFromCallFix implements IntentionAction
 	private final PsiType myExpressionType;
 	private final PsiVariable myVar;
 
-	private VariableTypeFromCallFix(@NotNull PsiClassType type, @NotNull PsiVariable var)
+	private VariableTypeFromCallFix(@Nonnull PsiClassType type, @Nonnull PsiVariable var)
 	{
 		myExpressionType = type;
 		myVar = var;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getText()
 	{
 		return JavaQuickFixBundle.message("fix.variable.type.text", UsageViewUtil.getType(myVar), myVar.getName(), myExpressionType.getCanonicalText());
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return JavaQuickFixBundle.message("fix.variable.type.family");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return myExpressionType.isValid() && myVar.isValid();
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		final TypeMigrationRules rules = new TypeMigrationRules(project);
 		rules.setBoundScope(PsiSearchHelper.SERVICE.getInstance(project).getUseScope(myVar));
@@ -70,8 +71,8 @@ public class VariableTypeFromCallFix implements IntentionAction
 	}
 
 
-	@NotNull
-	public static List<IntentionAction> getQuickFixActions(@NotNull PsiMethodCallExpression methodCall, @NotNull PsiExpressionList list)
+	@Nonnull
+	public static List<IntentionAction> getQuickFixActions(@Nonnull PsiMethodCallExpression methodCall, @Nonnull PsiExpressionList list)
 	{
 		final JavaResolveResult result = methodCall.getMethodExpression().advancedResolve(false);
 		PsiMethod method = (PsiMethod) result.getElement();
@@ -135,7 +136,7 @@ public class VariableTypeFromCallFix implements IntentionAction
 		return actions;
 	}
 
-	private static List<IntentionAction> getParameterTypeChangeFixes(@NotNull PsiMethod method, @NotNull PsiExpression expression, PsiType parameterType)
+	private static List<IntentionAction> getParameterTypeChangeFixes(@Nonnull PsiMethod method, @Nonnull PsiExpression expression, PsiType parameterType)
 	{
 		if(!(expression instanceof PsiReferenceExpression))
 		{

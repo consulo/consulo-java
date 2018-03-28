@@ -15,13 +15,13 @@
  */
 package com.intellij.codeInsight.generation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMember;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Medvedev Max
@@ -38,8 +38,8 @@ public interface GenerationInfo {
    * @param leaf leaf element. Is guaranteed to be a tree descendant of aClass.
    * @return the value that will be passed to the {@link #insert(com.intellij.psi.PsiClass, com.intellij.psi.PsiElement, boolean)} method later.
    */
-  @Nullable
-  PsiElement findInsertionAnchor(@NotNull PsiClass aClass, @NotNull PsiElement leaf);
+  @javax.annotation.Nullable
+  PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf);
 
   /**
    * Position caret in generated element in correct way

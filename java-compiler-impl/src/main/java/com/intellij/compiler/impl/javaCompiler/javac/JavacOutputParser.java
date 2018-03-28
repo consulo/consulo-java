@@ -22,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.compiler.OutputParser;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -258,7 +258,7 @@ public class JavacOutputParser extends OutputParser
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
 				@Override
-				protected void doExecute(final String line, @Nullable String parsedData, final Callback callback)
+				protected void doExecute(final String line, @javax.annotation.Nullable String parsedData, final Callback callback)
 				{
 					callback.setProgressText(CompilerBundle.message("progress.loading.classes"));
 				}
@@ -292,7 +292,7 @@ public class JavacOutputParser extends OutputParser
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
 				@Override
-				protected void doExecute(final String line, @Nullable String parsedData, final Callback callback)
+				protected void doExecute(final String line, @javax.annotation.Nullable String parsedData, final Callback callback)
 				{
 					// empty
 				}
@@ -303,7 +303,7 @@ public class JavacOutputParser extends OutputParser
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
 				@Override
-				protected void doExecute(final String line, @Nullable String parsedData, final Callback callback)
+				protected void doExecute(final String line, @javax.annotation.Nullable String parsedData, final Callback callback)
 				{
 					// ignored
 				}

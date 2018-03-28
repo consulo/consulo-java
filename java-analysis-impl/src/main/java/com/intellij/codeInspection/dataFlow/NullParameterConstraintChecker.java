@@ -21,7 +21,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.dataFlow.instructions.AssignInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
@@ -60,7 +61,7 @@ class NullParameterConstraintChecker extends DataFlowRunner
 		myUsedParameters = new THashSet<>();
 	}
 
-	@NotNull
+	@Nonnull
 	static PsiParameter[] checkMethodParameters(PsiMethod method)
 	{
 		if(method.getBody() == null)
@@ -90,9 +91,9 @@ class NullParameterConstraintChecker extends DataFlowRunner
 		return checker.myPossiblyViolatedParameters.stream().filter(checker.myUsedParameters::contains).toArray(PsiParameter[]::new);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected DfaInstructionState[] acceptInstruction(@NotNull InstructionVisitor visitor, @NotNull DfaInstructionState instructionState)
+	protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState)
 	{
 		Instruction instruction = instructionState.getInstruction();
 		if(instruction instanceof PushInstruction)
@@ -137,7 +138,7 @@ class NullParameterConstraintChecker extends DataFlowRunner
 		return super.acceptInstruction(visitor, instructionState);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected DfaMemoryState createMemoryState()
 	{
@@ -163,7 +164,7 @@ class NullParameterConstraintChecker extends DataFlowRunner
 		}
 
 		@Override
-		public void flushVariable(@NotNull DfaVariableValue variable)
+		public void flushVariable(@Nonnull DfaVariableValue variable)
 		{
 			final PsiModifierListOwner psi = variable.getPsiVariable();
 			if(psi instanceof PsiParameter && myPossiblyViolatedParameters.contains(psi))
@@ -173,7 +174,7 @@ class NullParameterConstraintChecker extends DataFlowRunner
 			super.flushVariable(variable);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public DfaMemoryStateImpl createCopy()
 		{

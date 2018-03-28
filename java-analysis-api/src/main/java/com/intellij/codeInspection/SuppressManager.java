@@ -20,7 +20,8 @@
  */
 package com.intellij.codeInspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiAnnotation;
@@ -42,13 +43,13 @@ public abstract class SuppressManager implements BatchSuppressManager, Inspectio
 		return annotation != null && SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public SuppressQuickFix[] createBatchSuppressActions(@NotNull HighlightDisplayKey key)
+	public SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key)
 	{
 		return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(key);
 	}
 
-	@NotNull
-	public abstract SuppressIntentionAction[] createSuppressActions(@NotNull HighlightDisplayKey key);
+	@Nonnull
+	public abstract SuppressIntentionAction[] createSuppressActions(@Nonnull HighlightDisplayKey key);
 }

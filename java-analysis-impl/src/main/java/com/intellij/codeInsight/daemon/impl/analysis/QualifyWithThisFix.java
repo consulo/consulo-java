@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -40,25 +41,25 @@ class QualifyWithThisFix implements IntentionAction {
     myExpression = expression;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return "Qualify with " + myContainingClass.getName() + ".this";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return true;
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final PsiThisExpression thisExpression =
       RefactoringChangeUtil.createThisExpression(PsiManager.getInstance(project), myContainingClass);
     ((PsiReferenceExpression)myExpression).setQualifierExpression(thisExpression);

@@ -17,9 +17,11 @@ package com.intellij.psi.impl.source.tree;
 
 import java.lang.reflect.Constructor;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.PsiBuilder;
@@ -61,7 +63,7 @@ public interface JavaDocElementType
 			myConstructor = ReflectionUtil.getDefaultConstructor(nodeClass);
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public ASTNode createCompositeNode()
 		{
@@ -119,7 +121,7 @@ public interface JavaDocElementType
 			}
 		};
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		public ASTNode parseContents(final ASTNode chameleon)
 		{
@@ -152,7 +154,7 @@ public interface JavaDocElementType
 		}
 
 		@Override
-		public boolean isParsable(@NotNull PsiFile psiFile, CharSequence buffer, Language fileLanguage, final Project project)
+		public boolean isParsable(@Nonnull PsiFile psiFile, CharSequence buffer, Language fileLanguage, final Project project)
 		{
 			if(!StringUtil.startsWith(buffer, "/**") || !StringUtil.endsWith(buffer, "*/"))
 			{

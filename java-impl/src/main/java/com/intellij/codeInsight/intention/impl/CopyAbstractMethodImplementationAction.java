@@ -19,14 +19,14 @@ import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
 public class CopyAbstractMethodImplementationAction extends ImplementAbstractMethodAction {
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return "Copy Abstract Method Implementation";
   }

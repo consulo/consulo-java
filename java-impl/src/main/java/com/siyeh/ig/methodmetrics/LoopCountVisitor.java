@@ -15,39 +15,40 @@
  */
 package com.siyeh.ig.methodmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 class LoopCountVisitor extends JavaRecursiveElementVisitor {
   private int m_count = 0;
 
 
   @Override
-  public void visitForStatement(@NotNull PsiForStatement psiForStatement) {
+  public void visitForStatement(@Nonnull PsiForStatement psiForStatement) {
     super.visitForStatement(psiForStatement);
     m_count++;
   }
 
   @Override
-  public void visitForeachStatement(@NotNull PsiForeachStatement psiForStatement) {
+  public void visitForeachStatement(@Nonnull PsiForeachStatement psiForStatement) {
     super.visitForeachStatement(psiForStatement);
     m_count++;
   }
 
   @Override
-  public void visitWhileStatement(@NotNull PsiWhileStatement psiWhileStatement) {
+  public void visitWhileStatement(@Nonnull PsiWhileStatement psiWhileStatement) {
     super.visitWhileStatement(psiWhileStatement);
     m_count++;
   }
 
   @Override
-  public void visitDoWhileStatement(@NotNull PsiDoWhileStatement psiDoWhileStatement) {
+  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement psiDoWhileStatement) {
     super.visitDoWhileStatement(psiDoWhileStatement);
     m_count++;
   }
 
   @Override
-  public void visitAnonymousClass(@NotNull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
     // no call to super, to keep it from drilling into anonymous classes
   }
 

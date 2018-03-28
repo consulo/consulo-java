@@ -22,9 +22,9 @@ package com.intellij.refactoring.extractSuperclass;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
@@ -60,7 +60,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
   private Project myProject;
 
 
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
@@ -78,7 +78,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     }
   }
 
-  public void invoke(@NotNull final Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     myProject = project;

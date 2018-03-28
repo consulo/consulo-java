@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -44,19 +44,19 @@ public class UnimplementInterfaceAction implements IntentionAction {
   private String myName = "Interface";
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return "Unimplement " + myName;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return "Unimplement Interface/Class";
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     final PsiReference psiReference = TargetElementUtil.findReference(editor);
     if (psiReference == null) return false;
@@ -86,7 +86,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiJavaCodeReferenceElement getTopLevelRef(PsiReference psiReference, PsiReferenceList referenceList) {
     PsiElement element = psiReference.getElement();
     while (element.getParent() != referenceList) {
@@ -99,7 +99,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(file)) return;
 
     final PsiReference psiReference = TargetElementUtil.findReference(editor);

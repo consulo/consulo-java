@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.EvaluatingComputable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -42,20 +42,20 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 {
 	private static final Logger LOG = Logger.getInstance(BasicStepMethodFilter.class);
 
-	@NotNull
+	@Nonnull
 	protected final JVMName myDeclaringClassName;
-	@NotNull
+	@Nonnull
 	private final String myTargetMethodName;
-	@Nullable
+	@javax.annotation.Nullable
 	protected final JVMName myTargetMethodSignature;
 	private final Range<Integer> myCallingExpressionLines;
 
-	public BasicStepMethodFilter(@NotNull PsiMethod psiMethod, Range<Integer> callingExpressionLines)
+	public BasicStepMethodFilter(@Nonnull PsiMethod psiMethod, Range<Integer> callingExpressionLines)
 	{
 		this(JVMNameUtil.getJVMQualifiedName(psiMethod.getContainingClass()), JVMNameUtil.getJVMMethodName(psiMethod), JVMNameUtil.getJVMSignature(psiMethod), callingExpressionLines);
 	}
 
-	protected BasicStepMethodFilter(@NotNull JVMName declaringClassName, @NotNull String targetMethodName, @Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
+	protected BasicStepMethodFilter(@Nonnull JVMName declaringClassName, @Nonnull String targetMethodName, @javax.annotation.Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
 	{
 		myDeclaringClassName = declaringClassName;
 		myTargetMethodName = targetMethodName;
@@ -64,7 +64,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getMethodName()
 	{
 		return myTargetMethodName;
@@ -76,7 +76,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		return locationMatches(process, location, () -> null);
 	}
 
-	public boolean locationMatches(DebugProcessImpl process, Location location, @NotNull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
+	public boolean locationMatches(DebugProcessImpl process, Location location, @Nonnull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
 	{
 		Method method = location.method();
 		String name = method.name();
@@ -147,7 +147,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public Range<Integer> getCallingExpressionLines()
 	{

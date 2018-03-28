@@ -47,8 +47,8 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ConcurrentWeakHashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -58,7 +58,7 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction {
   private final SmartPsiElementPointer<PsiField> myField;
   private final PsiClass myClass;
 
-  public CreateConstructorParameterFromFieldFix(@NotNull PsiField field) {
+  public CreateConstructorParameterFromFieldFix(@Nonnull PsiField field) {
     myClass = field.getContainingClass();
     myField = SmartPointerManager.getInstance(field.getProject()).createSmartPsiElementPointer(field);
     if (myClass != null) {
@@ -67,20 +67,20 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     if (getFieldsToFix().size() > 1 && myClass.getConstructors().length <= 1) return "Add constructor parameters";
     return JavaQuickFixBundle.message("add.constructor.parameter.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return isAvailable(getField());
   }
 
@@ -95,7 +95,7 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     PsiMethod[] constructors = myClass.getConstructors();
@@ -185,7 +185,7 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction {
     }
   }
 
-  @NotNull
+  @Nonnull
   private Collection<SmartPsiElementPointer<PsiField>> getFieldsToFix() {
     Map<SmartPsiElementPointer<PsiField>, Boolean> fields = myClass.getUserData(FIELDS);
     if (fields == null) myClass.putUserData(FIELDS, fields = new ConcurrentWeakHashMap<SmartPsiElementPointer<PsiField>,Boolean>(1));

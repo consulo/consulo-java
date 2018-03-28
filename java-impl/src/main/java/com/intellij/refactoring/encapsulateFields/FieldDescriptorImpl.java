@@ -17,8 +17,7 @@ package com.intellij.refactoring.encapsulateFields;
 
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * @author Max Medvedev
@@ -30,11 +29,11 @@ public class FieldDescriptorImpl implements FieldDescriptor {
   private final PsiMethod myGetterPrototype;
   private final PsiMethod mySetterPrototype;
 
-  public FieldDescriptorImpl(@NotNull PsiField field,
-                             @NotNull String getterName,
-                             @NotNull String setterName,
-                             @Nullable PsiMethod getterPrototype,
-                             @Nullable PsiMethod setterPrototype) {
+  public FieldDescriptorImpl(@Nonnull PsiField field,
+                             @Nonnull String getterName,
+                             @Nonnull String setterName,
+                             @javax.annotation.Nullable PsiMethod getterPrototype,
+                             @javax.annotation.Nullable PsiMethod setterPrototype) {
     myField = field;
     myGetterName = getterName;
     mySetterName = setterName;
@@ -42,38 +41,38 @@ public class FieldDescriptorImpl implements FieldDescriptor {
     mySetterPrototype = setterPrototype;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public PsiField getField() {
     return myField;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getGetterName() {
     return myGetterName;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getSetterName() {
     return mySetterName;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public PsiMethod getGetterPrototype() {
     return myGetterPrototype;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   public PsiMethod getSetterPrototype() {
     return mySetterPrototype;
   }
 
   @Override
-  public void refreshField(@NotNull PsiField newField) {
+  public void refreshField(@Nonnull PsiField newField) {
     myField = newField;
   }
 }

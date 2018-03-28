@@ -16,7 +16,8 @@
 
 package com.intellij.codeInsight.intention;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -28,24 +29,24 @@ import com.intellij.util.IncorrectOperationException;
  * @author ven
  */
 public class AddAnnotationFix extends AddAnnotationPsiFix implements IntentionAction {
-  public AddAnnotationFix(@NotNull String fqn, @NotNull PsiModifierListOwner modifierListOwner, @NotNull String... annotationsToRemove) {
+  public AddAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String... annotationsToRemove) {
     this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
   }
 
-  public AddAnnotationFix(@NotNull String fqn,
-                          @NotNull PsiModifierListOwner modifierListOwner,
-                          @NotNull PsiNameValuePair[] values,
-                          @NotNull String... annotationsToRemove) {
+  public AddAnnotationFix(@Nonnull String fqn,
+                          @Nonnull PsiModifierListOwner modifierListOwner,
+                          @Nonnull PsiNameValuePair[] values,
+                          @Nonnull String... annotationsToRemove) {
     super(fqn, modifierListOwner, values, annotationsToRemove);
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return isAvailable();
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     applyFix();
   }
 

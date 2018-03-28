@@ -18,8 +18,8 @@ package com.intellij.psi.impl;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -38,7 +38,7 @@ public class JavaClassSupersImpl extends JavaClassSupers
 {
 	@Override
 	@Nullable
-	public PsiSubstitutor getSuperClassSubstitutor(@NotNull PsiClass superClass, @NotNull PsiClass derivedClass, @NotNull GlobalSearchScope scope, @NotNull PsiSubstitutor derivedSubstitutor)
+	public PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass, @Nonnull PsiClass derivedClass, @Nonnull GlobalSearchScope scope, @Nonnull PsiSubstitutor derivedSubstitutor)
 	{
 		if(InheritanceImplUtil.hasObjectQualifiedName(superClass))
 		{
@@ -50,10 +50,10 @@ public class JavaClassSupersImpl extends JavaClassSupers
 	}
 
 	@Nullable
-	private static PsiSubstitutor getSuperSubstitutorWithCaching(@NotNull PsiClass superClass,
-			@NotNull PsiClass derivedClass,
-			@NotNull GlobalSearchScope resolveScope,
-			@NotNull PsiSubstitutor derivedSubstitutor)
+	private static PsiSubstitutor getSuperSubstitutorWithCaching(@Nonnull PsiClass superClass,
+			@Nonnull PsiClass derivedClass,
+			@Nonnull GlobalSearchScope resolveScope,
+			@Nonnull PsiSubstitutor derivedSubstitutor)
 	{
 		PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope, superClass);
 		if(substitutor == null)
@@ -68,13 +68,13 @@ public class JavaClassSupersImpl extends JavaClassSupers
 		return composeSubstitutors(derivedSubstitutor, substitutor, superClass);
 	}
 
-	@NotNull
-	static PsiSubstitutor createRawSubstitutor(@NotNull PsiClass superClass)
+	@Nonnull
+	static PsiSubstitutor createRawSubstitutor(@Nonnull PsiClass superClass)
 	{
 		return JavaPsiFacade.getElementFactory(superClass.getProject()).createRawSubstitutor(superClass);
 	}
 
-	@NotNull
+	@Nonnull
 	private static PsiSubstitutor composeSubstitutors(PsiSubstitutor outer, PsiSubstitutor inner, PsiClass onClass)
 	{
 		PsiSubstitutor answer = PsiSubstitutor.EMPTY;

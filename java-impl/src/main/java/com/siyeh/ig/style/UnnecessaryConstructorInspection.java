@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -38,13 +38,13 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
   public boolean ignoreAnnotations = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "RedundantNoArgConstructor";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.constructor.display.name");
@@ -59,7 +59,7 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.constructor.problem.descriptor");
@@ -77,7 +77,7 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
 
   private static class UnnecessaryConstructorFix
     extends InspectionGadgetsFix {
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.constructor.remove.quickfix");
@@ -97,7 +97,7 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       final PsiMethod[] constructors = aClass.getConstructors();
       if (constructors.length != 1) {
         return;

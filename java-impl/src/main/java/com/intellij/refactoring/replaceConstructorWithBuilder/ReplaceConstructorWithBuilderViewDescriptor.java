@@ -22,11 +22,11 @@ package com.intellij.refactoring.replaceConstructorWithBuilder;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ReplaceConstructorWithBuilderViewDescriptor extends UsageViewDescriptorAdapter{
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[0];
   }

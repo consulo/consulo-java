@@ -21,7 +21,6 @@ import com.intellij.openapi.util.ClassConditionKey;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author peter
@@ -32,7 +31,7 @@ public class CastingLookupElementDecorator extends LookupElementDecorator<Lookup
   private final LookupElement myCastItem;
   private final PsiType myCastType;
 
-  @Nullable
+  @javax.annotation.Nullable
   private static String getItemText(LookupElementPresentation base, LookupElement castItem) {
     final LookupElementPresentation castPresentation = new LookupElementPresentation();
     castItem.renderElement(castPresentation);

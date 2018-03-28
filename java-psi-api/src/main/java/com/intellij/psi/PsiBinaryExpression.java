@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 
@@ -34,7 +34,7 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 *
 	 * @return the left operand.
 	 */
-	@NotNull
+	@Nonnull
 	PsiExpression getLOperand();
 
 	/**
@@ -42,7 +42,7 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 *
 	 * @return the right operand, or null if the expression is incomplete.
 	 */
-	@Nullable
+	@javax.annotation.Nullable
 	PsiExpression getROperand();
 
 	/**
@@ -51,7 +51,7 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 *
 	 * @return the operation token.
 	 */
-	@NotNull
+	@Nonnull
 	PsiJavaToken getOperationSign();
 
 	/**
@@ -60,6 +60,6 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 * @return the token type.
 	 */
 	@Override
-	@NotNull
+	@Nonnull
 	IElementType getOperationTokenType();
 }

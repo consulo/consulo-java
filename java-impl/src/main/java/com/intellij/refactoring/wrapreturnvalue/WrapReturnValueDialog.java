@@ -18,6 +18,7 @@ package com.intellij.refactoring.wrapreturnvalue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -29,7 +30,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.jetbrains.annotations.NotNull;
 import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -158,12 +158,12 @@ class WrapReturnValueDialog extends RefactoringDialog {
     return myInnerClassNameTextField.getText().trim();
   }
 
-  @NotNull
+  @Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }
 
-  @NotNull
+  @Nonnull
   public String getClassName() {
     return classNameField.getText().trim();
   }

@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +46,8 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
   };
 
   @Override
-  @NotNull public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
+  @Nonnull
+  public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
     PsiExpression expr = CodeInsightUtil.findExpressionInRange(file, startOffset, endOffset);
     if (expr == null) {
       expr = IntroduceVariableBase.getSelectedExpression(file.getProject(), file, startOffset, endOffset);
@@ -59,7 +60,8 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
   }
 
   @Override
-  @NotNull public Surrounder[] getSurrounders() {
+  @Nonnull
+  public Surrounder[] getSurrounders() {
     if (mySurrounders == null) {
       final ArrayList<Surrounder> list = new ArrayList<Surrounder>();
       Collections.addAll(list, SURROUNDERS);

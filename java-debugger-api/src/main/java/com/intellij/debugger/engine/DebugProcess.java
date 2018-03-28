@@ -18,7 +18,7 @@ package com.intellij.debugger.engine;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.PositionManager;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
@@ -51,7 +51,7 @@ public interface DebugProcess extends UserDataHolder
 
 	RequestManager getRequestsManager();
 
-	@NotNull
+	@Nonnull
 	PositionManager getPositionManager();
 
 	VirtualMachineProxy getVirtualMachineProxy();
@@ -103,7 +103,7 @@ public interface DebugProcess extends UserDataHolder
 	/**
 	 * @return the search scope used by debugger to find sources corresponding to classes being executed
 	 */
-	@NotNull
+	@Nonnull
 	GlobalSearchScope getSearchScope();
 
 	void printToConsole(String text);

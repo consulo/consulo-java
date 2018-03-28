@@ -26,9 +26,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -317,7 +318,7 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
     return getAvailableActions(LightPlatformCodeInsightTestCase.getEditor(), LightPlatformCodeInsightTestCase.getFile());
   }
 
-  public static List<IntentionAction> getAvailableActions(@NotNull Editor editor, @NotNull PsiFile file) {
+  public static List<IntentionAction> getAvailableActions(@Nonnull Editor editor, @Nonnull PsiFile file) {
     return CodeInsightTestFixtureImpl.getAvailableIntentions(editor, file);
   }
 

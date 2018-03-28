@@ -20,7 +20,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -29,14 +29,14 @@ import java.util.List;
  */
 public class SplitTryWithMultipleResourcesIntention extends Intention {
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new TryWithMultipleResourcesPredicate();
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiTryStatement tryStatement = (PsiTryStatement)element.getParent();
     final PsiResourceList resourceList = tryStatement.getResourceList();
     if (resourceList == null) {

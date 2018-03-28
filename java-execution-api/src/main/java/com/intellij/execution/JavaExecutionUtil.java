@@ -18,10 +18,10 @@ package com.intellij.execution;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RunProfile;
@@ -60,12 +60,12 @@ public class JavaExecutionUtil
 	{
 	}
 
-	public static boolean executeRun(@NotNull final Project project, String contentName, Icon icon, final DataContext dataContext) throws ExecutionException
+	public static boolean executeRun(@Nonnull final Project project, String contentName, Icon icon, final DataContext dataContext) throws ExecutionException
 	{
 		return executeRun(project, contentName, icon, dataContext, null);
 	}
 
-	public static boolean executeRun(@NotNull final Project project, String contentName, Icon icon, DataContext dataContext, Filter[] filters) throws ExecutionException
+	public static boolean executeRun(@Nonnull final Project project, String contentName, Icon icon, DataContext dataContext, Filter[] filters) throws ExecutionException
 	{
 		final OwnJavaParameters cmdLine = dataContext.getData(OwnJavaParameters.JAVA_PARAMETERS);
 		final DefaultRunProfile profile = new DefaultRunProfile(project, cmdLine, contentName, icon, filters);
@@ -136,7 +136,7 @@ public class JavaExecutionUtil
 		}
 
 		@Override
-		public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
+		public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
 		{
 			final JavaCommandLineState state = new JavaCommandLineState(env)
 			{
@@ -162,14 +162,14 @@ public class JavaExecutionUtil
 		}
 	}
 
-	@Nullable
-	public static String getRuntimeQualifiedName(@NotNull final PsiClass aClass)
+	@javax.annotation.Nullable
+	public static String getRuntimeQualifiedName(@Nonnull final PsiClass aClass)
 	{
 		return ClassUtil.getJVMClassName(aClass);
 	}
 
-	@Nullable
-	public static String getPresentableClassName(@Nullable String rtClassName)
+	@javax.annotation.Nullable
+	public static String getPresentableClassName(@javax.annotation.Nullable String rtClassName)
 	{
 		if(StringUtil.isEmpty(rtClassName))
 		{
@@ -185,18 +185,18 @@ public class JavaExecutionUtil
 	 */
 	@DeprecationInfo("Use JavaExecutionUtil#getPresentableClassName(java.lang.String)")
 	@Deprecated
-	@Nullable
+	@javax.annotation.Nullable
 	public static String getPresentableClassName(final String rtClassName, final JavaRunConfigurationModule configurationModule)
 	{
 		return getPresentableClassName(rtClassName);
 	}
 
-	public static Module findModule(@NotNull final PsiClass psiClass)
+	public static Module findModule(@Nonnull final PsiClass psiClass)
 	{
 		return ModuleUtilCore.findModuleForPsiElement(psiClass);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiClass findMainClass(final Module module, final String mainClassName)
 	{
 		return findMainClass(module.getProject(), mainClassName, module.getModuleRuntimeScope(true));

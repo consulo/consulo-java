@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -46,7 +46,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.editorActions.CopyPasteReferenceProcessor");
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<ReferenceTransferableData> collectTransferableData(PsiFile file, final Editor editor, final int[] startOffsets,
 			final int[] endOffsets)
@@ -85,7 +85,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
 
 	protected abstract void addReferenceData(PsiFile file, int startOffset, PsiElement element, ArrayList<ReferenceData> to);
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<ReferenceTransferableData> extractTransferableData(final Transferable content)
 	{
@@ -152,7 +152,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
 	}
 
 	protected static void addReferenceData(final PsiElement element, final ArrayList<ReferenceData> array, final int startOffset,
-			final String qClassName, @Nullable final String staticMemberName)
+			final String qClassName, @javax.annotation.Nullable final String staticMemberName)
 	{
 		final TextRange range = element.getTextRange();
 		array.add(new ReferenceData(range.getStartOffset() - startOffset, range.getEndOffset() - startOffset, qClassName, staticMemberName));

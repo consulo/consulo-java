@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInspection.dataFlow.fix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -32,14 +33,14 @@ public class SurroundWithRequireNonNullFix implements LocalQuickFix
 	private final String myText;
 	private final SmartPsiElementPointer<PsiExpression> myQualifierPointer;
 
-	public SurroundWithRequireNonNullFix(@NotNull PsiExpression expressionToSurround)
+	public SurroundWithRequireNonNullFix(@Nonnull PsiExpression expressionToSurround)
 	{
 		myText = expressionToSurround.getText();
 		myQualifierPointer = SmartPointerManager.getInstance(expressionToSurround.getProject()).createSmartPsiElementPointer(expressionToSurround);
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -47,7 +48,7 @@ public class SurroundWithRequireNonNullFix implements LocalQuickFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -55,7 +56,7 @@ public class SurroundWithRequireNonNullFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		PsiExpression qualifier = myQualifierPointer.getElement();
 		if(qualifier == null)

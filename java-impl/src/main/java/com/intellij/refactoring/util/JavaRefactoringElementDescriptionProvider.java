@@ -19,10 +19,10 @@ import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.RefactoringBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class JavaRefactoringElementDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(@NotNull final PsiElement element, @NotNull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (!(location instanceof RefactoringDescriptionLocation)) return null;
     RefactoringDescriptionLocation rdLocation = (RefactoringDescriptionLocation) location;
 

@@ -28,8 +28,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -41,19 +41,19 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "StringBufferMayBeStringBuilder";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.builder.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.builder.problem.descriptor");
   }
@@ -86,7 +86,7 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
 
   private static class StringBufferMayBeStringBuilderFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.builder.replace.quickfix");
     }

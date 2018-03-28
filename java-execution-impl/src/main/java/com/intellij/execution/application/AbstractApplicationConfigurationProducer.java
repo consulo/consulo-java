@@ -15,7 +15,7 @@
  */
 package com.intellij.execution.application;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.execution.Location;

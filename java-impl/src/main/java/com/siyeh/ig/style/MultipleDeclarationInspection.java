@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.NormalizeDeclarationFix;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -32,20 +32,20 @@ public class MultipleDeclarationInspection extends BaseInspection {
   public boolean ignoreForLoopDeclarations = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "multiple.declaration.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MultipleVariablesInDeclaration";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "multiple.declaration.problem.descriptor");
@@ -98,7 +98,7 @@ public class MultipleDeclarationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (childrenContainTypeElement(field)) {
         return;

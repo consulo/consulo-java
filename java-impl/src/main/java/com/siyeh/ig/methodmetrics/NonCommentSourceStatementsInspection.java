@@ -15,22 +15,23 @@
  */
 package com.siyeh.ig.methodmetrics;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class NonCommentSourceStatementsInspection
   extends MethodMetricInspection {
 
   private static final int DEFAULT_LIMIT = 30;
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "OverlyLongMethod";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.comment.source.statements.display.name");
@@ -45,7 +46,7 @@ public class NonCommentSourceStatementsInspection
       "non.comment.source.statements.limit.option");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer statementCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -61,7 +62,7 @@ public class NonCommentSourceStatementsInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

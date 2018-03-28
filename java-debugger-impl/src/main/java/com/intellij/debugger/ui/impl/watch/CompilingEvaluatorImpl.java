@@ -18,8 +18,8 @@ package com.intellij.debugger.ui.impl.watch;
 import java.util.Collection;
 import java.util.function.Function;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.openapi.compiler.ClassObject;
@@ -44,7 +44,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 	}  */
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected Collection<ClassObject> compile(@Nullable JavaSdkVersion debuggeeVersion) throws EvaluateException
 	{
 		if(myCompiledClasses == null)
@@ -124,8 +124,8 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return myCompiledClasses;
 	}
 
-	@NotNull
-	private static String getSourceOption(@NotNull LanguageLevel languageLevel)
+	@Nonnull
+	private static String getSourceOption(@Nonnull LanguageLevel languageLevel)
 	{
 		return "1." + Integer.valueOf(3 + languageLevel.ordinal());
 	}
@@ -150,8 +150,8 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return file;
 	} */
 
-	@Nullable
-	public static ExpressionEvaluator create(@NotNull Project project, @Nullable PsiElement psiContext, @NotNull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
+	@javax.annotation.Nullable
+	public static ExpressionEvaluator create(@Nonnull Project project, @Nullable PsiElement psiContext, @Nonnull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
 	{
 		/*if(DEBUGGER_COMPILING_EVALUATOR && psiContext != null)
 		{
@@ -176,8 +176,8 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return null;
 	}
 
-	@NotNull
-	private static PsiElement findPhysicalContext(@NotNull PsiElement element)
+	@Nonnull
+	private static PsiElement findPhysicalContext(@Nonnull PsiElement element)
 	{
 		while(!element.isPhysical())
 		{

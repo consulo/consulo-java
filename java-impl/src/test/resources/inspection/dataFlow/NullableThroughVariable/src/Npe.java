@@ -1,8 +1,8 @@
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Npe {
-   Object foo(@NotNull Object o) {
+   Object foo(@Nonnull Object o) {
      return o;
    }
 

@@ -26,13 +26,12 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class ClassLiteralGetter {
 
-  public static void addCompletions(@NotNull final JavaSmartCompletionParameters parameters,
-                                    @NotNull Consumer<LookupElement> result, final PrefixMatcher matcher) {
+  public static void addCompletions(@Nonnull final JavaSmartCompletionParameters parameters,
+                                    @Nonnull Consumer<LookupElement> result, final PrefixMatcher matcher) {
     PsiType expectedType = parameters.getExpectedType();
     if (!InheritanceUtil.isInheritor(expectedType, CommonClassNames.JAVA_LANG_CLASS)) {
       return;
@@ -75,7 +74,7 @@ public class ClassLiteralGetter {
     });
   }
 
-  private static void addClassLiteralLookupElement(@Nullable final PsiType type, final Consumer<LookupElement> resultSet, final PsiFile context) {
+  private static void addClassLiteralLookupElement(@javax.annotation.Nullable final PsiType type, final Consumer<LookupElement> resultSet, final PsiFile context) {
     if (type instanceof PsiClassType &&
         PsiUtil.resolveClassInType(type) != null &&
         !((PsiClassType)type).hasParameters() &&

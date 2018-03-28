@@ -22,7 +22,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
@@ -95,7 +96,7 @@ public class FilterPattern
 		return false;
 	}
 
-	public boolean methodMatches(@NotNull PsiMethod method)
+	public boolean methodMatches(@Nonnull PsiMethod method)
 	{
 		final String methodName = method.getName();
 		final Pattern methodNamePattern = getMethodNamePattern();

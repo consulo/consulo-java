@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -25,8 +27,6 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ParameterListElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ParameterListElement");
@@ -79,7 +79,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
   }
 
   @Override
-  public void deleteChildInternal(@NotNull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     final TreeElement oldLastNodeInsideParens = getLastNodeInsideParens();
     final TreeElement oldFirstNodeInsideParens = getFirstNodeInsideParens();
     if (child.getElementType() == PARAMETER) {
@@ -176,7 +176,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
   /**
    * @return    last node before closing right paren if possible; <code>null</code> otherwise
    */
-  @Nullable
+  @javax.annotation.Nullable
   private TreeElement getLastNodeInsideParens() {
     TreeElement lastNode = getLastChildNode();
     return lastNode.getElementType() == RPARENTH ? lastNode.getTreePrev() : null;
@@ -185,7 +185,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
    /**
    * @return    first node after opening left paren if possible; <code>null</code> otherwise
    */
-  @Nullable
+  @javax.annotation.Nullable
   private TreeElement getFirstNodeInsideParens() {
     TreeElement firstNode = getFirstChildNode();
     return firstNode.getElementType() == LPARENTH ? firstNode.getTreeNext() : null;

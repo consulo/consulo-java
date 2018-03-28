@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -36,14 +36,14 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   public boolean m_ignoreForObjectSubclasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "implicit.call.to.super.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "implicit.call.to.super.problem.descriptor");
@@ -63,7 +63,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
 
   private static class AddExplicitSuperCall extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "implicit.call.to.super.make.explicit.quickfix");
@@ -101,7 +101,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   private class ImplicitCallToSuperVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (!method.isConstructor()) {
         return;

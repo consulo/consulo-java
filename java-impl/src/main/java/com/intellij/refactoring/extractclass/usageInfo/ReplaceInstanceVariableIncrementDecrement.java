@@ -20,11 +20,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo {
   private final PsiExpression reference;
-  private final @Nullable String setterName;
+  private final @javax.annotation.Nullable
+  String setterName;
   private final @Nullable String getterName;
   private final String delegateName;
   private final String fieldName;

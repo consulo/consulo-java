@@ -20,7 +20,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiJavaToken;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class PsiJavaTokenImpl extends LeafPsiElement implements PsiJavaToken{
   public PsiJavaTokenImpl(IElementType type, CharSequence text) {
@@ -33,7 +33,7 @@ public class PsiJavaTokenImpl extends LeafPsiElement implements PsiJavaToken{
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitJavaToken(this);
     }

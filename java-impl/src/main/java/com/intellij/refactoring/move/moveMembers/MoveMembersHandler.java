@@ -21,7 +21,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.refactoring.move.MoveCallback;
 import com.intellij.refactoring.move.MoveHandlerDelegate;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class MoveMembersHandler extends MoveHandlerDelegate {
   public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {

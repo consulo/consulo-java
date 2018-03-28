@@ -15,10 +15,11 @@
  */
 package com.siyeh.ipp.base;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class MutablyNamedIntention extends Intention {
 
@@ -27,14 +28,14 @@ public abstract class MutablyNamedIntention extends Intention {
   protected abstract String getTextForElement(PsiElement element);
 
   @Override
-  @NotNull
+  @Nonnull
   public final String getText() {
     return m_text == null ? "" : m_text;
   }
 
   @Override
-  public final boolean isAvailable(@NotNull Project project, Editor editor,
-                                   @NotNull PsiElement node) {
+  public final boolean isAvailable(@Nonnull Project project, Editor editor,
+                                   @Nonnull PsiElement node) {
     final PsiElement element = findMatchingElement(node, editor);
     if (element == null) {
       return false;

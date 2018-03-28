@@ -15,9 +15,10 @@
  */
 package com.siyeh.ig;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.GlobalJavaInspectionTool;
 
 public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool {
@@ -26,7 +27,7 @@ public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool {
   @NonNls private static final String INSPECTION = "Inspection";
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     if (shortName == null) {
       final Class<? extends BaseGlobalInspection> aClass = getClass();
@@ -42,7 +43,7 @@ public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public final String getGroupDisplayName() {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
   }

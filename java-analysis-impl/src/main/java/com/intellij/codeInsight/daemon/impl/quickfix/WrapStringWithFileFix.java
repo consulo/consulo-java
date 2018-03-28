@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
@@ -41,14 +43,14 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 	@Nullable
 	private final PsiType myType;
 
-	public WrapStringWithFileFix(@Nullable PsiType type, @NotNull PsiExpression expression)
+	public WrapStringWithFileFix(@javax.annotation.Nullable PsiType type, @Nonnull PsiExpression expression)
 	{
 		super(expression);
 		myType = type;
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -56,7 +58,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -65,19 +67,19 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		return myType != null && myType.isValid() && myType.equalsToText(CommonClassNames.JAVA_IO_FILE) && startElement.isValid() && startElement.getManager().isInProject(startElement) &&
 				isStringType(startElement);
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @javax.annotation.Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		startElement.replace(getModifiedExpression(startElement));
 	}
 
-	private static boolean isStringType(@NotNull PsiElement expression)
+	private static boolean isStringType(@Nonnull PsiElement expression)
 	{
 		if(!(expression instanceof PsiExpression))
 		{
@@ -91,7 +93,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 		return type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
 	}
 
-	private static PsiElement getModifiedExpression(@NotNull PsiElement expression)
+	private static PsiElement getModifiedExpression(@Nonnull PsiElement expression)
 	{
 		return JavaPsiFacade.getElementFactory(expression.getProject()).createExpressionFromText(PsiKeyword.NEW + " " + CommonClassNames.JAVA_IO_FILE + "(" + expression.getText() + ")", expression);
 	}
@@ -99,13 +101,13 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 	private static class MyMethodArgumentFix extends MethodArgumentFix implements HighPriorityAction
 	{
 
-		protected MyMethodArgumentFix(@NotNull PsiExpressionList list, int i, @NotNull PsiType toType, @NotNull ArgumentFixerActionFactory fixerActionFactory)
+		protected MyMethodArgumentFix(@Nonnull PsiExpressionList list, int i, @Nonnull PsiType toType, @Nonnull ArgumentFixerActionFactory fixerActionFactory)
 		{
 			super(list, i, toType, fixerActionFactory);
 		}
 
 		@Nls
-		@NotNull
+		@Nonnull
 		@Override
 		public String getText()
 		{
@@ -115,7 +117,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 		}
 
 		@Override
-		public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+		public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 		{
 			return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
 		}
@@ -123,7 +125,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 
 	public static class MyMethodArgumentFixerFactory extends ArgumentFixerActionFactory
 	{
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
 		protected PsiExpression getModifiedArgument(final PsiExpression expression, final PsiType toType) throws IncorrectOperationException
 		{
@@ -131,7 +133,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 		}
 
 		@Override
-		public boolean areTypesConvertible(@NotNull final PsiType exprType, @NotNull final PsiType parameterType, @NotNull final PsiElement context)
+		public boolean areTypesConvertible(@Nonnull final PsiType exprType, @Nonnull final PsiType parameterType, @Nonnull final PsiElement context)
 		{
 			return parameterType.isConvertibleFrom(exprType) || (parameterType.equalsToText(CommonClassNames.JAVA_IO_FILE) && exprType.equalsToText(CommonClassNames.JAVA_LANG_STRING));
 		}

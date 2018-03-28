@@ -17,8 +17,8 @@ package com.intellij.psi;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -31,8 +31,8 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType>
 {
 	protected static final Logger LOG = Logger.getInstance("#com.intellij.psi.PsiTypeMapper");
 
-	@Nullable
-	public <T extends PsiType> T mapType(@NotNull T type)
+	@javax.annotation.Nullable
+	public <T extends PsiType> T mapType(@Nonnull T type)
 	{
 		//noinspection unchecked
 		return (T) type.accept(this);

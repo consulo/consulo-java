@@ -27,7 +27,7 @@ import com.intellij.testFramework.LightIdeaTestCase;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -190,7 +190,7 @@ public class InspectionProfileTest extends LightIdeaTestCase {
     list.add(createTool("foo", true));
 
     InspectionToolRegistrar registrar = new InspectionToolRegistrar() {
-      @NotNull
+      @Nonnull
       @Override
       public List<InspectionToolWrapper> createTools() {
         return list;
@@ -339,8 +339,8 @@ public class InspectionProfileTest extends LightIdeaTestCase {
     return getInitializedTools(foo).size();
   }
 
-  @NotNull
-  public static List<InspectionToolWrapper> getInitializedTools(@NotNull Profile foo) {
+  @Nonnull
+  public static List<InspectionToolWrapper> getInitializedTools(@Nonnull Profile foo) {
     List<InspectionToolWrapper> initialized = new ArrayList<InspectionToolWrapper>();
     List<ScopeToolState> tools = ((InspectionProfileImpl)foo).getAllTools(getProject());
     for (ScopeToolState tool : tools) {

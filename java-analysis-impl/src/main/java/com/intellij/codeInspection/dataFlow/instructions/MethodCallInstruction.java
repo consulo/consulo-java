@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
@@ -45,9 +45,9 @@ public class MethodCallInstruction extends Instruction
 	private final PsiType myType;
 	private final int myArgCount;
 	private final boolean myShouldFlushFields;
-	@NotNull
+	@Nonnull
 	private final PsiElement myContext;
-	@Nullable
+	@javax.annotation.Nullable
 	private final PsiMethod myTargetMethod;
 	private final List<MethodContract> myContracts;
 	private final MethodType myMethodType;
@@ -66,7 +66,7 @@ public class MethodCallInstruction extends Instruction
 		CAST
 	}
 
-	public MethodCallInstruction(@NotNull PsiExpression context, MethodType methodType, @Nullable PsiType resultType)
+	public MethodCallInstruction(@Nonnull PsiExpression context, MethodType methodType, @Nullable PsiType resultType)
 	{
 		myContext = context;
 		myContracts = Collections.emptyList();
@@ -81,7 +81,7 @@ public class MethodCallInstruction extends Instruction
 		myReturnNullability = Nullness.UNKNOWN;
 	}
 
-	public MethodCallInstruction(@NotNull PsiMethodReferenceExpression reference, @NotNull List<? extends MethodContract> contracts)
+	public MethodCallInstruction(@Nonnull PsiMethodReferenceExpression reference, @Nonnull List<? extends MethodContract> contracts)
 	{
 		myContext = reference;
 		myMethodType = MethodType.METHOD_REFERENCE_CALL;
@@ -114,7 +114,7 @@ public class MethodCallInstruction extends Instruction
 		myShouldFlushFields = !isPureCall();
 	}
 
-	public MethodCallInstruction(@NotNull PsiCall call, @Nullable DfaValue precalculatedReturnValue, List<? extends MethodContract> contracts)
+	public MethodCallInstruction(@Nonnull PsiCall call, @Nullable DfaValue precalculatedReturnValue, List<? extends MethodContract> contracts)
 	{
 		myContext = call;
 		myContracts = Collections.unmodifiableList(contracts);
@@ -301,7 +301,7 @@ public class MethodCallInstruction extends Instruction
 		return myMethodType == MethodType.REGULAR_METHOD_CALL && myContext instanceof PsiCall ? (PsiCall) myContext : null;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiElement getContext()
 	{
 		return myContext;
@@ -313,7 +313,7 @@ public class MethodCallInstruction extends Instruction
 		return myPrecalculatedReturnValue;
 	}
 
-	@NotNull
+	@Nonnull
 	public Nullness getReturnNullability()
 	{
 		return myReturnNullability;

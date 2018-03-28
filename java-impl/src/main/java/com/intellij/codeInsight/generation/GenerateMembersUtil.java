@@ -22,9 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import org.jetbrains.java.generate.GenerationUtil;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.template.TemplatesManager;
@@ -76,8 +78,8 @@ public class GenerateMembersUtil
 	{
 	}
 
-	@NotNull
-	public static <T extends GenerationInfo> List<T> insertMembersAtOffset(PsiFile file, int offset, @NotNull List<T> memberPrototypes) throws IncorrectOperationException
+	@Nonnull
+	public static <T extends GenerationInfo> List<T> insertMembersAtOffset(PsiFile file, int offset, @Nonnull List<T> memberPrototypes) throws IncorrectOperationException
 	{
 		if(memberPrototypes.isEmpty())
 		{
@@ -158,8 +160,8 @@ public class GenerateMembersUtil
 		return insertMembersBeforeAnchor(aClass, anchor, memberPrototypes);
 	}
 
-	@NotNull
-	public static <T extends GenerationInfo> List<T> insertMembersBeforeAnchor(PsiClass aClass, @Nullable PsiElement anchor, @NotNull List<T> memberPrototypes) throws IncorrectOperationException
+	@Nonnull
+	public static <T extends GenerationInfo> List<T> insertMembersBeforeAnchor(PsiClass aClass, @javax.annotation.Nullable PsiElement anchor, @Nonnull List<T> memberPrototypes) throws IncorrectOperationException
 	{
 		boolean before = true;
 		for(T memberPrototype : memberPrototypes)
@@ -174,7 +176,7 @@ public class GenerateMembersUtil
 	/**
 	 * @see GenerationInfo#positionCaret(Editor, boolean)
 	 */
-	public static void positionCaret(@NotNull Editor editor, @NotNull PsiElement firstMember, boolean toEditMethodBody)
+	public static void positionCaret(@Nonnull Editor editor, @Nonnull PsiElement firstMember, boolean toEditMethodBody)
 	{
 		LOG.assertTrue(firstMember.isValid());
 		Project project = firstMember.getProject();
@@ -271,7 +273,7 @@ public class GenerateMembersUtil
 		editor.getSelectionModel().removeSelection();
 	}
 
-	public static PsiElement insert(@NotNull PsiClass aClass, @NotNull PsiMember member, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
+	public static PsiElement insert(@Nonnull PsiClass aClass, @Nonnull PsiMember member, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
 	{
 		if(member instanceof PsiMethod)
 		{
@@ -298,7 +300,7 @@ public class GenerateMembersUtil
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiClass findClassAtOffset(PsiFile file, PsiElement leaf)
 	{
 		PsiElement element = leaf;
@@ -343,7 +345,7 @@ public class GenerateMembersUtil
 		return substituteGenericMethod(method, substitutor, null);
 	}
 
-	public static PsiMethod substituteGenericMethod(@NotNull PsiMethod sourceMethod, @NotNull PsiSubstitutor substitutor, @Nullable PsiElement target)
+	public static PsiMethod substituteGenericMethod(@Nonnull PsiMethod sourceMethod, @Nonnull PsiSubstitutor substitutor, @javax.annotation.Nullable PsiElement target)
 	{
 		final Project project = sourceMethod.getProject();
 		final JVMElementFactory factory = getFactory(sourceMethod.getProject(), target);
@@ -386,18 +388,18 @@ public class GenerateMembersUtil
 		}
 	}
 
-	private static void copyModifiers(@NotNull PsiModifierList sourceModifierList, @NotNull PsiModifierList targetModifierList)
+	private static void copyModifiers(@Nonnull PsiModifierList sourceModifierList, @Nonnull PsiModifierList targetModifierList)
 	{
 		VisibilityUtil.setVisibility(targetModifierList, VisibilityUtil.getVisibilityModifier(sourceModifierList));
 	}
 
-	@NotNull
-	private static PsiSubstitutor substituteTypeParameters(@NotNull JVMElementFactory factory,
-			@Nullable PsiElement target,
+	@Nonnull
+	private static PsiSubstitutor substituteTypeParameters(@Nonnull JVMElementFactory factory,
+			@javax.annotation.Nullable PsiElement target,
 			@Nullable PsiTypeParameterList sourceTypeParameterList,
-			@Nullable PsiTypeParameterList targetTypeParameterList,
-			@NotNull PsiSubstitutor substitutor,
-			@NotNull PsiMethod sourceMethod)
+			@javax.annotation.Nullable PsiTypeParameterList targetTypeParameterList,
+			@Nonnull PsiSubstitutor substitutor,
+			@Nonnull PsiMethod sourceMethod)
 	{
 		if(sourceTypeParameterList == null || targetTypeParameterList == null || PsiUtil.isRawSubstitutor(sourceMethod, substitutor))
 		{
@@ -419,12 +421,12 @@ public class GenerateMembersUtil
 		return substitutionMap.isEmpty() ? substitutor : factory.createSubstitutor(substitutionMap);
 	}
 
-	@NotNull
-	private static PsiTypeParameter resolveTypeParametersCollision(@NotNull JVMElementFactory factory,
-			@NotNull PsiTypeParameterList sourceTypeParameterList,
+	@Nonnull
+	private static PsiTypeParameter resolveTypeParametersCollision(@Nonnull JVMElementFactory factory,
+			@Nonnull PsiTypeParameterList sourceTypeParameterList,
 			@Nullable PsiElement target,
-			@NotNull PsiTypeParameter typeParam,
-			@NotNull PsiSubstitutor substitutor)
+			@Nonnull PsiTypeParameter typeParam,
+			@Nonnull PsiSubstitutor substitutor)
 	{
 		for(PsiType type : substitutor.getSubstitutionMap().values())
 		{
@@ -439,8 +441,8 @@ public class GenerateMembersUtil
 		return factory.createTypeParameter(typeParam.getName(), typeParam.getSuperTypes());
 	}
 
-	@NotNull
-	private static String suggestUniqueTypeParameterName(String baseName, @NotNull PsiTypeParameterList typeParameterList, @Nullable PsiClass targetClass)
+	@Nonnull
+	private static String suggestUniqueTypeParameterName(String baseName, @Nonnull PsiTypeParameterList typeParameterList, @javax.annotation.Nullable PsiClass targetClass)
 	{
 		int i = 0;
 		while(true)
@@ -454,7 +456,7 @@ public class GenerateMembersUtil
 	}
 
 
-	private static boolean checkUniqueTypeParameterName(@NotNull String baseName, @Nullable PsiTypeParameterList typeParameterList)
+	private static boolean checkUniqueTypeParameterName(@Nonnull String baseName, @javax.annotation.Nullable PsiTypeParameterList typeParameterList)
 	{
 		if(typeParameterList == null)
 		{
@@ -472,11 +474,11 @@ public class GenerateMembersUtil
 	}
 
 
-	@NotNull
-	private static PsiTypeParameter substituteTypeParameter(final @NotNull JVMElementFactory factory,
-			@NotNull PsiTypeParameter typeParameter,
-			final @NotNull PsiSubstitutor substitutor,
-			@NotNull final PsiMethod sourceMethod)
+	@Nonnull
+	private static PsiTypeParameter substituteTypeParameter(final @Nonnull JVMElementFactory factory,
+			@Nonnull PsiTypeParameter typeParameter,
+			final @Nonnull PsiSubstitutor substitutor,
+			@Nonnull final PsiMethod sourceMethod)
 	{
 		final PsiElement copy = typeParameter.copy();
 		final Map<PsiElement, PsiElement> replacementMap = new HashMap<PsiElement, PsiElement>();
@@ -497,11 +499,11 @@ public class GenerateMembersUtil
 		return (PsiTypeParameter) RefactoringUtil.replaceElementsWithMap(copy, replacementMap);
 	}
 
-	private static void substituteParameters(@NotNull JVMElementFactory factory,
-			@NotNull JavaCodeStyleManager codeStyleManager,
-			@NotNull PsiParameterList sourceParameterList,
-			@NotNull PsiParameterList targetParameterList,
-			@NotNull PsiSubstitutor substitutor,
+	private static void substituteParameters(@Nonnull JVMElementFactory factory,
+			@Nonnull JavaCodeStyleManager codeStyleManager,
+			@Nonnull PsiParameterList sourceParameterList,
+			@Nonnull PsiParameterList targetParameterList,
+			@Nonnull PsiSubstitutor substitutor,
 			PsiElement target)
 	{
 		final PsiParameter[] parameters = sourceParameterList.getParameters();
@@ -515,9 +517,9 @@ public class GenerateMembersUtil
 	}
 
 	public static PsiParameter[] overriddenParameters(PsiParameter[] parameters,
-			@NotNull JVMElementFactory factory,
-			@NotNull JavaCodeStyleManager codeStyleManager,
-			@NotNull PsiSubstitutor substitutor,
+			@Nonnull JVMElementFactory factory,
+			@Nonnull JavaCodeStyleManager codeStyleManager,
+			@Nonnull PsiSubstitutor substitutor,
 			PsiElement target)
 	{
 		PsiParameter[] result = new PsiParameter[parameters.length];
@@ -560,10 +562,10 @@ public class GenerateMembersUtil
 		return result;
 	}
 
-	private static void substituteThrows(@NotNull JVMElementFactory factory,
-			@NotNull PsiReferenceList targetThrowsList,
-			@NotNull PsiSubstitutor substitutor,
-			@NotNull PsiMethod sourceMethod,
+	private static void substituteThrows(@Nonnull JVMElementFactory factory,
+			@Nonnull PsiReferenceList targetThrowsList,
+			@Nonnull PsiSubstitutor substitutor,
+			@Nonnull PsiMethod sourceMethod,
 			List<PsiClassType> thrownTypes)
 	{
 		for(PsiClassType thrownType : thrownTypes)
@@ -600,8 +602,8 @@ public class GenerateMembersUtil
 		});
 	}
 
-	@NotNull
-	private static PsiMethod createMethod(@NotNull JVMElementFactory factory, @NotNull PsiMethod method, PsiElement target)
+	@Nonnull
+	private static PsiMethod createMethod(@Nonnull JVMElementFactory factory, @Nonnull PsiMethod method, PsiElement target)
 	{
 		if(method.isConstructor())
 		{
@@ -610,7 +612,7 @@ public class GenerateMembersUtil
 		return factory.createMethod(method.getName(), PsiType.VOID, target);
 	}
 
-	private static void substituteReturnType(@NotNull PsiManager manager, @NotNull PsiMethod method, @Nullable PsiType returnType, @NotNull PsiSubstitutor substitutor)
+	private static void substituteReturnType(@Nonnull PsiManager manager, @Nonnull PsiMethod method, @javax.annotation.Nullable PsiType returnType, @Nonnull PsiSubstitutor substitutor)
 	{
 		final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
 		if(returnTypeElement == null || returnType == null)
@@ -622,8 +624,8 @@ public class GenerateMembersUtil
 		returnTypeElement.replace(new LightTypeElement(manager, substitutedReturnType instanceof PsiWildcardType ? TypeConversionUtil.erasure(substitutedReturnType) : substitutedReturnType));
 	}
 
-	@NotNull
-	private static JVMElementFactory getFactory(@NotNull Project p, @Nullable PsiElement target)
+	@Nonnull
+	private static JVMElementFactory getFactory(@Nonnull Project p, @javax.annotation.Nullable PsiElement target)
 	{
 		return target == null ? JavaPsiFacade.getInstance(p).getElementFactory() : JVMElementFactories.requireFactory(target.getLanguage(), p);
 	}
@@ -638,7 +640,7 @@ public class GenerateMembersUtil
 		return typeName != null && NameUtil.getSuggestionsByName(typeName, "", "", false, false, parameterType instanceof PsiArrayType).contains(paramName);
 	}
 
-	private static PsiType substituteType(final PsiSubstitutor substitutor, final PsiType type, @NotNull PsiTypeParameterListOwner owner)
+	private static PsiType substituteType(final PsiSubstitutor substitutor, final PsiType type, @Nonnull PsiTypeParameterListOwner owner)
 	{
 		if(PsiUtil.isRawSubstitutor(owner, substitutor))
 		{
@@ -713,7 +715,7 @@ public class GenerateMembersUtil
 		OverrideImplementUtil.annotateOnOverrideImplement(method, base, overridden);
 	}
 
-	public static void copyOrReplaceModifierList(@NotNull PsiModifierListOwner sourceParam, @NotNull PsiModifierListOwner targetParam)
+	public static void copyOrReplaceModifierList(@Nonnull PsiModifierListOwner sourceParam, @Nonnull PsiModifierListOwner targetParam)
 	{
 		PsiModifierList sourceModifierList = sourceParam.getModifierList();
 		PsiModifierList targetModifierList = targetParam.getModifierList();
@@ -774,12 +776,12 @@ public class GenerateMembersUtil
 	}
 
 	//java bean getters/setters
-	public static PsiMethod generateSimpleGetterPrototype(@NotNull PsiField field)
+	public static PsiMethod generateSimpleGetterPrototype(@Nonnull PsiField field)
 	{
 		return generatePrototype(field, PropertyUtil.generateGetterPrototype(field));
 	}
 
-	public static PsiMethod generateSimpleSetterPrototype(@NotNull PsiField field)
+	public static PsiMethod generateSimpleSetterPrototype(@Nonnull PsiField field)
 	{
 		return generatePrototype(field, PropertyUtil.generateSetterPrototype(field));
 	}
@@ -812,32 +814,32 @@ public class GenerateMembersUtil
 		return suggestSetterName(JavaPsiFacade.getElementFactory(project).createField(name, type instanceof PsiEllipsisType ? ((PsiEllipsisType) type).toArrayType() : type));
 	}
 
-	public static PsiMethod generateGetterPrototype(@NotNull PsiField field)
+	public static PsiMethod generateGetterPrototype(@Nonnull PsiField field)
 	{
 		return generateGetterPrototype(field, true);
 	}
 
-	public static PsiMethod generateSetterPrototype(@NotNull PsiField field)
+	public static PsiMethod generateSetterPrototype(@Nonnull PsiField field)
 	{
 		return generateSetterPrototype(field, true);
 	}
 
-	public static PsiMethod generateSetterPrototype(@NotNull PsiField field, PsiClass aClass)
+	public static PsiMethod generateSetterPrototype(@Nonnull PsiField field, PsiClass aClass)
 	{
 		return generatePrototype(field, aClass, true, SetterTemplatesManager.getInstance());
 	}
 
-	static PsiMethod generateGetterPrototype(@NotNull PsiField field, boolean ignoreInvalidTemplate)
+	static PsiMethod generateGetterPrototype(@Nonnull PsiField field, boolean ignoreInvalidTemplate)
 	{
 		return generatePrototype(field, field.getContainingClass(), ignoreInvalidTemplate, GetterTemplatesManager.getInstance());
 	}
 
-	static PsiMethod generateSetterPrototype(@NotNull PsiField field, boolean ignoreInvalidTemplate)
+	static PsiMethod generateSetterPrototype(@Nonnull PsiField field, boolean ignoreInvalidTemplate)
 	{
 		return generatePrototype(field, field.getContainingClass(), ignoreInvalidTemplate, SetterTemplatesManager.getInstance());
 	}
 
-	private static PsiMethod generatePrototype(@NotNull PsiField field, PsiClass psiClass, boolean ignoreInvalidTemplate, TemplatesManager templatesManager)
+	private static PsiMethod generatePrototype(@Nonnull PsiField field, PsiClass psiClass, boolean ignoreInvalidTemplate, TemplatesManager templatesManager)
 	{
 		Project project = field.getProject();
 		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
@@ -883,8 +885,8 @@ public class GenerateMembersUtil
 		return generatePrototype(field, result);
 	}
 
-	@Nullable
-	private static PsiMethod generatePrototype(@NotNull PsiField field, PsiMethod result)
+	@javax.annotation.Nullable
+	private static PsiMethod generatePrototype(@Nonnull PsiField field, PsiMethod result)
 	{
 		return setVisibility(field, annotateOnOverrideImplement(field.getContainingClass(), result));
 	}
@@ -915,8 +917,8 @@ public class GenerateMembersUtil
 		return prototype;
 	}
 
-	@Nullable
-	public static PsiMethod annotateOnOverrideImplement(@Nullable PsiClass targetClass, @Nullable PsiMethod generated)
+	@javax.annotation.Nullable
+	public static PsiMethod annotateOnOverrideImplement(@javax.annotation.Nullable PsiClass targetClass, @Nullable PsiMethod generated)
 	{
 		if(generated == null || targetClass == null)
 		{

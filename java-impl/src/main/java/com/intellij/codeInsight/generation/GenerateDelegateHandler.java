@@ -23,8 +23,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.ide.util.MemberChooser;
@@ -69,7 +69,7 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project, @NotNull final Editor editor, @NotNull final PsiFile file)
+	public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file)
 	{
 		if(!CodeInsightUtilBase.prepareEditorForWrite(editor))
 		{
@@ -417,7 +417,7 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
 		return targetElements != null && targetElements.length > 0;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiElementClassMember chooseTarget(PsiFile file, Editor editor, Project project)
 	{
 		final PsiElementClassMember[] targetElements = getTargetElements(file, editor);
@@ -451,7 +451,7 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
 		return null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiElementClassMember[] getTargetElements(PsiFile file, Editor editor)
 	{
 		int offset = editor.getCaretModel().getOffset();

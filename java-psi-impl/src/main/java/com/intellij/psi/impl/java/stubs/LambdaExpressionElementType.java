@@ -17,7 +17,8 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -44,25 +45,25 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
 	}
 
 	@Override
-	public PsiLambdaExpression createPsi(@NotNull ASTNode node)
+	public PsiLambdaExpression createPsi(@Nonnull ASTNode node)
 	{
 		return new PsiLambdaExpressionImpl(node);
 	}
 
 	@Override
-	public PsiLambdaExpression createPsi(@NotNull FunctionalExpressionStub<PsiLambdaExpression> stub)
+	public PsiLambdaExpression createPsi(@Nonnull FunctionalExpressionStub<PsiLambdaExpression> stub)
 	{
 		return new PsiLambdaExpressionImpl(stub);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
 		return new CompositeElement(this)
 		{
 			@Override
-			public void replaceChildInternal(@NotNull ASTNode child, @NotNull TreeElement newElement)
+			public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
 			{
 				if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) && ElementType.EXPRESSION_BIT_SET.contains(newElement.getElementType()))
 				{
@@ -99,15 +100,15 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected String getPresentableText(@NotNull LighterAST tree, @NotNull LighterASTNode funExpr)
+	protected String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr)
 	{
 		LighterASTNode parameterList = ObjectUtils.notNull(LightTreeUtil.firstChildOfType(tree, funExpr, JavaStubElementTypes.PARAMETER_LIST));
 		return getLambdaPresentableText(tree, parameterList);
 	}
 
-	private static String getLambdaPresentableText(@NotNull LighterAST tree, @NotNull LighterASTNode parameterList)
+	private static String getLambdaPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode parameterList)
 	{
 		StringBuilder buf = new StringBuilder(parameterList.getEndOffset() - parameterList.getStartOffset());
 		formatParameterList(tree, parameterList, buf);
@@ -115,7 +116,7 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
 		return buf.toString();
 	}
 
-	private static void formatParameterList(@NotNull LighterAST tree, @NotNull LighterASTNode parameterList, StringBuilder buf)
+	private static void formatParameterList(@Nonnull LighterAST tree, @Nonnull LighterASTNode parameterList, StringBuilder buf)
 	{
 		final List<LighterASTNode> children = tree.getChildren(parameterList);
 		boolean isFirstParameter = true;
@@ -147,7 +148,7 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
 		}
 	}
 
-	private static void formatParameter(@NotNull LighterAST tree, @NotNull LighterASTNode parameter, StringBuilder buf)
+	private static void formatParameter(@Nonnull LighterAST tree, @Nonnull LighterASTNode parameter, StringBuilder buf)
 	{
 		final List<LighterASTNode> children = tree.getChildren(parameter);
 		for(LighterASTNode node : children)

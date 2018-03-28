@@ -15,20 +15,21 @@
  */
 package com.intellij.refactoring.wrapreturnvalue;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.psi.MyUsageViewUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
 
 class WrapReturnValueUsageViewDescriptor implements UsageViewDescriptor {
 
-    @NotNull
+    @Nonnull
     private final PsiMethod method;
 
-    WrapReturnValueUsageViewDescriptor(@NotNull PsiMethod method,
+    WrapReturnValueUsageViewDescriptor(@Nonnull PsiMethod method,
                                        UsageInfo[] usages){
         super();
         this.method = method;

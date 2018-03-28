@@ -1,10 +1,9 @@
-import org.jetbrains.annotations.*;
 class TestIDEAWarn {
-  void method(@Nullable MyEnum e) {
+  void method(@javax.annotation.Nullable MyEnum e) {
     if (e != MyEnum.foo) {return;}
     System.out.println(e.hashCode());
   }
-  void method2(@Nullable MyEnum e) {
+  void method2(@javax.annotation.Nullable MyEnum e) {
     if (e == MyEnum.foo) {
       System.out.println(e.hashCode());
     }

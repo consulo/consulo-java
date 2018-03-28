@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.scope.processor;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiCallExpression;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -34,19 +35,19 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 {
 	private boolean myStopAcceptingCandidates;
 
-	public MethodResolverProcessor(@NotNull PsiMethodCallExpression place, @NotNull PsiFile placeFile)
+	public MethodResolverProcessor(@Nonnull PsiMethodCallExpression place, @Nonnull PsiFile placeFile)
 	{
 		this(place, place.getArgumentList(), placeFile);
 	}
 
-	public MethodResolverProcessor(@NotNull PsiCallExpression place, @NotNull PsiExpressionList argumentList, @NotNull PsiFile placeFile)
+	public MethodResolverProcessor(@Nonnull PsiCallExpression place, @Nonnull PsiExpressionList argumentList, @Nonnull PsiFile placeFile)
 	{
 		this(place, placeFile, new PsiConflictResolver[]{new JavaMethodsConflictResolver(argumentList, PsiUtil.getLanguageLevel(placeFile))});
 		setArgumentList(argumentList);
 		obtainTypeArguments(place);
 	}
 
-	public MethodResolverProcessor(PsiClass classConstr, @NotNull PsiExpressionList argumentList, @NotNull PsiElement place, @NotNull PsiFile placeFile)
+	public MethodResolverProcessor(PsiClass classConstr, @Nonnull PsiExpressionList argumentList, @Nonnull PsiElement place, @Nonnull PsiFile placeFile)
 	{
 		super(place, placeFile, new PsiConflictResolver[]{
 				new JavaMethodsConflictResolver(argumentList, PsiUtil.getLanguageLevel(placeFile))
@@ -56,13 +57,13 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 		setArgumentList(argumentList);
 	}
 
-	public MethodResolverProcessor(@NotNull PsiElement place, @NotNull PsiFile placeFile, @NotNull PsiConflictResolver[] resolvers)
+	public MethodResolverProcessor(@Nonnull PsiElement place, @Nonnull PsiFile placeFile, @Nonnull PsiConflictResolver[] resolvers)
 	{
 		super(place, placeFile, resolvers, new SmartList<CandidateInfo>());
 	}
 
 	@Override
-	public void handleEvent(@NotNull Event event, Object associated)
+	public void handleEvent(@Nonnull Event event, Object associated)
 	{
 		if(event == JavaScopeProcessorEvent.CHANGE_LEVEL)
 		{
@@ -75,7 +76,7 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 	}
 
 	@Override
-	public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state)
+	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		return !myStopAcceptingCandidates && super.execute(element, state);
 	}

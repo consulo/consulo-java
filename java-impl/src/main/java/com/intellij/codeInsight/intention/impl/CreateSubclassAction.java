@@ -55,8 +55,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,19 +66,19 @@ public class CreateSubclassAction extends BaseIntentionAction {
   @NonNls private static final String IMPL_SUFFIX = "Impl";
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     return myText;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.implement.abstract.class.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final CaretModel caretModel = editor.getCaretModel();
     final int position = caretModel.getOffset();
     PsiElement element = file.findElementAt(position);
@@ -130,7 +129,7 @@ public class CreateSubclassAction extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     final PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
 
@@ -164,7 +163,7 @@ public class CreateSubclassAction extends BaseIntentionAction {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static CreateClassDialog chooseSubclassToCreate(PsiClass psiClass) {
     final PsiDirectory sourceDir = psiClass.getContainingFile().getContainingDirectory();
 
@@ -305,7 +304,7 @@ public class CreateSubclassAction extends BaseIntentionAction {
     return typeParameterList.replace(oldTypeParameterList);
   }
 
-  protected static void chooseAndImplement(PsiClass psiClass, Project project, @NotNull PsiClass targetClass, Editor editor) {
+  protected static void chooseAndImplement(PsiClass psiClass, Project project, @Nonnull PsiClass targetClass, Editor editor) {
     boolean hasNonTrivialConstructor = false;
     final PsiMethod[] constructors = psiClass.getConstructors();
     for (PsiMethod constructor : constructors) {

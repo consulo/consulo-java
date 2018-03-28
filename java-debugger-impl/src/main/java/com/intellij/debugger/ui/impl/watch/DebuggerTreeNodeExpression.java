@@ -17,7 +17,7 @@ package com.intellij.debugger.ui.impl.watch;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.codeinsight.RuntimeTypeEvaluator;

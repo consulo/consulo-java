@@ -24,12 +24,13 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManager;
@@ -50,7 +51,6 @@ import com.intellij.debugger.ui.breakpoints.BreakpointManager;
 import com.intellij.debugger.ui.tree.render.BatchEvaluator;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
@@ -101,7 +101,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	private final DebuggerContextListener mySessionListener = new DebuggerContextListener()
 	{
 		@Override
-		public void changeEvent(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event)
+		public void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
 		{
 
 			final DebuggerSession session = newContext.getDebuggerSession();
@@ -150,7 +150,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	}
 
 	@Override
-	public String getVMClassQualifiedName(@NotNull final PsiClass aClass)
+	public String getVMClassQualifiedName(@Nonnull final PsiClass aClass)
 	{
 		for(NameMapper nameMapper : myNameMappers)
 		{
@@ -209,7 +209,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 		return getSessions().stream().filter(debuggerSession -> process == debuggerSession.getProcess()).findFirst().orElse(null);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Collection<DebuggerSession> getSessions()
 	{
@@ -257,7 +257,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 
 	@Override
 	@Nullable
-	public DebuggerSession attachVirtualMachine(@NotNull DebugEnvironment environment) throws ExecutionException
+	public DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		DebugProcessEvents debugProcess = new DebugProcessEvents(myProject);
@@ -415,27 +415,27 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getComponentName()
 	{
 		return "DebuggerManager";
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public BreakpointManager getBreakpointManager()
 	{
 		return myBreakpointManager;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DebuggerContextImpl getContext()
 	{
 		return getContextManager().getContext();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DebuggerStateManager getContextManager()
 	{
@@ -681,7 +681,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	{
 		private DebuggerSession myDebuggerSession;
 
-		@NotNull
+		@Nonnull
 		@Override
 		public DebuggerContextImpl getContext()
 		{
@@ -689,7 +689,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 		}
 
 		@Override
-		public void setState(@NotNull final DebuggerContextImpl context, DebuggerSession.State state, DebuggerSession.Event event, String description)
+		public void setState(@Nonnull final DebuggerContextImpl context, DebuggerSession.State state, DebuggerSession.Event event, String description)
 		{
 			ApplicationManager.getApplication().assertIsDispatchThread();
 			myDebuggerSession = context.getDebuggerSession();

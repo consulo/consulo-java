@@ -19,7 +19,7 @@ import java.awt.Color;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiExpressionPattern;
@@ -57,7 +57,7 @@ public class JavaPreviewHintProvider implements PreviewHintProvider
 	}
 
 	@Override
-	public JComponent getPreviewComponent(@NotNull PsiElement element)
+	public JComponent getPreviewComponent(@Nonnull PsiElement element)
 	{
 		final PsiNewExpression psiNewExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
 

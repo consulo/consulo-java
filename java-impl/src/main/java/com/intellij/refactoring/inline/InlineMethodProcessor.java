@@ -57,8 +57,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -83,16 +83,16 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
   private PsiMethod myMethodCopy;
   private Map<Language,InlineHandler.Inliner> myInliners;
 
-  public InlineMethodProcessor(@NotNull Project project,
-                               @NotNull PsiMethod method,
+  public InlineMethodProcessor(@Nonnull Project project,
+                               @Nonnull PsiMethod method,
                                @Nullable PsiJavaCodeReferenceElement reference,
                                Editor editor,
                                boolean isInlineThisOnly) {
     this(project, method, reference, editor, isInlineThisOnly, false, false);
   }
 
-  public InlineMethodProcessor(@NotNull Project project,
-                               @NotNull PsiMethod method,
+  public InlineMethodProcessor(@Nonnull Project project,
+                               @Nonnull PsiMethod method,
                                @Nullable PsiJavaCodeReferenceElement reference,
                                Editor editor,
                                boolean isInlineThisOnly,
@@ -117,12 +117,12 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     return RefactoringBundle.message("inline.method.command", myDescriptiveName);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InlineViewDescriptor(myMethod);
   }
 
-  @NotNull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     if (myInlineThisOnly) return new UsageInfo[]{new UsageInfo(myReference)};
     Set<UsageInfo> usages = new HashSet<UsageInfo>();
@@ -136,7 +136,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     if (mySearchInComments || mySearchForTextOccurrences) {
       final NonCodeUsageInfoFactory infoFactory = new NonCodeUsageInfoFactory(myMethod, myMethod.getName()) {
         @Override
-        public UsageInfo createUsageInfo(@NotNull PsiElement usage, int startOffset, int endOffset) {
+        public UsageInfo createUsageInfo(@Nonnull PsiElement usage, int startOffset, int endOffset) {
           if (PsiTreeUtil.isAncestor(myMethod, usage, false)) return null;
           return super.createUsageInfo(usage, startOffset, endOffset);
         }
@@ -219,7 +219,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
       }
 
       @Override
-      public void inlineUsage(@NotNull UsageInfo usage, @NotNull PsiElement referenced) {
+      public void inlineUsage(@Nonnull UsageInfo usage, @Nonnull PsiElement referenced) {
         if (usage instanceof NonCodeUsageInfo) return;
 
         throw new UnsupportedOperationException(
@@ -1419,7 +1419,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private PsiExpression getSimpleFieldInitializer(PsiField field, PsiClassInitializer initializer) {
     final PsiStatement[] statements = initializer.getBody().getStatements();
     if (statements.length != 1) return null;
@@ -1515,8 +1515,8 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @NotNull
-  protected Collection<? extends PsiElement> getElementsToWrite(@NotNull final UsageViewDescriptor descriptor) {
+  @Nonnull
+  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
     if (myInlineThisOnly) {
       return Collections.singletonList(myReference);
     }

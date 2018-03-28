@@ -26,8 +26,8 @@ package org.osmorc.manifest.lang.psi;
 
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.StubBasedPsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.psi.stub.HeaderStub;
 
 /**
@@ -43,7 +43,7 @@ public interface Header extends PsiNamedElement, StubBasedPsiElement<HeaderStub>
   /**
    * @return a list of clauses which describe the values of this header.
    */
-  @NotNull
+  @Nonnull
   Clause[] getClauses();
 
   /**
@@ -54,5 +54,5 @@ public interface Header extends PsiNamedElement, StubBasedPsiElement<HeaderStub>
   @Nullable
   Object getSimpleConvertedValue();
 
-  void addClause(@NotNull String text);
+  void addClause(@Nonnull String text);
 }

@@ -15,7 +15,8 @@
  */
 package com.intellij.refactoring.typeMigration.ui;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.packageDependencies.ui.UsagesPanel;
 import com.intellij.psi.PsiElement;
@@ -42,7 +43,7 @@ public class MigrationConflictsPanel extends UsagesPanel
 	}
 
 	@Override
-	public void showUsages(@NotNull final PsiElement[] primaryElements, @NotNull final UsageInfo[] usageInfos)
+	public void showUsages(@Nonnull final PsiElement[] primaryElements, @Nonnull final UsageInfo[] usageInfos)
 	{
 		super.showUsages(primaryElements, usageInfos);
 	}

@@ -15,8 +15,9 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.scope.PsiScopeProcessor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a reference found in Java code.
@@ -39,10 +40,10 @@ public interface PsiJavaReference extends PsiPolyVariantReference {
    * result.
    * @return the result of the resolve.
    */
-  @NotNull
+  @Nonnull
   JavaResolveResult advancedResolve(boolean incompleteCode);
   
   @Override
-  @NotNull
+  @Nonnull
   JavaResolveResult[] multiResolve(boolean incompleteCode);
 }

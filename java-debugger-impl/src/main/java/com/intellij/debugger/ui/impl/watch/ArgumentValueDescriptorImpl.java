@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -106,7 +107,7 @@ public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@NotNull String expression, @NotNull XModificationCallback callback)
+			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
 			{
 				final DecompiledLocalVariable local = ArgumentValueDescriptorImpl.this.getVariable();
 				if(local != null)

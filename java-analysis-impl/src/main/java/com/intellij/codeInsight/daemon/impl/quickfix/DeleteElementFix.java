@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.application.WriteAction;
@@ -33,20 +35,20 @@ public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElemen
 {
 	private final String myText;
 
-	public DeleteElementFix(@NotNull PsiElement element)
+	public DeleteElementFix(@Nonnull PsiElement element)
 	{
 		super(element);
 		myText = null;
 	}
 
-	public DeleteElementFix(@NotNull PsiElement element, @NotNull @Nls String text)
+	public DeleteElementFix(@Nonnull PsiElement element, @Nonnull @Nls String text)
 	{
 		super(element);
 		myText = text;
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -54,7 +56,7 @@ public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElemen
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -62,7 +64,7 @@ public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElemen
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		if(FileModificationService.getInstance().preparePsiElementForWrite(file))
 		{

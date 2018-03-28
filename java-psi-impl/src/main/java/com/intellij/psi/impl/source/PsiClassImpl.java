@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
@@ -145,7 +145,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public CompositeElement getNode()
 	{
 		return (CompositeElement) super.getNode();
@@ -252,7 +252,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		final PsiModifierList modlist = getModifierList();
 		return modlist != null && modlist.hasModifierProperty(name);
@@ -271,14 +271,14 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClassType[] getExtendsListTypes()
 	{
 		return PsiClassImplUtil.getExtendsListTypes(this);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClassType[] getImplementsListTypes()
 	{
 		return PsiClassImplUtil.getImplementsListTypes(this);
@@ -297,14 +297,14 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClass[] getSupers()
 	{
 		return PsiClassImplUtil.getSupers(this);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClassType[] getSuperTypes()
 	{
 		return PsiClassImplUtil.getSuperTypes(this);
@@ -374,55 +374,55 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<HierarchicalMethodSignature> getVisibleSignatures()
 	{
 		return PsiSuperMethodImplUtil.getVisibleSignatures(this);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiField[] getFields()
 	{
 		return myInnersCache.getFields();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiMethod[] getMethods()
 	{
 		return myInnersCache.getMethods();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiMethod[] getConstructors()
 	{
 		return myInnersCache.getConstructors();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClass[] getInnerClasses()
 	{
 		return myInnersCache.getInnerClasses();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<PsiField> getOwnFields()
 	{
 		return Arrays.asList(getStubOrPsiChildren(Constants.FIELD_BIT_SET, PsiField.ARRAY_FACTORY));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<PsiMethod> getOwnMethods()
 	{
 		return Arrays.asList(getStubOrPsiChildren(Constants.METHOD_BIT_SET, PsiMethod.ARRAY_FACTORY));
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public List<PsiClass> getOwnInnerClasses()
 	{
@@ -430,35 +430,35 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClassInitializer[] getInitializers()
 	{
 		return getStubOrPsiChildren(JavaStubElementTypes.CLASS_INITIALIZER, PsiClassInitializer.ARRAY_FACTORY);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiTypeParameter[] getTypeParameters()
 	{
 		return PsiImplUtil.getTypeParameters(this);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiField[] getAllFields()
 	{
 		return PsiClassImplUtil.getAllFields(this);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiMethod[] getAllMethods()
 	{
 		return PsiClassImplUtil.getAllMethods(this);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiClass[] getAllInnerClasses()
 	{
 		return PsiClassImplUtil.getAllInnerClasses(this);
@@ -477,28 +477,28 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiMethod[] findMethodsBySignature(PsiMethod patternMethod, boolean checkBases)
 	{
 		return PsiClassImplUtil.findMethodsBySignature(this, patternMethod, checkBases);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiMethod[] findMethodsByName(String name, boolean checkBases)
 	{
 		return myInnersCache.findMethodsByName(name, checkBases);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases)
 	{
 		return PsiClassImplUtil.findMethodsAndTheirSubstitutorsByName(this, name, checkBases);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors()
 	{
 		return PsiClassImplUtil.getAllWithSubstitutorsByMap(this, PsiClassImplUtil.MemberType.METHOD);
@@ -591,7 +591,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -609,14 +609,14 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		LanguageLevel level = PsiUtil.getLanguageLevel(place);
 		return PsiClassImplUtil.processDeclarationsInClass(this, processor, state, null, lastParent, place, level, false);
 	}
 
 	@Override
-	public PsiElement setName(@NotNull String newName) throws IncorrectOperationException
+	public PsiElement setName(@Nonnull String newName) throws IncorrectOperationException
 	{
 		String oldName = getName();
 		boolean isRenameFile = isRenameFileOnRenaming();
@@ -701,7 +701,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Nullable
-	private static PsiElement calcBasesResolveContext(@NotNull PsiElement scope, String baseClassName, boolean isInitialClass, final PsiElement defaultResolveContext)
+	private static PsiElement calcBasesResolveContext(@Nonnull PsiElement scope, String baseClassName, boolean isInitialClass, final PsiElement defaultResolveContext)
 	{
 		final StubElement stub = scope instanceof StubBasedPsiElementBase ? ((StubBasedPsiElementBase<?>) scope).getStub() : null;
 		if(stub == null || stub instanceof PsiClassStub && ((PsiClassStub) stub).isAnonymousInQualifiedNew())
@@ -779,7 +779,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	public boolean isInheritor(@NotNull PsiClass baseClass, boolean checkDeep)
+	public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep)
 	{
 		return InheritanceImplUtil.isInheritor(this, baseClass, checkDeep);
 	}
@@ -803,19 +803,19 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public SearchScope getUseScope()
 	{
 		return PsiClassImplUtil.getClassUseScope(this);
 	}
 
 	@Override
-	public void putInfo(@NotNull Map<String, String> info)
+	public void putInfo(@Nonnull Map<String, String> info)
 	{
 		putInfo(this, info);
 	}
 
-	public static void putInfo(@NotNull PsiClass psiClass, @NotNull Map<String, String> info)
+	public static void putInfo(@Nonnull PsiClass psiClass, @Nonnull Map<String, String> info)
 	{
 		info.put("className", psiClass.getName());
 		info.put("qualifiedClassName", psiClass.getQualifiedName());

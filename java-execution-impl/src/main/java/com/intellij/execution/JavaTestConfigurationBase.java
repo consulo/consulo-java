@@ -6,8 +6,8 @@ package com.intellij.execution;
 import java.util.List;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
@@ -25,7 +25,7 @@ public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration
 {
 	private ShortenCommandLine myShortenCommandLine = null;
 
-	public JavaTestConfigurationBase(String name, @NotNull JavaRunConfigurationModule configurationModule, @NotNull ConfigurationFactory factory)
+	public JavaTestConfigurationBase(String name, @Nonnull JavaRunConfigurationModule configurationModule, @Nonnull ConfigurationFactory factory)
 	{
 		super(name, configurationModule, factory);
 	}
@@ -35,7 +35,7 @@ public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration
 		super(configurationModule, factory);
 	}
 
-	@NotNull
+	@Nonnull
 	public abstract String getFrameworkPrefix();
 
 	public abstract void bePatternConfiguration(List<PsiClass> classes, PsiMethod method);
@@ -67,14 +67,14 @@ public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration
 	}
 
 	@Override
-	public void readExternal(@NotNull Element element) throws InvalidDataException
+	public void readExternal(@Nonnull Element element) throws InvalidDataException
 	{
 		super.readExternal(element);
 		setShortenCommandLine(ShortenCommandLine.readShortenClasspathMethod(element));
 	}
 
 	@Override
-	public void writeExternal(@NotNull Element element) throws WriteExternalException
+	public void writeExternal(@Nonnull Element element) throws WriteExternalException
 	{
 		super.writeExternal(element);
 		ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);

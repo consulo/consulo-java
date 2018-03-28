@@ -18,12 +18,12 @@ package com.intellij.refactoring.move.moveInner;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class MoveJavaInnerHandler implements MoveInnerHandler {
-  @NotNull
+  @Nonnull
   @Override
-  public PsiClass copyClass(@NotNull final MoveInnerOptions options) {
+  public PsiClass copyClass(@Nonnull final MoveInnerOptions options) {
     PsiClass innerClass = options.getInnerClass();
 
     PsiClass newClass;

@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.numeric;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiExpression;
@@ -25,23 +27,22 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class LongLiteralsEndingWithLowercaseLInspection
   extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getID() {
     return "LongLiteralEndingWithLowercaseL";
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "long.literals.ending.with.lowercase.l.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "long.literals.ending.with.lowercase.l.problem.descriptor");
@@ -57,7 +58,7 @@ public class LongLiteralsEndingWithLowercaseLInspection
 
   private static class LongLiteralFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "long.literals.ending.with.lowercase.l.replace.quickfix");
@@ -78,7 +79,7 @@ public class LongLiteralsEndingWithLowercaseLInspection
 
     @Override
     public void visitLiteralExpression(
-      @NotNull PsiLiteralExpression expression) {
+      @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null) {

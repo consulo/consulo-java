@@ -18,8 +18,8 @@ package com.intellij.codeInsight.editorActions;
 import static com.intellij.formatting.Indent.Type.CONTINUATION;
 import static com.intellij.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.Indent;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -64,22 +64,22 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 		SYNTAX_MAP.put(JavaTokenType.TRY_KEYWORD, TryKeyword);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	protected SemanticEditorPosition.SyntaxElement mapType(@NotNull IElementType tokenType)
+	protected SemanticEditorPosition.SyntaxElement mapType(@Nonnull IElementType tokenType)
 	{
 		return SYNTAX_MAP.get(tokenType);
 	}
 
 	@Override
-	public boolean isSuitableForLanguage(@NotNull Language language)
+	public boolean isSuitableForLanguage(@Nonnull Language language)
 	{
 		return language.isKindOf(JavaLanguage.INSTANCE);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
-	protected Indent.Type getIndentTypeInBlock(@NotNull Project project, @Nullable Language language, @NotNull SemanticEditorPosition blockStartPosition)
+	protected Indent.Type getIndentTypeInBlock(@Nonnull Project project, @javax.annotation.Nullable Language language, @Nonnull SemanticEditorPosition blockStartPosition)
 	{
 		SemanticEditorPosition beforeStart = blockStartPosition.before().beforeOptional(Whitespace);
 		if(beforeStart.isAt(JavaTokenType.EQ) || beforeStart.isAt(JavaTokenType.RBRACKET) || beforeStart.isAt(JavaTokenType.LPARENTH))

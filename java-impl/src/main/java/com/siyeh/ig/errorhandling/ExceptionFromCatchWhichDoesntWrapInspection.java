@@ -26,8 +26,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -42,19 +42,19 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
   public boolean ignoreCantWrap = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ThrowInsideCatchBlockWhichIgnoresCaughtException";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("exception.from.catch.which.doesnt.wrap.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("exception.from.catch.which.doesnt.wrap.problem.descriptor");
   }

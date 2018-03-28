@@ -6,8 +6,7 @@ import com.intellij.codeInspection.inheritance.search.InheritorsStatisticalDataS
 import com.intellij.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,14 +20,14 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
   public final static int MAX_QUICK_FIX_COUNTS = 4;
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getGroupDisplayName() {
     return GroupNames.INHERITANCE_GROUP_NAME;
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Class may extend a commonly used base class instead of implementing interface or extending abstract class";
@@ -39,10 +38,10 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
-  public ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass,
-                                        @NotNull final InspectionManager manager,
+  public ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass,
+                                        @Nonnull final InspectionManager manager,
                                         final boolean isOnTheFly) {
     if (aClass.isInterface() ||
         aClass instanceof PsiTypeParameter ||
@@ -83,8 +82,8 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
                                ProblemHighlightType.INFORMATION)};
   }
 
-  @Nullable
-  private static PsiClass getSuperIfUnique(final @NotNull PsiClass aClass) {
+  @javax.annotation.Nullable
+  private static PsiClass getSuperIfUnique(final @Nonnull PsiClass aClass) {
     if (aClass instanceof PsiAnonymousClass) {
       return (PsiClass)((PsiAnonymousClass)aClass).getBaseClassReference().resolve();
     }

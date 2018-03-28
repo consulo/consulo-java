@@ -17,7 +17,7 @@ package com.intellij.debugger.memory.ui;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.memory.utils.StackFrameItem;
 import com.intellij.openapi.ui.popup.JBPopup;
@@ -26,7 +26,7 @@ import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 
 public class StackFramePopup
 {
-	public static void show(@NotNull List<StackFrameItem> stack, DebugProcessImpl debugProcess)
+	public static void show(@Nonnull List<StackFrameItem> stack, DebugProcessImpl debugProcess)
 	{
 		StackFrameList list = new StackFrameList(debugProcess);
 		list.setFrameItems(stack, () -> DebuggerUIUtil.invokeLater(() ->

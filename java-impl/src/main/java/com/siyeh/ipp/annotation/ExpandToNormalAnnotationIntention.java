@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.annotation;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -24,7 +26,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
 
 public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
 
@@ -36,7 +37,7 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
       "expand.to.normal.annotation.name", text);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ExpandToNormalAnnotationPredicate();
@@ -53,7 +54,7 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiNameValuePair attribute = (PsiNameValuePair)element;
     final int textOffset = attribute.getTextOffset();
     final Project project = attribute.getProject();

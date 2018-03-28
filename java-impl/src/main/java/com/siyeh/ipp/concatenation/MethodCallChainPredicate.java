@@ -17,7 +17,6 @@ package com.siyeh.ipp.concatenation;
 
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.Nullable;
 
 class MethodCallChainPredicate implements PsiElementPredicate {
 
@@ -71,7 +70,7 @@ class MethodCallChainPredicate implements PsiElementPredicate {
     return true;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiClass getQualifierExpressionType(PsiElement element) {
     if (!(element instanceof PsiMethodCallExpression)) {
       return null;

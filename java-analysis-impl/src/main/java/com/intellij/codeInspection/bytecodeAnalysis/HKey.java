@@ -17,7 +17,7 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Small size key, constructed by hashing method signature.
@@ -25,13 +25,13 @@ import org.jetbrains.annotations.NotNull;
  * @see com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter for details of construction.
  */
 final class HKey {
-  @NotNull
+  @Nonnull
   final byte[] key;
   final int dirKey;
   final boolean stable;
   final boolean negated;
 
-  HKey(@NotNull byte[] key, int dirKey, boolean stable, boolean negated) {
+  HKey(@Nonnull byte[] key, int dirKey, boolean stable, boolean negated) {
     this.key = key;
     this.dirKey = dirKey;
     this.stable = stable;

@@ -23,8 +23,7 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
@@ -82,7 +81,7 @@ public class MethodPropertyReference extends BasicAttributeValueReference {
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public PsiElement resolve() {
     return/* JspSpiUtil.resolveMethodPropertyReference(this, */resolveClass()/*, myReadable)*/;
   }
@@ -97,7 +96,7 @@ public class MethodPropertyReference extends BasicAttributeValueReference {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Object[] getVariants() {
     return /*JspSpiUtil.getMethodPropertyReferenceVariants(this, resolveClass(), myReadable)*/PsiElement.EMPTY_ARRAY;
   }

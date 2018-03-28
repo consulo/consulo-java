@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.debugger.memory.utils.StackFrameItem;
 import com.intellij.openapi.util.Key;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -35,7 +35,7 @@ public class MemoryViewDebugProcessData
 
 	private final TrackedStacksContainer myStacksContainer = new MyStackContainer();
 
-	@NotNull
+	@Nonnull
 	public TrackedStacksContainer getTrackedStacks()
 	{
 		return myStacksContainer;
@@ -47,22 +47,22 @@ public class MemoryViewDebugProcessData
 
 		private final Map<ReferenceType, Map<ObjectReference, List<StackFrameItem>>> myPinnedType2Reference2Stack = new ConcurrentHashMap<>();
 
-		@Nullable
+		@javax.annotation.Nullable
 		@Override
-		public List<StackFrameItem> getStack(@NotNull ObjectReference reference)
+		public List<StackFrameItem> getStack(@Nonnull ObjectReference reference)
 		{
 			final List<StackFrameItem> stack = extract(myType2Reference2Stack, reference);
 			return stack != null ? stack : extract(myPinnedType2Reference2Stack, reference);
 		}
 
 		@Override
-		public void addStack(@NotNull ObjectReference ref, @NotNull List<StackFrameItem> frames)
+		public void addStack(@Nonnull ObjectReference ref, @Nonnull List<StackFrameItem> frames)
 		{
 			myType2Reference2Stack.computeIfAbsent(ref.referenceType(), referenceType -> new ConcurrentHashMap<>()).put(ref, frames);
 		}
 
 		@Override
-		public void pinStacks(@NotNull ReferenceType referenceType)
+		public void pinStacks(@Nonnull ReferenceType referenceType)
 		{
 			final Map<ObjectReference, List<StackFrameItem>> ref2Stack = myType2Reference2Stack.get(referenceType);
 			if(ref2Stack != null)
@@ -72,7 +72,7 @@ public class MemoryViewDebugProcessData
 		}
 
 		@Override
-		public void unpinStacks(@NotNull ReferenceType referenceType)
+		public void unpinStacks(@Nonnull ReferenceType referenceType)
 		{
 			myPinnedType2Reference2Stack.remove(referenceType);
 		}
@@ -91,7 +91,7 @@ public class MemoryViewDebugProcessData
 		}
 
 		@Nullable
-		private static List<StackFrameItem> extract(@NotNull Map<ReferenceType, Map<ObjectReference, List<StackFrameItem>>> map, @NotNull ObjectReference ref)
+		private static List<StackFrameItem> extract(@Nonnull Map<ReferenceType, Map<ObjectReference, List<StackFrameItem>>> map, @Nonnull ObjectReference ref)
 		{
 			final Map<ObjectReference, List<StackFrameItem>> ref2Stack = map.get(ref.referenceType());
 			return ref2Stack != null ? ref2Stack.get(ref) : null;

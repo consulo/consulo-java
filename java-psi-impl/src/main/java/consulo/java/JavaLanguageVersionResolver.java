@@ -1,7 +1,7 @@
 package consulo.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.lang.Language;
@@ -21,9 +21,9 @@ import consulo.lang.LanguageVersionResolver;
 public class JavaLanguageVersionResolver implements LanguageVersionResolver
 {
 	@RequiredReadAction
-	@NotNull
+	@Nonnull
 	@Override
-	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable PsiElement element)
+	public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable PsiElement element)
 	{
 		if(element == null)
 		{
@@ -45,10 +45,10 @@ public class JavaLanguageVersionResolver implements LanguageVersionResolver
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	@Override
-	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile)
+	public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile)
 	{
 		if(project == null || virtualFile == null)
 		{

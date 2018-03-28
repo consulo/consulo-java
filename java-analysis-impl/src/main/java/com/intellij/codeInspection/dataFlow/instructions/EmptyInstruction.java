@@ -24,7 +24,7 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -37,12 +37,12 @@ public class EmptyInstruction extends Instruction
 	@Nullable
 	private final PsiElement myAnchor;
 
-	public EmptyInstruction(@Nullable PsiElement anchor)
+	public EmptyInstruction(@javax.annotation.Nullable PsiElement anchor)
 	{
 		myAnchor = anchor;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiElement getAnchor()
 	{
 		return myAnchor;

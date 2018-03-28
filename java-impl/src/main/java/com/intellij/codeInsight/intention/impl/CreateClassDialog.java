@@ -33,8 +33,8 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.ClassKind;
@@ -95,11 +95,11 @@ public class CreateClassDialog extends DialogWrapper {
   };
   @NonNls private static final String RECENTS_KEY = "CreateClassDialog.RecentsKey";
 
-  public CreateClassDialog(@NotNull Project project,
-                           @NotNull String title,
-                           @NotNull String targetClassName,
-                           @NotNull String targetPackageName,
-                           @NotNull ClassKind kind,
+  public CreateClassDialog(@Nonnull Project project,
+                           @Nonnull String title,
+                           @Nonnull String targetClassName,
+                           @Nonnull String targetPackageName,
+                           @Nonnull ClassKind kind,
                            boolean classNameEditable,
                            @Nullable Module defaultModule) {
     super(project, true);
@@ -137,7 +137,7 @@ public class CreateClassDialog extends DialogWrapper {
     return false;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction()};
@@ -289,7 +289,7 @@ public class CreateClassDialog extends DialogWrapper {
     return myModule == null? null : PackageUtil.findPossiblePackageDirectoryInModule(myModule, packageName);
   }
 
-  @NotNull
+  @Nonnull
   public String getClassName() {
     if (myClassNameEditable) {
       return myTfClassName.getText();

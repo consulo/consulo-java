@@ -16,7 +16,7 @@
 package com.intellij.codeInspection;
 
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
@@ -39,7 +39,7 @@ public class ReplaceWithTrivialLambdaFix implements LocalQuickFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -47,7 +47,7 @@ public class ReplaceWithTrivialLambdaFix implements LocalQuickFix
 	}
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -55,7 +55,7 @@ public class ReplaceWithTrivialLambdaFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		PsiMethodReferenceExpression methodRef = ObjectUtils.tryCast(descriptor.getStartElement(), PsiMethodReferenceExpression.class);
 		if(methodRef == null)

@@ -22,7 +22,7 @@ import com.intellij.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -33,14 +33,14 @@ public class LocalVariableOfConcreteClassInspection
   public boolean ignoreAbstractClasses = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "local.variable.of.concrete.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... arg) {
     final PsiNamedElement variable = (PsiNamedElement)arg[0];
     final String name = variable.getName();
@@ -66,7 +66,7 @@ public class LocalVariableOfConcreteClassInspection
 
     @Override
     public void visitLocalVariable(
-      @NotNull PsiLocalVariable variable) {
+      @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiTypeElement typeElement = variable.getTypeElement();
       if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,

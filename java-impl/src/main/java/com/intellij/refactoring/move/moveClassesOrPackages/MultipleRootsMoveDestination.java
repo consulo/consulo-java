@@ -24,7 +24,6 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -71,7 +70,7 @@ public class MultipleRootsMoveDestination extends AutocreatingMoveDestination {
     return checkCanCreateInSourceRoot(sourceRootForFile);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String verify(PsiDirectory source) {
     VirtualFile virtualFile = source.getVirtualFile();
     final VirtualFile sourceRootForFile = myFileIndex.getSourceRootForFile(virtualFile);
@@ -82,7 +81,7 @@ public class MultipleRootsMoveDestination extends AutocreatingMoveDestination {
     return checkCanCreateInSourceRoot(sourceRootForFile);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String verify(PsiJavaPackage source) {
     PsiDirectory[] directories = source.getDirectories();
     for (final PsiDirectory directory : directories) {

@@ -15,7 +15,8 @@
  */
 package com.intellij.execution.junit2.info;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.Location;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -28,7 +29,7 @@ import consulo.annotations.Exported;
 @Exported
 public class LocationUtil
 {
-	public static boolean isJarAttached(@NotNull Location location, @NotNull final PsiJavaPackage aPackage, final String... fqn)
+	public static boolean isJarAttached(@Nonnull Location location, @Nonnull final PsiJavaPackage aPackage, final String... fqn)
 	{
 		return isJarAttached(location, aPackage.getDirectories(), fqn);
 	}
@@ -37,12 +38,12 @@ public class LocationUtil
 	 * @see #isJarAttached(Location, PsiDirectory[], String...) or {@link #isJarAttached(Location, PsiJavaPackage, String...)}
 	 */
 	@Deprecated
-	public static boolean isJarAttached(@NotNull Location location, String fqn, PsiDirectory[] directories)
+	public static boolean isJarAttached(@Nonnull Location location, String fqn, PsiDirectory[] directories)
 	{
 		return isJarAttached(location, directories, fqn);
 	}
 
-	public static boolean isJarAttached(@NotNull Location location, final PsiDirectory[] directories, final String... fqns)
+	public static boolean isJarAttached(@Nonnull Location location, final PsiDirectory[] directories, final String... fqns)
 	{
 		final JavaPsiFacade facade = JavaPsiFacade.getInstance(location.getProject());
 		final Module locationModule = location.getModule();

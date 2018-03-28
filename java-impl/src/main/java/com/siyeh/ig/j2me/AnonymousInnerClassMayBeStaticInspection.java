@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.j2me;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -23,17 +25,16 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MoveAnonymousToInnerClassFix;
 import com.siyeh.ig.performance.InnerClassReferenceVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "anonymous.inner.may.be.named.static.inner.class.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "anonymous.inner.may.be.named.static.inner.class.problem.descriptor");
@@ -53,7 +54,7 @@ public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!(aClass instanceof PsiAnonymousClass)) {
         return;
       }

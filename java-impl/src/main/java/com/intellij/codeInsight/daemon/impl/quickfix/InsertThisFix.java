@@ -17,7 +17,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -27,13 +28,13 @@ import com.intellij.psi.PsiMethod;
 public class InsertThisFix extends InsertConstructorCallFix
 {
 
-	public InsertThisFix(@NotNull PsiMethod constructor)
+	public InsertThisFix(@Nonnull PsiMethod constructor)
 	{
 		super(constructor, "this();");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return super.isAvailable(project, editor, file) && hasConstructorToDelegate();
 	}

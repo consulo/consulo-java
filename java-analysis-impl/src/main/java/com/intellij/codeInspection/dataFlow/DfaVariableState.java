@@ -22,9 +22,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.value.DfaPsiType;
 import com.intellij.codeInspection.dataFlow.value.DfaTypeValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
@@ -35,15 +37,15 @@ import com.intellij.util.containers.ContainerUtil;
 
 class DfaVariableState
 {
-	@NotNull
+	@Nonnull
 	final Set<DfaPsiType> myInstanceofValues;
-	@NotNull
+	@Nonnull
 	final Set<DfaPsiType> myNotInstanceofValues;
-	@NotNull
+	@Nonnull
 	final DfaFactMap myFactMap;
 	private final int myHash;
 
-	DfaVariableState(@NotNull DfaVariableValue dfaVar)
+	DfaVariableState(@Nonnull DfaVariableValue dfaVar)
 	{
 		this(Collections.emptySet(), Collections.emptySet(), dfaVar.getInherentFacts());
 	}
@@ -61,7 +63,7 @@ class DfaVariableState
 		return myFactMap.isSuperStateOf(that.myFactMap);
 	}
 
-	DfaVariableState(@NotNull Set<DfaPsiType> instanceofValues, @NotNull Set<DfaPsiType> notInstanceofValues, @NotNull DfaFactMap factMap)
+	DfaVariableState(@Nonnull Set<DfaPsiType> instanceofValues, @Nonnull Set<DfaPsiType> notInstanceofValues, @Nonnull DfaFactMap factMap)
 	{
 		myInstanceofValues = instanceofValues;
 		myNotInstanceofValues = notInstanceofValues;
@@ -69,7 +71,7 @@ class DfaVariableState
 		myHash = Objects.hash(myInstanceofValues, myNotInstanceofValues, myFactMap);
 	}
 
-	private boolean checkInstanceofValue(@NotNull DfaPsiType dfaType)
+	private boolean checkInstanceofValue(@Nonnull DfaPsiType dfaType)
 	{
 		if(myInstanceofValues.contains(dfaType))
 		{
@@ -96,7 +98,7 @@ class DfaVariableState
 	}
 
 	@Nullable
-	DfaVariableState withInstanceofValue(@NotNull DfaTypeValue dfaType)
+	DfaVariableState withInstanceofValue(@Nonnull DfaTypeValue dfaType)
 	{
 		if(dfaType.getDfaType().getPsiType() instanceof PsiPrimitiveType)
 		{
@@ -129,8 +131,8 @@ class DfaVariableState
 		return null;
 	}
 
-	@Nullable
-	DfaVariableState withNotInstanceofValue(@NotNull DfaTypeValue dfaType)
+	@javax.annotation.Nullable
+	DfaVariableState withNotInstanceofValue(@Nonnull DfaTypeValue dfaType)
 	{
 		if(myNotInstanceofValues.contains(dfaType.getDfaType()))
 		{
@@ -164,8 +166,8 @@ class DfaVariableState
 		return createCopy(myInstanceofValues, newNotInstanceof, myFactMap);
 	}
 
-	@NotNull
-	DfaVariableState withoutType(@NotNull DfaPsiType type)
+	@Nonnull
+	DfaVariableState withoutType(@Nonnull DfaPsiType type)
 	{
 		if(myInstanceofValues.contains(type))
 		{
@@ -202,8 +204,8 @@ class DfaVariableState
 				.myFactMap);
 	}
 
-	@NotNull
-	protected DfaVariableState createCopy(@NotNull Set<DfaPsiType> instanceofValues, @NotNull Set<DfaPsiType> notInstanceofValues, @NotNull DfaFactMap factMap)
+	@Nonnull
+	protected DfaVariableState createCopy(@Nonnull Set<DfaPsiType> instanceofValues, @Nonnull Set<DfaPsiType> notInstanceofValues, @Nonnull DfaFactMap factMap)
 	{
 		return new DfaVariableState(instanceofValues, notInstanceofValues, factMap);
 	}
@@ -230,7 +232,7 @@ class DfaVariableState
 		return buf.toString();
 	}
 
-	@NotNull
+	@Nonnull
 	Nullness getNullability()
 	{
 		return NullnessUtil.fromBoolean(myFactMap.get(DfaFactType.CAN_BE_NULL));
@@ -241,13 +243,13 @@ class DfaVariableState
 		return getNullability() == Nullness.NOT_NULL;
 	}
 
-	@NotNull
+	@Nonnull
 	DfaVariableState withNotNull()
 	{
 		return getNullability() == Nullness.NOT_NULL ? this : withoutFact(DfaFactType.CAN_BE_NULL);
 	}
 
-	@NotNull
+	@Nonnull
 	<T> DfaVariableState withFact(DfaFactType<T> type, T value)
 	{
 		DfaFactMap factMap = myFactMap.with(type, value);
@@ -266,7 +268,7 @@ class DfaVariableState
 		return factMap == null ? null : myFactMap.equals(factMap) ? this : createCopy(myInstanceofValues, myNotInstanceofValues, factMap);
 	}
 
-	@NotNull
+	@Nonnull
 	public DfaVariableState withValue(DfaValue value)
 	{
 		return this;
@@ -278,20 +280,20 @@ class DfaVariableState
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	public Set<DfaPsiType> getInstanceofValues()
 	{
 		return myInstanceofValues;
 	}
 
-	@NotNull
+	@Nonnull
 	public Set<DfaPsiType> getNotInstanceofValues()
 	{
 		return myNotInstanceofValues;
 	}
 
-	@Nullable
-	public <T> T getFact(@NotNull DfaFactType<T> factType)
+	@javax.annotation.Nullable
+	public <T> T getFact(@Nonnull DfaFactType<T> factType)
 	{
 		return myFactMap.get(factType);
 	}

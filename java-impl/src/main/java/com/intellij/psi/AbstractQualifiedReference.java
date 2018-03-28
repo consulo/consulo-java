@@ -32,8 +32,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -44,14 +44,14 @@ import java.util.Set;
 public abstract class AbstractQualifiedReference<T extends AbstractQualifiedReference<T>> extends ASTWrapperPsiElement
   implements PsiPolyVariantReference, PsiQualifiedReferenceElement {
   private static final ResolveCache.PolyVariantResolver<AbstractQualifiedReference> MY_RESOLVER = new ResolveCache.PolyVariantResolver<AbstractQualifiedReference>() {
-    @NotNull
+    @Nonnull
     @Override
-    public ResolveResult[] resolve(@NotNull final AbstractQualifiedReference expression, final boolean incompleteCode) {
+    public ResolveResult[] resolve(@Nonnull final AbstractQualifiedReference expression, final boolean incompleteCode) {
       return expression.resolveInner();
     }
   };
 
-  protected AbstractQualifiedReference(@NotNull final ASTNode node) {
+  protected AbstractQualifiedReference(@Nonnull final ASTNode node) {
     super(node);
   }
 
@@ -68,14 +68,14 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   protected abstract ResolveResult[] resolveInner();
 
   @Override
-  @NotNull
+  @Nonnull
   public final ResolveResult[] multiResolve(final boolean incompleteCode) {
     PsiFile file = getContainingFile();
     return ResolveCache.getInstance(file.getProject()).resolveWithCaching(this, MY_RESOLVER, true, false,file);
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public final PsiElement resolve() {
     final ResolveResult[] results = multiResolve(false);
     return results.length == 1 ? results[0].getElement() : null;
@@ -97,14 +97,14 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
 
 
   @Override
-  @NotNull
+  @Nonnull
   public  String getCanonicalText() {
     return getText();
   }
 
   @Override
   @SuppressWarnings({"unchecked"})
-  @Nullable
+  @javax.annotation.Nullable
   public T getQualifier() {
     return (T)findChildByClass(getClass());
   }
@@ -121,7 +121,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   @Override
-  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
     CheckUtil.checkWritable(this);
     if (isReferenceTo(element)) return this;
 
@@ -173,7 +173,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     return (AbstractQualifiedReference)newNode.getPsi();
   }
 
-  @NotNull
+  @Nonnull
   protected abstract T parseReference(String newText);
 
   protected boolean isAccessible(final PsiElement element) {
@@ -184,7 +184,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     return true;
   }
 
-  @NotNull
+  @Nonnull
   protected AbstractQualifiedReference shortenReferences() {
     final PsiElement refElement = resolve();
     if (refElement instanceof PsiClass) {
@@ -222,7 +222,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   @Nullable
   protected abstract PsiElement getSeparator();
 
-  @Nullable
+  @javax.annotation.Nullable
   protected abstract PsiElement getReferenceNameElement();
 
   @Override
@@ -250,7 +250,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     private final Set<ResolveResult> myResults = new LinkedHashSet<ResolveResult>();
 
     @Override
-    public boolean execute(@NotNull final PsiElement element, final ResolveState state) {
+    public boolean execute(@Nonnull final PsiElement element, final ResolveState state) {
       if (isFound()) return false;
       process(element);
       return true;

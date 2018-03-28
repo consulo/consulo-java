@@ -28,12 +28,12 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
 public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
-  @NotNull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new AnnotateOverriddenMethodsPredicate();
@@ -61,7 +61,7 @@ public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(@NotNull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiAnnotation annotation = (PsiAnnotation)element;
     final String annotationName = annotation.getQualifiedName();

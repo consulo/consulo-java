@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,13 +65,13 @@ public class AbsoluteAlignmentInUserInterfaceInspection extends BaseInspection {
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("absolute.alignment.in.user.interface.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
@@ -94,7 +94,7 @@ public class AbsoluteAlignmentInUserInterfaceInspection extends BaseInspection {
       myReplacement = replacement;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       final String shortClassName = myClassName.substring(myClassName.lastIndexOf('.') + 1);

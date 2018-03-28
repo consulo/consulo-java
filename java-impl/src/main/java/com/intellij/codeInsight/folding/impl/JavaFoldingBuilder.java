@@ -17,7 +17,8 @@ package com.intellij.codeInsight.folding.impl;
 
 import java.awt.Font;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.lang.java.JavaLanguage;
@@ -36,14 +37,14 @@ import com.intellij.util.FontUtil;
 public class JavaFoldingBuilder extends JavaFoldingBuilderBase
 {
 	@Override
-	protected boolean isBelowRightMargin(@NotNull Project project, int lineLength)
+	protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength)
 	{
 		final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
 		return lineLength <= settings.getRightMargin(JavaLanguage.INSTANCE);
 	}
 
 	@Override
-	protected boolean shouldShowExplicitLambdaType(@NotNull PsiAnonymousClass anonymousClass, @NotNull PsiNewExpression expression)
+	protected boolean shouldShowExplicitLambdaType(@Nonnull PsiAnonymousClass anonymousClass, @Nonnull PsiNewExpression expression)
 	{
 		PsiElement parent = expression.getParent();
 		if(parent instanceof PsiReferenceExpression || parent instanceof PsiAssignmentExpression)
@@ -56,13 +57,13 @@ public class JavaFoldingBuilder extends JavaFoldingBuilderBase
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected String rightArrow()
 	{
 		return getRightArrow();
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getRightArrow()
 	{
 		Font font = EditorColorsManager.getInstance().getGlobalScheme().getFont(EditorFontType.PLAIN);

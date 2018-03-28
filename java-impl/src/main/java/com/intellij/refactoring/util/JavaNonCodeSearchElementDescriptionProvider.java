@@ -15,16 +15,17 @@
  */
 package com.intellij.refactoring.util;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yole
  */
 public class JavaNonCodeSearchElementDescriptionProvider implements ElementDescriptionProvider {
   @Override
-  public String getElementDescription(@NotNull final PsiElement element, @NotNull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (!(location instanceof NonCodeSearchDescriptionLocation)) return null;
     NonCodeSearchDescriptionLocation ncdLocation = (NonCodeSearchDescriptionLocation) location;
     if (element instanceof PsiJavaPackage) {

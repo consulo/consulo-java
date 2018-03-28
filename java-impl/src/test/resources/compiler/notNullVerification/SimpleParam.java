@@ -1,6 +1,6 @@
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class SimpleParam {
-  public void test(@NotNull Object o) {
+  public void test(@Nonnull Object o) {
   }
 }

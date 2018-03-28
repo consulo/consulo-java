@@ -17,7 +17,8 @@ package com.intellij.psi.formatter.java;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.formatting.alignment.AlignmentInColumnsConfig;
 import com.intellij.formatting.alignment.AlignmentInColumnsHelper;
 import com.intellij.formatting.alignment.AlignmentStrategy;
@@ -43,7 +44,7 @@ public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 	private final AlignmentInColumnsHelper myAlignmentInColumnsHelper;
 	private AlignmentStrategy myAlignmentStrategy;
 
-	public SubsequentFieldAligner(@NotNull CommonCodeStyleSettings settings)
+	public SubsequentFieldAligner(@Nonnull CommonCodeStyleSettings settings)
 	{
 		myAlignmentInColumnsHelper = AlignmentInColumnsHelper.INSTANCE;
 		myAlignmentStrategy = newAlignmentStrategy();
@@ -56,7 +57,7 @@ public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 	}
 
 	@Override
-	public AlignmentStrategy getNextChildStrategy(@NotNull ASTNode child)
+	public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
 	{
 		if(!ElementType.JAVA_COMMENT_BIT_SET.contains(child.getElementType()) && !shouldUseVarDeclarationAlignment(child))
 		{
@@ -66,7 +67,7 @@ public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 		return JavaElementType.FIELD == child.getElementType() ? myAlignmentStrategy : AlignmentStrategy.getNullStrategy();
 	}
 
-	protected boolean shouldUseVarDeclarationAlignment(@NotNull ASTNode node)
+	protected boolean shouldUseVarDeclarationAlignment(@Nonnull ASTNode node)
 	{
 		return JavaElementType.FIELD == node.getElementType() && (!myAlignmentInColumnsHelper.useDifferentVarDeclarationAlignment(node, ALIGNMENT_IN_COLUMNS_CONFIG, mySettings
 				.KEEP_BLANK_LINES_IN_DECLARATIONS) || MultipleFieldDeclarationHelper.compoundFieldPart(node));

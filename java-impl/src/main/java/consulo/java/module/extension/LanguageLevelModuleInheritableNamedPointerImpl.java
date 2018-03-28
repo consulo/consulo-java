@@ -15,7 +15,8 @@
  */
 package consulo.java.module.extension;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.pom.java.LanguageLevel;
@@ -31,14 +32,14 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 {
 	private final String myExtensionId;
 
-	public LanguageLevelModuleInheritableNamedPointerImpl(@NotNull ModuleRootLayer layer, @NotNull String id)
+	public LanguageLevelModuleInheritableNamedPointerImpl(@Nonnull ModuleRootLayer layer, @Nonnull String id)
 	{
 		super(layer, "language-level");
 		myExtensionId = id;
 	}
 
 	@Override
-	public String getItemNameFromModule(@NotNull Module module)
+	public String getItemNameFromModule(@Nonnull Module module)
 	{
 		final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
 		if(extension != null)
@@ -49,7 +50,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 	}
 
 	@Override
-	public LanguageLevel getItemFromModule(@NotNull Module module)
+	public LanguageLevel getItemFromModule(@Nonnull Module module)
 	{
 		final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
 		if(extension != null)
@@ -59,9 +60,9 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public NamedPointer<LanguageLevel> getPointer(@NotNull ModuleRootLayer layer, @NotNull String name)
+	public NamedPointer<LanguageLevel> getPointer(@Nonnull ModuleRootLayer layer, @Nonnull String name)
 	{
 		return LanguageLevel.valueOf(name);
 	}

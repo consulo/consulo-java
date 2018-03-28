@@ -15,10 +15,11 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
@@ -27,7 +28,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   private final PsiAnnotation myParent;
   private final ClsNameValuePairImpl[] myAttributes;
 
-  public ClsAnnotationParameterListImpl(@NotNull PsiAnnotation parent, @NotNull PsiNameValuePair[] psiAttributes) {
+  public ClsAnnotationParameterListImpl(@Nonnull PsiAnnotation parent, @Nonnull PsiNameValuePair[] psiAttributes) {
     myParent = parent;
     myAttributes = new ClsNameValuePairImpl[psiAttributes.length];
     for (int i = 0; i < myAttributes.length; i++) {
@@ -39,7 +40,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     if (myAttributes.length != 0) {
       buffer.append("(");
       for (int i = 0; i < myAttributes.length; i++) {
@@ -51,13 +52,13 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   }
 
   @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(myAttributes, SourceTreeToPsiMap.<PsiAnnotationParameterList>treeToPsiNotNull(element).getAttributes());
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiElement[] getChildren() {
     return myAttributes;
   }
@@ -68,7 +69,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitAnnotationParameterList(this);
     }
@@ -78,7 +79,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiNameValuePair[] getAttributes() {
     return myAttributes;
   }

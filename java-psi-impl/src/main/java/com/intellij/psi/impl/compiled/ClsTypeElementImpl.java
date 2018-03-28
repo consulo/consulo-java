@@ -15,8 +15,9 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.AtomicNullableLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
@@ -50,7 +51,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 	private final NullableLazyValue<ClsElementImpl> myChild;
 	private final NotNullLazyValue<PsiType> myCachedType;
 
-	public ClsTypeElementImpl(@NotNull PsiElement parent, @NotNull String typeText, char variance)
+	public ClsTypeElementImpl(@Nonnull PsiElement parent, @Nonnull String typeText, char variance)
 	{
 		myParent = parent;
 		myTypeText = TypeInfo.internFrequentType(typeText);
@@ -65,7 +66,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 		};
 		myCachedType = new AtomicNotNullLazyValue<PsiType>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected PsiType compute()
 			{
@@ -75,7 +76,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		ClsElementImpl child = myChild.getValue();
@@ -119,13 +120,13 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		buffer.append(decorateTypeText(myTypeText));
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.TYPE);
 
@@ -147,7 +148,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType getType()
 	{
 		return myCachedType.getValue();
@@ -177,7 +178,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 		return myVariance == VARIANCE_INVARIANT ? null : new ClsJavaCodeReferenceElementImpl(this, myTypeText);
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiType calculateType()
 	{
 		PsiType result = PsiJavaParserFacadeImpl.getPrimitiveType(myTypeText);
@@ -233,7 +234,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 	}
 
 	@Override
-	public void accept(@NotNull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -246,27 +247,27 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotation[] getAnnotations()
 	{
 		throw new UnsupportedOperationException();//todo
 	}
 
 	@Override
-	public PsiAnnotation findAnnotation(@NotNull @NonNls String qualifiedName)
+	public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName)
 	{
 		return PsiImplUtil.findAnnotation(this, qualifiedName);
 	}
 
 	@Override
-	@NotNull
-	public PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName)
+	@Nonnull
+	public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName)
 	{
 		throw new UnsupportedOperationException();//todo
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiAnnotation[] getApplicableAnnotations()
 	{
 		return getAnnotations();

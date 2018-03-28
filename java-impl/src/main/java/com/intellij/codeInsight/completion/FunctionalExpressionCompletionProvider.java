@@ -22,8 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
@@ -70,7 +70,7 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
 		}
 	};
 
-	private static boolean isLambdaContext(@NotNull PsiElement element)
+	private static boolean isLambdaContext(@Nonnull PsiElement element)
 	{
 		final PsiElement rulezzRef = element.getParent();
 		return rulezzRef != null && rulezzRef instanceof PsiReferenceExpression && ((PsiReferenceExpression) rulezzRef).getQualifier() == null && LambdaUtil.isValidLambdaContext(rulezzRef.getParent
@@ -79,12 +79,12 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
+	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result)
 	{
 		addFunctionalVariants(parameters, true, true, result.getPrefixMatcher(), result);
 	}
 
-	static void addFunctionalVariants(@NotNull CompletionParameters parameters, boolean smart, boolean addInheritors, PrefixMatcher matcher, Consumer<LookupElement> result)
+	static void addFunctionalVariants(@Nonnull CompletionParameters parameters, boolean smart, boolean addInheritors, PrefixMatcher matcher, Consumer<LookupElement> result)
 	{
 		if(!PsiUtil.isLanguageLevel8OrHigher(parameters.getOriginalFile()) || !isLambdaContext(parameters.getPosition()))
 		{
@@ -207,14 +207,14 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
 		}
 	}
 
-	private static LookupElement createConstructorReferenceLookup(@NotNull PsiType functionalInterfaceType, @NotNull PsiType constructedType)
+	private static LookupElement createConstructorReferenceLookup(@Nonnull PsiType functionalInterfaceType, @Nonnull PsiType constructedType)
 	{
 		constructedType = TypeConversionUtil.erasure(constructedType);
 		return LookupElementBuilder.create(constructedType, constructedType.getPresentableText() + "::new").withTypeText(functionalInterfaceType.getPresentableText()).withIcon(AllIcons.Nodes
 				.MethodReference).withInsertHandler(CONSTRUCTOR_REF_INSERT_HANDLER).withAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
 	}
 
-	@NotNull
+	@Nonnull
 	private static LookupElement createMethodRefOnThis(PsiType functionalInterfaceType, PsiMethod psiMethod, @Nullable PsiClass outerClass)
 	{
 		String fullString = (outerClass == null ? "" : outerClass.getName() + ".") + "this::" + psiMethod.getName();
@@ -222,7 +222,7 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
 				.withIcon(AllIcons.Nodes.MethodReference).withAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
 	}
 
-	@NotNull
+	@Nonnull
 	private static LookupElement createMethodRefOnClass(PsiType functionalInterfaceType, PsiMethod psiMethod, PsiClass qualifierClass)
 	{
 		String presentableText = qualifierClass.getName() + "::" + psiMethod.getName();

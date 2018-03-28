@@ -24,11 +24,12 @@
  */
 package org.osmorc.manifest.lang;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.java.manifest.ManifestIcons;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
@@ -45,25 +46,25 @@ public class ManifestFileType extends LanguageFileType
 		super(ManifestLanguage.INSTANCE);
 	}
 
-	public ManifestFileType(@NotNull Language language)
+	public ManifestFileType(@Nonnull Language language)
 	{
 		super(language);
 	}
 
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getName()
 	{
 		return "MANIFEST";
 	}
 
-	@NotNull
+	@Nonnull
 	public String getDescription()
 	{
 		return "Manifest files";
 	}
 
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getDefaultExtension()
 	{

@@ -15,7 +15,8 @@
  */
 package com.siyeh.ig.junit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
@@ -65,7 +66,7 @@ class MakePublicStaticVoidFix extends InspectionGadgetsFix
 			ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project, method, false, myNewVisibility, method.getName(), PsiType.VOID, new ParameterInfoImpl[0])
 			{
 				@Override
-				protected void performRefactoring(@NotNull UsageInfo[] usages)
+				protected void performRefactoring(@Nonnull UsageInfo[] usages)
 				{
 					super.performRefactoring(usages);
 					PsiUtil.setModifierProperty(method, PsiModifier.STATIC, myMakeStatic);
@@ -81,7 +82,7 @@ class MakePublicStaticVoidFix extends InspectionGadgetsFix
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -89,7 +90,7 @@ class MakePublicStaticVoidFix extends InspectionGadgetsFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		return myName;

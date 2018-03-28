@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.typeMigration;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
@@ -31,7 +31,7 @@ class TypeMigrationViewDescriptor implements UsageViewDescriptor
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiElement[] getElements()
 	{
 		return new PsiElement[]{myElement};

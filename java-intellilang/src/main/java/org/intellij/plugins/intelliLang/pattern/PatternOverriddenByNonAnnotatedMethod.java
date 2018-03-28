@@ -24,7 +24,7 @@ import org.intellij.plugins.intelliLang.util.AnnotateFix;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -34,18 +34,18 @@ public class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.PATTERN_VALIDATION;
   }
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "Non-annotated Method overrides @Pattern Method";
   }
 
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  @Nonnull
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final Pair<String, ? extends Set<String>> annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getPatternAnnotationPair();
 
@@ -70,7 +70,7 @@ public class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
     };
   }
 
-  @NotNull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "PatternOverriddenByNonAnnotatedMethod";

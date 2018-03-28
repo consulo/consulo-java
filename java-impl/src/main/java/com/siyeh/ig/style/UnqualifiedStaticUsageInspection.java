@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -45,13 +45,13 @@ public class UnqualifiedStaticUsageInspection extends BaseInspection {
    */
   public boolean m_ignoreStaticAccessFromStaticContext = false;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unqualified.static.usage.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     if (infos[0] instanceof PsiMethodCallExpression) {
       return InspectionGadgetsBundle.message(
@@ -100,7 +100,7 @@ public class UnqualifiedStaticUsageInspection extends BaseInspection {
       m_fixField = fixField;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       if (m_fixField) {
         return InspectionGadgetsBundle.message(
@@ -130,7 +130,7 @@ public class UnqualifiedStaticUsageInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (m_ignoreStaticMethodCalls) {
         return;
@@ -145,7 +145,7 @@ public class UnqualifiedStaticUsageInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @NotNull PsiReferenceExpression expression) {
+      @Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       if (m_ignoreStaticFieldAccesses) {
         return;

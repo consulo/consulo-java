@@ -16,7 +16,7 @@
 package com.intellij.debugger.ui.tree.render;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.InvalidDataException;
@@ -34,7 +34,7 @@ public abstract class TypeRenderer implements Renderer
 		this(CommonClassNames.JAVA_LANG_OBJECT);
 	}
 
-	protected TypeRenderer(@NotNull String className)
+	protected TypeRenderer(@Nonnull String className)
 	{
 		myProperties.setClassName(className);
 	}

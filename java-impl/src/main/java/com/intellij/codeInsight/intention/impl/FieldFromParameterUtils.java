@@ -31,8 +31,8 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public final class FieldFromParameterUtils {
   @Nullable
-  public static PsiParameter findParameterAtCursor(@NotNull PsiFile file, @NotNull Editor editor) {
+  public static PsiParameter findParameterAtCursor(@Nonnull PsiFile file, @Nonnull Editor editor) {
     final int offset = editor.getCaretModel().getOffset();
     final PsiParameterList parameterList = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiParameterList.class, false);
     if (parameterList == null) return null;
@@ -55,7 +55,7 @@ public final class FieldFromParameterUtils {
     return null;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiType getType(@Nullable PsiParameter myParameter) {
     if (myParameter == null) return null;
     PsiType type = myParameter.getType();
@@ -63,7 +63,7 @@ public final class FieldFromParameterUtils {
   }
 
   @Nullable
-  public static PsiType getSubstitutedType(@Nullable PsiParameter parameter) {
+  public static PsiType getSubstitutedType(@javax.annotation.Nullable PsiParameter parameter) {
     if (parameter == null) return null;
 
     final PsiType type = getType(parameter);
@@ -97,7 +97,7 @@ public final class FieldFromParameterUtils {
     return psiClass instanceof PsiTypeParameter ? subst.substitute((PsiTypeParameter)psiClass) : elementFactory.createType(psiClass, substitutor);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static PsiField getParameterAssignedToField(final PsiParameter parameter) {
     for (PsiReference reference : ReferencesSearch.search(parameter, new LocalSearchScope(parameter.getDeclarationScope()), false)) {
       if (!(reference instanceof PsiReferenceExpression)) continue;
@@ -169,11 +169,11 @@ public final class FieldFromParameterUtils {
     return i;
   }
 
-  public static void createFieldAndAddAssignment(final @NotNull Project project,
-                                                 final @NotNull PsiClass targetClass,
-                                                 final @NotNull PsiMethod method,
-                                                 final @NotNull PsiParameter parameter,
-                                                 final @NotNull PsiType fieldType, final @NotNull String fieldName,
+  public static void createFieldAndAddAssignment(final @Nonnull Project project,
+                                                 final @Nonnull PsiClass targetClass,
+                                                 final @Nonnull PsiMethod method,
+                                                 final @Nonnull PsiParameter parameter,
+                                                 final @Nonnull PsiType fieldType, final @Nonnull String fieldName,
                                                  final boolean isStatic, final boolean isFinal) throws IncorrectOperationException {
 
     PsiManager psiManager = PsiManager.getInstance(project);
@@ -254,7 +254,7 @@ public final class FieldFromParameterUtils {
   }
 
   public static boolean isAvailable(@Nullable PsiParameter myParameter,
-                                     @Nullable PsiType type,
+                                     @javax.annotation.Nullable PsiType type,
                                      @Nullable PsiClass targetClass){
     return myParameter != null
            && myParameter.isValid()

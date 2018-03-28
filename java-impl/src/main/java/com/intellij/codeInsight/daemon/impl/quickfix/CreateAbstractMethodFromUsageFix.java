@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -29,7 +29,7 @@ import com.intellij.psi.util.PsiUtil;
 
 public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
 {
-	public CreateAbstractMethodFromUsageFix(@NotNull PsiMethodCallExpression methodCall)
+	public CreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall)
 	{
 		super(methodCall);
 	}
@@ -40,7 +40,7 @@ public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
 		return JavaQuickFixBundle.message("create.abstract.method.from.usage.text", name);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected List<PsiClass> getTargetClasses(PsiElement element)
 	{
@@ -57,7 +57,7 @@ public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
 	}
 
 	@Override
-	protected String getVisibility(PsiClass parentClass, @NotNull PsiClass targetClass)
+	protected String getVisibility(PsiClass parentClass, @Nonnull PsiClass targetClass)
 	{
 		String result = super.getVisibility(parentClass, targetClass);
 		return PsiModifier.PUBLIC.equals(result) ? result : PsiModifier.PROTECTED;

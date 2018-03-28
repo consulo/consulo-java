@@ -15,18 +15,19 @@
  */
 package com.siyeh.ig.psiutils;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 public class UtilityClassUtil {
 
   private UtilityClassUtil() {}
 
-  public static boolean isUtilityClass(@NotNull PsiClass aClass) {
+  public static boolean isUtilityClass(@Nonnull PsiClass aClass) {
     return isUtilityClass(aClass, true);
   }
 
-  public static boolean isUtilityClass(@NotNull PsiClass aClass, boolean fullCheck) {
+  public static boolean isUtilityClass(@Nonnull PsiClass aClass, boolean fullCheck) {
     if (aClass.isInterface() || aClass.isEnum() || aClass.isAnnotationType()) {
       return false;
     }

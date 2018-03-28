@@ -20,8 +20,8 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifierListOwner;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -33,29 +33,29 @@ public interface BatchSuppressManager {
       return ServiceManager.getService(BatchSuppressManager.class);
     }
   }
-  @NotNull
-  SuppressQuickFix[] createBatchSuppressActions(@NotNull HighlightDisplayKey key);
+  @Nonnull
+  SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key);
 
-  boolean isSuppressedFor(@NotNull PsiElement element, String toolId);
+  boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
 
-  PsiElement getElementMemberSuppressedIn(@NotNull PsiDocCommentOwner owner, String inspectionToolID);
-
-  @Nullable
-  PsiElement getAnnotationMemberSuppressedIn(@NotNull PsiModifierListOwner owner, String inspectionToolID);
+  PsiElement getElementMemberSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
   @Nullable
-  PsiElement getDocCommentToolSuppressedIn(@NotNull PsiDocCommentOwner owner, String inspectionToolID);
+  PsiElement getAnnotationMemberSuppressedIn(@Nonnull PsiModifierListOwner owner, String inspectionToolID);
 
-  @NotNull
-  Collection<String> getInspectionIdsSuppressedInAnnotation(@NotNull PsiModifierListOwner owner);
+  @javax.annotation.Nullable
+  PsiElement getDocCommentToolSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
-  @Nullable
-  String getSuppressedInspectionIdsIn(@NotNull PsiElement element);
+  @Nonnull
+  Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull PsiModifierListOwner owner);
 
-  @Nullable
-  PsiElement getElementToolSuppressedIn(@NotNull PsiElement place, String toolId);
+  @javax.annotation.Nullable
+  String getSuppressedInspectionIdsIn(@Nonnull PsiElement element);
 
-  boolean canHave15Suppressions(@NotNull PsiElement file);
+  @javax.annotation.Nullable
+  PsiElement getElementToolSuppressedIn(@Nonnull PsiElement place, String toolId);
 
-  boolean alreadyHas14Suppressions(@NotNull PsiDocCommentOwner commentOwner);
+  boolean canHave15Suppressions(@Nonnull PsiElement file);
+
+  boolean alreadyHas14Suppressions(@Nonnull PsiDocCommentOwner commentOwner);
 }

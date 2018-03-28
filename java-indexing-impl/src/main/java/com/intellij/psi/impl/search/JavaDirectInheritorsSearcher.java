@@ -20,7 +20,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
@@ -56,7 +57,7 @@ import com.intellij.util.containers.HashMap;
 public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, DirectClassInheritorsSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final DirectClassInheritorsSearch.SearchParameters p, @NotNull final Processor<PsiClass> consumer)
+	public boolean execute(@Nonnull final DirectClassInheritorsSearch.SearchParameters p, @Nonnull final Processor<PsiClass> consumer)
 	{
 		final PsiClass aClass = p.getClassToProcess();
 

@@ -17,8 +17,8 @@ package com.intellij.debugger;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -47,7 +47,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public abstract class SourcePosition implements Navigatable{
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.SourcePosition");
-  @NotNull
+  @Nonnull
   public abstract PsiFile getFile();
 
   public abstract PsiElement getElementAt();
@@ -62,20 +62,21 @@ public abstract class SourcePosition implements Navigatable{
   public abstract Editor openEditor(boolean requestFocus);
 
   private abstract static class SourcePositionCache extends SourcePosition {
-    @NotNull private final PsiFile myFile;
+    @Nonnull
+	private final PsiFile myFile;
     private long myModificationStamp = -1L;
 
     private PsiElement myPsiElement;
     private Integer myLine;
     private Integer myOffset;
 
-    public SourcePositionCache(@NotNull PsiFile file) {
+    public SourcePositionCache(@Nonnull PsiFile file) {
       myFile = file;
       updateData();
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public PsiFile getFile() {
       return myFile;
     }
@@ -199,7 +200,7 @@ public abstract class SourcePosition implements Navigatable{
       return -1;
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     protected PsiElement calcPsiElement() {
       PsiFile psiFile = getFile();
       int lineNumber = getLine();
@@ -258,7 +259,7 @@ public abstract class SourcePosition implements Navigatable{
     }
   }
 
-  public static SourcePosition createFromLineComputable(@NotNull final PsiFile file, final Computable<Integer> line) {
+  public static SourcePosition createFromLineComputable(@Nonnull final PsiFile file, final Computable<Integer> line) {
     return new SourcePositionCache(file) {
       @Override
       protected int calcLine() {
@@ -267,7 +268,7 @@ public abstract class SourcePosition implements Navigatable{
     };
   }
 
-  public static SourcePosition createFromLine(@NotNull final PsiFile file, final int line) {
+  public static SourcePosition createFromLine(@Nonnull final PsiFile file, final int line) {
     return new SourcePositionCache(file) {
       @Override
       protected int calcLine() {
@@ -276,7 +277,7 @@ public abstract class SourcePosition implements Navigatable{
     };
   }
 
-  public static SourcePosition createFromOffset(@NotNull final PsiFile file, final int offset) {
+  public static SourcePosition createFromOffset(@Nonnull final PsiFile file, final int offset) {
     return new SourcePositionCache(file) {
 
       @Override

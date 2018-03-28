@@ -20,7 +20,6 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiTypeElement;
 import com.intellij.util.VisibilityUtil;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,7 @@ public class JavaMethodDescriptor implements MethodDescriptor<ParameterInfoImpl,
     return myMethod.getParameterList().getParametersCount();
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String getReturnTypeText() {
     final PsiTypeElement typeElement = myMethod.getReturnTypeElement();
     return typeElement != null ? typeElement.getText() : null;

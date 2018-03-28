@@ -18,7 +18,8 @@ package com.siyeh.ig.fixes;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -40,13 +41,13 @@ import com.siyeh.ig.psiutils.HighlightUtils;
 
 public class InlineVariableFix extends InspectionGadgetsFix {
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("inline.variable.quickfix");
   }
 
   @Override
-  public void doFix(@NotNull final Project project, final ProblemDescriptor descriptor) {
+  public void doFix(@Nonnull final Project project, final ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiLocalVariable variable =
       (PsiLocalVariable)nameElement.getParent();

@@ -18,7 +18,8 @@ package com.intellij.ide.hierarchy.type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
@@ -51,8 +52,8 @@ public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure
 	}
 
 	@Override
-	@NotNull
-	protected final Object[] buildChildren(@NotNull final HierarchyNodeDescriptor descriptor)
+	@Nonnull
+	protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor)
 	{
 		final Object element = ((TypeHierarchyNodeDescriptor) descriptor).getPsiClass();
 		if(!(element instanceof PsiClass))

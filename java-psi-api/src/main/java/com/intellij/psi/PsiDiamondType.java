@@ -18,8 +18,8 @@ package com.intellij.psi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.util.PsiUtil;
@@ -39,7 +39,7 @@ public abstract class PsiDiamondType extends PsiType
 	{
 		public static final DiamondInferenceResult EXPLICIT_CONSTRUCTOR_TYPE_ARGS = new DiamondInferenceResult()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public PsiType[] getTypes()
 			{
@@ -55,7 +55,7 @@ public abstract class PsiDiamondType extends PsiType
 
 		public static final DiamondInferenceResult NULL_RESULT = new DiamondInferenceResult()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public PsiType[] getTypes()
 			{
@@ -71,7 +71,7 @@ public abstract class PsiDiamondType extends PsiType
 
 		public static final DiamondInferenceResult RAW_RESULT = new DiamondInferenceResult()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public PsiType[] getTypes()
 			{
@@ -87,7 +87,7 @@ public abstract class PsiDiamondType extends PsiType
 
 		public static final DiamondInferenceResult UNRESOLVED_CONSTRUCTOR = new DiamondInferenceResult()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public PsiType[] getTypes()
 			{
@@ -103,7 +103,7 @@ public abstract class PsiDiamondType extends PsiType
 
 		public static final DiamondInferenceResult ANONYMOUS_INNER_RESULT = new DiamondInferenceResult()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public PsiType[] getTypes()
 			{
@@ -130,7 +130,7 @@ public abstract class PsiDiamondType extends PsiType
 			myNewExpressionPresentableText = expressionPresentableText;
 		}
 
-		@NotNull
+		@Nonnull
 		public PsiType[] getTypes()
 		{
 			return myErrorMessage == null ? myInferredTypes.toArray(createArray(myInferredTypes.size())) : PsiType.EMPTY_ARRAY;
@@ -247,6 +247,6 @@ public abstract class PsiDiamondType extends PsiType
 		return expression.resolveMethodGenerics();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public abstract JavaResolveResult getStaticFactory();
 }

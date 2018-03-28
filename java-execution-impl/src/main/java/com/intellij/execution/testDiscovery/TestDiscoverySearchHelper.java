@@ -24,8 +24,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInsight.actions.FormatChangedTextUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -153,7 +153,7 @@ public class TestDiscoverySearchHelper
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<VirtualFile> getAffectedFiles(String changeListName, Project project)
 	{
 		final ChangeListManager changeListManager = ChangeListManager.getInstance(project);
@@ -183,7 +183,7 @@ public class TestDiscoverySearchHelper
 		return Collections.emptyList();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static LinkedHashSet<String> collectPatterns(PsiMethod psiMethod, String frameworkId)
 	{
 		LinkedHashSet<String> patterns = new LinkedHashSet<>();

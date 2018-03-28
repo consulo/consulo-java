@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -29,10 +29,10 @@ import com.intellij.psi.PsiVariable;
 public class AssignInstruction extends Instruction
 {
 	private final PsiExpression myRExpression;
-	@Nullable
+	@javax.annotation.Nullable
 	private final DfaValue myAssignedValue;
 
-	public AssignInstruction(PsiExpression RExpression, @Nullable DfaValue assignedValue)
+	public AssignInstruction(PsiExpression RExpression, @javax.annotation.Nullable DfaValue assignedValue)
 	{
 		myRExpression = RExpression;
 		myAssignedValue = assignedValue;
@@ -44,7 +44,7 @@ public class AssignInstruction extends Instruction
 		return visitor.visitAssign(this, runner, stateBefore);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiExpression getRExpression()
 	{
 		return myRExpression;

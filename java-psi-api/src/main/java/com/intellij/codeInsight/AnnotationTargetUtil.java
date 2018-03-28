@@ -18,8 +18,8 @@ package com.intellij.codeInsight;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.PsiAnnotation.TargetType;
@@ -71,8 +71,8 @@ public class AnnotationTargetUtil
 			TargetType.TYPE_USE
 	};
 
-	@NotNull
-	public static TargetType[] getTargetsForLocation(@Nullable PsiAnnotationOwner owner)
+	@Nonnull
+	public static TargetType[] getTargetsForLocation(@javax.annotation.Nullable PsiAnnotationOwner owner)
 	{
 		if(owner == null)
 		{
@@ -183,8 +183,8 @@ public class AnnotationTargetUtil
 		return null;
 	}
 
-	@Nullable
-	private static TargetType translateTargetRef(@NotNull PsiReference reference)
+	@javax.annotation.Nullable
+	private static TargetType translateTargetRef(@Nonnull PsiReference reference)
 	{
 		PsiElement field = reference.resolve();
 		if(field instanceof PsiEnumConstant)
@@ -205,7 +205,7 @@ public class AnnotationTargetUtil
 	/**
 	 * Returns {@code true} if the annotation resolves to a class having {@link TargetType#TYPE_USE} in it's targets.
 	 */
-	public static boolean isTypeAnnotation(@NotNull PsiAnnotation element)
+	public static boolean isTypeAnnotation(@Nonnull PsiAnnotation element)
 	{
 		return findAnnotationTarget(element, TargetType.TYPE_USE) == TargetType.TYPE_USE;
 	}
@@ -214,8 +214,8 @@ public class AnnotationTargetUtil
 	 * From given targets, returns first where the annotation may be applied. Returns {@code null} when the annotation is not applicable
 	 * at any of the targets, or {@linkplain TargetType#UNKNOWN} if the annotation does not resolve to a valid annotation type.
 	 */
-	@Nullable
-	public static TargetType findAnnotationTarget(@NotNull PsiAnnotation annotation, @NotNull TargetType... types)
+	@javax.annotation.Nullable
+	public static TargetType findAnnotationTarget(@Nonnull PsiAnnotation annotation, @Nonnull TargetType... types)
 	{
 		if(types.length != 0)
 		{
@@ -238,7 +238,7 @@ public class AnnotationTargetUtil
 	 * at any of the targets, or {@linkplain TargetType#UNKNOWN} if the type is not a valid annotation (e.g. cannot be resolved).
 	 */
 	@Nullable
-	public static TargetType findAnnotationTarget(@NotNull PsiClass annotationType, @NotNull TargetType... types)
+	public static TargetType findAnnotationTarget(@Nonnull PsiClass annotationType, @Nonnull TargetType... types)
 	{
 		if(types.length != 0)
 		{
@@ -263,7 +263,7 @@ public class AnnotationTargetUtil
 	 * Returns a set of targets where the given annotation may be applied, or {@code null} when the type is not a valid annotation.
 	 */
 	@Nullable
-	public static Set<TargetType> getAnnotationTargets(@NotNull PsiClass annotationType)
+	public static Set<TargetType> getAnnotationTargets(@Nonnull PsiClass annotationType)
 	{
 		if(!annotationType.isAnnotationType())
 		{

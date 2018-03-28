@@ -19,8 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.documentation.AbstractExternalFilter;
 import com.intellij.codeInsight.documentation.DocumentationManager;
 import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
@@ -128,7 +128,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 		return myReferenceConvertors;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static String filterInternalDocInfo(String text)
 	{
 		if(text == null)
@@ -140,7 +140,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 	}
 
 	@Override
-	@Nullable
+	@javax.annotation.Nullable
 	public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception
 	{
 		String externalDoc = super.getExternalDocInfoForElement(docURL, element);
@@ -152,7 +152,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 																								   NullableComputable<String>()
 				{
 					@Override
-					@Nullable
+					@javax.annotation.Nullable
 					public String compute()
 					{
 						PsiClass aClass = ((PsiMethod) element).getContainingClass();
@@ -170,9 +170,9 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 	}
 
 
-	@NotNull
+	@Nonnull
 	@Override
-	protected ParseSettings getParseSettings(@NotNull String url)
+	protected ParseSettings getParseSettings(@Nonnull String url)
 	{
 		return url.endsWith(JavaDocumentationProvider.PACKAGE_SUMMARY_FILE) ? ourPackageInfoSettings : super
 				.getParseSettings(url);

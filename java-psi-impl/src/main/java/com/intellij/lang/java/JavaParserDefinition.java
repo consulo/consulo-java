@@ -15,7 +15,8 @@
  */
 package com.intellij.lang.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LanguageUtil;
 import com.intellij.lang.ParserDefinition;
@@ -48,14 +49,14 @@ import consulo.lang.LanguageVersion;
 public class JavaParserDefinition implements ParserDefinition
 {
 	@Override
-	@NotNull
-	public Lexer createLexer(@NotNull LanguageVersion languageVersion)
+	@Nonnull
+	public Lexer createLexer(@Nonnull LanguageVersion languageVersion)
 	{
 		JavaLanguageVersion wrapper = (JavaLanguageVersion) languageVersion;
 		return new JavaLexer(wrapper.getLanguageLevel());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public IFileElementType getFileNodeType()
 	{
@@ -63,37 +64,37 @@ public class JavaParserDefinition implements ParserDefinition
 	}
 
 	@Override
-	@NotNull
-	public TokenSet getWhitespaceTokens(@NotNull LanguageVersion languageVersion)
+	@Nonnull
+	public TokenSet getWhitespaceTokens(@Nonnull LanguageVersion languageVersion)
 	{
 		return ElementType.JAVA_WHITESPACE_BIT_SET;
 	}
 
 	@Override
-	@NotNull
-	public TokenSet getCommentTokens(@NotNull LanguageVersion languageVersion)
+	@Nonnull
+	public TokenSet getCommentTokens(@Nonnull LanguageVersion languageVersion)
 	{
 		return ElementType.JAVA_COMMENT_BIT_SET;
 	}
 
 	@Override
-	@NotNull
-	public TokenSet getStringLiteralElements(@NotNull LanguageVersion languageVersion)
+	@Nonnull
+	public TokenSet getStringLiteralElements(@Nonnull LanguageVersion languageVersion)
 	{
 		return TokenSet.create(JavaElementType.LITERAL_EXPRESSION);
 	}
 
 	@Override
-	@NotNull
-	public PsiParser createParser(@NotNull LanguageVersion languageVersion)
+	@Nonnull
+	public PsiParser createParser(@Nonnull LanguageVersion languageVersion)
 	{
 		return new JavaParser();
 	}
 
 	@RequiredReadAction
 	@Override
-	@NotNull
-	public PsiElement createElement(@NotNull final ASTNode node)
+	@Nonnull
+	public PsiElement createElement(@Nonnull final ASTNode node)
 	{
 		final IElementType type = node.getElementType();
 		if(type instanceof JavaStubElementType)
@@ -105,12 +106,12 @@ public class JavaParserDefinition implements ParserDefinition
 	}
 
 	@Override
-	public PsiFile createFile(@NotNull final FileViewProvider viewProvider)
+	public PsiFile createFile(@Nonnull final FileViewProvider viewProvider)
 	{
 		return new PsiJavaFileImpl(viewProvider);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right)
 	{

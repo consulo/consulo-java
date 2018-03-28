@@ -26,8 +26,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -37,19 +37,19 @@ public class ConfusingElseInspection extends BaseInspection {
   public boolean reportWhenNoStatementFollow = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ConfusingElseBranch";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("confusing.else.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("confusing.else.problem.descriptor");
   }
@@ -72,7 +72,7 @@ public class ConfusingElseInspection extends BaseInspection {
 
   private static class ConfusingElseFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("confusing.else.unwrap.quickfix");
     }
@@ -112,7 +112,7 @@ public class ConfusingElseInspection extends BaseInspection {
   private class ConfusingElseVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@NotNull PsiIfStatement statement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiStatement thenBranch = statement.getThenBranch();
       if (thenBranch == null) {
@@ -164,7 +164,7 @@ public class ConfusingElseInspection extends BaseInspection {
       return !(parent instanceof PsiCodeBlock);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private PsiStatement getNextStatement(PsiIfStatement statement) {
       while (true) {
         final PsiElement parent = statement.getParent();

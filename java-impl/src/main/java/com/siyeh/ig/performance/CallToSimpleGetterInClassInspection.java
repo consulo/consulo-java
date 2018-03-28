@@ -28,8 +28,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -42,19 +42,19 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
   public boolean onlyReportPrivateGetter = false;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToSimpleGetterFromWithinClass";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("call.to.simple.getter.in.class.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("call.to.simple.getter.in.class.problem.descriptor");
   }
@@ -77,7 +77,7 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
 
   private static class InlineCallFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("call.to.simple.getter.in.class.inline.quickfix");
     }
@@ -145,7 +145,7 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
   private class CallToSimpleGetterInClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression call) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiClass containingClass = ClassUtils.getContainingClass(call);
       if (containingClass == null) {

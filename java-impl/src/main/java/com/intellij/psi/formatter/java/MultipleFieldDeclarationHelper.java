@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.formatter.java;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaTokenType;
@@ -33,7 +34,7 @@ public class MultipleFieldDeclarationHelper
 	/**
 	 * @return {@code true} if given node is a non-first part of composite field definition; {@code false} otherwise
 	 */
-	public static boolean compoundFieldPart(@NotNull ASTNode node)
+	public static boolean compoundFieldPart(@Nonnull ASTNode node)
 	{
 		if(node.getElementType() != JavaElementType.FIELD)
 		{
@@ -59,8 +60,8 @@ public class MultipleFieldDeclarationHelper
 	 * @param child child field node to check
 	 * @return last child field node at the field group identified by the given node if any; given child otherwise
 	 */
-	@NotNull
-	public static ASTNode findLastFieldInGroup(@NotNull final ASTNode child)
+	@Nonnull
+	public static ASTNode findLastFieldInGroup(@Nonnull final ASTNode child)
 	{
 		PsiElement psi = child.getPsi();
 		if(psi == null)

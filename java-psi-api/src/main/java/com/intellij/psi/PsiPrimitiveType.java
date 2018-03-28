@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
@@ -37,7 +37,7 @@ public class PsiPrimitiveType extends PsiType.Stub
 
 	private final String myName;
 
-	PsiPrimitiveType(@NotNull String name, String boxedName)
+	PsiPrimitiveType(@Nonnull String name, String boxedName)
 	{
 		this(name, TypeAnnotationProvider.EMPTY);
 		if(boxedName != null)
@@ -47,40 +47,40 @@ public class PsiPrimitiveType extends PsiType.Stub
 		}
 	}
 
-	public PsiPrimitiveType(@NotNull String name, @NotNull PsiAnnotation[] annotations)
+	public PsiPrimitiveType(@Nonnull String name, @Nonnull PsiAnnotation[] annotations)
 	{
 		super(annotations);
 		myName = name;
 	}
 
-	public PsiPrimitiveType(@NotNull String name, @NotNull TypeAnnotationProvider provider)
+	public PsiPrimitiveType(@Nonnull String name, @Nonnull TypeAnnotationProvider provider)
 	{
 		super(provider);
 		myName = name;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public PsiPrimitiveType annotate(@NotNull TypeAnnotationProvider provider)
+	public PsiPrimitiveType annotate(@Nonnull TypeAnnotationProvider provider)
 	{
 		return (PsiPrimitiveType) super.annotate(provider);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableText(boolean annotated)
 	{
 		return getText(false, annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getCanonicalText(boolean annotated)
 	{
 		return getText(true, annotated);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
@@ -118,13 +118,13 @@ public class PsiPrimitiveType extends PsiType.Stub
 	}
 
 	@Override
-	public boolean equalsToText(@NotNull String text)
+	public boolean equalsToText(@Nonnull String text)
 	{
 		return myName.equals(text);
 	}
 
 	@Override
-	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitPrimitiveType(this);
 	}
@@ -136,7 +136,7 @@ public class PsiPrimitiveType extends PsiType.Stub
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiType[] getSuperTypes()
 	{
 		return EMPTY_ARRAY;
@@ -178,7 +178,7 @@ public class PsiPrimitiveType extends PsiType.Stub
 		return unboxed.annotate(type.getAnnotationProvider());
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiPrimitiveType getOptionallyUnboxedType(PsiType type)
 	{
 		return type instanceof PsiPrimitiveType ? (PsiPrimitiveType) type : getUnboxedType(type);
@@ -197,7 +197,7 @@ public class PsiPrimitiveType extends PsiType.Stub
 	 * it was not possible to resolve the reference to the class.
 	 */
 	@Nullable
-	public PsiClassType getBoxedType(@NotNull PsiElement context)
+	public PsiClassType getBoxedType(@Nonnull PsiElement context)
 	{
 		PsiFile file = context.getContainingFile();
 		if(file == null)
@@ -228,7 +228,7 @@ public class PsiPrimitiveType extends PsiType.Stub
 	}
 
 	@Nullable
-	public PsiClassType getBoxedType(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
+	public PsiClassType getBoxedType(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope)
 	{
 		String boxedQName = getBoxedTypeName();
 		if(boxedQName == null)

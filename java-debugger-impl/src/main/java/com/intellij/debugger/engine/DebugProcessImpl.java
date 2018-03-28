@@ -27,10 +27,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.Patches;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebuggerBundle;
@@ -177,7 +179,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	private final Semaphore myWaitFor = new Semaphore();
 	private final AtomicBoolean myIsFailed = new AtomicBoolean(false);
 	protected DebuggerSession mySession;
-	@Nullable
+	@javax.annotation.Nullable
 	protected MethodReturnValueWatcher myReturnValueWatcher;
 	protected final Disposable myDisposable = Disposer.newDisposable();
 	private final Alarm myStatusUpdateAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myDisposable);
@@ -235,7 +237,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		});
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Pair<Method, Value> getLastExecutedMethod()
 	{
 		final MethodReturnValueWatcher watcher = myReturnValueWatcher;
@@ -296,13 +298,13 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public static NodeRenderer getDefaultRenderer(Value value)
 	{
 		return getDefaultRenderer(value != null ? value.type() : null);
 	}
 
-	@NotNull
+	@Nonnull
 	public static NodeRenderer getDefaultRenderer(Type type)
 	{
 		final NodeRendererSettings settings = NodeRendererSettings.getInstance();
@@ -490,7 +492,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private static List<ClassFilter> getActiveFilters()
 	{
 		DebuggerSettings settings = DebuggerSettings.getInstance();
@@ -536,7 +538,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	static String getCurrentClassName(ThreadReferenceProxyImpl thread)
 	{
 		try
@@ -771,7 +773,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		}
 	}
 
-	private static boolean versionMatch(@Nullable Sdk sdk, String version)
+	private static boolean versionMatch(@javax.annotation.Nullable Sdk sdk, String version)
 	{
 		if(sdk != null && sdk.getSdkType() instanceof JavaSdkType)
 		{
@@ -846,7 +848,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return myExecutionResult;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Project getProject()
 	{
@@ -894,7 +896,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return myRequestManager;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public VirtualMachineProxyImpl getVirtualMachineProxy()
 	{
@@ -923,7 +925,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
 	private volatile RunToCursorBreakpoint myRunToCursorBreakpoint;
 
-	public void setRunToCursorBreakpoint(@Nullable RunToCursorBreakpoint breakpoint)
+	public void setRunToCursorBreakpoint(@javax.annotation.Nullable RunToCursorBreakpoint breakpoint)
 	{
 		myRunToCursorBreakpoint = breakpoint;
 	}
@@ -1045,8 +1047,8 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return message;
 	}
 
-	@NotNull
-	public static String processIOException(@NotNull IOException e, @Nullable String address)
+	@Nonnull
+	public static String processIOException(@Nonnull IOException e, @javax.annotation.Nullable String address)
 	{
 		if(e instanceof UnknownHostException)
 		{
@@ -1114,7 +1116,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		private final Method myMethod;
 		private final List<Value> myArgs;
 
-		protected InvokeCommand(@NotNull Method method, @NotNull List<? extends Value> args)
+		protected InvokeCommand(@Nonnull Method method, @Nonnull List<? extends Value> args)
 		{
 			myMethod = method;
 			myArgs = new ArrayList<>(args);
@@ -1374,16 +1376,16 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	}
 
 	@Override
-	public Value invokeMethod(@NotNull EvaluationContext evaluationContext, @NotNull ObjectReference objRef, @NotNull Method method, @NotNull List<? extends Value> args) throws EvaluateException
+	public Value invokeMethod(@Nonnull EvaluationContext evaluationContext, @Nonnull ObjectReference objRef, @Nonnull Method method, @Nonnull List<? extends Value> args) throws EvaluateException
 	{
 		return invokeInstanceMethod(evaluationContext, objRef, method, args, 0);
 	}
 
 	@Override
-	public Value invokeInstanceMethod(@NotNull EvaluationContext evaluationContext,
-			@NotNull final ObjectReference objRef,
-			@NotNull Method method,
-			@NotNull List<? extends Value> args,
+	public Value invokeInstanceMethod(@Nonnull EvaluationContext evaluationContext,
+			@Nonnull final ObjectReference objRef,
+			@Nonnull Method method,
+			@Nonnull List<? extends Value> args,
 			final int invocationOptions) throws EvaluateException
 	{
 		final ThreadReference thread = getEvaluationThread(evaluationContext);
@@ -1419,10 +1421,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return invokeMethod(evaluationContext, classType, method, args, false);
 	}
 
-	public Value invokeMethod(@NotNull EvaluationContext evaluationContext,
-			@NotNull final ClassType classType,
-			@NotNull Method method,
-			@NotNull List<? extends Value> args,
+	public Value invokeMethod(@Nonnull EvaluationContext evaluationContext,
+			@Nonnull final ClassType classType,
+			@Nonnull Method method,
+			@Nonnull List<? extends Value> args,
 			boolean internalEvaluate) throws EvaluateException
 	{
 		final ThreadReference thread = getEvaluationThread(evaluationContext);
@@ -1497,10 +1499,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	}
 
 	@Override
-	public ObjectReference newInstance(@NotNull final EvaluationContext evaluationContext,
-			@NotNull final ClassType classType,
-			@NotNull Method method,
-			@NotNull List<? extends Value> args) throws EvaluateException
+	public ObjectReference newInstance(@Nonnull final EvaluationContext evaluationContext,
+			@Nonnull final ClassType classType,
+			@Nonnull Method method,
+			@Nonnull List<? extends Value> args) throws EvaluateException
 	{
 		final ThreadReference thread = getEvaluationThread(evaluationContext);
 		InvokeCommand<ObjectReference> invokeCommand = new InvokeCommand<ObjectReference>(method, args)
@@ -1708,13 +1710,13 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		StackCapturingLineBreakpoint.clearCaches(this);
 	}
 
-	@NotNull
+	@Nonnull
 	public SuspendManager getSuspendManager()
 	{
 		return mySuspendManager;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public CompoundPositionManager getPositionManager()
 	{
@@ -1729,7 +1731,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		getManagerThread().terminateAndInvoke(createStopCommand(forceTerminate), ApplicationManager.getApplication().isUnitTestMode() ? 0 : DebuggerManagerThreadImpl.COMMAND_TIMEOUT);
 	}
 
-	@NotNull
+	@Nonnull
 	public StopCommand createStopCommand(boolean forceTerminate)
 	{
 		return new StopCommand(forceTerminate);
@@ -1824,7 +1826,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		private final StepIntoBreakpoint myBreakpoint;
 		private final int myStepSize;
 
-		public StepIntoCommand(SuspendContextImpl suspendContext, boolean ignoreFilters, @Nullable final MethodFilter methodFilter, int stepSize)
+		public StepIntoCommand(SuspendContextImpl suspendContext, boolean ignoreFilters, @javax.annotation.Nullable final MethodFilter methodFilter, int stepSize)
 		{
 			super(suspendContext);
 			myForcedIgnoreFilters = ignoreFilters || methodFilter != null;
@@ -1884,13 +1886,13 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 			return StepRequest.STEP_OVER;
 		}
 
-		@NotNull
+		@Nonnull
 		protected String getStatusText()
 		{
 			return DebuggerBundle.message("status.step.over");
 		}
 
-		@NotNull
+		@Nonnull
 		protected RequestHint getHint(SuspendContextImpl suspendContext, ThreadReferenceProxyImpl stepThread)
 		{
 			// need this hint while stepping over for JSR45 support:
@@ -1935,7 +1937,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		private final RunToCursorBreakpoint myRunToCursorBreakpoint;
 		private final boolean myIgnoreBreakpoints;
 
-		private RunToCursorCommand(SuspendContextImpl suspendContext, @NotNull XSourcePosition position, final boolean ignoreBreakpoints)
+		private RunToCursorCommand(SuspendContextImpl suspendContext, @Nonnull XSourcePosition position, final boolean ignoreBreakpoints)
 		{
 			super(suspendContext);
 			myIgnoreBreakpoints = ignoreBreakpoints;
@@ -2007,7 +2009,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
 	public abstract class ResumeCommand extends SuspendContextCommandImpl
 	{
-		@Nullable
+		@javax.annotation.Nullable
 		protected final ThreadReferenceProxyImpl myContextThread;
 
 		public ResumeCommand(SuspendContextImpl suspendContext)
@@ -2036,7 +2038,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 			getSuspendManager().resume(getSuspendContext());
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		public ThreadReferenceProxyImpl getContextThread()
 		{
 			return myContextThread;
@@ -2081,7 +2083,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	{
 		private final ThreadReferenceProxyImpl myThread;
 
-		public ResumeThreadCommand(SuspendContextImpl suspendContext, @NotNull ThreadReferenceProxyImpl thread)
+		public ResumeThreadCommand(SuspendContextImpl suspendContext, @Nonnull ThreadReferenceProxyImpl thread)
 		{
 			super(suspendContext);
 			myThread = thread;
@@ -2147,7 +2149,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		}
 
 		@Override
-		public void threadAction(@NotNull SuspendContextImpl suspendContext)
+		public void threadAction(@Nonnull SuspendContextImpl suspendContext)
 		{
 			final ThreadReferenceProxyImpl thread = myStackFrame.threadProxy();
 			try
@@ -2195,7 +2197,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public GlobalSearchScope getSearchScope()
 	{
 		LOG.assertTrue(mySession != null, "Accessing debug session before its initialization");
@@ -2233,7 +2235,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		});
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public ExecutionResult attachVirtualMachine(final DebugEnvironment environment, final DebuggerSession session) throws ExecutionException
 	{
 		mySession = session;
@@ -2474,19 +2476,19 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return vm != null && vm.isPausePressed();
 	}
 
-	@NotNull
+	@Nonnull
 	public DebuggerCommandImpl createPauseCommand()
 	{
 		return new PauseCommand();
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createResumeCommand(SuspendContextImpl suspendContext)
 	{
 		return createResumeCommand(suspendContext, PrioritizedTask.Priority.HIGH);
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createResumeCommand(SuspendContextImpl suspendContext, final PrioritizedTask.Priority priority)
 	{
 		final BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(getProject()).getBreakpointManager();
@@ -2511,44 +2513,44 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		};
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createStepOverCommand(SuspendContextImpl suspendContext, boolean ignoreBreakpoints)
 	{
 		return createStepOverCommand(suspendContext, ignoreBreakpoints, StepRequest.STEP_LINE);
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createStepOverCommand(SuspendContextImpl suspendContext, boolean ignoreBreakpoints, int stepSize)
 	{
 		return new StepOverCommand(suspendContext, ignoreBreakpoints, stepSize);
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createStepOutCommand(SuspendContextImpl suspendContext)
 	{
 		return createStepOutCommand(suspendContext, StepRequest.STEP_LINE);
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createStepOutCommand(SuspendContextImpl suspendContext, int stepSize)
 	{
 		return new StepOutCommand(suspendContext, stepSize);
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createStepIntoCommand(SuspendContextImpl suspendContext, boolean ignoreFilters, final MethodFilter smartStepFilter)
 	{
 		return createStepIntoCommand(suspendContext, ignoreFilters, smartStepFilter, StepRequest.STEP_LINE);
 	}
 
-	@NotNull
+	@Nonnull
 	public ResumeCommand createStepIntoCommand(SuspendContextImpl suspendContext, boolean ignoreFilters, final MethodFilter smartStepFilter, int stepSize)
 	{
 		return new StepIntoCommand(suspendContext, ignoreFilters, smartStepFilter, stepSize);
 	}
 
-	@NotNull
-	public ResumeCommand createRunToCursorCommand(SuspendContextImpl suspendContext, @NotNull XSourcePosition position, boolean ignoreBreakpoints) throws EvaluateException
+	@Nonnull
+	public ResumeCommand createRunToCursorCommand(SuspendContextImpl suspendContext, @Nonnull XSourcePosition position, boolean ignoreBreakpoints) throws EvaluateException
 	{
 		RunToCursorCommand runToCursorCommand = new RunToCursorCommand(suspendContext, position, ignoreBreakpoints);
 		if(runToCursorCommand.myRunToCursorBreakpoint == null)
@@ -2559,19 +2561,19 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return runToCursorCommand;
 	}
 
-	@NotNull
+	@Nonnull
 	public DebuggerCommandImpl createFreezeThreadCommand(ThreadReferenceProxyImpl thread)
 	{
 		return new FreezeThreadCommand(thread);
 	}
 
-	@NotNull
-	public SuspendContextCommandImpl createResumeThreadCommand(SuspendContextImpl suspendContext, @NotNull ThreadReferenceProxyImpl thread)
+	@Nonnull
+	public SuspendContextCommandImpl createResumeThreadCommand(SuspendContextImpl suspendContext, @Nonnull ThreadReferenceProxyImpl thread)
 	{
 		return new ResumeThreadCommand(suspendContext, thread);
 	}
 
-	@NotNull
+	@Nonnull
 	public SuspendContextCommandImpl createPopFrameCommand(DebuggerContextImpl context, StackFrameProxyImpl stackFrame)
 	{
 		return new PopFrameCommand(context, stackFrame);
@@ -2601,7 +2603,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	//  }
 	//}
 
-	@NotNull
+	@Nonnull
 	public DebuggerContextImpl getDebuggerContext()
 	{
 		return mySession.getContextManager().getContext();
@@ -2612,7 +2614,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		myXDebugProcess = XDebugProcess;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public JavaDebugProcess getXdebugProcess()
 	{
 		return myXDebugProcess;

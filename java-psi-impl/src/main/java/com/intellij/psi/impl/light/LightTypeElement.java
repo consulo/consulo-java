@@ -15,8 +15,9 @@
  */
 package com.intellij.psi.impl.light;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiAnnotation;
@@ -51,7 +52,7 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitTypeElement(this);
     }
@@ -66,7 +67,7 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiType getType() {
     return myType;
   }
@@ -82,24 +83,24 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     return myType.getAnnotations();
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@NotNull @NonNls String qualifiedName) {
+  public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
     return myType.findAnnotation(qualifiedName);
   }
 
   @Override
-  @NotNull
-  public PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName) {
+  @Nonnull
+  public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
     throw new IncorrectOperationException();
   }
   
   @Override
-  @NotNull
+  @Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getAnnotations();
   }

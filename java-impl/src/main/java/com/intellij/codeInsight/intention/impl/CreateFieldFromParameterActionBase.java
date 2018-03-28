@@ -30,7 +30,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +40,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
   private static final Logger LOG = Logger.getInstance(CreateFieldFromParameterActionBase.class);
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter parameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (parameter == null || !isAvailable(parameter)) {
       return false;
@@ -53,13 +53,13 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
   protected abstract boolean isAvailable(PsiParameter parameter);
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return CodeInsightBundle.message("intention.create.field.from.parameter.family");
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (myParameter == null || !FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
@@ -72,8 +72,8 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
     }
   }
 
-  private void processParameter(final @NotNull Project project,
-                                final @NotNull PsiParameter myParameter,
+  private void processParameter(final @Nonnull Project project,
+                                final @Nonnull PsiParameter myParameter,
                                 final boolean isInteractive) {
     final PsiType type = getSubstitutedType(myParameter);
     final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);

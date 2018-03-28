@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,20 +27,20 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class LoopWithImplicitTerminationConditionInspection
   extends BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "loop.with.implicit.termination.condition.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     if (Boolean.TRUE.equals(infos[0])) {
       return InspectionGadgetsBundle.message(
@@ -56,7 +58,7 @@ public class LoopWithImplicitTerminationConditionInspection
   private static class LoopWithImplicitTerminationConditionFix
     extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "loop.with.implicit.termination.condition.quickfix");
@@ -141,7 +143,7 @@ public class LoopWithImplicitTerminationConditionInspection
     }
 
     private static void replaceStatement(
-      @NotNull PsiStatement replacedStatement,
+      @Nonnull PsiStatement replacedStatement,
       @Nullable PsiStatement replacingStatement)
       throws IncorrectOperationException {
       if (replacingStatement == null) {

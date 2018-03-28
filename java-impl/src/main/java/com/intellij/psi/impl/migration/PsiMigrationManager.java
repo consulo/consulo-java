@@ -23,7 +23,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMigration;
 import com.intellij.psi.impl.PsiManagerEx;
 import com.intellij.psi.impl.PsiManagerImpl;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class PsiMigrationManager {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.migration.PsiMigrationManager");
@@ -49,7 +49,7 @@ public class PsiMigrationManager {
    *
    * @return the migrate operation object.
    */
-  @NotNull
+  @Nonnull
   public PsiMigration startMigration() {
     LOG.assertTrue(myCurrentMigration == null);
     myCurrentMigration = new PsiMigrationImpl(this, JavaPsiFacade.getInstance(myProject),

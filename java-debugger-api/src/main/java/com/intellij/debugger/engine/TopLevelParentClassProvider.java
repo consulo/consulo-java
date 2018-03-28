@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.util.PsiTreeUtil;

@@ -18,8 +18,8 @@ package com.intellij.psi.formatter.java.wrap.impl;
 import static com.intellij.psi.formatter.java.JavaFormatterUtil.getWrapType;
 import static com.intellij.psi.impl.PsiImplUtil.isTypeAnnotation;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
@@ -348,7 +348,7 @@ public class JavaChildWrapArranger
 		return suggestedWrap;
 	}
 
-	private static boolean isTypeAnnotationOrFalseIfDumb(@NotNull ASTNode child)
+	private static boolean isTypeAnnotationOrFalseIfDumb(@Nonnull ASTNode child)
 	{
 		PsiElement node = child.getPsi();
 		PsiElement next = PsiTreeUtil.skipSiblingsForward(node, PsiWhiteSpace.class, PsiAnnotation.class);
@@ -359,7 +359,7 @@ public class JavaChildWrapArranger
 		return !DumbService.isDumb(node.getProject()) && isTypeAnnotation(node);
 	}
 
-	private static void putPreferredWrapInParentBlock(@NotNull AbstractJavaBlock block, @NotNull Wrap preferredWrap)
+	private static void putPreferredWrapInParentBlock(@Nonnull AbstractJavaBlock block, @Nonnull Wrap preferredWrap)
 	{
 		AbstractJavaBlock parentBlock = block.getParentBlock();
 		if(parentBlock != null)
@@ -368,7 +368,7 @@ public class JavaChildWrapArranger
 		}
 	}
 
-	private static boolean isFieldModifierListWithSingleAnnotation(@NotNull ASTNode elem)
+	private static boolean isFieldModifierListWithSingleAnnotation(@Nonnull ASTNode elem)
 	{
 		ASTNode parent = elem.getTreeParent();
 		if(parent != null && parent.getElementType() == JavaElementType.FIELD)
@@ -378,7 +378,7 @@ public class JavaChildWrapArranger
 		return false;
 	}
 
-	private static boolean isModifierListWithSingleAnnotation(@NotNull ASTNode elem)
+	private static boolean isModifierListWithSingleAnnotation(@Nonnull ASTNode elem)
 	{
 		if(elem.getPsi() instanceof PsiModifierList)
 		{

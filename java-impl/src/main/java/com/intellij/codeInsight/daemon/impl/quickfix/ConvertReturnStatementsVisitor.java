@@ -21,8 +21,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.ReturnStatementsVisitor;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
     return myLatestReturn;
   }
 
-  private String generateValue(@NotNull PsiElement stopElement) {
+  private String generateValue(@Nonnull PsiElement stopElement) {
     final PsiVariable variable = mySearcher.getDeclaration(stopElement);
     return variable != null ? variable.getName() : myDefaultValue;
   }

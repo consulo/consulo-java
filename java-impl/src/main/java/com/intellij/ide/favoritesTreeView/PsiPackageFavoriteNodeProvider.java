@@ -25,7 +25,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.ModuleGroup;
@@ -203,7 +204,7 @@ public class PsiPackageFavoriteNodeProvider extends FavoriteNodeProvider
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFavoriteTypeId()
 	{
 		return "package";

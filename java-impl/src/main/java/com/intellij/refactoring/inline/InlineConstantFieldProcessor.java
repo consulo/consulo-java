@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -84,14 +85,14 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@NotNull
-	protected UsageViewDescriptor createUsageViewDescriptor(@NotNull UsageInfo[] usages)
+	@Nonnull
+	protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages)
 	{
 		return new InlineViewDescriptor(myField);
 	}
 
 	@Override
-	protected boolean isPreviewUsages(@NotNull UsageInfo[] usages)
+	protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages)
 	{
 		if(super.isPreviewUsages(usages))
 		{
@@ -109,14 +110,14 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 
 	private static class UsageFromJavaDoc extends UsageInfo
 	{
-		private UsageFromJavaDoc(@NotNull PsiElement element)
+		private UsageFromJavaDoc(@Nonnull PsiElement element)
 		{
 			super(element, true);
 		}
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		if(myInlineThisOnly)
@@ -143,7 +144,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 			UsageInfoFactory nonCodeUsageFactory = new NonCodeUsageInfoFactory(myField, myField.getName())
 			{
 				@Override
-				public UsageInfo createUsageInfo(@NotNull PsiElement usage, int startOffset, int endOffset)
+				public UsageInfo createUsageInfo(@Nonnull PsiElement usage, int startOffset, int endOffset)
 				{
 					if(PsiTreeUtil.isAncestor(myField, usage, false))
 					{
@@ -172,14 +173,14 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void refreshElements(@NotNull PsiElement[] elements)
+	protected void refreshElements(@Nonnull PsiElement[] elements)
 	{
 		LOG.assertTrue(elements.length == 1 && elements[0] instanceof PsiField);
 		myField = (PsiField) elements[0];
 	}
 
 	@Override
-	protected void performRefactoring(@NotNull UsageInfo[] usages)
+	protected void performRefactoring(@Nonnull UsageInfo[] usages)
 	{
 		PsiExpression initializer = myField.getInitializer();
 		LOG.assertTrue(initializer != null);
@@ -317,7 +318,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected boolean preprocessUsages(@NotNull Ref<UsageInfo[]> refUsages)
+	protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages)
 	{
 		UsageInfo[] usagesIn = refUsages.get();
 		MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
@@ -381,8 +382,8 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@NotNull
-	protected Collection<? extends PsiElement> getElementsToWrite(@NotNull final UsageViewDescriptor descriptor)
+	@Nonnull
+	protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor)
 	{
 		if(myInlineThisOnly)
 		{

@@ -24,8 +24,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateMethodQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -46,7 +47,7 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
   private static final String PARAMETERS_FQN = "org.junit.runners.Parameterized.Parameters";
   private static final String PARAMETERIZED_FQN = "org.junit.runners.Parameterized";
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return infos.length > 0
            ? (String)infos[1]
@@ -142,7 +143,7 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
         }
       }
 
-      @NotNull
+      @Nonnull
       public String getName() {
         return infos.length > 0 ? (String)infos[0] : "Create @Parameterized.Parameters data provider";
       }
@@ -150,7 +151,7 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
   }
 
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return "@RunWith(Parameterized.class) without data provider";
   }

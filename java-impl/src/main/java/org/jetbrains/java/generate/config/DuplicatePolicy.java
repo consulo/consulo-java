@@ -15,7 +15,7 @@
  */
 package org.jetbrains.java.generate.config;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -45,7 +45,7 @@ public class DuplicatePolicy implements ConflictResolutionPolicy
 	}
 
 	@Override
-	public PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, @NotNull PsiMethod newMethod, Editor editor)
+	public PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, @Nonnull PsiMethod newMethod, Editor editor)
 	{
 		return newMethodStrategy.insertNewMethod(clazz, newMethod, editor);
 	}

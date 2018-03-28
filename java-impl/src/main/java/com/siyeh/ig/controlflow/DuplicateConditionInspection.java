@@ -19,10 +19,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
@@ -48,17 +47,17 @@ public class DuplicateConditionInspection extends BaseInspection {
   // This is a dirty fix of 'squared' algorithm performance issue.
   private static final int LIMIT_DEPTH = 20;
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("duplicate.condition.display.name");
   }
 
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("duplicate.condition.problem.descriptor");
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("duplicate.condition.ignore.method.calls.option"),
                                           this, "ignoreMethodCalls");
@@ -71,7 +70,7 @@ public class DuplicateConditionInspection extends BaseInspection {
   private class DuplicateConditionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@NotNull PsiIfStatement statement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {

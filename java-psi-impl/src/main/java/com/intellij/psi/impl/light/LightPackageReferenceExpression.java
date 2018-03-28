@@ -17,8 +17,8 @@ package com.intellij.psi.impl.light;
 
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 public class LightPackageReferenceExpression extends LightPackageReference implements PsiReferenceExpression {
   public LightPackageReferenceExpression(PsiManager manager, PsiJavaPackage refPackage) {
@@ -31,7 +31,7 @@ public class LightPackageReferenceExpression extends LightPackageReference imple
   }
 
   @Override
-  public PsiElement bindToElementViaStaticImport(@NotNull PsiClass aClass) throws IncorrectOperationException {
+  public PsiElement bindToElementViaStaticImport(@Nonnull PsiClass aClass) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 

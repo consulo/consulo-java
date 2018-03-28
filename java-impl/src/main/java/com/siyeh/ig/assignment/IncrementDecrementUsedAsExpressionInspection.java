@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.assignment;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -28,27 +30,25 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class IncrementDecrementUsedAsExpressionInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "ValueOfIncrementOrDecrementUsed";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "increment.decrement.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Object info = infos[0];
     if (info instanceof PsiPostfixExpression) {
@@ -82,7 +82,7 @@ public class IncrementDecrementUsedAsExpressionInspection
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     return new IncrementDecrementUsedAsExpressionFix(expression.getText());
@@ -97,7 +97,7 @@ public class IncrementDecrementUsedAsExpressionInspection
       this.elementText = elementText;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "increment.decrement.used.as.expression.quickfix",
@@ -324,7 +324,7 @@ public class IncrementDecrementUsedAsExpressionInspection
 
     @Override
     public void visitPostfixExpression(
-      @NotNull PsiPostfixExpression expression) {
+      @Nonnull PsiPostfixExpression expression) {
       super.visitPostfixExpression(expression);
       final PsiElement parent = expression.getParent();
       if (parent instanceof PsiExpressionStatement ||
@@ -343,7 +343,7 @@ public class IncrementDecrementUsedAsExpressionInspection
 
     @Override
     public void visitPrefixExpression(
-      @NotNull PsiPrefixExpression expression) {
+      @Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       final PsiElement parent = expression.getParent();
       if (parent instanceof PsiExpressionStatement ||

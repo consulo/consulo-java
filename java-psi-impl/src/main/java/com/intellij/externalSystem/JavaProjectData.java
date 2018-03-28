@@ -23,8 +23,8 @@ import com.intellij.openapi.externalSystem.model.project.AbstractExternalEntityD
 import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +35,8 @@ import java.util.regex.Pattern;
  */
 public class JavaProjectData extends AbstractExternalEntityData {
 
-  @NotNull public static final Key<JavaProjectData> KEY = Key.create(JavaProjectData.class, ProjectKeys.PROJECT.getProcessingWeight() + 1);
+  @Nonnull
+  public static final Key<JavaProjectData> KEY = Key.create(JavaProjectData.class, ProjectKeys.PROJECT.getProcessingWeight() + 1);
 
   private static final Logger LOG = Logger.getInstance("#" + JavaProjectData.class.getName());
 
@@ -45,31 +46,34 @@ public class JavaProjectData extends AbstractExternalEntityData {
   private static final JavaSdkVersion DEFAULT_JDK_VERSION    = JavaSdkVersion.JDK_1_6;
   private static final Pattern        JDK_VERSION_PATTERN    = Pattern.compile(".*1\\.(\\d+).*");
 
-  @NotNull private JavaSdkVersion myJdkVersion    = DEFAULT_JDK_VERSION;
-  @NotNull private LanguageLevel  myLanguageLevel = DEFAULT_LANGUAGE_LEVEL;
+  @Nonnull
+  private JavaSdkVersion myJdkVersion    = DEFAULT_JDK_VERSION;
+  @Nonnull
+  private LanguageLevel  myLanguageLevel = DEFAULT_LANGUAGE_LEVEL;
 
-  @NotNull private  String myCompileOutputPath;
+  @Nonnull
+  private  String myCompileOutputPath;
 
-  public JavaProjectData(@NotNull ProjectSystemId owner, @NotNull String compileOutputPath) {
+  public JavaProjectData(@Nonnull ProjectSystemId owner, @Nonnull String compileOutputPath) {
     super(owner);
     myCompileOutputPath = compileOutputPath;
   }
 
-  @NotNull
+  @Nonnull
   public String getCompileOutputPath() {
     return myCompileOutputPath;
   }
 
-  public void setCompileOutputPath(@NotNull String compileOutputPath) {
+  public void setCompileOutputPath(@Nonnull String compileOutputPath) {
     myCompileOutputPath = ExternalSystemApiUtil.toCanonicalPath(compileOutputPath);
   }
 
-  @NotNull
+  @Nonnull
   public JavaSdkVersion getJdkVersion() {
     return myJdkVersion;
   }
 
-  public void setJdkVersion(@NotNull JavaSdkVersion jdkVersion) {
+  public void setJdkVersion(@Nonnull JavaSdkVersion jdkVersion) {
     myJdkVersion = jdkVersion;
   }
 
@@ -117,16 +121,16 @@ public class JavaProjectData extends AbstractExternalEntityData {
     return false;
   }
 
-  @NotNull
+  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel;
   }
 
-  public void setLanguageLevel(@NotNull LanguageLevel level) {
+  public void setLanguageLevel(@Nonnull LanguageLevel level) {
     myLanguageLevel = level;
   }
 
-  public void setLanguageLevel(@Nullable String languageLevel) {
+  public void setLanguageLevel(@javax.annotation.Nullable String languageLevel) {
     LanguageLevel level = LanguageLevel.parse(languageLevel);
     if (level != null) {
       myLanguageLevel = level;

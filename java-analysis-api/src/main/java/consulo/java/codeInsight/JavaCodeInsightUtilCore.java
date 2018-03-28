@@ -19,8 +19,8 @@ package consulo.java.codeInsight;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -84,8 +84,8 @@ public class JavaCodeInsightUtilCore
 		return CodeInsightUtilCore.findElementInRange(file, startOffset, endOffset, klass, JavaLanguage.INSTANCE);
 	}
 
-	@NotNull
-	public static PsiElement[] findStatementsInRange(@NotNull PsiFile file, int startOffset, int endOffset)
+	@Nonnull
+	public static PsiElement[] findStatementsInRange(@Nonnull PsiFile file, int startOffset, int endOffset)
 	{
 		Language language = findJavaOrLikeLanguage(file);
 		if(language == null)
@@ -209,8 +209,8 @@ public class JavaCodeInsightUtilCore
 		return PsiUtilCore.toPsiElementArray(array);
 	}
 
-	@Nullable
-	public static Language findJavaOrLikeLanguage(@NotNull final PsiFile file)
+	@javax.annotation.Nullable
+	public static Language findJavaOrLikeLanguage(@Nonnull final PsiFile file)
 	{
 		final Set<Language> languages = file.getViewProvider().getLanguages();
 		for(final Language language : languages)

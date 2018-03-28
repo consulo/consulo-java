@@ -21,10 +21,10 @@
 package com.intellij.ide.util.scopeChooser;
 
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class HierarchyScopeDescriptorProvider implements ScopeDescriptorProvider {
-  @NotNull
+  @Nonnull
   public ScopeDescriptor[] getScopeDescriptors(final Project project) {
     return new ScopeDescriptor[]{new ClassHierarchyScopeDescriptor(project)};
   }

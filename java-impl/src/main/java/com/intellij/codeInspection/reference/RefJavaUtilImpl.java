@@ -20,7 +20,6 @@
  */
 package com.intellij.codeInspection.reference;
 
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -32,7 +31,7 @@ import com.intellij.util.VisibilityUtil;
 public class RefJavaUtilImpl extends RefJavaUtil{
 
   @Override
-  public void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @Nullable PsiElement findIn) {
+  public void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @javax.annotation.Nullable PsiElement findIn) {
     final RefJavaElementImpl refFrom = (RefJavaElementImpl)ref;
     if (findIn != null) {
       findIn.accept(
@@ -81,7 +80,7 @@ public class RefJavaUtilImpl extends RefJavaUtil{
             }
           }
 
-          @Nullable
+          @javax.annotation.Nullable
           private RefMethod processNewLikeConstruct(final PsiMethod psiConstructor, final PsiExpressionList argumentList) {
             if (psiConstructor != null) {
               if (isDeprecated(psiConstructor)) refFrom.setUsesDeprecatedApi(true);
@@ -238,7 +237,7 @@ public class RefJavaUtilImpl extends RefJavaUtil{
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   public String getPackageName(RefEntity refEntity) {
     if (refEntity instanceof RefProject) {
       return null;
@@ -277,7 +276,8 @@ public class RefJavaUtilImpl extends RefJavaUtil{
    }
 
    @Override
-   @Nullable public RefClass getOwnerClass(RefManager refManager, PsiElement psiElement) {
+   @javax.annotation.Nullable
+   public RefClass getOwnerClass(RefManager refManager, PsiElement psiElement) {
      while (psiElement != null && !(psiElement instanceof PsiClass)) {
        psiElement = psiElement.getParent();
      }
@@ -286,7 +286,8 @@ public class RefJavaUtilImpl extends RefJavaUtil{
    }
 
    @Override
-   @Nullable public RefClass getOwnerClass(RefElement refElement) {
+   @javax.annotation.Nullable
+   public RefClass getOwnerClass(RefElement refElement) {
      RefEntity parent = refElement.getOwner();
 
      while (!(parent instanceof RefClass) && parent instanceof RefElement) {

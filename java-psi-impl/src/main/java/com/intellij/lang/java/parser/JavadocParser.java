@@ -15,9 +15,11 @@
  */
 package com.intellij.lang.java.parser;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.util.Key;
 import com.intellij.pom.java.LanguageLevel;
@@ -57,13 +59,13 @@ public class JavadocParser
 	{
 	}
 
-	public static void parseJavadocReference(@NotNull final PsiBuilder builder)
+	public static void parseJavadocReference(@Nonnull final PsiBuilder builder)
 	{
 		JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, true, true, false, false);
 		swallowTokens(builder);
 	}
 
-	public static void parseJavadocType(@NotNull final PsiBuilder builder)
+	public static void parseJavadocType(@Nonnull final PsiBuilder builder)
 	{
 		JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD);
 		swallowTokens(builder);
@@ -77,7 +79,7 @@ public class JavadocParser
 		}
 	}
 
-	public static void parseDocCommentText(@NotNull final PsiBuilder builder)
+	public static void parseDocCommentText(@Nonnull final PsiBuilder builder)
 	{
 		builder.enforceCommentTokens(SKIP_TOKENS);
 
@@ -95,7 +97,7 @@ public class JavadocParser
 		}
 	}
 
-	private static void parseTag(@NotNull final PsiBuilder builder)
+	private static void parseTag(@Nonnull final PsiBuilder builder)
 	{
 		final String tagName = builder.getTokenText();
 		final PsiBuilder.Marker tag = builder.mark();
@@ -112,7 +114,7 @@ public class JavadocParser
 		tag.done(JavaDocElementType.DOC_TAG);
 	}
 
-	private static void parseDataItem(@NotNull final PsiBuilder builder, @Nullable final String tagName, final boolean isInline)
+	private static void parseDataItem(@Nonnull final PsiBuilder builder, @Nullable final String tagName, final boolean isInline)
 	{
 		IElementType tokenType = getTokenType(builder);
 		if(tokenType == JavaDocTokenType.DOC_INLINE_TAG_START)
@@ -212,7 +214,7 @@ public class JavadocParser
 		}
 	}
 
-	private static void parseSeeTagValue(@NotNull final PsiBuilder builder, boolean allowBareFieldReference)
+	private static void parseSeeTagValue(@Nonnull final PsiBuilder builder, boolean allowBareFieldReference)
 	{
 		final IElementType tokenType = getTokenType(builder);
 		if(tokenType == JavaDocTokenType.DOC_TAG_VALUE_SHARP_TOKEN)
@@ -248,7 +250,7 @@ public class JavadocParser
 		}
 	}
 
-	private static void parseMethodRef(@NotNull final PsiBuilder builder, @NotNull final PsiBuilder.Marker refStart)
+	private static void parseMethodRef(@Nonnull final PsiBuilder builder, @Nonnull final PsiBuilder.Marker refStart)
 	{
 		if(getTokenType(builder) == JavaDocTokenType.DOC_TAG_VALUE_SHARP_TOKEN)
 		{
@@ -299,7 +301,7 @@ public class JavadocParser
 		refStart.done(JavaDocElementType.DOC_METHOD_OR_FIELD_REF);
 	}
 
-	private static void parseSimpleTagValue(@NotNull final PsiBuilder builder, final boolean parameter)
+	private static void parseSimpleTagValue(@Nonnull final PsiBuilder builder, final boolean parameter)
 	{
 		final PsiBuilder.Marker tagValue = builder.mark();
 		while(TAG_VALUES_SET.contains(getTokenType(builder)))
@@ -310,7 +312,7 @@ public class JavadocParser
 	}
 
 	@Nullable
-	private static IElementType getTokenType(@NotNull final PsiBuilder builder)
+	private static IElementType getTokenType(@Nonnull final PsiBuilder builder)
 	{
 		IElementType tokenType;
 		while((tokenType = builder.getTokenType()) == JavaDocTokenType.DOC_SPACE)
@@ -321,18 +323,18 @@ public class JavadocParser
 		return tokenType;
 	}
 
-	private static int getBraceScope(@NotNull final PsiBuilder builder)
+	private static int getBraceScope(@Nonnull final PsiBuilder builder)
 	{
 		final Integer braceScope = builder.getUserDataUnprotected(BRACE_SCOPE_KEY);
 		return braceScope != null ? braceScope : 0;
 	}
 
-	private static void setBraceScope(@NotNull final PsiBuilder builder, final int braceScope)
+	private static void setBraceScope(@Nonnull final PsiBuilder builder, final int braceScope)
 	{
 		builder.putUserDataUnprotected(BRACE_SCOPE_KEY, braceScope);
 	}
 
-	private static void remapAndAdvance(@NotNull final PsiBuilder builder)
+	private static void remapAndAdvance(@Nonnull final PsiBuilder builder)
 	{
 		if(INLINE_TAG_BORDERS_SET.contains(builder.getTokenType()) && getBraceScope(builder) != 1)
 		{

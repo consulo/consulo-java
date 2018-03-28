@@ -15,8 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a Java anonymous class.
@@ -29,7 +28,7 @@ public interface PsiAnonymousClass extends PsiClass {
    *
    * @return the reference element for the base class.
    */
-  @NotNull
+  @Nonnull
   PsiJavaCodeReferenceElement getBaseClassReference();
 
   /**
@@ -37,7 +36,7 @@ public interface PsiAnonymousClass extends PsiClass {
    *
    * @return the type for the base class.
    */
-  @NotNull
+  @Nonnull
   PsiClassType getBaseClassType();
 
   /**
@@ -45,7 +44,7 @@ public interface PsiAnonymousClass extends PsiClass {
    *
    * @return the argument list, or null if no argument list was specified.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpressionList getArgumentList();
 
   boolean isInQualifiedNew();

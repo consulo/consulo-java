@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
@@ -50,7 +50,7 @@ public class PsiClassStubImpl<T extends PsiClass> extends StubBase<T> implements
 	public PsiClassStubImpl(final JavaClassElementType type,
 			final StubElement parent,
 			@Nullable final String qualifiedName,
-			@Nullable final String name,
+			@javax.annotation.Nullable final String name,
 			@Nullable final String baseRefText,
 			final byte flags)
 	{

@@ -15,9 +15,11 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -35,7 +37,7 @@ public class FieldReferenceInstruction extends Instruction
 	@Nullable
 	private final String mySyntheticFieldName;
 
-	public FieldReferenceInstruction(@NotNull PsiExpression expression, @Nullable @NonNls String syntheticFieldName)
+	public FieldReferenceInstruction(@Nonnull PsiExpression expression, @javax.annotation.Nullable @NonNls String syntheticFieldName)
 	{
 		myExpression = expression;
 		mySyntheticFieldName = syntheticFieldName;
@@ -52,7 +54,7 @@ public class FieldReferenceInstruction extends Instruction
 		return "FIELD_REFERENCE: " + myExpression.getText();
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiExpression getExpression()
 	{
 		return myExpression;

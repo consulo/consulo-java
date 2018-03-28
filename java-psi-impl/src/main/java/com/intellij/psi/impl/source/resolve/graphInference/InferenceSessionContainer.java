@@ -22,9 +22,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
@@ -56,7 +58,7 @@ public class InferenceSessionContainer
 	}
 
 	@Contract("_, !null -> !null")
-	public PsiSubstitutor findNestedSubstitutor(PsiElement arg, @Nullable PsiSubstitutor defaultSession)
+	public PsiSubstitutor findNestedSubstitutor(PsiElement arg, @javax.annotation.Nullable PsiSubstitutor defaultSession)
 	{
 		InferenceSession session = myNestedSessions.get(PsiTreeUtil.getParentOfType(arg, PsiCall.class));
 		return session == null ? defaultSession : session.getInferenceSubstitution();
@@ -76,12 +78,12 @@ public class InferenceSessionContainer
 		}
 	}
 
-	static PsiSubstitutor infer(@NotNull PsiTypeParameter[] typeParameters,
-			@NotNull PsiParameter[] parameters,
-			@NotNull PsiExpression[] arguments,
-			@NotNull PsiSubstitutor partialSubstitutor,
-			@NotNull final PsiElement parent,
-			@NotNull final ParameterTypeInferencePolicy policy)
+	static PsiSubstitutor infer(@Nonnull PsiTypeParameter[] typeParameters,
+			@Nonnull PsiParameter[] parameters,
+			@Nonnull PsiExpression[] arguments,
+			@Nonnull PsiSubstitutor partialSubstitutor,
+			@Nonnull final PsiElement parent,
+			@Nonnull final ParameterTypeInferencePolicy policy)
 	{
 		if(parent instanceof PsiCall)
 		{
@@ -118,7 +120,7 @@ public class InferenceSessionContainer
 					{
 						session = CachedValuesManager.getCachedValue(topLevelCall, new CachedValueProvider<InferenceSession>()
 						{
-							@Nullable
+							@javax.annotation.Nullable
 							@Override
 							public Result<InferenceSession> compute()
 							{
@@ -169,12 +171,12 @@ public class InferenceSessionContainer
 	}
 
 	private static PsiSubstitutor inferNested(final PsiTypeParameter[] typeParameters,
-			@NotNull final PsiParameter[] parameters,
-			@NotNull final PsiExpression[] arguments,
+			@Nonnull final PsiParameter[] parameters,
+			@Nonnull final PsiExpression[] arguments,
 			final PsiSubstitutor partialSubstitutor,
-			@NotNull final PsiCall parent,
-			@NotNull final ParameterTypeInferencePolicy policy,
-			@NotNull final MethodCandidateInfo.CurrentCandidateProperties properties,
+			@Nonnull final PsiCall parent,
+			@Nonnull final ParameterTypeInferencePolicy policy,
+			@Nonnull final MethodCandidateInfo.CurrentCandidateProperties properties,
 			final InferenceSession parentSession)
 	{
 		final CompoundInitialState compoundInitialState = createState(parentSession);
@@ -340,7 +342,7 @@ public class InferenceSessionContainer
 		return null;
 	}
 
-	@NotNull
+	@Nonnull
 	private static PsiSubstitutor replaceVariables(Collection<InferenceVariable> inferenceVariables)
 	{
 		final List<InferenceVariable> targetVars = new ArrayList<InferenceVariable>();

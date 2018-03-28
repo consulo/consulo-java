@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.openapi.util.text.StringUtil;
@@ -38,7 +39,7 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
 		super(stub);
 		myModuleReference = new AtomicNotNullLazyValue<PsiJavaModuleReferenceElement>()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			protected PsiJavaModuleReferenceElement compute()
 			{
@@ -60,7 +61,7 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 		StringUtil.repeatSymbol(buffer, ' ', indentLevel);
 		buffer.append("requires ");
@@ -69,7 +70,7 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
 	}
 
 	@Override
-	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.REQUIRES_STATEMENT);
 		setMirror(getModifierList(), SourceTreeToPsiMap.<PsiRequiresStatement>treeToPsiNotNull(element).getModifierList());
@@ -83,7 +84,7 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
 	}
 
 	@Override
-	public boolean hasModifierProperty(@NotNull String name)
+	public boolean hasModifierProperty(@Nonnull String name)
 	{
 		PsiModifierList modifierList = getModifierList();
 		return modifierList != null && modifierList.hasModifierProperty(name);

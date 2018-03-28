@@ -6,9 +6,9 @@ package com.intellij.coverage;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.coverage.info.CoberturaLoaderUtil;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.util.SystemInfo;
@@ -17,7 +17,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 
 public class CoberturaCoverageRunner extends JavaCoverageRunner {
 
-  public ProjectData loadCoverageData(@NotNull final File sessionDataFile, @Nullable final CoverageSuite coverageSuite) {
+  public ProjectData loadCoverageData(@Nonnull final File sessionDataFile, @javax.annotation.Nullable final CoverageSuite coverageSuite) {
     return CoberturaLoaderUtil.load(sessionDataFile);
   }
 

@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -41,7 +43,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
   private final CoverageEngine myCoverageEngine;
 
   //read external only
-  public JavaCoverageSuite(@NotNull final JavaCoverageEngine coverageSupportProvider) {
+  public JavaCoverageSuite(@Nonnull final JavaCoverageEngine coverageSupportProvider) {
     super();
     myCoverageEngine = coverageSupportProvider;
   }
@@ -54,7 +56,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
                            final boolean tracingEnabled,
                            final boolean trackTestFolders,
                            final CoverageRunner coverageRunner,
-                           @NotNull final JavaCoverageEngine coverageSupportProvider,
+                           @Nonnull final JavaCoverageEngine coverageSupportProvider,
                            final Project project) {
     super(name, coverageDataFileProvider, lastCoverageTimeStamp, coverageByTestEnabled,
           tracingEnabled, trackTestFolders,
@@ -64,7 +66,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     myCoverageEngine = coverageSupportProvider;
   }
 
-  @NotNull
+  @Nonnull
   public String[] getFilteredPackageNames() {
     if (myFilters == null || myFilters.length == 0) return ArrayUtil.EMPTY_STRING_ARRAY;
     List<String> result = new ArrayList<String>();
@@ -77,7 +79,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return ArrayUtil.toStringArray(result);
   }
 
-  @NotNull
+  @Nonnull
   public String[] getFilteredClassNames() {
     if (myFilters == null) return ArrayUtil.EMPTY_STRING_ARRAY;
     List<String> result = new ArrayList<String>();
@@ -152,12 +154,12 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return map;
   }
 
-  @NotNull
+  @Nonnull
   public CoverageEngine getCoverageEngine() {
     return myCoverageEngine;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public String getSuiteToMerge() {
     return mySuiteToMerge;
   }
@@ -181,7 +183,8 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return filteredPackageNames.length == 0 && getFilteredClassNames().length == 0;
   }
 
-  public @NotNull List<PsiJavaPackage> getCurrentSuitePackages(Project project) {
+  public @Nonnull
+  List<PsiJavaPackage> getCurrentSuitePackages(Project project) {
     List<PsiJavaPackage> packages = new ArrayList<PsiJavaPackage>();
     final PsiManager psiManager = PsiManager.getInstance(project);
     final String[] filters = getFilteredPackageNames();
@@ -220,7 +223,8 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return false;
   }
 
-  public @NotNull List<PsiClass> getCurrentSuiteClasses(final Project project) {
+  public @Nonnull
+  List<PsiClass> getCurrentSuiteClasses(final Project project) {
     final List<PsiClass> classes = new ArrayList<PsiClass>();
     final PsiManager psiManager = PsiManager.getInstance(project);
     final String[] classNames = getFilteredClassNames();
@@ -228,7 +232,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
       for (final String className : classNames) {
         final PsiClass aClass =
           ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-            @Nullable
+            @javax.annotation.Nullable
             public PsiClass compute() {
               return JavaPsiFacade.getInstance(psiManager.getProject()).findClass(className.replace("$", "."), GlobalSearchScope.allScope(project));
             }

@@ -17,7 +17,7 @@ package com.intellij.psi.formatter.java;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.formatting.alignment.AlignmentStrategy;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.impl.source.tree.JavaElementType;
@@ -35,7 +35,7 @@ public class SubsequentOneLineMethodsAligner extends ChildAlignmentStrategyProvi
 	}
 
 	@Override
-	public AlignmentStrategy getNextChildStrategy(@NotNull ASTNode child)
+	public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
 	{
 		IElementType childType = child.getElementType();
 

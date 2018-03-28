@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAssignmentExpression;
@@ -43,13 +44,13 @@ import com.siyeh.ig.psiutils.EquivalenceChecker;
 public class TrivialIfInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "RedundantIfStatement";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("trivial.if.display.name");
   }
@@ -60,7 +61,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("trivial.if.problem.descriptor");
   }
@@ -71,7 +72,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   private static class TrivialIfFix extends InspectionGadgetsFix {
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "constant.conditional.expression.simplify.quickfix");
@@ -285,7 +286,7 @@ public class TrivialIfInspection extends BaseInspection {
   private static class TrivialIfVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@NotNull PsiIfStatement ifStatement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement ifStatement) {
       super.visitIfStatement(ifStatement);
       final PsiExpression condition = ifStatement.getCondition();
       if (condition == null) {

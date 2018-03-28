@@ -22,7 +22,7 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.classMembers.ClassMembersUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class ExtractSuperClassViewDescriptor extends UsageViewDescriptorAdapter 
     }
   }
 
-  @NotNull
+  @Nonnull
   public PsiElement[] getElements() {
     return myElements;
   }

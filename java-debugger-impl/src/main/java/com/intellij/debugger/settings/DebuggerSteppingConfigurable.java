@@ -21,11 +21,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.ui.JavaDebuggerSupport;
 import com.intellij.openapi.options.ConfigurableUi;
@@ -41,7 +41,7 @@ class DebuggerSteppingConfigurable implements ConfigurableUi<DebuggerSettings>
 	private JCheckBox myCbSkipSimpleGetters;
 
 	@Override
-	public void reset(@NotNull DebuggerSettings settings)
+	public void reset(@Nonnull DebuggerSettings settings)
 	{
 		myCbSkipSimpleGetters.setSelected(settings.SKIP_GETTERS);
 		myCbSkipSyntheticMethods.setSelected(settings.SKIP_SYNTHETIC_METHODS);
@@ -55,7 +55,7 @@ class DebuggerSteppingConfigurable implements ConfigurableUi<DebuggerSettings>
 	}
 
 	@Override
-	public void apply(@NotNull DebuggerSettings settings)
+	public void apply(@Nonnull DebuggerSettings settings)
 	{
 		getSettingsTo(settings);
 	}
@@ -73,7 +73,7 @@ class DebuggerSteppingConfigurable implements ConfigurableUi<DebuggerSettings>
 	}
 
 	@Override
-	public boolean isModified(@NotNull DebuggerSettings currentSettings)
+	public boolean isModified(@Nonnull DebuggerSettings currentSettings)
 	{
 		DebuggerSettings debuggerSettings = currentSettings.clone();
 		getSettingsTo(debuggerSettings);
@@ -81,7 +81,7 @@ class DebuggerSteppingConfigurable implements ConfigurableUi<DebuggerSettings>
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JComponent getComponent()
 	{
 		final JPanel panel = new JPanel(new GridBagLayout());

@@ -24,9 +24,10 @@ import gnu.trove.THashSet;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.CommonProblemDescriptor;
@@ -62,7 +63,7 @@ public class InconsistentLanguageLevelInspection extends GlobalInspectionTool
 	}
 
 	@Override
-	public void runInspection(@NotNull AnalysisScope scope, @NotNull InspectionManager manager, @NotNull GlobalInspectionContext globalContext, @NotNull ProblemDescriptionsProcessor problemProcessor)
+	public void runInspection(@Nonnull AnalysisScope scope, @Nonnull InspectionManager manager, @Nonnull GlobalInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor problemProcessor)
 	{
 		final Set<Module> modules = new THashSet<Module>();
 		scope.accept(new PsiElementVisitor()
@@ -115,14 +116,14 @@ public class InconsistentLanguageLevelInspection extends GlobalInspectionTool
 
 	@Override
 	@Nls
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.MODULARIZATION_GROUP_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return "Inconsistent language level settings";
@@ -130,7 +131,7 @@ public class InconsistentLanguageLevelInspection extends GlobalInspectionTool
 
 	@Override
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "InconsistentLanguageLevel";
@@ -146,21 +147,21 @@ public class InconsistentLanguageLevelInspection extends GlobalInspectionTool
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getName()
 		{
 			return "Open module " + myModule.getName() + " settings";
 		}
 
 		@Override
-		@NotNull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return getName();
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull CommonProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor)
 		{
 			if(!myModule.isDisposed())
 			{

@@ -18,7 +18,8 @@ package com.intellij.ide.highlighter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.lexer.JavaHighlightingLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.HighlighterColors;
@@ -116,20 +117,20 @@ public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter
 		this(LanguageLevel.HIGHEST.toLangVersion());
 	}
 
-	public JavaFileHighlighter(@NotNull LanguageVersion languageLevel)
+	public JavaFileHighlighter(@Nonnull LanguageVersion languageLevel)
 	{
 		super(languageLevel);
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Lexer getHighlightingLexer(LanguageVersion languageVersion)
 	{
 		return new JavaHighlightingLexer(((JavaLanguageVersion) languageVersion).getLanguageLevel());
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TextAttributesKey[] getTokenHighlights(IElementType tokenType)
 	{
 		return pack(ourMap1.get(tokenType), ourMap2.get(tokenType));

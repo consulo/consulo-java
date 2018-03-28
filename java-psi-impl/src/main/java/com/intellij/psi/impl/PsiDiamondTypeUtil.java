@@ -17,7 +17,7 @@ package com.intellij.psi.impl;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
@@ -39,7 +39,7 @@ public class PsiDiamondTypeUtil
 	{
 	}
 
-	public static boolean canCollapseToDiamond(final PsiNewExpression expression, final PsiNewExpression context, @Nullable final PsiType expectedType)
+	public static boolean canCollapseToDiamond(final PsiNewExpression expression, final PsiNewExpression context, @javax.annotation.Nullable final PsiType expectedType)
 	{
 		return canCollapseToDiamond(expression, context, expectedType, false);
 	}

@@ -15,10 +15,12 @@
  */
 package com.siyeh.ig.psiutils;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
@@ -30,7 +32,7 @@ public class BoolUtils
 	{
 	}
 
-	public static boolean isNegation(@NotNull PsiExpression expression)
+	public static boolean isNegation(@Nonnull PsiExpression expression)
 	{
 		if(!(expression instanceof PsiPrefixExpression))
 		{
@@ -53,7 +55,7 @@ public class BoolUtils
 		return parent instanceof PsiExpression && isNegation((PsiExpression) parent);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiExpression getNegated(PsiExpression expression)
 	{
 		if(!(expression instanceof PsiPrefixExpression))
@@ -70,13 +72,13 @@ public class BoolUtils
 		return ParenthesesUtils.stripParentheses(operand);
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getNegatedExpressionText(@Nullable PsiExpression condition)
 	{
 		return getNegatedExpressionText(condition, ParenthesesUtils.NUM_PRECEDENCES);
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getNegatedExpressionText(@Nullable PsiExpression expression, int precedence)
 	{
 		if(expression == null)
@@ -208,7 +210,7 @@ public class BoolUtils
 	}
 
 	@Contract(value = "null -> false", pure = true)
-	public static boolean isFalse(@Nullable PsiExpression expression)
+	public static boolean isFalse(@javax.annotation.Nullable PsiExpression expression)
 	{
 		expression = ParenthesesUtils.stripParentheses(expression);
 		if(expression == null)

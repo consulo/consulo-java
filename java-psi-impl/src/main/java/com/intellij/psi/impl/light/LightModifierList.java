@@ -22,7 +22,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -61,51 +61,51 @@ public class LightModifierList extends LightElement implements PsiModifierList {
   }
 
   @Override
-  public boolean hasModifierProperty(@NotNull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return myModifiers.contains(name);
   }
 
   @Override
-  public boolean hasExplicitModifier(@NotNull String name) {
+  public boolean hasExplicitModifier(@Nonnull String name) {
     return myModifiers.contains(name);
   }
 
   @Override
-  public void setModifierProperty(@NotNull String name, boolean value) throws IncorrectOperationException {
+  public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public void checkSetModifierProperty(@NotNull String name, boolean value) throws IncorrectOperationException {
+  public void checkSetModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     //todo
     return PsiAnnotation.EMPTY_ARRAY;
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getAnnotations();
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@NotNull String qualifiedName) {
+  public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
     return null;
   }
 
   @Override
-  @NotNull
-  public PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName) {
+  @Nonnull
+  public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitModifierList(this);
     }

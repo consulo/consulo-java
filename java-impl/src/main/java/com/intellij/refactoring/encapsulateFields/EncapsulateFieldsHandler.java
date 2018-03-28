@@ -17,7 +17,8 @@ package com.intellij.refactoring.encapsulateFields;
 
 import java.util.HashSet;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
@@ -37,7 +38,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.encapsulateFields.EncapsulateFieldsHandler");
   public static final String REFACTORING_NAME = RefactoringBundle.message("encapsulate.fields.title");
 
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = file.findElementAt(offset);
@@ -68,7 +69,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
    * if elements.length == 1 the expected value is either PsiClass or PsiField
    * if elements.length > 1 the expected values are PsiField objects only
    */
-  public void invoke(@NotNull final Project project, @NotNull final PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, DataContext dataContext) {
     PsiClass aClass = null;
     final HashSet<PsiField> preselectedFields = new HashSet<PsiField>();
     if (elements.length == 1) {

@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
@@ -51,23 +51,23 @@ public class TestIntegrationUtils {
 
   public enum MethodKind {
     SET_UP("setUp") {
-      public FileTemplateDescriptor getFileTemplateDescriptor(@NotNull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
         return framework.getSetUpMethodFileTemplateDescriptor();
       }
     },
     TEAR_DOWN("tearDown") {
-      public FileTemplateDescriptor getFileTemplateDescriptor(@NotNull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
         return framework.getTearDownMethodFileTemplateDescriptor();
       }
     },
     TEST("test") {
-      public FileTemplateDescriptor getFileTemplateDescriptor(@NotNull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
         return framework.getTestMethodFileTemplateDescriptor();
       }
     },
     DATA("data") {
       @Override
-      public FileTemplateDescriptor getFileTemplateDescriptor(@NotNull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
         if (framework instanceof JavaTestFramework) {
           return ((JavaTestFramework)framework).getParametersMethodFileTemplateDescriptor();
         }
@@ -84,16 +84,16 @@ public class TestIntegrationUtils {
       return myDefaultName;
     }
 
-    public abstract FileTemplateDescriptor getFileTemplateDescriptor(@NotNull TestFramework framework);
+    public abstract FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework);
   }
 
-  public static boolean isTest(@NotNull PsiElement element) {
+  public static boolean isTest(@Nonnull PsiElement element) {
     PsiClass klass = findOuterClass(element);
     return klass != null && TestFrameworks.getInstance().isTestClass(klass);
   }
 
-  @Nullable
-  public static PsiClass findOuterClass(@NotNull PsiElement element) {
+  @javax.annotation.Nullable
+  public static PsiClass findOuterClass(@Nonnull PsiElement element) {
     PsiClass result = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
     if (result == null) {
        final PsiFile containingFile = element.getContainingFile();
@@ -138,7 +138,7 @@ public class TestIntegrationUtils {
                                            final Editor editor,
                                            final PsiClass targetClass,
                                            final PsiMethod method,
-                                           @Nullable String name,
+                                           @javax.annotation.Nullable String name,
                                            boolean automatic) {
     Template template = createTestMethodTemplate(methodKind, framework, targetClass, name, automatic);
 
@@ -181,7 +181,7 @@ public class TestIntegrationUtils {
   private static Template createTestMethodTemplate(MethodKind methodKind,
                                                    TestFramework descriptor,
                                                    PsiClass targetClass,
-                                                   @Nullable String name,
+                                                   @javax.annotation.Nullable String name,
                                                    boolean automatic) {
     FileTemplateDescriptor templateDesc = methodKind.getFileTemplateDescriptor(descriptor);
     String templateName = templateDesc.getFileName();
@@ -233,7 +233,7 @@ public class TestIntegrationUtils {
     return template;
   }
 
-  public static PsiMethod createDummyMethod(@NotNull PsiElement context) {
+  public static PsiMethod createDummyMethod(@Nonnull PsiElement context) {
     JVMElementFactory factory = JVMElementFactories.getFactory(context.getLanguage(), context.getProject());
     if (factory == null) factory = JavaPsiFacade.getElementFactory(context.getProject());
     return factory.createMethod("dummy", PsiType.VOID);

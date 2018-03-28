@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.style;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,18 +26,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class UnnecessaryEnumModifierInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.enum.modifier.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiElement parent = (PsiElement)infos[1];
     if (parent instanceof PsiMethod) {
@@ -65,7 +66,7 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return m_name;
     }
@@ -93,7 +94,7 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
   private static class UnnecessaryEnumModifierVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@NotNull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!aClass.isEnum() || !ClassUtils.isInnerClass(aClass) || !aClass.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
@@ -111,7 +112,7 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@NotNull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!method.isConstructor() || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;
       }

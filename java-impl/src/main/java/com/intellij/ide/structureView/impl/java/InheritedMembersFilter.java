@@ -15,6 +15,8 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.FileStructureFilter;
@@ -24,7 +26,6 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.keymap.KeymapManager;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class InheritedMembersFilter implements FileStructureFilter {
   @NonNls public static final String ID = "SHOW_INHERITED";
@@ -38,12 +39,12 @@ public class InheritedMembersFilter implements FileStructureFilter {
     }
   }
 
-  @NotNull
+  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.structureview.show.inherited"), null, AllIcons.Hierarchy.Supertypes);
   }
 
-  @NotNull
+  @Nonnull
   public String getName() {
     return ID;
   }

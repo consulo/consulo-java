@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
@@ -38,15 +38,15 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStub> implements PsiNameValuePair {
 
-  public PsiNameValuePairImpl(@NotNull PsiNameValuePairStub stub) {
+  public PsiNameValuePairImpl(@Nonnull PsiNameValuePairStub stub) {
     super(stub, JavaStubElementTypes.NAME_VALUE_PAIR);
   }
 
-  public PsiNameValuePairImpl(@NotNull ASTNode node) {
+  public PsiNameValuePairImpl(@Nonnull ASTNode node) {
     super(node);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public NameValuePairElement getNode() {
     return (NameValuePairElement)super.getNode();
@@ -82,9 +82,9 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     return node == null ? null : (PsiAnnotationMemberValue)node.getPsi();
   }
 
-  @NotNull
+  @Nonnull
   @Override
-  public PsiAnnotationMemberValue setValue(@NotNull PsiAnnotationMemberValue newValue) {
+  public PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue) {
     getValue().replace(newValue);
     return getValue();
   }
@@ -133,7 +133,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
       }
 
       @Override
-      @NotNull
+      @Nonnull
       public String getCanonicalText() {
         String name = getName();
         return name != null ? name : PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME;
@@ -155,7 +155,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
       }
 
       @Override
-      public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+      public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
         throw new IncorrectOperationException("Not implemented");
       }
 
@@ -172,7 +172,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
   }
 
   @Override
-  public final void accept(@NotNull PsiElementVisitor visitor) {
+  public final void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitNameValuePair(this);
     }

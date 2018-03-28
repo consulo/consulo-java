@@ -17,8 +17,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.Arrays;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -47,28 +47,28 @@ public class RemoveRedundantArgumentsFix implements IntentionAction {
   private final PsiExpression[] myArguments;
   private final PsiSubstitutor mySubstitutor;
 
-  private RemoveRedundantArgumentsFix(@NotNull PsiMethod targetMethod,
-                                      @NotNull PsiExpression[] arguments,
-                                      @NotNull PsiSubstitutor substitutor) {
+  private RemoveRedundantArgumentsFix(@Nonnull PsiMethod targetMethod,
+                                      @Nonnull PsiExpression[] arguments,
+                                      @Nonnull PsiSubstitutor substitutor) {
     myTargetMethod = targetMethod;
     myArguments = arguments;
     mySubstitutor = substitutor;
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.redundant.arguments.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) return false;
     for (PsiExpression expression : myArguments) {
       if (!expression.isValid()) return false;
@@ -79,9 +79,9 @@ public class RemoveRedundantArgumentsFix implements IntentionAction {
   }
 
   @Nullable
-  private static PsiExpression[] findRedundantArgument(@NotNull PsiExpression[] arguments,
-                                                       @NotNull PsiParameter[] parameters,
-                                                       @NotNull PsiSubstitutor substitutor) {
+  private static PsiExpression[] findRedundantArgument(@Nonnull PsiExpression[] arguments,
+                                                       @Nonnull PsiParameter[] parameters,
+                                                       @Nonnull PsiSubstitutor substitutor) {
     if (arguments.length <= parameters.length) return null;
 
     for (int i = 0; i < parameters.length; i++) {
@@ -101,7 +101,7 @@ public class RemoveRedundantArgumentsFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiExpression[] redundantArguments = findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor);
     if (redundantArguments != null) {
@@ -116,20 +116,20 @@ public class RemoveRedundantArgumentsFix implements IntentionAction {
     return true;
   }
 
-  public static void registerIntentions(@NotNull JavaResolveResult[] candidates,
-                                        @NotNull PsiExpressionList arguments,
-                                        @Nullable HighlightInfo highlightInfo,
+  public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
+                                        @Nonnull PsiExpressionList arguments,
+                                        @javax.annotation.Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange) {
     for (JavaResolveResult candidate : candidates) {
       registerIntention(arguments, highlightInfo, fixRange, candidate, arguments);
     }
   }
 
-  private static void registerIntention(@NotNull PsiExpressionList arguments,
+  private static void registerIntention(@Nonnull PsiExpressionList arguments,
                                         @Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange,
-                                        @NotNull JavaResolveResult candidate,
-                                        @NotNull PsiElement context) {
+                                        @Nonnull JavaResolveResult candidate,
+                                        @Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
     PsiMethod method = (PsiMethod)candidate.getElement();
     PsiSubstitutor substitutor = candidate.getSubstitutor();

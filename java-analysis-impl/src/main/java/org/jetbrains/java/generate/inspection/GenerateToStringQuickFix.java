@@ -15,7 +15,8 @@
  */
 package org.jetbrains.java.generate.inspection;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -42,21 +43,21 @@ public class GenerateToStringQuickFix implements LocalQuickFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		return "Generate toString()";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return "Generate";
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor desc)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor desc)
 	{
 		final PsiClass clazz = PsiTreeUtil.getParentOfType(desc.getPsiElement(), PsiClass.class);
 		if(clazz == null)

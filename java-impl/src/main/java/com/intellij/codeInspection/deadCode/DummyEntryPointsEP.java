@@ -15,10 +15,11 @@
  */
 package com.intellij.codeInspection.deadCode;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.InspectionEP;
 import com.intellij.codeInspection.InspectionProfileEntry;
 import com.intellij.codeInspection.InspectionsBundle;
-import org.jetbrains.annotations.NotNull;
 
 public class DummyEntryPointsEP extends InspectionEP {
   public DummyEntryPointsEP() {
@@ -28,7 +29,7 @@ public class DummyEntryPointsEP extends InspectionEP {
     shortName = "";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public InspectionProfileEntry instantiateTool() {
     return new DummyEntryPointsTool();

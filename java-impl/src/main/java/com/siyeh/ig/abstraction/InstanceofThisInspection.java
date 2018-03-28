@@ -15,21 +15,22 @@
  */
 package com.siyeh.ig.abstraction;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NotNull;
 
 public class InstanceofThisInspection extends BaseInspection {
 
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("instanceof.check.for.this.display.name");
   }
 
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("instanceof.check.for.this.problem.descriptor");
   }
@@ -41,7 +42,7 @@ public class InstanceofThisInspection extends BaseInspection {
   private static class InstanceofThisVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitThisExpression(@NotNull PsiThisExpression thisValue) {
+    public void visitThisExpression(@Nonnull PsiThisExpression thisValue) {
       super.visitThisExpression(thisValue);
       if (thisValue.getQualifier() != null) {
         return;

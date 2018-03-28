@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.threading;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,24 +28,23 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class ThreadRunInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("thread.run.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "CallToThreadRun";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("thread.run.problem.descriptor");
   }
@@ -55,14 +56,14 @@ public class ThreadRunInspection extends BaseInspection {
 
   private static class ThreadRunFix extends InspectionGadgetsFix {
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "thread.run.replace.quickfix");
     }
 
     @Override
-    public void doFix(@NotNull Project project, ProblemDescriptor descriptor)
+    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement methodNameIdentifier = descriptor.getPsiElement();
       final PsiReferenceExpression methodExpression =
@@ -88,7 +89,7 @@ public class ThreadRunInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @NotNull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

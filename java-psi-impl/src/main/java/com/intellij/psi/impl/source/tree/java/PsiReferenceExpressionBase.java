@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.psi.JavaResolveResult;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -31,13 +31,13 @@ import com.intellij.util.IncorrectOperationException;
 
 public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement implements PsiReferenceExpression
 {
-	public PsiReferenceExpressionBase(@NotNull final IElementType type)
+	public PsiReferenceExpressionBase(@Nonnull final IElementType type)
 	{
 		super(type);
 	}
 
 	@Override
-	public PsiElement bindToElementViaStaticImport(@NotNull final PsiClass qualifierClass) throws
+	public PsiElement bindToElementViaStaticImport(@Nonnull final PsiClass qualifierClass) throws
 			IncorrectOperationException
 	{
 		throw new IncorrectOperationException();
@@ -68,7 +68,7 @@ public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement im
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		throw new IncorrectOperationException();
 	}
@@ -91,7 +91,7 @@ public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement im
 		return this;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public JavaResolveResult advancedResolve(boolean incompleteCode)
 	{
@@ -112,7 +112,7 @@ public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement im
 		return PsiTreeUtil.getChildOfType(this, PsiReferenceParameterList.class);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public PsiType[] getTypeParameters()
 	{

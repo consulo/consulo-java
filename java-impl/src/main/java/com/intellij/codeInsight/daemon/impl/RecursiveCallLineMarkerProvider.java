@@ -20,10 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProviderDescriptor;
@@ -51,14 +51,14 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 {
 	@RequiredReadAction
 	@Override
-	public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element)
+	public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element)
 	{
 		return null; //do nothing
 	}
 
 	@RequiredReadAction
 	@Override
-	public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result)
+	public void collectSlowLineMarkers(@Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result)
 	{
 		final Set<PsiStatement> statements = new HashSet<>();
 
@@ -78,7 +78,7 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 		}
 	}
 
-	public static boolean isRecursiveMethodCall(@NotNull PsiMethodCallExpression methodCall)
+	public static boolean isRecursiveMethodCall(@Nonnull PsiMethodCallExpression methodCall)
 	{
 		final PsiExpression qualifier = methodCall.getMethodExpression().getQualifierExpression();
 		if(qualifier != null && !(qualifier instanceof PsiThisExpression))
@@ -95,7 +95,7 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 		return Comparing.equal(method, methodCall.resolveMethod());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -111,7 +111,7 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 
 	private static class RecursiveMethodCallMarkerInfo extends LineMarkerInfo<PsiMethodCallExpression>
 	{
-		private RecursiveMethodCallMarkerInfo(@NotNull PsiMethodCallExpression methodCall)
+		private RecursiveMethodCallMarkerInfo(@Nonnull PsiMethodCallExpression methodCall)
 		{
 			super(methodCall, methodCall.getTextRange(), AllIcons.Gutter.RecursiveMethod, Pass.LINE_MARKERS, FunctionUtil.constant("Recursive call"), null, GutterIconRenderer.Alignment.RIGHT);
 		}

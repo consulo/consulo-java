@@ -18,8 +18,8 @@ package com.intellij.codeInspection.dataFlow;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
 import com.intellij.codeInspection.dataFlow.value.DfaTypeValue;
@@ -53,7 +53,7 @@ public abstract class MethodContract
 	 * @param defaultResult default result value for the called method
 	 * @return a DfaValue describing the return value of this contract
 	 */
-	@NotNull
+	@Nonnull
 	DfaValue getDfaReturnValue(DfaValueFactory factory, DfaValue defaultResult)
 	{
 		switch(getReturnValue())

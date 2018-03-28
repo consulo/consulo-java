@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -22,28 +24,26 @@ import com.intellij.psi.*;
 import com.intellij.refactoring.BaseRefactoringIntentionAction;
 import com.intellij.refactoring.encapsulateFields.EncapsulateFieldsHandler;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Danila Ponomarenko
  */
 public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
 
-  @NotNull
+  @Nonnull
   @Override
   public String getText() {
     return CodeInsightBundle.message("intention.encapsulate.field.text");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public final String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof SyntheticElement){
       return false;
     }
@@ -53,7 +53,7 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiField field = getField(element);
     if (field == null) {
       return;
@@ -63,8 +63,8 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
   }
 
 
-  @Nullable
-  protected static PsiField getField(@Nullable PsiElement element) {
+  @javax.annotation.Nullable
+  protected static PsiField getField(@javax.annotation.Nullable PsiElement element) {
     if (element == null || !(element instanceof PsiIdentifier)) {
       return null;
     }

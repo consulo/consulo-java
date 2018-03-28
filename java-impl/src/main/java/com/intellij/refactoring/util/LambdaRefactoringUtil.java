@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -359,7 +359,7 @@ public class LambdaRefactoringUtil
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static String createLambdaParameterListWithFormalTypes(PsiType functionalInterfaceType, PsiLambdaExpression lambdaExpression, boolean checkApplicability)
 	{
 		final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
@@ -402,7 +402,7 @@ public class LambdaRefactoringUtil
 		return specifyLambdaParameterTypes(lambdaExpression.getFunctionalInterfaceType(), lambdaExpression);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static PsiParameterList specifyLambdaParameterTypes(PsiType functionalInterfaceType, PsiLambdaExpression lambdaExpression)
 	{
 		String typedParamList = createLambdaParameterListWithFormalTypes(functionalInterfaceType, lambdaExpression, false);
@@ -415,7 +415,7 @@ public class LambdaRefactoringUtil
 		return null;
 	}
 
-	public static void simplifyToExpressionLambda(@NotNull final PsiLambdaExpression lambdaExpression)
+	public static void simplifyToExpressionLambda(@Nonnull final PsiLambdaExpression lambdaExpression)
 	{
 		final PsiElement body = lambdaExpression.getBody();
 		final PsiExpression singleExpression = RedundantLambdaCodeBlockInspection.isCodeBlockRedundant(body);

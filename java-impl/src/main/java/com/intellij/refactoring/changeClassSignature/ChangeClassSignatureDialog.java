@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,8 +35,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -81,7 +80,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
   static final String REFACTORING_NAME = RefactoringBundle.message("changeClassSignature.refactoring.name");
   private boolean myHideDefaultValueColumn;
 
-  public ChangeClassSignatureDialog(@NotNull PsiClass aClass, boolean hideDefaultValueColumn) {
+  public ChangeClassSignatureDialog(@Nonnull PsiClass aClass, boolean hideDefaultValueColumn) {
     this(
       aClass,
       initTypeParameterInfos(aClass.getTypeParameters().length),
@@ -90,7 +89,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     );
   }
 
-  @NotNull
+  @Nonnull
   private static List<TypeParameterInfo> initTypeParameterInfos(int length) {
     final List<TypeParameterInfo> result = new ArrayList<TypeParameterInfo>();
     for (int i = 0; i < length; i++) {
@@ -99,7 +98,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     return result;
   }
 
-  @NotNull
+  @Nonnull
   private static List<PsiTypeCodeFragment> initTypeCodeFragment(int length) {
     final List<PsiTypeCodeFragment> result = new ArrayList<PsiTypeCodeFragment>();
     for (int i = 0; i < length; i++) {
@@ -108,15 +107,15 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     return result;
   }
 
-  public ChangeClassSignatureDialog(@NotNull PsiClass aClass,
-                                    @NotNull Map<TypeParameterInfo, PsiTypeCodeFragment> parameters,
+  public ChangeClassSignatureDialog(@Nonnull PsiClass aClass,
+                                    @Nonnull Map<TypeParameterInfo, PsiTypeCodeFragment> parameters,
                                     boolean hideDefaultValueColumn) {
     this(aClass, parameters.keySet(), parameters.values(), hideDefaultValueColumn);
   }
 
-  public ChangeClassSignatureDialog(@NotNull PsiClass aClass,
-                                    @NotNull Collection<TypeParameterInfo> typeParameterInfos,
-                                    @NotNull Collection<PsiTypeCodeFragment> typeCodeFragments,
+  public ChangeClassSignatureDialog(@Nonnull PsiClass aClass,
+                                    @Nonnull Collection<TypeParameterInfo> typeParameterInfos,
+                                    @Nonnull Collection<PsiTypeCodeFragment> typeCodeFragments,
                                     boolean hideDefaultValueColumn) {
     super(aClass.getProject(), true);
     myHideDefaultValueColumn = hideDefaultValueColumn;
@@ -256,7 +255,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
       return myTypeParameterInfos.size();
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     public Class getColumnClass(int columnIndex) {
       return columnIndex == NAME_COLUMN ? String.class : null;
     }

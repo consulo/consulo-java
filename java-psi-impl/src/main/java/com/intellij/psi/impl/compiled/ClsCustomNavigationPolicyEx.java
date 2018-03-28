@@ -15,10 +15,12 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -26,24 +28,24 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ClsCustomNavigationPolicyEx implements ClsCustomNavigationPolicy {
   @Nullable
   @Override
-  public PsiElement getNavigationElement(@NotNull ClsClassImpl clsClass) {
+  public PsiElement getNavigationElement(@Nonnull ClsClassImpl clsClass) {
     return null;
   }
 
   @Nullable
   @Override
-  public PsiElement getNavigationElement(@NotNull ClsMethodImpl clsMethod) {
+  public PsiElement getNavigationElement(@Nonnull ClsMethodImpl clsMethod) {
     return null;
   }
 
   @Nullable
   @Override
-  public PsiElement getNavigationElement(@NotNull ClsFieldImpl clsField) {
+  public PsiElement getNavigationElement(@Nonnull ClsFieldImpl clsField) {
     return null;
   }
 
-  @Nullable
-  public PsiFile getFileNavigationElement(@NotNull ClsFileImpl file) {
+  @javax.annotation.Nullable
+  public PsiFile getFileNavigationElement(@Nonnull ClsFileImpl file) {
     return null;
   }
 }

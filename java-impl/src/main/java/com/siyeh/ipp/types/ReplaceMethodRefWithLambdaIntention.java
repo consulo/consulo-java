@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
@@ -47,7 +47,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention
 {
 	private static final Logger LOG = Logger.getInstance("#" + ReplaceMethodRefWithLambdaIntention.class.getName());
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected PsiElementPredicate getElementPredicate()
 	{
@@ -55,12 +55,12 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention
 	}
 
 	@Override
-	protected void processIntention(@NotNull PsiElement element)
+	protected void processIntention(@Nonnull PsiElement element)
 	{
 	}
 
 	@Override
-	protected void processIntention(final Editor editor, @NotNull PsiElement element)
+	protected void processIntention(final Editor editor, @Nonnull PsiElement element)
 	{
 		final PsiMethodReferenceExpression referenceExpression = PsiTreeUtil.getParentOfType(element,
 				PsiMethodReferenceExpression.class);

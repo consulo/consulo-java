@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.migration;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -28,22 +30,20 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class CollectionsFieldAccessReplaceableByMethodCallInspection
   extends BaseInspection {
 
   @Override
   @Nls
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "collections.field.access.replaceable.by.method.call.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "collections.field.access.replaceable.by.method.call.problem.descriptor",
@@ -51,7 +51,7 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
   }
 
   @Override
-  @Nullable
+  @javax.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiReferenceExpression expression =
       (PsiReferenceExpression)infos[0];
@@ -69,7 +69,7 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
       replacementText = getCollectionsMethodCallText(referenceName);
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "collections.field.access.replaceable.by.method.call.quickfix",

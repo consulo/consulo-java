@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.initialization;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -29,24 +31,23 @@ import com.siyeh.ig.fixes.MakeClassFinalFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class OverridableMethodCallDuringObjectConstructionInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overridable.method.call.in.constructor.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("overridable.method.call.in.constructor.problem.descriptor");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)infos[0];
     final PsiClass callClass = ClassUtils.getContainingClass(methodCallExpression);
@@ -74,7 +75,7 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.method.final.fix.name", methodName);
     }
@@ -101,7 +102,7 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
   private static class OverridableMethodCallInConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
         return;

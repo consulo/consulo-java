@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a resource variable of try-with-resources statement (automatic resource management) introduced in JDK 7.
@@ -25,6 +25,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface PsiResourceVariable extends PsiLocalVariable, PsiResourceListElement
 {
-	@NotNull
+	@Nonnull
 	PsiElement[] getDeclarationScope();
 }

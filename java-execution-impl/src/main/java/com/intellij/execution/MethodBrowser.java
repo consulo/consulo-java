@@ -15,7 +15,8 @@
  */
 package com.intellij.execution;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.execution.configuration.BrowseModuleValueActionListener;
@@ -73,7 +74,7 @@ public abstract class MethodBrowser extends BrowseModuleValueActionListener
 		new TextFieldCompletionProvider()
 		{
 			@Override
-			protected void addCompletionVariants(@NotNull String text, int offset, @NotNull String prefix, @NotNull CompletionResultSet result)
+			protected void addCompletionVariants(@Nonnull String text, int offset, @Nonnull String prefix, @Nonnull CompletionResultSet result)
 			{
 				final String className = getClassName();
 				if(className.trim().length() == 0)

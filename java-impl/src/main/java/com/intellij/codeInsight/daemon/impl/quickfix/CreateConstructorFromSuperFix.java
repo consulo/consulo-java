@@ -22,7 +22,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +39,7 @@ public class CreateConstructorFromSuperFix extends CreateConstructorFromThisOrSu
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     do {
       element = PsiTreeUtil.getParentOfType(element, PsiClass.class);
@@ -58,7 +58,7 @@ public class CreateConstructorFromSuperFix extends CreateConstructorFromThisOrSu
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("create.constructor.from.super.call.family");
   }

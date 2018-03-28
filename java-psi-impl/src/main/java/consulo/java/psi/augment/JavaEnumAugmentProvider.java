@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.augment.PsiAugmentProvider;
 import consulo.java.module.util.JavaClassNames;
 import com.intellij.lang.java.JavaLanguage;
@@ -44,10 +45,10 @@ public class JavaEnumAugmentProvider extends PsiAugmentProvider
 	public static final String VALUES_METHOD_NAME = "values";
 	public static final String VALUE_OF_METHOD_NAME = "valueOf";
 
-	@NotNull
+	@Nonnull
 	@Override
 	@SuppressWarnings("unchecked")
-	public <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type)
+	public <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type)
 	{
 		if(type == PsiMethod.class && element instanceof PsiClass && element.getUserData(FLAG) == Boolean.TRUE && ((PsiClass) element).isEnum())
 		{

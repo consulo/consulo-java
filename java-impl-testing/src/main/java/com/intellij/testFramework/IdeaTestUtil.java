@@ -17,7 +17,8 @@ package com.intellij.testFramework;
 
 import java.io.File;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.PathManager;
@@ -68,7 +69,7 @@ public class IdeaTestUtil extends PlatformTestUtil {
     return getMockJdk17("java 1.7");
   }
 
-  public static Sdk getMockJdk17(@NotNull String name) {
+  public static Sdk getMockJdk17(@Nonnull String name) {
     return JavaSdk.getInstance().createJdk(name, getMockJdk17Path().getPath(), false);
   }
 
@@ -95,7 +96,7 @@ public class IdeaTestUtil extends PlatformTestUtil {
     return jdk;
   }
 
-  public static void addWebJarsTo(@NotNull Sdk jdk) {
+  public static void addWebJarsTo(@Nonnull Sdk jdk) {
     SdkModificator sdkModificator = jdk.getSdkModificator();
     sdkModificator.addRoot(findJar("lib/jsp-api.jar"), OrderRootType.CLASSES);
     sdkModificator.addRoot(findJar("lib/servlet-api.jar"), OrderRootType.CLASSES);
@@ -112,7 +113,7 @@ public class IdeaTestUtil extends PlatformTestUtil {
   }
 
   @TestOnly
-  public static void setTestVersion(@NotNull final JavaSdkVersion testVersion, @NotNull Module module, @NotNull Disposable parentDisposable) {
+  public static void setTestVersion(@Nonnull final JavaSdkVersion testVersion, @Nonnull Module module, @Nonnull Disposable parentDisposable) {
     ModuleRootManager rootManager = ModuleRootManager.getInstance(module);
    /* final Sdk sdk = rootManager.getSdk();
     final String oldVersionString = sdk.getVersionString();

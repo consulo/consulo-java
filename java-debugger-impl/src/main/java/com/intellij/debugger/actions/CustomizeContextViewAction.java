@@ -20,7 +20,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.border.EmptyBorder;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.JavaDebugProcess;
 import com.intellij.debugger.settings.JavaDebuggerSettings;
@@ -49,7 +49,7 @@ public class CustomizeContextViewAction extends XDebuggerTreeActionBase
 	}
 
 	@Override
-	protected void perform(XValueNodeImpl node, @NotNull String nodeName, AnActionEvent e)
+	protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e)
 	{
 		final Project project = e.getData(CommonDataKeys.PROJECT);
 		Disposable disposable = Disposer.newDisposable();

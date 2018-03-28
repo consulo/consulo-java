@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.bitwise;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -26,19 +28,18 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
 
 public class ShiftOutOfRangeInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "shift.operation.by.inappropriate.constant.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer value = (Integer)infos[0];
     if (value.intValue() > 0) {
@@ -72,7 +73,7 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
       this.isLong = isLong;
     }
 
-    @NotNull
+    @Nonnull
     public String getName() {
       final int newValue;
       if (isLong) {
@@ -126,7 +127,7 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
 
     @Override
     public void visitBinaryExpression(
-      @NotNull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiJavaToken sign = expression.getOperationSign();
       final IElementType tokenType = sign.getTokenType();

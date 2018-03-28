@@ -28,9 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -109,8 +111,8 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 
 	protected LanguageLevel myEffectiveLanguageLevel = null;
 
-	@Nullable
-	private static Set<String> getForbiddenApi(@NotNull LanguageLevel languageLevel)
+	@javax.annotation.Nullable
+	private static Set<String> getForbiddenApi(@Nonnull LanguageLevel languageLevel)
 	{
 		if(!ourPresentableShortMessage.containsKey(languageLevel))
 		{
@@ -158,28 +160,28 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.1.5.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;
 	}
 
 
-	@NotNull
+	@Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{
@@ -193,7 +195,7 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 	}
 
 	@Override
-	public void readSettings(@NotNull Element node) throws InvalidDataException
+	public void readSettings(@Nonnull Element node) throws InvalidDataException
 	{
 		final Element element = node.getChild(EFFECTIVE_LL);
 		if(element != null)
@@ -203,7 +205,7 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 	}
 
 	@Override
-	public void writeSettings(@NotNull Element node) throws WriteExternalException
+	public void writeSettings(@Nonnull Element node) throws WriteExternalException
 	{
 		if(myEffectiveLanguageLevel != null)
 		{
@@ -214,8 +216,8 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 	}
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly)
 	{
 		return new MyVisitor(holder, isOnTheFly);
 	}
@@ -487,7 +489,7 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 		return presentableText.substring(0, presentableText.indexOf(" "));
 	}
 
-	public static boolean isForbiddenApiUsage(@NotNull PsiMember member, @NotNull LanguageLevel languageLevel)
+	public static boolean isForbiddenApiUsage(@Nonnull PsiMember member, @Nonnull LanguageLevel languageLevel)
 	{
 		if(member instanceof PsiAnonymousClass)
 		{
@@ -510,7 +512,7 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 
 	}
 
-	private static boolean isForbiddenSignature(@NotNull PsiMember member, @NotNull LanguageLevel languageLevel)
+	private static boolean isForbiddenSignature(@Nonnull PsiMember member, @Nonnull LanguageLevel languageLevel)
 	{
 		Set<String> forbiddenApi = getForbiddenApi(languageLevel);
 		String signature = getSignature(member);
@@ -518,9 +520,9 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 				forbiddenApi);
 	}
 
-	private static boolean isForbiddenSignature(@NotNull String signature,
-			@NotNull LanguageLevel languageLevel,
-			@NotNull Set<String> forbiddenApi)
+	private static boolean isForbiddenSignature(@Nonnull String signature,
+			@Nonnull LanguageLevel languageLevel,
+			@Nonnull Set<String> forbiddenApi)
 	{
 		if(forbiddenApi.contains(signature))
 		{
@@ -539,7 +541,7 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 	 * please leave public for JavaAPIUsagesInspectionTest#testCollectSinceApiUsages
 	 */
 	@Nullable
-	public static String getSignature(@Nullable PsiMember member)
+	public static String getSignature(@javax.annotation.Nullable PsiMember member)
 	{
 		if(member instanceof PsiClass)
 		{

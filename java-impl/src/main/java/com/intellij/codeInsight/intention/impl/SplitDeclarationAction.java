@@ -15,7 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.lang.java.JavaLanguage;
@@ -36,14 +37,14 @@ import com.siyeh.ig.psiutils.CommentTracker;
 public class SplitDeclarationAction extends PsiElementBaseIntentionAction
 {
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return CodeInsightBundle.message("intention.split.declaration.family");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element)
 	{
 
 		if(element instanceof PsiCompiledElement)
@@ -176,7 +177,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException
 	{
 		final PsiDeclarationStatement decl = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class);
 

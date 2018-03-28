@@ -24,13 +24,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.generate.tostring.GenerateToStringClassFilter;
 import org.jetbrains.java.generate.config.Config;
 import org.jetbrains.java.generate.template.TemplateResource;
@@ -75,7 +74,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file)
+	public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file)
 	{
 		PsiClass clazz = getSubjectClass(editor, file);
 		assert clazz != null;
@@ -90,7 +89,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 		doExecuteAction(project, clazz, null);
 	}
 
-	private static void doExecuteAction(@NotNull final Project project, @NotNull final PsiClass clazz, final Editor editor)
+	private static void doExecuteAction(@Nonnull final Project project, @Nonnull final PsiClass clazz, final Editor editor)
 	{
 		logger.debug("+++ doExecuteAction - START +++");
 
@@ -114,7 +113,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 				}
 				final MemberChooser<PsiElementClassMember> chooser = new MemberChooser<PsiElementClassMember>(dialogMembers, true, true, project, PsiUtil.isLanguageLevel5OrHigher(clazz), header)
 				{
-					@Nullable
+					@javax.annotation.Nullable
 					@Override
 					protected String getHelpId()
 					{
@@ -183,7 +182,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 		return GenerationUtil.combineToClassMemberList(filteredFields, filteredMethods);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static PsiClass getSubjectClass(Editor editor, final PsiFile file)
 	{
 		if(file == null)

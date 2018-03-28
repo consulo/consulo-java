@@ -17,7 +17,7 @@ package com.intellij.debugger.ui.tree;
 
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -32,7 +32,7 @@ public interface ValueDescriptor extends NodeDescriptor
 
 	Value getValue();
 
-	@Nullable
+	@javax.annotation.Nullable
 	default Type getType()
 	{
 		Value value = getValue();

@@ -15,7 +15,7 @@
  */
 package com.intellij.patterns;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
@@ -42,7 +42,7 @@ public class PsiParameterPattern extends PsiModifierListOwnerPattern<PsiParamete
         return processor.process((PsiMethod)scope, context);
       }
 
-      public boolean accepts(@NotNull final PsiParameter t, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiParameter t, final ProcessingContext context) {
         if (!super.accepts(t, context)) return false;
         final PsiMethod psiMethod = (PsiMethod)t.getDeclarationScope();
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.tree;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 
 /**
@@ -25,11 +25,11 @@ public abstract class NodeDescriptorNameAdjuster
 {
 	public static ExtensionPointName<NodeDescriptorNameAdjuster> EP_NAME = ExtensionPointName.create("consulo.java.debugger.nodeNameAdjuster");
 
-	public abstract boolean isApplicable(@NotNull NodeDescriptor descriptor);
+	public abstract boolean isApplicable(@Nonnull NodeDescriptor descriptor);
 
-	public abstract String fixName(String name, @NotNull NodeDescriptor descriptor);
+	public abstract String fixName(String name, @Nonnull NodeDescriptor descriptor);
 
-	public static NodeDescriptorNameAdjuster findFor(@NotNull NodeDescriptor descriptor)
+	public static NodeDescriptorNameAdjuster findFor(@Nonnull NodeDescriptor descriptor)
 	{
 		for(NodeDescriptorNameAdjuster adjuster : EP_NAME.getExtensions())
 		{

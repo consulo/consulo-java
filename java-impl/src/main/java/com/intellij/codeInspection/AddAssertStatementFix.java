@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInspection;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -22,7 +24,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -33,20 +34,20 @@ public class AddAssertStatementFix implements LocalQuickFix {
   private final SmartPsiElementPointer<PsiExpression> myExpressionToAssert;
   private final String myText;
 
-  public AddAssertStatementFix(@NotNull PsiExpression expressionToAssert) {
+  public AddAssertStatementFix(@Nonnull PsiExpression expressionToAssert) {
     myExpressionToAssert = SmartPointerManager.getInstance(expressionToAssert.getProject()).createSmartPsiElementPointer(expressionToAssert);
     LOG.assertTrue(PsiType.BOOLEAN.equals(expressionToAssert.getType()));
     myText = expressionToAssert.getText();
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getName() {
     return InspectionsBundle.message("inspection.assert.quickfix", myText);
   }
 
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiExpression expressionToAssert = myExpressionToAssert.getElement();
     if (expressionToAssert == null) return;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) return;
@@ -84,7 +85,7 @@ public class AddAssertStatementFix implements LocalQuickFix {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return InspectionsBundle.message("inspection.quickfix.assert.family");
   }

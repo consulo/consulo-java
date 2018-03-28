@@ -19,14 +19,14 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.lang.LangBundle;
 import com.intellij.psi.util.PsiFormatUtilBase;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
 public class JavaHighlightUsagesDescriptionProvider implements ElementDescriptionProvider {
   @Override
-  public String getElementDescription(@NotNull final PsiElement element, @NotNull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (!(location instanceof HighlightUsagesDescriptionLocation)) return null;
 
     String elementName = null;

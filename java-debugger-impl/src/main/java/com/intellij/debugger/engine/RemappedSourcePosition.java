@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -35,7 +35,7 @@ abstract class RemappedSourcePosition extends SourcePosition
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiFile getFile()
 	{
 		return myDelegate.getFile();

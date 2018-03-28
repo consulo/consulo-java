@@ -17,9 +17,11 @@ package com.intellij.openapi.projectRoots;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.projectRoots.impl.SdkVersionUtil;
 
 public abstract class JavaSdk extends SdkType implements JavaSdkType {
@@ -31,24 +33,24 @@ public abstract class JavaSdk extends SdkType implements JavaSdkType {
     return EP_NAME.findExtension(JavaSdk.class);
   }
 
-  public final Sdk createJdk(@NotNull String jdkName, @NotNull String jreHome) {
+  public final Sdk createJdk(@Nonnull String jdkName, @Nonnull String jreHome) {
     return createJdk(jdkName, jreHome, true);
   }
 
   /**
    * @deprecated use {@link #isOfVersionOrHigher(Sdk, JavaSdkVersion)} instead
    */
-  public abstract int compareTo(@NotNull String versionString, @NotNull String versionNumber);
+  public abstract int compareTo(@Nonnull String versionString, @Nonnull String versionNumber);
 
-  public abstract Sdk createJdk(@NonNls String jdkName, @NotNull String home, boolean isJre);
-
-  @Nullable
-  public abstract JavaSdkVersion getVersion(@NotNull Sdk sdk);
+  public abstract Sdk createJdk(@NonNls String jdkName, @Nonnull String home, boolean isJre);
 
   @Nullable
-  public abstract JavaSdkVersion getVersion(@NotNull String versionString);
+  public abstract JavaSdkVersion getVersion(@Nonnull Sdk sdk);
 
-  public abstract boolean isOfVersionOrHigher(@NotNull Sdk sdk, @NotNull JavaSdkVersion version);
+  @Nullable
+  public abstract JavaSdkVersion getVersion(@Nonnull String versionString);
+
+  public abstract boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version);
 
   @Deprecated
   public static boolean checkForJdk(File file) {
@@ -60,7 +62,7 @@ public abstract class JavaSdk extends SdkType implements JavaSdkType {
     return JdkUtil.checkForJre(file);
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   public static String getJdkVersion(final String sdkHome) {
     return SdkVersionUtil.detectJdkVersion(sdkHome);
   }

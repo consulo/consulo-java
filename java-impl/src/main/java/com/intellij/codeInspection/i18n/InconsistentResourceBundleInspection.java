@@ -27,8 +27,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.BidirectionalMap;
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.List;
@@ -44,25 +44,25 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
   @SuppressWarnings({"WeakerAccess"}) public boolean REPORT_DUPLICATED_PROPERTIES = true;
 
   @Override
-  @NotNull
+  @Nonnull
   public String getGroupDisplayName() {
     return PropertiesBundle.message("properties.files.inspection.group.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inconsistent.resource.bundle.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getShortName() {
     return "InconsistentResourceBundle";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
@@ -80,25 +80,25 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 
   private static final Key<Set<ResourceBundle>> VISITED_BUNDLES_KEY = Key.create("VISITED_BUNDLES_KEY");
   @Override
-  public void inspectionStarted(@NotNull InspectionManager manager,
-                                @NotNull GlobalInspectionContext globalContext,
-                                @NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
+  public void inspectionStarted(@Nonnull InspectionManager manager,
+                                @Nonnull GlobalInspectionContext globalContext,
+                                @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
     globalContext.putUserData(VISITED_BUNDLES_KEY, new THashSet<ResourceBundle>());
   }
 
   @Override
-  public void checkFile(@NotNull PsiFile file,
-                        @NotNull InspectionManager manager,
-                        @NotNull ProblemsHolder problemsHolder,
-                        @NotNull GlobalInspectionContext globalContext,
-                        @NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
+  public void checkFile(@Nonnull PsiFile file,
+                        @Nonnull InspectionManager manager,
+                        @Nonnull ProblemsHolder problemsHolder,
+                        @Nonnull GlobalInspectionContext globalContext,
+                        @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
     Set<ResourceBundle> visitedBundles = globalContext.getUserData(VISITED_BUNDLES_KEY);
     checkFile(file, manager, visitedBundles, globalContext.getRefManager(), problemDescriptionsProcessor);
   }
 
-  private void checkFile(@NotNull final PsiFile file,
-                         @NotNull final InspectionManager manager,
-                         @NotNull Set<ResourceBundle> visitedBundles,
+  private void checkFile(@Nonnull final PsiFile file,
+                         @Nonnull final InspectionManager manager,
+                         @Nonnull Set<ResourceBundle> visitedBundles,
                          RefManager refManager, ProblemDescriptionsProcessor processor) {
     if (!(file instanceof PropertiesFile)) return;
     final PropertiesFile propertiesFile = (PropertiesFile)file;

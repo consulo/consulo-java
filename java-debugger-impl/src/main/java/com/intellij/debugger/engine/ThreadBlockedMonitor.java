@@ -20,10 +20,9 @@ import java.util.HashSet;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nonnull;
 import javax.swing.event.HyperlinkEvent;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.concurrency.JobScheduler;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
@@ -59,7 +58,7 @@ public class ThreadBlockedMonitor
 		Disposer.register(disposable, this::cancelTask);
 	}
 
-	public void startWatching(@Nullable ThreadReferenceProxy thread)
+	public void startWatching(@javax.annotation.Nullable ThreadReferenceProxy thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		if(thread != null)
@@ -72,7 +71,7 @@ public class ThreadBlockedMonitor
 		}
 	}
 
-	public void stopWatching(@Nullable ThreadReferenceProxy thread)
+	public void stopWatching(@javax.annotation.Nullable ThreadReferenceProxy thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		if(thread != null)
@@ -98,13 +97,13 @@ public class ThreadBlockedMonitor
 		}
 	}
 
-	private static void onThreadBlocked(@NotNull final ThreadReference blockedThread, @NotNull final ThreadReference blockingThread, final DebugProcessImpl process)
+	private static void onThreadBlocked(@Nonnull final ThreadReference blockedThread, @Nonnull final ThreadReference blockingThread, final DebugProcessImpl process)
 	{
 		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.thread.blocked.by", blockedThread.name(), blockingThread.name()), DebuggerBundle.message("status" + ""
 				+ ".thread" + ".blocked.by.resume", blockingThread.name()), NotificationType.INFORMATION, new NotificationListener()
 		{
 			@Override
-			public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event)
+			public void hyperlinkUpdate(@Nonnull Notification notification, @Nonnull HyperlinkEvent event)
 			{
 				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
 				{

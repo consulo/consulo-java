@@ -17,8 +17,8 @@ package consulo.java.execution;
 
 import java.nio.charset.Charset;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ShortenCommandLine;
@@ -58,7 +58,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	private boolean myClasspathFile = true;
 	private String myJarPath;
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Sdk getJdk()
 	{
 		return myJdk;
@@ -104,13 +104,13 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		return myVmParameters;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public Charset getCharset()
 	{
 		return myCharset;
 	}
 
-	public void setCharset(@Nullable Charset charset)
+	public void setCharset(@javax.annotation.Nullable Charset charset)
 	{
 		myCharset = charset;
 	}
@@ -125,7 +125,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		myUseDynamicClasspath = useDynamicClasspath && (myArgFile || myUseClasspathJar || myClasspathFile);
 	}
 
-	public void setUseDynamicClasspath(@Nullable Project project)
+	public void setUseDynamicClasspath(@javax.annotation.Nullable Project project)
 	{
 		setUseDynamicClasspath(OwnJdkUtil.useDynamicClasspath(project));
 	}
@@ -220,13 +220,13 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	 * @throws CantRunException when incorrect Java SDK is specified
 	 * @see OwnJdkUtil#setupJVMCommandLine(OwnSimpleJavaParameters)
 	 */
-	@NotNull
+	@Nonnull
 	public GeneralCommandLine toCommandLine() throws CantRunException
 	{
 		return OwnJdkUtil.setupJVMCommandLine(this);
 	}
 
-	@NotNull
+	@Nonnull
 	public OSProcessHandler createOSProcessHandler() throws ExecutionException
 	{
 		OSProcessHandler processHandler = new OSProcessHandler(toCommandLine());

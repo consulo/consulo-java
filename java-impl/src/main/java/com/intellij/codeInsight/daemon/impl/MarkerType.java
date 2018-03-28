@@ -29,11 +29,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.DaemonBundle;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
@@ -82,18 +83,18 @@ public class MarkerType
 {
 	private final GutterIconNavigationHandler<PsiElement> handler;
 	private final Function<PsiElement, String> myTooltip;
-	@NotNull
+	@Nonnull
 	private final String myDebugName;
 
 	/**
 	 * @deprecated use {@link #MarkerType(String, Function, LineMarkerNavigator)} instead
 	 */
-	public MarkerType(@NotNull Function<PsiElement, String> tooltip, @NotNull final LineMarkerNavigator navigator)
+	public MarkerType(@Nonnull Function<PsiElement, String> tooltip, @Nonnull final LineMarkerNavigator navigator)
 	{
 		this("Unknown", tooltip, navigator);
 	}
 
-	public MarkerType(@NotNull String debugName, @NotNull Function<PsiElement, String> tooltip, @NotNull final LineMarkerNavigator navigator)
+	public MarkerType(@Nonnull String debugName, @Nonnull Function<PsiElement, String> tooltip, @Nonnull final LineMarkerNavigator navigator)
 	{
 		myTooltip = tooltip;
 		myDebugName = debugName;
@@ -106,13 +107,13 @@ public class MarkerType
 		return myDebugName;
 	}
 
-	@NotNull
+	@Nonnull
 	public GutterIconNavigationHandler<PsiElement> getNavigationHandler()
 	{
 		return handler;
 	}
 
-	@NotNull
+	@Nonnull
 	public Function<PsiElement, String> getTooltip()
 	{
 		return myTooltip;
@@ -166,7 +167,7 @@ public class MarkerType
 	});
 
 	@Nullable
-	private static String calculateOverridingMethodTooltip(@NotNull PsiMethod method, boolean acceptSelf)
+	private static String calculateOverridingMethodTooltip(@Nonnull PsiMethod method, boolean acceptSelf)
 	{
 		PsiMethod[] superMethods = composeSuperMethods(method, acceptSelf);
 		if(superMethods.length == 0)
@@ -191,8 +192,8 @@ public class MarkerType
 		return composeText(superMethods, "", DaemonBundle.message(key), IdeActions.ACTION_GOTO_SUPER);
 	}
 
-	@Nullable
-	private static String calculateOverridingSiblingMethodTooltip(@NotNull PsiMethod method)
+	@javax.annotation.Nullable
+	private static String calculateOverridingSiblingMethodTooltip(@Nonnull PsiMethod method)
 	{
 		FindSuperElementsHelper.SiblingInfo pair = FindSuperElementsHelper.getSiblingInfoInheritedViaSubClass(method);
 		if(pair == null)
@@ -209,8 +210,8 @@ public class MarkerType
 		return composeText(new PsiElement[]{superMethod}, "", pattern, IdeActions.ACTION_GOTO_SUPER);
 	}
 
-	@NotNull
-	private static String composeText(@NotNull PsiElement[] methods, @NotNull String start, @NotNull String pattern, @NotNull String actionId)
+	@Nonnull
+	private static String composeText(@Nonnull PsiElement[] methods, @Nonnull String start, @Nonnull String pattern, @Nonnull String actionId)
 	{
 		Shortcut[] shortcuts = ActionManager.getInstance().getAction(actionId).getShortcutSet().getShortcuts();
 		Shortcut shortcut = ArrayUtil.getFirstElement(shortcuts);
@@ -223,7 +224,7 @@ public class MarkerType
 		return GutterIconTooltipHelper.composeText(Arrays.asList(methods), start, pattern, postfix);
 	}
 
-	private static void navigateToOverridingMethod(MouseEvent e, @NotNull PsiMethod method, boolean acceptSelf)
+	private static void navigateToOverridingMethod(MouseEvent e, @Nonnull PsiMethod method, boolean acceptSelf)
 	{
 		PsiMethod[] superMethods = composeSuperMethods(method, acceptSelf);
 		if(superMethods.length == 0)
@@ -235,7 +236,7 @@ public class MarkerType
 				method.getName()), new MethodCellRenderer(showMethodNames));
 	}
 
-	private static void navigateToSiblingOverridingMethod(MouseEvent e, @NotNull PsiMethod method)
+	private static void navigateToSiblingOverridingMethod(MouseEvent e, @Nonnull PsiMethod method)
 	{
 		PsiMethod superMethod = FindSuperElementsHelper.getSiblingInheritedViaSubClass(method);
 		if(superMethod == null)
@@ -246,8 +247,8 @@ public class MarkerType
 				".findUsages.title.super.method", method.getName()), new MethodCellRenderer(false));
 	}
 
-	@NotNull
-	private static PsiMethod[] composeSuperMethods(@NotNull PsiMethod method, boolean acceptSelf)
+	@Nonnull
+	private static PsiMethod[] composeSuperMethods(@Nonnull PsiMethod method, boolean acceptSelf)
 	{
 		PsiElement[] superElements = FindSuperElementsHelper.findSuperElements(method);
 
@@ -259,7 +260,7 @@ public class MarkerType
 		return superMethods;
 	}
 
-	private static PsiElement getParentMethod(@NotNull PsiElement element)
+	private static PsiElement getParentMethod(@Nonnull PsiElement element)
 	{
 		final PsiElement parent = element.getParent();
 		final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(parent);
@@ -291,7 +292,7 @@ public class MarkerType
 		}
 	});
 
-	private static String getOverriddenMethodTooltip(@NotNull PsiMethod method)
+	private static String getOverriddenMethodTooltip(@Nonnull PsiMethod method)
 	{
 		PsiElementProcessor.CollectElementsWithLimit<PsiMethod> processor = new PsiElementProcessor.CollectElementsWithLimit<>(5);
 		GlobalSearchScope scope = GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(method));
@@ -323,7 +324,7 @@ public class MarkerType
 		return composeText(overridings, start, pattern, IdeActions.ACTION_GOTO_IMPLEMENTATION);
 	}
 
-	private static void navigateToOverriddenMethod(MouseEvent e, @NotNull final PsiMethod method)
+	private static void navigateToOverriddenMethod(MouseEvent e, @Nonnull final PsiMethod method)
 	{
 		if(DumbService.isDumb(method.getProject()))
 		{
@@ -392,7 +393,7 @@ public class MarkerType
 	});
 
 	// Used in Kotlin, please don't make private
-	public static String getSubclassedClassTooltip(@NotNull PsiClass aClass)
+	public static String getSubclassedClassTooltip(@Nonnull PsiClass aClass)
 	{
 		PsiElementProcessor.CollectElementsWithLimit<PsiClass> processor = new PsiElementProcessor.CollectElementsWithLimit<>(5, new THashSet<>());
 		ClassInheritorsSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(processor));
@@ -423,7 +424,7 @@ public class MarkerType
 	}
 
 	// Used in Kotlin, please don't make private
-	public static void navigateToSubclassedClass(MouseEvent e, @NotNull final PsiClass aClass)
+	public static void navigateToSubclassedClass(MouseEvent e, @Nonnull final PsiClass aClass)
 	{
 		if(DumbService.isDumb(aClass.getProject()))
 		{
@@ -463,7 +464,7 @@ public class MarkerType
 		private final PsiClass myClass;
 		private final PsiClassOrFunctionalExpressionListCellRenderer myRenderer;
 
-		private SubclassUpdater(@NotNull PsiClass aClass, @NotNull PsiClassOrFunctionalExpressionListCellRenderer renderer)
+		private SubclassUpdater(@Nonnull PsiClass aClass, @Nonnull PsiClassOrFunctionalExpressionListCellRenderer renderer)
 		{
 			super(aClass.getProject(), SEARCHING_FOR_OVERRIDDEN_METHODS);
 			myClass = aClass;
@@ -491,7 +492,7 @@ public class MarkerType
 		}
 
 		@Override
-		public void run(@NotNull final ProgressIndicator indicator)
+		public void run(@Nonnull final ProgressIndicator indicator)
 		{
 			super.run(indicator);
 			ClassInheritorsSearch.search(myClass, ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>()
@@ -536,7 +537,7 @@ public class MarkerType
 		private final PsiMethod myMethod;
 		private final PsiElementListCellRenderer myRenderer;
 
-		private OverridingMethodsUpdater(@NotNull PsiMethod method, @NotNull PsiElementListCellRenderer renderer)
+		private OverridingMethodsUpdater(@Nonnull PsiMethod method, @Nonnull PsiElementListCellRenderer renderer)
 		{
 			super(method.getProject(), SEARCHING_FOR_OVERRIDING_METHODS);
 			myMethod = method;
@@ -562,7 +563,7 @@ public class MarkerType
 		}
 
 		@Override
-		public void run(@NotNull final ProgressIndicator indicator)
+		public void run(@Nonnull final ProgressIndicator indicator)
 		{
 			super.run(indicator);
 			GlobalSearchScope scope = GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(myMethod));

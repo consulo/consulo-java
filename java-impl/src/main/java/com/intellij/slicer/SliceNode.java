@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JTree;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.application.ApplicationManager;
@@ -48,13 +48,13 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 	protected boolean changed;
 	private int index; // my index in parent's mycachedchildren
 
-	protected SliceNode(@NotNull Project project, SliceUsage sliceUsage, @NotNull DuplicateMap targetEqualUsages)
+	protected SliceNode(@Nonnull Project project, SliceUsage sliceUsage, @Nonnull DuplicateMap targetEqualUsages)
 	{
 		super(project, sliceUsage);
 		this.targetEqualUsages = targetEqualUsages;
 	}
 
-	@NotNull
+	@Nonnull
 	SliceNode copy()
 	{
 		SliceUsage newUsage = getValue().copy();
@@ -65,7 +65,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Collection<? extends AbstractTreeNode> getChildren()
 	{
 		ProgressIndicator current = ProgressManager.getInstance().getProgressIndicator();
@@ -100,8 +100,8 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 		return index == 0 ? null : (SliceNode) parentChildren.get(index - 1);
 	}
 
-	@NotNull
-	protected List<? extends AbstractTreeNode> getChildrenUnderProgress(@NotNull final ProgressIndicator progress)
+	@Nonnull
+	protected List<? extends AbstractTreeNode> getChildrenUnderProgress(@Nonnull final ProgressIndicator progress)
 	{
 		if(isUpToDate())
 		{
@@ -167,13 +167,13 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 		return false;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected PresentationData createPresentation()
 	{
 		return new PresentationData()
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public Object[] getEqualityObjects()
 			{
@@ -248,8 +248,8 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 	}
 
 	@Override
-	public void customizeCellRenderer(@NotNull SliceUsageCellRenderer renderer,
-			@NotNull JTree tree,
+	public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
+			@Nonnull JTree tree,
 			Object value,
 			boolean selected,
 			boolean expanded,

@@ -24,25 +24,25 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getID() {
     return "MismatchedReadAndWriteOfArray";
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "mismatched.read.write.array.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean written = ((Boolean)infos[0]).booleanValue();
     if (written) {
@@ -74,7 +74,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@NotNull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;
@@ -94,7 +94,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
     @Override
     public void visitLocalVariable(
-      @NotNull PsiLocalVariable variable) {
+      @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock =
         PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
@@ -172,14 +172,14 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
       return false;
     }
 
-    public static boolean variableIsWritten(@NotNull PsiVariable variable, @NotNull PsiElement context) {
+    public static boolean variableIsWritten(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
       final VariableReadWriteVisitor visitor =
         new VariableReadWriteVisitor(variable, true);
       context.accept(visitor);
       return visitor.isPassed();
     }
 
-    public static boolean variableIsRead(@NotNull PsiVariable variable, @NotNull PsiElement context) {
+    public static boolean variableIsRead(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
       final VariableReadWriteVisitor visitor =
         new VariableReadWriteVisitor(variable, false);
       context.accept(visitor);
@@ -188,18 +188,18 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
     static class VariableReadWriteVisitor extends JavaRecursiveElementVisitor {
 
-      @NotNull
+      @Nonnull
       private final PsiVariable variable;
       private final boolean write;
       private boolean passed = false;
 
-      VariableReadWriteVisitor(@NotNull PsiVariable variable, boolean write) {
+      VariableReadWriteVisitor(@Nonnull PsiVariable variable, boolean write) {
         this.variable = variable;
         this.write = write;
       }
 
       @Override
-      public void visitElement(@NotNull PsiElement element) {
+      public void visitElement(@Nonnull PsiElement element) {
         if (!passed) {
           super.visitElement(element);
         }
@@ -231,7 +231,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
       @Override
       public void visitMethodCallExpression(
-        @NotNull PsiMethodCallExpression call) {
+        @Nonnull PsiMethodCallExpression call) {
         if (passed) {
           return;
         }
@@ -282,7 +282,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
       @Override
       public void visitNewExpression(
-        @NotNull PsiNewExpression newExpression) {
+        @Nonnull PsiNewExpression newExpression) {
         if (passed) {
           return;
         }

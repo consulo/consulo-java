@@ -1,12 +1,12 @@
 <root>
   <item name='persistence.Test java.lang.String<T> getString(java.util.Map.Entry<T,T>) 0'>
-    <annotation name='org.jetbrains.annotations.NotNull'/>
+    <annotation name='javax.annotation.Nonnull'/>
   </item>
   <item name='persistence.Test java.lang.String<T> getString(java.util.Map.Entry<T, T>) 0'>
     <annotation name='org.jetbrains.annotations.NonNls'/>
   </item>
   <item name='persistence.Test java.lang.String&lt;T&gt; getString(java.util.Map.Entry&lt;T,T&gt;)'>
-    <annotation name='org.jetbrains.annotations.Nullable'/>
+    <annotation name='javax.annotation.Nullable'/>
   </item>
   <item name='persistence.Test java.lang.String&lt;T&gt; getString(java.util.Map.Entry&lt;T, T&gt;)'>
     <annotation name='org.jetbrains.annotations.Nls'/>

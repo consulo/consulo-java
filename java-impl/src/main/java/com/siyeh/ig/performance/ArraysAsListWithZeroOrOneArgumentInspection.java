@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.performance;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -24,8 +26,6 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -33,13 +33,13 @@ import org.jetbrains.annotations.Nullable;
 public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection {
 
   @Nls
-  @NotNull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("arrays.as.list.with.zero.or.one.argument.display.name");
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final Boolean isEmpty = (Boolean)infos[0];
@@ -51,7 +51,7 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final Boolean isEmpty = (Boolean)infos[0];
@@ -66,7 +66,7 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
       myEmpty = isEmpty;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getName() {
       if (myEmpty) {

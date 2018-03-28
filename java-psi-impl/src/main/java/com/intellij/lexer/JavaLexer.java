@@ -31,7 +31,8 @@ import gnu.trove.THashSet;
 import java.io.IOException;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
@@ -71,7 +72,7 @@ public class JavaLexer extends LexerBase
 		return getTable(level).contains(id);
 	}
 
-	public static boolean isSoftKeyword(CharSequence id, @NotNull LanguageLevel level)
+	public static boolean isSoftKeyword(CharSequence id, @Nonnull LanguageLevel level)
 	{
 		return id != null && level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id);
 	}
@@ -85,7 +86,7 @@ public class JavaLexer extends LexerBase
 	private int myTokenEndOffset;  // positioned after the last symbol of the current token
 	private IElementType myTokenType;
 
-	public JavaLexer(@NotNull final LanguageLevel level)
+	public JavaLexer(@Nonnull final LanguageLevel level)
 	{
 		myFlexLexer = new _JavaLexer(level);
 		myTable = getTable(level);

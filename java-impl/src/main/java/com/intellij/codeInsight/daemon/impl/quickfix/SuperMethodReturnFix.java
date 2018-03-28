@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -30,7 +32,6 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
-import org.jetbrains.annotations.NotNull;
 
 public class SuperMethodReturnFix implements IntentionAction {
 
@@ -43,7 +44,7 @@ public class SuperMethodReturnFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getText() {
     String name = PsiFormatUtil.formatMethod(
             mySuperMethod,
@@ -56,13 +57,13 @@ public class SuperMethodReturnFix implements IntentionAction {
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.super.method.return.type.family");
   }
 
   @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return
             mySuperMethod != null
             && mySuperMethod.isValid()
@@ -72,7 +73,7 @@ public class SuperMethodReturnFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(mySuperMethod.getContainingFile())) return;
     ChangeSignatureProcessor processor = new ChangeSignatureProcessor(
             project,

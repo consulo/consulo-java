@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -49,15 +50,15 @@ public class FilePathReferenceProvider extends PsiReferenceProvider
 		myEndingSlashNotAllowed = endingSlashNotAllowed;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft)
 	{
 		return getReferencesByElement(element, text, offset, soft, Module.EMPTY_ARRAY);
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft,
-			final @NotNull Module... forModules)
+			final @Nonnull Module... forModules)
 	{
 		return new FileReferenceSet(text, element, offset, this, true, myEndingSlashNotAllowed)
 		{
@@ -87,7 +88,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider
 			}
 
 			@Override
-			@NotNull
+			@Nonnull
 			public Collection<PsiFileSystemItem> computeDefaultContexts()
 			{
 				Set<PsiFileSystemItem> systemItems = new HashSet<PsiFileSystemItem>();
@@ -127,7 +128,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider
 	}
 
 	@Override
-	public boolean acceptsTarget(@NotNull PsiElement target)
+	public boolean acceptsTarget(@Nonnull PsiElement target)
 	{
 		return target instanceof PsiFileSystemItem;
 	}
@@ -143,8 +144,8 @@ public class FilePathReferenceProvider extends PsiReferenceProvider
 	}
 
 	@Override
-	@NotNull
-	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
+	@Nonnull
+	public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context)
 	{
 		String text = null;
 		if(element instanceof PsiLiteralExpression)
@@ -165,7 +166,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider
 		return getReferencesByElement(element, text, 1, true);
 	}
 
-	@NotNull
+	@Nonnull
 	public static Collection<PsiFileSystemItem> getRoots(final Module thisModule, boolean includingClasses)
 	{
 		if(thisModule == null)

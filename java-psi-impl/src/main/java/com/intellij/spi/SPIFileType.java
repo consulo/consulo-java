@@ -20,8 +20,8 @@ import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -35,19 +35,19 @@ public class SPIFileType extends LanguageFileType {
     super(SPILanguage.INSTANCE);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getName() {
     return "JAVA-SPI";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDescription() {
     return "Service Provider Interface";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public String getDefaultExtension() {
     return "";
@@ -64,9 +64,9 @@ public class SPIFileType extends LanguageFileType {
     return false;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   @Override
-  public String getCharset(@NotNull VirtualFile file, byte[] content) {
+  public String getCharset(@Nonnull VirtualFile file, byte[] content) {
     return CharsetToolkit.UTF8;
   }
 }

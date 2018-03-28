@@ -22,9 +22,11 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.featureStatistics.FeatureUsageTracker;
@@ -69,21 +71,21 @@ public class ReferenceExpressionCompletionContributor
 	private static final PrefixMatcher TRUE_MATCHER = new PrefixMatcher("")
 	{
 		@Override
-		public boolean prefixMatches(@NotNull String name)
+		public boolean prefixMatches(@Nonnull String name)
 		{
 			return true;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public PrefixMatcher cloneWithPrefix(@NotNull String prefix)
+		public PrefixMatcher cloneWithPrefix(@Nonnull String prefix)
 		{
 			return this;
 		}
 	};
 	public static final ElementPattern<PsiElement> IN_SWITCH_LABEL = psiElement().withSuperParent(2, psiElement(PsiSwitchLabelStatement.class).withSuperParent(2, PsiSwitchStatement.class));
 
-	@NotNull
+	@Nonnull
 	private static ElementFilter getReferenceFilter(PsiElement element, boolean allowRecursion)
 	{
 		//throw foo
@@ -253,7 +255,7 @@ public class ReferenceExpressionCompletionContributor
 		return elements;
 	}
 
-	@NotNull
+	@Nonnull
 	public static Set<PsiField> findConstantsUsedInSwitch(@Nullable PsiElement position)
 	{
 		if(IN_SWITCH_LABEL.accepts(position))
@@ -283,7 +285,7 @@ public class ReferenceExpressionCompletionContributor
 		return Collections.emptySet();
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static ExpressionLookupItem getSingleArrayElementAccess(PsiElement element, LookupElement item)
 	{
 		if(item.getObject() instanceof PsiLocalVariable)
@@ -579,7 +581,7 @@ public class ReferenceExpressionCompletionContributor
 	}
 
 	@Nullable
-	public static PsiReferenceExpression createMockReference(final PsiElement place, @NotNull PsiType qualifierType, LookupElement qualifierItem)
+	public static PsiReferenceExpression createMockReference(final PsiElement place, @Nonnull PsiType qualifierType, LookupElement qualifierItem)
 	{
 		PsiElementFactory factory = JavaPsiFacade.getElementFactory(place.getProject());
 		if(qualifierItem.getObject() instanceof PsiClass)

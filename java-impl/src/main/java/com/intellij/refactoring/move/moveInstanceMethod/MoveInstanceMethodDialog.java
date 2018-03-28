@@ -32,7 +32,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.ui.Messages;
@@ -122,7 +121,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     }
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private JPanel createParametersPanel () {
     myThisClassesMap = MoveInstanceMembersUtil.getThisClassesToMembers(myMethod);
     myOldClassParameterNameFields = new HashMap<PsiClass, EditorTextField>();

@@ -22,9 +22,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.Patches;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -69,7 +71,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 
 	private JavaExecutionStack myActiveExecutionStack;
 
-	SuspendContextImpl(@NotNull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set)
+	SuspendContextImpl(@Nonnull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set)
 	{
 		myDebugProcess = debugProcess;
 		mySuspendPolicy = suspendPolicy;
@@ -135,7 +137,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public DebugProcessImpl getDebugProcess()
 	{
 		return myDebugProcess;
@@ -155,7 +157,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@Override
 	public ThreadReferenceProxyImpl getThread()
 	{
@@ -175,7 +177,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myVotesToVote = 1000000000;
 	}
 
-	public boolean isExplicitlyResumed(@Nullable ThreadReferenceProxyImpl thread)
+	public boolean isExplicitlyResumed(@javax.annotation.Nullable ThreadReferenceProxyImpl thread)
 	{
 		return myResumedThreads != null && myResumedThreads.contains(thread);
 	}
@@ -287,7 +289,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myDebugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(this)
 		{
 			@Override
-			public void contextAction(@NotNull SuspendContextImpl suspendContext) throws Exception
+			public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
 			{
 				List<JavaExecutionStack> res = new ArrayList<>();
 				Collection<ThreadReferenceProxyImpl> threads = getDebugProcess().getVirtualMachineProxy().allThreads();

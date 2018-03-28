@@ -17,7 +17,7 @@ package com.intellij.execution.filters;
 
 import java.util.concurrent.ConcurrentMap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -43,13 +43,13 @@ public class ExceptionInfoCache
 		mySearchScope = searchScope;
 	}
 
-	@NotNull
+	@Nonnull
 	public Project getProject()
 	{
 		return myProject;
 	}
 
-	@NotNull
+	@Nonnull
 	private PsiClass[] findClassesPreferringMyScope(String className)
 	{
 		JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);

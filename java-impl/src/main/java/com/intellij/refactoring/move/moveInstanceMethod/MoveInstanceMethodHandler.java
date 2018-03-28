@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -55,7 +55,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodHandler");
 	static final String REFACTORING_NAME = RefactoringBundle.message("move.instance.method.title");
 
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -86,7 +86,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		invoke(project, new PsiElement[]{element}, dataContext);
 	}
 
-	public void invoke(@NotNull final Project project, @NotNull final PsiElement[] elements, final DataContext dataContext)
+	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
 	{
 		if(elements.length != 1 || !(elements[0] instanceof PsiMethod))
 		{
@@ -166,7 +166,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.getCannotRefactorMessage(message), REFACTORING_NAME, HelpID.MOVE_INSTANCE_METHOD);
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private static String collectSuitableVariables(final PsiMethod method, final List<PsiVariable> suitableVariables)
 	{
 		final List<PsiVariable> allVariables = new ArrayList<PsiVariable>();

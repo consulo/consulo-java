@@ -18,7 +18,8 @@ package com.intellij.codeInspection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
@@ -45,7 +46,7 @@ public class AnnotateMethodFix implements LocalQuickFix
 	private final String myAnnotation;
 	private final String[] myAnnotationsToRemove;
 
-	public AnnotateMethodFix(@NotNull String fqn, @NotNull String... annotationsToRemove)
+	public AnnotateMethodFix(@Nonnull String fqn, @Nonnull String... annotationsToRemove)
 	{
 		myAnnotation = fqn;
 		myAnnotationsToRemove = annotationsToRemove;
@@ -53,20 +54,20 @@ public class AnnotateMethodFix implements LocalQuickFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		return getFamilyName() + " " + getPreposition() + " \'@" + ClassUtil.extractClassName(myAnnotation) + "\'";
 	}
 
-	@NotNull
+	@Nonnull
 	protected String getPreposition()
 	{
 		return "with";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		if(annotateSelf())
@@ -93,7 +94,7 @@ public class AnnotateMethodFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 
@@ -145,7 +146,7 @@ public class AnnotateMethodFix implements LocalQuickFix
 		return true;
 	}
 
-	private void annotateMethod(@NotNull PsiMethod method)
+	private void annotateMethod(@Nonnull PsiMethod method)
 	{
 		AddAnnotationPsiFix fix = new AddAnnotationPsiFix(myAnnotation, method, PsiNameValuePair.EMPTY_ARRAY, myAnnotationsToRemove);
 		fix.invoke(method.getProject(), method.getContainingFile(), method, method);

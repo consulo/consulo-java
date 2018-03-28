@@ -31,7 +31,7 @@ import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.ui.DocumentAdapter;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -131,7 +131,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent(), "<whole project>");
   }
 
-  public void applyEditorTo(@NotNull final RemoteConfiguration configuration) throws ConfigurationException {
+  public void applyEditorTo(@Nonnull final RemoteConfiguration configuration) throws ConfigurationException {
     configuration.HOST = (myHostField.isEditable() ? myHostField.getText() : myHostName).trim();
     if (configuration.HOST != null && configuration.HOST.isEmpty()) {
       configuration.HOST = null;
@@ -175,7 +175,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     myModuleSelector.reset(configuration);
   }
 
-  @NotNull
+  @Nonnull
   public JComponent createEditor() {
     return myPanel;
   }

@@ -17,8 +17,8 @@ package com.siyeh.ig.javadoc;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -53,14 +53,14 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection
 {
 
 	@Nls
-	@NotNull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.display.name");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	protected String buildErrorString(Object... infos)
 	{
@@ -86,7 +86,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection
 	private static class DeletePackageDotHtmlFix extends InspectionGadgetsFix
 	{
 
-		@NotNull
+		@Nonnull
 		public String getName()
 		{
 			return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.delete.quickfix");
@@ -128,7 +128,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection
 			this.aPackage = aPackage;
 		}
 
-		@NotNull
+		@Nonnull
 		public String getName()
 		{
 			return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.convert.quickfix");
@@ -216,7 +216,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection
 			}.execute();
 		}
 
-		@Nullable
+		@javax.annotation.Nullable
 		private static String getPackageInfoText(XmlFile xmlFile)
 		{
 			final XmlTag rootTag = xmlFile.getRootTag();
@@ -279,7 +279,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection
 			registerError(file, aPackage, Boolean.valueOf(exists));
 		}
 
-		public static String getPackage(@NotNull PsiDirectory directory)
+		public static String getPackage(@Nonnull PsiDirectory directory)
 		{
 			final VirtualFile virtualFile = directory.getVirtualFile();
 			final Project project = directory.getProject();

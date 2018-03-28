@@ -17,11 +17,11 @@ package com.intellij.debugger.memory.event;
 
 import java.util.EventListener;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.debugger.memory.component.MemoryViewManagerState;
 
 @FunctionalInterface
 public interface MemoryViewManagerListener extends EventListener
 {
-	void stateChanged(@NotNull MemoryViewManagerState state);
+	void stateChanged(@Nonnull MemoryViewManagerState state);
 }

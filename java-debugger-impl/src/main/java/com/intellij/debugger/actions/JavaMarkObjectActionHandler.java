@@ -23,8 +23,8 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -68,7 +68,7 @@ public class JavaMarkObjectActionHandler extends MarkObjectActionHandler {
   public static final long AUTO_MARKUP_REFERRING_OBJECTS_LIMIT = 100L; // todo: some reasonable limit
 
   @Override
-  public void perform(@NotNull Project project, AnActionEvent event) {
+  public void perform(@Nonnull Project project, AnActionEvent event) {
     final DebuggerTreeNodeImpl node = DebuggerAction.getSelectedNode(event.getDataContext());
     if (node == null) {
       return;
@@ -240,7 +240,7 @@ public class JavaMarkObjectActionHandler extends MarkObjectActionHandler {
     return Collections.emptyList();
   }
 
-  private static String createMarkupTooltipText(@Nullable String prefix, ReferenceType refType, String fieldName) {
+  private static String createMarkupTooltipText(@javax.annotation.Nullable String prefix, ReferenceType refType, String fieldName) {
     final StringBuilder builder = new StringBuilder();
     if (prefix == null) {
       builder.append("Value referenced from:");
@@ -252,18 +252,18 @@ public class JavaMarkObjectActionHandler extends MarkObjectActionHandler {
   }
 
   @Override
-  public boolean isEnabled(@NotNull Project project, AnActionEvent event) {
+  public boolean isEnabled(@Nonnull Project project, AnActionEvent event) {
     final DebuggerTreeNodeImpl node = DebuggerAction.getSelectedNode(event.getDataContext());
     return node != null && node.getDescriptor() instanceof ValueDescriptor;
   }
 
   @Override
-  public boolean isHidden(@NotNull Project project, AnActionEvent event) {
+  public boolean isHidden(@Nonnull Project project, AnActionEvent event) {
     return DebuggerAction.getSelectedNode(event.getDataContext()) == null;
   }
 
   @Override
-  public boolean isMarked(@NotNull Project project, @NotNull AnActionEvent event) {
+  public boolean isMarked(@Nonnull Project project, @Nonnull AnActionEvent event) {
     final DebuggerTreeNodeImpl node = DebuggerAction.getSelectedNode(event.getDataContext());
     if (node == null) return false;
 

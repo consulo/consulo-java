@@ -33,8 +33,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.util.VariableData;
 import com.intellij.refactoring.util.duplicates.DuplicatesFinder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -54,7 +54,7 @@ public class ParametersFolder {
     myDeleted.clear();
   }
 
-  public boolean isParameterSafeToDelete(@NotNull VariableData data, @NotNull LocalSearchScope scope) {
+  public boolean isParameterSafeToDelete(@Nonnull VariableData data, @Nonnull LocalSearchScope scope) {
     Next:
     for (PsiReference reference : ReferencesSearch.search(data.variable, scope)) {
       PsiElement expression = reference.getElement();
@@ -82,7 +82,7 @@ public class ParametersFolder {
     return false;
   }
 
-  public void foldParameterUsagesInBody(@NotNull VariableData data, PsiElement[] elements, SearchScope scope) {
+  public void foldParameterUsagesInBody(@Nonnull VariableData data, PsiElement[] elements, SearchScope scope) {
     if (myDeleted.contains(data.variable)) return;
     final PsiExpression psiExpression = myExpressions.get(data.variable);
     if (psiExpression == null) return;
@@ -108,9 +108,9 @@ public class ParametersFolder {
     }
   }
 
-  public boolean isParameterFoldable(@NotNull VariableData data,
-                                     @NotNull LocalSearchScope scope,
-                                     @NotNull final List<? extends PsiVariable> inputVariables) {
+  public boolean isParameterFoldable(@Nonnull VariableData data,
+                                     @Nonnull LocalSearchScope scope,
+                                     @Nonnull final List<? extends PsiVariable> inputVariables) {
     final List<PsiExpression> mentionedInExpressions = getMentionedExpressions(data.variable, scope, inputVariables);
     if (mentionedInExpressions == null) return false;
 
@@ -274,12 +274,12 @@ public class ParametersFolder {
     return localVarsUsed[0];
   }
 
-  @NotNull
-  public String getGeneratedCallArgument(@NotNull VariableData data) {
+  @Nonnull
+  public String getGeneratedCallArgument(@Nonnull VariableData data) {
     return myExpressions.containsKey(data.variable) ? myExpressions.get(data.variable).getText() : data.variable.getName();
   }
 
-  public boolean annotateWithParameter(@NotNull VariableData data, @NotNull PsiElement element) {
+  public boolean annotateWithParameter(@Nonnull VariableData data, @Nonnull PsiElement element) {
     final PsiExpression psiExpression = myExpressions.get(data.variable);
     if (psiExpression != null) {
       final PsiExpression expression = findEquivalent(psiExpression, element);
@@ -291,7 +291,7 @@ public class ParametersFolder {
     return false;
   }
 
-  @Nullable
+  @javax.annotation.Nullable
   private static PsiExpression findEquivalent(PsiExpression expr, PsiElement element) {
     PsiElement expression = element;
     while (expression  != null) {

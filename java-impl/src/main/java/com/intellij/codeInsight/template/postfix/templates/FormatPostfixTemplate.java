@@ -21,7 +21,7 @@ import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 
@@ -43,18 +43,18 @@ public class FormatPostfixTemplate extends JavaStatementWrapPostfixTemplate {
   }
 
   @Override
-  protected void afterExpand(@NotNull PsiElement newElement, @NotNull Editor editor) {
+  protected void afterExpand(@Nonnull PsiElement newElement, @Nonnull Editor editor) {
     editor.getCaretModel().moveToOffset(newElement.getTextRange().getEndOffset() - 2);
     JavaPostfixTemplateProvider.doNotDeleteSemicolon(newElement.getContainingFile());
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getHead() {
     return "String.format(";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTail() {
     return ", );";

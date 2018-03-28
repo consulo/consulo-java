@@ -22,21 +22,20 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SynchronizationUtil;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 public class NonAtomicOperationOnVolatileFieldInspection
   extends BaseInspection {
 
   @Override
-  @NotNull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.atomic.operation.on.volatile.field.display.name");
   }
 
   @Override
-  @NotNull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.atomic.operation.on.volatile.field.problem.descriptor");
@@ -52,7 +51,7 @@ public class NonAtomicOperationOnVolatileFieldInspection
 
     @Override
     public void visitAssignmentExpression(
-      @NotNull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final PsiExpression rhs = expression.getRExpression();
       if (rhs == null) {
@@ -116,7 +115,7 @@ public class NonAtomicOperationOnVolatileFieldInspection
       registerError(operand);
     }
 
-    @Nullable
+    @javax.annotation.Nullable
     private static PsiField findNonSynchronizedVolatileField(
       PsiExpression expression) {
       if (!(expression instanceof PsiReferenceExpression)) {

@@ -23,8 +23,8 @@ import static com.intellij.lang.java.parser.JavaParserUtil.getLanguageLevel;
 import static com.intellij.util.BitUtil.isSet;
 import static com.intellij.util.BitUtil.set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.pom.java.LanguageLevel;
@@ -58,19 +58,19 @@ public class ReferenceParser
 
 	private final JavaParser myParser;
 
-	public ReferenceParser(@NotNull final JavaParser javaParser)
+	public ReferenceParser(@Nonnull final JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseType(final PsiBuilder builder, final int flags)
 	{
 		final TypeInfo typeInfo = parseTypeInfo(builder, flags);
 		return typeInfo != null ? typeInfo.marker : null;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public TypeInfo parseTypeInfo(final PsiBuilder builder, final int flags)
 	{
 		final TypeInfo typeInfo = parseTypeInfo(builder, flags, false);
@@ -102,7 +102,7 @@ public class ReferenceParser
 		return typeInfo;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private TypeInfo parseTypeInfo(PsiBuilder builder, int flags, boolean badWildcard)
 	{
 		if(builder.getTokenType() == null)
@@ -219,7 +219,7 @@ public class ReferenceParser
 		}
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder, boolean eatLastDot, boolean parameterList, boolean isNew, boolean diamonds)
 	{
 		return parseJavaCodeReference(builder, eatLastDot, parameterList, false, false, isNew, diamonds, new TypeInfo());
@@ -232,7 +232,7 @@ public class ReferenceParser
 		return !typeInfo.hasErrors;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	private PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder,
 			boolean eatLastDot,
 			boolean parameterList,
@@ -377,7 +377,7 @@ public class ReferenceParser
 		return isOk;
 	}
 
-	@NotNull
+	@Nonnull
 	public PsiBuilder.Marker parseTypeParameters(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker list = builder.mark();
@@ -427,7 +427,7 @@ public class ReferenceParser
 		return list;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public PsiBuilder.Marker parseTypeParameter(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker param = builder.mark();
@@ -459,7 +459,7 @@ public class ReferenceParser
 		return param;
 	}
 
-	public boolean parseReferenceList(PsiBuilder builder, IElementType start, @Nullable IElementType type, IElementType delimiter)
+	public boolean parseReferenceList(PsiBuilder builder, IElementType start, @javax.annotation.Nullable IElementType type, IElementType delimiter)
 	{
 		PsiBuilder.Marker element = builder.mark();
 

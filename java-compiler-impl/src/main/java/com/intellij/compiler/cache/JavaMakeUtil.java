@@ -21,7 +21,6 @@
 package com.intellij.compiler.cache;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.Opcodes;
 import com.intellij.compiler.classParsing.AnnotationConstantValue;
 import com.intellij.compiler.classParsing.AnnotationNameValuePair;
@@ -133,7 +132,7 @@ public class JavaMakeUtil extends MakeUtil
 		return false;
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	@SuppressWarnings({"HardCodedStringLiteral"})
 	public static String relativeClassPathToQName(String relativePath, char separator)
 	{

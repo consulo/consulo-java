@@ -18,8 +18,6 @@ package com.intellij.codeInspection.dataFlow;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * @author peter
  */
@@ -27,7 +25,7 @@ public class WorkingTimeMeasurer
 {
 	private final long myTimeLimit;
 	private final long myStart;
-	@Nullable
+	@javax.annotation.Nullable
 	private static final ThreadMXBean ourThreadMXBean;
 
 	static

@@ -23,8 +23,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
@@ -107,12 +107,12 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase
 	protected static final String REFACTORING_NAME = RefactoringBundle.message("introduce.variable.title");
 	public static final Key<Boolean> NEED_PARENTHESIS = Key.create("NEED_PARENTHESIS");
 
-	public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @NotNull final PsiExpression expression)
+	public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @Nonnull final PsiExpression expression)
 	{
 		return getSuggestedName(type, expression, expression);
 	}
 
-	public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @NotNull final PsiExpression expression, final PsiElement anchor)
+	public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @Nonnull final PsiExpression expression, final PsiElement anchor)
 	{
 		final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(expression.getProject());
 		final SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.LOCAL_VARIABLE, null, expression, type);
@@ -122,7 +122,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase
 		return codeStyleManager.suggestUniqueVariableName(delegate, anchor, true);
 	}
 
-	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file, DataContext dataContext)
+	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext)
 	{
 		final SelectionModel selectionModel = editor.getSelectionModel();
 		if(!selectionModel.hasSelection())
@@ -577,7 +577,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase
 				injectedLanguageManager.injectedToHost(file, endOffset));
 	}
 
-	@Nullable
+	@javax.annotation.Nullable
 	public static String getErrorMessage(PsiExpression expr)
 	{
 		final Boolean needParenthesis = expr.getCopyableUserData(NEED_PARENTHESIS);

@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Represents a single <code>case</code> or <code>default</code> section in a
  * Java <code>switch</code> statement.
@@ -35,7 +33,7 @@ public interface PsiSwitchLabelStatement extends PsiStatement {
    * @return the associated constant, or null if the statement is incomplete or the element
    * represents a <code>default</code> section.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiExpression getCaseValue();
 
   /**
@@ -43,6 +41,6 @@ public interface PsiSwitchLabelStatement extends PsiStatement {
    *
    * @return the associated statement, or null if the element is not valid in its current context.
    */
-  @Nullable
+  @javax.annotation.Nullable
   PsiSwitchStatement getEnclosingSwitchStatement();
 }

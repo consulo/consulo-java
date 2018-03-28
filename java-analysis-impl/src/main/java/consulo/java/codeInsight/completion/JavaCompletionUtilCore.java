@@ -16,7 +16,7 @@
 
 package consulo.java.codeInsight.completion;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;

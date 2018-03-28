@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
@@ -29,7 +31,6 @@ import com.intellij.psi.xml.*;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.text.CharArrayUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author lesya
@@ -44,7 +45,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
 
   private final PostFormatProcessorHelper myPostProcessor;
 
-  public ImportsFormatter(@NotNull CodeStyleSettings settings, @NotNull PsiFile file) {
+  public ImportsFormatter(@Nonnull CodeStyleSettings settings, @Nonnull PsiFile file) {
     myPostProcessor = new PostFormatProcessorHelper(settings);
     myDocumentModel = FormattingDocumentModelImpl.createOn(file);
     myIndentOptions = settings.getIndentOptions(file.getFileType());
