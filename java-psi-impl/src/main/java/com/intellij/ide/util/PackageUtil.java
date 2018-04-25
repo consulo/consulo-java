@@ -16,14 +16,15 @@
 package com.intellij.ide.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
@@ -48,7 +49,6 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.impl.file.impl.FileManager;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.ActionRunner;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Query;
 
@@ -95,10 +95,7 @@ public class PackageUtil
 	 * @deprecated
 	 */
 	@Nullable
-	public static PsiDirectory findOrCreateDirectoryForPackage(Project project,
-			String packageName,
-			PsiDirectory baseDir,
-			boolean askUserToCreate) throws IncorrectOperationException
+	public static PsiDirectory findOrCreateDirectoryForPackage(Project project, String packageName, PsiDirectory baseDir, boolean askUserToCreate) throws IncorrectOperationException
 	{
 		return findOrCreateDirectoryForPackage(project, packageName, baseDir, askUserToCreate, false);
 	}
@@ -107,11 +104,7 @@ public class PackageUtil
 	 * @deprecated
 	 */
 	@Nullable
-	public static PsiDirectory findOrCreateDirectoryForPackage(Project project,
-			String packageName,
-			PsiDirectory baseDir,
-			boolean askUserToCreate,
-			boolean filterSourceDirsForTestBaseDir) throws IncorrectOperationException
+	public static PsiDirectory findOrCreateDirectoryForPackage(Project project, String packageName, PsiDirectory baseDir, boolean askUserToCreate, boolean filterSourceDirsForTestBaseDir) throws IncorrectOperationException
 	{
 
 		PsiDirectory psiDirectory = null;
@@ -144,8 +137,7 @@ public class PackageUtil
 		if(psiDirectory == null)
 		{
 			PsiDirectory[] sourceDirectories = getSourceRootDirectories(project);
-			psiDirectory = DirectoryChooserUtil.selectDirectory(project, sourceDirectories, baseDir, File.separatorChar + packageName.replace('.',
-					File.separatorChar));
+			psiDirectory = DirectoryChooserUtil.selectDirectory(project, sourceDirectories, baseDir, File.separatorChar + packageName.replace('.', File.separatorChar));
 			if(psiDirectory == null)
 			{
 				return null;
@@ -162,8 +154,7 @@ public class PackageUtil
 			{
 				if(!askedToCreate && askUserToCreate)
 				{
-					int toCreate = Messages.showYesNoDialog(project, IdeBundle.message("prompt.create.non.existing.package", packageName),
-							IdeBundle.message("title.package.not.found"), Messages.getQuestionIcon());
+					int toCreate = Messages.showYesNoDialog(project, IdeBundle.message("prompt.create.non.existing.package", packageName), IdeBundle.message("title.package.not.found"), Messages.getQuestionIcon());
 					if(toCreate != 0)
 					{
 						return null;
@@ -181,9 +172,7 @@ public class PackageUtil
 		return psiDirectory;
 	}
 
-	private static PsiDirectory createSubdirectory(final PsiDirectory oldDirectory,
-			final String name,
-			Project project) throws IncorrectOperationException
+	private static PsiDirectory createSubdirectory(final PsiDirectory oldDirectory, final String name, Project project) throws IncorrectOperationException
 	{
 		final PsiDirectory[] psiDirectory = new PsiDirectory[1];
 		final IncorrectOperationException[] exception = new IncorrectOperationException[1];
@@ -219,20 +208,13 @@ public class PackageUtil
 	}
 
 	@Nullable
-	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module,
-			String packageName,
-			@javax.annotation.Nullable PsiDirectory baseDir,
-			boolean askUserToCreate) throws IncorrectOperationException
+	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module, String packageName, @javax.annotation.Nullable PsiDirectory baseDir, boolean askUserToCreate) throws IncorrectOperationException
 	{
 		return findOrCreateDirectoryForPackage(module, packageName, baseDir, askUserToCreate, false);
 	}
 
 	@Nullable
-	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module,
-			String packageName,
-			PsiDirectory baseDir,
-			boolean askUserToCreate,
-			boolean filterSourceDirsForBaseTestDirectory) throws IncorrectOperationException
+	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module, String packageName, PsiDirectory baseDir, boolean askUserToCreate, boolean filterSourceDirsForBaseTestDirectory) throws IncorrectOperationException
 	{
 		final Project project = module.getProject();
 		PsiDirectory psiDirectory = null;
@@ -278,8 +260,7 @@ public class PackageUtil
 				}
 			}
 			PsiDirectory[] sourceDirectories = directoryList.toArray(new PsiDirectory[directoryList.size()]);
-			psiDirectory = DirectoryChooserUtil.selectDirectory(project, sourceDirectories, baseDir, File.separatorChar + packageName.replace('.',
-					File.separatorChar));
+			psiDirectory = DirectoryChooserUtil.selectDirectory(project, sourceDirectories, baseDir, File.separatorChar + packageName.replace('.', File.separatorChar));
 			if(psiDirectory == null)
 			{
 				return null;
@@ -298,8 +279,7 @@ public class PackageUtil
 				{
 					if(!ApplicationManager.getApplication().isUnitTestMode())
 					{
-						int toCreate = Messages.showYesNoDialog(project, IdeBundle.message("prompt.create.non.existing.package", packageName),
-								IdeBundle.message("title.package.not.found"), Messages.getQuestionIcon());
+						int toCreate = Messages.showYesNoDialog(project, IdeBundle.message("prompt.create.non.existing.package", packageName), IdeBundle.message("title.package.not.found"), Messages.getQuestionIcon());
 						if(toCreate != 0)
 						{
 							return null;
@@ -311,21 +291,11 @@ public class PackageUtil
 				final PsiDirectory psiDirectory1 = psiDirectory;
 				try
 				{
-					psiDirectory = ActionRunner.runInsideWriteAction(new ActionRunner.InterruptibleRunnableWithResult<PsiDirectory>()
-					{
-						public PsiDirectory run() throws Exception
-						{
-							return psiDirectory1.createSubdirectory(name);
-						}
-					});
+					psiDirectory = WriteAction.compute(() -> psiDirectory1.createSubdirectory(name));
 				}
 				catch(IncorrectOperationException e)
 				{
 					throw e;
-				}
-				catch(IOException e)
-				{
-					throw new IncorrectOperationException(e.toString(), e);
 				}
 				catch(Exception e)
 				{
@@ -471,8 +441,7 @@ public class PackageUtil
 			}
 
 			Project project = module.getProject();
-			Messages.showErrorDialog(project, ProjectBundle.message("module.source.roots.not.configured.error", module.getName()),
-					ProjectBundle.message("module.source.roots.not.configured.title"));
+			Messages.showErrorDialog(project, ProjectBundle.message("module.source.roots.not.configured.error", module.getName()), ProjectBundle.message("module.source.roots.not.configured.title"));
 
 			ProjectSettingsService.getInstance(project).showModuleConfigurationDialog(module.getName(), ContentEntriesEditor.NAME);
 
