@@ -69,7 +69,7 @@ public class JavaSdkUtil
 	public static String getJavaRtJarPath()
 	{
 		File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
-		File jarFile = new File(pluginPath, "java-rt.jar");
+		File jarFile = new File(pluginPath, "java-rt-shaded.jar");
 		return jarFile.getPath();
 	}
 

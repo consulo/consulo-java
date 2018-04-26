@@ -69,6 +69,7 @@
 
 		<module>java-rt</module>
 		<module>java-rt-common</module>
+		<module>java-rt-shaded</module>
 
 		<module>extract/guava-impl</module>
 		<module>extract/gson-impl</module>

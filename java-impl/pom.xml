@@ -67,8 +67,8 @@
 								<path>jdk-annotations.jar</path>
 							</copy>
 							<copy>
-								<artifact>${project.groupId}:consulo.java-java.rt:${project.version}</artifact>
-								<path>java-rt.jar</path>
+								<artifact>${project.groupId}:consulo.java-java.rt.shaded:${project.version}</artifact>
+								<path>java-rt-shaded.jar</path>
 							</copy>
 							<copy>
 								<artifact>consulo.internal:java.coverage.agent:1.0</artifact>
@@ -90,6 +90,14 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+			<!--just for correct working packaging-->
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.rt.shaded</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-java.psi.api</artifactId>
