@@ -25,15 +25,14 @@ import java.lang.reflect.Modifier;
 import java.net.Socket;
 import java.util.Locale;
 
+import consulo.java.rt.execution.application.AppMainV2Constants;
+
 /**
  * @author ven
  * @noinspection UseOfSystemOutOrSystemErr
  */
-public class AppMainV2
+public class AppMainV2 implements AppMainV2Constants
 {
-	public static final String LAUNCHER_PORT_NUMBER = "idea.launcher.port";
-	public static final String LAUNCHER_BIN_PATH = "idea.launcher.bin.path";
-
 	private static final String JAVAFX_LAUNCHER = "com.sun.javafx.application.LauncherImpl";
 	private static final String LAUNCH_APPLICATION_METHOD_NAME = "launchApplication";
 

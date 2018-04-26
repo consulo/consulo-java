@@ -26,9 +26,10 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.rt.execution.application.AppMainV2;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.module.util.JavaClassNames;
+import consulo.java.rt.JavaRtClassNames;
+import consulo.java.rt.execution.application.AppMainV2Constants;
 import consulo.platform.Platform;
 
 public class ProcessProxyFactoryImpl extends ProcessProxyFactory
@@ -63,11 +64,11 @@ public class ProcessProxyFactoryImpl extends ProcessProxyFactory
 						JavaSdkUtil.addRtJar(javaParameters.getClassPath());
 
 						ParametersList vmParametersList = javaParameters.getVMParametersList();
-						vmParametersList.defineProperty(AppMainV2.LAUNCHER_PORT_NUMBER, port);
-						vmParametersList.defineProperty(AppMainV2.LAUNCHER_BIN_PATH, binPath);
+						vmParametersList.defineProperty(AppMainV2Constants.LAUNCHER_PORT_NUMBER, port);
+						vmParametersList.defineProperty(AppMainV2Constants.LAUNCHER_BIN_PATH, binPath);
 
 						javaParameters.getProgramParametersList().prepend(mainClass);
-						javaParameters.setMainClass(AppMainV2.class.getName());
+						javaParameters.setMainClass(JavaRtClassNames.APP_MAINV2);
 					}
 
 					return proxy;

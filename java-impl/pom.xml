@@ -67,6 +67,10 @@
 								<path>jdk-annotations.jar</path>
 							</copy>
 							<copy>
+								<artifact>${project.groupId}:consulo.java-java.rt:${project.version}</artifact>
+								<path>java-rt.jar</path>
+							</copy>
+							<copy>
 								<artifact>consulo.internal:java.coverage.agent:1.0</artifact>
 								<path>coverage/consulo/agent.jar</path>
 							</copy>
@@ -114,11 +118,6 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-java.indexing.impl</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-java.rt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -194,6 +193,11 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-gson.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.rt.common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

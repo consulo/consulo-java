@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.annotation.Nullable;
+
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -27,7 +29,6 @@ import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.openapi.util.io.StreamUtil;
-import com.intellij.rt.debugger.ImageSerializer;
 import consulo.internal.com.sun.jdi.*;
 
 /**
@@ -76,7 +77,7 @@ public class ClassLoadingUtils
 	 * Finds and if necessary defines helper class
 	 * May modify class loader in evaluationContext
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static ClassType getHelperClass(String name, EvaluationContext evaluationContext, DebugProcess process) throws EvaluateException
 	{
 		// TODO [egor]: cache and load in boostrap class loader
@@ -90,11 +91,11 @@ public class ClassLoadingUtils
 			Throwable cause = e.getCause();
 			if(cause instanceof InvocationException)
 			{
-				if("java.lang.ClassNotFoundException".equals(((InvocationException) cause).exception().type().name()))
+				if(ClassNotFoundException.class.getName().equals(((InvocationException) cause).exception().type().name()))
 				{
 					// need to define
 					ClassLoaderReference classLoader = getClassLoader(evaluationContext, process);
-					InputStream stream = ImageSerializer.class.getResourceAsStream("/" + name.replaceAll("[.]", "/") + ".class");
+					InputStream stream = ClassLoadingUtils.class.getResourceAsStream("/" + name.replaceAll("[.]", "/") + ".class");
 					try
 					{
 						if(stream == null)

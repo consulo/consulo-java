@@ -48,9 +48,10 @@
 			<artifactId>consulo.java-java.psi.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-java.rt</artifactId>
+			<artifactId>consulo.java-java.rt.common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

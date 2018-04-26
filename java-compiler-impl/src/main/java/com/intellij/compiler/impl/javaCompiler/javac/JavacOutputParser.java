@@ -21,8 +21,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.compiler.OutputParser;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -33,9 +34,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.rt.compiler.JavacResourcesReader;
+import consulo.java.rt.compiler.JavacResourcesReaderConstans;
 
-public class JavacOutputParser extends OutputParser
+public class JavacOutputParser extends OutputParser implements JavacResourcesReaderConstans
 {
 	private final int myTabSize;
 	@NonNls
@@ -47,11 +48,11 @@ public class JavacOutputParser extends OutputParser
 		if(ApplicationManager.getApplication().isUnitTestMode())
 		{
 			// emulate patterns setup if 'embedded' javac is used (javac is started not via JavacRunner)
-			addJavacPattern(JavacResourcesReader.MSG_PARSING_STARTED + JavacResourcesReader.CATEGORY_VALUE_DIVIDER + "[parsing started {0}]");
-			addJavacPattern(JavacResourcesReader.MSG_PARSING_COMPLETED + JavacResourcesReader.CATEGORY_VALUE_DIVIDER + "[parsing completed {0}ms]");
-			addJavacPattern(JavacResourcesReader.MSG_LOADING + JavacResourcesReader.CATEGORY_VALUE_DIVIDER + "[loading {0}]");
-			addJavacPattern(JavacResourcesReader.MSG_CHECKING + JavacResourcesReader.CATEGORY_VALUE_DIVIDER + "[checking {0}]");
-			addJavacPattern(JavacResourcesReader.MSG_WROTE + JavacResourcesReader.CATEGORY_VALUE_DIVIDER + "[wrote {0}]");
+			addJavacPattern(MSG_PARSING_STARTED + CATEGORY_VALUE_DIVIDER + "[parsing started {0}]");
+			addJavacPattern(MSG_PARSING_COMPLETED + CATEGORY_VALUE_DIVIDER + "[parsing completed {0}ms]");
+			addJavacPattern(MSG_LOADING + CATEGORY_VALUE_DIVIDER + "[loading {0}]");
+			addJavacPattern(MSG_CHECKING + CATEGORY_VALUE_DIVIDER + "[checking {0}]");
+			addJavacPattern(MSG_WROTE + CATEGORY_VALUE_DIVIDER + "[wrote {0}]");
 		}
 	}
 
@@ -67,13 +68,13 @@ public class JavacOutputParser extends OutputParser
 		{
 			return false;
 		}
-		if(JavacResourcesReader.MSG_PATTERNS_START.equals(line))
+		if(MSG_PATTERNS_START.equals(line))
 		{
 			myParserActions.clear();
 			while(true)
 			{
 				final String patternLine = callback.getNextLine();
-				if(JavacResourcesReader.MSG_PATTERNS_END.equals(patternLine))
+				if(MSG_PATTERNS_END.equals(patternLine))
 				{
 					break;
 				}
@@ -230,7 +231,7 @@ public class JavacOutputParser extends OutputParser
 
 	private void addJavacPattern(@NonNls final String line)
 	{
-		final int dividerIndex = line.indexOf(JavacResourcesReader.CATEGORY_VALUE_DIVIDER);
+		final int dividerIndex = line.indexOf(CATEGORY_VALUE_DIVIDER);
 		if(dividerIndex < 0)
 		{
 			// by reports it may happen for some IBM JDKs (empty string?)
@@ -238,11 +239,11 @@ public class JavacOutputParser extends OutputParser
 		}
 		final String category = line.substring(0, dividerIndex);
 		final String resourceBundleValue = line.substring(dividerIndex + 1);
-		if(JavacResourcesReader.MSG_PARSING_COMPLETED.equals(category) || JavacResourcesReader.MSG_PARSING_STARTED.equals(category) || JavacResourcesReader.MSG_WROTE.equals(category))
+		if(MSG_PARSING_COMPLETED.equals(category) || MSG_PARSING_STARTED.equals(category) || MSG_WROTE.equals(category))
 		{
 			myParserActions.add(new FilePathActionJavac(createMatcher(resourceBundleValue)));
 		}
-		else if(JavacResourcesReader.MSG_CHECKING.equals(category))
+		else if(MSG_CHECKING.equals(category))
 		{
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
@@ -253,7 +254,7 @@ public class JavacOutputParser extends OutputParser
 				}
 			});
 		}
-		else if(JavacResourcesReader.MSG_LOADING.equals(category))
+		else if(MSG_LOADING.equals(category))
 		{
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
@@ -264,7 +265,7 @@ public class JavacOutputParser extends OutputParser
 				}
 			});
 		}
-		else if(JavacResourcesReader.MSG_NOTE.equals(category))
+		else if(MSG_NOTE.equals(category))
 		{
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
@@ -283,11 +284,11 @@ public class JavacOutputParser extends OutputParser
 				}
 			});
 		}
-		else if(JavacResourcesReader.MSG_WARNING.equals(category))
+		else if(MSG_WARNING.equals(category))
 		{
 			WARNING_PREFIX = resourceBundleValue;
 		}
-		else if(JavacResourcesReader.MSG_STATISTICS.equals(category))
+		else if(MSG_STATISTICS.equals(category))
 		{
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
@@ -298,7 +299,7 @@ public class JavacOutputParser extends OutputParser
 				}
 			});
 		}
-		else if(JavacResourcesReader.MSG_IGNORED.equals(category))
+		else if(MSG_IGNORED.equals(category))
 		{
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{

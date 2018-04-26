@@ -43,10 +43,39 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Premain-Class>com.intellij.rt.execution.application.AppMainV2$Agent</Premain-Class>
+							<!--shaded reference-->
+							<Premain-Class>consulo.shade.com.intellij.rt.execution.application.AppMainV2$Agent</Premain-Class>
 						</manifestEntries>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.6</version>
+				<configuration>
+					<createDependencyReducedPom>true</createDependencyReducedPom>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<relocations>
+								<relocation>
+									<pattern>com.intellij.rt</pattern>
+									<shadedPattern>consulo.shade.com.intellij.rt</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>consulo.java.rt</pattern>
+									<shadedPattern>consulo.shade.consulo.java.rt</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -56,6 +85,13 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.rt.common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -20,26 +20,16 @@ import java.util.ListResourceBundle;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import consulo.java.rt.compiler.JavacResourcesReaderConstans;
+
 /**
  * MUST BE COMPILED WITH JDK 1.1 IN ORDER TO SUPPORT JAVAC LAUNCHING FOR ALL JDKs
  *
  * @author Eugene Zhuravlev
  *         Date: Oct 10, 2005
  */
-public class JavacResourcesReader
+public class JavacResourcesReader implements JavacResourcesReaderConstans
 {
-	public static final String MSG_PATTERNS_START = "__patterns_start";
-	public static final String MSG_PATTERNS_END = "__patterns_end";
-	public static final String MSG_PARSING_STARTED = "MSG_PARSING_STARTED";
-	public static final String MSG_PARSING_COMPLETED = "MSG_PARSING_COMPLETED";
-	public static final String MSG_LOADING = "MSG_LOADING";
-	public static final String MSG_CHECKING = "MSG_CHECKING";
-	public static final String MSG_WROTE = "MSG_WROTE";
-	public static final String MSG_WARNING = "MSG_WARNING";
-	public static final String MSG_NOTE = "MSG_NOTE";
-	public static final String MSG_STATISTICS = "MSG_STATISTICS";
-	public static final String MSG_IGNORED = "MSG_IGNORED";
-
 	private static final String[] BUNDLE_NAMES = new String[]{
 			"com.sun.tools.javac.resources.compiler",
 			// v1.5
@@ -109,8 +99,6 @@ public class JavacResourcesReader
 			new IgnoredWarningBundleKey("compiler.warn.path.element.not.found"),
 			//jdk 1.5
 	};
-
-	public static final String CATEGORY_VALUE_DIVIDER = "=";
 
 	public static void main(String[] args)
 	{

@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -29,8 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import org.intellij.images.editor.impl.ImageEditorManagerImpl;
-import javax.annotation.Nonnull;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.FullValueEvaluatorProvider;
@@ -41,9 +40,13 @@ import com.intellij.debugger.impl.ClassLoadingUtils;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.rt.debugger.ImageSerializer;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
-import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ByteValue;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.Value;
+import consulo.java.rt.JavaRtClassNames;
 
 /**
  * Created by Egor on 04.10.2014.
@@ -112,7 +115,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 	{
 		DebugProcess process = evaluationContext.getDebugProcess();
 		EvaluationContext copyContext = evaluationContext.createEvaluationContext(obj);
-		ClassType helperClass = ClassLoadingUtils.getHelperClass(ImageSerializer.class.getName(), copyContext, process);
+		ClassType helperClass = ClassLoadingUtils.getHelperClass(JavaRtClassNames.IMAGE_SERIALIZER, copyContext, process);
 
 		if(helperClass != null)
 		{

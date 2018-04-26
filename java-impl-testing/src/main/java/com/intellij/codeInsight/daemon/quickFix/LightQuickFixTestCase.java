@@ -45,12 +45,12 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.PsiFile;
-import com.intellij.rt.execution.junit.FileComparisonFailure;
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
 import com.intellij.testFramework.LightPlatformTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ui.UIUtil;
+import junit.framework.ComparisonFailure;
 
 public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase {
   @NonNls private static final String BEFORE_PREFIX = "before";
@@ -93,7 +93,7 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
             quickFixTestCase.afterActionCompleted(testName, contents);
           }
         }
-        catch (FileComparisonFailure e){
+        catch (ComparisonFailure e){
           throw e;
         }
         catch (Throwable e) {

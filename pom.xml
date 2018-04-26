@@ -68,6 +68,7 @@
 		<module>jdk-annotations</module>
 
 		<module>java-rt</module>
+		<module>java-rt-common</module>
 
 		<module>extract/guava-impl</module>
 		<module>extract/gson-impl</module>

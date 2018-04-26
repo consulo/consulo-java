@@ -15,12 +15,16 @@
  */
 package com.intellij.openapi.projectRoots.ex;
 
+import java.io.File;
+
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
+
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -53,34 +57,6 @@ public class JavaSdkUtil
 		}
 	}
 
-	@Deprecated
-	@DeprecationInfo("Moved to junit plugin")
-	public static String getJunit4JarPath()
-	{
-		try
-		{
-			return PathUtil.getJarPathForClass(Class.forName("org.junit.Test"));
-		}
-		catch(ClassNotFoundException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Deprecated
-	@DeprecationInfo("Moved to junit plugin")
-	public static String getJunit3JarPath()
-	{
-		try
-		{
-			return PathUtil.getJarPathForClass(Class.forName("junit.runner.TestSuiteLoader")); //junit3 specific class
-		}
-		catch(ClassNotFoundException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Nonnull
 	@Deprecated
 	@DeprecationInfo("Use #getJavaRtJarPath()")
@@ -92,14 +68,9 @@ public class JavaSdkUtil
 	@Nonnull
 	public static String getJavaRtJarPath()
 	{
-		try
-		{
-			return PathUtil.getJarPathForClass(Class.forName("com.intellij.rt.compiler.JavacRunner"));
-		}
-		catch(ClassNotFoundException e)
-		{
-			throw new RuntimeException(e);
-		}
+		File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
+		File jarFile = new File(pluginPath, "java-rt.jar");
+		return jarFile.getPath();
 	}
 
 	public static boolean isLanguageLevelAcceptable(@Nonnull Project project, @Nonnull Module module, @Nonnull LanguageLevel level)

@@ -15,6 +15,10 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessAdapter;
@@ -27,13 +31,9 @@ import com.intellij.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
-import com.intellij.rt.debugger.BatchEvaluatorServer;
 import com.intellij.util.containers.HashMap;
 import consulo.internal.com.sun.jdi.*;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import consulo.java.rt.JavaRtClassNames;
 
 /**
  * User: lex
@@ -49,8 +49,8 @@ public class BatchEvaluator {
   private ObjectReference myBatchEvaluatorObject;
   private Method myBatchEvaluatorMethod;
 
-  private static final Key<BatchEvaluator> BATCH_EVALUATOR_KEY = new Key<BatchEvaluator>("BatchEvaluator");
-  public static final Key<Boolean> REMOTE_SESSION_KEY = new Key<Boolean>("is_remote_session_key");
+  private static final Key<BatchEvaluator> BATCH_EVALUATOR_KEY = Key.create("BatchEvaluator");
+  public static final Key<Boolean> REMOTE_SESSION_KEY = Key.create("is_remote_session_key");
 
   private final HashMap<SuspendContext, List<ToStringCommand>> myBuffer = new HashMap<SuspendContext, List<ToStringCommand>>();
 
@@ -87,8 +87,7 @@ public class BatchEvaluator {
 
       ClassType batchEvaluatorClass = null;
       try {
-        batchEvaluatorClass = (ClassType)myDebugProcess.findClass(evaluationContext, BatchEvaluatorServer.class.getName(),
-          evaluationContext.getClassLoader());
+        batchEvaluatorClass = (ClassType)myDebugProcess.findClass(evaluationContext, JavaRtClassNames.BATCH_EVALUATOR_SERVER, evaluationContext.getClassLoader());
       }
       catch (EvaluateException e) {
       }

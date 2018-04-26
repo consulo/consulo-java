@@ -1,4 +1,4 @@
-
+package com.intellij.rt.form;
 /*
  * Copyright 2000-2009 JetBrains s.r.o.
  *

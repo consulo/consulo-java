@@ -26,7 +26,6 @@ import javax.annotation.Nonnull;
 import org.jdom.Element;
 import com.intellij.execution.JavaTestConfigurationBase;
 import com.intellij.execution.RunConfigurationExtension;
-import com.intellij.execution.TestDiscoveryListener;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.process.ProcessHandler;
@@ -141,7 +140,9 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 	@Override
 	public boolean isListenerDisabled(RunConfigurationBase configuration, Object listener, RunnerSettings runnerSettings)
 	{
-		return listener instanceof TestDiscoveryListener && (runnerSettings != null || !isApplicableFor(configuration));
+		return false;
+		// FIXME [VISTALL] TestDiscoveryListener is not in root classloder
+		//return listener instanceof TestDiscoveryListener && (runnerSettings != null || !isApplicableFor(configuration));
 	}
 
 	@Override

@@ -39,8 +39,13 @@ import com.intellij.debugger.impl.ClassLoadingUtils;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.rt.debugger.DefaultMethodInvoker;
-import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.InterfaceType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Value;
+import consulo.java.rt.JavaRtClassNames;
 
 public class MethodEvaluator implements Evaluator
 {
@@ -238,7 +243,7 @@ public class MethodEvaluator implements Evaluator
 	// only methods without arguments for now
 	private static Value invokeDefaultMethod(DebugProcess debugProcess, EvaluationContext evaluationContext, Value obj, String name) throws EvaluateException
 	{
-		ClassType invokerClass = ClassLoadingUtils.getHelperClass(DefaultMethodInvoker.class.getName(), evaluationContext, debugProcess);
+		ClassType invokerClass = ClassLoadingUtils.getHelperClass(JavaRtClassNames.DEFAULT_METHOD_INVOKER, evaluationContext, debugProcess);
 
 		if(invokerClass != null)
 		{

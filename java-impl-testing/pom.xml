@@ -47,11 +47,7 @@
 			<artifactId>consulo.java-java.psi.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-java.rt</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-java.analysis.impl</artifactId>

@@ -15,18 +15,20 @@
  */
 package com.intellij.rt.execution.junit.segments;
 
-import junit.runner.BaseTestRunner;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Vector;
 
-public class Packet extends PacketWriter {
+import consulo.java.rt.execution.junit.segments.PacketConstants;
+import junit.runner.BaseTestRunner;
+
+public class Packet extends PacketWriter implements PacketConstants {
   private final OutputObjectRegistry myRegistry;
   private final PacketProcessor myTransport;
-  public static final char ourSpecialSymbol = '$';
-  public static final char[] ourSymbolsToEncode = new char[] {'\n', '\r', SegmentedStream.SPECIAL_SYMBOL};
-  public static final int CODE_LENGTH = 2;
 
   public Packet(PacketProcessor transport, OutputObjectRegistry registry) {
     myTransport = transport;

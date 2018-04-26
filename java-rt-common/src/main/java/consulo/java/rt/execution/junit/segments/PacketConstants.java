@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2010 JetBrains s.r.o.
+ * Copyright 2013-2018 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.execution.junit2.segments;
 
-import com.intellij.execution.testframework.Printable;
+package consulo.java.rt.execution.junit.segments;
+
+import com.intellij.rt.execution.junit.segments.SegmentedStream;
 
 /**
- * User: anna
- * Date: 12/6/10
+ * @author VISTALL
+ * @since 2018-04-26
  */
-public interface OutputPacketProcessor extends PacketProcessor {
-  void processOutput(Printable printable);
+public interface PacketConstants
+{
+	public static final char ourSpecialSymbol = '$';
+	public static final char[] ourSymbolsToEncode = new char[] {'\n', '\r', SegmentedStream.SPECIAL_SYMBOL};
+	public static final int CODE_LENGTH = 2;
 }

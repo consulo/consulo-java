@@ -64,7 +64,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.rt.compiler.JavacRunner;
 import com.intellij.util.PathsList;
 import consulo.annotations.RequiredReadAction;
 import consulo.compiler.roots.CompilerPathsImpl;
@@ -72,6 +71,7 @@ import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.rt.JavaRtClassNames;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.vfs.util.ArchiveVfsUtil;
 
@@ -80,7 +80,7 @@ public class JavacCompiler extends ExternalCompiler
 	@NonNls
 	public static final String TESTS_EXTERNAL_COMPILER_HOME_PROPERTY_NAME = "tests.external.compiler.home";
 
-	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler");
+	private static final Logger LOG = Logger.getInstance(JavacCompiler.class);
 	private final Project myProject;
 	private final List<File> myTempFiles = new ArrayList<>();
 	@NonNls
@@ -125,8 +125,7 @@ public class JavacCompiler extends ExternalCompiler
 			final Sdk javaSdk = JavaCompilerUtil.getSdkForCompilation(module);
 			if(javaSdk == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()), JavaCompilerBundle.message("compiler.javac.name"),
-						Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 
@@ -142,29 +141,25 @@ public class JavacCompiler extends ExternalCompiler
 			final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
 			if(homeDirectory == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()), JavaCompilerBundle.message("compiler" +
-						".javac" + ".name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()), JavaCompilerBundle.message("compiler" + ".javac" + ".name"), Messages.getErrorIcon());
 				return false;
 			}
 			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(javaSdk);
 			if(toolsJarPath == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
-						.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 			final String versionString = javaSdk.getVersionString();
 			if(versionString == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
-						.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 
 			if(CompilerUtil.isOfVersion(versionString, "1.0"))
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"), JavaCompilerBundle.message("compiler.javac.name"), Messages
-						.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 		}
@@ -195,17 +190,12 @@ public class JavacCompiler extends ExternalCompiler
 	@Nonnull
 	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
 	{
-		return ReadAction.compute(() -> createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
-				.isAnnotationProcessorsEnabled()));
+		return ReadAction.compute(() -> createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject).isAnnotationProcessorsEnabled()));
 	}
 
 	@Nonnull
 	@RequiredReadAction
-	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
-			final String outputPath,
-			final CompileContext compileContext,
-			JpsJavaCompilerOptions javacOptions,
-			final boolean annotationProcessorsEnabled) throws IOException
+	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final String outputPath, final CompileContext compileContext, JpsJavaCompilerOptions javacOptions, final boolean annotationProcessorsEnabled) throws IOException
 	{
 		final Sdk jdk = getJdkForStartupCommand(chunk);
 		final String versionString = jdk.getVersionString();
@@ -249,8 +239,8 @@ public class JavacCompiler extends ExternalCompiler
 		}
 		else
 		{
-			parametersList.add(sdkType.getToolsPath(jdk) + File.pathSeparator + JavaSdkUtil.getIdeaRtJarPath());
-			parametersList.add(JavacRunner.class.getName());
+			parametersList.add(sdkType.getToolsPath(jdk) + File.pathSeparator + JavaSdkUtil.getJavaRtJarPath());
+			parametersList.add(JavaRtClassNames.JAVAC_RUNNER);
 			parametersList.add("\"" + versionString + "\"");
 		}
 
@@ -305,12 +295,7 @@ public class JavacCompiler extends ExternalCompiler
 		return commandLine;
 	}
 
-	public static List<String> addAdditionalSettings(ParametersList parametersList,
-			JpsJavaCompilerOptions javacOptions,
-			boolean isAnnotationProcessing,
-			JavaSdkVersion version,
-			ModuleChunk chunk,
-			boolean annotationProcessorsEnabled)
+	public static List<String> addAdditionalSettings(ParametersList parametersList, JpsJavaCompilerOptions javacOptions, boolean isAnnotationProcessing, JavaSdkVersion version, ModuleChunk chunk, boolean annotationProcessorsEnabled)
 	{
 		final List<String> additionalOptions = new ArrayList<>();
 		StringTokenizer tokenizer = new StringTokenizer(new JavacSettingsBuilder(javacOptions).getOptionsString(chunk), " ");
@@ -399,16 +384,7 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@RequiredReadAction
-	public static void addCommandLineOptions(CompileContext compileContext,
-			ModuleChunk chunk,
-			@NonNls ParametersList commandLine,
-			String outputPath,
-			Sdk jdk,
-			JavaSdkVersion version,
-			List<File> tempFiles,
-			boolean addSourcePath,
-			boolean useTempFile,
-			boolean isAnnotationProcessingMode) throws IOException
+	public static void addCommandLineOptions(CompileContext compileContext, ModuleChunk chunk, @NonNls ParametersList commandLine, String outputPath, Sdk jdk, JavaSdkVersion version, List<File> tempFiles, boolean addSourcePath, boolean useTempFile, boolean isAnnotationProcessingMode) throws IOException
 	{
 
 		LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
@@ -523,13 +499,7 @@ public class JavacCompiler extends ExternalCompiler
 		return pathsList.getPathsString();
 	}
 
-	private static void addClassPathValue(final Sdk jdk,
-			final JavaSdkVersion version,
-			final ParametersList parametersList,
-			final String cpString,
-			@NonNls final String tempFileName,
-			List<File> tempFiles,
-			boolean useTempFile) throws IOException
+	private static void addClassPathValue(final Sdk jdk, final JavaSdkVersion version, final ParametersList parametersList, final String cpString, @NonNls final String tempFileName, List<File> tempFiles, boolean useTempFile) throws IOException
 	{
 		if(!useTempFile)
 		{

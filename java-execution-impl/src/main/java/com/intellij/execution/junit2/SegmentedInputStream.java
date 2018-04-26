@@ -23,9 +23,9 @@ import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.rt.execution.junit.segments.Packet;
-import com.intellij.rt.execution.junit.segments.PacketProcessor;
+import com.intellij.execution.junit2.segments.PacketProcessor;
 import com.intellij.rt.execution.junit.segments.SegmentedStream;
+import consulo.java.rt.execution.junit.segments.PacketConstants;
 
 public class SegmentedInputStream extends InputStream
 {
@@ -155,19 +155,19 @@ public class SegmentedInputStream extends InputStream
 		{
 			char chr = chars[i];
 			final char decodedChar;
-			if(chr == Packet.ourSpecialSymbol)
+			if(chr == PacketConstants.ourSpecialSymbol)
 			{
 				i++;
 				chr = chars[i];
-				if(chr != Packet.ourSpecialSymbol)
+				if(chr != PacketConstants.ourSpecialSymbol)
 				{
-					final StringBuilder codeBuffer = new StringBuilder(Packet.CODE_LENGTH);
+					final StringBuilder codeBuffer = new StringBuilder(PacketConstants.CODE_LENGTH);
 					codeBuffer.append(chr);
-					for(int j = 1; j < Packet.CODE_LENGTH; j++)
+					for(int j = 1; j < PacketConstants.CODE_LENGTH; j++)
 					{
 						codeBuffer.append(chars[i + j]);
 					}
-					i += Packet.CODE_LENGTH - 1;
+					i += PacketConstants.CODE_LENGTH - 1;
 					decodedChar = (char) Integer.parseInt(codeBuffer.toString());
 				}
 				else
