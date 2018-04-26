@@ -63,6 +63,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
 							<relocations>
 								<relocation>
 									<pattern>com.intellij.rt</pattern>
