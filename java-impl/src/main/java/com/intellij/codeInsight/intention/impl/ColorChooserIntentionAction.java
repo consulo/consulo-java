@@ -29,6 +29,7 @@ import javax.swing.JComponent;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -50,7 +51,6 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction
 	private static final PsiMethodPattern DECODE_METHOD = PsiJavaPatterns.psiMethod().definedInClass(JAVA_AWT_COLOR).withName("decode");
 
 	private static final PsiMethodPattern GET_COLOR_METHOD = PsiJavaPatterns.psiMethod().definedInClass(JAVA_AWT_COLOR).withName("getColor");
-
 
 	public ColorChooserIntentionAction()
 	{
@@ -119,20 +119,29 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction
 		{
 			oldColor = JBColor.GRAY;
 		}
-		Color color = ColorChooser.chooseColor(editorComponent, getText(), oldColor, true);
-		if(color == null)
+
+		final Color temp = oldColor;
+
+		ColorChooser.chooseColor(editorComponent, getText(), temp, color ->
 		{
-			return;
-		}
-		final int rgb = color.getRGB() - ((255 & 0xFF) << 24);
-		if(color != null && rgb != oldColor.getRGB())
-		{
-			final String newText = radix == 16 ? hexPrefix + String.format("%6s", Integer.toHexString(rgb)).replace(' ', '0') : radix == 8 ? "0" + Integer.toOctalString(rgb) : Integer.toString(rgb);
-			final PsiManager manager = literal.getManager();
-			final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-			final PsiExpression newLiteral = factory.createExpressionFromText("\"" + newText + "\"", literal);
-			literal.replace(newLiteral);
-		}
+			if(color == null)
+			{
+				return;
+			}
+
+			WriteCommandAction.runWriteCommandAction(element.getProject(), () ->
+			{
+				final int rgb = color.getRGB() - ((255 & 0xFF) << 24);
+				if(rgb != temp.getRGB())
+				{
+					final String newText = radix == 16 ? hexPrefix + String.format("%6s", Integer.toHexString(rgb)).replace(' ', '0') : radix == 8 ? "0" + Integer.toOctalString(rgb) : Integer.toString(rgb);
+					final PsiManager manager = literal.getManager();
+					final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+					final PsiExpression newLiteral = factory.createExpressionFromText("\"" + newText + "\"", literal);
+					literal.replace(newLiteral);
+				}
+			});
+		});
 	}
 
 	private void invokeForConstructor(JComponent editorComponent, PsiElement element)
@@ -218,15 +227,22 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction
 
 	private void replaceColor(JComponent editorComponent, PsiNewExpression expression, Color oldColor)
 	{
-		final Color color = ColorChooser.chooseColor(editorComponent, getText(), oldColor, true);
-		if(color != null)
+		ColorChooser.chooseColor(editorComponent, getText(), oldColor, true, color ->
 		{
-			final PsiManager manager = expression.getManager();
-			final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-			final PsiExpression newCall = factory.createExpressionFromText("new " + JAVA_AWT_COLOR + "(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + (color.getAlpha() < 255 ? ", " + color.getAlpha() : "") + ")", expression);
-			final PsiElement insertedElement = expression.replace(newCall);
-			final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
-			codeStyleManager.reformat(insertedElement);
-		}
+			if(color == null)
+			{
+				return;
+			}
+
+			WriteCommandAction.runWriteCommandAction(expression.getProject(), () ->
+			{
+				final PsiManager manager = expression.getManager();
+				final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+				final PsiExpression newCall = factory.createExpressionFromText("new " + JAVA_AWT_COLOR + "(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + (color.getAlpha() < 255 ? ", " + color.getAlpha() : "") + ")", expression);
+				final PsiElement insertedElement = expression.replace(newCall);
+				final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
+				codeStyleManager.reformat(insertedElement);
+			});
+		});
 	}
 }
