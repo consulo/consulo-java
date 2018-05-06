@@ -42,6 +42,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredDispatchThread;
+import consulo.awt.TargetAWT;
 
 public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction
 {
@@ -91,7 +92,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
 				@Override
 				public Icon getIconFor(T configuration)
 				{
-					return configuration.getIcon();
+					return TargetAWT.to(configuration.getIcon());
 				}
 
 				@Nonnull

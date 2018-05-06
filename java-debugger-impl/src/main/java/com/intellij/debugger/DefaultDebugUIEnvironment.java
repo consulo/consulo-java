@@ -16,9 +16,8 @@
 package com.intellij.debugger;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfile;
@@ -31,6 +30,7 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.Constraints;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.IdeActions;
+import consulo.ui.image.Image;
 
 public class DefaultDebugUIEnvironment implements DebugUIEnvironment
 {
@@ -58,7 +58,7 @@ public class DefaultDebugUIEnvironment implements DebugUIEnvironment
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return getRunProfile().getIcon();
 	}

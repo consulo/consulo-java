@@ -15,11 +15,12 @@
  */
 package com.intellij.debugger;
 
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import consulo.ui.image.Image;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,14 +30,14 @@ public interface DebugUIEnvironment
 {
 	DebugEnvironment getEnvironment();
 
-	@javax.annotation.Nullable
+	@Nullable
 	RunContentDescriptor getReuseContent();
 
-	@javax.annotation.Nullable
-	Icon getIcon();
+	@Nullable
+	Image getIcon();
 
 	void initActions(RunContentDescriptor content, DefaultActionGroup actionGroup);
 
-	@javax.annotation.Nullable
+	@Nullable
 	RunProfile getRunProfile();
 }

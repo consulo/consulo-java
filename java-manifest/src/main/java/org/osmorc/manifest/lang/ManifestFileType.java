@@ -25,14 +25,13 @@
 package org.osmorc.manifest.lang;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.java.manifest.ManifestIcons;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import consulo.java.manifest.ManifestIcons;
+import consulo.ui.image.Image;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -51,19 +50,22 @@ public class ManifestFileType extends LanguageFileType
 		super(language);
 	}
 
+	@Override
 	@Nonnull
 	@NonNls
-	public String getName()
+	public String getId()
 	{
 		return "MANIFEST";
 	}
 
+	@Override
 	@Nonnull
 	public String getDescription()
 	{
 		return "Manifest files";
 	}
 
+	@Override
 	@Nonnull
 	@NonNls
 	public String getDefaultExtension()
@@ -71,8 +73,9 @@ public class ManifestFileType extends LanguageFileType
 		return "MF";
 	}
 
+	@Override
 	@Nullable
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return ManifestIcons.ManifestFileType;
 	}

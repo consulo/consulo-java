@@ -16,12 +16,11 @@
 package com.intellij.ide.highlighter;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
-import consulo.java.JavaIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.java.JavaIcons;
+import consulo.ui.image.Image;
 
 public class JavaClassFileType implements FileType {
 
@@ -49,22 +48,12 @@ public class JavaClassFileType implements FileType {
   }
 
   @Override
-  public Icon getIcon() {
+  public Image getIcon() {
     return JavaIcons.FileTypes.JavaClass;
   }
 
   @Override
   public boolean isBinary() {
     return true;
-  }
-
-  @Override
-  public boolean isReadOnly() {
-    return false;
-  }
-
-  @Override
-  public String getCharset(@Nonnull VirtualFile file, final byte[] content) {
-    return null;
   }
 }

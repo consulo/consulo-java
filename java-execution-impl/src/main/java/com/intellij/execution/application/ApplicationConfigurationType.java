@@ -16,12 +16,9 @@
 package com.intellij.execution.application;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
 import com.intellij.execution.configurations.ConfigurationFactory;
@@ -36,7 +33,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
+import consulo.ui.image.Image;
 
 public class ApplicationConfigurationType implements ConfigurationType
 {
@@ -79,7 +78,7 @@ public class ApplicationConfigurationType implements ConfigurationType
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.RunConfigurations.Application;
 	}

@@ -24,10 +24,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
@@ -71,6 +70,7 @@ import com.intellij.psi.ServerPageFile;
 import com.intellij.util.PathsList;
 import com.intellij.util.containers.HashSet;
 import consulo.roots.types.SourcesOrderRootType;
+import consulo.ui.image.Image;
 
 /**
  * @author nik
@@ -94,21 +94,25 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile
 		return PathUtilEx.getAnyJdk(project);
 	}
 
+	@Override
 	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
 	{
 		return new MyJavaCommandLineState(myConfiguration, myProject, myGenerationScope, env);
 	}
 
+	@Override
 	public String getName()
 	{
 		return JavadocBundle.message("javadoc.settings.title");
 	}
 
-	public Icon getIcon()
+	@Override
+	public Image getIcon()
 	{
 		return null;
 	}
 
+	@Override
 	@Nonnull
 	public Module[] getModules()
 	{
@@ -351,6 +355,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile
 			}
 		}
 
+		@Override
 		@Nonnull
 		protected OSProcessHandler startProcess() throws ExecutionException
 		{
@@ -358,6 +363,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile
 			ProcessTerminatedListener.attach(handler, myProject, JavadocBundle.message("javadoc.generate.exited"));
 			handler.addProcessListener(new ProcessAdapter()
 			{
+				@Override
 				public void processTerminated(ProcessEvent event)
 				{
 					if(myConfiguration.OPEN_IN_BROWSER)

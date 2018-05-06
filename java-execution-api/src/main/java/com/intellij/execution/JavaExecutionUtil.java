@@ -19,9 +19,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RunProfile;
@@ -50,6 +49,7 @@ import com.intellij.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotations.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.ui.image.Image;
 
 /**
  * @author spleaner
@@ -60,12 +60,12 @@ public class JavaExecutionUtil
 	{
 	}
 
-	public static boolean executeRun(@Nonnull final Project project, String contentName, Icon icon, final DataContext dataContext) throws ExecutionException
+	public static boolean executeRun(@Nonnull final Project project, String contentName, Image icon, final DataContext dataContext) throws ExecutionException
 	{
 		return executeRun(project, contentName, icon, dataContext, null);
 	}
 
-	public static boolean executeRun(@Nonnull final Project project, String contentName, Icon icon, DataContext dataContext, Filter[] filters) throws ExecutionException
+	public static boolean executeRun(@Nonnull final Project project, String contentName, Image icon, DataContext dataContext, Filter[] filters) throws ExecutionException
 	{
 		final OwnJavaParameters cmdLine = dataContext.getData(OwnJavaParameters.JAVA_PARAMETERS);
 		final DefaultRunProfile profile = new DefaultRunProfile(project, cmdLine, contentName, icon, filters);
@@ -118,9 +118,9 @@ public class JavaExecutionUtil
 		private final String myContentName;
 		private final Filter[] myFilters;
 		private final Project myProject;
-		private final Icon myIcon;
+		private final Image myIcon;
 
-		public DefaultRunProfile(final Project project, final OwnJavaParameters parameters, final String contentName, final Icon icon, Filter[] filters)
+		public DefaultRunProfile(final Project project, final OwnJavaParameters parameters, final String contentName, final Image icon, Filter[] filters)
 		{
 			myProject = project;
 			myParameters = parameters;
@@ -130,7 +130,7 @@ public class JavaExecutionUtil
 		}
 
 		@Override
-		public Icon getIcon()
+		public Image getIcon()
 		{
 			return myIcon;
 		}

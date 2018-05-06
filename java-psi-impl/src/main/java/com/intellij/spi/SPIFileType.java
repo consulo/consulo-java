@@ -15,15 +15,15 @@
  */
 package com.intellij.spi;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import javax.swing.*;
+import consulo.ui.image.Image;
 
 /**
  * User: anna
@@ -55,16 +55,11 @@ public class SPIFileType extends LanguageFileType {
 
   @Nullable
   @Override
-  public Icon getIcon() {
+  public Image getIcon() {
     return AllIcons.FileTypes.Text;
   }
 
-  @Override
-  public boolean isReadOnly() {
-    return false;
-  }
-
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getCharset(@Nonnull VirtualFile file, byte[] content) {
     return CharsetToolkit.UTF8;

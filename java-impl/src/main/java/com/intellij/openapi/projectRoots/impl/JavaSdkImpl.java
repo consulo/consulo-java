@@ -60,6 +60,7 @@ import consulo.java.projectRoots.OwnJdkUtil;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.DocumentationOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
+import consulo.ui.image.Image;
 import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
@@ -93,7 +94,7 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return JavaIcons.Java;
 	}

@@ -16,9 +16,7 @@
 package com.intellij.execution.applet;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
 import com.intellij.execution.configurations.ConfigurationFactory;
@@ -29,7 +27,9 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
+import consulo.ui.image.Image;
 
 public class AppletConfigurationType implements ConfigurationType
 {
@@ -72,7 +72,7 @@ public class AppletConfigurationType implements ConfigurationType
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.RunConfigurations.Applet;
 	}

@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
 import org.osmorc.manifest.lang.ManifestFileType;
+import consulo.awt.TargetAWT;
 import consulo.java.manifest.lang.headerparser.HeaderParserEP;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
@@ -38,7 +39,7 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
   @javax.annotation.Nullable
   @Override
   protected Icon getIcon(@Nonnull String item) {
-    return ManifestFileType.INSTANCE.getIcon();
+    return TargetAWT.to(ManifestFileType.INSTANCE.getIcon());
   }
 
   @Nonnull

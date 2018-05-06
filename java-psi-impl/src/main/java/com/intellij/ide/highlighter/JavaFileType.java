@@ -16,13 +16,13 @@
 package com.intellij.ide.highlighter;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import consulo.java.JavaIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import consulo.java.JavaIcons;
+import consulo.ui.image.Image;
 
 public class JavaFileType extends LanguageFileType {
   @NonNls public static final String DEFAULT_EXTENSION = "java";
@@ -52,7 +52,7 @@ public class JavaFileType extends LanguageFileType {
   }
 
   @Override
-  public Icon getIcon() {
+  public Image getIcon() {
     return JavaIcons.FileTypes.Java;
   }
 }

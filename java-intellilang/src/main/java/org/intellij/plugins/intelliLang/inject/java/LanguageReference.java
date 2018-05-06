@@ -17,6 +17,8 @@ package org.intellij.plugins.intelliLang.inject.java;
 
 import javax.annotation.Nonnull;
 
+import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
+import org.intellij.plugins.intelliLang.util.StringLiteralReference;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.Language;
@@ -26,8 +28,7 @@ import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.EmptyIcon;
-import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
-import org.intellij.plugins.intelliLang.util.StringLiteralReference;
+import consulo.awt.TargetAWT;
 
 /**
  * Provides completion for available Language-IDs in
@@ -58,7 +59,7 @@ final class LanguageReference extends StringLiteralReference {
 
         final FileType ft = l.getAssociatedFileType();
         if (ft != null) {
-          return LookupElementBuilder.create(s).withIcon(ft.getIcon()).withTypeText(ft.getDescription());
+          return LookupElementBuilder.create(s).withIcon(TargetAWT.to(ft.getIcon())).withTypeText(ft.getDescription());
 //                } else if (l == StdLanguages.EL) {
 //                    // IDEA-10012
 //                    return new LanguageLookupValue(s, StdFileTypes.JSP.getIcon(), "Expression Language");

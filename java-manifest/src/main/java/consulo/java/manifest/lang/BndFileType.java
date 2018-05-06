@@ -1,15 +1,14 @@
 package consulo.java.manifest.lang;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import consulo.java.manifest.ManifestIcons;
+import consulo.ui.image.Image;
 
 /**
  * @author VISTALL
@@ -24,19 +23,22 @@ public class BndFileType extends ManifestFileType
 		super(ManifestLanguage.INSTANCE);
 	}
 
+	@Override
 	@Nonnull
 	@NonNls
-	public String getName()
+	public String getId()
 	{
 		return "BND";
 	}
 
+	@Override
 	@Nonnull
 	public String getDescription()
 	{
 		return "Bnd files";
 	}
 
+	@Override
 	@Nonnull
 	@NonNls
 	public String getDefaultExtension()
@@ -44,8 +46,9 @@ public class BndFileType extends ManifestFileType
 		return "bnd";
 	}
 
+	@Override
 	@Nullable
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return ManifestIcons.BndFileType;
 	}

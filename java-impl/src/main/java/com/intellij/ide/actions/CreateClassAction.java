@@ -39,6 +39,7 @@ import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.annotations.RequiredDispatchThread;
+import consulo.awt.TargetAWT;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtension;
 
@@ -71,7 +72,7 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 			final JavaCreateFromTemplateHandler handler = new JavaCreateFromTemplateHandler();
 			if(handler.handlesTemplate(template) && JavaCreateFromTemplateHandler.canCreate(directory))
 			{
-				builder.addKind(template.getName(), JavaFileType.INSTANCE.getIcon(), template.getName());
+				builder.addKind(template.getName(), TargetAWT.to(JavaFileType.INSTANCE.getIcon()), template.getName());
 			}
 		}
 
