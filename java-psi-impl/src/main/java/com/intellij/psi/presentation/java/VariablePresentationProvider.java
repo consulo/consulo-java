@@ -21,6 +21,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.psi.PsiVariable;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 /**
@@ -43,7 +44,7 @@ public class VariablePresentationProvider<T extends PsiVariable & NavigationItem
 
       @Override
       public Icon getIcon(boolean open) {
-        return IconDescriptorUpdaters.getIcon(variable, 0);
+        return TargetAWT.to(IconDescriptorUpdaters.getIcon(variable, 0));
       }
     };
   }

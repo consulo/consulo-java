@@ -49,6 +49,7 @@ import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.list.PopupListElementRenderer;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
 
@@ -175,7 +176,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
 			@Override
 			public Icon getIconFor(T aValue)
 			{
-				return IconDescriptorUpdaters.getIcon(aValue, 0);
+				return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
 			}
 		};
 

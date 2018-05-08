@@ -41,6 +41,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.util.PsiUtilCore;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.ide.projectView.impl.nodes.PackageElement;
 
@@ -105,7 +106,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
 
     LOG.assertTrue(value.isValid());
 
-    Icon icon = IconDescriptorUpdaters.getIcon(value, flags);
+    Icon icon = TargetAWT.to(IconDescriptorUpdaters.getIcon(value, flags));
     data.setIcon(icon);
     data.setPresentableText(myName);
     if (isDeprecated()) {

@@ -34,6 +34,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.icons.AllIcons;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.help.HelpManager;
@@ -627,7 +628,7 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
       switch (modelColumn) {
         case FIELD_COLUMN:
         {
-          Icon icon = IconDescriptorUpdaters.getIcon(field, Iconable.ICON_FLAG_VISIBILITY);
+          Icon icon = TargetAWT.to(IconDescriptorUpdaters.getIcon(field, Iconable.ICON_FLAG_VISIBILITY));
           setIcon(icon);
           setDisabledIcon(icon);
           configureColors(isSelected, table, hasFocus, row, column);
@@ -647,7 +648,7 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
 
             PsiMethod existing = myClass.findMethodBySignature(prototype, false);
             if (existing != null) {
-              methodIcon = IconDescriptorUpdaters.getIcon(existing, Iconable.ICON_FLAG_VISIBILITY);
+              methodIcon = TargetAWT.to(IconDescriptorUpdaters.getIcon(existing, Iconable.ICON_FLAG_VISIBILITY));
             }
 
             PsiMethod[] superMethods = prototype.findSuperMethods(myClass);

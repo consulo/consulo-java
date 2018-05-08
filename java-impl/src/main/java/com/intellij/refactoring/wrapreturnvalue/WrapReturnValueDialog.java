@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -221,7 +222,7 @@ class WrapReturnValueDialog extends RefactoringDialog {
         if (value instanceof PsiField) {
           final PsiField field = (PsiField)value;
           setText(field.getName());
-          setIcon(IconDescriptorUpdaters.getIcon(field, Iconable.ICON_FLAG_VISIBILITY));
+          setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(field, Iconable.ICON_FLAG_VISIBILITY)));
         }
       }
     });

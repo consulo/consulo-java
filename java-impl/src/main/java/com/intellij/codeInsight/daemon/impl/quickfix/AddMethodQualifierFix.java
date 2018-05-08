@@ -35,6 +35,7 @@ import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.util.IncorrectOperationException;
 import consulo.annotations.RequiredReadAction;
 import consulo.annotations.RequiredWriteAction;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
 
@@ -191,7 +192,7 @@ public class AddMethodQualifierFix implements IntentionAction
 			@Override
 			public Icon getIconFor(final PsiVariable aValue)
 			{
-				return IconDescriptorUpdaters.getIcon(aValue, 0);
+				return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
 			}
 		};
 

@@ -15,17 +15,21 @@
  */
 package com.intellij.ide.util;
 
+import java.awt.Component;
+import java.awt.Font;
+
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+
 import com.intellij.icons.AllIcons;
-import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.psi.PsiClass;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.SimpleTextAttributes;
-
-import javax.swing.*;
-import java.awt.*;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 public class FQNameCellRenderer extends SimpleColoredComponent implements ListCellRenderer{
   private final Font FONT;
@@ -48,7 +52,7 @@ public class FQNameCellRenderer extends SimpleColoredComponent implements ListCe
 
     if (value instanceof PsiClass) {
       PsiClass aClass = (PsiClass)value;
-      setIcon(IconDescriptorUpdaters.getIcon(aClass, 0));
+      setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(aClass, 0)));
       if (aClass.getQualifiedName() != null) {
         SimpleTextAttributes attributes;
         if (aClass.isDeprecated()) {

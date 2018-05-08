@@ -15,6 +15,23 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
+import javax.annotation.Nullable;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
+
 import com.intellij.ide.util.DirectoryChooser;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -32,14 +49,12 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.MoveDestination;
 import com.intellij.refactoring.PackageWrapper;
-import com.intellij.ui.*;
-import javax.annotation.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
+import com.intellij.ui.CollectionComboBoxModel;
+import com.intellij.ui.ComboboxSpeedSearch;
+import com.intellij.ui.ComboboxWithBrowseButton;
+import com.intellij.ui.EditorComboBox;
+import com.intellij.ui.ListCellRendererWrapper;
+import consulo.awt.TargetAWT;
 
 /**
  * User: anna
@@ -103,7 +118,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
                             boolean selected,
                             boolean hasFocus) {
         if (itemWrapper != NULL_WRAPPER && itemWrapper != null) {
-          setIcon(itemWrapper.getIcon(fileIndex));
+          setIcon(TargetAWT.to(itemWrapper.getIcon(fileIndex)));
 
           setText(itemWrapper.getRelativeToProjectPath());
         }

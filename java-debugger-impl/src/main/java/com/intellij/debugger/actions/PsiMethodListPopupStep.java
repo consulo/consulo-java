@@ -23,6 +23,7 @@ import javax.swing.Icon;
 import com.intellij.codeInsight.unwrap.ScopeHighlighter;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.icons.AllIcons;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.popup.ListPopupStep;
@@ -81,7 +82,7 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget>
 	{
 		if(aValue instanceof MethodSmartStepTarget)
 		{
-			return IconDescriptorUpdaters.getIcon(((MethodSmartStepTarget) aValue).getMethod(), 0);
+			return TargetAWT.to(IconDescriptorUpdaters.getIcon(((MethodSmartStepTarget) aValue).getMethod(), 0));
 		}
 		if(aValue instanceof LambdaSmartStepTarget)
 		{

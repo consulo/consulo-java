@@ -23,11 +23,10 @@ import java.util.StringJoiner;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
@@ -50,6 +49,7 @@ import com.intellij.util.PlatformIcons;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 /**
@@ -376,7 +376,7 @@ public class JavaReflectionReferenceUtil
 			{
 				types.add(getTypeText(parameter.getType(), method));
 			}
-			final Icon icon = IconDescriptorUpdaters.getIcon(method, Iconable.ICON_FLAG_VISIBILITY);
+			final Icon icon = TargetAWT.to(IconDescriptorUpdaters.getIcon(method, Iconable.ICON_FLAG_VISIBILITY));
 			return ReflectiveSignature.create(icon, types);
 		}
 		return null;
@@ -536,7 +536,7 @@ public class JavaReflectionReferenceUtil
 			return create(null, typeTexts);
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		public static ReflectiveSignature create(@javax.annotation.Nullable Icon icon, @Nonnull List<String> typeTexts)
 		{
 			if(!typeTexts.isEmpty() && !typeTexts.contains(null))

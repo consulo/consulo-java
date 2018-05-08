@@ -54,6 +54,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.ui.LayeredIcon;
 import consulo.annotations.RequiredDispatchThread;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor implements Navigatable
@@ -106,7 +107,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
 	public final boolean update()
 	{
 		final CompositeAppearance oldText = myHighlightedText;
-		final Icon oldIcon = getIcon();
+		final Icon oldIcon = TargetAWT.to(getIcon());
 
 		int flags = Iconable.ICON_FLAG_VISIBILITY;
 		if(isMarkReadOnly())
@@ -128,7 +129,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
 			return true;
 		}
 
-		Icon newIcon = IconDescriptorUpdaters.getIcon(enclosingElement, flags);
+		Icon newIcon = TargetAWT.to(IconDescriptorUpdaters.getIcon(enclosingElement, flags));
 		if(changes && myIsBase)
 		{
 			final LayeredIcon icon = new LayeredIcon(2);

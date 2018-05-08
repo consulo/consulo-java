@@ -15,14 +15,17 @@
  */
 package com.intellij.refactoring.ui;
 
-import consulo.ide.IconDescriptorUpdaters;
+import java.awt.Component;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
+
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.PsiFormatUtil;
-
-import javax.swing.*;
-import java.awt.*;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  *  @author dsl
@@ -43,8 +46,7 @@ public class MethodCellRenderer extends DefaultListCellRenderer {
               PsiFormatUtil.SHOW_TYPE);
     setText(text);
 
-    Icon icon = IconDescriptorUpdaters.getIcon(method, Iconable.ICON_FLAG_VISIBILITY);
-    if(icon != null) setIcon(icon);
+    setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(method, Iconable.ICON_FLAG_VISIBILITY)));
     return this;
   }
 

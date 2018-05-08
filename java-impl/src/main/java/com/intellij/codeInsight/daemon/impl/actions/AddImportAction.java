@@ -58,6 +58,7 @@ import com.intellij.ui.popup.list.PopupListElementRenderer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
 import consulo.annotations.RequiredReadAction;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
 
@@ -162,7 +163,7 @@ public class AddImportAction implements QuestionAction
 			@RequiredReadAction
 			public Icon getIconFor(PsiClass aValue)
 			{
-				return IconDescriptorUpdaters.getIcon(aValue, 0);
+				return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
 			}
 		};
 		ListPopupImpl popup = new ListPopupImpl(step)

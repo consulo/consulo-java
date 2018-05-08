@@ -15,56 +15,63 @@
  */
 package com.intellij.refactoring.ui;
 
-import consulo.ide.IconDescriptorUpdaters;
-import com.intellij.ui.ListCellRendererWrapper;
+import javax.annotation.Nonnull;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiClass;
 import com.intellij.refactoring.RefactoringBundle;
-import javax.annotation.Nonnull;
-
-import javax.swing.*;
+import com.intellij.ui.ListCellRendererWrapper;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * Renders a list cell which contains a class.
  *
  * @author dsl
- * Date: 18.06.2002
+ *         Date: 18.06.2002
  */
-public class ClassCellRenderer extends ListCellRendererWrapper<PsiClass> {
-  private final boolean myShowReadOnly;
+public class ClassCellRenderer extends ListCellRendererWrapper<PsiClass>
+{
+	private final boolean myShowReadOnly;
 
-  public ClassCellRenderer(ListCellRenderer original) {
-    super();
-    myShowReadOnly = true;
-  }
+	public ClassCellRenderer(ListCellRenderer original)
+	{
+		super();
+		myShowReadOnly = true;
+	}
 
-  @Override
-  public void customize(JList list, PsiClass aClass, int index, boolean selected, boolean hasFocus) {
-    if (aClass != null) {
-      setText(getClassText(aClass));
+	@Override
+	public void customize(JList list, PsiClass aClass, int index, boolean selected, boolean hasFocus)
+	{
+		if(aClass != null)
+		{
+			setText(getClassText(aClass));
 
-      int flags = Iconable.ICON_FLAG_VISIBILITY;
-      if (myShowReadOnly) {
-        flags |= Iconable.ICON_FLAG_READ_STATUS;
-      }
-      Icon icon = IconDescriptorUpdaters.getIcon(aClass, flags);
-      if (icon != null) {
-        setIcon(icon);
-      }
-    }
-  }
+			int flags = Iconable.ICON_FLAG_VISIBILITY;
+			if(myShowReadOnly)
+			{
+				flags |= Iconable.ICON_FLAG_READ_STATUS;
+			}
+			setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(aClass, flags)));
+		}
+	}
 
-  private static String getClassText(@Nonnull PsiClass aClass) {
-    String qualifiedName = aClass.getQualifiedName();
-    if (qualifiedName != null) {
-      return qualifiedName;
-    }
+	private static String getClassText(@Nonnull PsiClass aClass)
+	{
+		String qualifiedName = aClass.getQualifiedName();
+		if(qualifiedName != null)
+		{
+			return qualifiedName;
+		}
 
-    String name = aClass.getName();
-    if (name != null) {
-      return name;
-    }
+		String name = aClass.getName();
+		if(name != null)
+		{
+			return name;
+		}
 
-    return RefactoringBundle.message("anonymous.class.text");
-  }
+		return RefactoringBundle.message("anonymous.class.text");
+	}
 }

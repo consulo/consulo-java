@@ -20,6 +20,7 @@ import java.awt.Font;
 import javax.swing.Icon;
 
 import com.intellij.icons.AllIcons;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
@@ -116,7 +117,7 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 			return true;
 		}
 
-		final Icon newRawIcon = IconDescriptorUpdaters.getIcon(psiClass, flags);
+		final Icon newRawIcon = TargetAWT.to(IconDescriptorUpdaters.getIcon(psiClass, flags));
 		final Icon newStateIcon = psiClass instanceof PsiClass ? calculateState((PsiClass) psiClass) : AllIcons.Hierarchy.MethodDefined;
 
 		if(changes || newRawIcon != myRawIcon || newStateIcon != myStateIcon)

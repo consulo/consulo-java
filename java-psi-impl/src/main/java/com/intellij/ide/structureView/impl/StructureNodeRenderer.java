@@ -30,6 +30,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMember;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
+import consulo.awt.TargetAWT;
 
 public class StructureNodeRenderer extends ColoredTreeCellRenderer {
   public void customizeCellRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -59,7 +60,7 @@ public class StructureNodeRenderer extends ColoredTreeCellRenderer {
       }
     }
 
-    result.setIcon(descriptor.getIcon());
+    result.setIcon(TargetAWT.to(descriptor.getIcon()));
     return result;
   }
 

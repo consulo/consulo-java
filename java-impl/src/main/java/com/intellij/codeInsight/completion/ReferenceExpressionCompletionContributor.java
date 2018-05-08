@@ -23,10 +23,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.featureStatistics.FeatureUsageTracker;
@@ -55,7 +54,6 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ide.IconDescriptorUpdaters;
 
@@ -429,7 +427,7 @@ public class ReferenceExpressionCompletionContributor
 				presentable,
 				methodName + "(" + prefix + ")"
 		};
-		result.consume(new ExpressionLookupItem(conversion, PlatformIcons.METHOD_ICON, presentable, lookupStrings)
+		result.consume(new ExpressionLookupItem(conversion, AllIcons.Nodes.Method, presentable, lookupStrings)
 		{
 			@Override
 			public void handleInsert(InsertionContext context)

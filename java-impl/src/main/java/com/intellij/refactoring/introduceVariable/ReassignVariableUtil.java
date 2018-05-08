@@ -15,10 +15,14 @@
  */
 package com.intellij.refactoring.introduceVariable;
 
+import java.awt.Point;
+
+import javax.annotation.Nullable;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
-import consulo.ide.IconDescriptorUpdaters;
-import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -32,11 +36,11 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.rename.inplace.InplaceRefactoring;
+import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBList;
-
-import javax.swing.*;
-import java.awt.*;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * User: anna
@@ -72,7 +76,7 @@ public class ReassignVariableUtil {
           public void customize(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             if (value instanceof PsiVariable) {
               setText(((PsiVariable)value).getName());
-              setIcon(IconDescriptorUpdaters.getIcon(((PsiVariable)value), 0));
+              setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(((PsiVariable)value), 0)));
             }
           }
         });
@@ -95,8 +99,8 @@ public class ReassignVariableUtil {
     return false;
   }
 
-  @javax.annotation.Nullable
-  static PsiType getVariableType(@javax.annotation.Nullable PsiDeclarationStatement declaration) {
+  @Nullable
+  static PsiType getVariableType(@Nullable PsiDeclarationStatement declaration) {
     if (declaration != null) {
       final PsiElement[] declaredElements = declaration.getDeclaredElements();
       if (declaredElements.length > 0 && declaredElements[0] instanceof PsiVariable) {

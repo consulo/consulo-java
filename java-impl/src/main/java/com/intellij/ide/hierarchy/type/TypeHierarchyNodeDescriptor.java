@@ -30,6 +30,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFunctionalExpression;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.ui.LayeredIcon;
+import consulo.awt.TargetAWT;
 
 public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 {
@@ -60,7 +61,7 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 		if(changes && myIsBase)
 		{
 			final LayeredIcon icon = new LayeredIcon(2);
-			icon.setIcon(getIcon(), 0);
+			icon.setIcon(TargetAWT.to(getIcon()), 0);
 			icon.setIcon(AllIcons.Hierarchy.Base, 1, -AllIcons.Hierarchy.Base.getIconWidth() / 2, 0);
 			setIcon(icon);
 		}

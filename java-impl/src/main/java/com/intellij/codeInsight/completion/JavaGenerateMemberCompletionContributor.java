@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.Icon;
-
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.GenerationInfo;
 import com.intellij.codeInsight.generation.GetterSetterPrototypeProvider;
@@ -43,11 +41,12 @@ import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.RowIcon;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 
 /**
  * @author peter
@@ -108,7 +107,7 @@ public class JavaGenerateMemberCompletionContributor
 			{
 				if(parent.findMethodBySignature(prototype, false) == null && addedSignatures.add(prototype.getSignature(PsiSubstitutor.EMPTY)))
 				{
-					Icon icon = IconDescriptorUpdaters.getIcon(prototype, Iconable.ICON_FLAG_VISIBILITY);
+					Image icon = IconDescriptorUpdaters.getIcon(prototype, Iconable.ICON_FLAG_VISIBILITY);
 					result.addElement(createGenerateMethodElement(prototype, PsiSubstitutor.EMPTY, icon, "", new InsertHandler<LookupElement>()
 					{
 						@Override
@@ -151,7 +150,7 @@ public class JavaGenerateMemberCompletionContributor
 
 	private static LookupElementBuilder createOverridingLookupElement(boolean implemented, final PsiMethod baseMethod, PsiClass baseClass, PsiSubstitutor substitutor)
 	{
-		RowIcon icon = new RowIcon(IconDescriptorUpdaters.getIcon(baseMethod, 0), implemented ? AllIcons.Gutter.ImplementingMethod : AllIcons.Gutter.OverridingMethod);
+		Image icon = ImageEffects.appendRight(IconDescriptorUpdaters.getIcon(baseMethod, 0), implemented ? AllIcons.Gutter.ImplementingMethod : AllIcons.Gutter.OverridingMethod);
 		return createGenerateMethodElement(baseMethod, substitutor, icon, baseClass.getName(), new InsertHandler<LookupElement>()
 		{
 			@Override
@@ -194,7 +193,7 @@ public class JavaGenerateMemberCompletionContributor
 		}
 	}
 
-	private static LookupElementBuilder createGenerateMethodElement(PsiMethod prototype, PsiSubstitutor substitutor, Icon icon, String typeText, InsertHandler<LookupElement> insertHandler)
+	private static LookupElementBuilder createGenerateMethodElement(PsiMethod prototype, PsiSubstitutor substitutor, Image icon, String typeText, InsertHandler<LookupElement> insertHandler)
 	{
 		String methodName = prototype.getName();
 

@@ -15,7 +15,22 @@
  */
 package com.intellij.refactoring.move.moveInstanceMethod;
 
-import consulo.ide.IconDescriptorUpdaters;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.AbstractListModel;
+import javax.swing.Box;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -30,11 +45,8 @@ import com.intellij.refactoring.ui.JavaVisibilityPanel;
 import com.intellij.refactoring.ui.RefactoringDialog;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBList;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author dsl
@@ -144,7 +156,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
       final String text = PsiFormatUtil.formatVariable(psiVariable,
                                                        PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE,
                                                        PsiSubstitutor.EMPTY);
-      setIcon(IconDescriptorUpdaters.getIcon(psiVariable, 0));
+      setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(psiVariable, 0)));
       setText(text);
       return this;
     }

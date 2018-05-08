@@ -19,9 +19,8 @@ import java.util.Collections;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -29,7 +28,9 @@ import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiType;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
 
 /**
  * @author peter
@@ -37,7 +38,7 @@ import consulo.ide.IconDescriptorUpdaters;
 public class ExpressionLookupItem extends LookupElement implements TypedLookupItem
 {
 	private final PsiExpression myExpression;
-	private final Icon myIcon;
+	private final Image myIcon;
 	private final String myPresentableText;
 	private final String myLookupString;
 	private final Set<String> myAllLookupStrings;
@@ -47,7 +48,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 		this(expression, getExpressionIcon(expression), expression.getText(), expression.getText());
 	}
 
-	public ExpressionLookupItem(final PsiExpression expression, @javax.annotation.Nullable Icon icon, String presentableText, String... lookupStrings)
+	public ExpressionLookupItem(final PsiExpression expression, @Nullable Image icon, String presentableText, String... lookupStrings)
 	{
 		myExpression = expression;
 		myPresentableText = presentableText;
@@ -57,7 +58,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 	}
 
 	@Nullable
-	private static Icon getExpressionIcon(@Nonnull PsiExpression expression)
+	private static Image getExpressionIcon(@Nonnull PsiExpression expression)
 	{
 		if(expression instanceof PsiReferenceExpression)
 		{
@@ -84,7 +85,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 	@Override
 	public void renderElement(LookupElementPresentation presentation)
 	{
-		presentation.setIcon(myIcon);
+		presentation.setIcon(TargetAWT.to(myIcon));
 		presentation.setItemText(myPresentableText);
 		PsiType type = getType();
 		presentation.setTypeText(type == null ? null : type.getPresentableText());

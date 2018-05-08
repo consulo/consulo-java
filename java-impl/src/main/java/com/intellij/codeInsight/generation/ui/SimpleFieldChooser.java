@@ -15,7 +15,16 @@
  */
 package com.intellij.codeInsight.generation.ui;
 
-import consulo.ide.IconDescriptorUpdaters;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JList;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiField;
@@ -24,10 +33,8 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.ui.DoubleClickListener;
 import com.intellij.ui.components.JBList;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author ven
@@ -76,7 +83,7 @@ public class SimpleFieldChooser extends DialogWrapper {
       Icon icon = null;
       if (value instanceof PsiField) {
         PsiField field = (PsiField)value;
-        icon = IconDescriptorUpdaters.getIcon(field, 0);
+        icon = TargetAWT.to(IconDescriptorUpdaters.getIcon(field, 0));
         final String text = PsiFormatUtil.formatVariable(field, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE, PsiSubstitutor.EMPTY);
         setText(text);
       }

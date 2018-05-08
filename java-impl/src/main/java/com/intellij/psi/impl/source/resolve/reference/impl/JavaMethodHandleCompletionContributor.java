@@ -28,9 +28,8 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -38,6 +37,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PsiJavaElementPattern;
 import com.intellij.patterns.PsiMethodPattern;
@@ -45,8 +45,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Consumer;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.ui.image.Image;
 
 /**
  * @author Pavel.Dolgov
@@ -172,7 +172,7 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
 		final String presentableText = PsiNameHelper.getShortClassName(JAVA_LANG_INVOKE_METHOD_TYPE) + "." + METHOD_TYPE + shortTypes;
 		final String lookupText = METHOD_TYPE + signature.getText(true, PsiNameHelper::getShortClassName);
 
-		return lookupExpression(expression, PlatformIcons.METHOD_ICON, presentableText, lookupText);
+		return lookupExpression(expression, AllIcons.Nodes.Method, presentableText, lookupText);
 	}
 
 	private static void addFieldHandleVariants(@Nonnull PsiElement position, @Nonnull Consumer<LookupElement> result)
@@ -212,13 +212,13 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
 				final PsiExpression expression = factory.createExpressionFromText(typeText + ".class", context);
 
 				final String shortType = PsiNameHelper.getShortClassName(typeText);
-				result.consume(lookupExpression(expression, PlatformIcons.CLASS_ICON, shortType + ".class", shortType));
+				result.consume(lookupExpression(expression, AllIcons.Nodes.Class, shortType + ".class", shortType));
 			}
 		}
 	}
 
 	@Nonnull
-	private static LookupElement lookupExpression(@Nonnull PsiExpression expression, @Nullable Icon icon, @Nonnull String presentableText, @Nonnull String lookupText)
+	private static LookupElement lookupExpression(@Nonnull PsiExpression expression, @Nullable Image icon, @Nonnull String presentableText, @Nonnull String lookupText)
 	{
 		final LookupElement element = new ExpressionLookupItem(expression, icon, presentableText, lookupText)
 		{

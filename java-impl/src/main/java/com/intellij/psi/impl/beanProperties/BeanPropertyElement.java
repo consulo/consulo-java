@@ -15,8 +15,12 @@
  */
 package com.intellij.psi.impl.beanProperties;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.icons.AllIcons;
-import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -29,11 +33,8 @@ import com.intellij.psi.meta.PsiMetaOwner;
 import com.intellij.psi.meta.PsiPresentableMetaData;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import javax.swing.*;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author peter
@@ -117,9 +118,9 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public Icon getIcon() {
-    return IconDescriptorUpdaters.getIcon(this, 0);
+    return TargetAWT.to(IconDescriptorUpdaters.getIcon(this, 0));
   }
 
   @Override

@@ -33,6 +33,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiTreeUtil;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 public class JavaPresentationUtil {
@@ -65,7 +66,7 @@ public class JavaPresentationUtil {
 
       @Override
       public Icon getIcon(boolean open) {
-        return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY);
+        return TargetAWT.to(IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY));
       }
     };
   }
@@ -92,7 +93,7 @@ public class JavaPresentationUtil {
 
       @Override
       public Icon getIcon(boolean open) {
-        return IconDescriptorUpdaters.getIcon(psiField, Iconable.ICON_FLAG_VISIBILITY);
+        return TargetAWT.to(IconDescriptorUpdaters.getIcon(psiField, Iconable.ICON_FLAG_VISIBILITY));
       }
     };
   }

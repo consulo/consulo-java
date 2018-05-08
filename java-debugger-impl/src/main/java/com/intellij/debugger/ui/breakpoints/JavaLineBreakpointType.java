@@ -19,12 +19,11 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
@@ -52,6 +51,7 @@ import com.intellij.xdebugger.breakpoints.ui.XBreakpointGroupingRule;
 import com.intellij.xdebugger.impl.XSourcePositionImpl;
 import com.intellij.xdebugger.impl.breakpoints.XLineBreakpointImpl;
 import consulo.annotations.RequiredReadAction;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 /**
@@ -243,7 +243,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		@Override
 		public Icon getIcon()
 		{
-			return myElement != null ? IconDescriptorUpdaters.getIcon(myElement, 0) : AllIcons.Debugger.Db_set_breakpoint;
+			return myElement != null ? TargetAWT.to(IconDescriptorUpdaters.getIcon(myElement, 0)) : AllIcons.Debugger.Db_set_breakpoint;
 		}
 
 		@RequiredReadAction

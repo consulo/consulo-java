@@ -17,17 +17,23 @@ package com.intellij.psi.filters.getters;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.TypedLookupItem;
-import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import org.jetbrains.annotations.NonNls;
+import consulo.awt.TargetAWT;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author peter
@@ -53,7 +59,7 @@ public class ClassLiteralLookupElement extends LookupElement implements TypedLoo
   @Override
   public void renderElement(LookupElementPresentation presentation) {
     presentation.setItemText(getLookupString());
-    presentation.setIcon(IconDescriptorUpdaters.getIcon(myExpr, 0));
+    presentation.setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(myExpr, 0)));
     String pkg = StringUtil.getPackageName(myCanonicalText);
     if (StringUtil.isNotEmpty(pkg)) {
       presentation.setTailText(" (" + pkg + ")", true);

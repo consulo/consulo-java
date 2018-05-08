@@ -25,6 +25,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
+import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 /**
@@ -46,7 +47,7 @@ public class ParameterClassMember implements ClassMember {
   @Override
   public void renderTreeNode(SimpleColoredComponent component, JTree tree) {
     SpeedSearchUtil.appendFragmentsForSpeedSearch(tree, getText(), SimpleTextAttributes.REGULAR_ATTRIBUTES, false, component);
-    component.setIcon(IconDescriptorUpdaters.getIcon(myParameter, 0));
+    component.setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(myParameter, 0)));
   }
 
   @Override
