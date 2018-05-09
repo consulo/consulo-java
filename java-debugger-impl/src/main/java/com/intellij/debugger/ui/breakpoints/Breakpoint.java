@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -91,6 +90,7 @@ import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.VoidValue;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.ui.image.Image;
 
 public abstract class Breakpoint<P extends JavaBreakpointProperties> implements FilteredRequestor, ClassPrepareRequestor
 {
@@ -215,7 +215,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return null;
 	}
 
-	public abstract Icon getIcon();
+	public abstract Image getIcon();
 
 	public abstract void reload();
 

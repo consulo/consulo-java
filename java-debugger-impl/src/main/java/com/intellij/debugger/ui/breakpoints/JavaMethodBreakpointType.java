@@ -15,8 +15,6 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nonnull;
 
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
@@ -28,6 +26,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.ui.image.Image;
 
 /**
  * @author Eugene Zhuravlev
@@ -48,14 +47,14 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 
 	@Nonnull
 	@Override
-	public Icon getEnabledIcon()
+	public Image getEnabledIcon()
 	{
 		return AllIcons.Debugger.Db_method_breakpoint;
 	}
 
 	@Nonnull
 	@Override
-	public Icon getDisabledIcon()
+	public Image getDisabledIcon()
 	{
 		return AllIcons.Debugger.Db_disabled_method_breakpoint;
 	}

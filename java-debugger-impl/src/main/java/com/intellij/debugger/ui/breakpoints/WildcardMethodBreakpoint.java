@@ -20,11 +20,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
-import javax.swing.Icon;
-
-import org.jdom.Element;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jdom.Element;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -58,6 +57,7 @@ import consulo.internal.com.sun.jdi.event.MethodEntryEvent;
 import consulo.internal.com.sun.jdi.event.MethodExitEvent;
 import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
+import consulo.ui.image.Image;
 
 public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointProperties> implements MethodBreakpointBase
 {
@@ -127,7 +127,7 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		if(!isEnabled())
 		{

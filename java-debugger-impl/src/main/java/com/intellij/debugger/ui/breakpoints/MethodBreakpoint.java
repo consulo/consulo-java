@@ -29,12 +29,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import org.jetbrains.org.objectweb.asm.Label;
 import org.jetbrains.org.objectweb.asm.MethodVisitor;
@@ -92,6 +91,7 @@ import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
+import consulo.ui.image.Image;
 
 public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakpointProperties> implements MethodBreakpointBase
 {
@@ -409,7 +409,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 	}
 
 	@Override
-	protected Icon getDisabledIcon(boolean isMuted)
+	protected Image getDisabledIcon(boolean isMuted)
 	{
 		final Breakpoint master = DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager().findMasterBreakpoint(this);
 		if(master != null)
@@ -421,21 +421,21 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 
 	@Override
 	@Nonnull
-	protected Icon getInvalidIcon(boolean isMuted)
+	protected Image getInvalidIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_invalid_method_breakpoint : AllIcons.Debugger.Db_invalid_method_breakpoint;
 	}
 
 	@Override
 	@Nonnull
-	protected Icon getVerifiedIcon(boolean isMuted)
+	protected Image getVerifiedIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_verified_method_breakpoint : AllIcons.Debugger.Db_verified_method_breakpoint;
 	}
 
 	@Override
 	@Nonnull
-	protected Icon getVerifiedWarningsIcon(boolean isMuted)
+	protected Image getVerifiedWarningsIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_method_warning_breakpoint : AllIcons.Debugger.Db_method_warning_breakpoint;
 	}

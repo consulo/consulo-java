@@ -20,8 +20,6 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import javax.swing.Icon;
-
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
@@ -55,6 +53,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.internal.com.sun.jdi.request.ExceptionRequest;
+import consulo.ui.image.Image;
 
 public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointProperties>
 {
@@ -134,7 +133,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		if(!isEnabled())
 		{

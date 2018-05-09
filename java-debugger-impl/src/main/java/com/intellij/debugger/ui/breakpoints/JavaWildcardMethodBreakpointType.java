@@ -16,10 +16,9 @@
 package com.intellij.debugger.ui.breakpoints;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
-import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.HelpID;
@@ -30,6 +29,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.ui.image.Image;
 
 /**
  * @author Egor
@@ -43,14 +43,14 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
 
 	@Nonnull
 	@Override
-	public Icon getEnabledIcon()
+	public Image getEnabledIcon()
 	{
 		return AllIcons.Debugger.Db_method_breakpoint;
 	}
 
 	@Nonnull
 	@Override
-	public Icon getDisabledIcon()
+	public Image getDisabledIcon()
 	{
 		return AllIcons.Debugger.Db_disabled_method_breakpoint;
 	}

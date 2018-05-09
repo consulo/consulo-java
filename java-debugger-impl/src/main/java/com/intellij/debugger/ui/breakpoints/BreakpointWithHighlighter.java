@@ -15,11 +15,10 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import javax.swing.Icon;
-
-import org.jdom.Element;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jdom.Element;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
@@ -54,6 +53,7 @@ import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xml.CommonXmlStrings;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.ui.image.Image;
 
 public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperties> extends Breakpoint<P>
 {
@@ -63,7 +63,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	private SourcePosition mySourcePosition;
 
 	private boolean myVisible = true;
-	private volatile Icon myIcon = getSetIcon(false);
+	private volatile Image myIcon = getSetIcon(false);
 	@javax.annotation.Nullable
 	private String myClassName;
 	@javax.annotation.Nullable
@@ -73,21 +73,21 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 
 	protected abstract void createRequestForPreparedClass(final DebugProcessImpl debugProcess, final ReferenceType classType);
 
-	protected abstract Icon getDisabledIcon(boolean isMuted);
+	protected abstract Image getDisabledIcon(boolean isMuted);
 
-	protected abstract Icon getInvalidIcon(boolean isMuted);
+	protected abstract Image getInvalidIcon(boolean isMuted);
 
-	protected Icon getSetIcon(boolean isMuted)
+	protected Image getSetIcon(boolean isMuted)
 	{
 		return null;
 	}
 
-	protected abstract Icon getVerifiedIcon(boolean isMuted);
+	protected abstract Image getVerifiedIcon(boolean isMuted);
 
-	protected abstract Icon getVerifiedWarningsIcon(boolean isMuted);
+	protected abstract Image getVerifiedWarningsIcon(boolean isMuted);
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return myIcon;
 	}
@@ -145,7 +145,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		myPackageName = JVMNameUtil.getSourcePositionPackageDisplayName(debugProcess, getSourcePosition());
 	}
 
-	private Icon calcIcon(@javax.annotation.Nullable DebugProcessImpl debugProcess)
+	private Image calcIcon(@javax.annotation.Nullable DebugProcessImpl debugProcess)
 	{
 		final boolean muted = debugProcess != null && isMuted(debugProcess);
 		if(!isEnabled())

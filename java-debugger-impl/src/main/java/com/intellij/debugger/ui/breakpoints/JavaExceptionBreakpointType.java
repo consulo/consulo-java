@@ -16,10 +16,9 @@
 package com.intellij.debugger.ui.breakpoints;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
-import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.HelpID;
@@ -37,6 +36,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.ui.image.Image;
 
 /**
  * @author Eugene Zhuravlev
@@ -52,14 +52,14 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 
 	@Nonnull
 	@Override
-	public Icon getEnabledIcon()
+	public Image getEnabledIcon()
 	{
 		return AllIcons.Debugger.Db_exception_breakpoint;
 	}
 
 	@Nonnull
 	@Override
-	public Icon getDisabledIcon()
+	public Image getDisabledIcon()
 	{
 		return AllIcons.Debugger.Db_disabled_exception_breakpoint;
 	}

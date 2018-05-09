@@ -17,7 +17,6 @@
 package com.intellij.debugger.ui.breakpoints;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -62,6 +61,7 @@ import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.internal.com.sun.jdi.event.ModificationWatchpointEvent;
 import consulo.internal.com.sun.jdi.request.AccessWatchpointRequest;
 import consulo.internal.com.sun.jdi.request.ModificationWatchpointRequest;
+import consulo.ui.image.Image;
 
 
 /*
@@ -98,7 +98,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 	}
 
 	@Override
-	protected Icon getDisabledIcon(boolean isMuted)
+	protected Image getDisabledIcon(boolean isMuted)
 	{
 		final Breakpoint master = DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager().findMasterBreakpoint(this);
 		if(isMuted)
@@ -112,25 +112,25 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 	}
 
 	@Override
-	protected Icon getSetIcon(boolean isMuted)
+	protected Image getSetIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_field_breakpoint : AllIcons.Debugger.Db_field_breakpoint;
 	}
 
 	@Override
-	protected Icon getInvalidIcon(boolean isMuted)
+	protected Image getInvalidIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_invalid_field_breakpoint : AllIcons.Debugger.Db_invalid_field_breakpoint;
 	}
 
 	@Override
-	protected Icon getVerifiedIcon(boolean isMuted)
+	protected Image getVerifiedIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_verified_field_breakpoint : AllIcons.Debugger.Db_verified_field_breakpoint;
 	}
 
 	@Override
-	protected Icon getVerifiedWarningsIcon(boolean isMuted)
+	protected Image getVerifiedWarningsIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_field_warning_breakpoint : AllIcons.Debugger.Db_field_warning_breakpoint;
 	}

@@ -26,11 +26,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -65,6 +63,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpointType;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.ui.image.Image;
 
 public class LineBreakpoint<P extends JavaBreakpointProperties> extends BreakpointWithHighlighter<P>
 {
@@ -80,7 +79,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 	}
 
 	@Override
-	protected Icon getDisabledIcon(boolean isMuted)
+	protected Image getDisabledIcon(boolean isMuted)
 	{
 		if(DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager().findMasterBreakpoint(this) != null)
 		{
@@ -90,13 +89,13 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 	}
 
 	@Override
-	protected Icon getInvalidIcon(boolean isMuted)
+	protected Image getInvalidIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_invalid_breakpoint : AllIcons.Debugger.Db_invalid_breakpoint;
 	}
 
 	@Override
-	protected Icon getVerifiedIcon(boolean isMuted)
+	protected Image getVerifiedIcon(boolean isMuted)
 	{
 		if(isRemoveAfterHit())
 		{
@@ -106,7 +105,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 	}
 
 	@Override
-	protected Icon getVerifiedWarningsIcon(boolean isMuted)
+	protected Image getVerifiedWarningsIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_verified_warning_breakpoint : AllIcons.Debugger.Db_verified_warning_breakpoint;
 	}
