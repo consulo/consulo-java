@@ -20,7 +20,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.Icon;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -51,8 +50,8 @@ import com.intellij.xdebugger.breakpoints.ui.XBreakpointGroupingRule;
 import com.intellij.xdebugger.impl.XSourcePositionImpl;
 import com.intellij.xdebugger.impl.breakpoints.XLineBreakpointImpl;
 import consulo.annotations.RequiredReadAction;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
 
 /**
  * Base class for java line-connected exceptions (line, method, field)
@@ -241,9 +240,9 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 
 		@RequiredReadAction
 		@Override
-		public Icon getIcon()
+		public Image getIcon()
 		{
-			return myElement != null ? TargetAWT.to(IconDescriptorUpdaters.getIcon(myElement, 0)) : AllIcons.Debugger.Db_set_breakpoint;
+			return myElement != null ? IconDescriptorUpdaters.getIcon(myElement, 0) : AllIcons.Debugger.Db_set_breakpoint;
 		}
 
 		@RequiredReadAction
@@ -285,7 +284,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		}
 
 		@Override
-		public Icon getIcon()
+		public Image getIcon()
 		{
 			return AllIcons.Debugger.Db_set_breakpoint;
 		}
@@ -299,7 +298,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		}
 
 		@Override
-		public Icon getIcon()
+		public Image getIcon()
 		{
 			return AllIcons.Debugger.LambdaBreakpoint;
 		}
