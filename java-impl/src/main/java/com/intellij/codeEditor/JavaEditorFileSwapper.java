@@ -15,6 +15,8 @@
  */
 package com.intellij.codeEditor;
 
+import javax.annotation.Nullable;
+
 import com.intellij.openapi.fileEditor.impl.EditorFileSwapper;
 import com.intellij.openapi.fileEditor.impl.EditorWithProviderComposite;
 import com.intellij.openapi.fileEditor.impl.text.TextEditorImpl;
@@ -22,84 +24,126 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiCompiledFile;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMember;
 import com.intellij.psi.impl.compiled.ClsClassImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import javax.annotation.Nullable;
+import consulo.annotations.RequiredReadAction;
 
-public class JavaEditorFileSwapper extends EditorFileSwapper {
+public class JavaEditorFileSwapper extends EditorFileSwapper
+{
+	@Override
+	@RequiredReadAction
+	public Pair<VirtualFile, Integer> getFileToSwapTo(Project project, EditorWithProviderComposite editorWithProviderComposite)
+	{
+		VirtualFile file = editorWithProviderComposite.getFile();
+		VirtualFile sourceFile = findSourceFile(project, file);
+		if(sourceFile == null)
+		{
+			return null;
+		}
 
-  public Pair<VirtualFile, Integer> getFileToSwapTo(Project project, EditorWithProviderComposite editorWithProviderComposite) {
-    VirtualFile file = editorWithProviderComposite.getFile();
-    VirtualFile sourceFile = findSourceFile(project, file);
-    if (sourceFile == null) return null;
+		Integer position = null;
 
-    Integer position = null;
+		TextEditorImpl oldEditor = findSinglePsiAwareEditor(editorWithProviderComposite.getEditors());
+		if(oldEditor != null)
+		{
+			PsiCompiledFile clsFile = (PsiCompiledFile) PsiManager.getInstance(project).findFile(file);
+			assert clsFile != null;
 
-    TextEditorImpl oldEditor = findSinglePsiAwareEditor(editorWithProviderComposite.getEditors());
-    if (oldEditor != null) {
-      PsiCompiledFile clsFile = (PsiCompiledFile)PsiManager.getInstance(project).findFile(file);
-      assert clsFile != null;
+			int offset = oldEditor.getEditor().getCaretModel().getOffset();
 
-      int offset = oldEditor.getEditor().getCaretModel().getOffset();
+			PsiElement elementAt = clsFile.findElementAt(offset);
+			PsiMember member = PsiTreeUtil.getParentOfType(elementAt, PsiMember.class, false);
 
-      PsiElement elementAt = clsFile.findElementAt(offset);
-      PsiMember member = PsiTreeUtil.getParentOfType(elementAt, PsiMember.class, false);
+			if(member instanceof PsiClass)
+			{
+				boolean isFirstMember = true;
 
-      if (member instanceof PsiClass) {
-        boolean isFirstMember = true;
+				for(PsiElement e = member.getFirstChild(); e != null; e = e.getNextSibling())
+				{
+					if(e instanceof PsiMember)
+					{
+						if(offset < e.getTextRange().getEndOffset())
+						{
+							if(!isFirstMember)
+							{
+								member = (PsiMember) e;
+							}
 
-        for (PsiElement e = member.getFirstChild(); e != null; e = e.getNextSibling()) {
-          if (e instanceof PsiMember) {
-            if (offset < e.getTextRange().getEndOffset()) {
-              if (!isFirstMember) {
-                member = (PsiMember)e;
-              }
+							break;
+						}
 
-              break;
-            }
+						isFirstMember = false;
+					}
+				}
+			}
 
-            isFirstMember = false;
-          }
-        }
-      }
+			if(member != null)
+			{
+				PsiElement navigationElement = member.getNavigationElement();
+				if(Comparing.equal(navigationElement.getContainingFile().getVirtualFile(), sourceFile))
+				{
+					position = navigationElement.getTextOffset();
+				}
+			}
+		}
 
-      if (member != null) {
-        PsiElement navigationElement = member.getNavigationElement();
-        if (Comparing.equal(navigationElement.getContainingFile().getVirtualFile(), sourceFile)) {
-          position = navigationElement.getTextOffset();
-        }
-      }
-    }
+		return Pair.create(sourceFile, position);
+	}
 
-    return Pair.create(sourceFile, position);
-  }
+	@Nullable
+	@RequiredReadAction
+	public static VirtualFile findSourceFile(Project project, VirtualFile eachFile)
+	{
+		PsiFile psiFile = PsiManager.getInstance(project).findFile(eachFile);
+		if(!(psiFile instanceof PsiCompiledFile))
+		{
+			return null;
+		}
 
-  @Nullable
-  public static VirtualFile findSourceFile(Project project, VirtualFile eachFile) {
-    PsiFile psiFile = PsiManager.getInstance(project).findFile(eachFile);
-    if (!(psiFile instanceof PsiCompiledFile)) return null;
+		String fqn = getFQN(psiFile);
+		if(fqn == null)
+		{
+			return null;
+		}
 
-    String fqn = getFQN(psiFile);
-    if (fqn == null) return null;
+		PsiClass clsClass = JavaPsiFacade.getInstance(project).findClass(fqn, GlobalSearchScope.allScope(project));
+		if(!(clsClass instanceof ClsClassImpl))
+		{
+			return null;
+		}
 
-    PsiClass clsClass = JavaPsiFacade.getInstance(project).findClass(fqn, GlobalSearchScope.allScope(project));
-    if (!(clsClass instanceof ClsClassImpl)) return null;
+		PsiClass sourceClass = ((ClsClassImpl) clsClass).getSourceMirrorClass();
+		if(sourceClass == null)
+		{
+			return null;
+		}
 
-    PsiClass sourceClass = ((ClsClassImpl)clsClass).getSourceMirrorClass();
-    if (sourceClass == null) return null;
+		VirtualFile result = sourceClass.getContainingFile().getVirtualFile();
+		assert result != null;
+		return result;
+	}
 
-    VirtualFile result = sourceClass.getContainingFile().getVirtualFile();
-    assert result != null;
-    return result;
-  }
-
-  @Nullable
-  public static String getFQN(PsiFile psiFile) {
-    if (!(psiFile instanceof PsiJavaFile)) return null;
-    PsiClass[] classes = ((PsiJavaFile)psiFile).getClasses();
-    if (classes.length == 0) return null;
-    return classes[0].getQualifiedName();
-  }
+	@Nullable
+	public static String getFQN(PsiFile psiFile)
+	{
+		if(!(psiFile instanceof PsiJavaFile))
+		{
+			return null;
+		}
+		PsiClass[] classes = ((PsiJavaFile) psiFile).getClasses();
+		if(classes.length == 0)
+		{
+			return null;
+		}
+		return classes[0].getQualifiedName();
+	}
 }
