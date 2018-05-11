@@ -5,8 +5,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.openapi.fileEditor.impl.EditorFileSwapper;
-import com.intellij.openapi.fileEditor.impl.EditorWithProviderComposite;
-import com.intellij.openapi.fileEditor.impl.text.TextEditorImpl;
+import com.intellij.openapi.fileEditor.impl.text.DesktopTextEditorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
@@ -21,6 +20,7 @@ import com.intellij.psi.PsiMember;
 import com.intellij.psi.impl.compiled.ClsClassImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotations.RequiredReadAction;
+import consulo.fileEditor.impl.EditorWithProviderComposite;
 
 public class JavaEditorFileSwapper extends EditorFileSwapper
 {
@@ -37,7 +37,7 @@ public class JavaEditorFileSwapper extends EditorFileSwapper
 
 		Integer position = null;
 
-		TextEditorImpl oldEditor = findSinglePsiAwareEditor(editor.getEditors());
+		DesktopTextEditorImpl oldEditor = findSinglePsiAwareEditor(editor.getEditors());
 		if(oldEditor != null)
 		{
 			PsiCompiledFile clsFile = (PsiCompiledFile) PsiManager.getInstance(project).findFile(file);
