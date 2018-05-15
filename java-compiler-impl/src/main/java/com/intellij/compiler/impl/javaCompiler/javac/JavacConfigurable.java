@@ -15,90 +15,108 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import com.intellij.compiler.options.ComparingUtils;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.RawCommandLineEditor;
-
-import javax.swing.*;
+import consulo.annotations.RequiredDispatchThread;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Mar 30, 2004
  */
-public class JavacConfigurable implements Configurable{
-  private JPanel myPanel;
-  private JCheckBox myCbDebuggingInfo;
-  private JCheckBox myCbDeprecation;
-  private JCheckBox myCbGenerateNoWarnings;
-  private RawCommandLineEditor myAdditionalOptionsField;
-  private JTextField myJavacMaximumHeapField;
-  private final JpsJavaCompilerOptions myJavacSettings;
+public class JavacConfigurable implements Configurable
+{
+	private JPanel myPanel;
+	private JCheckBox myCbDebuggingInfo;
+	private JCheckBox myCbDeprecation;
+	private JCheckBox myCbGenerateNoWarnings;
+	private RawCommandLineEditor myAdditionalOptionsField;
+	private JTextField myJavacMaximumHeapField;
+	private final JpsJavaCompilerOptions myJavacSettings;
 
-  public JavacConfigurable(final Project project) {
-    myJavacSettings = JavacCompilerConfiguration.getInstance(project);
-    myAdditionalOptionsField.setDialogCaption(CompilerBundle.message("java.compiler.option.additional.command.line.parameters"));
-  }
+	public JavacConfigurable(final Project project)
+	{
+		myJavacSettings = JavacCompilerConfiguration.getInstance(project);
+		myAdditionalOptionsField.setDialogCaption(CompilerBundle.message("java.compiler.option.additional.command.line.parameters"));
+	}
 
-  @Override
-  public String getDisplayName() {
-    return "Javac";
-  }
+	@Override
+	public String getDisplayName()
+	{
+		return "Javac";
+	}
 
-  @Override
-  public String getHelpTopic() {
-    return null;
-  }
+	@RequiredDispatchThread
+	@Override
+	public JComponent createComponent()
+	{
+		return myPanel;
+	}
 
-  @Override
-  public JComponent createComponent() {
-    return myPanel;
-  }
+	@RequiredDispatchThread
+	@Override
+	public boolean isModified()
+	{
+		boolean isModified = false;
+		isModified |= isModified(myJavacMaximumHeapField, myJavacSettings.MAXIMUM_HEAP_SIZE);
+		isModified |= myCbDeprecation.isSelected() != myJavacSettings.DEPRECATION;
+		isModified |= myCbDebuggingInfo.isSelected() != myJavacSettings.DEBUGGING_INFO;
+		isModified |= myCbGenerateNoWarnings.isSelected() != myJavacSettings.GENERATE_NO_WARNINGS;
+		isModified |= !myAdditionalOptionsField.getText().equals(myJavacSettings.ADDITIONAL_OPTIONS_STRING);
+		return isModified;
+	}
 
-  @Override
-  public boolean isModified() {
-    boolean isModified = false;
-    isModified |= ComparingUtils.isModified(myJavacMaximumHeapField, myJavacSettings.MAXIMUM_HEAP_SIZE);
+	public static boolean isModified(JTextField textField, int value)
+	{
+		try
+		{
+			int fieldValue = Integer.parseInt(textField.getText().trim());
+			return fieldValue != value;
+		}
+		catch(NumberFormatException e)
+		{
+			return false;
+		}
+	}
 
-    isModified |= ComparingUtils.isModified(myCbDeprecation, myJavacSettings.DEPRECATION);
-    isModified |= ComparingUtils.isModified(myCbDebuggingInfo, myJavacSettings.DEBUGGING_INFO);
-    isModified |= ComparingUtils.isModified(myCbGenerateNoWarnings, myJavacSettings.GENERATE_NO_WARNINGS);
-    isModified |= ComparingUtils.isModified(myAdditionalOptionsField, myJavacSettings.ADDITIONAL_OPTIONS_STRING);
-    return isModified;
-  }
+	@RequiredDispatchThread
+	@Override
+	public void apply() throws ConfigurationException
+	{
+		try
+		{
+			myJavacSettings.MAXIMUM_HEAP_SIZE = Integer.parseInt(myJavacMaximumHeapField.getText());
+			if(myJavacSettings.MAXIMUM_HEAP_SIZE < 1)
+			{
+				myJavacSettings.MAXIMUM_HEAP_SIZE = 128;
+			}
+		}
+		catch(NumberFormatException exception)
+		{
+			myJavacSettings.MAXIMUM_HEAP_SIZE = 128;
+		}
 
-  @Override
-  public void apply() throws ConfigurationException {
+		myJavacSettings.DEPRECATION = myCbDeprecation.isSelected();
+		myJavacSettings.DEBUGGING_INFO = myCbDebuggingInfo.isSelected();
+		myJavacSettings.GENERATE_NO_WARNINGS = myCbGenerateNoWarnings.isSelected();
+		myJavacSettings.ADDITIONAL_OPTIONS_STRING = myAdditionalOptionsField.getText();
+	}
 
-    try {
-      myJavacSettings.MAXIMUM_HEAP_SIZE = Integer.parseInt(myJavacMaximumHeapField.getText());
-      if(myJavacSettings.MAXIMUM_HEAP_SIZE < 1) {
-        myJavacSettings.MAXIMUM_HEAP_SIZE = 128;
-      }
-    }
-    catch(NumberFormatException exception) {
-      myJavacSettings.MAXIMUM_HEAP_SIZE = 128;
-    }
-
-    myJavacSettings.DEPRECATION =  myCbDeprecation.isSelected();
-    myJavacSettings.DEBUGGING_INFO = myCbDebuggingInfo.isSelected();
-    myJavacSettings.GENERATE_NO_WARNINGS = myCbGenerateNoWarnings.isSelected();
-    myJavacSettings.ADDITIONAL_OPTIONS_STRING = myAdditionalOptionsField.getText();
-  }
-
-  @Override
-  public void reset() {
-    myJavacMaximumHeapField.setText(Integer.toString(myJavacSettings.MAXIMUM_HEAP_SIZE));
-    myCbDeprecation.setSelected(myJavacSettings.DEPRECATION);
-    myCbDebuggingInfo.setSelected(myJavacSettings.DEBUGGING_INFO);
-    myCbGenerateNoWarnings.setSelected(myJavacSettings.GENERATE_NO_WARNINGS);
-    myAdditionalOptionsField.setText(myJavacSettings.ADDITIONAL_OPTIONS_STRING);
-  }
-
-  @Override
-  public void disposeUIResources() {
-  }
-
+	@RequiredDispatchThread
+	@Override
+	public void reset()
+	{
+		myJavacMaximumHeapField.setText(Integer.toString(myJavacSettings.MAXIMUM_HEAP_SIZE));
+		myCbDeprecation.setSelected(myJavacSettings.DEPRECATION);
+		myCbDebuggingInfo.setSelected(myJavacSettings.DEBUGGING_INFO);
+		myCbGenerateNoWarnings.setSelected(myJavacSettings.GENERATE_NO_WARNINGS);
+		myAdditionalOptionsField.setText(myJavacSettings.ADDITIONAL_OPTIONS_STRING);
+	}
 }
