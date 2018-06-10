@@ -29,6 +29,7 @@ import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.impl.PsiImplUtil;
+import consulo.awt.TargetAWT;
 import consulo.java.JavaIcons;
 
 public class JavaModulePresentationProvider implements ItemPresentationProvider<PsiJavaModule>
@@ -76,7 +77,7 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
 			@Override
 			public Icon getIcon(boolean unused)
 			{
-				return JavaIcons.Nodes.JavaModule;
+				return TargetAWT.to(JavaIcons.Nodes.JavaModule);
 			}
 		};
 	}

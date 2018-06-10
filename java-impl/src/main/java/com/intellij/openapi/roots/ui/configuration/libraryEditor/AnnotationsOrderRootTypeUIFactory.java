@@ -20,7 +20,7 @@
  */
 package com.intellij.openapi.roots.ui.configuration.libraryEditor;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
@@ -29,25 +29,28 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.ui.SdkPathEditor;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.ui.OrderRootTypeUIFactory;
+import consulo.ui.image.Image;
 
 public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory
 {
+	@Nonnull
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.Modules.Annotation;
 	}
 
+	@Nonnull
 	@Override
 	public String getNodeText()
 	{
 		return JavaCoreBundle.message("sdk.configure.external.annotations.tab");
 	}
 
+	@Nonnull
 	@Override
 	public SdkPathEditor createPathEditor(Sdk sdk)
 	{
-		return new SdkPathEditor(JavaCoreBundle.message("sdk.configure.external.annotations.tab"), AnnotationOrderRootType.getInstance(),
-				new FileChooserDescriptor(false, true, true, false, true, false), sdk);
+		return new SdkPathEditor(JavaCoreBundle.message("sdk.configure.external.annotations.tab"), AnnotationOrderRootType.getInstance(), new FileChooserDescriptor(false, true, true, false, true, false), sdk);
 	}
 }

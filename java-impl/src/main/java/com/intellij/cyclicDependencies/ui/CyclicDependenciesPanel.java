@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -35,10 +36,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import com.intellij.openapi.util.Key;
-import consulo.java.JavaIcons;
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.cyclicDependencies.CyclicDependenciesBuilder;
@@ -51,6 +48,7 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.packageDependencies.DependenciesToolWindow;
 import com.intellij.packageDependencies.DependencyUISettings;
@@ -70,6 +68,8 @@ import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.EditSourceOnDoubleClickHandler;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
+import consulo.awt.TargetAWT;
+import consulo.java.JavaIcons;
 
 /**
  * User: anna
@@ -466,8 +466,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
 
   private final class ShowFilesAction extends ToggleAction {
     ShowFilesAction() {
-      super(AnalysisScopeBundle.message("action.show.files"), AnalysisScopeBundle.message("action.show.files.description"),
-            JavaIcons.FileTypes.Java);
+      super(AnalysisScopeBundle.message("action.show.files"), AnalysisScopeBundle.message("action.show.files.description"), TargetAWT.to(JavaIcons.FileTypes.Java));
     }
 
     public boolean isSelected(AnActionEvent event) {

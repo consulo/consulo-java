@@ -16,29 +16,32 @@
 
 package com.intellij.openapi.roots.ui.configuration.libraryEditor;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 
-import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.ui.SdkPathEditor;
 import com.intellij.openapi.roots.ui.OrderRootTypeUIFactory;
 import consulo.java.JavaBundle;
 import consulo.java.JavaIcons;
+import consulo.ui.image.Image;
 
 public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFactory
 {
+	@Nonnull
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return JavaIcons.Nodes.NativeLibrariesFolder;
 	}
 
+	@Nonnull
 	@Override
 	public String getNodeText()
 	{
 		return JavaBundle.message("project.roots.native.library.node.text");
 	}
 
+	@Nonnull
 	@Override
 	public SdkPathEditor createPathEditor(Sdk sdk)
 	{

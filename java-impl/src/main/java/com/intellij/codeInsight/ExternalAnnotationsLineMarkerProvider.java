@@ -57,6 +57,7 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import consulo.annotations.RequiredDispatchThread;
+import consulo.awt.TargetAWT;
 import consulo.java.JavaIcons;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
 
@@ -87,7 +88,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 			return null;
 		}
 
-		return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.ExtAnnotation, Pass.LINE_MARKERS, ourTooltipProvider, MyIconGutterHandler.INSTANCE, GutterIconRenderer.Alignment
+		return new LineMarkerInfo<>(element, element.getTextRange(), TargetAWT.to(JavaIcons.Gutter.ExtAnnotation), Pass.LINE_MARKERS, ourTooltipProvider, MyIconGutterHandler.INSTANCE, GutterIconRenderer.Alignment
 				.RIGHT);
 	}
 
@@ -126,11 +127,11 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 		return "External annotations";
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Icon getIcon()
 	{
-		return JavaIcons.Gutter.ExtAnnotation;
+		return TargetAWT.to(JavaIcons.Gutter.ExtAnnotation);
 	}
 
 	private static class MyIconGutterHandler implements GutterIconNavigationHandler<PsiElement>
