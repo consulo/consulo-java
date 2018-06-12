@@ -15,10 +15,9 @@
  */
 package com.intellij.codeInsight.lookup;
 
-import java.awt.Color;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.CodeCompletionFeatures;
@@ -44,6 +43,8 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.ui.ColorIcon;
 import com.intellij.util.ui.JBUI;
+import consulo.awt.TargetAWT;
+import consulo.ui.shared.ColorValue;
 
 /**
  * @author peter
@@ -53,7 +54,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 	private static final String EQ = " = ";
 	@Nullable
 	private final MemberLookupHelper myHelper;
-	private final Color myColor;
+	private final ColorValue myColor;
 	private final String myTailText;
 	private PsiSubstitutor mySubstitutor = PsiSubstitutor.EMPTY;
 
@@ -80,7 +81,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		myTailText = getInitializerText(field);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private String getInitializerText(PsiVariable var)
 	{
 		if(myColor != null || !var.hasModifierProperty(PsiModifier.FINAL) || !var.hasModifierProperty(PsiModifier.STATIC))
@@ -110,8 +111,8 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		return var instanceof PsiFieldImpl ? ((PsiFieldImpl) var).getDetachedInitializer() : var.getInitializer();
 	}
 
-	@javax.annotation.Nullable
-	private static Color getInitializerColor(@Nonnull PsiVariable var)
+	@Nullable
+	private static ColorValue getInitializerColor(@Nonnull PsiVariable var)
 	{
 		if(!JavaColorProvider.isColorType(var.getType()))
 		{
@@ -190,7 +191,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		}
 		if(myColor != null)
 		{
-			presentation.setTypeText("", JBUI.scale(new ColorIcon(12, myColor)));
+			presentation.setTypeText("", JBUI.scale(new ColorIcon(12, TargetAWT.to(myColor))));
 		}
 		else
 		{

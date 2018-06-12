@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.components.ServiceManager;
@@ -39,6 +39,8 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.ui.JBUI;
+import consulo.ui.image.Image;
+import consulo.ui.migration.SwingImageRef;
 
 /**
  * Resolve small icons located in project for use in UI (e.g. gutter preview icon, lookups).
@@ -53,6 +55,10 @@ public class ProjectIconsAccessor implements Disposable
 		return ServiceManager.getService(project, ProjectIconsAccessor.class);
 	}
 
+	private static final int ICON_MAX_WEIGHT = 16;
+
+	private static final int ICON_MAX_HEIGHT = 16;
+
 	@NonNls
 	private static final String JAVAX_SWING_ICON = "javax.swing.Icon";
 
@@ -66,8 +72,8 @@ public class ProjectIconsAccessor implements Disposable
 	{
 	}
 
-	@javax.annotation.Nullable
-	public VirtualFile resolveIconFile(PsiType type, @javax.annotation.Nullable PsiExpression initializer)
+	@Nullable
+	public VirtualFile resolveIconFile(PsiType type, @Nullable PsiExpression initializer)
 	{
 		if(initializer == null || !initializer.isValid() || !isIconClassType(type))
 		{
@@ -116,9 +122,7 @@ public class ProjectIconsAccessor implements Disposable
 				file = psiFileSystemItem.getVirtualFile();
 			}
 
-			if(file == null || file.isDirectory() ||
-					!isIconFileExtension(file.getExtension()) ||
-					file.getLength() > ICON_MAX_SIZE)
+			if(file == null || file.isDirectory() || !isIconFileExtension(file.getExtension()) || file.getLength() > ICON_MAX_SIZE)
 			{
 				continue;
 			}
@@ -128,8 +132,8 @@ public class ProjectIconsAccessor implements Disposable
 		return null;
 	}
 
-	@javax.annotation.Nullable
-	public Icon getIcon(@Nonnull VirtualFile file, @javax.annotation.Nullable PsiElement element)
+	@Nullable
+	public Icon getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element)
 	{
 		final String path = file.getPath();
 		final long stamp = file.getModificationStamp();
@@ -139,11 +143,11 @@ public class ProjectIconsAccessor implements Disposable
 			try
 			{
 				final Icon icon = createOrFindBetterIcon(file, isConsuloProject(element));
-				iconInfo = new Pair<Long, Icon>(stamp, hasProperSize(icon) ? icon : null);
+				iconInfo = new Pair<>(stamp, hasProperSize(icon) ? icon : null);
 				myIconsCache.put(file.getPath(), iconInfo);
 			}
 			catch(Exception e)
-			{//
+			{
 				iconInfo = null;
 				myIconsCache.remove(path);
 			}
@@ -153,7 +157,7 @@ public class ProjectIconsAccessor implements Disposable
 
 	public static boolean isIconClassType(PsiType type)
 	{
-		return InheritanceUtil.isInheritor(type, JAVAX_SWING_ICON);
+		return InheritanceUtil.isInheritor(type, JAVAX_SWING_ICON) || InheritanceUtil.isInheritor(type, Image.class.getName()) || InheritanceUtil.isInheritor(type, SwingImageRef.class.getName());
 	}
 
 	private static boolean isIconFileExtension(String extension)
@@ -163,17 +167,16 @@ public class ProjectIconsAccessor implements Disposable
 
 	private static boolean hasProperSize(Icon icon)
 	{
-		return icon.getIconHeight() <= JBUI.scale(16) && icon.getIconWidth() <= JBUI.scale(16);
+		return icon.getIconHeight() <= JBUI.scale(ICON_MAX_WEIGHT) && icon.getIconWidth() <= JBUI.scale(ICON_MAX_HEIGHT);
 	}
 
-	private static boolean isConsuloProject(@javax.annotation.Nullable PsiElement element)
+	private static boolean isConsuloProject(@Nullable PsiElement element)
 	{
 		if(element == null)
 		{
 			return false;
 		}
-		return JavaPsiFacade.getInstance(element.getProject()).findClass(Application.class.getName(),
-				element.getResolveScope()) != null;
+		return JavaPsiFacade.getInstance(element.getProject()).findClass(Application.class.getName(), element.getResolveScope()) != null;
 	}
 
 	private static Icon createOrFindBetterIcon(VirtualFile file, boolean useIconLoader) throws IOException

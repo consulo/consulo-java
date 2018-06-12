@@ -117,13 +117,13 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 		return body.getStatements()[0] instanceof PsiReturnStatement;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static LineMarkerInfo<PsiElement> createIconLineMarker(PsiType type, @Nullable PsiExpression initializer)
 	{
 		return createIconLineMarker(type, initializer, initializer);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static LineMarkerInfo<PsiElement> createIconLineMarker(PsiType type, @Nullable PsiExpression initializer, PsiElement bindingElement)
 	{
 		if(initializer == null)

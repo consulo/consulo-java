@@ -19,6 +19,7 @@ import java.awt.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.openapi.editor.ElementColorProvider;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -33,6 +34,8 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.ui.ColorUtil;
 import consulo.annotations.RequiredReadAction;
 import consulo.annotations.RequiredWriteAction;
+import consulo.ui.shared.ColorValue;
+import consulo.ui.shared.RGBColor;
 
 /**
  * @author Konstantin Bulenkov
@@ -41,7 +44,7 @@ public class JavaColorProvider implements ElementColorProvider
 {
 	@RequiredReadAction
 	@Override
-	public Color getColorFrom(@Nonnull PsiElement element)
+	public ColorValue getColorFrom(@Nonnull PsiElement element)
 	{
 		return getJavaColorFromExpression(element);
 	}
@@ -64,7 +67,7 @@ public class JavaColorProvider implements ElementColorProvider
 	}
 
 	@Nullable
-	public static Color getJavaColorFromExpression(@Nullable PsiElement element)
+	public static ColorValue getJavaColorFromExpression(@Nullable PsiElement element)
 	{
 		if(element instanceof PsiNewExpression)
 		{
@@ -78,7 +81,7 @@ public class JavaColorProvider implements ElementColorProvider
 	}
 
 	@Nullable
-	private static Color getColor(PsiExpressionList list)
+	private static ColorValue getColor(PsiExpressionList list)
 	{
 		try
 		{
@@ -90,17 +93,38 @@ public class JavaColorProvider implements ElementColorProvider
 				switch(type)
 				{
 					case INT:
-						return new Color(getInt(args[0]));
+					{
+						int i = getInt(args[0]);
+						return new RGBColor((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF);
+					}
 					case INT_BOOL:
-						return new Color(getInt(args[0]), getBoolean(args[1]));
+					{
+						int i = getInt(args[0]);
+						if(getBoolean(args[1]))
+						{
+							return new RGBColor((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF, ((i >> 24) & 0xFF) / 255f);
+						}
+						return new RGBColor((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF);
+					}
 					case INT_x3:
-						return new Color(getInt(args[0]), getInt(args[1]), getInt(args[2]));
+						return new RGBColor(getInt(args[0]), getInt(args[1]), getInt(args[2]));
 					case INT_x4:
-						return new Color(getInt(args[0]), getInt(args[1]), getInt(args[2]), getInt(args[3]));
+						return new RGBColor(getInt(args[0]), getInt(args[1]), getInt(args[2]), getInt(args[3]) / 255f);
 					case FLOAT_x3:
-						return new Color(getFloat(args[0]), getFloat(args[1]), getFloat(args[2]));
+					{
+						float r = getFloat(args[0]);
+						float g = getFloat(args[1]);
+						float b = getFloat(args[2]);
+						return new RGBColor((int) (r * 255 + 0.5), (int) (g * 255 + 0.5), (int) (b * 255 + 0.5));
+					}
 					case FLOAT_x4:
-						return new Color(getFloat(args[0]), getFloat(args[1]), getFloat(args[2]), getFloat(args[3]));
+					{
+						float r = getFloat(args[0]);
+						float g = getFloat(args[1]);
+						float b = getFloat(args[2]);
+						float a = getFloat(args[3]);
+						return new RGBColor((int) (r * 255 + 0.5), (int) (g * 255 + 0.5), (int) (b * 255 + 0.5), a);
+					}
 				}
 			}
 		}
@@ -136,12 +160,12 @@ public class JavaColorProvider implements ElementColorProvider
 
 	public static int getInt(PsiExpression expr)
 	{
-		return ((Integer) getObject(expr)).intValue();
+		return ((Number) getObject(expr)).intValue();
 	}
 
 	public static float getFloat(PsiExpression expr)
 	{
-		return ((Float) getObject(expr)).floatValue();
+		return ((Number) getObject(expr)).floatValue();
 	}
 
 	public static boolean getBoolean(PsiExpression expr)
@@ -156,7 +180,7 @@ public class JavaColorProvider implements ElementColorProvider
 
 	@RequiredWriteAction
 	@Override
-	public void setColorTo(@Nonnull PsiElement element, @Nonnull Color color)
+	public void setColorTo(@Nonnull PsiElement element, @Nonnull ColorValue colorValue)
 	{
 		PsiExpressionList argumentList = ((PsiNewExpression) element).getArgumentList();
 		assert argumentList != null;
@@ -166,29 +190,35 @@ public class JavaColorProvider implements ElementColorProvider
 
 		assert type != null;
 
+		RGBColor rgb = colorValue.toRGB();
+
 		switch(type)
 		{
 			case INT:
 			case INT_BOOL:
-				replaceInt(expr[0], color.getRGB(), true);
+			{
+				int value = (((int) (rgb.getAlpha() * 255) & 0xFF) << 24) | ((rgb.getRed() & 0xFF) << 16) | ((rgb.getGreen() & 0xFF) << 8) | ((rgb.getBlue() & 0xFF) << 0);
+
+				replaceInt(expr[0], value, true);
 				return;
+			}
 			case INT_x3:
 			case INT_x4:
-				replaceInt(expr[0], color.getRed());
-				replaceInt(expr[1], color.getGreen());
-				replaceInt(expr[2], color.getBlue());
+				replaceInt(expr[0], rgb.getRed());
+				replaceInt(expr[1], rgb.getGreen());
+				replaceInt(expr[2], rgb.getBlue());
 				if(type == ColorConstructors.INT_x4)
 				{
-					replaceInt(expr[3], color.getAlpha());
+					replaceInt(expr[3], (int) (rgb.getAlpha() * 255));
 				}
-				else if(color.getAlpha() != 255)
+				else if(rgb.getAlpha() != 1f)
 				{
 					//todo add alpha
 				}
 				return;
 			case FLOAT_x3:
 			case FLOAT_x4:
-				float[] rgba = color.getColorComponents(null);
+				float[] rgba = rgb.getFloatValues();
 				replaceFloat(expr[0], rgba[0]);
 				replaceFloat(expr[1], rgba[1]);
 				replaceFloat(expr[2], rgba[2]);
@@ -196,7 +226,7 @@ public class JavaColorProvider implements ElementColorProvider
 				{
 					replaceFloat(expr[3], rgba.length == 4 ? rgba[3] : 0f);
 				}
-				else if(color.getAlpha() != 255)
+				else if(rgb.getAlpha() != 1f)
 				{
 					//todo add alpha
 				}
@@ -229,6 +259,11 @@ public class JavaColorProvider implements ElementColorProvider
 
 	private enum ColorConstructors
 	{
-		INT, INT_BOOL, INT_x3, INT_x4, FLOAT_x3, FLOAT_x4
+		INT,
+		INT_BOOL,
+		INT_x3,
+		INT_x4,
+		FLOAT_x3,
+		FLOAT_x4
 	}
 }
