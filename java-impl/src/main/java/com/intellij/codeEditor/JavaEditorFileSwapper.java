@@ -4,8 +4,8 @@ package com.intellij.codeEditor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.fileEditor.impl.EditorFileSwapper;
-import com.intellij.openapi.fileEditor.impl.text.DesktopTextEditorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
@@ -37,7 +37,7 @@ public class JavaEditorFileSwapper extends EditorFileSwapper
 
 		Integer position = null;
 
-		DesktopTextEditorImpl oldEditor = findSinglePsiAwareEditor(editor.getEditors());
+		TextEditor oldEditor = findSinglePsiAwareEditor(editor.getEditors());
 		if(oldEditor != null)
 		{
 			PsiCompiledFile clsFile = (PsiCompiledFile) PsiManager.getInstance(project).findFile(file);
