@@ -17,10 +17,9 @@ package com.intellij.codeInsight;
 
 import java.awt.event.MouseEvent;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -60,6 +59,7 @@ import consulo.annotations.RequiredDispatchThread;
 import consulo.awt.TargetAWT;
 import consulo.java.JavaIcons;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
+import consulo.ui.image.Image;
 
 public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDescriptor
 {
@@ -129,9 +129,9 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 
 	@Nullable
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
-		return TargetAWT.to(JavaIcons.Gutter.ExtAnnotation);
+		return JavaIcons.Gutter.ExtAnnotation;
 	}
 
 	private static class MyIconGutterHandler implements GutterIconNavigationHandler<PsiElement>

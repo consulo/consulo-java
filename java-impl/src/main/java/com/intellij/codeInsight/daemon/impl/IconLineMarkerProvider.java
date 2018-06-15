@@ -34,6 +34,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import consulo.annotations.RequiredReadAction;
+import consulo.ui.image.Image;
 
 /**
  * Shows small (16x16 or less) icons as gutters.
@@ -151,7 +152,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.Gutter.Colors;
 	}

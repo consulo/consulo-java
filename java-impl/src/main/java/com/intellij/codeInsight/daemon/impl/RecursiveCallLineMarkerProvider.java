@@ -21,9 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProviderDescriptor;
@@ -43,6 +42,7 @@ import com.intellij.psi.PsiThisExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.FunctionUtil;
 import consulo.annotations.RequiredReadAction;
+import consulo.ui.image.Image;
 
 /**
  * @author Danila Ponomarenko
@@ -104,7 +104,7 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 
 	@Nullable
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.Gutter.RecursiveMethod;
 	}
