@@ -29,8 +29,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeHighlighting.Pass;
@@ -106,6 +107,7 @@ import com.intellij.testFramework.LightPlatformTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.xml.XmlSchemaProvider;
+import consulo.ui.UIAccess;
 
 public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 {
@@ -196,9 +198,9 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 		DaemonCodeAnalyzerImpl daemonCodeAnalyzer = (DaemonCodeAnalyzerImpl) DaemonCodeAnalyzer.getInstance(getProject());
 		daemonCodeAnalyzer.prepareForTest();
 		final StartupManagerImpl startupManager = (StartupManagerImpl) StartupManagerEx.getInstanceEx(getProject());
-		startupManager.runStartupActivities();
+		startupManager.runStartupActivities(UIAccess.get());
 		startupManager.startCacheUpdate();
-		startupManager.runPostStartupActivities();
+		startupManager.runPostStartupActivities(UIAccess.get());
 		DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(false);
 
 		if(isPerformanceTest())
