@@ -2,7 +2,7 @@ package consulo.java.manifest.editor.models;
 
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestFile;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
 
@@ -29,7 +29,7 @@ public class FileTableModel extends ListTableModel<Header> {
     if (rowValue == null) {
       return;
     }
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+    WriteCommandAction.runWriteCommandAction(myManifestFile.getProject(), new Runnable() {
       @Override
       public void run() {
         rowValue.setName((String)aValue);
