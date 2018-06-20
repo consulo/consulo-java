@@ -17,6 +17,12 @@ package com.intellij.codeInsight.daemon;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.io.File;
+import java.util.Collection;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.analysis.PackagesScopesProvider;
 import com.intellij.application.options.colors.ScopeAttributesUtil;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -32,7 +38,6 @@ import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.packageDependencies.DependencyValidationManager;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiField;
@@ -42,17 +47,12 @@ import com.intellij.psi.search.scope.packageSet.NamedScopeManager;
 import com.intellij.psi.search.scope.packageSet.NamedScopesHolder;
 import com.intellij.psi.search.scope.packageSet.PatternPackageSet;
 import com.intellij.testFramework.IdeaTestUtil;
-import org.jetbrains.annotations.NonNls;
-
-import java.awt.*;
-import java.io.File;
-import java.util.Collection;
 
 /**
  * This class intended for "heavily-loaded" tests only, e.g. those need to setup separate project directory structure to run.
  * For "lightweight" tests use LightAdvHighlightingTest.
  */
-public class AdvHighlightingTest extends DaemonAnalyzerTestCase {
+public abstract class AdvHighlightingTest extends DaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
 
   @Override

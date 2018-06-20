@@ -20,12 +20,13 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-public class SuppressWarningsTest extends LightDaemonAnalyzerTestCase {
+import org.jetbrains.annotations.NonNls;
+import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+
+public abstract class SuppressWarningsTest extends LightDaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
 
   private void doTest(boolean checkWarnings) throws Exception {

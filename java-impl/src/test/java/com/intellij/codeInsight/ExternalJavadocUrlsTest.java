@@ -27,7 +27,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
  * User: anna
  * Date: 11/27/11
  */
-public class ExternalJavadocUrlsTest extends LightCodeInsightFixtureTestCase {
+public abstract class ExternalJavadocUrlsTest extends LightCodeInsightFixtureTestCase {
   private void doTest(String text, String... expectedSignature) {
     myFixture.configureByText("Test.java", text);
     final PsiElement elementAtCaret = myFixture.getElementAtCaret();

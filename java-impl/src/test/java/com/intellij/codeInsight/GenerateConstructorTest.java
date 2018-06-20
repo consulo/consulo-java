@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight;
 
+import java.util.List;
+
 import com.intellij.codeInsight.generation.ClassMember;
 import com.intellij.codeInsight.generation.GenerateConstructorHandler;
 import com.intellij.openapi.editor.Editor;
@@ -23,12 +25,10 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
-import java.util.List;
-
 /**
  * @author ven
  */
-public class GenerateConstructorTest extends LightCodeInsightTestCase {
+public abstract class GenerateConstructorTest extends LightCodeInsightTestCase {
   public void testAbstractClass() throws Exception { doTest(); }
   public void testPackageLocalClass() throws Exception { doTest(); }
   public void testPrivateClass() throws Exception { doTest(); }

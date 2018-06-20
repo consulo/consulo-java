@@ -23,9 +23,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
@@ -64,7 +65,7 @@ import consulo.java.codeInspection.JavaExtensionPoints;
  * This class is for "lightweight" tests only, i.e. those which can run inside default light project set up
  * For "heavyweight" tests use AdvHighlightingTest
  */
-public class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
+public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
 
   private UnusedSymbolLocalInspection myUnusedSymbolLocalInspection;

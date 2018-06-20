@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
  * User: anna
  * Date: 3/9/11
  */
-public class DiamondSuite {
+public abstract class DiamondSuite {
   private DiamondSuite() {
   }
 

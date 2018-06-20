@@ -10,7 +10,7 @@ import com.intellij.psi.PsiDocumentManager;
 
 import java.util.Collection;
 
-public class UnusedSymbolLocalTest extends DaemonAnalyzerTestCase {
+public abstract class UnusedSymbolLocalTest extends DaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/unusedDecls";
 
   @Override

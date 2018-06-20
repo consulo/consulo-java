@@ -9,7 +9,7 @@ import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.pom.java.LanguageLevel;
 
 
-public class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {
+public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/javaDoc";
 
   @Nonnull

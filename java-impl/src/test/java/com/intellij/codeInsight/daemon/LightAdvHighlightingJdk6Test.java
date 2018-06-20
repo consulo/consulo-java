@@ -15,6 +15,9 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
@@ -23,14 +26,12 @@ import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 /**
  * This class is for "lightweight" tests only, i.e. those which can run inside default light project set up.
  * For "heavyweight" tests use AdvHighlightingTest.
  */
-public class LightAdvHighlightingJdk6Test extends LightDaemonAnalyzerTestCase {
+public abstract class LightAdvHighlightingJdk6Test extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting6";
 
   private void doTest(boolean checkWarnings, boolean checkInfos, Class<?>... classes) {

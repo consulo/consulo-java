@@ -16,7 +16,7 @@ import com.intellij.util.ProcessingContext;
 /**
  * @author Maxim.Mossienko
  */
-public class WordCompletionTest extends CompletionTestCase {
+public abstract class WordCompletionTest extends CompletionTestCase {
   private static final String BASE_PATH = "/codeInsight/completion/word/";
 
   @Override

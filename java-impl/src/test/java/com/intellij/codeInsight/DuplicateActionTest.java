@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
-public class DuplicateActionTest extends LightCodeInsightFixtureTestCase
+public abstract class DuplicateActionTest extends LightCodeInsightFixtureTestCase
 {
 	public void testOneLine()
 	{

@@ -19,7 +19,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
 
-public class JavadocResolveTest extends DaemonAnalyzerTestCase {
+public abstract class JavadocResolveTest extends DaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/javaDoc/resolve";
 
   @Override

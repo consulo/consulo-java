@@ -15,13 +15,14 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
-public class HighlightSeverityTest extends LightDaemonAnalyzerTestCase {
+public abstract class HighlightSeverityTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/highlightSeverity";
 
 

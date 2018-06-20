@@ -26,7 +26,7 @@ import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 
-public class SuppressExternalTest extends UsefulTestCase {
+public abstract class SuppressExternalTest extends UsefulTestCase {
   protected CodeInsightTestFixture myFixture;
 
   private LanguageLevel myLanguageLevel;

@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon;
 
-public class TypeMatchingTest extends LightDaemonAnalyzerTestCase {
+public abstract class TypeMatchingTest extends LightDaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/typeMatching";
 
   public void testIf() throws Exception {

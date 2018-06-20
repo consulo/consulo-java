@@ -17,19 +17,19 @@ package com.intellij.codeInsight.daemon;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.InspectionProfileEntry;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * This class is for "lightweight" tests only, i.e. those which can run inside default light project set up
  * For "heavyweight" tests use AdvHighlightingTest
  */
-public class AmbiguousMethodCallTest extends LightDaemonAnalyzerTestCase {
+public abstract class AmbiguousMethodCallTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/ambiguousCalls";
 
   private void doTest(boolean checkWarnings, boolean checkInfos, InspectionProfileEntry... tools) throws Exception {

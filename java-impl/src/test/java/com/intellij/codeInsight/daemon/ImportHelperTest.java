@@ -46,7 +46,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ui.UIUtil;
 
 @DaemonAnalyzerTestCase.CanChangeDocumentDuringHighlighting
-public class ImportHelperTest extends DaemonAnalyzerTestCase
+public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 {
 	private static final Logger LOGGER = Logger.getInstance(ImportHelper.class);
 

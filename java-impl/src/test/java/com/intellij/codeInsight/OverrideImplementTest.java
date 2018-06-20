@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * @author ven
  */
-public class OverrideImplementTest extends LightCodeInsightTestCase {
+public abstract class OverrideImplementTest extends LightCodeInsightTestCase {
   private static final String BASE_DIR = "/codeInsight/overrideImplement/";
 
   @Override

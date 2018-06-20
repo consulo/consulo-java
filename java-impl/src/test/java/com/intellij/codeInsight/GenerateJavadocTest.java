@@ -11,7 +11,7 @@ import com.intellij.testFramework.PlatformTestCase;
  * @author mike
  */
 @PlatformTestCase.WrapInCommand
-public class GenerateJavadocTest extends CodeInsightTestCase {
+public abstract class GenerateJavadocTest extends CodeInsightTestCase {
   public void test1() throws Exception { doTest(); }
   public void test2() throws Exception { doTest(); }
   public void test3() throws Exception { doTest(); }

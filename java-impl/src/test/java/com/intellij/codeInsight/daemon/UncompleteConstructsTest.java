@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon;
 
-public class UncompleteConstructsTest extends LightDaemonAnalyzerTestCase {
+public abstract class UncompleteConstructsTest extends LightDaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/uncompleteConstructs";
 
   public void testIf1() throws Exception { doTest(); }

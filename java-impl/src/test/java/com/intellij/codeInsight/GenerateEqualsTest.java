@@ -6,7 +6,7 @@ import com.intellij.testFramework.IdeaTestUtil;
 /**
  * @author dsl
  */
-public class GenerateEqualsTest extends GenerateEqualsTestCase {
+public abstract class GenerateEqualsTest extends GenerateEqualsTestCase {
   public void testNoBaseEquals() throws Exception {
     doTest(new int[0], new int[0], new int[0], false);
   }

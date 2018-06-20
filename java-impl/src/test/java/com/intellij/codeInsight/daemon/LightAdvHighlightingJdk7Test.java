@@ -46,7 +46,7 @@ import consulo.java.codeInspection.JavaExtensionPoints;
  * This class is for "lightweight" tests only, i.e. those which can run inside default light project set up
  * For "heavyweight" tests use AdvHighlightingTest
  */
-public class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTestCase {
+public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting7";
 
   private void doTest(boolean checkWarnings, boolean checkInfos, Class<?>... classes) {

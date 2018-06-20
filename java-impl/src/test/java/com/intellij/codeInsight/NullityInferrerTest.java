@@ -29,7 +29,7 @@ import consulo.vfs.util.ArchiveVfsUtil;
  * User: anna
  * Date: Sep 2, 2010
  */
-public class NullityInferrerTest extends CodeInsightTestCase {
+public abstract class NullityInferrerTest extends CodeInsightTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

@@ -30,7 +30,7 @@ import com.intellij.testFramework.TestDataPath;
  * @author max
  */
 @TestDataPath("$CONTENT_ROOT/testData")
-public class CompleteStatementTest extends EditorActionTestCase {
+public abstract class CompleteStatementTest extends EditorActionTestCase {
   public void testAddMissingSemicolon() throws Exception { doTest(); }
 
   public void testAddMissingParen() throws Exception { doTest(); }

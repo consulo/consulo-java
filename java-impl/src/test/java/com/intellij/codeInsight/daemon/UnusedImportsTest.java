@@ -6,7 +6,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection;
 import com.intellij.psi.PsiFile;
 
-public class UnusedImportsTest extends DaemonAnalyzerTestCase {
+public abstract class UnusedImportsTest extends DaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/unusedImports";
 
   @Override

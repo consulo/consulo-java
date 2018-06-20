@@ -22,7 +22,7 @@ import consulo.codeInsight.TargetElementUtil;
 /**
  * User: anna
  */
-public class ImplementationsViewTest extends LightCodeInsightFixtureTestCase {
+public abstract class ImplementationsViewTest extends LightCodeInsightFixtureTestCase {
   public void testFromCompletion() {
     myFixture.configureByText("a.java", "public class Foo {\n" +
                                         "    private final String text;\n" +

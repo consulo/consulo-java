@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.defUse.DefUseInspection;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
@@ -27,7 +28,7 @@ import com.intellij.testFramework.IdeaTestUtil;
  * This class intended for "heavily-loaded" tests only, e.g. those need to setup separate project directory structure to run.
  * For "lightweight" tests please use {@linkplain LightAdvHighlightingJdk7Test}.
  */
-public class AdvHighlightingJdk7Test extends DaemonAnalyzerTestCase {
+public abstract class AdvHighlightingJdk7Test extends DaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting7/";
 
   @Override

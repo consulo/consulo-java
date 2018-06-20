@@ -59,7 +59,7 @@ import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.util.messages.MessageBusConnection;
 
-public class AddAnnotationFixTest extends UsefulTestCase {
+public abstract class AddAnnotationFixTest extends UsefulTestCase {
   private CodeInsightTestFixture myFixture;
   private Module myModule;
   private Project myProject;

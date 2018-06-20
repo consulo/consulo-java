@@ -35,7 +35,7 @@ import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ThrowableRunnable;
 
-public class LightAdvHighlightingPerformanceTest extends LightDaemonAnalyzerTestCase {
+public abstract class LightAdvHighlightingPerformanceTest extends LightDaemonAnalyzerTestCase {
   private final Disposable my = Disposer.newDisposable();
   @Override
   protected void setUp() throws Exception {

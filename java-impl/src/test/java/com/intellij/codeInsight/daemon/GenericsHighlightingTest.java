@@ -31,7 +31,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
 
-public class GenericsHighlightingTest extends LightDaemonAnalyzerTestCase {
+public abstract class GenericsHighlightingTest extends LightDaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/genericsHighlighting";
 
   @Nonnull
