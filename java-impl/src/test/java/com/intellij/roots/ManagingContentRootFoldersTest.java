@@ -19,7 +19,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import consulo.roots.impl.ExcludedContentFolderTypeProvider;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
-public class ManagingContentRootFoldersTest extends IdeaTestCase {
+public abstract class ManagingContentRootFoldersTest extends IdeaTestCase {
   private VirtualFile root;
   private ContentEntry entry;
   private ModifiableRootModel myModel;

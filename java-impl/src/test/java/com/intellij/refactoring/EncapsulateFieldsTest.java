@@ -37,7 +37,7 @@ import com.intellij.refactoring.encapsulateFields.FieldDescriptorImpl;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import junit.framework.Assert;
 
-public class EncapsulateFieldsTest extends MultiFileTestCase{
+public abstract class EncapsulateFieldsTest extends MultiFileTestCase{
   public void testAlreadyExist() throws Exception {
     doTest("i" , null);
   }

@@ -28,7 +28,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-public class ChangeSignatureTargetTest extends LightCodeInsightTestCase {
+public abstract class ChangeSignatureTargetTest extends LightCodeInsightTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

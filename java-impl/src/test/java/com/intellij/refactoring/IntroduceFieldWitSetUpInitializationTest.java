@@ -8,6 +8,9 @@
  */
 package com.intellij.refactoring;
 
+import java.io.File;
+
+import org.junit.Before;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.openapi.module.Module;
@@ -21,11 +24,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.introduceField.BaseExpressionToFieldHandler;
 import com.intellij.refactoring.introduceField.LocalToFieldHandler;
 import com.intellij.util.PathUtil;
-import org.junit.Before;
 
-import java.io.File;
-
-public class IntroduceFieldWitSetUpInitializationTest extends CodeInsightTestCase {
+public abstract class IntroduceFieldWitSetUpInitializationTest extends CodeInsightTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

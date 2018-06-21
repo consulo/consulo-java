@@ -32,7 +32,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
-public class MakeMethodStaticTest extends LightRefactoringTestCase {
+public abstract class MakeMethodStaticTest extends LightRefactoringTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

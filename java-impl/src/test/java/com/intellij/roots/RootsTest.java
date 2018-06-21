@@ -16,7 +16,7 @@ import com.intellij.testFramework.PsiTestUtil;
 /**
  *  @author dsl
  */
-public class RootsTest extends PsiTestCase {
+public abstract class RootsTest extends PsiTestCase {
   public void testTest1() {
     final String rootPath = "/moduleRootManager/roots/" + "test1";
     final VirtualFile[] rootFileBox = new VirtualFile[1];

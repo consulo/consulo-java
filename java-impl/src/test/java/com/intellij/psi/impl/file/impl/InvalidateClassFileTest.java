@@ -33,7 +33,7 @@ import java.io.File;
 /**
  * @author ven
  */
-public class InvalidateClassFileTest extends PsiTestCase {
+public abstract class InvalidateClassFileTest extends PsiTestCase {
   private File myRoot;
 
   private static final String BASE_PATH = "/psi/java/cls/";

@@ -26,7 +26,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author Denis Zhdanov
  * @since Apr 28, 2010 12:12:13 PM
  */
-public class JavaFormatterNewLineTest extends AbstractJavaFormatterTest {
+public abstract class JavaFormatterNewLineTest extends AbstractJavaFormatterTest {
 
   public void testAutomaticElseWrapping() throws Exception {
     getSettings().ELSE_ON_NEW_LINE = true;

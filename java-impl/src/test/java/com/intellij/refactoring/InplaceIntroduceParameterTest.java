@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
  * User: anna
  * Date: 3/16/11
  */
-public class InplaceIntroduceParameterTest extends AbstractJavaInplaceIntroduceTest {
+public abstract class InplaceIntroduceParameterTest extends AbstractJavaInplaceIntroduceTest {
 
   private static final String BASE_PATH = "/refactoring/inplaceIntroduceParameter/";
 

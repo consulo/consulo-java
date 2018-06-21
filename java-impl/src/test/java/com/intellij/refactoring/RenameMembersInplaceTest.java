@@ -32,7 +32,7 @@ import consulo.codeInsight.TargetElementUtil;
  * User: anna
  * Date: 12/4/11
  */
-public class RenameMembersInplaceTest extends LightCodeInsightTestCase {
+public abstract class RenameMembersInplaceTest extends LightCodeInsightTestCase {
   private static final String BASE_PATH = "/refactoring/renameInplace/";
 
   @Nonnull

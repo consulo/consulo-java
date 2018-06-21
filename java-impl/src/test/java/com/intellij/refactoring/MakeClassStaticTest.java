@@ -21,7 +21,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
-public class MakeClassStaticTest extends LightRefactoringTestCase {
+public abstract class MakeClassStaticTest extends LightRefactoringTestCase {
   private static final String TEST_ROOT = "/refactoring/makeClassStatic/";
 
   @Nonnull

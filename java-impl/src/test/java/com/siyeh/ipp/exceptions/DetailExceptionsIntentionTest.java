@@ -7,7 +7,7 @@ import com.siyeh.ipp.IPPTestCase;
  * @see DetailExceptionsIntention
  * @author Bas Leijdekkers
  */
-public class DetailExceptionsIntentionTest extends IPPTestCase {
+public abstract class DetailExceptionsIntentionTest extends IPPTestCase {
 
   public void testDisjunction() { assertIntentionNotAvailable(); }
   public void testSimple() { doTest(); }

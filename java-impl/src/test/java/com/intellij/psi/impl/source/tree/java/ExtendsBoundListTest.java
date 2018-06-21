@@ -22,7 +22,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 /**
  *  @author dsl
  */
-public class ExtendsBoundListTest extends LightCodeInsightTestCase {
+public abstract class ExtendsBoundListTest extends LightCodeInsightTestCase {
   public void testRemoveBoundFromFront() throws Exception {
     final PsiTypeParameter typeParameter = getTypeParameter();
     ApplicationManager.getApplication().runWriteAction(new Runnable() {

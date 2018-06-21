@@ -41,7 +41,7 @@ import java.io.PrintWriter;
  * To change this template use Options | File Templates.
  */
 
-public class TypeCookTest extends MultiFileTestCase {
+public abstract class TypeCookTest extends MultiFileTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

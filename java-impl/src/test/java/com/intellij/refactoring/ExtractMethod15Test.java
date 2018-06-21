@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
-public class ExtractMethod15Test extends LightCodeInsightTestCase {
+public abstract class ExtractMethod15Test extends LightCodeInsightTestCase {
   private static final String BASE_PATH = "/refactoring/extractMethod15/";
 
   @Nonnull

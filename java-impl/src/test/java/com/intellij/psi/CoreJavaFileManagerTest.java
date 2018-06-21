@@ -23,7 +23,7 @@ import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 
 
-public class CoreJavaFileManagerTest extends PsiTestCase {
+public abstract class CoreJavaFileManagerTest extends PsiTestCase {
 
   public void testNotNullInnerClass() throws Exception {
     VirtualFile root = PsiTestUtil.createTestProjectStructure(myProject, myModule, myFilesToDelete);

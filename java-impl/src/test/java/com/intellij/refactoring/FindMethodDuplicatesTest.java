@@ -4,7 +4,7 @@
  */
 package com.intellij.refactoring;
 
-public class FindMethodDuplicatesTest extends FindMethodDuplicatesBaseTest{
+public abstract class FindMethodDuplicatesTest extends FindMethodDuplicatesBaseTest{
 
   @Override
   protected String getTestFilePath() {

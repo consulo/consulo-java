@@ -31,7 +31,7 @@ import com.intellij.refactoring.util.VariableData;
 import com.intellij.util.Function;
 import com.intellij.util.VisibilityUtil;
 
-public class IntroduceParameterObjectTest extends MultiFileTestCase{
+public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
   @Override
   protected String getTestRoot() {
     return "/refactoring/introduceParameterObject/";

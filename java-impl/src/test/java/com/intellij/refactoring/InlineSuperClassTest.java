@@ -11,7 +11,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.inlineSuperClass.InlineSuperClassRefactoringProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
 
-public class InlineSuperClassTest extends MultiFileTestCase {
+public abstract class InlineSuperClassTest extends MultiFileTestCase {
   @Override
   protected String getTestRoot() {
     return "/refactoring/inlineSuperClass/";

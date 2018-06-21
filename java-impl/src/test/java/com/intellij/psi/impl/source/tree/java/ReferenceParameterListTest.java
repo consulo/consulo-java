@@ -10,7 +10,7 @@ import com.intellij.util.IncorrectOperationException;
 /**
  *  @author dsl
  */
-public class ReferenceParameterListTest extends PsiTestCase {
+public abstract class ReferenceParameterListTest extends PsiTestCase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ReferenceParameterListTest");
   public void testParameterListInExtends() throws Exception {
     final PsiManager manager = PsiManager.getInstance(myProject);

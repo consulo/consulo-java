@@ -11,7 +11,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 /**
  * @author dsl
  */
-public class ResolveMethod15Test extends Resolve15TestCase {
+public abstract class ResolveMethod15Test extends Resolve15TestCase {
   public void testStaticImportOnDemand() throws Exception {
     final PsiReference ref = configureByFile();
     final PsiElement element = ref.resolve();

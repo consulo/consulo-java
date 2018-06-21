@@ -23,7 +23,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.turnRefsToSuper.TurnRefsToSuperProcessor;
 import org.jetbrains.annotations.NonNls;
 
-public class TurnRefsToSuperTest extends MultiFileTestCase {
+public abstract class TurnRefsToSuperTest extends MultiFileTestCase {
   public void testSuperClass() throws Exception { doTest("AClass", "ASuper", true); }
   public void testMethodFromSuper() throws Exception { doTest("AClass", "ASuper", true); }
   public void testRemoveImport() throws Exception { doTest("pack1.AClass", "pack1.AnInterface", true); }

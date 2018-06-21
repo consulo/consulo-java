@@ -2,23 +2,30 @@ package com.intellij.refactoring;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiLocalVariable;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.TestDataPath;
 import com.intellij.util.VisibilityUtil;
 import junit.framework.Assert;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author ven
  */
 @TestDataPath("$CONTENT_ROOT/testData")
-public class IntroduceConstantTest extends LightCodeInsightTestCase {
+public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
   @NonNls private static final String BASE_PATH = "/refactoring/introduceConstant/";
 
   @Nonnull

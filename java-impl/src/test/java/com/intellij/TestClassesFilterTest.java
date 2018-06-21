@@ -15,17 +15,17 @@
  */
 package com.intellij;
 
-import com.intellij.openapi.diagnostic.Logger;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import com.intellij.openapi.diagnostic.Logger;
 
-public class TestClassesFilterTest {
+public abstract class TestClassesFilterTest {
   private static final Logger LOG = Logger.getInstance("#com.intellij.TestClassesFilterTest");
 
   @Test

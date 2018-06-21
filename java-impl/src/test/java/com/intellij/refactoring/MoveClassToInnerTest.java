@@ -37,7 +37,7 @@ import java.io.File;
 /**
  * @author yole
  */
-public class MoveClassToInnerTest extends RefactoringTestCase {
+public abstract class MoveClassToInnerTest extends RefactoringTestCase {
   public void testContextChange1() throws Exception {
     doTest(new String[] { "pack1.Class1" }, "pack2.A");
   }

@@ -40,7 +40,7 @@ import com.intellij.util.IncorrectOperationException;
  * java formatting test classes.
  */
 @SuppressWarnings({"Deprecation"})
-public class JavaFormatterTest extends AbstractJavaFormatterTest
+public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 {
 
 	public void testForEach() throws Exception

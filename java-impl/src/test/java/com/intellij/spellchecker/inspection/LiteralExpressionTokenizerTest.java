@@ -15,22 +15,22 @@
  */
 package com.intellij.spellchecker.inspection;
 
+import static com.intellij.testFramework.UsefulTestCase.assertOrderedEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.spellchecker.LiteralExpressionTokenizer;
 import com.intellij.spellchecker.inspections.Splitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.intellij.testFramework.UsefulTestCase.assertOrderedEquals;
 
 /**
  * @author yole
  */
-public class LiteralExpressionTokenizerTest {
+public abstract class LiteralExpressionTokenizerTest {
   private static class TokenCollector extends TokenConsumer {
     private List<String> myTokenTexts = new ArrayList<String>();
 

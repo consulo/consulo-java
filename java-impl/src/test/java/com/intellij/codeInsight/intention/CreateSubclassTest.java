@@ -10,7 +10,7 @@ import com.intellij.refactoring.MultiFileTestCase;
 /**
  * @author yole
  */
-public class CreateSubclassTest extends MultiFileTestCase {
+public abstract class CreateSubclassTest extends MultiFileTestCase {
   public void testGenerics() throws Exception {
     doTest();
   }

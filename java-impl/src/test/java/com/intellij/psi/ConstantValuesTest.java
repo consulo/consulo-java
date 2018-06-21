@@ -17,7 +17,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 
-public class ConstantValuesTest extends PsiTestCase
+public abstract class ConstantValuesTest extends PsiTestCase
 {
 	private static final Logger LOGGER = Logger.getInstance(ConstantValuesTest.class);
 	private PsiClass myClass;

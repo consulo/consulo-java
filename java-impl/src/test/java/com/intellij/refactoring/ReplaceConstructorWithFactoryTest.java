@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  * @author dsl
  */
-public class ReplaceConstructorWithFactoryTest extends LightRefactoringTestCase {
+public abstract class ReplaceConstructorWithFactoryTest extends LightRefactoringTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

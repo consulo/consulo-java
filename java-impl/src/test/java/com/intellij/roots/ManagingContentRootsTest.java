@@ -13,7 +13,7 @@ import com.intellij.testFramework.PsiTestUtil;
 
 import java.io.IOException;
 
-public class ManagingContentRootsTest extends IdeaTestCase {
+public abstract class ManagingContentRootsTest extends IdeaTestCase {
   private VirtualFile dir;
 
   @Override

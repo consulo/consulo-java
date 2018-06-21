@@ -24,7 +24,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
  * @author Denis Zhdanov
  * @since Apr 27, 2010 6:39:24 PM
  */
-public class JavaFormatterBracesTest extends AbstractJavaFormatterTest {
+public abstract class JavaFormatterBracesTest extends AbstractJavaFormatterTest {
 
   public void testBracePositioningAtPreviousLine() throws Exception {
     // Inspired by IDEADEV-18529

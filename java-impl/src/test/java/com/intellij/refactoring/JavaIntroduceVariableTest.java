@@ -29,7 +29,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaIntroduceVariableTest extends LightCodeInsightTestCase {
+public abstract class JavaIntroduceVariableTest extends LightCodeInsightTestCase {
   public void testIntroduceBasedOnLiterals() throws Exception {
     doTest("getA(\"simple\")", "simple");
     doTest("getA(\"SimpleName\")", "simpleName", "name");

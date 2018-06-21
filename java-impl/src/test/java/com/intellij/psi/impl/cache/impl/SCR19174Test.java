@@ -16,7 +16,7 @@ import com.intellij.testFramework.PsiTestUtil;
 /**
  * @author max
  */
-public class SCR19174Test extends PsiTestCase {
+public abstract class SCR19174Test extends PsiTestCase {
   private VirtualFile myDir;
   private VirtualFile myVFile;
 

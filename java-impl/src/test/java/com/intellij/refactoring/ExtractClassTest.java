@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.TreeSet;
 
-public class ExtractClassTest extends MultiFileTestCase{
+public abstract class ExtractClassTest extends MultiFileTestCase{
   @Override
   protected String getTestRoot() {
     return "/refactoring/extractClass/";

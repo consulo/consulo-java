@@ -7,7 +7,7 @@ import com.intellij.testFramework.ResolveTestCase;
 /**
  * @author max
  */
-public class ResolveInCodeFragmentTest extends ResolveTestCase {
+public abstract class ResolveInCodeFragmentTest extends ResolveTestCase {
   public void testLocalVariable() throws Exception {
     final PsiReference iRef = configure();
 

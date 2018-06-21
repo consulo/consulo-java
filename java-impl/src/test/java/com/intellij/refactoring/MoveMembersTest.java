@@ -20,7 +20,7 @@ import com.intellij.refactoring.move.moveMembers.MockMoveMembersOptions;
 import com.intellij.refactoring.move.moveMembers.MoveMembersProcessor;
 import com.intellij.util.VisibilityUtil;
 
-public class MoveMembersTest extends MultiFileTestCase {
+public abstract class MoveMembersTest extends MultiFileTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

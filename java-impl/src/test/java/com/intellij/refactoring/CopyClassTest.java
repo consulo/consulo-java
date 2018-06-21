@@ -15,12 +15,21 @@
  */
 package com.intellij.refactoring;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.copy.CopyClassesHandler;
@@ -29,14 +38,10 @@ import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.IncorrectOperationException;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-
 /**
  * @author yole
  */
-public class CopyClassTest extends CodeInsightTestCase {
+public abstract class CopyClassTest extends CodeInsightTestCase {
   private VirtualFile myRootDir;
 
   public void testReplaceAllOccurrences() throws Exception {

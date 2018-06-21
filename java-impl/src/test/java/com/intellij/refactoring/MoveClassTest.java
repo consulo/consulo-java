@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 
-public class MoveClassTest extends RefactoringTestCase {
+public abstract class MoveClassTest extends RefactoringTestCase {
   public void testContextChange() throws Exception{
     doTest("contextChange1", new String[]{"pack1.Class1"}, "pack2");
     doTest("contextChange2", new String[]{"pack1.Class1"}, "pack2");

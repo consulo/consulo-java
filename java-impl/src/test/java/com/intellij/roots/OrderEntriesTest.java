@@ -8,7 +8,7 @@ import com.intellij.util.PathsList;
 /**
  * @author nik
  */
-public class OrderEntriesTest extends ModuleRootManagerTestCase {
+public abstract class OrderEntriesTest extends ModuleRootManagerTestCase {
   public void testLibrary() throws Exception {
     ModuleRootModificationUtil.addDependency(myModule, createJDomLibrary());
     assertOrderFiles(OrderRootType.CLASSES, getRtJar(), getJDomJar());

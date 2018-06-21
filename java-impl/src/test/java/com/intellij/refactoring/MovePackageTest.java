@@ -9,7 +9,7 @@ import com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackages
 import com.intellij.refactoring.move.moveClassesOrPackages.SingleSourceRootMoveDestination;
 import com.intellij.JavaTestUtil;
 
-public class MovePackageTest extends MultiFileTestCase {
+public abstract class MovePackageTest extends MultiFileTestCase {
 
   @Override
   protected String getTestDataPath() {

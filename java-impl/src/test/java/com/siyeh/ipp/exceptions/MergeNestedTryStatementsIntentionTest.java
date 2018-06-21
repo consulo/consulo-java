@@ -6,7 +6,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @author Bas Leijdekkers
  */
-public class MergeNestedTryStatementsIntentionTest extends IPPTestCase {
+public abstract class MergeNestedTryStatementsIntentionTest extends IPPTestCase {
 
   public void testSimple() { doTest(); }
   public void testWithoutAndWithResources() { doTest(); }

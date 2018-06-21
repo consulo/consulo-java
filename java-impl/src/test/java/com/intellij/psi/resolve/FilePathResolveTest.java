@@ -11,7 +11,7 @@ import com.intellij.psi.impl.include.FileIncludeManager;
 /**
  * @author cdr
  */
-public class FilePathResolveTest extends CodeInsightTestCase{
+public abstract class FilePathResolveTest extends CodeInsightTestCase{
   private static final String BASE_PATH = "/psi/resolve/filePath/";
 
   public void testC1() throws Exception{

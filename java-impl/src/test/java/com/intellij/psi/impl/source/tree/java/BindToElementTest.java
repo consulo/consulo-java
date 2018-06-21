@@ -25,7 +25,7 @@ import com.intellij.util.IncorrectOperationException;
 /**
  * @author dsl
  */
-public class BindToElementTest extends CodeInsightTestCase
+public abstract class BindToElementTest extends CodeInsightTestCase
 {
 	private static final Logger LOGGER = Logger.getInstance(BindToElementTest.class);
 

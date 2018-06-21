@@ -18,7 +18,7 @@ import com.intellij.testFramework.PsiTestUtil;
 /**
  * @author max
  */
-public class SCR17650Test extends PsiTestCase {
+public abstract class SCR17650Test extends PsiTestCase {
   private static final String TEST_ROOT = "/psi/repositoryUse/cls";
 
   private VirtualFile myDir;

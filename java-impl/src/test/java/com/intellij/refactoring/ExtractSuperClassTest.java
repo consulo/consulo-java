@@ -52,7 +52,7 @@ import com.intellij.util.containers.MultiMap;
 /**
  * @author yole
  */
-public class ExtractSuperClassTest extends RefactoringTestCase {
+public abstract class ExtractSuperClassTest extends RefactoringTestCase {
   public void testFinalFieldInitialization() throws Exception {   // IDEADEV-19704
     doTest("Test", "TestSubclass", new RefactoringTestUtil.MemberDescriptor("X", PsiClass.class),
            new RefactoringTestUtil.MemberDescriptor("x", PsiField.class));

@@ -15,12 +15,13 @@
  */
 package com.intellij.psi.formatter.java;
 
+import java.io.IOException;
+
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
-import javax.annotation.Nonnull;
-
-import java.io.IOException;
 
 /**
  * Is intended to test formatting in editor behavior, i.e. check how formatting affects things like caret position, selection etc. 
@@ -28,7 +29,7 @@ import java.io.IOException;
  * @author Denis Zhdanov
  * @since 6/1/11 6:17 PM
  */
-public class JavaFormatterInEditorTest extends LightPlatformCodeInsightTestCase {
+public abstract class JavaFormatterInEditorTest extends LightPlatformCodeInsightTestCase {
   
   public void testCaretPositionOnLongLineWrapping() throws IOException {
     // Inspired by IDEA-70242

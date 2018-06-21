@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
 
 import java.util.List;
 
-public class ExtractMethodTest extends LightCodeInsightTestCase {
+public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
   @NonNls private static final String BASE_PATH = "/refactoring/extractMethod/";
   private boolean myCatchOnNewLine = true;
 

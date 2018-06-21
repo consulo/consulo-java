@@ -27,7 +27,7 @@ import com.intellij.testFramework.PsiTestCase;
 /**
  * @author dsl
  */
-public class InnerClassesScannerTest extends PsiTestCase
+public abstract class InnerClassesScannerTest extends PsiTestCase
 {
 	public void testClassWithGenericParameters() throws Exception
 	{

@@ -13,7 +13,7 @@ import com.intellij.refactoring.wrapreturnvalue.WrapReturnValueProcessor;
 import com.intellij.JavaTestUtil;
 import org.jetbrains.annotations.NonNls;
 
-public class WrapReturnValueTest extends MultiFileTestCase{
+public abstract class WrapReturnValueTest extends MultiFileTestCase{
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

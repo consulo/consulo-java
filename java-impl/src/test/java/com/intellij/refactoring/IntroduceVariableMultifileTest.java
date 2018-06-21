@@ -15,7 +15,7 @@ import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 /**
  *  @author dsl
  */
-public class IntroduceVariableMultifileTest extends MultiFileTestCase {
+public abstract class IntroduceVariableMultifileTest extends MultiFileTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

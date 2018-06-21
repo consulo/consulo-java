@@ -33,7 +33,7 @@ import junit.framework.Assert;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class MovePackageAsDirectoryTest extends MultiFileTestCase {
+public abstract class MovePackageAsDirectoryTest extends MultiFileTestCase {
 
   @Override
   protected String getTestDataPath() {

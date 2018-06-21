@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 
-public class JavaSpellcheckerSuppressionTest extends LightQuickFixTestCase
+public abstract class JavaSpellcheckerSuppressionTest extends LightQuickFixTestCase
 {
 	@Nonnull
 	@Override

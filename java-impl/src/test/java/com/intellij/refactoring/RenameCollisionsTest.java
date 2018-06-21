@@ -22,7 +22,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author sashache
  */
-public class RenameCollisionsTest extends LightRefactoringTestCase {
+public abstract class RenameCollisionsTest extends LightRefactoringTestCase {
   private static final String BASE_PATH = "/refactoring/renameCollisions/";
 
   @Nonnull

@@ -15,12 +15,15 @@
  */
 package com.intellij.refactoring;
 
-import com.intellij.psi.*;
+import java.io.IOException;
+
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.refactoring.inline.InlineMethodProcessor;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-
-import java.io.IOException;
 
 /**
  * Is assumed to contain tests that include more than one refactoring into the processing.
@@ -28,7 +31,7 @@ import java.io.IOException;
  * @author Denis Zhdanov
  * @since 1/12/12 2:35 PM
  */
-public class SequentialRefactoringTest extends LightCodeInsightTestCase {
+public abstract class SequentialRefactoringTest extends LightCodeInsightTestCase {
 
   public void testFormattingAfterInlineExtractMethod() throws IOException, PrepareFailedException {
     String text =

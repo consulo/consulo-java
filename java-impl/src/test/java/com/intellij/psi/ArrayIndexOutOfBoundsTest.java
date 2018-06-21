@@ -37,7 +37,7 @@ import java.io.IOException;
 /**
  * @author max
  */
-public class ArrayIndexOutOfBoundsTest extends PsiTestCase {
+public abstract class ArrayIndexOutOfBoundsTest extends PsiTestCase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.ArrayIndexOutOfBoundsTest");
   private VirtualFile myProjectRoot;
 

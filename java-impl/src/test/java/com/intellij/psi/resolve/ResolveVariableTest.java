@@ -6,7 +6,7 @@ import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.ResolveTestCase;
 
 @PlatformTestCase.WrapInCommand
-public class ResolveVariableTest extends ResolveTestCase {
+public abstract class ResolveVariableTest extends ResolveTestCase {
   public void testAnonymousConstructorArg() throws Exception {
     PsiElement target = configureAndResolve();
     assertTrue(target instanceof PsiParameter);

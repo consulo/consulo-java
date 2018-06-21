@@ -21,7 +21,7 @@ import com.intellij.testFramework.PsiTestUtil;
 /**
  * @author max
  */
-public class SCR20733Test extends PsiTestCase
+public abstract class SCR20733Test extends PsiTestCase
 {
 	private static final Logger LOGGER = Logger.getInstance(SCR20733Test.class);
 

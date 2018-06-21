@@ -11,7 +11,7 @@ import com.intellij.psi.PsiElement;
 /**
  * @author ven
  */
-public class ResolveVariable15Test extends Resolve15TestCase {
+public abstract class ResolveVariable15Test extends Resolve15TestCase {
 
   public void testDuplicateStaticImport() throws Exception {
     PsiReference ref = configure();

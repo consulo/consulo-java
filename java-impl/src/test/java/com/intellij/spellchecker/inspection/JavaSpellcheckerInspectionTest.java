@@ -17,7 +17,7 @@ package com.intellij.spellchecker.inspection;
 
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
-public class JavaSpellcheckerInspectionTest extends LightCodeInsightFixtureTestCase {
+public abstract class JavaSpellcheckerInspectionTest extends LightCodeInsightFixtureTestCase {
   @Override
   protected String getBasePath() {
     return  "/testData/inspection";

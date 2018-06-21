@@ -23,7 +23,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
  * @author Denis Zhdanov
  * @since Apr 29, 2010 5:50:34 PM
  */
-public class JavaFormatterSpaceTest extends AbstractJavaFormatterTest {
+public abstract class JavaFormatterSpaceTest extends AbstractJavaFormatterTest {
 
   public void testSpacingBetweenTypeParameters() throws Exception {
     // Implied by IDEADEV-3666

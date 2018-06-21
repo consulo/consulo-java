@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author ven
  */
-public class IntroduceFieldInSameClassTest extends LightCodeInsightTestCase {
+public abstract class IntroduceFieldInSameClassTest extends LightCodeInsightTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

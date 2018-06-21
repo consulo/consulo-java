@@ -30,7 +30,7 @@ import com.intellij.testFramework.ResolveTestCase;
 
 import java.util.Collections;
 
-public class ResolveClassTest extends ResolveTestCase {
+public abstract class ResolveClassTest extends ResolveTestCase {
   public void testFQName() throws Exception {
     PsiReference ref = configure();
     PsiElement target = ((PsiJavaReference)ref).advancedResolve(true).getElement();

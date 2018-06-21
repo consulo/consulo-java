@@ -25,7 +25,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author ven
  */
-public class RenameLocalTest extends LightRefactoringTestCase {
+public abstract class RenameLocalTest extends LightRefactoringTestCase {
   private static final String BASE_PATH = "/refactoring/renameLocal/";
 
   @Nonnull

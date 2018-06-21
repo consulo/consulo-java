@@ -23,7 +23,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
  * @author Denis Zhdanov
  * @since 1/18/11 3:11 PM
  */
-public class JavadocFormatterTest extends AbstractJavaFormatterTest {
+public abstract class JavadocFormatterTest extends AbstractJavaFormatterTest {
 
   public void testRightMargin() throws Exception {
     getSettings().getRootSettings().getCommonSettings(JavaLanguage.INSTANCE).WRAP_LONG_LINES = true;

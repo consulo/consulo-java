@@ -38,7 +38,7 @@ import java.util.Collection;
 /**
  * @author dsl
  */
-public class IntroduceVariableTest extends LightCodeInsightTestCase {
+public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
 
   @Nonnull
   @Override

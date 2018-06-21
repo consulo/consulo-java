@@ -25,7 +25,7 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 
-public class CopyTest extends CodeInsightTestCase {
+public abstract class CopyTest extends CodeInsightTestCase {
   
   private String getRoot() {
     return JavaTestUtil.getJavaTestDataPath() + "/refactoring/copy/multifile/" + getTestName(true);

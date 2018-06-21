@@ -25,7 +25,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
  * @author Denis Zhdanov
  * @since Apr 29, 2010 4:06:15 PM
  */
-public class JavaFormatterWrapTest extends AbstractJavaFormatterTest {
+public abstract class JavaFormatterWrapTest extends AbstractJavaFormatterTest {
 
   public void testWrappingAnnotationArrayParameters() throws Exception {
     getSettings().getRootSettings().RIGHT_MARGIN = 80;

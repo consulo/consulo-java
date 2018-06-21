@@ -18,7 +18,7 @@ package com.siyeh.ipp.exceptions;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class SplitMultiCatchIntentionTest extends IPPTestCase {
+public abstract class SplitMultiCatchIntentionTest extends IPPTestCase {
   public void testSimple() { doTest(); }
   public void testTypeAnno() { doTest(); }
 

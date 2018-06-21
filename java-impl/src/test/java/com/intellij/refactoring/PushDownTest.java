@@ -41,7 +41,7 @@ import consulo.codeInsight.TargetElementUtilEx;
  * @author anna
  * @since 13-Mar-2008
  */
-public class PushDownTest extends LightRefactoringTestCase {
+public abstract class PushDownTest extends LightRefactoringTestCase {
   private static final String BASE_PATH = "/refactoring/pushDown/";
 
   public void testTypeParameter() { doTest(); }

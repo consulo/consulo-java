@@ -22,7 +22,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author Denis Zhdanov
  * @since May 11, 2010 5:30:28 PM
  */
-public class JavaIndenterTest extends AbstractJavaFormatterTest {
+public abstract class JavaIndenterTest extends AbstractJavaFormatterTest {
 
   private static final String CARET_TOKEN = "<caret>";
 

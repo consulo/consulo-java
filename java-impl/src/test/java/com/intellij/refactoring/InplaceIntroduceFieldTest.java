@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pass;
@@ -22,13 +24,12 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiLocalVariable;
 import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.refactoring.introduceField.IntroduceFieldHandler;
-import javax.annotation.Nonnull;
 
 /**
  * User: anna
  * Date: 3/16/11
  */
-public class InplaceIntroduceFieldTest extends AbstractJavaInplaceIntroduceTest {
+public abstract class InplaceIntroduceFieldTest extends AbstractJavaInplaceIntroduceTest {
 
   private static final String BASE_PATH = "/refactoring/inplaceIntroduceField/";
 

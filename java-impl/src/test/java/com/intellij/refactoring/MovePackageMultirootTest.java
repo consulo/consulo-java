@@ -32,7 +32,7 @@ import com.intellij.testFramework.PsiTestUtil;
 /**
  *  @author dsl
  */
-public class MovePackageMultirootTest extends MultiFileTestCase {
+public abstract class MovePackageMultirootTest extends MultiFileTestCase {
 
   @Override
   protected String getTestDataPath() {

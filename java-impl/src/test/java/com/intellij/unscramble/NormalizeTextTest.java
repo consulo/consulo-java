@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  * @author cdr
  */
-public class NormalizeTextTest extends TestCase {
+public abstract class NormalizeTextTest extends TestCase {
   public void testCausedBy() {
     doTest("javax.faces.FacesException: Error calling action method of component with id _id6:_id10\n" +
            "        at java.lang.Th\n" +

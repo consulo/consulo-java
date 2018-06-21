@@ -12,7 +12,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.canBeFinal.CanBeFinalInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class CanBeFinalTest extends InspectionTestCase {
+public abstract class CanBeFinalTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

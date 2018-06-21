@@ -27,7 +27,7 @@ import java.io.File;
  * @author Dmitry Avdeev
  *         Date: 4/9/12
  */
-public class UnscrambleDialogTest extends JavaCodeInsightFixtureTestCase {
+public abstract class UnscrambleDialogTest extends JavaCodeInsightFixtureTestCase {
 
   public void testStacktrace() throws Exception {
     RunContentDescriptor content = showText("");

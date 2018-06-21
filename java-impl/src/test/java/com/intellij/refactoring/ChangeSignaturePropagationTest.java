@@ -35,7 +35,7 @@ import junit.framework.Assert;
 /**
  * @author ven
  */
-public class ChangeSignaturePropagationTest extends LightRefactoringTestCase  {
+public abstract class ChangeSignaturePropagationTest extends LightRefactoringTestCase  {
   public void testParamSimple() throws Exception {
     parameterPropagationTest();
   }

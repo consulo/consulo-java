@@ -26,7 +26,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author Denis Zhdanov
  * @since Apr 27, 2010 6:42:00 PM
  */
-public class JavaFormatterAlignmentTest extends AbstractJavaFormatterTest {
+public abstract class JavaFormatterAlignmentTest extends AbstractJavaFormatterTest {
 
   public void testChainedMethodsAlignment() throws Exception {
     // Inspired by IDEA-30369

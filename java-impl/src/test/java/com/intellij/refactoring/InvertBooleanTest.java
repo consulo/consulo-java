@@ -14,7 +14,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author ven
  */
-public class InvertBooleanTest extends LightRefactoringTestCase {
+public abstract class InvertBooleanTest extends LightRefactoringTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

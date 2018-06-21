@@ -13,7 +13,7 @@ import org.junit.Assert;
 /**
  * @author dsl
  */
-public class RenameMethodMultiTest extends MultiFileTestCase {
+public abstract class RenameMethodMultiTest extends MultiFileTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

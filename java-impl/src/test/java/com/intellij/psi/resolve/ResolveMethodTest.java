@@ -27,7 +27,7 @@ import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.ResolveTestCase;
 
-public class ResolveMethodTest extends ResolveTestCase {
+public abstract class ResolveMethodTest extends ResolveTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

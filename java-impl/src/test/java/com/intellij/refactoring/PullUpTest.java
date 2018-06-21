@@ -49,7 +49,7 @@ import com.intellij.util.ui.UIUtil;
 /**
  * @author ven
  */
-public class PullUpTest extends LightRefactoringTestCase
+public abstract class PullUpTest extends LightRefactoringTestCase
 {
 	private static final String BASE_PATH = "/refactoring/pullUp/";
 

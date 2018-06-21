@@ -18,7 +18,7 @@ import com.intellij.util.containers.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ReplaceConstructorWithBuilderTest extends MultiFileTestCase {
+public abstract class ReplaceConstructorWithBuilderTest extends MultiFileTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

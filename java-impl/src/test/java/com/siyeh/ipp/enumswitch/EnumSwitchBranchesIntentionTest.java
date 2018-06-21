@@ -18,7 +18,7 @@ package com.siyeh.ipp.enumswitch;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class EnumSwitchBranchesIntentionTest extends IPPTestCase {
+public abstract class EnumSwitchBranchesIntentionTest extends IPPTestCase {
   public void testWithoutBraces() throws Exception {
     doTest();
   }

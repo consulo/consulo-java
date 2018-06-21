@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  *  @author dsl
  */
-public class MoveInnerTest extends MultiFileTestCase {
+public abstract class MoveInnerTest extends MultiFileTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

@@ -39,7 +39,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author dsl
  */
-public class ChangeSignatureTest extends LightRefactoringTestCase
+public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 {
 	public void testSimple() throws Exception
 	{

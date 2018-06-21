@@ -29,7 +29,7 @@ import com.intellij.refactoring.introduceField.IntroduceConstantHandler;
  * User: anna
  * Date: 3/16/11
  */
-public class InplaceIntroduceConstantTest extends AbstractJavaInplaceIntroduceTest {
+public abstract class InplaceIntroduceConstantTest extends AbstractJavaInplaceIntroduceTest {
 
   private static final String BASE_PATH = "/refactoring/inplaceIntroduceConstant/";
 

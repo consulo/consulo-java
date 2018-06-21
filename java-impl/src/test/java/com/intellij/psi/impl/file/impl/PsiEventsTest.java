@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 
-public class PsiEventsTest extends PsiTestCase {
+public abstract class PsiEventsTest extends PsiTestCase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.impl.PsiEventsTest");
 
   private VirtualFile myPrjDir1;

@@ -31,7 +31,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 /**
  * @author dsl
  */
-public class ShortenClassReferencesTest extends LightCodeInsightFixtureTestCase {
+public abstract class ShortenClassReferencesTest extends LightCodeInsightFixtureTestCase {
   private static final String BASE_PATH = "/psi/shortenClassRefs";
 
   @Override

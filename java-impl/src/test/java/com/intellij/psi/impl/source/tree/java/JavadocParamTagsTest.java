@@ -12,7 +12,7 @@ import com.intellij.util.IncorrectOperationException;
 /**
  *  @author dsl
  */
-public class JavadocParamTagsTest extends LightIdeaTestCase {
+public abstract class JavadocParamTagsTest extends LightIdeaTestCase {
   public void testDeleteTag1() throws Exception {
     final PsiElementFactory factory = getFactory();
     final PsiMethod method = factory.createMethodFromText(

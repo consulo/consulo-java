@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TreeSet;
 
-public class ExtractEnumTest extends MultiFileTestCase {
+public abstract class ExtractEnumTest extends MultiFileTestCase {
 
   @Override
   protected String getTestRoot() {

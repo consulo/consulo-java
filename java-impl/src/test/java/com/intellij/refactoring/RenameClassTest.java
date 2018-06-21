@@ -11,7 +11,7 @@ import com.intellij.refactoring.rename.RenameProcessor;
 import com.intellij.refactoring.rename.naming.AutomaticRenamerFactory;
 import org.jetbrains.annotations.NonNls;
 
-public class RenameClassTest extends MultiFileTestCase {
+public abstract class RenameClassTest extends MultiFileTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

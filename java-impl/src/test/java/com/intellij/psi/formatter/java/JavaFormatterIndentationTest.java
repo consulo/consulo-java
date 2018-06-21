@@ -25,7 +25,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author Denis Zhdanov
  * @since Apr 27, 2010 6:29:25 PM
  */
-public class JavaFormatterIndentationTest extends AbstractJavaFormatterTest {
+public abstract class JavaFormatterIndentationTest extends AbstractJavaFormatterTest {
 
   public void testClassInitializationBlockIndentation() throws Exception {
     // Checking that initialization block body is correctly indented.

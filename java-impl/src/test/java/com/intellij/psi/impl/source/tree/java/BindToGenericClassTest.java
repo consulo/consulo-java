@@ -8,7 +8,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 /**
  * @author dsl
  */
-public class BindToGenericClassTest extends GenericsTestCase {
+public abstract class BindToGenericClassTest extends GenericsTestCase {
   private boolean myOldFQNamesSetting;
 
   @Override

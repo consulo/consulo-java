@@ -24,7 +24,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 /**
  * @author yole
  */
-public class AnonymousToInnerTest extends LightCodeInsightTestCase {
+public abstract class AnonymousToInnerTest extends LightCodeInsightTestCase {
   private static final String TEST_ROOT = "/refactoring/anonymousToInner/";
 
   @Nonnull

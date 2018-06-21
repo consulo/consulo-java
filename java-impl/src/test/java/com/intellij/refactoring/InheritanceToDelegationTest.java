@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author dsl
  */
-public class InheritanceToDelegationTest extends MultiFileTestCase {
+public abstract class InheritanceToDelegationTest extends MultiFileTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

@@ -29,7 +29,7 @@ import consulo.roots.ContentFolderScopes;
 /**
  * @author max
  */
-public class SCR14423Test extends PsiTestCase {
+public abstract class SCR14423Test extends PsiTestCase {
   private VirtualFile myPrjDir1;
   private VirtualFile mySrcDir1;
   private VirtualFile myPackDir;

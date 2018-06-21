@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class RemoveMiddleManTest extends MultiFileTestCase{
+public abstract class RemoveMiddleManTest extends MultiFileTestCase{
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

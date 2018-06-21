@@ -14,7 +14,7 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectHandler;
 import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectProcessor;
 
-public class ExtractMethodObjectWithMultipleExitPointsTest extends LightRefactoringTestCase {
+public abstract class ExtractMethodObjectWithMultipleExitPointsTest extends LightRefactoringTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

@@ -7,7 +7,7 @@ package com.intellij.refactoring;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class ReplaceMethodDuplicatesTestSuite {
+public abstract class ReplaceMethodDuplicatesTestSuite {
   private ReplaceMethodDuplicatesTestSuite() {
   }
 

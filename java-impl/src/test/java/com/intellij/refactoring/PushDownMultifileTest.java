@@ -31,7 +31,7 @@ import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 
 //push first method from class a.A to class b.B
-public class PushDownMultifileTest extends MultiFileTestCase {
+public abstract class PushDownMultifileTest extends MultiFileTestCase {
   @Override
   protected String getTestRoot() {
     return "/refactoring/pushDown/";

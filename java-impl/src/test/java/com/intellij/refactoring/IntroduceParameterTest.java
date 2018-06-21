@@ -35,7 +35,7 @@ import com.intellij.refactoring.util.occurrences.ExpressionOccurrenceManager;
 import com.intellij.testFramework.TestDataPath;
 
 @TestDataPath("$CONTENT_ROOT/testData")
-public class IntroduceParameterTest extends LightRefactoringTestCase
+public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 {
 	@Nonnull
 	@Override

@@ -44,7 +44,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 
-public class IdCacheTest extends CodeInsightTestCase{
+public abstract class IdCacheTest extends CodeInsightTestCase{
 
   private VirtualFile myRootDir;
   private File myCacheFile;

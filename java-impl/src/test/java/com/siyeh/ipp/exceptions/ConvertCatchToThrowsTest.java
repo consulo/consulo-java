@@ -18,7 +18,7 @@ package com.siyeh.ipp.exceptions;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ConvertCatchToThrowsTest extends IPPTestCase {
+public abstract class ConvertCatchToThrowsTest extends IPPTestCase {
   public void testSingleCatch() { doTest(); }
   public void testPluralCatches() { doTest(); }
   public void testMultiCatch() { doTest(); }

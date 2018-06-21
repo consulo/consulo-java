@@ -6,7 +6,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @author Bas Leijdekkers
  */
-public class SplitTryWithMultipleResourcesIntentionTest extends IPPTestCase {
+public abstract class SplitTryWithMultipleResourcesIntentionTest extends IPPTestCase {
 
   public void testSimple() { doTest(); }
   public void testWithCatch() { doTest(); }

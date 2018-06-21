@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
-public class SuggestedParamTypesTest extends LightCodeInsightTestCase {
+public abstract class SuggestedParamTypesTest extends LightCodeInsightTestCase {
   @NonNls private static final String BASE_PATH = "/refactoring/suggestedTypes/";
 
   @Nonnull

@@ -47,7 +47,7 @@ import consulo.java.module.extension.JavaModuleExtensionImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
 
 @PlatformTestCase.WrapInCommand
-public class ClsRepositoryUseTest extends PsiTestCase {
+public abstract class ClsRepositoryUseTest extends PsiTestCase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.ClsRepositoryUseTest");
 
   private static final String TEST_ROOT = "/psi/repositoryUse/cls";

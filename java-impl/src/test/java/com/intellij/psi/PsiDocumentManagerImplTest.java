@@ -49,7 +49,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.ui.UIUtil;
 
-public class PsiDocumentManagerImplTest extends PlatformTestCase
+public abstract class PsiDocumentManagerImplTest extends PlatformTestCase
 {
 	private PsiDocumentManagerImpl getPsiDocumentManager()
 	{

@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NonNls;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
 
-public class ResolveVarargsMethodTest extends Resolve15TestCase {
+public abstract class ResolveVarargsMethodTest extends Resolve15TestCase {
 
   public void testPrimitiveObject() throws Exception {
     doTest(1);

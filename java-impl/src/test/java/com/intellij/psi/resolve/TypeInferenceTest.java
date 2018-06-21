@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  * @author ven
  */
-public class TypeInferenceTest extends Resolve15TestCase {
+public abstract class TypeInferenceTest extends Resolve15TestCase {
   public void testInferInCall1 () throws Exception {
     PsiReferenceExpression ref = configure();
     PsiType type = ref.getType();

@@ -19,7 +19,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
-public class SafeDeleteTest extends MultiFileTestCase {
+public abstract class SafeDeleteTest extends MultiFileTestCase {
   private VirtualFile myRootBefore;
 
   @Override
