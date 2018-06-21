@@ -15,12 +15,18 @@
  */
 package com.intellij.psi.ref;
 
-import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NonNls;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiAnnotationMemberValue;
+import com.intellij.psi.PsiChildLink;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiKeyword;
+import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.ObjectUtils;
 
 /**
  * @author peter

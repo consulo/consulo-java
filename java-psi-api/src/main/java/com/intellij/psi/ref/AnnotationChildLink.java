@@ -17,9 +17,13 @@ package com.intellij.psi.ref;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiChildLink;
+import com.intellij.psi.PsiElementRef;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.util.IncorrectOperationException;
 
 /**
  * @author peter

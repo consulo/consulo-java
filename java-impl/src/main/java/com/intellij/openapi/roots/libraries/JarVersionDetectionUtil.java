@@ -58,7 +58,7 @@ public class JarVersionDetectionUtil
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String detectJarVersion(@Nonnull String detectionClass, @Nonnull List<VirtualFile> files)
 	{
 		VirtualFile jarRoot = LibrariesHelper.getInstance().findRootByClass(files, detectionClass);
@@ -83,13 +83,13 @@ public class JarVersionDetectionUtil
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getBundleVersion(@Nonnull File jar)
 	{
 		return JarUtil.getJarAttribute(jar, new Attributes.Name("Bundle-Version"));
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getImplementationVersion(@Nonnull File jar)
 	{
 		return JarUtil.getJarAttribute(jar, Attributes.Name.IMPLEMENTATION_VERSION);

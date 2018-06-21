@@ -15,11 +15,12 @@
  */
 package com.intellij.psi.ref;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.psi.PsiChildLink;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
 
 /**
  * @author peter
