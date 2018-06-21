@@ -20,7 +20,7 @@ import com.intellij.pom.java.LanguageLevel;
 /**
  * @author ven
  */
-public abstract abstract class LightQuickFix15TestCase extends LightQuickFixTestCase {
+public abstract class LightQuickFix15TestCase extends LightQuickFixTestCase {
   @Override
   protected void doAllTests() {
     setLanguageLevel(LanguageLevel.JDK_1_5);
