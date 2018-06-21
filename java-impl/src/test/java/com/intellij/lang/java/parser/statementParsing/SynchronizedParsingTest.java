@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class SynchronizedParsingTest extends JavaParsingTestCase {
+public abstract class SynchronizedParsingTest extends JavaParsingTestCase {
   public SynchronizedParsingTest() {
     super("parser-full/statementParsing/synchronized");
   }

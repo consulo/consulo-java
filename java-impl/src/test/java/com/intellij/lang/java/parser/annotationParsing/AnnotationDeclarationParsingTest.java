@@ -20,7 +20,7 @@ import com.intellij.lang.java.parser.JavaParsingTestCase;
 /**
  * @author ven
  */
-public class AnnotationDeclarationParsingTest extends JavaParsingTestCase {
+public abstract class AnnotationDeclarationParsingTest extends JavaParsingTestCase {
   public AnnotationDeclarationParsingTest() {
     super("parser-full/annotationParsing/declaration");
   }

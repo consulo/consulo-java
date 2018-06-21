@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.declarationParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class FieldParsingTest extends JavaParsingTestCase {
+public abstract class FieldParsingTest extends JavaParsingTestCase {
   public FieldParsingTest() {
     super("parser-full/declarationParsing/field");
   }

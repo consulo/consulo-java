@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.java.parser;
 
-public class CommonJavaParsingTest extends JavaParsingTestCase{
+public abstract class CommonJavaParsingTest extends JavaParsingTestCase{
   public CommonJavaParsingTest() {
     super("parser-full/commonParsing");
   }

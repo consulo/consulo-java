@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.declarationParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class MethodParsingTest extends JavaParsingTestCase {
+public abstract class MethodParsingTest extends JavaParsingTestCase {
   public MethodParsingTest() {
     super("parser-full/declarationParsing/method");
   }

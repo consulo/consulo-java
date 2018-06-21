@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class WhileParsingTest extends JavaParsingTestCase {
+public abstract class WhileParsingTest extends JavaParsingTestCase {
   public WhileParsingTest() {
     super("parser-full/statementParsing/while");
   }

@@ -21,7 +21,7 @@ import com.intellij.lang.java.parser.JavaParsingTestCase;
 import com.intellij.lang.java.parser.ReferenceParser;
 
 
-public class ReferenceParserTest extends JavaParsingTestCase {
+public abstract class ReferenceParserTest extends JavaParsingTestCase {
   public ReferenceParserTest() {
     super("parser-partial/references");
   }

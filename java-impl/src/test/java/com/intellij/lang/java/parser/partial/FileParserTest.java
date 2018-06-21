@@ -20,7 +20,7 @@ import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
 
-public class FileParserTest extends JavaParsingTestCase {
+public abstract class FileParserTest extends JavaParsingTestCase {
   public FileParserTest() {
     super("parser-partial/files");
   }

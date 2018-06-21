@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class TryParsingTest extends JavaParsingTestCase {
+public abstract class TryParsingTest extends JavaParsingTestCase {
   public TryParsingTest() {
     super("parser-full/statementParsing/try");
   }

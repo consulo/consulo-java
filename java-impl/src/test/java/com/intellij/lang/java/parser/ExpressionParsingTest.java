@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.java.parser;
 
-public class ExpressionParsingTest extends JavaParsingTestCase {
+public abstract class ExpressionParsingTest extends JavaParsingTestCase {
   public ExpressionParsingTest() {
     super("parser-full/expressionParsing");
   }

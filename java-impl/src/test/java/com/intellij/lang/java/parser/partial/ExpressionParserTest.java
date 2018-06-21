@@ -20,7 +20,7 @@ import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 import org.jetbrains.annotations.NonNls;
 
-public class ExpressionParserTest extends JavaParsingTestCase {
+public abstract class ExpressionParserTest extends JavaParsingTestCase {
   public ExpressionParserTest() {
     super("parser-partial/expressions");
   }

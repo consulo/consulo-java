@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class LabelParsingTest extends JavaParsingTestCase {
+public abstract class LabelParsingTest extends JavaParsingTestCase {
   public LabelParsingTest() {
     super("parser-full/statementParsing/label");
   }

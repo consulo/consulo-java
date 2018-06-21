@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.declarationParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class CommentBindingTest extends JavaParsingTestCase {
+public abstract class CommentBindingTest extends JavaParsingTestCase {
   public CommentBindingTest() {
     super("parser-full/declarationParsing/commentBinding");
   }

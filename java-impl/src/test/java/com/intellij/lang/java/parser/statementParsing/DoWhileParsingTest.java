@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class DoWhileParsingTest extends JavaParsingTestCase {
+public abstract class DoWhileParsingTest extends JavaParsingTestCase {
   public DoWhileParsingTest() {
     super("parser-full/statementParsing/do-while");
   }

@@ -19,7 +19,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class DeclarationParserTest extends JavaParsingTestCase {
+public abstract class DeclarationParserTest extends JavaParsingTestCase {
   public DeclarationParserTest() {
     super("parser-partial/declarations");
   }

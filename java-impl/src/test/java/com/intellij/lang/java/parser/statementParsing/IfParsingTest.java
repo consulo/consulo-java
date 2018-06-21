@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class IfParsingTest extends JavaParsingTestCase {
+public abstract class IfParsingTest extends JavaParsingTestCase {
   public IfParsingTest() {
     super("parser-full/statementParsing/if");
   }

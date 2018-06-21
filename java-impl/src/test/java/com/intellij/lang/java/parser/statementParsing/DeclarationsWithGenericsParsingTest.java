@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class DeclarationsWithGenericsParsingTest extends JavaParsingTestCase {
+public abstract class DeclarationsWithGenericsParsingTest extends JavaParsingTestCase {
   public DeclarationsWithGenericsParsingTest() {
     super("parser-full/statementParsing/genericsParsing");
   }

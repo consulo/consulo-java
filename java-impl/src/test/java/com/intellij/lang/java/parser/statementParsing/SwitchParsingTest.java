@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser.statementParsing;
 
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
-public class SwitchParsingTest extends JavaParsingTestCase {
+public abstract class SwitchParsingTest extends JavaParsingTestCase {
   public SwitchParsingTest() {
     super("parser-full/statementParsing/switch");
   }
