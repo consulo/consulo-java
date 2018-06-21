@@ -8,7 +8,7 @@ import com.intellij.testFramework.InspectionTestCase;
 /**
  * @author max
  */
-public class LocalCanBeFinalTest extends InspectionTestCase {
+public abstract class LocalCanBeFinalTest extends InspectionTestCase {
   private LocalCanBeFinal myTool;
 
   @Override

@@ -23,7 +23,7 @@ import com.intellij.testFramework.InspectionTestCase;
 /**
  * @author max
  */
-public class UnusedDeclarationTest extends InspectionTestCase
+public abstract class UnusedDeclarationTest extends InspectionTestCase
 {
 	private UnusedDeclarationInspection myTool;
 

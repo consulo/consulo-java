@@ -32,7 +32,7 @@ import java.util.*;
  * User: anna
  * Date: Feb 2, 2005
  */
-public class CyclicDependenciesTest extends PsiTestCase {
+public abstract class CyclicDependenciesTest extends PsiTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

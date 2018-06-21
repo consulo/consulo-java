@@ -55,7 +55,7 @@ import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 @SuppressWarnings("ConstantConditions")
 @PlatformTestCase.WrapInCommand
-public class SrcRepositoryUseTest extends PsiTestCase{
+public abstract class SrcRepositoryUseTest extends PsiTestCase{
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.SrcRepositoryUseTest");
   private static final Key<String> TEST_KEY = Key.create("TEST");
 

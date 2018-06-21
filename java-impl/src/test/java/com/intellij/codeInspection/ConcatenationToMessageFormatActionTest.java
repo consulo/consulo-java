@@ -10,7 +10,7 @@ import com.intellij.testFramework.LightIdeaTestCase;
 
 import java.util.ArrayList;
 
-public class ConcatenationToMessageFormatActionTest extends LightIdeaTestCase {
+public abstract class ConcatenationToMessageFormatActionTest extends LightIdeaTestCase {
   
   public void test1() throws Exception{
     final String text = "\"aaa 'bbb' '\" + ((java.lang.String)ccc) + \"'\"";

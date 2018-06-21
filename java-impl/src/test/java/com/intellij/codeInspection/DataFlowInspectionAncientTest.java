@@ -23,7 +23,7 @@ import com.intellij.testFramework.InspectionTestCase;
  * @author max
  * @since Apr 11, 2002
  */
-public class DataFlowInspectionAncientTest extends InspectionTestCase {
+public abstract class DataFlowInspectionAncientTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

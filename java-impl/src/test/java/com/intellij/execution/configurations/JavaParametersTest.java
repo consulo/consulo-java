@@ -27,7 +27,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 /**
  * @author nik
  */
-public class JavaParametersTest extends ModuleRootManagerTestCase
+public abstract class JavaParametersTest extends ModuleRootManagerTestCase
 {
 	public void testLibrary() throws Exception
 	{

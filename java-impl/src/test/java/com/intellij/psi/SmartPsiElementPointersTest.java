@@ -44,7 +44,7 @@ import java.util.Collections;
 import java.util.Set;
 
 @PlatformTestCase.WrapInCommand
-public class SmartPsiElementPointersTest extends CodeInsightTestCase {
+public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
   private VirtualFile myRoot;
 
   @Override

@@ -39,7 +39,7 @@ import static com.intellij.testFramework.PlatformTestUtil.assertElementsEqual;
  * @author Anna.Kozlova
  * Date: 18-Aug-2006
  */
-public class InspectionProfileTest extends LightIdeaTestCase {
+public abstract class InspectionProfileTest extends LightIdeaTestCase {
   private static final String PROFILE = "ToConvert";
 
   @Override

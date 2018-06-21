@@ -45,7 +45,7 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.IntArrayList;
 
-public class FindUsagesTest extends PsiTestCase{
+public abstract class FindUsagesTest extends PsiTestCase{
 
   @Override
   protected void setUp() throws Exception {

@@ -17,7 +17,7 @@ package com.siyeh.ipp.annotation;
 
 import com.siyeh.ipp.IPPTestCase;
 
-public class ExpandToNormalAnnotationIntentionTest extends IPPTestCase {
+public abstract class ExpandToNormalAnnotationIntentionTest extends IPPTestCase {
   public void testOneAttr() throws Exception {
     doTest();
   }

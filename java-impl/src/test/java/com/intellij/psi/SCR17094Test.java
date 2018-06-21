@@ -15,7 +15,7 @@ import com.intellij.testFramework.PsiTestCase;
 /**
  *  @author dsl
  */
-public class SCR17094Test extends PsiTestCase {
+public abstract class SCR17094Test extends PsiTestCase {
   protected void setUpClasses(final String s) throws Exception {
     final String testRoot = "/psi/repositoryUse/scr17094";
     VirtualFile classesRoot  = ApplicationManager.getApplication().runWriteAction(new Computable<VirtualFile>() {

@@ -23,7 +23,7 @@ import com.intellij.util.cls.ClsFormatException;
 /**
  * @author max
  */
-public class ClsBuilderTest extends LightIdeaTestCase {
+public abstract class ClsBuilderTest extends LightIdeaTestCase {
   public void testUtilList() throws Exception {
     doTest("java/util/List.class");
   }

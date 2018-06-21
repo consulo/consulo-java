@@ -18,7 +18,7 @@ package com.siyeh.ipp.integer;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ConvertIntegerToHexTest extends IPPTestCase {
+public abstract class ConvertIntegerToHexTest extends IPPTestCase {
   public void testDecToHex1() { doTest(); }
   public void testDecToHex2() { doTest(); }
   public void testDecToHex3() { doTest(); }

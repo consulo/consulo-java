@@ -10,7 +10,7 @@ import java.text.StringCharacterIterator;
 import com.intellij.psi.impl.compiled.SignatureParsing;
 import junit.framework.TestCase;
 
-public class SignatureParsingTest extends TestCase {
+public abstract class SignatureParsingTest extends TestCase {
   public void testVarianceAmbiguity() throws Exception {
     assertEquals("Psi<?,P>", SignatureParsing.parseTypeString(new StringCharacterIterator("LPsi<*TP>;"), s -> s));
     assertEquals("Psi<? extends P>", SignatureParsing.parseTypeString(new StringCharacterIterator("LPsi<+TP>;"), s -> s));

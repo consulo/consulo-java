@@ -11,7 +11,7 @@ import com.intellij.testFramework.InspectionTestCase;
 /**
  * @author yole
  */
-public class SuspiciousNameCombinationTest extends InspectionTestCase {
+public abstract class SuspiciousNameCombinationTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

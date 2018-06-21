@@ -8,7 +8,7 @@ import com.intellij.testFramework.InspectionTestCase;
 /**
  * @author cdr
  */
-public class RedundantArrayForVarargsCallInspectionTest extends InspectionTestCase {
+public abstract class RedundantArrayForVarargsCallInspectionTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

@@ -31,7 +31,7 @@ import com.intellij.util.IncorrectOperationException;
 /**
  * @author ven
  */
-public class ModifyAnnotationsTest extends PsiTestCase {
+public abstract class ModifyAnnotationsTest extends PsiTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

@@ -6,7 +6,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @see ReplaceOperatorAssignmentWithAssignmentIntention
  */
-public class ReplaceOperatorAssignmentWithAssignmentIntentionTest extends IPPTestCase {
+public abstract class ReplaceOperatorAssignmentWithAssignmentIntentionTest extends IPPTestCase {
   public void testOperatorAssignment1() { doTest(); }
   public void testDoubleOpAssign() { doTest(); }
   public void testStringOpAssign() { doTest(); }

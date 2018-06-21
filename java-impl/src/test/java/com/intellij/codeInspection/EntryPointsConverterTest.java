@@ -8,7 +8,7 @@ import com.intellij.util.containers.HashMap;
 import junit.framework.TestCase;
 import org.jdom.Element;
 
-public class EntryPointsConverterTest extends TestCase {
+public abstract class EntryPointsConverterTest extends TestCase {
   public void testMethodConverter1() throws Exception {
     doTest("method", "String java.lang.String.replace(char oldChar, char newChar)", "java.lang.String String replace(char oldChar, char newChar)");
   }

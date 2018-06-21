@@ -34,7 +34,7 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaPackage;
 
-public class FileStructureDialogTest extends BaseProjectViewTestCase
+public abstract class FileStructureDialogTest extends BaseProjectViewTestCase
 {
 	public void testFileStructureForClass()
 	{

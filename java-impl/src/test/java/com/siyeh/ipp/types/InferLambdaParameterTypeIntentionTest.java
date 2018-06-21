@@ -17,7 +17,7 @@ package com.siyeh.ipp.types;
 
 import com.siyeh.ipp.IPPTestCase;
 
-public class InferLambdaParameterTypeIntentionTest extends IPPTestCase {
+public abstract class InferLambdaParameterTypeIntentionTest extends IPPTestCase {
   
   public void testSimple() {
     doTest("Expand lambda to (String o) -> {...}");

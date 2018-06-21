@@ -21,7 +21,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @see ReplaceWithOperatorAssignmentIntention
  */
-public class ReplaceWithOperatorAssignmentIntentionTest extends IPPTestCase {
+public abstract class ReplaceWithOperatorAssignmentIntentionTest extends IPPTestCase {
   public void testPolyadicExpression() { doTest(); }
   public void testExcluded() { assertIntentionNotAvailable(); }
 

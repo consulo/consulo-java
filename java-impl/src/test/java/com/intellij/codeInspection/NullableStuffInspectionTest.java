@@ -16,7 +16,7 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class NullableStuffInspectionTest extends InspectionTestCase {
+public abstract class NullableStuffInspectionTest extends InspectionTestCase {
   private final NullableStuffInspection myInspection = new NullableStuffInspection();
   {
     myInspection.REPORT_ANNOTATION_NOT_PROPAGATED_TO_OVERRIDERS = false;

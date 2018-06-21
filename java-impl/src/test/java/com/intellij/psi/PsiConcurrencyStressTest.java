@@ -42,7 +42,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.Timings;
 import com.intellij.util.IncorrectOperationException;
 
-public class PsiConcurrencyStressTest extends PsiTestCase {
+public abstract class PsiConcurrencyStressTest extends PsiTestCase {
   private static final boolean SKIP = "true".equalsIgnoreCase(System.getProperty("skip.psi.concurrency.test"));
 
   @Override

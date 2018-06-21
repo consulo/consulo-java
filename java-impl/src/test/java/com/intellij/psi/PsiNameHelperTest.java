@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class PsiNameHelperTest {
+public abstract class PsiNameHelperTest {
   @Test
   public void shortClassName() {
     doTest("I<Integer>", "I");

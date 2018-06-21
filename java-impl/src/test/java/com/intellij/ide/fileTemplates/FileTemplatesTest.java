@@ -28,7 +28,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.properties.EncodingAwareProperties;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
-public class FileTemplatesTest extends IdeaTestCase {
+public abstract class FileTemplatesTest extends IdeaTestCase {
   public void testAllTemplates() throws Exception {
     final File testsDir = new File("/ide/fileTemplates");
 

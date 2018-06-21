@@ -3,12 +3,12 @@
  */
 package com.intellij.psi;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.editor.Document;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import org.jetbrains.annotations.NonNls;
 
-public class TreeIsCorrectAfterDiffReparseTest extends LightCodeInsightTestCase {
+public abstract class TreeIsCorrectAfterDiffReparseTest extends LightCodeInsightTestCase {
 
   public void testIDEADEV41862() throws Exception {
     @NonNls String part1 = "package com.test;\n" +

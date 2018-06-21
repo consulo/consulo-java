@@ -43,7 +43,7 @@ import com.intellij.testFramework.PsiTestUtil;
  * @author dsl
  */
 @PlatformTestCase.WrapInCommand
-public class Src15RepositoryUseTest extends PsiTestCase {
+public abstract class Src15RepositoryUseTest extends PsiTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

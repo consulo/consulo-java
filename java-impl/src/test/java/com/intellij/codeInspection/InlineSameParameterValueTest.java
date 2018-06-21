@@ -6,13 +6,13 @@ package com.intellij.codeInspection;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 import com.intellij.codeInspection.sameParameterValue.SameParameterValueInspection;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NonNls;
 
-public class InlineSameParameterValueTest extends LightQuickFixTestCase {
+public abstract class InlineSameParameterValueTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

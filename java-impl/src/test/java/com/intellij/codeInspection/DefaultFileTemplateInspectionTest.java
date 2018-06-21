@@ -5,7 +5,7 @@ import com.intellij.codeInspection.defaultFileTemplateUsage.DefaultFileTemplateU
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class DefaultFileTemplateInspectionTest extends InspectionTestCase {
+public abstract class DefaultFileTemplateInspectionTest extends InspectionTestCase {
   @Override
   protected Sdk getTestProjectSdk() {
     final Sdk sdk = super.getTestProjectSdk();

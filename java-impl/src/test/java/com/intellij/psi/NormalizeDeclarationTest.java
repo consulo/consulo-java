@@ -7,7 +7,7 @@ import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 
 @PlatformTestCase.WrapInCommand
-public class NormalizeDeclarationTest extends PsiTestCase{
+public abstract class NormalizeDeclarationTest extends PsiTestCase{
   private static final String BASE_PATH = JavaTestUtil.getJavaTestDataPath() + "/psi/normalizeDeclaration";
 
   @Override

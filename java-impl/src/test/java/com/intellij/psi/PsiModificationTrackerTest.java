@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * @author Dmitry Avdeev
  */
-public class PsiModificationTrackerTest extends LightPlatformCodeInsightFixtureTestCase {
+public abstract class PsiModificationTrackerTest extends LightPlatformCodeInsightFixtureTestCase {
   public void testAnnotationNotChanged() throws Exception {
     doReplaceTest("@SuppressWarnings(\"zz\")\n" +
                   "public class Foo { <selection></selection>}",

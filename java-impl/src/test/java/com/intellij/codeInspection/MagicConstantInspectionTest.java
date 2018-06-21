@@ -36,7 +36,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.InspectionTestCase;
 import com.intellij.testFramework.PlatformTestUtil;
 
-public class MagicConstantInspectionTest extends InspectionTestCase {
+public abstract class MagicConstantInspectionTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

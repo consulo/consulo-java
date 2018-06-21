@@ -33,7 +33,7 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 
-public class FindUsages15Test extends PsiTestCase{
+public abstract class FindUsages15Test extends PsiTestCase{
 
   @Override
   protected void setUp() throws Exception {

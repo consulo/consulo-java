@@ -16,21 +16,16 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.*;
+import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.dataFlow.DataFlowInspection;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import org.jetbrains.annotations.*;
-
-import java.io.IOException;
 
 /**
  * @author peter
  */
-public class DataFlowInspectionTest extends LightCodeInsightFixtureTestCase {
+public abstract class DataFlowInspectionTest extends LightCodeInsightFixtureTestCase {
 
   @Override
   protected String getTestDataPath() {

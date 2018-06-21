@@ -25,7 +25,7 @@ import com.intellij.testFramework.PlatformTestUtil;
 
 import java.io.IOException;
 
-public class ClsMirrorBuildingTest extends LightIdeaTestCase {
+public abstract class ClsMirrorBuildingTest extends LightIdeaTestCase {
   public void testSimpleEnum() { doTest(); }
   public void testEnumWithFields() { doTest(); }
   public void testNormalClass() { doTest(); }

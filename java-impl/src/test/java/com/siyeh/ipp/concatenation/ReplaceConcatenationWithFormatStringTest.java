@@ -18,7 +18,7 @@ package com.siyeh.ipp.concatenation;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ReplaceConcatenationWithFormatStringTest extends IPPTestCase {
+public abstract class ReplaceConcatenationWithFormatStringTest extends IPPTestCase {
     public void testNumericBinaryExpression() { doTest(); }
     public void testHexadecimalLiteral() { doTest(); }
     public void testPercentInLiteral() { doTest(); }

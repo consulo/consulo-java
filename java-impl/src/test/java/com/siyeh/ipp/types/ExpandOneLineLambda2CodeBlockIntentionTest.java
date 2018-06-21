@@ -17,7 +17,7 @@ package com.siyeh.ipp.types;
 
 import com.siyeh.ipp.IPPTestCase;
 
-public class ExpandOneLineLambda2CodeBlockIntentionTest extends IPPTestCase {
+public abstract class ExpandOneLineLambda2CodeBlockIntentionTest extends IPPTestCase {
   
   public void testSimple() {
     doTest();

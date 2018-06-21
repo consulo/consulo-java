@@ -31,6 +31,8 @@
  */
 package com.intellij.projectView;
 
+import javax.swing.JTree;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.ide.structureView.impl.java.JavaInheritedMembersNodeProvider;
 import com.intellij.ide.structureView.impl.java.PublicElementsFilter;
@@ -45,9 +47,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.TestSourceBasedTestCase;
 
-import javax.swing.*;
-
-public class JavaTreeStructureTest extends TestSourceBasedTestCase {
+public abstract class JavaTreeStructureTest extends TestSourceBasedTestCase {
   @Override
   protected String getTestPath() {
     return "structureView";

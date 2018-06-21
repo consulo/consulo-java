@@ -24,7 +24,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaAnonymousClassesHelperTest extends LightCodeInsightFixtureTestCase {
+public abstract class JavaAnonymousClassesHelperTest extends LightCodeInsightFixtureTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();

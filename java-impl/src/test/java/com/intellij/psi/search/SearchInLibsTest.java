@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class SearchInLibsTest extends PsiTestCase {
+public abstract class SearchInLibsTest extends PsiTestCase {
   public void testSearchInProject() throws Exception {
     doTest("ProjectClass", new String[]{"ProjectClass.java"}, GlobalSearchScope.projectScope(myProject));
     doTest("LibraryClass1", new String[]{"ProjectClass.java"}, GlobalSearchScope.projectScope(myProject));

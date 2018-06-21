@@ -18,7 +18,7 @@ package com.siyeh.ipp.types;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ReplaceMethodReferenceWithLambdaIntentionTest extends IPPTestCase {
+public abstract class ReplaceMethodReferenceWithLambdaIntentionTest extends IPPTestCase {
  
   @Override
   protected String getIntentionName() {

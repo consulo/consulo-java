@@ -18,7 +18,7 @@ package com.siyeh.ipp.integer;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ConvertToPlainTest extends IPPTestCase {
+public abstract class ConvertToPlainTest extends IPPTestCase {
   public void testToPlain() { doTest(); }
   public void testNegatedFloatToPlain() { doTest(); }
   public void testWithUnderscoresToPlain() { doTest(); }

@@ -18,7 +18,7 @@ package com.siyeh.ipp.forloop;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ReplaceForEachLoopWithIndexedForLoopIntentionTest extends IPPTestCase {
+public abstract class ReplaceForEachLoopWithIndexedForLoopIntentionTest extends IPPTestCase {
   public void testLabeledForLoop() { doTest(); }
   public void testNormalForeachLoop() { doTest(); }
   public void testNewArray() { doTest(); }

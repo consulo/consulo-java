@@ -21,7 +21,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @see ReplaceConditionalWithIfIntention
  */
-public class ReplaceConditionalWithIfTest extends IPPTestCase {
+public abstract class ReplaceConditionalWithIfTest extends IPPTestCase {
 
     public void testConditionalAsArgument() { doTest(); }
     public void testComment() { doTest(); }

@@ -7,7 +7,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @author Bas Leijdekkers
  */
-public class MergeCallSequenceToChainIntentionTest extends IPPTestCase {
+public abstract class MergeCallSequenceToChainIntentionTest extends IPPTestCase {
 
   public void testAppend() { doTest(); }
 

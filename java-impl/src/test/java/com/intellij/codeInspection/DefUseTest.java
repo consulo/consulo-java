@@ -4,7 +4,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.defUse.DefUseInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class DefUseTest extends InspectionTestCase {
+public abstract class DefUseTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

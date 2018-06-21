@@ -12,7 +12,7 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.testFramework.IdeaTestCase;
 import com.intellij.util.io.URLUtil;
 
-public class JarFileSystemTest extends IdeaTestCase
+public abstract class JarFileSystemTest extends IdeaTestCase
 {
 	public void testFindFile() throws Exception
 	{

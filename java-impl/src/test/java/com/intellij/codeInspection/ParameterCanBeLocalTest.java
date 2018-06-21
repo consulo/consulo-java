@@ -19,7 +19,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.varScopeCanBeNarrowed.ParameterCanBeLocalInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class ParameterCanBeLocalTest extends InspectionTestCase {
+public abstract class ParameterCanBeLocalTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

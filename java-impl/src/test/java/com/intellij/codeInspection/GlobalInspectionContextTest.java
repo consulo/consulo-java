@@ -31,7 +31,7 @@ import java.util.Arrays;
  * @author Dmitry Avdeev
  *         Date: 5/24/12
  */
-public class GlobalInspectionContextTest extends CodeInsightTestCase {
+public abstract class GlobalInspectionContextTest extends CodeInsightTestCase {
 
   public void testProblemDuplication() throws Exception {
     String shortName = new VisibilityInspection().getShortName();

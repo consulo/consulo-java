@@ -4,7 +4,7 @@ import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class RedundantCast15Test extends InspectionTestCase {
+public abstract class RedundantCast15Test extends InspectionTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

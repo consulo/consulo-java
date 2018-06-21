@@ -38,7 +38,7 @@ import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.Processor;
 
-public class LoadProjectTest extends PlatformTestCase {
+public abstract class LoadProjectTest extends PlatformTestCase {
   @Override
   protected void setUpProject() throws Exception {
     String projectPath = "/model/model.ipr";

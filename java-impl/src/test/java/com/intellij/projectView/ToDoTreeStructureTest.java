@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-public class ToDoTreeStructureTest extends BaseProjectViewTestCase {
+public abstract class ToDoTreeStructureTest extends BaseProjectViewTestCase {
 
   @Override
   protected void setUp() throws Exception {

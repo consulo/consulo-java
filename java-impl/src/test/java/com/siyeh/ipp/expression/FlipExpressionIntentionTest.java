@@ -21,7 +21,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @see com.siyeh.ipp.expression.FlipExpressionIntention
  */
-public class FlipExpressionIntentionTest extends IPPTestCase {
+public abstract class FlipExpressionIntentionTest extends IPPTestCase {
   public void testPrefix() { doTest(); }
   public void testPolyadic() { doTest(); }
   public void testNoChange() { assertIntentionNotAvailable(); }

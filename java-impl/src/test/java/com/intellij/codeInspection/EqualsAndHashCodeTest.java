@@ -14,7 +14,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.equalsAndHashcode.EqualsAndHashcode;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class EqualsAndHashCodeTest extends InspectionTestCase {
+public abstract class EqualsAndHashCodeTest extends InspectionTestCase {
   private final EqualsAndHashcode myTool = new EqualsAndHashcode();
 
   @Override

@@ -2,7 +2,7 @@ package com.intellij.projectView;
 
 import com.intellij.openapi.ui.Queryable;
 
-public class ProjectTreeStructureTest extends BaseProjectViewTestCase {
+public abstract class ProjectTreeStructureTest extends BaseProjectViewTestCase {
 
   @Override
   protected void setUp() throws Exception {

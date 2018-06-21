@@ -17,7 +17,7 @@ package com.siyeh.ipp.switchtoif;
 
 import com.siyeh.ipp.IPPTestCase;
 
-public class ReplaceSwitchWithIflIntentionTest extends IPPTestCase {
+public abstract class ReplaceSwitchWithIflIntentionTest extends IPPTestCase {
 
   public void testReplaceInt() {
     doTest();

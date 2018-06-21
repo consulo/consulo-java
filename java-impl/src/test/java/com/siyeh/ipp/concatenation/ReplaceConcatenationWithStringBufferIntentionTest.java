@@ -6,7 +6,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @author Bas Leijdekkers
  */
-public class ReplaceConcatenationWithStringBufferIntentionTest extends IPPTestCase {
+public abstract class ReplaceConcatenationWithStringBufferIntentionTest extends IPPTestCase {
 
   public void testNonStringConcatenationStart() { doTest(); }
   public void testConcatenationInsideAppend() { doTest(); }

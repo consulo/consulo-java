@@ -18,7 +18,7 @@ package com.intellij.ide.fileStructure;
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaFileStructureSelectionTest extends JavaFileStructureTestCase {
+public abstract class JavaFileStructureSelectionTest extends JavaFileStructureTestCase {
   @Override
   protected String getTestDataFolderName() {
     return "selection";

@@ -21,7 +21,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @see com.siyeh.ipp.forloop.ReplaceForEachLoopWithIteratorForLoopIntention
  */
-public class ReplaceForEachLoopWithIteratorForLoopIntentionTest extends IPPTestCase {
+public abstract class ReplaceForEachLoopWithIteratorForLoopIntentionTest extends IPPTestCase {
   public void testBareCollectionLoop() { doTest(); }
   public void testGenericTypes() { doTest(); }
   public void testBoundedTypes() { doTest(); }

@@ -7,7 +7,7 @@ import com.intellij.testFramework.InspectionTestCase;
 /**
  * @author max
  */
-public class EmptyMethodTest extends InspectionTestCase {
+public abstract class EmptyMethodTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

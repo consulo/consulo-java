@@ -25,7 +25,7 @@ import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
  * User: anna
  * Date: 11/13/10
  */
-public class RedundantArray4VarargsCallInspectionTest extends UsefulTestCase {
+public abstract class RedundantArray4VarargsCallInspectionTest extends UsefulTestCase {
    protected CodeInsightTestFixture myFixture;
   private RedundantArrayForVarargsCallInspection myInspection;
 

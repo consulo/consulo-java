@@ -27,7 +27,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 /**
  * @author cdr
  */
-public class GotoImplementationTest extends CodeInsightTestCase
+public abstract class GotoImplementationTest extends CodeInsightTestCase
 {
 
 	private static Collection<PsiClass> getClassImplementations(final PsiClass psiClass)

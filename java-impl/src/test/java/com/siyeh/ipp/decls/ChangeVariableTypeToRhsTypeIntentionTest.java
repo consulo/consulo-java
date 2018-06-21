@@ -6,7 +6,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @author Bas Leijdekkers
  */
-public class ChangeVariableTypeToRhsTypeIntentionTest extends IPPTestCase {
+public abstract class ChangeVariableTypeToRhsTypeIntentionTest extends IPPTestCase {
 
   public void testSimple() { doTest("Declare 'ss' with type 'ArrayList<String>'"); }
 

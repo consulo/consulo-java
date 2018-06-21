@@ -24,7 +24,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 
-public class GotoImplementationHandlerTest extends JavaCodeInsightFixtureTestCase {
+public abstract class GotoImplementationHandlerTest extends JavaCodeInsightFixtureTestCase {
 
   public void testMultipleImplsFromAbstractCall() throws Throwable {
     PsiFile file = myFixture.addFileToProject("Foo.java", "public abstract class Hello {\n" +

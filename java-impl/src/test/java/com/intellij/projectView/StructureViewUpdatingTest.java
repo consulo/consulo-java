@@ -52,7 +52,7 @@ import com.intellij.util.IncorrectOperationException;
 
 import javax.swing.*;
 
-public class StructureViewUpdatingTest extends TestSourceBasedTestCase {
+public abstract class StructureViewUpdatingTest extends TestSourceBasedTestCase {
   @Override
   protected String getTestPath() {
     return "structureView";

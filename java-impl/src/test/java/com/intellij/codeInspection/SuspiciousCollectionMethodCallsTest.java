@@ -4,7 +4,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.miscGenerics.SuspiciousCollectionsMethodCallsInspection;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
-public class SuspiciousCollectionMethodCallsTest extends LightCodeInsightFixtureTestCase {
+public abstract class SuspiciousCollectionMethodCallsTest extends LightCodeInsightFixtureTestCase {
   private final SuspiciousCollectionsMethodCallsInspection myTool = new SuspiciousCollectionsMethodCallsInspection();
 
   @Override

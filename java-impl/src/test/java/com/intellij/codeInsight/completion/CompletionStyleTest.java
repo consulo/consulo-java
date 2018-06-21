@@ -24,7 +24,7 @@ import com.intellij.testFramework.TestDataPath;
  * To change this template use Options | File Templates.
  */
 @TestDataPath("$CONTENT_ROOT/testData")
-public class CompletionStyleTest extends LightCodeInsightTestCase{
+public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   private static final String BASE_PATH = "/codeInsight/completion/style";
 
   @Override

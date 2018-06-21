@@ -18,7 +18,7 @@ package com.siyeh.ipp.types;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ReplaceLambdaWithAnonymousIntentionTest extends IPPTestCase {
+public abstract class ReplaceLambdaWithAnonymousIntentionTest extends IPPTestCase {
   public void testSimpleRunnable() {
     doTest();
   }

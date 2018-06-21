@@ -14,7 +14,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.unusedReturnValue.UnusedReturnValue;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class UnusedReturnValueTest extends InspectionTestCase {
+public abstract class UnusedReturnValueTest extends InspectionTestCase {
   private final UnusedReturnValue myTool = new UnusedReturnValue();
 
   @Override

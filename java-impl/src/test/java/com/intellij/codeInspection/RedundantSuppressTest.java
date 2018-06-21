@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.InspectionTestCase;
 import javax.annotation.Nonnull;
 
-public class RedundantSuppressTest extends InspectionTestCase {
+public abstract class RedundantSuppressTest extends InspectionTestCase {
   private GlobalInspectionToolWrapper myWrapper;
   private InspectionToolWrapper[] myInspectionToolWrappers;
 

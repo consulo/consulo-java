@@ -37,7 +37,7 @@ import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 @PlatformTestCase.WrapInCommand
-public class ChangeSignatureGestureTest extends LightCodeInsightFixtureTestCase
+public abstract class ChangeSignatureGestureTest extends LightCodeInsightFixtureTestCase
 {
 
 	private void doTest(final Runnable run)

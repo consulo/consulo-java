@@ -59,7 +59,7 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.testFramework.PlatformTestUtil;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
-public class NavigateFromSourceTest extends BaseProjectViewTestCase
+public abstract class NavigateFromSourceTest extends BaseProjectViewTestCase
 {
 	public void testShowClassMembers() throws Exception
 	{

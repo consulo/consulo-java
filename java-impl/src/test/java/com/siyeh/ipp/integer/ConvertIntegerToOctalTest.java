@@ -18,7 +18,7 @@ package com.siyeh.ipp.integer;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ConvertIntegerToOctalTest extends IPPTestCase {
+public abstract class ConvertIntegerToOctalTest extends IPPTestCase {
   public void testDecToOct1() { doTest(); }
   public void testDecToOct2() { doTest(); }
   public void testHexToOct1() { doTest(); }

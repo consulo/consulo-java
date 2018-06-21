@@ -24,7 +24,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.testFramework.PsiTestCase;
 
-public class OptimizeImportsTest extends PsiTestCase
+public abstract class OptimizeImportsTest extends PsiTestCase
 {
 	private static final Logger LOGGER = Logger.getInstance(OptimizeImportsTest.class);
 

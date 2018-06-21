@@ -12,7 +12,7 @@ import com.intellij.testFramework.codeInsight.hierarchy.HierarchyViewTestBase;
 /**
  * @author yole
  */
-public class JavaCallHierarchyTest extends HierarchyViewTestBase {
+public abstract class JavaCallHierarchyTest extends HierarchyViewTestBase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

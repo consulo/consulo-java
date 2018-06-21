@@ -7,7 +7,7 @@ import com.intellij.testFramework.InspectionTestCase;
 /**
  * @author ven
  */
-public class FieldCanBeLocalTest extends InspectionTestCase {
+public abstract class FieldCanBeLocalTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

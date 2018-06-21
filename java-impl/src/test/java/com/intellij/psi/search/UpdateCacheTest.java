@@ -67,7 +67,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.indexing.FileBasedIndex;
 
 @PlatformTestCase.WrapInCommand
-public class UpdateCacheTest extends PsiTestCase{
+public abstract class UpdateCacheTest extends PsiTestCase{
   @Override
   protected void setUp() throws Exception {
     super.setUp();

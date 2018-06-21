@@ -23,7 +23,7 @@ import com.intellij.find.impl.livePreview.LivePreviewController;
 import com.intellij.find.impl.livePreview.SearchResults;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
-public class FindInEditorTest extends LightCodeInsightTestCase {
+public abstract class FindInEditorTest extends LightCodeInsightTestCase {
 
   private LivePreviewController myLivePreviewController;
   private SearchResults mySearchResults;

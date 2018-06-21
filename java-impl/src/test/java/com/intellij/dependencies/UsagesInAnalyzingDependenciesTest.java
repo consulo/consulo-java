@@ -42,7 +42,7 @@ import java.util.Set;
  * User: anna
  * Date: Jan 18, 2005
  */
-public class UsagesInAnalyzingDependenciesTest extends PsiTestCase{
+public abstract class UsagesInAnalyzingDependenciesTest extends PsiTestCase{
   @Override
   protected void setUp() throws Exception {
     super.setUp();

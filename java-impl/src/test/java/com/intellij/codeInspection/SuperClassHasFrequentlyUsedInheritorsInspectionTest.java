@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
 @SuppressWarnings("ALL")
-public class SuperClassHasFrequentlyUsedInheritorsInspectionTest extends JavaCodeInsightFixtureTestCase {
+public abstract class SuperClassHasFrequentlyUsedInheritorsInspectionTest extends JavaCodeInsightFixtureTestCase {
 
   @Override
   protected String getTestDataPath() {

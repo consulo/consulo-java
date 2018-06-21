@@ -33,7 +33,7 @@ import com.intellij.util.containers.IntArrayList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlainTextUsagesTest extends PsiTestCase {
+public abstract class PlainTextUsagesTest extends PsiTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

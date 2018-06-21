@@ -15,14 +15,14 @@
  */
 package com.intellij.ide.fileStructure;
 
-import com.intellij.idea.Bombed;
-
 import java.util.Calendar;
+
+import com.intellij.idea.Bombed;
 
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaFileStructureFilteringTest extends JavaFileStructureTestCase {
+public abstract class JavaFileStructureFilteringTest extends JavaFileStructureTestCase {
   @Override
   protected String getTestDataFolderName() {
     return "filtering";

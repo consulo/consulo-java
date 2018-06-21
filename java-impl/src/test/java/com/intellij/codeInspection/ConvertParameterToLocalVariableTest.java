@@ -27,7 +27,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-public class ConvertParameterToLocalVariableTest extends LightQuickFixTestCase {
+public abstract class ConvertParameterToLocalVariableTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

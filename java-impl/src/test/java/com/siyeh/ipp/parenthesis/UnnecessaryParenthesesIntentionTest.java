@@ -6,7 +6,7 @@ import com.siyeh.ipp.IPPTestCase;
 /**
  * @see RemoveUnnecessaryParenthesesIntention
  */
-public class UnnecessaryParenthesesIntentionTest extends IPPTestCase {
+public abstract class UnnecessaryParenthesesIntentionTest extends IPPTestCase {
 
   public void testPolyadic() { doTest(); }
   public void testCommutative() { doTest(); }

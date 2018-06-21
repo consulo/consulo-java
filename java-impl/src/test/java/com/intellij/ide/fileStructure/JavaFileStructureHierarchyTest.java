@@ -18,7 +18,7 @@ package com.intellij.ide.fileStructure;
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaFileStructureHierarchyTest extends JavaFileStructureTestCase {
+public abstract class JavaFileStructureHierarchyTest extends JavaFileStructureTestCase {
   @Override
   protected String getTestDataFolderName() {
     return "hierarchy";

@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
-public class InheritorsTest extends PsiTestCase{
+public abstract class InheritorsTest extends PsiTestCase{
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.search.InheritorsTest");
 
   @Override

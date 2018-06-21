@@ -18,7 +18,7 @@ package com.siyeh.ipp.commutative;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class FlipCommutativeMethodCallIntentionTest extends IPPTestCase {
+public abstract class FlipCommutativeMethodCallIntentionTest extends IPPTestCase {
     public void testSubstitution() { doTest(); }
 
     @Override

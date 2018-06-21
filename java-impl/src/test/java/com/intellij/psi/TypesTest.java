@@ -33,7 +33,7 @@ import com.intellij.testFramework.PsiTestUtil;
 /**
  *  @author dsl
  */
-public class TypesTest extends GenericsTestCase {
+public abstract class TypesTest extends GenericsTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

@@ -28,6 +28,5 @@ public class ProjectRootUtil
 	public static PsiDirectory[] getAllContentRoots(Project project)
 	{
 		throw new UnsupportedOperationException();
-
 	}
 }

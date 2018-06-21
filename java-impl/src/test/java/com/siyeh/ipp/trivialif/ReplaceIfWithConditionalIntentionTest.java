@@ -18,7 +18,7 @@ package com.siyeh.ipp.trivialif;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ReplaceIfWithConditionalIntentionTest extends IPPTestCase {
+public abstract class ReplaceIfWithConditionalIntentionTest extends IPPTestCase {
 
   public void testReturnValueWithDiamonds() {
     doTest();

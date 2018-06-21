@@ -29,7 +29,7 @@ import com.intellij.testFramework.TestFileType;
  * @author Denis Zhdanov
  * @since 11/18/10 7:42 PM
  */
-public class FoldingProcessingOnDocumentModificationTest extends AbstractEditorTest
+public abstract class FoldingProcessingOnDocumentModificationTest extends AbstractEditorTest
 {
 
 	public void testUnexpectedClassLevelJavadocExpandingOnClassSignatureChange() throws IOException

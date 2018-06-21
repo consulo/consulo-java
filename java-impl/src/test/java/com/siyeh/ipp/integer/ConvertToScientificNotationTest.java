@@ -18,7 +18,7 @@ package com.siyeh.ipp.integer;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ConvertToScientificNotationTest extends IPPTestCase {
+public abstract class ConvertToScientificNotationTest extends IPPTestCase {
   public void testToSci() { doTest(); }
   public void testNegatedFloatToSci() { doTest(); }
   public void testWithUnderscoresToSci() { doTest(); }

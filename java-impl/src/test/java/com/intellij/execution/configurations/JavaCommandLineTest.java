@@ -30,7 +30,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.testFramework.LightIdeaTestCase;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
-public class JavaCommandLineTest extends LightIdeaTestCase
+public abstract class JavaCommandLineTest extends LightIdeaTestCase
 {
 	public void testJdk()
 	{

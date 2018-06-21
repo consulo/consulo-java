@@ -34,7 +34,7 @@ import com.intellij.util.containers.ContainerUtil;
 /**
  * @author cdr
  */
-public class SliceTreeTest extends LightDaemonAnalyzerTestCase {
+public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
   private SliceTreeStructure configureTree(@NonNls final String name) throws Exception {
     configureByFile("/codeInsight/slice/backward/"+ name +".java");
     PsiDocumentManager.getInstance(getProject()).commitAllDocuments();

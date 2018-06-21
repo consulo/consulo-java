@@ -18,7 +18,7 @@ package com.siyeh.ipp.integer;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ConvertIntegerToBinaryTest extends IPPTestCase {
+public abstract class ConvertIntegerToBinaryTest extends IPPTestCase {
   public void testDecToBin1() { doTest(); }
   public void testDecToBin2() { doTest(); }
   public void testHexToBin1() { doTest(); }

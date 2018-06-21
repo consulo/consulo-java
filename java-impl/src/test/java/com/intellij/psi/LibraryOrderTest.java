@@ -30,7 +30,7 @@ import java.util.List;
 /**
  *  @author dsl
  */
-public class LibraryOrderTest extends PsiTestCase {
+public abstract class LibraryOrderTest extends PsiTestCase {
 
   public void test1() {
     setupPaths();

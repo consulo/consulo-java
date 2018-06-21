@@ -31,6 +31,8 @@
  */
 package com.intellij.dependencies;
 
+import javax.swing.JTree;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.openapi.util.Disposer;
@@ -39,14 +41,16 @@ import com.intellij.packageDependencies.DependencyUISettings;
 import com.intellij.packageDependencies.ForwardDependenciesBuilder;
 import com.intellij.packageDependencies.ui.DependenciesPanel;
 import com.intellij.packageDependencies.ui.PackagePatternProvider;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.TestSourceBasedTestCase;
 import junit.framework.Assert;
 
-import javax.swing.*;
-
-public class DependenciesPanelTest extends TestSourceBasedTestCase{
+public abstract class DependenciesPanelTest extends TestSourceBasedTestCase{
   public void testDependencies(){
     DependenciesPanel dependenciesPanel = null;
     try {

@@ -3,7 +3,7 @@ package com.siyeh.ipp.concatenation;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class JoinConcatenatedStringLiteralsIntentionTest extends IPPTestCase {
+public abstract class JoinConcatenatedStringLiteralsIntentionTest extends IPPTestCase {
     public void testSimple() { doTest(); }
     public void testPolyadic() { doTest(); }
     public void testNonString() { doTest(); }

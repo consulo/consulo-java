@@ -34,7 +34,7 @@ import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class JavaAPIUsagesInspectionTest extends InspectionTestCase {
+public abstract class JavaAPIUsagesInspectionTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

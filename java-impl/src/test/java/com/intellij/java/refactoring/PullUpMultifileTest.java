@@ -41,7 +41,7 @@ import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.containers.MultiMap;
 
 //pull first method from class a.A to class b.B
-public class PullUpMultifileTest extends MultiFileTestCase
+public abstract class PullUpMultifileTest extends MultiFileTestCase
 {
 	@Nonnull
 	@Override

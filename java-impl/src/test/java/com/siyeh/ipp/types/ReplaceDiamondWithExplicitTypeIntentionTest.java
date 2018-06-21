@@ -18,7 +18,7 @@ package com.siyeh.ipp.types;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ReplaceDiamondWithExplicitTypeIntentionTest extends IPPTestCase {
+public abstract class ReplaceDiamondWithExplicitTypeIntentionTest extends IPPTestCase {
   public void testAnonymousClass() {
     doTest();
   }

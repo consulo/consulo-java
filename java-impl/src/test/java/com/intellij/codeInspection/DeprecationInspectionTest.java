@@ -11,7 +11,7 @@ import com.intellij.testFramework.InspectionTestCase;
 /**
  * @author max
  */
-public class DeprecationInspectionTest extends InspectionTestCase {
+public abstract class DeprecationInspectionTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

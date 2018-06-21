@@ -22,8 +22,9 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.security.SecureRandom;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.impl.DebugUtil;
@@ -34,7 +35,7 @@ import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.util.ThrowableRunnable;
 
 @SuppressWarnings("SpellCheckingInspection")
-public class JavaStubBuilderTest extends LightIdeaTestCase {
+public abstract class JavaStubBuilderTest extends LightIdeaTestCase {
   private static final StubBuilder NEW_BUILDER = new JavaLightStubBuilder();
 
   @Override

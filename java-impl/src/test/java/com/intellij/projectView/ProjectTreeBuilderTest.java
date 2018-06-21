@@ -18,7 +18,7 @@ import com.intellij.util.ui.tree.TreeUtil;
 
 import java.io.IOException;
 
-public class ProjectTreeBuilderTest extends BaseProjectViewTestCase {
+public abstract class ProjectTreeBuilderTest extends BaseProjectViewTestCase {
   public void testStandardProviders() throws Exception {
     getProjectTreeStructure().setProviders();
 

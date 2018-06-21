@@ -18,7 +18,7 @@ package com.siyeh.ipp.trivialif;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class ConvertToNestedIfIntentionTest extends IPPTestCase {
+public abstract class ConvertToNestedIfIntentionTest extends IPPTestCase {
 
   public void testNested() { doTest(); }
   public void testStaircase() { doTest(); }

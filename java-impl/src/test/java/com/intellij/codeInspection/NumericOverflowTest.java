@@ -3,7 +3,7 @@ package com.intellij.codeInspection;
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class NumericOverflowTest extends InspectionTestCase {
+public abstract class NumericOverflowTest extends InspectionTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";

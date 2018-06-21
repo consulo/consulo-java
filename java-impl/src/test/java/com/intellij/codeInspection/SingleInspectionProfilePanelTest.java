@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
  * @author Dmitry Avdeev
  *         Date: 5/10/12
  */
-public class SingleInspectionProfilePanelTest extends LightIdeaTestCase {
+public abstract class SingleInspectionProfilePanelTest extends LightIdeaTestCase {
 
   // see IDEA-85700
   public void testSettingsModification() throws Exception {

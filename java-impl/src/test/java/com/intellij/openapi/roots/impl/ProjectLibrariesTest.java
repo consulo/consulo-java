@@ -26,7 +26,7 @@ import com.intellij.testFramework.IdeaTestCase;
 /**
  * @author dsl
  */
-public class ProjectLibrariesTest extends IdeaTestCase {
+public abstract class ProjectLibrariesTest extends IdeaTestCase {
   public void test() {
     final LibraryTable libraryTable = ProjectLibraryTable.getInstance(myProject);
     Library lib = ApplicationManager.getApplication().runWriteAction(new Computable<Library>() {

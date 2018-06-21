@@ -4,7 +4,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.visibility.VisibilityInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
-public class VisibilityInspectionTest extends InspectionTestCase {
+public abstract class VisibilityInspectionTest extends InspectionTestCase {
   private final VisibilityInspection myTool = new VisibilityInspection();
 
   @Override

@@ -63,7 +63,7 @@ import com.intellij.util.WaitFor;
  * Time: 7:53:31 PM
  */
 @SuppressWarnings({"HardCodedStringLiteral"})
-public class FindManagerTest extends DaemonAnalyzerTestCase {
+public abstract class FindManagerTest extends DaemonAnalyzerTestCase {
   protected VirtualFile[] mySourceDirs;
 
   public void testFindString() throws Exception{

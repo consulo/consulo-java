@@ -18,7 +18,7 @@ package com.siyeh.ipp.bool;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
-public class DemorgansIntentionTest extends IPPTestCase {
+public abstract class DemorgansIntentionTest extends IPPTestCase {
   public void testNeedsParentheses() { doTest(); }
   public void testNeedsMoreParentheses() { doTest(); }
   public void testNotTooManyParentheses() { doTest(); }
