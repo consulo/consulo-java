@@ -23,7 +23,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author yole
  */
-public class InlineToAnonymousClassTest extends LightRefactoringTestCase
+public abstract class InlineToAnonymousClassTest extends LightRefactoringTestCase
 {
 	@Nonnull
 	@Override

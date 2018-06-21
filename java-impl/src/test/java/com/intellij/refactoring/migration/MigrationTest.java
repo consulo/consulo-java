@@ -8,7 +8,7 @@ import com.intellij.JavaTestUtil;
 /**
  * @author dsl
  */
-public class MigrationTest extends MultiFileTestCase {
+public abstract class MigrationTest extends MultiFileTestCase {
   public void testUnexistingClassInUnexistingPackage() throws Exception {
     doTest(createAction(new MigrationMap(new MigrationMapEntry[]{
       new MigrationMapEntry("qqq.aaa.Yahoo", "java.lang.String", MigrationMapEntry.CLASS, false)

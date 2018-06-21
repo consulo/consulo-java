@@ -22,7 +22,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author ven
  */
-public class MoveInstanceMethodTest extends LightRefactoringTestCase {
+public abstract class MoveInstanceMethodTest extends LightRefactoringTestCase {
 
   public void testSimple() throws Exception { doTest(true, 0); }
 

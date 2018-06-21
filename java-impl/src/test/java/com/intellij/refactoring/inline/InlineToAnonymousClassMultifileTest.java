@@ -34,7 +34,7 @@ import java.io.File;
 /**
  * @author yole
  */
-public class InlineToAnonymousClassMultifileTest extends RefactoringTestCase {
+public abstract class InlineToAnonymousClassMultifileTest extends RefactoringTestCase {
   public void testProtectedMember() throws Exception {   // IDEADEV-18738
     doTest("p1.SubjectWithSuper");
   }

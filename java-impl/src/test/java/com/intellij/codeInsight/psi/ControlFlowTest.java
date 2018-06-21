@@ -30,7 +30,7 @@ import com.intellij.util.containers.IntArrayList;
  * @author cdr
  * Date: Nov 25, 2002
  */
-public class ControlFlowTest extends LightCodeInsightTestCase {
+public abstract class ControlFlowTest extends LightCodeInsightTestCase {
   @NonNls private static final String BASE_PATH = "/psi/controlFlow";
 
   private static void doTestFor(final File file) throws Exception {

@@ -7,7 +7,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 /**
  * @author mike
  */
-public class SplitIfActionTest extends LightCodeInsightTestCase {
+public abstract class SplitIfActionTest extends LightCodeInsightTestCase {
   public void test1() throws Exception {
     CodeStyleSettingsManager.getSettings(getProject()).ELSE_ON_NEW_LINE= true;
     doTest();

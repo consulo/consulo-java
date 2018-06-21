@@ -21,7 +21,7 @@ import static com.intellij.testFramework.EditorTestUtil.BACKSPACE_FAKE_CHAR;
 /**
  * @author Maxim.Mossienko
  */
-public class CustomFileTypeEditorTest extends LightCodeInsightTestCase {
+public abstract class CustomFileTypeEditorTest extends LightCodeInsightTestCase {
   private static final String BASE_PATH = "/codeInsight/defaultAction/customFileType/";
 
   private void _testBlockNavigation(String test, String ext) throws Exception {

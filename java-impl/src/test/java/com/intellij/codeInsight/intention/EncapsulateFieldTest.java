@@ -20,7 +20,7 @@ import com.intellij.codeInsight.daemon.LightIntentionActionTestCase;
 /**
  * @author Danila Ponomarenko
  */
-public class EncapsulateFieldTest extends LightIntentionActionTestCase {
+public abstract class EncapsulateFieldTest extends LightIntentionActionTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

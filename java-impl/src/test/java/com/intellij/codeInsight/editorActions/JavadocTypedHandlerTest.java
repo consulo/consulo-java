@@ -15,15 +15,15 @@
  */
 package com.intellij.codeInsight.editorActions;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * @author Denis Zhdanov
  * @since 02/02/2011
  */
-public class JavadocTypedHandlerTest {
+public abstract class JavadocTypedHandlerTest {
 
   private static final String CARET_MARKER = "<caret>";
   

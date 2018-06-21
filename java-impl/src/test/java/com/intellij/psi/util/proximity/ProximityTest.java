@@ -15,7 +15,7 @@ import com.intellij.testFramework.fixtures.TempDirTestFixture;
 /**
  * @author peter
  */
-public class ProximityTest extends JavaCodeInsightFixtureTestCase {
+public abstract class ProximityTest extends JavaCodeInsightFixtureTestCase {
 
   public void testSameSourceRoot() throws Throwable {
     final TempDirTestFixture root1 = IdeaTestFixtureFactory.getFixtureFactory().createTempDirTestFixture();

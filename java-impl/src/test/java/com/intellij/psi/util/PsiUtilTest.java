@@ -14,7 +14,7 @@ import java.util.Iterator;
 /**
  *  @author dsl
  */
-public class PsiUtilTest extends LightCodeInsightTestCase {
+public abstract class PsiUtilTest extends LightCodeInsightTestCase {
   public void testTypeParameterIterator() throws Exception {
     PsiClass classA = createClass("class A<T> {}");
     final Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA);

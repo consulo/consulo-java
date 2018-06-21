@@ -17,7 +17,7 @@ package com.intellij.codeInsight.intention;
 
 import com.intellij.codeInsight.daemon.LightIntentionActionTestCase;
 
-public class ExpandStaticImportActionTest extends LightIntentionActionTestCase {
+public abstract class ExpandStaticImportActionTest extends LightIntentionActionTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

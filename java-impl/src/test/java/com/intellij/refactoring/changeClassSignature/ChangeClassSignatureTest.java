@@ -17,7 +17,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author dsl
  */
-public class ChangeClassSignatureTest extends LightRefactoringTestCase {
+public abstract class ChangeClassSignatureTest extends LightRefactoringTestCase {
   @NonNls private static final String DATA_PATH = "/refactoring/changeClassSignature/";
 
   @Nonnull

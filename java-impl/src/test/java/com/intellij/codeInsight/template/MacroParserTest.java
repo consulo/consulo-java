@@ -7,7 +7,7 @@ import com.intellij.testFramework.LightIdeaTestCase;
 /**
  * @author yole
  */
-public class MacroParserTest extends LightIdeaTestCase {
+public abstract class MacroParserTest extends LightIdeaTestCase {
 
   public void testEmpty() {
     Expression e = TemplateImplUtil.parseTemplate("");

@@ -20,8 +20,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
@@ -36,7 +37,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
-public class InlineMethodTest extends LightRefactoringTestCase {
+public abstract class InlineMethodTest extends LightRefactoringTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

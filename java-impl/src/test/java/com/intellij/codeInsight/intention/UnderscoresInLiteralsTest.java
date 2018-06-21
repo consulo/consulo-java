@@ -22,7 +22,7 @@ import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 
-public class UnderscoresInLiteralsTest extends JavaCodeInsightFixtureTestCase {
+public abstract class UnderscoresInLiteralsTest extends JavaCodeInsightFixtureTestCase {
   @Override
   protected void tuneFixture(final JavaModuleFixtureBuilder moduleBuilder) throws Exception {
     super.tuneFixture(moduleBuilder);

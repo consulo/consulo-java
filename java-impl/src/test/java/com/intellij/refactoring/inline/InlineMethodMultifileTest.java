@@ -33,7 +33,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import java.io.File;
 
 
-public class InlineMethodMultifileTest extends RefactoringTestCase {
+public abstract class InlineMethodMultifileTest extends RefactoringTestCase {
 
   private String getRoot() {
     return JavaTestUtil.getJavaTestDataPath() + "/refactoring/inlineMethod/multifile/" + getTestName(true);

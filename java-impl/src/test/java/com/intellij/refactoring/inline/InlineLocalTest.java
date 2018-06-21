@@ -23,7 +23,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author ven
  */
-public class InlineLocalTest extends LightCodeInsightTestCase {
+public abstract class InlineLocalTest extends LightCodeInsightTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

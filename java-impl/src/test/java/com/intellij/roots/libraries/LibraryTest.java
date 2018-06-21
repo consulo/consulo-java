@@ -13,7 +13,7 @@ import org.jdom.output.XMLOutputter;
 /**
  *  @author dsl
  */
-public class LibraryTest extends IdeaTestCase {
+public abstract class LibraryTest extends IdeaTestCase {
   public void testModification() throws Exception {
     final LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable();
     final Library library = libraryTable.createLibrary("NewLibrary");

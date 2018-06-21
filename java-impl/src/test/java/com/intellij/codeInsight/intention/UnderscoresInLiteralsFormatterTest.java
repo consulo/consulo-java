@@ -15,12 +15,14 @@
  */
 package com.intellij.codeInsight.intention;
 
-import com.intellij.psi.PsiType;
-import com.intellij.util.text.LiteralFormatUtil;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
+import org.junit.Test;
+import com.intellij.psi.PsiType;
+import com.intellij.util.text.LiteralFormatUtil;
+
+@Ignore
 public class UnderscoresInLiteralsFormatterTest {
   @Test
   public void testIntegers() {

@@ -13,7 +13,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
-public class PropertyUtilTest extends LightCodeInsightTestCase {
+public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
   public void testSuggestGetterName() throws Exception {
     assertEquals("isValid", PropertyUtil.suggestGetterName("valid", getType("boolean")));
     assertEquals("getValid", PropertyUtil.suggestGetterName("valid", getType("Object")));

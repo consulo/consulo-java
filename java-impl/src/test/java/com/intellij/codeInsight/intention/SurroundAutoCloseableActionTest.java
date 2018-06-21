@@ -22,7 +22,7 @@ import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 
-public class SurroundAutoCloseableActionTest extends JavaCodeInsightFixtureTestCase {
+public abstract class SurroundAutoCloseableActionTest extends JavaCodeInsightFixtureTestCase {
   private String myIntention;
 
   @Override

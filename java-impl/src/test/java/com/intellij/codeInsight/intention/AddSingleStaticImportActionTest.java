@@ -18,7 +18,7 @@ package com.intellij.codeInsight.intention;
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 
-public class AddSingleStaticImportActionTest extends JavaCodeInsightFixtureTestCase {
+public abstract class AddSingleStaticImportActionTest extends JavaCodeInsightFixtureTestCase {
 
   public void testInaccessible() {
     myFixture.addClass("package foo; class Foo {public static void foo(){}}");

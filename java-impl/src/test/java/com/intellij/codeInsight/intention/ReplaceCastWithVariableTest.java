@@ -20,7 +20,7 @@ import com.intellij.codeInsight.daemon.LightIntentionActionTestCase;
 /**
  * @author Danila Ponomarenko
  */
-public class ReplaceCastWithVariableTest extends LightIntentionActionTestCase {
+public abstract class ReplaceCastWithVariableTest extends LightIntentionActionTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

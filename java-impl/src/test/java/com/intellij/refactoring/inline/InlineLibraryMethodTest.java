@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author anna
  * @since 11/4/11
  */
-public class InlineLibraryMethodTest extends RefactoringTestCase {
+public abstract class InlineLibraryMethodTest extends RefactoringTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

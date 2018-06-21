@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * @author yole
  */
-public class JavaDocInfoGeneratorTest extends CodeInsightTestCase {
+public abstract class JavaDocInfoGeneratorTest extends CodeInsightTestCase {
   public void testSimpleField() throws Exception {
     doTestField();
   }

@@ -22,7 +22,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 /**
  * @author yole
  */
-public class ClassUtilTest extends LightCodeInsightFixtureTestCase {
+public abstract class ClassUtilTest extends LightCodeInsightFixtureTestCase {
   public void testFindPsiClassByJvmName() {
     myFixture.configureByFile("ManyClasses.java");
     assertNotNull(ClassUtil.findPsiClassByJVMName(getPsiManager(), "ManyClasses"));

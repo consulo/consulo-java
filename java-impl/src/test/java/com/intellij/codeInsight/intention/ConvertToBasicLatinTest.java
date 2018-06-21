@@ -21,7 +21,7 @@ import com.intellij.openapi.vfs.encoding.EncodingManager;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 
-public class ConvertToBasicLatinTest extends JavaCodeInsightFixtureTestCase {
+public abstract class ConvertToBasicLatinTest extends JavaCodeInsightFixtureTestCase {
   private String myIntention;
 
   @Override

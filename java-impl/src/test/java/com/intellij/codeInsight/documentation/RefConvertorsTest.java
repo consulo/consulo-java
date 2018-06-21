@@ -36,7 +36,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
  * @author Denis Zhdanov
  * @since 1/15/13 7:26 PM
  */
-public class RefConvertorsTest extends LightCodeInsightTestCase {
+public abstract class RefConvertorsTest extends LightCodeInsightTestCase {
   
   private File myExtractedImagesDir;
 

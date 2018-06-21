@@ -13,7 +13,7 @@ import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 
-public class InvertIfConditionTest extends LightIntentionActionTestCase {
+public abstract class InvertIfConditionTest extends LightIntentionActionTestCase {
 
   @Override
   protected String getBasePath() {

@@ -5,7 +5,7 @@ import com.intellij.testFramework.LightIdeaTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.IncorrectOperationException;
 
-public class AddRemoveInTypeParameterListTest extends LightIdeaTestCase{
+public abstract class AddRemoveInTypeParameterListTest extends LightIdeaTestCase{
   public void testAdd() throws IncorrectOperationException {
     PsiJavaFile file = (PsiJavaFile)createLightFile("Test.java", "class Test extends Type {\n}");
     PsiClass aClass = file.getClasses()[0];

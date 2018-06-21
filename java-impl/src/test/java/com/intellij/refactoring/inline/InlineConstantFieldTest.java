@@ -2,8 +2,9 @@ package com.intellij.refactoring.inline;
 
 import static org.junit.Assert.assertTrue;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
@@ -15,7 +16,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
-public class InlineConstantFieldTest extends LightRefactoringTestCase
+public abstract class InlineConstantFieldTest extends LightRefactoringTestCase
 {
 	@Nonnull
 	@Override

@@ -19,7 +19,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author dsl
  */
-public class ConvertToInstanceMethodTest extends LightRefactoringTestCase {
+public abstract class ConvertToInstanceMethodTest extends LightRefactoringTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

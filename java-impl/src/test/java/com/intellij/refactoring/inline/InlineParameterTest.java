@@ -3,8 +3,9 @@ package com.intellij.refactoring.inline;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.BaseRefactoringProcessor;
@@ -17,8 +18,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 /**
  * @author yole
  */
-
-public class InlineParameterTest extends LightRefactoringTestCase {
+public abstract class InlineParameterTest extends LightRefactoringTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

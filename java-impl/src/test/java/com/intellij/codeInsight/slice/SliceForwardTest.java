@@ -36,7 +36,7 @@ import com.intellij.util.containers.IntArrayList;
 /**
  * @author cdr
  */
-public class SliceForwardTest extends DaemonAnalyzerTestCase {
+public abstract class SliceForwardTest extends DaemonAnalyzerTestCase {
   private final TIntObjectHashMap<IntArrayList> myFlownOffsets = new TIntObjectHashMap<IntArrayList>();
 
   private void dotest() throws Exception {

@@ -5,7 +5,7 @@ import com.intellij.codeInsight.daemon.LightIntentionActionTestCase;
 /**
  * @author ven
  */
-public class MoveFieldAssignmentToInitializerActionTest extends LightIntentionActionTestCase {
+public abstract class MoveFieldAssignmentToInitializerActionTest extends LightIntentionActionTestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

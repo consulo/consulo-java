@@ -22,7 +22,7 @@ import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import consulo.java.JavaQuickFixBundle;
 
 
-public class ConvertToStringLiteralTest extends JavaCodeInsightFixtureTestCase {
+public abstract class ConvertToStringLiteralTest extends JavaCodeInsightFixtureTestCase {
   private String myIntention;
 
   @Override

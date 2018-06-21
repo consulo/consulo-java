@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
  * @author Denis Zhdanov
  * @since 5/3/11 2:35 PM
  */
-public class JavaSurroundWithTest extends LightCodeInsightTestCase {
+public abstract class JavaSurroundWithTest extends LightCodeInsightTestCase {
   
   private static final String BASE_PATH = "/codeInsight/generation/surroundWith/java/";
   
