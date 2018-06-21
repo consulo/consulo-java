@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class RemoveTypeArgumentsTest extends LightQuickFixTestCase {
+public abstract class RemoveTypeArgumentsTest extends LightQuickFixTestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

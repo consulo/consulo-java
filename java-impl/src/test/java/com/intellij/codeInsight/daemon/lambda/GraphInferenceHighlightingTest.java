@@ -15,12 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.testFramework.IdeaTestUtil;
-import org.jetbrains.annotations.NonNls;
 
-public class GraphInferenceHighlightingTest extends LightDaemonAnalyzerTestCase {
+public abstract class GraphInferenceHighlightingTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/graphInference";
 
   public void testNestedCalls() throws Exception {

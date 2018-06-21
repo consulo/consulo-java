@@ -20,7 +20,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.IncorrectOperationException;
 
 
-public class I18nizeTest extends LightCodeInsightTestCase {
+public abstract class I18nizeTest extends LightCodeInsightTestCase {
   @NonNls
   private static String getBasePath() {
     return "/codeInsight/daemonCodeAnalyzer/quickFix/i18nize";

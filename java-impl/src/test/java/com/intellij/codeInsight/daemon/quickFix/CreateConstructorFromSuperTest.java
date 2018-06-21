@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author ven
  */
-public class CreateConstructorFromSuperTest extends LightQuickFixTestCase {
+public abstract class CreateConstructorFromSuperTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

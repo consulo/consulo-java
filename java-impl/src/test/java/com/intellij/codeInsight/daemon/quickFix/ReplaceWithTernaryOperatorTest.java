@@ -26,7 +26,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.dataFlow.DataFlowInspection;
 import com.intellij.codeInspection.nullable.NullableStuffInspection;
 
-public class ReplaceWithTernaryOperatorTest extends LightQuickFixTestCase {
+public abstract class ReplaceWithTernaryOperatorTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

@@ -28,7 +28,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.TestDataPath;
 
 @TestDataPath("$CONTENT_ROOT/testData")
-public class ClassNameCompletionTest extends LightFixtureCompletionTestCase {
+public abstract class ClassNameCompletionTest extends LightFixtureCompletionTestCase {
 
   @Override
   protected void setUp() throws Exception {

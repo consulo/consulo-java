@@ -27,7 +27,7 @@ import com.intellij.util.ProcessingContext;
 /**
  * @author mike
  */
-public class JavadocCompletionTest extends LightFixtureCompletionTestCase {
+public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCase {
 
   @Override
   protected String getBasePath() {

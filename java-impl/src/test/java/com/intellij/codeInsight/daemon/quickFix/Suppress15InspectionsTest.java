@@ -30,7 +30,7 @@ import com.intellij.codeInspection.unusedParameters.UnusedParametersInspection;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 
-public class Suppress15InspectionsTest extends LightQuickFixTestCase {
+public abstract class Suppress15InspectionsTest extends LightQuickFixTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

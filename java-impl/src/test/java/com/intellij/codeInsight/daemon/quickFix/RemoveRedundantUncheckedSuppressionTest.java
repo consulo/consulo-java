@@ -17,15 +17,26 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.*;
+import org.jetbrains.annotations.Nls;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInspection.LocalInspectionToolSession;
+import com.intellij.codeInspection.PossibleHeapPollutionVarargsInspection;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.codeInspection.RedundantSuppressInspection;
 import com.intellij.codeInspection.ex.InspectionToolWrapper;
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.Nls;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
 
 
-public class RemoveRedundantUncheckedSuppressionTest extends LightQuickFixTestCase {
+public abstract class RemoveRedundantUncheckedSuppressionTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

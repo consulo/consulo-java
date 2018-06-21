@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class AddVariableInitializerTest extends LightQuickFixTestCase {
+public abstract class AddVariableInitializerTest extends LightQuickFixTestCase {
 
   public void test() throws Exception {
     doAllTests();

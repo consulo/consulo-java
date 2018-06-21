@@ -24,7 +24,7 @@ import com.intellij.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 
-public class FunctionalInterfaceTest extends LightDaemonAnalyzerTestCase {
+public abstract class FunctionalInterfaceTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/functionalInterface";
 
   private void doTestFunctionalInterface(@javax.annotation.Nullable String expectedErrorMessage) throws Exception {

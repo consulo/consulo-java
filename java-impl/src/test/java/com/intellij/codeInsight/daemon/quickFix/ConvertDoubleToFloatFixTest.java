@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author cdr
  */
-public class ConvertDoubleToFloatFixTest extends LightQuickFix15TestCase {
+public abstract class ConvertDoubleToFloatFixTest extends LightQuickFix15TestCase {
 
   public void test() throws Exception { doAllTests(); }
 

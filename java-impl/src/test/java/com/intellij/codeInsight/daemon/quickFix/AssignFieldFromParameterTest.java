@@ -1,14 +1,14 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
+import org.jdom.Element;
+import com.intellij.codeInsight.daemon.LightIntentionActionTestCase;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.codeInsight.daemon.LightIntentionActionTestCase;
-import org.jdom.Element;
 
 /**
  * @author ven
  */
-public class AssignFieldFromParameterTest extends LightIntentionActionTestCase {
+public abstract class AssignFieldFromParameterTest extends LightIntentionActionTestCase {
   private Element myOldSettings;
 
   @Override

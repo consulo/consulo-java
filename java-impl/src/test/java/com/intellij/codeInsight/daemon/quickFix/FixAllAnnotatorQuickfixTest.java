@@ -43,7 +43,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.IncorrectOperationException;
 
-public class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase {
+public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase {
   public void testAnnotator() throws Exception {
     Annotator annotator = new MyAnnotator();
     Language javaLanguage = JavaFileType.INSTANCE.getLanguage();

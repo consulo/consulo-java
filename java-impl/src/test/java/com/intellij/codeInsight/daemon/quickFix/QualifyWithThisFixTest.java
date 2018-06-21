@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author anna
  */
-public class QualifyWithThisFixTest extends LightQuickFixTestCase {
+public abstract class QualifyWithThisFixTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

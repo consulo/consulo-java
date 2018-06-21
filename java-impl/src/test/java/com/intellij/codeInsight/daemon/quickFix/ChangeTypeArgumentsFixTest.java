@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class ChangeTypeArgumentsFixTest extends LightQuickFix15TestCase {
+public abstract class ChangeTypeArgumentsFixTest extends LightQuickFix15TestCase {
 
   public void test() throws Exception { doAllTests(); }
 

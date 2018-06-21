@@ -7,7 +7,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 
-public class RemoveUnusedParameterTest extends LightQuickFixTestCase {
+public abstract class RemoveUnusedParameterTest extends LightQuickFixTestCase {
 
 
   @Nonnull

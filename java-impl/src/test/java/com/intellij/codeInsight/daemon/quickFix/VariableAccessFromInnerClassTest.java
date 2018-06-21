@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import com.intellij.pom.java.LanguageLevel;
 
-public class VariableAccessFromInnerClassTest extends VariableAccessFromInnerClass18Test {
+public abstract class VariableAccessFromInnerClassTest extends VariableAccessFromInnerClass18Test {
 
   @Override
   protected String getBasePath() {

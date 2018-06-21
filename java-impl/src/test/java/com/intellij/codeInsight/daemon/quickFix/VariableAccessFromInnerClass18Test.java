@@ -20,7 +20,7 @@ import com.intellij.openapi.application.ApplicationManager;
 /**
  * User: anna
  */
-public class VariableAccessFromInnerClass18Test extends LightQuickFixTestCase {
+public abstract class VariableAccessFromInnerClass18Test extends LightQuickFixTestCase {
   public void test() throws Exception {
     doAllTests();
   }

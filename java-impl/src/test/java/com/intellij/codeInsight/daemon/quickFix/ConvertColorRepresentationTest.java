@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author Danila Ponomarenko
  */
-public class ConvertColorRepresentationTest extends LightQuickFix15TestCase {
+public abstract class ConvertColorRepresentationTest extends LightQuickFix15TestCase {
 
   public void test() throws Exception { doAllTests(); }
 

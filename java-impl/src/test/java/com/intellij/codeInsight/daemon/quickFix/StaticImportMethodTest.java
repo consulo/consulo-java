@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class StaticImportMethodTest extends LightQuickFix15TestCase {
+public abstract class StaticImportMethodTest extends LightQuickFix15TestCase {
 
   public void test() throws Exception { doAllTests(); }
 

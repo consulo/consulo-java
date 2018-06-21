@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 
-public class PullOverrideMethodUpFixTest extends LightQuickFixTestCase {
+public abstract class PullOverrideMethodUpFixTest extends LightQuickFixTestCase {
   public void test1() throws Exception {
     doSingleTest("1.java");
   }

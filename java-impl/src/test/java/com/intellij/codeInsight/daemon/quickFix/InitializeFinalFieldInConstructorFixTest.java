@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
-public class InitializeFinalFieldInConstructorFixTest extends LightQuickFixTestCase {
+public abstract class InitializeFinalFieldInConstructorFixTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

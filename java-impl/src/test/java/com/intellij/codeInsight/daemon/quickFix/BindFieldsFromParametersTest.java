@@ -22,7 +22,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 /**
  * @author Danila Ponomarenko
  */
-public class BindFieldsFromParametersTest extends LightIntentionActionTestCase {
+public abstract class BindFieldsFromParametersTest extends LightIntentionActionTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

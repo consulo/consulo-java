@@ -1,16 +1,17 @@
 package com.intellij.codeInsight.completion;
 
+import java.io.IOException;
+
+import javax.annotation.Nonnull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileTypes.MockLanguageFileType;
 import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
-import javax.annotation.Nonnull;
-
-import java.io.IOException;
 
 /**
  * @author Maxim.Mossienko
  */
-public class CustomFileTypeCompletionTest extends LightCompletionTestCase {
+public abstract class CustomFileTypeCompletionTest extends LightCompletionTestCase {
   private static final String BASE_PATH = "/codeInsight/completion/customFileType/";
 
   @Nonnull

@@ -6,7 +6,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 
 
-public class GenerifyFileTest extends LightQuickFixAvailabilityTestCase {
+public abstract class GenerifyFileTest extends LightQuickFixAvailabilityTestCase {
 
   @Nonnull
   @Override

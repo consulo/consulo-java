@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author cdr
  */
-public class ChangeMethodSignatureFromUsageTest extends LightQuickFix15TestCase {
+public abstract class ChangeMethodSignatureFromUsageTest extends LightQuickFix15TestCase {
 
   public void test() throws Exception { doAllTests(); }
 

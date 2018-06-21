@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.localCanBeFinal.LocalCanBeFinal;
 
-public class SuppressLocalInspectionTest extends LightQuickFixTestCase {
+public abstract class SuppressLocalInspectionTest extends LightQuickFixTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

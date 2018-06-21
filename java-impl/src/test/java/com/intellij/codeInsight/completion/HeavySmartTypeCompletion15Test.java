@@ -7,7 +7,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 
 @SuppressWarnings({"ALL"})
-public class HeavySmartTypeCompletion15Test extends JavaCodeInsightFixtureTestCase {
+public abstract class HeavySmartTypeCompletion15Test extends JavaCodeInsightFixtureTestCase {
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

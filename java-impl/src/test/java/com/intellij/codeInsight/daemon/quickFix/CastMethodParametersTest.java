@@ -1,7 +1,7 @@
 
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class CastMethodParametersTest extends LightQuickFixTestCase {
+public abstract class CastMethodParametersTest extends LightQuickFixTestCase {
 
   @Override
   protected void setUp() throws Exception {

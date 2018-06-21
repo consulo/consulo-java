@@ -24,7 +24,7 @@ import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.testFramework.TestModuleDescriptor;
 
-public class SmartType17CompletionTest extends LightFixtureCompletionTestCase {
+public abstract class SmartType17CompletionTest extends LightFixtureCompletionTestCase {
   @Override
   protected String getBasePath() {
     return JavaTestUtil.getRelativeJavaTestDataPath() + "/codeInsight/completion/smartType/";

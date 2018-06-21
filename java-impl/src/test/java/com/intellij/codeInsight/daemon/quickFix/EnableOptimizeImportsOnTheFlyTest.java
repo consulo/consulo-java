@@ -8,7 +8,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection;
 
 
-public class EnableOptimizeImportsOnTheFlyTest extends LightQuickFixTestCase {
+public abstract class EnableOptimizeImportsOnTheFlyTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

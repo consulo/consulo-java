@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class WrapExpressionFixTest extends LightQuickFixTestCase {
+public abstract class WrapExpressionFixTest extends LightQuickFixTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

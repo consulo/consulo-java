@@ -9,7 +9,7 @@ import com.intellij.openapi.util.Comparing;
 /**
  * @author yole
  */
-public class I18nQuickFixTest extends LightQuickFix15TestCase {
+public abstract class I18nQuickFixTest extends LightQuickFix15TestCase {
   private boolean myMustBeAvailableAfterInvoke;
 
   @Nonnull

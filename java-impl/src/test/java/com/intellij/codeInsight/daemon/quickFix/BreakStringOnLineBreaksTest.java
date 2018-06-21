@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author Danila Ponomarenko
  */
-public class BreakStringOnLineBreaksTest extends LightQuickFixTestCase {
+public abstract class BreakStringOnLineBreaksTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

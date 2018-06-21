@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class AddTypeCastTest extends LightQuickFixTestCase {
+public abstract class AddTypeCastTest extends LightQuickFixTestCase {
   public void test() { doAllTests(); }
 
   @Override

@@ -20,7 +20,7 @@ import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 /**
  * @author Danila Ponomarenko
  */
-public class CreateGetterOrSetterTest extends LightQuickFixTestCase {
+public abstract class CreateGetterOrSetterTest extends LightQuickFixTestCase {
   public void test() throws Exception {
     enableInspectionTool(new UnusedSymbolLocalInspection());
     doAllTests();

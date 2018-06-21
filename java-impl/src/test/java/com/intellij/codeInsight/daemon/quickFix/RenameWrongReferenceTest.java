@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class RenameWrongReferenceTest extends LightQuickFixAvailabilityTestCase {
+public abstract class RenameWrongReferenceTest extends LightQuickFixAvailabilityTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

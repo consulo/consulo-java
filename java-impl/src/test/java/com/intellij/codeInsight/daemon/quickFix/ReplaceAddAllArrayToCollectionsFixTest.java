@@ -20,7 +20,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class ReplaceAddAllArrayToCollectionsFixTest extends LightQuickFixTestCase {
+public abstract class ReplaceAddAllArrayToCollectionsFixTest extends LightQuickFixTestCase {
    public void test() throws Exception {
      doAllTests();
    }

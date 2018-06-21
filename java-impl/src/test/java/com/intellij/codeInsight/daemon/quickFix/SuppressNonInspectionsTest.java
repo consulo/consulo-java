@@ -12,7 +12,7 @@ import com.intellij.codeInspection.unneededThrows.RedundantThrowsDeclaration;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 
-public class SuppressNonInspectionsTest extends LightQuickFixTestCase {
+public abstract class SuppressNonInspectionsTest extends LightQuickFixTestCase {
 
   @Override
   protected void setUp() throws Exception {

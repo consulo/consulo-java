@@ -15,12 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
 import javax.annotation.Nonnull;
 
+import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
 
-public class RedundantLambdaCodeBlockInspectionTest extends LightQuickFixTestCase {
+
+public abstract class RedundantLambdaCodeBlockInspectionTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

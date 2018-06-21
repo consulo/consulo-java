@@ -41,7 +41,7 @@ import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 
-public class LossyEncodingTest extends LightDaemonAnalyzerTestCase {
+public abstract class LossyEncodingTest extends LightDaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lossyEncoding";
 
   @Nonnull

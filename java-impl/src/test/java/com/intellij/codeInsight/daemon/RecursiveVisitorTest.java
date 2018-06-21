@@ -8,7 +8,7 @@ import com.intellij.util.ThrowableRunnable;
 /**
  * @author cdr
  */
-public class RecursiveVisitorTest extends LightDaemonAnalyzerTestCase{
+public abstract class RecursiveVisitorTest extends LightDaemonAnalyzerTestCase{
   public void testHugeConcatenationVisitingPerformance() throws IncorrectOperationException {
     StringBuilder text = new StringBuilder("String s = null");
     final int N = 20000;

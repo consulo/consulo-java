@@ -24,7 +24,7 @@ import com.intellij.codeInsight.CodeInsightSettings;
  * @author ik
  * Date: 21.01.2003
  */
-public class DotCompletionTest extends LightCompletionTestCase {
+public abstract class DotCompletionTest extends LightCompletionTestCase {
   @Nonnull
   @Override
   protected String getTestDataPath() {

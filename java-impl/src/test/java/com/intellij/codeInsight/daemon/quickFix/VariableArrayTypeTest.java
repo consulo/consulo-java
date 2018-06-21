@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class VariableArrayTypeTest extends LightQuickFixTestCase {
+public abstract class VariableArrayTypeTest extends LightQuickFixTestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

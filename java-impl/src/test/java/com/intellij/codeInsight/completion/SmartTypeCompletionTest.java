@@ -19,7 +19,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.util.containers.ContainerUtil;
 
-public class SmartTypeCompletionTest extends LightFixtureCompletionTestCase {
+public abstract class SmartTypeCompletionTest extends LightFixtureCompletionTestCase {
 
   @Override
   protected String getBasePath() {

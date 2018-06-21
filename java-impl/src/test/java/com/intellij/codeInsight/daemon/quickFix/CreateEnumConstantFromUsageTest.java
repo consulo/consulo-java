@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author ven
  */
-public class CreateEnumConstantFromUsageTest extends LightQuickFix15TestCase{
+public abstract class CreateEnumConstantFromUsageTest extends LightQuickFix15TestCase{
 
   public void test() throws Exception { doAllTests(); }
 

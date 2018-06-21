@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NonNls;
  * @author ik
  * @since 20.02.2003
  */
-public class KeywordCompletionTest extends LightCompletionTestCase {
+public abstract class KeywordCompletionTest extends LightCompletionTestCase {
   private static final String BASE_PATH = "/codeInsight/completion/keywords";
 
   private static final String[] FILE_SCOPE_KEYWORDS = {

@@ -15,13 +15,14 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
-public class LambdaRedundantCastTest extends LightDaemonAnalyzerTestCase {
+public abstract class LambdaRedundantCastTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/redundantCast";
 
   @Nonnull

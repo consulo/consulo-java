@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 package com.intellij.codeInsight.daemon.quickFix
-import com.intellij.codeInsight.lookup.LookupManager
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl
-import com.intellij.ide.DataManager
-import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.IdeActions
-import com.intellij.openapi.editor.actionSystem.EditorActionManager
 /**
  * @author ven
  */
-public class CreateMethodFromUsageTest extends LightQuickFixTestCase {
+public abstract class CreateMethodFromUsageTest extends LightQuickFixTestCase {
   public void test() throws Exception { doAllTests(); }
 
   public void testTemplateAssertions() throws Exception {

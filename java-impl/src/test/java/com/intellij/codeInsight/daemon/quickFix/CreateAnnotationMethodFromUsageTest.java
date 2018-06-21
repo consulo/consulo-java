@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class CreateAnnotationMethodFromUsageTest extends LightQuickFix15TestCase {
+public abstract class CreateAnnotationMethodFromUsageTest extends LightQuickFix15TestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

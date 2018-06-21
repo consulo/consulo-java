@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 
 
-public class DeferFinalAssignmentTest extends LightQuickFixTestCase {
+public abstract class DeferFinalAssignmentTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

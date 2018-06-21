@@ -1,7 +1,7 @@
 
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class MoveCatchUpTest extends LightQuickFixTestCase {
+public abstract class MoveCatchUpTest extends LightQuickFixTestCase {
 
   public void test() throws Exception {
     doAllTests();

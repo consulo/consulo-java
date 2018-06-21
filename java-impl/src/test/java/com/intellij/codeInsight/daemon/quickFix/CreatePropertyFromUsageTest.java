@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class CreatePropertyFromUsageTest extends LightQuickFix15TestCase {
+public abstract class CreatePropertyFromUsageTest extends LightQuickFix15TestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

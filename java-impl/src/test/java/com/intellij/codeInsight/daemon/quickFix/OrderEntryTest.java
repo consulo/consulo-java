@@ -28,7 +28,7 @@ import com.intellij.testFramework.PsiTestUtil;
 /**
  * @author cdr
  */
-public class OrderEntryTest extends DaemonAnalyzerTestCase {
+public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/quickFix/orderEntry/";
 
   @Override

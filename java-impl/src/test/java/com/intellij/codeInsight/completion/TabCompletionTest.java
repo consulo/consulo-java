@@ -3,7 +3,7 @@ package com.intellij.codeInsight.completion;
 
 import com.intellij.JavaTestUtil;
 
-public class TabCompletionTest extends LightFixtureCompletionTestCase {
+public abstract class TabCompletionTest extends LightFixtureCompletionTestCase {
   @Override
   protected String getBasePath() {
     return JavaTestUtil.getRelativeJavaTestDataPath() + "/codeInsight/completion/normal";

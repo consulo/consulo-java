@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class PushConditionInCallTest extends LightQuickFixTestCase{
+public abstract class PushConditionInCallTest extends LightQuickFixTestCase{
   public void test() throws Exception { doAllTests(); }
 
   @Override

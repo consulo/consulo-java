@@ -22,7 +22,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 
 
 //todo test3 should be checked if it compiles - as now javac infers Object instead of String?!
-public class Simplify2DiamondInspectionsTest extends LightQuickFixTestCase {
+public abstract class Simplify2DiamondInspectionsTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

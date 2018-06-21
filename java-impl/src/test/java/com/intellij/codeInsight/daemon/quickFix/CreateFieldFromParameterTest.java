@@ -22,7 +22,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 /**
  * @author ven
  */
-public class CreateFieldFromParameterTest extends LightIntentionActionTestCase {
+public abstract class CreateFieldFromParameterTest extends LightIntentionActionTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

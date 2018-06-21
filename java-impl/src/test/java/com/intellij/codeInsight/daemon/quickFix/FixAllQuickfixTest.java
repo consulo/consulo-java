@@ -4,12 +4,13 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.dataFlow.DataFlowInspection;
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-public class FixAllQuickfixTest extends LightQuickFixTestCase {
+import org.jetbrains.annotations.NonNls;
+import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInspection.dataFlow.DataFlowInspection;
+
+public abstract class FixAllQuickfixTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

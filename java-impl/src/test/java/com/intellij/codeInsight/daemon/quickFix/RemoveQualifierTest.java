@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class RemoveQualifierTest extends LightQuickFixTestCase {
+public abstract class RemoveQualifierTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

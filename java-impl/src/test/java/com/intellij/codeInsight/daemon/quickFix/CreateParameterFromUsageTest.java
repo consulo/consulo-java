@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author ven
  */
-public class CreateParameterFromUsageTest extends LightQuickFixTestCase{
+public abstract class CreateParameterFromUsageTest extends LightQuickFixTestCase{
   public void test() throws Exception { doAllTests(); }
 
   @Override

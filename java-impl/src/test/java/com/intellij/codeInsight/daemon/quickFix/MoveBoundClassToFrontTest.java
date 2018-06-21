@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class MoveBoundClassToFrontTest extends LightQuickFixTestCase {
+public abstract class MoveBoundClassToFrontTest extends LightQuickFixTestCase {
   public void test() throws Exception {
     doAllTests();
   }

@@ -21,7 +21,7 @@ import com.intellij.codeInspection.AnonymousCanBeMethodReferenceInspection;
 import com.intellij.codeInspection.LocalInspectionTool;
 
 
-public class Anonymous2MethodReferenceInspectionTest extends LightQuickFixTestCase {
+public abstract class Anonymous2MethodReferenceInspectionTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

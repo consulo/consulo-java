@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class VariableParameterizedTypeTest extends LightQuickFix15TestCase {
+public abstract class VariableParameterizedTypeTest extends LightQuickFix15TestCase {
 
   public void test() throws Exception { doAllTests(); }
 

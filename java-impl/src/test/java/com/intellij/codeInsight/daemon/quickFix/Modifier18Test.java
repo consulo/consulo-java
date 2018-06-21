@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class Modifier18Test extends LightQuickFixTestCase {
+public abstract class Modifier18Test extends LightQuickFixTestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

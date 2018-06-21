@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.quickFix;
 import com.intellij.codeInsight.daemon.LightIntentionActionTestCase;
 
-public class MakeTypeGenericTest extends LightIntentionActionTestCase {
+public abstract class MakeTypeGenericTest extends LightIntentionActionTestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

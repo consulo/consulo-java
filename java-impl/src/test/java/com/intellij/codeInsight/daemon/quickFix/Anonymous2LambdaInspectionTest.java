@@ -15,12 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.codeInspection.AnonymousCanBeLambdaInspection;
-import com.intellij.codeInspection.LocalInspectionTool;
 import javax.annotation.Nonnull;
 
+import com.intellij.codeInspection.AnonymousCanBeLambdaInspection;
+import com.intellij.codeInspection.LocalInspectionTool;
 
-public class Anonymous2LambdaInspectionTest extends LightQuickFixTestCase {
+
+public abstract class Anonymous2LambdaInspectionTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

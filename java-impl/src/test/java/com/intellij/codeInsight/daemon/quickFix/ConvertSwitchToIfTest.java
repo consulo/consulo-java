@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class ConvertSwitchToIfTest extends LightQuickFixTestCase {
+public abstract class ConvertSwitchToIfTest extends LightQuickFixTestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

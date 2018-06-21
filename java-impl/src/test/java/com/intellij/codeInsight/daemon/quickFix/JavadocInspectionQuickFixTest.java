@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
 
-public class JavadocInspectionQuickFixTest extends LightQuickFix15TestCase {
+public abstract class JavadocInspectionQuickFixTest extends LightQuickFix15TestCase {
 
   @Nonnull
   @Override

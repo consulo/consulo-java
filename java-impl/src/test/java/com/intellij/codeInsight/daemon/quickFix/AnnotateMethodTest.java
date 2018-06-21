@@ -1,14 +1,15 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.AnnotateMethodFix;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.nullable.NullableStuffInspection;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 
-public class AnnotateMethodTest extends LightQuickFix15TestCase {
+public abstract class AnnotateMethodTest extends LightQuickFix15TestCase {
   private boolean myMustBeAvailableAfterInvoke;
 
   @Override

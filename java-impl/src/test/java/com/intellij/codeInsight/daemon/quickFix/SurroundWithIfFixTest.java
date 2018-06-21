@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.dataFlow.DataFlowInspection;
 
-public class SurroundWithIfFixTest extends LightQuickFixTestCase {
+public abstract class SurroundWithIfFixTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

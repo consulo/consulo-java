@@ -16,7 +16,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class OverrideMethodTest extends LightQuickFix15TestCase {
+public abstract class OverrideMethodTest extends LightQuickFix15TestCase {
 
   public void test() throws Exception {
     doAllTests();

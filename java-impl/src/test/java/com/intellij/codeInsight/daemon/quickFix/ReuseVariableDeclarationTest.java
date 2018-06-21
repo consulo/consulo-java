@@ -1,7 +1,7 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
 
-public class ReuseVariableDeclarationTest extends LightQuickFixTestCase {
+public abstract class ReuseVariableDeclarationTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

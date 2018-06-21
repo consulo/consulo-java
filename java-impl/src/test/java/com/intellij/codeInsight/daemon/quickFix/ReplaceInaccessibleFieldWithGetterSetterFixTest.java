@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class ReplaceInaccessibleFieldWithGetterSetterFixTest extends LightQuickFixTestCase {
+public abstract class ReplaceInaccessibleFieldWithGetterSetterFixTest extends LightQuickFixTestCase {
   public void test() throws Exception { doAllTests(); }
 
   @Override

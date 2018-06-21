@@ -20,7 +20,7 @@ import com.intellij.JavaTestUtil;
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaReflectionCompletionTest extends LightFixtureCompletionTestCase {
+public abstract class JavaReflectionCompletionTest extends LightFixtureCompletionTestCase {
 
   @Override
   protected String getBasePath() {

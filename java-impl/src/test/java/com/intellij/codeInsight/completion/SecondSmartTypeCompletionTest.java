@@ -11,7 +11,7 @@ import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NonNls;
 
 @SuppressWarnings({"ALL"})
-public class SecondSmartTypeCompletionTest extends LightFixtureCompletionTestCase {
+public abstract class SecondSmartTypeCompletionTest extends LightFixtureCompletionTestCase {
 
   @Override
   protected void complete() {

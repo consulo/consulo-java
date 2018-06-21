@@ -28,7 +28,7 @@ import java.util.Collection;
  * User: anna
  * Date: 10/15/12
  */
-public class MethodReferencesFindUsagesTest extends LightDaemonAnalyzerTestCase {
+public abstract class MethodReferencesFindUsagesTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/methodRef/findUsages/";
   
   

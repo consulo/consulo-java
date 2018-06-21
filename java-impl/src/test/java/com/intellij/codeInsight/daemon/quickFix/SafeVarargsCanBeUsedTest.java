@@ -21,7 +21,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.PossibleHeapPollutionVarargsInspection;
 
 
-public class SafeVarargsCanBeUsedTest extends LightQuickFixTestCase {
+public abstract class SafeVarargsCanBeUsedTest extends LightQuickFixTestCase {
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {

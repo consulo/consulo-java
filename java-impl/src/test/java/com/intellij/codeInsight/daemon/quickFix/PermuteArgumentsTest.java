@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class PermuteArgumentsTest extends LightQuickFixTestCase {
+public abstract class PermuteArgumentsTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

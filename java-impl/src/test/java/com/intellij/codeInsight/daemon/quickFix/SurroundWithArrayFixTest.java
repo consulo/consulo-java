@@ -20,7 +20,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class SurroundWithArrayFixTest extends LightQuickFix15TestCase {
+public abstract class SurroundWithArrayFixTest extends LightQuickFix15TestCase {
    public void test() throws Exception {
      doAllTests();
    }

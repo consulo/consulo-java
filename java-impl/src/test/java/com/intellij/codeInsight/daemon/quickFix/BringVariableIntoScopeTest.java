@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 /**
  * @author ven
  */
-public class BringVariableIntoScopeTest extends LightQuickFixTestCase {
+public abstract class BringVariableIntoScopeTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { doAllTests(); }
 

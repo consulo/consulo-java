@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
 
-public class AccessStaticViaInstanceTest extends LightQuickFixTestCase {
+public abstract class AccessStaticViaInstanceTest extends LightQuickFixTestCase {
   @Override
   protected String getBasePath() {
     return "/codeInsight/daemonCodeAnalyzer/quickFix/accessStaticViaInstance";

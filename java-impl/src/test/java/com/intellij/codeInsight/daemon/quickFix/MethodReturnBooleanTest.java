@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-public class MethodReturnBooleanTest extends LightQuickFixTestCase {
+public abstract class MethodReturnBooleanTest extends LightQuickFixTestCase {
 
   public void test() throws Exception { 
     doAllTests();
