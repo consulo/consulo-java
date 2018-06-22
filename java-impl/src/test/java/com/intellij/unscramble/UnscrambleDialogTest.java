@@ -19,6 +19,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
+import consulo.ui.image.Image;
 
 import javax.swing.*;
 import java.io.File;
@@ -31,7 +32,7 @@ public abstract class UnscrambleDialogTest extends JavaCodeInsightFixtureTestCas
 
   public void testStacktrace() throws Exception {
     RunContentDescriptor content = showText("");
-    Icon icon = content.getIcon();
+    Image icon = content.getIcon();
     String name = content.getDisplayName();
     assertEquals(null, icon);
     assertEquals("<Stacktrace>", name);
@@ -68,7 +69,7 @@ public abstract class UnscrambleDialogTest extends JavaCodeInsightFixtureTestCas
     return descriptor;
   }
 
-  private static void assertIcon(String s, Icon icon) {
+  private static void assertIcon(String s, Image icon) {
     assertTrue(icon.toString().contains(s));
   }
 

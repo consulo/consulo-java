@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -34,8 +35,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
@@ -61,6 +60,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
 import consulo.java.unscramble.UnscrambleManager;
+import consulo.ui.image.Image;
 
 /**
  * @author cdr
@@ -473,7 +473,7 @@ public class UnscrambleDialog extends DialogWrapper
 
 	private static RunContentDescriptor addConsole(final Project project, final List<ThreadState> threadDump, String unscrambledTrace)
 	{
-		Icon icon = null;
+		Image icon = null;
 		String message = IdeBundle.message("unscramble.unscrambled.stacktrace.tab");
 		if(!threadDump.isEmpty())
 		{
@@ -494,8 +494,8 @@ public class UnscrambleDialog extends DialogWrapper
 			message = IdeBundle.message("unscramble.unscrambled.deadlock.tab");
 			icon = AllIcons.Debugger.KillProcess;
 		}
-		return AnalyzeStacktraceUtil.addConsole(project, threadDump.size() > 1 ? (AnalyzeStacktraceUtil.ConsoleFactory) (consoleView, toolbarActions) -> new ThreadDumpPanel(project, consoleView,
-				toolbarActions, threadDump) : null, message, unscrambledTrace, icon);
+		return AnalyzeStacktraceUtil.addConsole(project, threadDump.size() > 1 ? (consoleView, toolbarActions) -> new ThreadDumpPanel(project, consoleView, toolbarActions, threadDump) : null,
+				message, unscrambledTrace, icon);
 	}
 
 	@Override
