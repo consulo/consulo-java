@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.ModuleUtil;
@@ -31,6 +30,7 @@ import com.intellij.packaging.elements.PackagingElementOutputKind;
 import com.intellij.packaging.elements.PackagingElementResolvingContext;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.packaging.impl.elements.JarArchivePackagingElement;
+import consulo.ui.image.Image;
 
 /**
  * @author nik
@@ -49,7 +49,7 @@ public class JarArtifactType extends ArtifactType
 
 	@Nonnull
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.Nodes.Artifact;
 	}

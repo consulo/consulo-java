@@ -16,9 +16,8 @@
 package consulo.java.packaging.impl.elements;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.module.ModuleUtil;
@@ -35,6 +34,7 @@ import com.intellij.packaging.impl.elements.PackagingElementFactoryImpl;
 import com.intellij.packaging.ui.ArtifactEditorContext;
 import com.intellij.util.PathUtil;
 import consulo.java.module.extension.JavaModuleExtension;
+import consulo.ui.image.Image;
 
 /**
  * @author nik
@@ -60,7 +60,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 
 	@Nonnull
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.Nodes.PpJar;
 	}
