@@ -62,6 +62,8 @@ import com.intellij.util.FunctionUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
+import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
 
 public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 {
@@ -431,11 +433,11 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 			return otherElement != null && myElement != null;
 		}
 
-
+		@Nonnull
 		@Override
-		public Icon getCommonIcon(@Nonnull List<MergeableLineMarkerInfo> infos)
+		public Image getCommonIcon(@Nonnull List<MergeableLineMarkerInfo> infos)
 		{
-			return myIcon;
+			return TargetAWT.from(myIcon);
 		}
 
 		@Nonnull
