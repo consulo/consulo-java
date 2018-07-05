@@ -18,10 +18,10 @@ package consulo.java.guava;
 
 import java.util.Collection;
 
-import javax.swing.JComponent;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.swing.JComponent;
+
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
@@ -45,7 +45,6 @@ import com.intellij.util.FilteredQuery;
 import com.intellij.util.Functions;
 import com.intellij.util.Query;
 import consulo.annotations.RequiredReadAction;
-import consulo.awt.TargetAWT;
 import consulo.java.JavaIcons;
 
 /**
@@ -120,7 +119,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider
 
 			if(createQuery((PsiClass) parent, annotation).findFirst() != null)
 			{
-				return new LineMarkerInfo<>(element, element.getTextRange(), TargetAWT.to(JavaIcons.Gutter.EventMethod), Pass.LINE_MARKERS, Functions.constant("Event Object"), ourClassNavigator,
+				return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.EventMethod, Pass.LINE_MARKERS, Functions.constant("Event Object"), ourClassNavigator,
 						GutterIconRenderer.Alignment.RIGHT);
 			}
 		}
@@ -139,7 +138,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider
 				PsiParameter[] parameters = parameterList.getParameters();
 				if(parameters.length == 1 && parameters[0].getType() instanceof PsiClassType && AnnotationUtil.isAnnotated(method, GuavaLibrary.Subscribe, false))
 				{
-					return new LineMarkerInfo<>(element, element.getTextRange(), TargetAWT.to(JavaIcons.Gutter.EventMethod), Pass.LINE_MARKERS, Functions.constant("Event Method"), ourMethodNavigator,
+					return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.EventMethod, Pass.LINE_MARKERS, Functions.constant("Event Method"), ourMethodNavigator,
 							GutterIconRenderer.Alignment.RIGHT);
 				}
 			}
