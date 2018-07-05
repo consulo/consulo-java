@@ -32,6 +32,7 @@ public interface JavaTokenType extends TokenType
 	IElementType DOUBLE_LITERAL = new IJavaElementType("DOUBLE_LITERAL");
 	IElementType CHARACTER_LITERAL = new IJavaElementType("CHARACTER_LITERAL");
 	IElementType STRING_LITERAL = new IJavaElementType("STRING_LITERAL");
+	IElementType RAW_STRING_LITERAL = new IJavaElementType("RAW_STRING_LITERAL");
 
 	IElementType TRUE_KEYWORD = new IKeywordElementType("TRUE_KEYWORD");
 	IElementType FALSE_KEYWORD = new IKeywordElementType("FALSE_KEYWORD");
@@ -152,4 +153,6 @@ public interface JavaTokenType extends TokenType
 	IElementType TRANSITIVE_KEYWORD = new IJavaElementType("TRANSITIVE");
 	IElementType TO_KEYWORD = new IJavaElementType("TO");
 	IElementType WITH_KEYWORD = new IJavaElementType("WITH");
+
+	IElementType VAR_KEYWORD = new IJavaElementType("VAR");
 }

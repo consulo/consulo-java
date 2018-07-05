@@ -172,6 +172,8 @@ public interface JavaClassNames
 	@NonNls
 	String JAVA_LANG_INVOKE_MH_POLYMORPHIC = "java.lang.invoke.MethodHandle.PolymorphicSignature";
 
+	String JAVA_LANG_SAFE_VARARGS = "java.lang.SafeVarargs";
+
 	@NonNls
 	String JAVA_LANG_FUNCTIONAL_INTERFACE = "java.lang.FunctionalInterface";
 

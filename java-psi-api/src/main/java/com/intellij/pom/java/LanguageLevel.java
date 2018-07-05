@@ -39,6 +39,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	JDK_1_8("1.8", "Java 8", JavaCoreBundle.message("jdk.1.8.language.level.description"), "1.8", "8"),
 	JDK_1_9("1.9", "Java 9", JavaCoreBundle.message("jdk.1.9.language.level.description"), "9", "1.9"),
 	JDK_10(JavaCoreBundle.message("jdk.10.language.level.description"), "10", "1.10"),
+	JDK_11(JavaCoreBundle.message("jdk.11.language.level.description"), "11", "1.11"),
 	JDK_X("1.10", "Java X", JavaCoreBundle.message("jdk.X.language.level.description"), "");
 
 	public static final LanguageLevel HIGHEST = JDK_1_9;

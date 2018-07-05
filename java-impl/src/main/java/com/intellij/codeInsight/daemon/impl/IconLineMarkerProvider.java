@@ -140,7 +140,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 			return null;
 		}
 
-		final Icon icon = ProjectIconsAccessor.getInstance(project).getIcon(file, initializer);
+		final Image icon = ProjectIconsAccessor.getInstance(project).getIcon(file, initializer);
 		if(icon == null)
 		{
 			return null;

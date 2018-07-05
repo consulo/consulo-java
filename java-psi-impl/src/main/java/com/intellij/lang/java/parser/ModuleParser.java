@@ -22,7 +22,7 @@ import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-
+import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.JavaTokenType;
@@ -43,7 +43,7 @@ public class ModuleParser
 		myParser = parser;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder)
 	{
 		PsiBuilder.Marker module = builder.mark();

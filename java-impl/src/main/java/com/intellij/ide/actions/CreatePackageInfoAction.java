@@ -18,6 +18,7 @@ package com.intellij.ide.actions;
 import static com.intellij.ide.fileTemplates.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;
 
 import javax.annotation.Nullable;
+
 import com.intellij.CommonBundle;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.IdeView;
@@ -41,7 +42,6 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.util.PsiUtil;
-import consulo.awt.TargetAWT;
 import consulo.java.JavaBundle;
 import consulo.roots.ContentFolderScopes;
 
@@ -52,7 +52,7 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
 {
 	public CreatePackageInfoAction()
 	{
-		super(JavaBundle.message("action.create.new.package-info.title"), JavaBundle.message("action.create.new.package-info.description"), TargetAWT.to(JavaFileType.INSTANCE.getIcon()));
+		super(JavaBundle.message("action.create.new.package-info.title"), JavaBundle.message("action.create.new.package-info.description"), JavaFileType.INSTANCE.getIcon());
 	}
 
 	@Nullable

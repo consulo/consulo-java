@@ -26,6 +26,11 @@ public class JavaErrorMessages extends AbstractBundle
 	public static final String BUNDLE = "messages.JavaErrorMessages";
 	private static final JavaErrorMessages ourInstance = new JavaErrorMessages();
 
+	public static JavaErrorMessages getInstance()
+	{
+		return ourInstance;
+	}
+
 	private JavaErrorMessages()
 	{
 		super(BUNDLE);

@@ -15,16 +15,7 @@
  */
 package com.intellij.lexer;
 
-import static com.intellij.psi.PsiKeyword.EXPORTS;
-import static com.intellij.psi.PsiKeyword.MODULE;
-import static com.intellij.psi.PsiKeyword.OPENS;
-import static com.intellij.psi.PsiKeyword.PROVIDES;
-import static com.intellij.psi.PsiKeyword.REQUIRES;
-import static com.intellij.psi.PsiKeyword.TO;
-import static com.intellij.psi.PsiKeyword.TRANSITIVE;
-import static com.intellij.psi.PsiKeyword.USES;
-import static com.intellij.psi.PsiKeyword.WITH;
-import static com.intellij.psi.PsiKeyword.OPEN;
+import static com.intellij.psi.PsiKeyword.*;
 
 import gnu.trove.THashSet;
 
@@ -51,9 +42,8 @@ public class JavaLexer extends LexerBase
 			new HashTable(LanguageLevel.JDK_1_3)
 	};
 
-	private static final Set<CharSequence> JAVA9_KEYWORDS = ContainerUtil.newTroveSet(
-			CharSequenceHashingStrategy.CASE_SENSITIVE,
-			OPEN, MODULE, REQUIRES, EXPORTS, OPENS, USES, PROVIDES, TRANSITIVE, TO, WITH);
+	private static final Set<CharSequence> JAVA9_KEYWORDS = ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_SENSITIVE, OPEN, MODULE, REQUIRES, EXPORTS, OPENS, USES, PROVIDES, TRANSITIVE,
+			TO, WITH);
 
 	private static HashTable getTable(final LanguageLevel level)
 	{
@@ -74,7 +64,8 @@ public class JavaLexer extends LexerBase
 
 	public static boolean isSoftKeyword(CharSequence id, @Nonnull LanguageLevel level)
 	{
-		return id != null && level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id);
+		return id != null && (level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id) ||
+				level.isAtLeast(LanguageLevel.JDK_10) && VAR.contentEquals(id));
 	}
 
 	private final _JavaLexer myFlexLexer;
@@ -326,9 +317,8 @@ public class JavaLexer extends LexerBase
 					}
 					else if(nextChar == '*')
 					{
-						if(myBufferIndex + 2 >= myBufferEndOffset ||
-								(myBufferArray != null ? myBufferArray[myBufferIndex + 2] : myBuffer.charAt(myBufferIndex + 2)) != '*' ||
-								(myBufferIndex + 3 < myBufferEndOffset && (myBufferArray != null ? myBufferArray[myBufferIndex + 3] : myBuffer.charAt(myBufferIndex + 3)) == '/'))
+						if(myBufferIndex + 2 >= myBufferEndOffset || (myBufferArray != null ? myBufferArray[myBufferIndex + 2] : myBuffer.charAt(myBufferIndex + 2)) != '*' || (myBufferIndex + 3 <
+								myBufferEndOffset && (myBufferArray != null ? myBufferArray[myBufferIndex + 3] : myBuffer.charAt(myBufferIndex + 3)) == '/'))
 						{
 							myTokenType = JavaTokenType.C_STYLE_COMMENT;
 							myTokenEndOffset = getClosingComment(myBufferIndex + 2);
@@ -513,12 +503,7 @@ public class JavaLexer extends LexerBase
 		{
 			char c = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
 
-			while(c >= 'a' && c <= 'z' ||
-					c >= 'A' && c <= 'Z' ||
-					c >= '0' && c <= '9' ||
-					c == '_' ||
-					c == '$' ||
-					c > 127 && Character.isJavaIdentifierPart(c))
+			while(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '$' || c > 127 && Character.isJavaIdentifierPart(c))
 			{
 				pos++;
 				hashCode += c;

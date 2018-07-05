@@ -56,6 +56,7 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import consulo.annotations.RequiredDispatchThread;
+import consulo.annotations.RequiredReadAction;
 import consulo.awt.TargetAWT;
 import consulo.java.JavaIcons;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
@@ -71,7 +72,8 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 				JavaDocInfoGenerator.generateSignature(owner));
 	};
 
-	@javax.annotation.Nullable
+	@RequiredReadAction
+	@Nullable
 	@Override
 	public LineMarkerInfo getLineMarkerInfo(@Nonnull final PsiElement element)
 	{
@@ -88,12 +90,12 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 			return null;
 		}
 
-		return new LineMarkerInfo<>(element, element.getTextRange(), TargetAWT.to(JavaIcons.Gutter.ExtAnnotation), Pass.LINE_MARKERS, ourTooltipProvider, MyIconGutterHandler.INSTANCE, GutterIconRenderer.Alignment
+		return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.ExtAnnotation, Pass.LINE_MARKERS, ourTooltipProvider, MyIconGutterHandler.INSTANCE, GutterIconRenderer.Alignment
 				.RIGHT);
 	}
 
 	@Nullable
-	static PsiModifierListOwner getAnnotationOwner(@javax.annotation.Nullable PsiElement element)
+	static PsiModifierListOwner getAnnotationOwner(@Nullable PsiElement element)
 	{
 		if(element == null)
 		{
@@ -168,7 +170,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 			}
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor)
 		{
 			final DefaultActionGroup group = new DefaultActionGroup();

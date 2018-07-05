@@ -23,8 +23,6 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.Disposable;
@@ -33,6 +31,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
@@ -66,7 +65,7 @@ public class ProjectIconsAccessor implements Disposable
 
 	private static final List<String> ICON_EXTENSIONS = ContainerUtil.immutableList("png", "ico", "bmp", "gif", "jpg");
 
-	private final SLRUMap<String, Pair<Long, Icon>> myIconsCache = new SLRUMap<String, Pair<Long, Icon>>(500, 1000);
+	private final SLRUMap<String, Pair<Long, Image>> myIconsCache = new SLRUMap<>(500, 1000);
 
 	ProjectIconsAccessor(Project project)
 	{
@@ -133,16 +132,16 @@ public class ProjectIconsAccessor implements Disposable
 	}
 
 	@Nullable
-	public Icon getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element)
+	public Image getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element)
 	{
 		final String path = file.getPath();
 		final long stamp = file.getModificationStamp();
-		Pair<Long, Icon> iconInfo = myIconsCache.get(path);
+		Pair<Long, Image> iconInfo = myIconsCache.get(path);
 		if(iconInfo == null || iconInfo.getFirst() < stamp)
 		{
 			try
 			{
-				final Icon icon = createOrFindBetterIcon(file, isConsuloProject(element));
+				final Image icon = createOrFindBetterIcon(file, isConsuloProject(element));
 				iconInfo = new Pair<>(stamp, hasProperSize(icon) ? icon : null);
 				myIconsCache.put(file.getPath(), iconInfo);
 			}
@@ -165,9 +164,9 @@ public class ProjectIconsAccessor implements Disposable
 		return extension != null && ICON_EXTENSIONS.contains(extension.toLowerCase(Locale.US));
 	}
 
-	private static boolean hasProperSize(Icon icon)
+	private static boolean hasProperSize(Image icon)
 	{
-		return icon.getIconHeight() <= JBUI.scale(ICON_MAX_WEIGHT) && icon.getIconWidth() <= JBUI.scale(ICON_MAX_HEIGHT);
+		return icon.getHeight() <= JBUI.scale(ICON_MAX_WEIGHT) && icon.getWidth() <= JBUI.scale(ICON_MAX_HEIGHT);
 	}
 
 	private static boolean isConsuloProject(@Nullable PsiElement element)
@@ -179,13 +178,13 @@ public class ProjectIconsAccessor implements Disposable
 		return JavaPsiFacade.getInstance(element.getProject()).findClass(Application.class.getName(), element.getResolveScope()) != null;
 	}
 
-	private static Icon createOrFindBetterIcon(VirtualFile file, boolean useIconLoader) throws IOException
+	private static Image createOrFindBetterIcon(VirtualFile file, boolean useIconLoader) throws IOException
 	{
 		if(useIconLoader)
 		{
 			return IconLoader.findIcon(new File(file.getPath()).toURI().toURL());
 		}
-		return new ImageIcon(file.contentsToByteArray());
+		return Image.create(VfsUtilCore.virtualToIoFile(file).toURL());
 	}
 
 	@Override

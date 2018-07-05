@@ -23,9 +23,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -62,7 +61,6 @@ import com.intellij.util.FunctionUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
-import consulo.awt.TargetAWT;
 import consulo.ui.image.Image;
 
 public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
@@ -98,7 +96,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 			{
 				boolean overrides = method.hasModifierProperty(PsiModifier.ABSTRACT) == superSignature.getMethod().hasModifierProperty(PsiModifier.ABSTRACT);
 
-				final Icon icon;
+				final Image icon;
 				if(overrides)
 				{
 					if(!myOverridingOption.isEnabled())
@@ -177,7 +175,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 	}
 
 	@Nonnull
-	private static LineMarkerInfo createSuperMethodLineMarkerInfo(@Nonnull PsiElement name, @Nonnull Icon icon, int passId)
+	private static LineMarkerInfo createSuperMethodLineMarkerInfo(@Nonnull PsiElement name, @Nonnull Image icon, int passId)
 	{
 		ArrowUpLineMarkerInfo info = new ArrowUpLineMarkerInfo(name, icon, MarkerType.OVERRIDING_METHOD, passId);
 		return NavigateAction.setNavigateAction(info, "Go to super method", IdeActions.ACTION_GOTO_SUPER);
@@ -305,7 +303,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		PsiClass subClass = DirectClassInheritorsSearch.search(aClass).findFirst();
 		if(subClass != null || FunctionalExpressionSearch.search(aClass).findFirst() != null)
 		{
-			final Icon icon;
+			final Image icon;
 			if(aClass.isInterface())
 			{
 				if(!myImplementedOption.isEnabled())
@@ -387,7 +385,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 			}
 			PsiElement range = getMethodRange(method);
 			final MarkerType type = MarkerType.OVERRIDDEN_METHOD;
-			final Icon icon = overrides ? AllIcons.Gutter.OverridenMethod : AllIcons.Gutter.ImplementedMethod;
+			final Image icon = overrides ? AllIcons.Gutter.OverridenMethod : AllIcons.Gutter.ImplementedMethod;
 			LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(range, range.getTextRange(), icon, Pass.LINE_MARKERS, type.getTooltip(), type.getNavigationHandler(), GutterIconRenderer.Alignment
 					.RIGHT);
 			NavigateAction.setNavigateAction(info, overrides ? "Go to overriding methods" : "Go to implementation(s)", IdeActions.ACTION_GOTO_IMPLEMENTATION);
@@ -416,7 +414,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 
 	private static class ArrowUpLineMarkerInfo extends MergeableLineMarkerInfo<PsiElement>
 	{
-		private ArrowUpLineMarkerInfo(@Nonnull PsiElement element, @Nonnull Icon icon, @Nonnull MarkerType markerType, int passId)
+		private ArrowUpLineMarkerInfo(@Nonnull PsiElement element, @Nonnull Image icon, @Nonnull MarkerType markerType, int passId)
 		{
 			super(element, element.getTextRange(), icon, passId, markerType.getTooltip(), markerType.getNavigationHandler(), GutterIconRenderer.Alignment.LEFT);
 		}
@@ -437,14 +435,14 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		@Override
 		public Image getCommonIcon(@Nonnull List<MergeableLineMarkerInfo> infos)
 		{
-			return TargetAWT.from(myIcon);
+			return myIcon;
 		}
 
 		@Nonnull
 		@Override
 		public Function<? super PsiElement, String> getCommonTooltip(@Nonnull List<MergeableLineMarkerInfo> infos)
 		{
-			return (Function<PsiElement, String>) element -> "Multiple method overrides";
+			return element -> "Multiple method overrides";
 		}
 
 		@Override

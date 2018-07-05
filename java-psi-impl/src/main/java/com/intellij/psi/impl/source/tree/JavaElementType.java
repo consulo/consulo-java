@@ -18,10 +18,9 @@ package com.intellij.psi.impl.source.tree;
 import java.lang.reflect.Constructor;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.LighterASTNode;
@@ -189,7 +188,7 @@ public interface JavaElementType
 		}
 
 		@Override
-		public ASTNode parseContents(final ASTNode chameleon)
+		public ASTNode parseContents(@Nonnull final ASTNode chameleon)
 		{
 			final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
 			JavaParser.INSTANCE.getStatementParser().parseCodeBlockDeep(builder, true);
@@ -207,37 +206,61 @@ public interface JavaElementType
 		@Override
 		public int getErrorsCount(final CharSequence seq, Language fileLanguage, final Project project)
 		{
-			final Lexer lexer = new JavaLexer(LanguageLevel.HIGHEST);
+			Lexer lexer = new JavaLexer(LanguageLevel.HIGHEST);
+			return hasProperBraceBalance(seq, lexer, JavaTokenType.LBRACE, JavaTokenType.RBRACE) ? NO_ERRORS : FATAL_ERROR;
+		}
 
-			lexer.start(seq);
-			if(lexer.getTokenType() != JavaTokenType.LBRACE)
+		/**
+		 * Checks if `text` looks like a proper block.
+		 * In particular it
+		 * (1) checks brace balance
+		 * (2) verifies that the block's closing brace is the last token
+		 *
+		 * @param text       - text to check
+		 * @param lexer      - lexer to use
+		 * @param leftBrace  - left brace element type
+		 * @param rightBrace - right brace element type
+		 * @return true if `text` passes the checks
+		 */
+		public static boolean hasProperBraceBalance(@Nonnull CharSequence text, @Nonnull Lexer lexer, @Nonnull IElementType leftBrace, @Nonnull IElementType rightBrace)
+		{
+			lexer.start(text);
+
+			if(lexer.getTokenType() != leftBrace)
 			{
-				return IErrorCounterReparseableElementType.FATAL_ERROR;
+				return false;
 			}
+
 			lexer.advance();
 			int balance = 1;
+
 			while(true)
 			{
 				IElementType type = lexer.getTokenType();
+
 				if(type == null)
 				{
-					break;
+					//eof: checking balance
+					return balance == 0;
 				}
+
 				if(balance == 0)
 				{
-					return IErrorCounterReparseableElementType.FATAL_ERROR;
+					//the last brace is not the last token
+					return false;
 				}
-				if(type == JavaTokenType.LBRACE)
+
+				if(type == leftBrace)
 				{
 					balance++;
 				}
-				else if(type == JavaTokenType.RBRACE)
+				else if(type == rightBrace)
 				{
 					balance--;
 				}
+
 				lexer.advance();
 			}
-			return balance;
 		}
 	}
 

@@ -45,7 +45,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.util.PsiUtil;
-import consulo.awt.TargetAWT;
 import consulo.java.JavaBundle;
 import consulo.roots.ContentFolderScopes;
 
@@ -53,7 +52,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 {
 	public CreateModuleInfoAction()
 	{
-		super(JavaBundle.message("action.create.new.module-info.title"), JavaBundle.message("action.create.new.module-info.description"), TargetAWT.to(JavaFileType.INSTANCE.getIcon()));
+		super(JavaBundle.message("action.create.new.module-info.title"), JavaBundle.message("action.create.new.module-info.description"), JavaFileType.INSTANCE.getIcon());
 	}
 
 	@Override

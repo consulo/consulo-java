@@ -28,11 +28,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -1334,6 +1333,16 @@ public final class PsiUtil extends PsiUtilCore
 	public static boolean isLanguageLevel9OrHigher(@Nonnull final PsiElement element)
 	{
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_9);
+	}
+
+	public static boolean isLanguageLevel10OrHigher(@Nonnull final PsiElement element)
+	{
+		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_10);
+	}
+
+	public static boolean isLanguageLevel11OrHigher(@Nonnull final PsiElement element)
+	{
+		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_11);
 	}
 
 	@Nonnull

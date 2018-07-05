@@ -18,10 +18,9 @@ package com.intellij.psi.impl;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.java.parser.DeclarationParser;
 import com.intellij.lang.java.parser.JavaParser;
@@ -59,11 +58,12 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 
 	private static final JavaParserUtil.ParserWrapper ANNOTATION = builder -> JavaParser.INSTANCE.getDeclarationParser().parseAnnotation(builder);
 
-	private static final JavaParserUtil.ParserWrapper PARAMETER = builder -> JavaParser.INSTANCE.getDeclarationParser().parseParameter(builder, true, false);
+	private static final JavaParserUtil.ParserWrapper PARAMETER = builder -> JavaParser.INSTANCE.getDeclarationParser().parseParameter(builder, true, false, false);
 
 	private static final JavaParserUtil.ParserWrapper RESOURCE = builder -> JavaParser.INSTANCE.getDeclarationParser().parseResource(builder);
 
-	private static final JavaParserUtil.ParserWrapper TYPE = builder -> JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS);
+	private static final JavaParserUtil.ParserWrapper TYPE = builder -> JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS |
+			ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS  | ReferenceParser.VAR_TYPE);
 
 	public static final JavaParserUtil.ParserWrapper REFERENCE = builder -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
 

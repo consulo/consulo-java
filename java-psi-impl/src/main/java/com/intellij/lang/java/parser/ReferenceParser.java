@@ -24,11 +24,13 @@ import static com.intellij.util.BitUtil.isSet;
 import static com.intellij.util.BitUtil.set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
@@ -43,6 +45,7 @@ public class ReferenceParser
 	public static final int DISJUNCTIONS = 0x10;
 	public static final int CONJUNCTIONS = 0x20;
 	public static final int INCOMPLETE_ANNO = 0x40;
+	public static final int VAR_TYPE = 0x80;
 
 	public static class TypeInfo
 	{
@@ -63,14 +66,14 @@ public class ReferenceParser
 		myParser = javaParser;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiBuilder.Marker parseType(final PsiBuilder builder, final int flags)
 	{
 		final TypeInfo typeInfo = parseTypeInfo(builder, flags);
 		return typeInfo != null ? typeInfo.marker : null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public TypeInfo parseTypeInfo(final PsiBuilder builder, final int flags)
 	{
 		final TypeInfo typeInfo = parseTypeInfo(builder, flags, false);
@@ -102,7 +105,7 @@ public class ReferenceParser
 		return typeInfo;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private TypeInfo parseTypeInfo(PsiBuilder builder, int flags, boolean badWildcard)
 	{
 		if(builder.getTokenType() == null)
@@ -115,7 +118,16 @@ public class ReferenceParser
 		PsiBuilder.Marker type = builder.mark();
 		PsiBuilder.Marker anno = myParser.getDeclarationParser().parseAnnotations(builder);
 
-		final IElementType tokenType = builder.getTokenType();
+		IElementType tokenType = builder.getTokenType();
+		if(tokenType == JavaTokenType.IDENTIFIER && isSet(flags, VAR_TYPE) && PsiKeyword.VAR.equals(builder.getTokenText()) && getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_10))
+		{
+			builder.remapCurrentToken(tokenType = JavaTokenType.VAR_KEYWORD);
+		}
+		else if(tokenType == JavaTokenType.VAR_KEYWORD && !isSet(flags, VAR_TYPE))
+		{
+			builder.remapCurrentToken(tokenType = JavaTokenType.IDENTIFIER);
+		}
+
 		if(expect(builder, ElementType.PRIMITIVE_TYPE_BIT_SET))
 		{
 			typeInfo.isPrimitive = true;
@@ -219,7 +231,7 @@ public class ReferenceParser
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder, boolean eatLastDot, boolean parameterList, boolean isNew, boolean diamonds)
 	{
 		return parseJavaCodeReference(builder, eatLastDot, parameterList, false, false, isNew, diamonds, new TypeInfo());
@@ -232,7 +244,7 @@ public class ReferenceParser
 		return !typeInfo.hasErrors;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder,
 			boolean eatLastDot,
 			boolean parameterList,
@@ -427,7 +439,7 @@ public class ReferenceParser
 		return list;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiBuilder.Marker parseTypeParameter(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker param = builder.mark();
@@ -459,7 +471,7 @@ public class ReferenceParser
 		return param;
 	}
 
-	public boolean parseReferenceList(PsiBuilder builder, IElementType start, @javax.annotation.Nullable IElementType type, IElementType delimiter)
+	public boolean parseReferenceList(PsiBuilder builder, IElementType start, @Nullable IElementType type, IElementType delimiter)
 	{
 		PsiBuilder.Marker element = builder.mark();
 

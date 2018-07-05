@@ -1,18 +1,4 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lang.java.parser;
 
 import static com.intellij.codeInsight.daemon.JavaErrorMessages.BUNDLE;
@@ -64,7 +50,7 @@ public class ExpressionParser
 	private static final TokenSet PREF_ARITHMETIC_OPS = TokenSet.orSet(POSTFIX_OPS, TokenSet.create(JavaTokenType.PLUS, JavaTokenType.MINUS));
 	private static final TokenSet PREFIX_OPS = TokenSet.orSet(PREF_ARITHMETIC_OPS, TokenSet.create(JavaTokenType.TILDE, JavaTokenType.EXCL));
 	private static final TokenSet LITERALS = TokenSet.create(JavaTokenType.TRUE_KEYWORD, JavaTokenType.FALSE_KEYWORD, JavaTokenType.NULL_KEYWORD, JavaTokenType.INTEGER_LITERAL, JavaTokenType
-			.LONG_LITERAL, JavaTokenType.FLOAT_LITERAL, JavaTokenType.DOUBLE_LITERAL, JavaTokenType.CHARACTER_LITERAL, JavaTokenType.STRING_LITERAL);
+			.LONG_LITERAL, JavaTokenType.FLOAT_LITERAL, JavaTokenType.DOUBLE_LITERAL, JavaTokenType.CHARACTER_LITERAL, JavaTokenType.STRING_LITERAL, JavaTokenType.RAW_STRING_LITERAL);
 	private static final TokenSet CONDITIONAL_OR_OPS = TokenSet.create(JavaTokenType.OROR);
 	private static final TokenSet CONDITIONAL_AND_OPS = TokenSet.create(JavaTokenType.ANDAND);
 	private static final TokenSet OR_OPS = TokenSet.create(JavaTokenType.OR);
@@ -88,13 +74,13 @@ public class ExpressionParser
 		myParser = javaParser;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiBuilder.Marker parse(final PsiBuilder builder)
 	{
 		return parseAssignment(builder);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiBuilder.Marker parseAssignment(final PsiBuilder builder)
 	{
 		final PsiBuilder.Marker left = parseConditional(builder);
@@ -213,7 +199,7 @@ public class ExpressionParser
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiBuilder.Marker parseBinary(final PsiBuilder builder, final ExprType type, final TokenSet ops)
 	{
 		PsiBuilder.Marker result = parseExpression(builder, type);
@@ -393,8 +379,8 @@ public class ExpressionParser
 		P4
 	}
 
-	@javax.annotation.Nullable
-	private PsiBuilder.Marker parsePrimary(PsiBuilder builder, @javax.annotation.Nullable BreakPoint breakPoint, int breakOffset)
+	@Nullable
+	private PsiBuilder.Marker parsePrimary(PsiBuilder builder, @Nullable BreakPoint breakPoint, int breakOffset)
 	{
 		PsiBuilder.Marker startMarker = builder.mark();
 
@@ -589,7 +575,7 @@ public class ExpressionParser
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiBuilder.Marker parsePrimaryExpressionStart(final PsiBuilder builder)
 	{
 		IElementType tokenType = builder.getTokenType();
@@ -669,6 +655,10 @@ public class ExpressionParser
 			tokenType = builder.getTokenType();
 		}
 
+		if(tokenType == JavaTokenType.VAR_KEYWORD)
+		{
+			builder.remapCurrentToken(tokenType = JavaTokenType.IDENTIFIER);
+		}
 		if(tokenType == JavaTokenType.IDENTIFIER)
 		{
 			if(builder.lookAhead(1) == JavaTokenType.ARROW)
@@ -785,12 +775,8 @@ public class ExpressionParser
 
 			first = false;
 
-			final IElementType tokenType = builder.getTokenType();
-			if(tokenType == JavaTokenType.COMMA)
-			{
-				builder.advanceLexer();
-			}
-			else if(tokenType != JavaTokenType.RBRACE)
+			IElementType tokenType = builder.getTokenType();
+			if(!expect(builder, JavaTokenType.COMMA) && tokenType != JavaTokenType.RBRACE)
 			{
 				error(builder, JavaErrorMessages.message("expected.comma"));
 			}
@@ -801,7 +787,7 @@ public class ExpressionParser
 	}
 
 	@Nonnull
-	private PsiBuilder.Marker parseNew(PsiBuilder builder, @javax.annotation.Nullable PsiBuilder.Marker start)
+	private PsiBuilder.Marker parseNew(PsiBuilder builder, @Nullable PsiBuilder.Marker start)
 	{
 		PsiBuilder.Marker newExpr = (start != null ? start.precede() : builder.mark());
 		builder.advanceLexer();
@@ -923,7 +909,7 @@ public class ExpressionParser
 		return result;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiBuilder.Marker parseClassAccessOrMethodReference(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword)
 	{
 		IElementType tokenType = builder.getTokenType();
@@ -939,7 +925,7 @@ public class ExpressionParser
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiBuilder.Marker parseClassObjectAccess(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword)
 	{
 		final PsiBuilder.Marker mark = builder.mark();
@@ -980,7 +966,7 @@ public class ExpressionParser
 		return start;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiBuilder.Marker parseLambdaAfterParenth(final PsiBuilder builder)
 	{
 		final boolean isLambda;
@@ -1141,7 +1127,7 @@ public class ExpressionParser
 		emptyElement(builder, JavaElementType.EMPTY_EXPRESSION);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static IElementType getGtTokenType(final PsiBuilder builder)
 	{
 		IElementType tokenType = builder.getTokenType();

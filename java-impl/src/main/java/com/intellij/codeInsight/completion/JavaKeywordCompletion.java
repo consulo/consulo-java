@@ -33,6 +33,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.TailTypes;
@@ -303,11 +304,59 @@ public class JavaKeywordCompletion
 
 		addPrimitiveTypes(this::addKeyword, myPosition, mySession);
 
+		addVar();
+
 		addClassLiteral();
 
 		addUnfinishedMethodTypeParameters();
 
 		addExtendsImplements();
+	}
+
+	private void addVar()
+	{
+		if(isVarAllowed())
+		{
+			addKeyword(createKeyword(PsiKeyword.VAR));
+		}
+	}
+
+	private boolean isVarAllowed()
+	{
+		if(PsiUtil.isLanguageLevel11OrHigher(myPosition) && isLambdaParameterType())
+		{
+			return true;
+		}
+
+		if(!PsiUtil.isLanguageLevel10OrHigher(myPosition))
+		{
+			return false;
+		}
+
+		if(isAtCatchOrResourceVariableStart(myPosition) && PsiTreeUtil.getParentOfType(myPosition, PsiCatchSection.class) == null)
+		{
+			return true;
+		}
+
+		return isVariableTypePosition(myPosition) && PsiTreeUtil.getParentOfType(myPosition, PsiCodeBlock.class, true, PsiMember.class, PsiLambdaExpression.class) != null;
+	}
+
+	private static boolean isVariableTypePosition(PsiElement position)
+	{
+		return START_FOR.accepts(position) || isInsideParameterList(position) || VARIABLE_AFTER_FINAL.accepts(position) || isStatementPosition(position);
+	}
+
+	private boolean isLambdaParameterType()
+	{
+		PsiElement position = myParameters.getOriginalPosition();
+		PsiParameterList paramList = PsiTreeUtil.getParentOfType(position, PsiParameterList.class);
+		if(paramList != null && paramList.getParent() instanceof PsiLambdaExpression)
+		{
+			PsiParameter param = PsiTreeUtil.getParentOfType(position, PsiParameter.class);
+			PsiTypeElement type = param == null ? null : param.getTypeElement();
+			return type == null || PsiTreeUtil.isAncestor(type, position, false);
+		}
+		return false;
 	}
 
 	static boolean addWildcardExtendsSuper(CompletionResultSet result, PsiElement position)
@@ -776,6 +825,21 @@ public class JavaKeywordCompletion
 	private static boolean isAtCatchVariableStart(PsiElement position)
 	{
 		return psiElement().insideStarting(psiElement(PsiTypeElement.class).withParent(PsiCatchSection.class)).accepts(position);
+	}
+
+	private static boolean isAtCatchOrResourceVariableStart(PsiElement position)
+	{
+		PsiElement type = PsiTreeUtil.getParentOfType(position, PsiTypeElement.class);
+		if(type != null && type.getTextRange().getStartOffset() == position.getTextRange().getStartOffset())
+		{
+			PsiElement parent = type.getParent();
+			if(parent instanceof PsiVariable)
+			{
+				parent = parent.getParent();
+			}
+			return parent instanceof PsiCatchSection || parent instanceof PsiResourceList;
+		}
+		return psiElement().insideStarting(psiElement(PsiResourceExpression.class)).accepts(position);
 	}
 
 	private void addBreakContinue()

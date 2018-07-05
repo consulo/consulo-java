@@ -23,11 +23,9 @@ package com.intellij.packageDependencies.ui;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.scopeChooser.GroupByScopeTypeAction;
@@ -43,6 +41,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.search.scope.packageSet.PackageSet;
 import com.intellij.psi.search.scope.packageSet.PatternPackageSet;
+import consulo.ui.image.Image;
 
 public class PackagePatternProvider extends PatternDialectProvider {
   @NonNls public static final String PACKAGES = "package";
@@ -117,7 +116,7 @@ public class PackagePatternProvider extends PatternDialectProvider {
     return null;
   }
 
-  public Icon getIcon() {
+  public Image getIcon() {
     return AllIcons.General.PackagesTab;
   }
 
