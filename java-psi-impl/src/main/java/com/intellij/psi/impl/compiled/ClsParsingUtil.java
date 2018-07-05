@@ -233,6 +233,11 @@ public class ClsParsingUtil
 			case Opcodes.V1_9:
 				return LanguageLevel.JDK_1_9;
 
+			case 54:
+				return LanguageLevel.JDK_10;
+
+			case 55:
+				return LanguageLevel.JDK_11;
 			default:
 				return null;
 		}

@@ -1,24 +1,10 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lang.java.parser;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
-
+import javax.annotation.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.ASTNode;
@@ -92,7 +78,7 @@ public class JavaParserUtil
 			for(int idx = tokens.size() - 1; idx >= 0; idx--)
 			{
 				final IElementType tokenType = tokens.get(idx);
-				if(ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokenType))
+				if(TokenSet.WHITE_SPACE.contains(tokenType))
 				{
 					if(StringUtil.getLineBreakCount(getter.get(idx)) > 1)
 					{
@@ -101,8 +87,7 @@ public class JavaParserUtil
 				}
 				else if(ElementType.JAVA_PLAIN_COMMENT_BIT_SET.contains(tokenType))
 				{
-					if(atStreamEdge || (idx == 0 && myAfterEmptyImport) || (idx > 0 && ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokens.get(idx - 1)) && StringUtil.containsLineBreak(getter.get
-							(idx - 1))))
+					if(atStreamEdge || (idx == 0 && myAfterEmptyImport) || (idx > 0 && TokenSet.WHITE_SPACE.contains(tokens.get(idx - 1)) && StringUtil.containsLineBreak(getter.get(idx - 1))))
 					{
 						result = idx;
 					}
@@ -131,7 +116,7 @@ public class JavaParserUtil
 			for(int idx = 0; idx < tokens.size(); idx++)
 			{
 				final IElementType tokenType = tokens.get(idx);
-				if(ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokenType))
+				if(TokenSet.WHITE_SPACE.contains(tokenType))
 				{
 					if(StringUtil.containsLineBreak(getter.get(idx)))
 					{
@@ -167,25 +152,25 @@ public class JavaParserUtil
 
 	public static void setLanguageLevel(final PsiBuilder builder, final LanguageLevel level)
 	{
-		builder.putUserDataUnprotected(LANG_LEVEL_KEY, level);
+		builder.putUserData(LANG_LEVEL_KEY, level);
 	}
 
 	@Nonnull
 	public static LanguageLevel getLanguageLevel(final PsiBuilder builder)
 	{
-		final LanguageLevel level = builder.getUserDataUnprotected(LANG_LEVEL_KEY);
+		final LanguageLevel level = builder.getUserData(LANG_LEVEL_KEY);
 		assert level != null : builder;
 		return level;
 	}
 
 	public static void setParseStatementCodeBlocksDeep(final PsiBuilder builder, final boolean deep)
 	{
-		builder.putUserDataUnprotected(DEEP_PARSE_BLOCKS_IN_STATEMENTS, deep);
+		builder.putUserData(DEEP_PARSE_BLOCKS_IN_STATEMENTS, deep);
 	}
 
 	public static boolean isParseStatementCodeBlocksDeep(final PsiBuilder builder)
 	{
-		return Boolean.TRUE.equals(builder.getUserDataUnprotected(DEEP_PARSE_BLOCKS_IN_STATEMENTS));
+		return Boolean.TRUE.equals(builder.getUserData(DEEP_PARSE_BLOCKS_IN_STATEMENTS));
 	}
 
 	@Nonnull
@@ -239,13 +224,13 @@ public class JavaParserUtil
 		return builder;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper)
 	{
 		return parseFragment(chameleon, wrapper, true, LanguageLevel.HIGHEST);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper, final boolean eatAll, final LanguageLevel level)
 	{
 		final PsiElement psi = (chameleon.getTreeParent() != null ? chameleon.getTreeParent().getPsi() : chameleon.getPsi());
@@ -285,8 +270,8 @@ public class JavaParserUtil
 		marker.setCustomEdgeTokenBinders(left, right);
 	}
 
-	@javax.annotation.Nullable
-	public static IElementType exprType(@javax.annotation.Nullable final PsiBuilder.Marker marker)
+	@Nullable
+	public static IElementType exprType(@Nullable final PsiBuilder.Marker marker)
 	{
 		return marker != null ? ((LighterASTNode) marker).getTokenType() : null;
 	}
@@ -297,7 +282,7 @@ public class JavaParserUtil
 		builder.mark().error(message);
 	}
 
-	public static void error(final PsiBuilder builder, final String message, @javax.annotation.Nullable final PsiBuilder.Marker before)
+	public static void error(final PsiBuilder builder, final String message, @Nullable final PsiBuilder.Marker before)
 	{
 		if(before == null)
 		{

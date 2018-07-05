@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.lexer.JavaLexer;
@@ -41,7 +42,7 @@ public class JavaSoftKeywordHighlightingPass extends TextEditorHighlightingPass
 	private final PsiJavaFile myFile;
 	private final List<HighlightInfo> myResults = new ArrayList<>();
 
-	public JavaSoftKeywordHighlightingPass(@Nonnull PsiJavaFile file, @javax.annotation.Nullable Document document)
+	public JavaSoftKeywordHighlightingPass(@Nonnull PsiJavaFile file, @Nullable Document document)
 	{
 		super(file.getProject(), document);
 		myFile = file;

@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
-
+import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiJavaFile;
@@ -30,70 +30,86 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 
-public class JavaFileElement extends FileElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.JavaFileElement");
+public class JavaFileElement extends FileElement
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.JavaFileElement");
 
-  public JavaFileElement(CharSequence text) {
-    super(JavaStubElementTypes.JAVA_FILE, text);
-  }
+	public JavaFileElement(CharSequence text)
+	{
+		super(JavaStubElementTypes.JAVA_FILE, text);
+	}
 
-  @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
-    if (child.getElementType() == JavaElementType.CLASS) {
-      PsiJavaFile file = SourceTreeToPsiMap.treeToPsiNotNull(this);
-      if (file.getClasses().length == 1) {
-        file.delete();
-        return;
-      }
-    }
-    super.deleteChildInternal(child);
-  }
+	@Override
+	public void deleteChildInternal(@Nonnull ASTNode child)
+	{
+		if(child.getElementType() == JavaElementType.CLASS)
+		{
+			PsiJavaFile file = SourceTreeToPsiMap.treeToPsiNotNull(this);
+			if(file.getClasses().length == 1)
+			{
+				file.delete();
+				return;
+			}
+		}
+		super.deleteChildInternal(child);
+	}
 
-  @Override
-  @javax.annotation.Nullable
-  public ASTNode findChildByRole(int role) {
-    LOG.assertTrue(ChildRole.isUnique(role));
-    switch (role) {
-      default:
-        return null;
+	@Override
+	@Nullable
+	public ASTNode findChildByRole(int role)
+	{
+		LOG.assertTrue(ChildRole.isUnique(role));
+		switch(role)
+		{
+			default:
+				return null;
 
-      case ChildRole.PACKAGE_STATEMENT:
-        return findChildByType(JavaElementType.PACKAGE_STATEMENT);
+			case ChildRole.PACKAGE_STATEMENT:
+				return findChildByType(JavaElementType.PACKAGE_STATEMENT);
 
-      case ChildRole.IMPORT_LIST:
-        return findChildByType(JavaElementType.IMPORT_LIST);
-    }
-  }
+			case ChildRole.IMPORT_LIST:
+				return findChildByType(JavaElementType.IMPORT_LIST);
+		}
+	}
 
-  @Override
-  public int getChildRole(ASTNode child) {
-    LOG.assertTrue(child.getTreeParent() == this);
-    IElementType i = child.getElementType();
-    if (i == JavaElementType.PACKAGE_STATEMENT) {
-      return ChildRole.PACKAGE_STATEMENT;
-    }
-    else if (i == JavaElementType.IMPORT_LIST) {
-      return ChildRole.IMPORT_LIST;
-    }
-    else if (i == JavaElementType.CLASS) {
-      return ChildRole.CLASS;
-    }
-    else {
-      return ChildRoleBase.NONE;
-    }
-  }
+	@Override
+	public int getChildRole(@Nonnull ASTNode child)
+	{
+		LOG.assertTrue(child.getTreeParent() == this);
+		IElementType i = child.getElementType();
+		if(i == JavaElementType.PACKAGE_STATEMENT)
+		{
+			return ChildRole.PACKAGE_STATEMENT;
+		}
+		else if(i == JavaElementType.IMPORT_LIST)
+		{
+			return ChildRole.IMPORT_LIST;
+		}
+		else if(i == JavaElementType.CLASS)
+		{
+			return ChildRole.CLASS;
+		}
+		else
+		{
+			return ChildRoleBase.NONE;
+		}
+	}
 
-  @Override
-  public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement) {
-    if (newElement.getElementType() == JavaElementType.IMPORT_LIST) {
-      LOG.assertTrue(child.getElementType() == JavaElementType.IMPORT_LIST);
-      if (newElement.getFirstChildNode() == null) { //empty import list
-        ASTNode next = child.getTreeNext();
-        if (next != null && next.getElementType() == TokenType.WHITE_SPACE) {
-          removeChild(next);
-        }
-      }
-    }
-    super.replaceChildInternal(child, newElement);
-  }
+	@Override
+	public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
+	{
+		if(newElement.getElementType() == JavaElementType.IMPORT_LIST)
+		{
+			LOG.assertTrue(child.getElementType() == JavaElementType.IMPORT_LIST);
+			if(newElement.getFirstChildNode() == null)
+			{ //empty import list
+				ASTNode next = child.getTreeNext();
+				if(next != null && next.getElementType() == TokenType.WHITE_SPACE)
+				{
+					removeChild(next);
+				}
+			}
+		}
+		super.replaceChildInternal(child, newElement);
+	}
 }

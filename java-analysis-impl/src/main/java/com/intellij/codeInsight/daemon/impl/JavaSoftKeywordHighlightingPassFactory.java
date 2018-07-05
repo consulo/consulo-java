@@ -17,6 +17,7 @@
 package com.intellij.codeInsight.daemon.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.codeHighlighting.TextEditorHighlightingPassFactory;
@@ -40,7 +41,7 @@ public class JavaSoftKeywordHighlightingPassFactory extends AbstractProjectCompo
 		registrar.registerTextEditorHighlightingPass(this, null, null, false, -1);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public TextEditorHighlightingPass createHighlightingPass(@Nonnull PsiFile file, @Nonnull Editor editor)
 	{

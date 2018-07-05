@@ -39,7 +39,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import consulo.annotations.RequiredReadAction;
-import consulo.java.JavaParser;
 import consulo.java.psi.JavaLanguageVersion;
 import consulo.lang.LanguageVersion;
 
@@ -88,7 +87,7 @@ public class JavaParserDefinition implements ParserDefinition
 	@Nonnull
 	public PsiParser createParser(@Nonnull LanguageVersion languageVersion)
 	{
-		return new JavaParser();
+		throw new UnsupportedOperationException();
 	}
 
 	@RequiredReadAction

@@ -277,7 +277,7 @@ public interface JavaElementType
 			}
 		};
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public ASTNode parseContents(final ASTNode chameleon)
 		{
@@ -296,7 +296,7 @@ public interface JavaElementType
 			}
 		};
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public ASTNode parseContents(final ASTNode chameleon)
 		{
@@ -315,7 +315,7 @@ public interface JavaElementType
 			}
 		};
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public ASTNode parseContents(final ASTNode chameleon)
 		{
@@ -341,13 +341,14 @@ public interface JavaElementType
 			@Override
 			public void parse(final PsiBuilder builder)
 			{
-				JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | myFlags);
+				int flags = ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | myFlags;
+				JavaParser.INSTANCE.getReferenceParser().parseType(builder, flags);
 			}
 		};
 
 		@Nullable
 		@Override
-		public ASTNode parseContents(final ASTNode chameleon)
+		public ASTNode parseContents(@Nonnull final ASTNode chameleon)
 		{
 			return JavaParserUtil.parseFragment(chameleon, myParser);
 		}
