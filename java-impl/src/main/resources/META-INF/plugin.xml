@@ -1071,6 +1071,7 @@
 		<programRunner id="defaultRunRunner" implementation="com.intellij.execution.impl.DefaultJavaProgramRunner"/>
 		<programRunner implementation="com.intellij.execution.jar.JarApplicationDebuggerRunner"/>
 
+		<editorTabTitleProvider implementation="consulo.java.fileEditor.impl.JavaModuleEditorTabTitleProvider" order="first"/>
 
 		<globalInspection groupPath="Java" language="JAVA" shortName="unused" displayName="Unused declaration" groupBundle="messages.InspectionsBundle"
 						  groupKey="group.names.declaration.redundancy" enabledByDefault="true" level="WARNING"

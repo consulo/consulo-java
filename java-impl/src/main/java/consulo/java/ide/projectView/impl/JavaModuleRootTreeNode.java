@@ -69,10 +69,4 @@ public class JavaModuleRootTreeNode extends PsiDirectoryNode
 	{
 		data.setIcon(JavaIcons.Nodes.JavaModuleRoot);
 	}
-
-	@Override
-	public void update(PresentationData data)
-	{
-		super.update(data);
-	}
 }
