@@ -17,13 +17,11 @@ package com.intellij.psi.impl.source;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -47,17 +45,7 @@ public class PsiJavaFileImpl extends PsiJavaFileBaseImpl
 	public PsiJavaModule getModuleDeclaration()
 	{
 		PsiJavaFileStub stub = (PsiJavaFileStub) getGreenStub();
-		if(stub != null)
-		{
-			return stub.getModule();
-		}
-
-		PsiElement element = getFirstChild();
-		if(element instanceof PsiWhiteSpace || element instanceof PsiComment)
-		{
-			element = PsiTreeUtil.skipSiblingsForward(element, PsiWhiteSpace.class, PsiComment.class);
-		}
-		return element instanceof PsiJavaModule ? (PsiJavaModule) element : null;
+		return stub != null ? stub.getModule() : PsiTreeUtil.getChildOfType(this, PsiJavaModule.class);
 	}
 
 	@Override

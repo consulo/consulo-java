@@ -22,14 +22,14 @@ import java.util.LinkedList;
 
 import javax.annotation.Nonnull;
 
-import org.jetbrains.org.objectweb.asm.Opcodes;
-import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.InsnList;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.jetbrains.org.objectweb.asm.tree.analysis.Frame;
-import org.jetbrains.org.objectweb.asm.tree.analysis.SourceInterpreter;
-import org.jetbrains.org.objectweb.asm.tree.analysis.SourceValue;
-import org.jetbrains.org.objectweb.asm.tree.analysis.Value;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.analysis.Frame;
+import org.objectweb.asm.tree.analysis.SourceInterpreter;
+import org.objectweb.asm.tree.analysis.SourceValue;
+import org.objectweb.asm.tree.analysis.Value;
 
 /**
  * @author lambdamix

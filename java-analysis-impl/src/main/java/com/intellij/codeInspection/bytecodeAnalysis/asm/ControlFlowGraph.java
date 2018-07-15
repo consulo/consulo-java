@@ -17,8 +17,8 @@ package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import java.util.Set;
 
-import org.jetbrains.org.objectweb.asm.tree.MethodNode;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
  * @author lambdamix

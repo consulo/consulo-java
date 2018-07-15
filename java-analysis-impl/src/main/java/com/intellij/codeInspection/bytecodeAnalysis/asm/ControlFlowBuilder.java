@@ -21,8 +21,8 @@ import gnu.trove.TIntArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.org.objectweb.asm.tree.MethodNode;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 final class ControlFlowBuilder extends FramelessAnalyzer {
   final String className;

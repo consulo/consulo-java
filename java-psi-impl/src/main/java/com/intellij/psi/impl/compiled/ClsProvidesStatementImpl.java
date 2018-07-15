@@ -16,7 +16,6 @@
 package com.intellij.psi.impl.compiled;
 
 import javax.annotation.Nonnull;
-
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiProvidesStatement;

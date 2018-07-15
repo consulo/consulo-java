@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
-import org.jetbrains.org.objectweb.asm.tree.JumpInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.LabelNode;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
  * @author lambdamix

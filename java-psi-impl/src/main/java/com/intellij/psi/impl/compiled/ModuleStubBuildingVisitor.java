@@ -23,10 +23,10 @@ import static com.intellij.util.containers.ContainerUtil.map2Array;
 
 import java.util.Arrays;
 
-import org.jetbrains.org.objectweb.asm.AnnotationVisitor;
-import org.jetbrains.org.objectweb.asm.ClassVisitor;
-import org.jetbrains.org.objectweb.asm.ModuleVisitor;
-import org.jetbrains.org.objectweb.asm.Opcodes;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ModuleVisitor;
+import org.objectweb.asm.Opcodes;
 import com.intellij.psi.impl.cache.ModifierFlags;
 import com.intellij.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.psi.impl.java.stubs.PsiJavaModuleStub;
@@ -38,6 +38,7 @@ import com.intellij.psi.impl.java.stubs.impl.PsiPackageAccessibilityStatementStu
 import com.intellij.psi.impl.java.stubs.impl.PsiProvidesStatementStubImpl;
 import com.intellij.psi.impl.java.stubs.impl.PsiRequiresStatementStubImpl;
 import com.intellij.psi.impl.java.stubs.impl.PsiUsesStatementStubImpl;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 
 public class ModuleStubBuildingVisitor extends ClassVisitor
@@ -106,7 +107,8 @@ public class ModuleStubBuildingVisitor extends ClassVisitor
 			public void visitProvide(String service, String... providers)
 			{
 				PsiProvidesStatementStubImpl statementStub = new PsiProvidesStatementStubImpl(myResult, NAME_MAPPER.fun(service));
-				new PsiClassReferenceListStubImpl(PROVIDES_WITH_LIST, statementStub, map2Array(providers, String.class, NAME_MAPPER));
+				String[] names = map2Array(providers, String.class, NAME_MAPPER);
+				new PsiClassReferenceListStubImpl(PROVIDES_WITH_LIST, statementStub, names.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : names);
 			}
 		};
 	}

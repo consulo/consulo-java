@@ -18,16 +18,16 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.List;
 
-import org.jetbrains.org.objectweb.asm.Opcodes;
-import org.jetbrains.org.objectweb.asm.Type;
-import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.FieldInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.InvokeDynamicInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.LdcInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.MethodInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.MethodNode;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.jetbrains.org.objectweb.asm.tree.analysis.Interpreter;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InvokeDynamicInsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.analysis.Interpreter;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ASMUtils;
 import com.intellij.openapi.util.Couple;
 
@@ -42,7 +42,7 @@ class DataInterpreter extends Interpreter<DataValue>
   final EffectQuantum[] effects;
 
   protected DataInterpreter(MethodNode methodNode) {
-    super(Opcodes.ASM5);
+    super(Opcodes.API_VERSION);
     this.methodNode = methodNode;
     shift = (methodNode.access & Opcodes.ACC_STATIC) == 0 ? 2 : 1;
     arity = Type.getArgumentTypes(methodNode.desc).length;

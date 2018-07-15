@@ -17,12 +17,14 @@ package com.intellij.psi.impl.compiled;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jetbrains.org.objectweb.asm.Opcodes;
+
+import org.objectweb.asm.Opcodes;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.lexer.JavaLexer;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -32,6 +34,7 @@ import com.intellij.psi.impl.source.JavaDummyElement;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.lang.JavaVersion;
 
 /**
  * @author ven
@@ -230,16 +233,31 @@ public class ClsParsingUtil
 			case Opcodes.V1_8:
 				return LanguageLevel.JDK_1_8;
 
-			case Opcodes.V1_9:
+			case Opcodes.V9:
 				return LanguageLevel.JDK_1_9;
 
-			case 54:
+			case Opcodes.V10:
 				return LanguageLevel.JDK_10;
 
-			case 55:
+			case Opcodes.V11:
 				return LanguageLevel.JDK_11;
 			default:
 				return null;
 		}
+	}
+
+	@Nullable
+	public static JavaSdkVersion getJdkVersionByBytecode(int major)
+	{
+		if(major == Opcodes.V1_1 || major == 45)
+		{
+			return JavaSdkVersion.JDK_1_1;
+		}
+		if(major >= 46)
+		{
+			JavaVersion version = JavaVersion.compose(major - 44);  // 46 = 1.2, 47 = 1.3 etc.
+			return JavaSdkVersion.fromJavaVersion(version);
+		}
+		return null;
 	}
 }

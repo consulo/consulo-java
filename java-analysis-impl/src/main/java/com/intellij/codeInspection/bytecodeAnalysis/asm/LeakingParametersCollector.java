@@ -16,12 +16,12 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
-import static org.jetbrains.org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.*;
 
 import java.util.List;
 
-import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 class LeakingParametersCollector extends ParametersUsage {
   final boolean[] leaking;

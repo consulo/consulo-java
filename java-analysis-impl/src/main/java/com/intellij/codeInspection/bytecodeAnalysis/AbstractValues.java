@@ -18,9 +18,9 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.Set;
 
-import org.jetbrains.org.objectweb.asm.Type;
-import org.jetbrains.org.objectweb.asm.tree.analysis.BasicValue;
-import org.jetbrains.org.objectweb.asm.tree.analysis.Frame;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.analysis.BasicValue;
+import org.objectweb.asm.tree.analysis.Frame;
 
 class AbstractValues {
   static final class ParamValue extends BasicValue

@@ -21,24 +21,24 @@ import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.TrueVa
 import static com.intellij.codeInspection.bytecodeAnalysis.CombinedData.ThisValue;
 import static com.intellij.codeInspection.bytecodeAnalysis.Direction.NullableOut;
 import static com.intellij.codeInspection.bytecodeAnalysis.Direction.Out;
-import static org.jetbrains.org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.jetbrains.org.objectweb.asm.Opcodes.ARETURN;
-import static org.jetbrains.org.objectweb.asm.Opcodes.ATHROW;
-import static org.jetbrains.org.objectweb.asm.Opcodes.DRETURN;
-import static org.jetbrains.org.objectweb.asm.Opcodes.FRETURN;
-import static org.jetbrains.org.objectweb.asm.Opcodes.IRETURN;
-import static org.jetbrains.org.objectweb.asm.Opcodes.LRETURN;
-import static org.jetbrains.org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ATHROW;
+import static org.objectweb.asm.Opcodes.DRETURN;
+import static org.objectweb.asm.Opcodes.FRETURN;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.LRETURN;
+import static org.objectweb.asm.Opcodes.RETURN;
 
 import java.util.Collections;
 import java.util.Set;
 
-import org.jetbrains.org.objectweb.asm.Type;
-import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.MethodNode;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.jetbrains.org.objectweb.asm.tree.analysis.BasicValue;
-import org.jetbrains.org.objectweb.asm.tree.analysis.Frame;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.analysis.BasicValue;
+import org.objectweb.asm.tree.analysis.Frame;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ASMUtils;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
 import com.intellij.util.SingletonSet;

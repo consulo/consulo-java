@@ -19,27 +19,31 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.NullValue;
 import static com.intellij.codeInspection.bytecodeAnalysis.PResults.join;
 
-import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.jetbrains.org.objectweb.asm.tree.analysis.BasicValue;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.analysis.BasicValue;
 
-class NullableInterpreter extends NullityInterpreter {
+class NullableInterpreter extends NullityInterpreter
+{
 
-  NullableInterpreter() {
-    super(true, Direction.In.NULLABLE_MASK);
-  }
-
-	@Override
-  public BasicValue newOperation(AbstractInsnNode insn) throws AnalyzerException
+	NullableInterpreter()
 	{
-    if (insn.getOpcode() == ACONST_NULL && taken) {
-      return NullValue;
-    }
-    return super.newOperation(insn);
-  }
+		super(true, Direction.In.NULLABLE_MASK);
+	}
 
 	@Override
-	PResults.PResult combine(PResults.PResult res1, PResults.PResult res2) throws AnalyzerException {
-    return join(res1, res2);
-  }
+	public BasicValue newOperation(AbstractInsnNode insn) throws AnalyzerException
+	{
+		if(insn.getOpcode() == ACONST_NULL && taken)
+		{
+			return NullValue;
+		}
+		return super.newOperation(insn);
+	}
+
+	@Override
+	PResults.PResult combine(PResults.PResult res1, PResults.PResult res2) throws AnalyzerException
+	{
+		return join(res1, res2);
+	}
 }

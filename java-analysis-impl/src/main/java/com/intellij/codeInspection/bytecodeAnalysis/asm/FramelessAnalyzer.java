@@ -21,16 +21,17 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-import org.jetbrains.org.objectweb.asm.tree.AbstractInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.IincInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.JumpInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.LabelNode;
-import org.jetbrains.org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.MethodNode;
-import org.jetbrains.org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.TryCatchBlockNode;
-import org.jetbrains.org.objectweb.asm.tree.VarInsnNode;
-import org.jetbrains.org.objectweb.asm.tree.analysis.AnalyzerException;
+
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.IincInsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
+import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
  * Specialized version of {@link org.jetbrains.org.objectweb.asm.tree.analysis.Analyzer}.

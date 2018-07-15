@@ -44,7 +44,7 @@ import com.intellij.util.io.StringRef;
  */
 public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileStub>
 {
-	public static final int STUB_VERSION = 41;
+	public static final int STUB_VERSION = 44;
 
 	public JavaFileElementType()
 	{

@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.jetbrains.org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 
 final class Method {
   final String internalClassName;

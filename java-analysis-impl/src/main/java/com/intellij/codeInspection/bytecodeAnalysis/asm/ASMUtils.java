@@ -16,8 +16,8 @@
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.org.objectweb.asm.Type;
-import org.jetbrains.org.objectweb.asm.tree.analysis.BasicValue;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.analysis.BasicValue;
 
 /**
  * @author lambdamix

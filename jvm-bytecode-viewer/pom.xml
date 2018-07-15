@@ -54,5 +54,10 @@
 			<artifactId>consulo.java-java.debugger.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>consulo.internal.org.ow2.asm</groupId>
+			<artifactId>asm-util</artifactId>
+			<version>6.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

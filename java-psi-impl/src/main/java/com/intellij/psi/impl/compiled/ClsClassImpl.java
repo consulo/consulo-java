@@ -1,27 +1,17 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.compiled;
 
+import static com.intellij.util.ObjectUtils.assertNotNull;
 import static java.util.Arrays.asList;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.navigation.ItemPresentation;
@@ -39,6 +29,7 @@ import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiClassStub;
+import com.intellij.psi.impl.java.stubs.impl.PsiClassStubImpl;
 import com.intellij.psi.impl.source.ClassInnerStuffCache;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.PsiClassImpl;
@@ -51,9 +42,10 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredReadAction;
 import consulo.java.psi.augment.JavaEnumAugmentProvider;
 
-public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiExtensibleClass, PsiQualifiedNamedElement, Queryable
+public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiExtensibleClass, Queryable
 {
 	public static final Key<PsiClass> DELEGATE_KEY = Key.create("DELEGATE");
 
@@ -65,12 +57,13 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 		putUserData(JavaEnumAugmentProvider.FLAG, Boolean.TRUE);
 	}
 
+	@RequiredReadAction
 	@Override
 	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		List<PsiElement> children = ContainerUtil.newArrayList();
-		ContainerUtil.addAll(children, getChildren(getDocComment(), getModifierList(), getNameIdentifier(), getExtendsList(), getImplementsList()));
+		ContainerUtil.addAll(children, getChildren(getDocComment(), getModifierListInternal(), getNameIdentifier(), getExtendsList(), getImplementsList()));
 		ContainerUtil.addAll(children, getOwnFields());
 		ContainerUtil.addAll(children, getOwnMethods());
 		ContainerUtil.addAll(children, getOwnInnerClasses());
@@ -81,7 +74,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	@Nonnull
 	public PsiTypeParameterList getTypeParameterList()
 	{
-		return getStub().findChildStubByType(JavaStubElementTypes.TYPE_PARAMETER_LIST).getPsi();
+		return assertNotNull(getStub().findChildStubByType(JavaStubElementTypes.TYPE_PARAMETER_LIST)).getPsi();
 	}
 
 	@Override
@@ -91,37 +84,63 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	}
 
 	@Override
-	@Nonnull
+	@Nullable
 	public String getQualifiedName()
 	{
 		return getStub().getQualifiedName();
 	}
 
+	private boolean isLocalClass()
+	{
+		PsiClassStub<?> stub = getStub();
+		return stub instanceof PsiClassStubImpl && ((PsiClassStubImpl) stub).isLocalClassInner();
+	}
+
+	private boolean isAnonymousClass()
+	{
+		PsiClassStub<?> stub = getStub();
+		return stub instanceof PsiClassStubImpl && ((PsiClassStubImpl) stub).isAnonymousInner();
+	}
+
+	private boolean isAnonymousOrLocalClass()
+	{
+		return isAnonymousClass() || isLocalClass();
+	}
+
 	@Override
-	@Nonnull
+	@Nullable
 	public PsiModifierList getModifierList()
 	{
-		return getStub().findChildStubByType(JavaStubElementTypes.MODIFIER_LIST).getPsi();
+		if(isAnonymousClass())
+		{
+			return null;
+		}
+		return getModifierListInternal();
+	}
+
+	private PsiModifierList getModifierListInternal()
+	{
+		return assertNotNull(getStub().findChildStubByType(JavaStubElementTypes.MODIFIER_LIST)).getPsi();
 	}
 
 	@Override
 	public boolean hasModifierProperty(@Nonnull String name)
 	{
-		return getModifierList().hasModifierProperty(name);
+		return getModifierListInternal().hasModifierProperty(name);
 	}
 
 	@Override
 	@Nonnull
 	public PsiReferenceList getExtendsList()
 	{
-		return getStub().findChildStubByType(JavaStubElementTypes.EXTENDS_LIST).getPsi();
+		return assertNotNull(getStub().findChildStubByType(JavaStubElementTypes.EXTENDS_LIST)).getPsi();
 	}
 
 	@Override
 	@Nonnull
 	public PsiReferenceList getImplementsList()
 	{
-		return getStub().findChildStubByType(JavaStubElementTypes.IMPLEMENTS_LIST).getPsi();
+		return assertNotNull(getStub().findChildStubByType(JavaStubElementTypes.IMPLEMENTS_LIST)).getPsi();
 	}
 
 	@Override
@@ -233,7 +252,34 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	@Override
 	public List<PsiClass> getOwnInnerClasses()
 	{
-		return asList(getStub().getChildrenByType(JavaStubElementTypes.CLASS, PsiClass.ARRAY_FACTORY));
+		PsiClass[] classes = getStub().getChildrenByType(JavaStubElementTypes.CLASS, PsiClass.ARRAY_FACTORY);
+		if(classes.length == 0)
+		{
+			return Collections.emptyList();
+		}
+
+		int anonymousOrLocalClassesCount = 0;
+		for(PsiClass aClass : classes)
+		{
+			if(aClass instanceof ClsClassImpl && ((ClsClassImpl) aClass).isAnonymousOrLocalClass())
+			{
+				++anonymousOrLocalClassesCount;
+			}
+		}
+		if(anonymousOrLocalClassesCount == 0)
+		{
+			return asList(classes);
+		}
+
+		ArrayList<PsiClass> result = new ArrayList<>(classes.length - anonymousOrLocalClassesCount);
+		for(PsiClass aClass : classes)
+		{
+			if(!(aClass instanceof ClsClassImpl) || !((ClsClassImpl) aClass).isAnonymousOrLocalClass())
+			{
+				result.add(aClass);
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -380,7 +426,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	{
 		appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
 
-		appendText(getModifierList(), indentLevel, buffer);
+		appendText(getModifierListInternal(), indentLevel, buffer);
 		buffer.append(isEnum() ? "enum " : isAnnotationType() ? "@interface " : isInterface() ? "interface " : "class ");
 		appendText(getNameIdentifier(), indentLevel, buffer, " ");
 		appendText(getTypeParameterList(), indentLevel, buffer, " ");
@@ -484,7 +530,11 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
 		setMirrorIfPresent(getDocComment(), mirror.getDocComment());
 
-		setMirror(getModifierList(), mirror.getModifierList());
+		PsiModifierList modifierList = getModifierList();
+		if(modifierList != null)
+		{
+			setMirror(modifierList, mirror.getModifierList());
+		}
 		setMirror(getNameIdentifier(), mirror.getNameIdentifier());
 		setMirror(getTypeParameterList(), mirror.getTypeParameterList());
 		setMirror(getExtendsList(), mirror.getExtendsList());
@@ -549,7 +599,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 		return InheritanceImplUtil.isInheritor(this, baseClass, checkDeep);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiClass getSourceMirrorClass()
 	{
 		final PsiClass delegate = getUserData(DELEGATE_KEY);
@@ -610,11 +660,11 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	@Nonnull
 	public PsiElement getNavigationElement()
 	{
-		for(ClsCustomNavigationPolicy customNavigationPolicy : Extensions.getExtensions(ClsCustomNavigationPolicy.EP_NAME))
+		for(ClsCustomNavigationPolicy navigationPolicy : Extensions.getExtensions(ClsCustomNavigationPolicy.EP_NAME))
 		{
 			try
 			{
-				PsiElement navigationElement = customNavigationPolicy.getNavigationElement(this);
+				PsiElement navigationElement = navigationPolicy.getNavigationElement(this);
 				if(navigationElement != null)
 				{
 					return navigationElement;
@@ -628,7 +678,6 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 		try
 		{
 			PsiClass aClass = getSourceMirrorClass();
-
 			if(aClass != null)
 			{
 				return aClass.getNavigationElement();

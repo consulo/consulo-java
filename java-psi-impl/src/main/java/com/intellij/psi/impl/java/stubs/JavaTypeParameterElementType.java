@@ -15,6 +15,10 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
+import java.io.IOException;
+
+import javax.annotation.Nonnull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -30,9 +34,6 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.util.io.StringRef;
-import javax.annotation.Nonnull;
-
-import java.io.IOException;
 
 /**
  * @author max
@@ -62,7 +63,7 @@ public class JavaTypeParameterElementType extends JavaStubElementType<PsiTypePar
   public PsiTypeParameterStub createStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub) {
     final LighterASTNode id = LightTreeUtil.requiredChildOfType(tree, node, JavaTokenType.IDENTIFIER);
     final String name = RecordUtil.intern(tree.getCharTable(), id);
-    return new PsiTypeParameterStubImpl(parentStub, StringRef.fromString(name));
+    return new PsiTypeParameterStubImpl(parentStub, name);
   }
 
   @Override
@@ -74,7 +75,7 @@ public class JavaTypeParameterElementType extends JavaStubElementType<PsiTypePar
   @Nonnull
   @Override
   public PsiTypeParameterStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
-    StringRef name = dataStream.readName();
+    String name = StringRef.toString(dataStream.readName());
     return new PsiTypeParameterStubImpl(parentStub, name);
   }
 

@@ -7,9 +7,9 @@ import java.io.StringWriter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jetbrains.org.objectweb.asm.ClassReader;
-import org.jetbrains.org.objectweb.asm.util.Textifier;
-import org.jetbrains.org.objectweb.asm.util.TraceClassVisitor;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.util.Textifier;
+import org.objectweb.asm.util.TraceClassVisitor;
 import com.intellij.codeInsight.documentation.DockablePopupManager;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.openapi.components.ServiceManager;

@@ -16,8 +16,10 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
+import org.objectweb.asm.tree.analysis.Value;
+
 // data for data analysis
-abstract class DataValue implements org.jetbrains.org.objectweb.asm.tree.analysis.Value {
+abstract class DataValue implements Value {
   private final int myHash;
 
   DataValue(int hash) {

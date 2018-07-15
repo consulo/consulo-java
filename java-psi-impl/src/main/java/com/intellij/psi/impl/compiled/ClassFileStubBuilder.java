@@ -40,7 +40,7 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.compiled.ClassFileStubBuilder");
 
-	public static final int STUB_VERSION = 18;
+	public static final int STUB_VERSION = 20;
 
 	@Override
 	public boolean acceptsFile(@Nonnull VirtualFile file)

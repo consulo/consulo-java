@@ -16,13 +16,13 @@
 package com.intellij.psi.impl.compiled;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
@@ -40,7 +40,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.HashMap;
 
 public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements PsiAnnotatedJavaCodeReferenceElement
 {
@@ -416,12 +415,14 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 		}
 	}
 
+	@Nonnull
 	@Override
 	public TextRange getRangeInElement()
 	{
 		return new TextRange(0, getTextLength());
 	}
 
+	@Nonnull
 	@Override
 	public PsiElement getElement()
 	{

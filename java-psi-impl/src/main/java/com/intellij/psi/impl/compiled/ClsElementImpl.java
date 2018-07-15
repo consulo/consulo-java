@@ -104,7 +104,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 	}
 
 	@Nonnull
-	protected PsiElement[] getChildren(@javax.annotation.Nullable PsiElement... children)
+	protected PsiElement[] getChildren(@Nullable PsiElement... children)
 	{
 		if(children == null)
 		{
@@ -129,7 +129,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 	}
 
 	@Nonnull
-	static IncorrectOperationException cannotModifyException(@Nonnull ClsElementImpl element)
+	static IncorrectOperationException cannotModifyException(@Nonnull PsiCompiledElement element)
 	{
 		VirtualFile virtualFile = PsiUtilCore.getVirtualFile(element);
 		String path = virtualFile == null ? "?" : virtualFile.getPresentableUrl();
@@ -292,7 +292,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 
 	protected static final String NEXT_LINE = "go_to_next_line_and_indent";
 
-	protected static void appendText(@javax.annotation.Nullable PsiElement stub, int indentLevel, @Nonnull StringBuilder buffer, @Nonnull String separator)
+	protected static void appendText(@Nullable PsiElement stub, int indentLevel, @Nonnull StringBuilder buffer, @Nonnull String separator)
 	{
 		if(stub == null)
 		{
@@ -330,7 +330,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 		myMirror = Pair.create(element.getTextRange(), Identikit.fromPsi(psi, JavaLanguage.INSTANCE));
 	}
 
-	protected static <T extends PsiElement> void setMirror(@javax.annotation.Nullable T stub, @Nullable T mirror) throws InvalidMirrorException
+	protected static <T extends PsiElement> void setMirror(@Nullable T stub, @Nullable T mirror) throws InvalidMirrorException
 	{
 		if(stub == null || mirror == null)
 		{
@@ -339,7 +339,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 		((ClsElementImpl) stub).setMirror(SourceTreeToPsiMap.psiToTreeNotNull(mirror));
 	}
 
-	protected static <T extends PsiElement> void setMirrorIfPresent(@javax.annotation.Nullable T stub, @javax.annotation.Nullable T mirror) throws InvalidMirrorException
+	protected static <T extends PsiElement> void setMirrorIfPresent(@Nullable T stub, @Nullable T mirror) throws InvalidMirrorException
 	{
 		if((stub == null) != (mirror == null))
 		{
@@ -375,7 +375,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 			super(message);
 		}
 
-		public InvalidMirrorException(@javax.annotation.Nullable PsiElement stubElement, @javax.annotation.Nullable PsiElement mirrorElement)
+		public InvalidMirrorException(@Nullable PsiElement stubElement, @Nullable PsiElement mirrorElement)
 		{
 			this("stub:" + stubElement + "; mirror:" + mirrorElement);
 		}
