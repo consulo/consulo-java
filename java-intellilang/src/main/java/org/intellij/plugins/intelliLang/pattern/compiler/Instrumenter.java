@@ -15,8 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler;
 
-import org.jetbrains.org.objectweb.asm.ClassVisitor;
-import org.jetbrains.org.objectweb.asm.Opcodes;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Opcodes;
 
 public abstract class Instrumenter extends ClassVisitor
 {

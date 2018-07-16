@@ -16,10 +16,6 @@
 
 package consulo.java.compiler.bytecodeProcessing.impl;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.compiler.cache.Cache;
 import com.intellij.compiler.cache.JavaDependencyCache;
@@ -38,6 +34,10 @@ import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.util.ArrayUtil;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
+import org.objectweb.asm.ClassWriter;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author VISTALL

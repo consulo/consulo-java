@@ -34,7 +34,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
- * Specialized version of {@link org.jetbrains.org.objectweb.asm.tree.analysis.Analyzer}.
+ * Specialized version of {@link org.objectweb.asm.tree.analysis.Analyzer}.
  * Calculation of fix-point of frames is removed, since frames are not needed to build control flow graph.
  * So, the main point here is handling of subroutines (jsr) and try-catch-finally blocks.
  */

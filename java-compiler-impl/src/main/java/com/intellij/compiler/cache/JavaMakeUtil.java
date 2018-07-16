@@ -21,7 +21,7 @@
 package com.intellij.compiler.cache;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Opcodes;
 import com.intellij.compiler.classParsing.AnnotationConstantValue;
 import com.intellij.compiler.classParsing.AnnotationNameValuePair;
 import com.intellij.compiler.classParsing.ConstantValue;
