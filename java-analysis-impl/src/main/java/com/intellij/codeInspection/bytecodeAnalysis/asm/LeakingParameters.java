@@ -17,13 +17,13 @@ package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import javax.annotation.Nonnull;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.analysis.Analyzer;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.Frame;
-import org.objectweb.asm.tree.analysis.Value;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.InsnList;
+import consulo.internal.org.objectweb.asm.tree.MethodNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
+import consulo.internal.org.objectweb.asm.tree.analysis.Value;
 
 /**
  * @author lambdamix

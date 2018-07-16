@@ -17,8 +17,8 @@ package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import java.util.List;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
  * Specialized lite version of {@link FramelessAnalyzer}.

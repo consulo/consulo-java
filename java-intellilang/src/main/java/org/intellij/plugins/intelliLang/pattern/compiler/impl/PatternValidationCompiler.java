@@ -25,7 +25,7 @@ import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
 import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
-import org.objectweb.asm.ClassWriter;
+import consulo.internal.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;

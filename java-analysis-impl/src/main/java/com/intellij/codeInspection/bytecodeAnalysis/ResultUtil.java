@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 class ResultUtil
 {

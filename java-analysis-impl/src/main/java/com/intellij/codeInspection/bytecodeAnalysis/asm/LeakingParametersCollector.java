@@ -20,8 +20,8 @@ import static org.objectweb.asm.Opcodes.*;
 
 import java.util.List;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.MethodNode;
 
 class LeakingParametersCollector extends ParametersUsage {
   final boolean[] leaking;

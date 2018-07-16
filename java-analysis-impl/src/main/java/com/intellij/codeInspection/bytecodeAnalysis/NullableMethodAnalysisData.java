@@ -16,8 +16,8 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.analysis.BasicValue;
+import consulo.internal.org.objectweb.asm.Type;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 
 interface NullableMethodAnalysisData {
   Type NullType = Type.getObjectType("null");

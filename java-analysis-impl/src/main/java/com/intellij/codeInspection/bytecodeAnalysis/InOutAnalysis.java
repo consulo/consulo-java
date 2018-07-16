@@ -29,11 +29,11 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.BasicValue;
-import org.objectweb.asm.tree.analysis.Frame;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
+import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ASMUtils;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.RichControlFlow;

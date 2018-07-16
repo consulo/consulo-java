@@ -18,7 +18,7 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import static com.intellij.codeInspection.bytecodeAnalysis.PResults.meet;
 
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 class NotNullInterpreter extends NullityInterpreter
 {

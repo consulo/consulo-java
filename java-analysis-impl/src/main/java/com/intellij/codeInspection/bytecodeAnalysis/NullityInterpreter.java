@@ -23,13 +23,13 @@ import static com.intellij.codeInspection.bytecodeAnalysis.PResults.NPE;
 
 import java.util.List;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.BasicInterpreter;
-import org.objectweb.asm.tree.analysis.BasicValue;
+import consulo.internal.org.objectweb.asm.Type;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.MethodInsnNode;
+import consulo.internal.org.objectweb.asm.tree.TypeInsnNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicInterpreter;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 
 abstract class NullityInterpreter extends BasicInterpreter
 {

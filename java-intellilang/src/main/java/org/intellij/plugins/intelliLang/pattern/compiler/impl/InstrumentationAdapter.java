@@ -22,11 +22,11 @@ import java.util.List;
 
 import org.intellij.plugins.intelliLang.Configuration;
 import org.jetbrains.annotations.NonNls;
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
+import consulo.internal.org.objectweb.asm.AnnotationVisitor;
+import consulo.internal.org.objectweb.asm.Label;
+import consulo.internal.org.objectweb.asm.MethodVisitor;
+import consulo.internal.org.objectweb.asm.Opcodes;
+import consulo.internal.org.objectweb.asm.Type;
 
 class InstrumentationAdapter extends MethodVisitor implements Opcodes {
   @NonNls

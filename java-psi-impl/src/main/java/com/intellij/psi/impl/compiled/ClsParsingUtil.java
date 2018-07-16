@@ -18,7 +18,7 @@ package com.intellij.psi.impl.compiled;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.objectweb.asm.Opcodes;
+import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;

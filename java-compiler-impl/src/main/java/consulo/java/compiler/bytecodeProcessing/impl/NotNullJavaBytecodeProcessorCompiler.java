@@ -34,7 +34,7 @@ import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.util.ArrayUtil;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
-import org.objectweb.asm.ClassWriter;
+import consulo.internal.org.objectweb.asm.ClassWriter;
 
 import java.io.File;
 import java.io.IOException;

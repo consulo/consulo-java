@@ -22,16 +22,16 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.IincInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.objectweb.asm.tree.TryCatchBlockNode;
-import org.objectweb.asm.tree.VarInsnNode;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.IincInsnNode;
+import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
+import consulo.internal.org.objectweb.asm.tree.LabelNode;
+import consulo.internal.org.objectweb.asm.tree.LookupSwitchInsnNode;
+import consulo.internal.org.objectweb.asm.tree.MethodNode;
+import consulo.internal.org.objectweb.asm.tree.TableSwitchInsnNode;
+import consulo.internal.org.objectweb.asm.tree.TryCatchBlockNode;
+import consulo.internal.org.objectweb.asm.tree.VarInsnNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
  * Specialized version of {@link org.objectweb.asm.tree.analysis.Analyzer}.

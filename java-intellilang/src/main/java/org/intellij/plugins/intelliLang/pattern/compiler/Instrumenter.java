@@ -15,8 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler;
 
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Opcodes;
+import consulo.internal.org.objectweb.asm.ClassVisitor;
+import consulo.internal.org.objectweb.asm.Opcodes;
 
 public abstract class Instrumenter extends ClassVisitor
 {

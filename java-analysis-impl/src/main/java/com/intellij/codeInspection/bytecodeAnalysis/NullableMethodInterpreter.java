@@ -21,15 +21,15 @@ import static com.intellij.codeInspection.bytecodeAnalysis.NullableMethodAnalysi
 
 import java.util.List;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.BasicInterpreter;
-import org.objectweb.asm.tree.analysis.BasicValue;
+import consulo.internal.org.objectweb.asm.Opcodes;
+import consulo.internal.org.objectweb.asm.Type;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.InsnList;
+import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
+import consulo.internal.org.objectweb.asm.tree.MethodInsnNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicInterpreter;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.InterpreterExt;
 
 class NullableMethodInterpreter extends BasicInterpreter implements InterpreterExt<NullableMethodAnalysisData.Constraint>

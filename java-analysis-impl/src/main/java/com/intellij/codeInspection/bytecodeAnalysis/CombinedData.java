@@ -18,8 +18,8 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.List;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.analysis.BasicValue;
+import consulo.internal.org.objectweb.asm.Type;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 
 // additional data structures for combined analysis
 interface CombinedData {

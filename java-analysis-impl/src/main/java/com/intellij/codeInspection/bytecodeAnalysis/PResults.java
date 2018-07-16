@@ -19,7 +19,7 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 abstract class PResults {
   // SoP = sum of products

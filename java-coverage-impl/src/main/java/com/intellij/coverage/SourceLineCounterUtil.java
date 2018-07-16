@@ -5,7 +5,7 @@ import gnu.trove.TIntProcedure;
 
 import java.util.List;
 
-import org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.ClassReader;
 
 /**
  * User: anna

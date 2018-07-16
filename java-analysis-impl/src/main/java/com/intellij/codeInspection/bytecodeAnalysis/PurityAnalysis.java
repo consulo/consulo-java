@@ -20,10 +20,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.analysis.Analyzer;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.Opcodes;
+import consulo.internal.org.objectweb.asm.tree.MethodNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
  * Produces equations for inference of @Contract(pure=true) annotations.

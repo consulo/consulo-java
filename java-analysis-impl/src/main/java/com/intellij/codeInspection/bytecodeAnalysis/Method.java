@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.objectweb.asm.tree.MethodInsnNode;
+import consulo.internal.org.objectweb.asm.tree.MethodInsnNode;
 
 final class Method {
   final String internalClassName;

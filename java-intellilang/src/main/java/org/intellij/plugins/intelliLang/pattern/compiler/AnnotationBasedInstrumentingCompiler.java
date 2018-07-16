@@ -25,8 +25,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
+import consulo.internal.org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.ClassWriter;
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.PsiClassWriter;
 import com.intellij.lang.java.JavaLanguage;

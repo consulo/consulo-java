@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.objectweb.asm.tree.analysis.Value;
+import consulo.internal.org.objectweb.asm.tree.analysis.Value;
 
 // data for data analysis
 abstract class DataValue implements Value {

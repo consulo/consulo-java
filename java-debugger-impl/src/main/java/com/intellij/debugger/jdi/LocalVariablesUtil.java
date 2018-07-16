@@ -22,8 +22,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import javax.annotation.Nonnull;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import consulo.internal.org.objectweb.asm.MethodVisitor;
+import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.ContextUtil;
 import com.intellij.debugger.engine.DebugProcess;

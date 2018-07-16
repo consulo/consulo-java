@@ -23,10 +23,10 @@ import static com.intellij.util.containers.ContainerUtil.map2Array;
 
 import java.util.Arrays;
 
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
+import consulo.internal.org.objectweb.asm.AnnotationVisitor;
+import consulo.internal.org.objectweb.asm.ClassVisitor;
+import consulo.internal.org.objectweb.asm.ModuleVisitor;
+import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.psi.impl.cache.ModifierFlags;
 import com.intellij.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.psi.impl.java.stubs.PsiJavaModuleStub;

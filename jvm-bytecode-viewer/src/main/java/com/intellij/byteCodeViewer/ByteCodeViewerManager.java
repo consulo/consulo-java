@@ -7,9 +7,9 @@ import java.io.StringWriter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.Textifier;
-import org.objectweb.asm.util.TraceClassVisitor;
+import consulo.internal.org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.util.Textifier;
+import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
 import com.intellij.codeInsight.documentation.DockablePopupManager;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.openapi.components.ServiceManager;

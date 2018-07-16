@@ -16,8 +16,8 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import org.objectweb.asm.tree.analysis.BasicValue;
-import org.objectweb.asm.tree.analysis.Frame;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
+import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
 
 final class Conf {
   final int insnIndex;

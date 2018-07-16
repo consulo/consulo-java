@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
-import org.objectweb.asm.tree.analysis.Value;
+import consulo.internal.org.objectweb.asm.tree.analysis.Value;
 
 // specialized version
 final class IParamsValue implements Value

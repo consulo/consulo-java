@@ -19,9 +19,9 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.NullValue;
 import static com.intellij.codeInspection.bytecodeAnalysis.PResults.join;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.BasicValue;
+import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 
 class NullableInterpreter extends NullityInterpreter
 {
