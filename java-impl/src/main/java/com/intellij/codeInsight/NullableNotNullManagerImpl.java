@@ -50,8 +50,10 @@ import one.util.streamex.StreamEx;
 public class NullableNotNullManagerImpl extends NullableNotNullManager implements PersistentStateComponent<Element>
 {
 	public static final List<String> DEFAULT_NOT_NULLS = Arrays.asList(
-			Nonnull.class.getName(), "javax.annotation.Nonnull",
-			"edu.umd.cs.findbugs.annotations.NonNull", "android.support.annotation.NonNull"
+			JAVAX_ANNOTATION_NONNULL,
+			AnnotationUtil.NOT_NULL,
+			"edu.umd.cs.findbugs.annotations.NonNull",
+			"android.support.annotation.NonNull"
 	);
 
 	public static final String TYPE_QUALIFIER_NICKNAME = "javax.annotation.meta.TypeQualifierNickname";
