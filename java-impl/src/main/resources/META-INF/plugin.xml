@@ -450,11 +450,6 @@
 		<component>
 			<implementation-class>com.intellij.execution.testDiscovery.TestDiscoveryIndex</implementation-class>
 		</component>
-
-		<component>
-			<implementation-class>com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory</implementation-class>
-			<skipForDefaultProject/>
-		</component>
 	</project-components>
 
 	<extensionPoints>
@@ -2085,6 +2080,8 @@
 		<orderRootType implementation="com.intellij.openapi.roots.NativeLibraryOrderRootType"/>
 		<orderRootTypeEditor key="javaNative"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.NativeLibraryOrderRootTypeUIFactory"/>
+
+		<textEditorHighlightingPassFactory implementation="com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory" />
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

@@ -21,10 +21,7 @@ import javax.annotation.Nullable;
 
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.codeHighlighting.TextEditorHighlightingPassFactory;
-import com.intellij.codeHighlighting.TextEditorHighlightingPassRegistrar;
-import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
@@ -33,11 +30,11 @@ import com.intellij.psi.PsiJavaFile;
  * @author VISTALL
  * @since 09-Jan-17
  */
-public class JavaSoftKeywordHighlightingPassFactory extends AbstractProjectComponent implements TextEditorHighlightingPassFactory
+public class JavaSoftKeywordHighlightingPassFactory implements TextEditorHighlightingPassFactory
 {
-	public JavaSoftKeywordHighlightingPassFactory(Project project, TextEditorHighlightingPassRegistrar registrar)
+	@Override
+	public void register(@Nonnull Registrar registrar)
 	{
-		super(project);
 		registrar.registerTextEditorHighlightingPass(this, null, null, false, -1);
 	}
 
