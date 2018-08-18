@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.compiler.CompilerIOUtil;
@@ -386,10 +387,27 @@ public class JavacCompiler extends ExternalCompiler
 	@RequiredReadAction
 	public static void addCommandLineOptions(CompileContext compileContext, ModuleChunk chunk, @NonNls ParametersList commandLine, String outputPath, Sdk jdk, JavaSdkVersion version, List<File> tempFiles, boolean addSourcePath, boolean useTempFile, boolean isAnnotationProcessingMode) throws IOException
 	{
-
 		LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
-		JavaCompilerUtil.addSourceCommandLineSwitch(jdk, languageLevel, commandLine);
-		JavaCompilerUtil.addTargetCommandLineSwitch(chunk, commandLine);
+		boolean isJava9Version = isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9);
+
+		if(!isJava9Version)
+		{
+			JavaCompilerUtil.addSourceCommandLineSwitch(jdk, languageLevel, commandLine);
+			JavaCompilerUtil.addTargetCommandLineSwitch(chunk, commandLine);
+		}
+		else
+		{
+			JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(chunk.getModule(), JavaModuleExtension.class);
+			if(extension != null)
+			{
+				String bytecodeVersion = extension.getBytecodeVersion();
+				if(bytecodeVersion != null)
+				{
+					commandLine.add("--release");
+					commandLine.add(bytecodeVersion);
+				}
+			}
+		}
 
 		commandLine.add("-verbose");
 
@@ -420,8 +438,16 @@ public class JavacCompiler extends ExternalCompiler
 			}
 		}
 
-		commandLine.add("-classpath");
-		addClassPathValue(jdk, version, commandLine, classPath, "javac_cp", tempFiles, useTempFile);
+		if(isJava9Version)
+		{
+			commandLine.add("--module-path");
+			addClassPathValue(jdk, version, commandLine, classPath, "javac_mp", tempFiles, useTempFile);
+		}
+		else
+		{
+			commandLine.add("-classpath");
+			addClassPathValue(jdk, version, commandLine, classPath, "javac_cp", tempFiles, useTempFile);
+		}
 
 		if(isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9))
 		{
@@ -469,7 +495,7 @@ public class JavacCompiler extends ExternalCompiler
 		}
 	}
 
-	private static boolean isAtLeast(@Nonnull JavaSdkVersion version, @javax.annotation.Nullable LanguageLevel languageLevel, @Nonnull JavaSdkVersion target)
+	private static boolean isAtLeast(@Nonnull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @Nonnull JavaSdkVersion target)
 	{
 		return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(version.getMaxLanguageLevel()));
 	}

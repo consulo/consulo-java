@@ -213,7 +213,7 @@ public class JavaCompilerUtil
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static Sdk getSdkForCompilation(@Nonnull final Module module)
 	{
 		JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);

@@ -20,6 +20,14 @@
  */
 package com.intellij.compiler.classParsing;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.intellij.compiler.cache.SymbolTable;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.openapi.compiler.CompilerBundle;
@@ -29,13 +37,6 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.cls.BytePointer;
 import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.cls.ClsUtil;
-import javax.annotation.Nonnull;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class ClassFileReader {
   private final File myFile;
@@ -210,7 +211,7 @@ public class ClassFileReader {
       BytePointer ptr = new BytePointer(getData(), getConstantPoolEnd() + 4);
       int index = ClsUtil.readU2(ptr);
       if (index == 0) {
-        if (CommonClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName()) || "module-info".equals(getQualifiedName())) {
           mySuperClassName = "";
         }
         else {
@@ -756,6 +757,8 @@ public class ClassFileReader {
           myPtr.offset += 3;
           break;
         case ClsUtil.CONSTANT_MethodType:
+        case ClsUtil.CONSTANT_ModuleTag:
+        case ClsUtil.CONSTANT_PackageTag:
           myPtr.offset += 2;
           break;
         case ClsUtil.CONSTANT_InvokeDynamic:

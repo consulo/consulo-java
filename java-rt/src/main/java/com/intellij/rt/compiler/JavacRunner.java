@@ -66,7 +66,7 @@ public class JavacRunner
 				}
 				else
 				{
-					isClasspath = "-classpath".equals(arg) || "-cp".equals(arg) || "-bootclasspath".equals(arg);
+					isClasspath = "-classpath".equals(arg) || "-cp".equals(arg) || "-bootclasspath".equals(arg) || "--module-path".equals(arg);
 					arguments.addElement(arg);
 				}
 			}
@@ -84,6 +84,10 @@ public class JavacRunner
 		expandClasspath(newArgs);
 		try
 		{
+			for(String newArg : newArgs)
+			{
+				System.out.println(newArg);
+			}
 			mainMethod.invoke(null, new Object[]{newArgs});
 		}
 		catch(Throwable e)
@@ -119,7 +123,7 @@ public class JavacRunner
 		{
 			final String arg = args[idx];
 			//noinspection HardCodedStringLiteral
-			if("-classpath".equals(arg) || "-cp".equals(arg) || "-bootclasspath".equals(arg))
+			if("-classpath".equals(arg) || "-cp".equals(arg) || "-bootclasspath".equals(arg) || "--module-path".equals(arg))
 			{
 				final String cpValue = args[idx + 1];
 				if(cpValue.startsWith("@"))

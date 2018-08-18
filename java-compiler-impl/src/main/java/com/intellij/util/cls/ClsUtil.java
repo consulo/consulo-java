@@ -37,6 +37,8 @@ public class ClsUtil
 	public static final int CONSTANT_MethodHandle = 15;
 	public static final int CONSTANT_MethodType = 16;
 	public static final int CONSTANT_InvokeDynamic = 18;
+	public static final int CONSTANT_ModuleTag = 19;
+	public static final int CONSTANT_PackageTag = 20;
 
 	public static final int ACC_PUBLIC = 0x0001;
 	public static final int ACC_PRIVATE = 0x0002;
