@@ -84,10 +84,6 @@ public class JavacRunner
 		expandClasspath(newArgs);
 		try
 		{
-			for(String newArg : newArgs)
-			{
-				System.out.println(newArg);
-			}
 			mainMethod.invoke(null, new Object[]{newArgs});
 		}
 		catch(Throwable e)
