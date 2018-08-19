@@ -419,9 +419,6 @@
 			<implementation-class>com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter</implementation-class>
 		</component>
 		<component>
-			<implementation-class>com.intellij.openapi.vfs.impl.jar.JarFileSystemImpl</implementation-class>
-		</component>
-		<component>
 			<implementation-class>consulo.java.JavaDummyHolderComponent</implementation-class>
 		</component>
 		<component>
@@ -2082,6 +2079,8 @@
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.NativeLibraryOrderRootTypeUIFactory"/>
 
 		<textEditorHighlightingPassFactory implementation="com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory" />
+
+		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jar.JarFileSystemImpl" />
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">
