@@ -16,6 +16,8 @@
 
 package consulo.java;
 
+import javax.inject.Singleton;
+
 import com.intellij.psi.impl.source.DummyHolderFactory;
 import com.intellij.psi.impl.source.JavaDummyHolderFactory;
 
@@ -23,6 +25,7 @@ import com.intellij.psi.impl.source.JavaDummyHolderFactory;
  * @author VISTALL
  * @since 27-Feb-17
  */
+@Singleton
 public class JavaDummyHolderComponent
 {
 	public JavaDummyHolderComponent()

@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
   <extensions defaultExtensionNs="com.intellij">
     <projectService serviceInterface="com.intellij.byteCodeViewer.ByteCodeViewerManager"
                     serviceImplementation="com.intellij.byteCodeViewer.ByteCodeViewerManager"/>

@@ -17,6 +17,8 @@ package com.intellij.debugger.ui;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebugUIEnvironment;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -36,7 +38,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.execution.ui.RunContentManager;
 import com.intellij.execution.ui.RunContentWithExecutorListener;
-import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.xdebugger.XDebugProcess;
@@ -44,13 +45,38 @@ import com.intellij.xdebugger.XDebugProcessStarter;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 
-public class DebuggerPanelsManager implements ProjectComponent
+@Singleton
+public class DebuggerPanelsManager
 {
 	private final Project myProject;
 
 	public DebuggerPanelsManager(Project project)
 	{
 		myProject = project;
+		myProject.getMessageBus().connect(myProject).subscribe(RunContentManager.TOPIC, new RunContentWithExecutorListener()
+		{
+			@Override
+			public void contentSelected(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor)
+			{
+				if(executor == DefaultDebugExecutor.getDebugExecutorInstance())
+				{
+					DebuggerSession session = descriptor == null ? null : getSession(myProject, descriptor);
+					if(session != null)
+					{
+						getContextManager().setState(session.getContextManager().getContext(), session.getState(), DebuggerSession.Event.CONTEXT, null);
+					}
+					else
+					{
+						getContextManager().setState(DebuggerContextImpl.EMPTY_CONTEXT, DebuggerSession.State.DISPOSED, DebuggerSession.Event.CONTEXT, null);
+					}
+				}
+			}
+
+			@Override
+			public void contentRemoved(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor)
+			{
+			}
+		});
 	}
 
 	private DebuggerStateManager getContextManager()
@@ -58,7 +84,7 @@ public class DebuggerPanelsManager implements ProjectComponent
 		return DebuggerManagerEx.getInstanceEx(myProject).getContextManager();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public RunContentDescriptor attachVirtualMachine(@Nonnull ExecutionEnvironment environment,
 			RunProfileState state,
 			RemoteConnection remoteConnection,
@@ -67,7 +93,7 @@ public class DebuggerPanelsManager implements ProjectComponent
 		return attachVirtualMachine(new DefaultDebugUIEnvironment(environment, state, remoteConnection, pollConnection));
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public RunContentDescriptor attachVirtualMachine(DebugUIEnvironment environment) throws ExecutionException
 	{
 		final DebugEnvironment modelEnvironment = environment.getEnvironment();
@@ -100,58 +126,6 @@ public class DebuggerPanelsManager implements ProjectComponent
 			}
 		});
 		return debugSession.getRunContentDescriptor();
-	}
-
-
-	@Override
-	public void projectOpened()
-	{
-		myProject.getMessageBus().connect(myProject).subscribe(RunContentManager.TOPIC, new RunContentWithExecutorListener()
-		{
-			@Override
-			public void contentSelected(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor)
-			{
-				if(executor == DefaultDebugExecutor.getDebugExecutorInstance())
-				{
-					DebuggerSession session = descriptor == null ? null : getSession(myProject, descriptor);
-					if(session != null)
-					{
-						getContextManager().setState(session.getContextManager().getContext(), session.getState(), DebuggerSession.Event.CONTEXT, null);
-					}
-					else
-					{
-						getContextManager().setState(DebuggerContextImpl.EMPTY_CONTEXT, DebuggerSession.State.DISPOSED, DebuggerSession.Event.CONTEXT, null);
-					}
-				}
-			}
-
-			@Override
-			public void contentRemoved(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor)
-			{
-			}
-		});
-	}
-
-	@Override
-	public void projectClosed()
-	{
-	}
-
-	@Override
-	@Nonnull
-	public String getComponentName()
-	{
-		return "DebuggerPanelsManager";
-	}
-
-	@Override
-	public void initComponent()
-	{
-	}
-
-	@Override
-	public void disposeComponent()
-	{
 	}
 
 	public static DebuggerPanelsManager getInstance(Project project)

@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
 	<extensions defaultExtensionNs="consulo.java">
 		<manifest.headerParser key="" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser" order="last"/>
 
@@ -44,10 +44,9 @@
 						 implementationClass="org.osmorc.manifest.codeInspection.MissingFinalNewlineInspection"/>
 
 		<colorSettingsPage implementation="org.osmorc.manifest.lang.ManifestColorsAndFontsPage"/>
-		<errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
 		<lang.parserDefinition language="MANIFEST" implementationClass="org.osmorc.manifest.lang.ManifestParserDefinition"/>
 		<completion.contributor language="MANIFEST" implementationClass="org.osmorc.manifest.ManifestCompletionContributor"/>
-		<lang.syntaxHighlighterFactory key="MANIFEST" implementationClass="consulo.java.manifest.lang.ManifestSyntaxHighlighterFactory"/>
+		<lang.syntaxHighlighterFactory language="MANIFEST" implementationClass="consulo.java.manifest.lang.ManifestSyntaxHighlighterFactory"/>
 		<annotator language="MANIFEST" implementationClass="org.osmorc.manifest.lang.headerparser.HeaderAnnotator"/>
 		<annotator language="MANIFEST" implementationClass="org.osmorc.manifest.lang.ManifestHighlightingAnnotator"/>
 		<lang.elementManipulator forClass="org.osmorc.manifest.lang.psi.HeaderValuePart" implementationClass="org.osmorc.manifest.lang.psi.HeaderValuePartManipulator"/>

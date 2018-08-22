@@ -25,6 +25,7 @@ import java.util.jar.Attributes;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 import javax.swing.SwingUtilities;
 
 import org.jdom.Element;
@@ -84,6 +85,7 @@ import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
+@Singleton
 @State(name = "DebuggerManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 public class DebuggerManagerImpl extends DebuggerManagerEx implements PersistentStateComponent<Element>
 {

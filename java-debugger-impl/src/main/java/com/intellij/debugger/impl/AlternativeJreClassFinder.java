@@ -21,7 +21,9 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.execution.configurations.ConfigurationWithAlternativeJre;
 import com.intellij.execution.configurations.RunProfile;
@@ -40,10 +42,10 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class AlternativeJreClassFinder extends NonClasspathClassFinder
 {
-	public AlternativeJreClassFinder(Project project, DebuggerManagerEx manager)
+	public AlternativeJreClassFinder(Project project, DebuggerManager manager)
 	{
 		super(project);
-		manager.addDebuggerManagerListener(new DebuggerManagerListener()
+		((DebuggerManagerEx)manager).addDebuggerManagerListener(new DebuggerManagerListener()
 		{
 			@Override
 			public void sessionCreated(DebuggerSession session)
@@ -79,7 +81,7 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder
 		return res;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static Sdk getAlternativeJre(RunProfile profile)
 	{
 		if(profile instanceof ConfigurationWithAlternativeJre)

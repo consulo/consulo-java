@@ -33,6 +33,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -47,6 +49,7 @@ import com.intellij.util.io.PathKt;
 /**
  * @author Maxim.Mossienko on 7/9/2015.
  */
+@Singleton
 public class TestDiscoveryIndex implements Disposable
 {
 	static final Logger LOG = Logger.getInstance(TestDiscoveryIndex.class);

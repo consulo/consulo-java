@@ -45,7 +45,6 @@ public abstract class LoadProjectTest extends PlatformTestCase {
     myProject = ProjectManager.getInstance().loadAndOpenProject(projectPath);
     MutablePicoContainer container = (MutablePicoContainer)getProject().getPicoContainer();
     container.unregisterComponent(FileEditorManager.class.getName());
-    ((ProjectImpl)getProject()).registerComponentImplementation(FileEditorManager.class, FileEditorManagerImpl.class);
   }
 
   @Override

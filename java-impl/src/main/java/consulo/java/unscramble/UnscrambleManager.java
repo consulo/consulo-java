@@ -17,6 +17,8 @@
 package consulo.java.unscramble;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationActivationListener;
@@ -30,6 +32,7 @@ import com.intellij.util.messages.MessageBusConnection;
  * @author VISTALL
  * @since 01-Nov-17
  */
+@Singleton
 public class UnscrambleManager
 {
 	private static final String KEY = "java.analyze.exceptions.on.the.fly";
@@ -40,7 +43,7 @@ public class UnscrambleManager
 		return ApplicationManager.getApplication().getComponent(UnscrambleManager.class);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private MessageBusConnection myConnection;
 
 	private final UnscrambleListener myListener = new UnscrambleListener();

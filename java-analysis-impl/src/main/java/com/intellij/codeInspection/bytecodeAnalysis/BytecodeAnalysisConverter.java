@@ -33,6 +33,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.ThreadLocalCachedValue;
 import com.intellij.openapi.util.text.StringUtil;
@@ -44,6 +46,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 /**
  * @author lambdamix
  */
+@Singleton
 public class BytecodeAnalysisConverter {
 
   // how many bytes are taken from class fqn digest

@@ -411,43 +411,6 @@
 			<reference ref="Debugger.CustomizeContextView"/>
 		</group>
 	</actions>
-	<application-components>
-		<component>
-			<implementation-class>com.intellij.util.xml.impl.JavaDomApplicationComponent</implementation-class>
-		</component>
-		<component>
-			<implementation-class>com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter</implementation-class>
-		</component>
-		<component>
-			<implementation-class>consulo.java.JavaDummyHolderComponent</implementation-class>
-		</component>
-		<component>
-			<implementation-class>consulo.java.unscramble.UnscrambleManager</implementation-class>
-		</component>
-	</application-components>
-
-	<project-components>
-		<component>
-			<interface-class>com.intellij.pom.java.PomJavaAspect</interface-class>
-			<implementation-class>com.intellij.pom.java.impl.PomJavaAspectImpl</implementation-class>
-			<loadForDefaultProject/>
-		</component>
-
-		<component>
-			<interface-class>com.intellij.debugger.ui.DebuggerPanelsManager</interface-class>
-			<implementation-class>com.intellij.debugger.ui.DebuggerPanelsManager</implementation-class>
-		</component>
-
-		<component>
-			<interface-class>com.intellij.debugger.DebuggerManager</interface-class>
-			<implementation-class>com.intellij.debugger.impl.DebuggerManagerImpl</implementation-class>
-			<loadForDefaultProject/>
-		</component>
-
-		<component>
-			<implementation-class>com.intellij.execution.testDiscovery.TestDiscoveryIndex</implementation-class>
-		</component>
-	</project-components>
 
 	<extensionPoints>
 		<extensionPoint name="manifest.headerParser" beanClass="consulo.java.manifest.lang.headerparser.HeaderParserEP">
@@ -2081,6 +2044,16 @@
 		<textEditorHighlightingPassFactory implementation="com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory" />
 
 		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jar.JarFileSystemImpl" />
+
+		<applicationService serviceImplementation="com.intellij.util.xml.impl.JavaDomApplicationComponent" lazy="false"/>
+		<applicationService serviceImplementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter" lazy="false"/>
+		<applicationService serviceImplementation="consulo.java.JavaDummyHolderComponent" lazy="false" />
+		<applicationService serviceImplementation="consulo.java.unscramble.UnscrambleManager" lazy="false" />
+
+		<projectService serviceImplementation="com.intellij.debugger.ui.DebuggerPanelsManager" lazy="false" />
+		<projectService serviceImplementation="com.intellij.execution.testDiscovery.TestDiscoveryIndex" lazy="false" />
+		<projectService serviceInterface="com.intellij.debugger.DebuggerManager" serviceImplementation="com.intellij.debugger.impl.DebuggerManagerImpl" lazy="false" />
+		<projectService serviceInterface="com.intellij.pom.java.PomJavaAspect" serviceImplementation="com.intellij.pom.java.impl.PomJavaAspectImpl" lazy="false" />
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">
