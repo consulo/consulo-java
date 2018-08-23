@@ -2045,6 +2045,9 @@
 
 		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jar.JarFileSystemImpl" />
 
+		<applicationService serviceInterface="com.intellij.codeInsight.generation.OverrideImplementExploreUtil$MemberImplementorExplorersProvider"
+							serviceImplementation="com.intellij.codeInsight.generation.MemberImplementorExplorersProviderImpl"/>
+
 		<applicationService serviceImplementation="com.intellij.util.xml.impl.JavaDomApplicationComponent" lazy="false"/>
 		<applicationService serviceImplementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter" lazy="false"/>
 		<applicationService serviceImplementation="consulo.java.JavaDummyHolderComponent" lazy="false" />
