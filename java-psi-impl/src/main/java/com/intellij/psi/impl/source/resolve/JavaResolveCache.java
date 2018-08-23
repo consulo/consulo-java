@@ -25,6 +25,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.components.ServiceManager;
@@ -50,8 +52,8 @@ import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.messages.MessageBus;
 
+@Singleton
 public class JavaResolveCache
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.JavaResolveCache");
@@ -70,22 +72,17 @@ public class JavaResolveCache
 
 	private static final Object NULL = Key.create("NULL");
 
-	/**
-	 * @param messageBus  "can be null in com.intellij.core.JavaCoreApplicationEnvironment.JavaCoreApplicationEnvironment"
-	 */
-	public JavaResolveCache(@Nullable MessageBus messageBus)
+	@Inject
+	public JavaResolveCache(Project project)
 	{
-		if(messageBus != null)
+		project.getMessageBus().connect().subscribe(PsiManagerImpl.ANY_PSI_CHANGE_TOPIC, new AnyPsiChangeListener.Adapter()
 		{
-			messageBus.connect().subscribe(PsiManagerImpl.ANY_PSI_CHANGE_TOPIC, new AnyPsiChangeListener.Adapter()
+			@Override
+			public void beforePsiChanged(boolean isPhysical)
 			{
-				@Override
-				public void beforePsiChanged(boolean isPhysical)
-				{
-					clearCaches(isPhysical);
-				}
-			});
-		}
+				clearCaches(isPhysical);
+			}
+		});
 	}
 
 	private void clearCaches(boolean isPhysical)

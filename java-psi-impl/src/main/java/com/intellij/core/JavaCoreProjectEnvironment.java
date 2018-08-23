@@ -50,7 +50,7 @@ public class JavaCoreProjectEnvironment  extends CoreProjectEnvironment {
     myProject.registerService(PsiElementFactory.class, new PsiElementFactoryImpl(myPsiManager));
     myProject.registerService(JavaPsiImplementationHelper.class, createJavaPsiImplementationHelper());
     myProject.registerService(PsiResolveHelper.class, new PsiResolveHelperImpl(myPsiManager));
-    myProject.registerService(JavaResolveCache.class, new JavaResolveCache(myMessageBus));
+    myProject.registerService(JavaResolveCache.class, new JavaResolveCache(myProject));
     myProject.registerService(JavaCodeStyleSettingsFacade.class, new CoreJavaCodeStyleSettingsFacade());
     myProject.registerService(JavaCodeStyleManager.class, new CoreJavaCodeStyleManager());
     registerProjectExtensionPoint(PsiElementFinder.EP_NAME, PsiElementFinder.class);
