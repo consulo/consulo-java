@@ -18,16 +18,13 @@ package com.intellij.project;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.picocontainer.MutablePicoContainer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.fileEditor.impl.FileEditorManagerImpl;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ex.ProjectManagerEx;
-import com.intellij.openapi.project.impl.ProjectImpl;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -43,8 +40,6 @@ public abstract class LoadProjectTest extends PlatformTestCase {
   protected void setUpProject() throws Exception {
     String projectPath = "/model/model.ipr";
     myProject = ProjectManager.getInstance().loadAndOpenProject(projectPath);
-    MutablePicoContainer container = (MutablePicoContainer)getProject().getPicoContainer();
-    container.unregisterComponent(FileEditorManager.class.getName());
   }
 
   @Override

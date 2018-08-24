@@ -15,7 +15,6 @@
  */
 package com.intellij.openapi.fileEditor;
 
-import com.intellij.openapi.components.impl.ComponentManagerImpl;
 import com.intellij.openapi.fileEditor.impl.FileEditorManagerImpl;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -39,7 +38,6 @@ public abstract class HeavyFileEditorManagerTestCase extends CodeInsightFixtureT
 	{
 		super.setUp();
 		myManager = new FileEditorManagerImpl(getProject(), DockManager.getInstance(getProject())) {};
-		((ComponentManagerImpl) getProject()).registerComponentInstance(FileEditorManager.class, myManager);
 	}
 
 	@Override
