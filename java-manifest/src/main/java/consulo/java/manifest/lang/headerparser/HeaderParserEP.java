@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.TestOnly;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.extensions.AbstractExtensionPointBean;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.util.xmlb.annotations.Attribute;
@@ -39,7 +39,7 @@ public class HeaderParserEP extends AbstractExtensionPointBean {
   public HeaderParser getParserInstance() {
     if(myParserInstance == null) {
       try {
-        myParserInstance = instantiate(implementationClass, ApplicationManager.getApplication().getPicoContainer());
+        myParserInstance = instantiate(implementationClass, Application.get().getInjectingContainer());
       }
       catch (Exception e) {
         throw new RuntimeException(e);
