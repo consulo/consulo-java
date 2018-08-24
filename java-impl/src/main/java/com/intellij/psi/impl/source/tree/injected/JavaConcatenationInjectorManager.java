@@ -19,6 +19,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.lang.injection.ConcatenationAwareInjector;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
@@ -45,13 +48,15 @@ import com.intellij.util.containers.ContainerUtil;
 /**
  * @author cdr
  */
+@Singleton
 public class JavaConcatenationInjectorManager implements ModificationTracker
 {
 	//FIXME [VISTALL] move ConcatenationAwareInjector to java plugin?
 	public static final ExtensionPointName<ConcatenationAwareInjector> CONCATENATION_INJECTOR_EP_NAME = ExtensionPointName.create("com.intellij.concatenationAwareInjector");
 	private volatile long myModificationCounter;
 
-	public JavaConcatenationInjectorManager(Project project, PsiManagerEx psiManagerEx)
+	@Inject
+	public JavaConcatenationInjectorManager(Project project, PsiManager psiManager)
 	{
 		final ExtensionPoint<ConcatenationAwareInjector> concatPoint = Extensions.getArea(project).getExtensionPoint(CONCATENATION_INJECTOR_EP_NAME);
 		concatPoint.addExtensionPointListener(new ExtensionPointListener<ConcatenationAwareInjector>()
@@ -68,7 +73,7 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 				unregisterConcatenationInjector(injector);
 			}
 		});
-		psiManagerEx.registerRunnableToRunOnAnyChange(new Runnable()
+		((PsiManagerEx) psiManager).registerRunnableToRunOnAnyChange(new Runnable()
 		{
 			@Override
 			public void run()
@@ -125,7 +130,7 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 	}
 
 	private static MultiHostRegistrarImpl doCompute(@Nonnull PsiFile containingFile, @Nonnull Project project, @Nonnull PsiElement anchor,
-			@Nonnull PsiElement[] operands)
+													@Nonnull PsiElement[] operands)
 	{
 		MultiHostRegistrarImpl registrar = new MultiHostRegistrarImpl(project, containingFile, anchor);
 		JavaConcatenationInjectorManager concatenationInjectorManager = getInstance(project);
@@ -204,8 +209,7 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 				{
 					CachedValueProvider.Result<MultiHostRegistrarImpl> cachedResult = CachedValueProvider.Result.create(result,
 							PsiModificationTracker.MODIFICATION_COUNT, getInstance(project));
-					data = CachedValuesManager.getManager(project).createParameterizedCachedValue(new
-																										  ParameterizedCachedValueProvider<MultiHostRegistrarImpl, PsiElement>()
+					data = CachedValuesManager.getManager(project).createParameterizedCachedValue(new ParameterizedCachedValueProvider<MultiHostRegistrarImpl, PsiElement>()
 					{
 						@Override
 						public CachedValueProvider.Result<MultiHostRegistrarImpl> compute(PsiElement context)

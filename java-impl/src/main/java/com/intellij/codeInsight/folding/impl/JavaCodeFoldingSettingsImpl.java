@@ -15,11 +15,14 @@
  */
 package com.intellij.codeInsight.folding.impl;
 
+import javax.inject.Singleton;
+
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
+@Singleton
 @State(name="JavaCodeFoldingSettings", storages= @Storage("editor.codeinsight.xml"))
 public class JavaCodeFoldingSettingsImpl extends JavaCodeFoldingSettingsBase implements PersistentStateComponent<JavaCodeFoldingSettingsImpl> {
   @Override
