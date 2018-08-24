@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
@@ -43,6 +46,7 @@ import com.intellij.util.xmlb.annotations.AbstractCollection;
 import com.intellij.util.xmlb.annotations.Tag;
 import com.intellij.util.xmlb.annotations.Transient;
 
+@Singleton
 @State(name = "JavaDebuggerSettings", storages = @Storage("debugger.xml"))
 public class DebuggerSettings implements Cloneable, PersistentStateComponent<Element>
 {
@@ -125,7 +129,7 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
 		mySteppingFilters = steppingFilters != null ? steppingFilters : ClassFilter.EMPTY_ARRAY;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Element getState()
 	{

@@ -27,15 +27,19 @@ package com.intellij.psi.controlFlow;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.PsiManagerEx;
 import com.intellij.util.containers.ConcurrentList;
 import com.intellij.util.containers.ContainerUtil;
 
+@Singleton
 public class ControlFlowFactory
 {
 	// psiElements hold weakly, controlFlows softly
@@ -48,17 +52,10 @@ public class ControlFlowFactory
 		return INSTANCE_KEY.getValue(project);
 	}
 
-
-	public ControlFlowFactory(PsiManagerEx psiManager)
+	@Inject
+	public ControlFlowFactory(PsiManager psiManager)
 	{
-		psiManager.registerRunnableToRunOnChange(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				clearCache();
-			}
-		});
+		((PsiManagerEx)psiManager).registerRunnableToRunOnChange(this::clearCache);
 	}
 
 	private void clearCache()

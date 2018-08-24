@@ -24,15 +24,16 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.java.stubs.index.JavaFieldNameIndex;
@@ -53,9 +54,10 @@ import com.intellij.util.indexing.IdFilter;
 
 public class PsiShortNamesCacheImpl extends PsiShortNamesCache
 {
-	private final PsiManagerEx myManager;
+	private final PsiManager myManager;
 
-	public PsiShortNamesCacheImpl(PsiManagerEx manager)
+	@Inject
+	public PsiShortNamesCacheImpl(PsiManager manager)
 	{
 		myManager = manager;
 	}
@@ -183,13 +185,13 @@ public class PsiShortNamesCacheImpl extends PsiShortNamesCache
 		final List<PsiMethod> methods = new SmartList<PsiMethod>();
 		StubIndex.getInstance().process(JavaStubIndexKeys.METHODS, name, myManager.getProject(), scope,
 				new CommonProcessors.CollectProcessor<PsiMethod>(methods)
-		{
-			@Override
-			public boolean process(PsiMethod method)
-			{
-				return methods.size() != maxCount && super.process(method);
-			}
-		});
+				{
+					@Override
+					public boolean process(PsiMethod method)
+					{
+						return methods.size() != maxCount && super.process(method);
+					}
+				});
 		if(methods.isEmpty())
 		{
 			return PsiMethod.EMPTY_ARRAY;
@@ -225,13 +227,13 @@ public class PsiShortNamesCacheImpl extends PsiShortNamesCache
 		final List<PsiField> methods = new SmartList<PsiField>();
 		StubIndex.getInstance().process(JavaStubIndexKeys.FIELDS, name, myManager.getProject(), scope,
 				new CommonProcessors.CollectProcessor<PsiField>(methods)
-		{
-			@Override
-			public boolean process(PsiField method)
-			{
-				return methods.size() != maxCount && super.process(method);
-			}
-		});
+				{
+					@Override
+					public boolean process(PsiField method)
+					{
+						return methods.size() != maxCount && super.process(method);
+					}
+				});
 		if(methods.isEmpty())
 		{
 			return PsiField.EMPTY_ARRAY;
@@ -271,7 +273,7 @@ public class PsiShortNamesCacheImpl extends PsiShortNamesCache
 
 	@Override
 	public boolean processFieldsWithName(@Nonnull String name, @Nonnull Processor<? super PsiField> processor, @Nonnull GlobalSearchScope scope,
-			@Nullable IdFilter filter)
+										 @Nullable IdFilter filter)
 	{
 		return StubIndex.getInstance().process(JavaStubIndexKeys.FIELDS, name, myManager.getProject(), new JavaSourceFilterScope(scope), filter,
 				processor);
@@ -279,7 +281,7 @@ public class PsiShortNamesCacheImpl extends PsiShortNamesCache
 
 	@Override
 	public boolean processMethodsWithName(@NonNls @Nonnull String name, @Nonnull Processor<? super PsiMethod> processor,
-			@Nonnull GlobalSearchScope scope, @javax.annotation.Nullable IdFilter filter)
+										  @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter)
 	{
 		return StubIndex.getInstance().process(JavaStubIndexKeys.METHODS, name, myManager.getProject(), new JavaSourceFilterScope(scope), filter,
 				processor);
@@ -287,7 +289,7 @@ public class PsiShortNamesCacheImpl extends PsiShortNamesCache
 
 	@Override
 	public boolean processClassesWithName(@Nonnull String name, @Nonnull Processor<? super PsiClass> processor, @Nonnull GlobalSearchScope scope,
-			@javax.annotation.Nullable IdFilter filter)
+										  @Nullable IdFilter filter)
 	{
 		return StubIndex.getInstance().process(JavaStubIndexKeys.CLASS_SHORT_NAMES, name, myManager.getProject(), new JavaSourceFilterScope(scope),
 				filter, processor);
