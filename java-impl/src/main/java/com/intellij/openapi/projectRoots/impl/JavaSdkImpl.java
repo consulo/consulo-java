@@ -29,6 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
@@ -41,6 +42,7 @@ import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
+import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.util.Key;
@@ -108,7 +110,7 @@ public class JavaSdkImpl extends JavaSdk
 
 	@NonNls
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public String getDefaultDocumentationUrl(@Nonnull final Sdk sdk)
 	{
 		final JavaSdkVersion version = getVersion(sdk);
@@ -520,7 +522,7 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public JavaSdkVersion getVersion(@Nonnull String versionString)
 	{
 		return JavaSdkVersion.fromVersionString(versionString);
@@ -536,7 +538,7 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public Sdk createJdk(@Nonnull String jdkName, @Nonnull String home, boolean isJre)
 	{
-		SdkImpl jdk = new SdkImpl(jdkName, this);
+		Sdk jdk = SdkTable.getInstance().createSdk(jdkName, this);
 		SdkModificator sdkModificator = jdk.getSdkModificator();
 
 		String path = home.replace(File.separatorChar, '/');
@@ -654,7 +656,7 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getCanonicalPath(File file)
 	{
 		try
@@ -692,7 +694,7 @@ public class JavaSdkImpl extends JavaSdk
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static VirtualFile findInJar(File jarFile, String relativePath)
 	{
 		VirtualFile fileByIoFile = LocalFileSystem.getInstance().findFileByIoFile(jarFile);
@@ -704,7 +706,7 @@ public class JavaSdkImpl extends JavaSdk
 		return archiveRootForLocalFile == null ? null : archiveRootForLocalFile.findFileByRelativePath(relativePath);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static VirtualFile findDocs(File file, final String relativePath)
 	{
 		file = new File(file.getAbsolutePath() + File.separator + relativePath.replace('/', File.separatorChar));
