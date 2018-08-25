@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
 import org.intellij.plugins.intelliLang.inject.InjectorUtils;
@@ -36,7 +38,6 @@ import org.intellij.plugins.intelliLang.inject.config.InjectionPlace;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
-import javax.annotation.Nonnull;
 import com.intellij.lang.Language;
 import com.intellij.lang.injection.ConcatenationAwareInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
@@ -65,6 +66,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.PatternValuesIndex;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.psi.injection.impl.ProjectInjectionConfiguration;
 
 /**
  * @author cdr
@@ -78,7 +80,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
   private final LanguageInjectionSupport mySupport;
 
 
-  public ConcatenationInjector(Configuration configuration, Project project, TemporaryPlacesRegistry temporaryPlacesRegistry) {
+  public ConcatenationInjector(ProjectInjectionConfiguration configuration, Project project, TemporaryPlacesRegistry temporaryPlacesRegistry) {
     myConfiguration = configuration;
     myProject = project;
     myTemporaryPlacesRegistry = temporaryPlacesRegistry;
