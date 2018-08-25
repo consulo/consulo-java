@@ -94,6 +94,6 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 		final String parentPath = PathUtil.getParentPath(path);
 		final String fileName = PathUtil.getFileName(path);
 		final PackagingElement<?> element = new JarArchivePackagingElement(fileName);
-		return (CompositePackagingElement<?>) PackagingElementFactory.getInstance().createParentDirectories(parentPath, element);
+		return (CompositePackagingElement<?>) PackagingElementFactory.getInstance(context.getProject()).createParentDirectories(parentPath, element);
 	}
 }

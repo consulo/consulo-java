@@ -386,7 +386,7 @@ public class ManifestFileUtil
 				final VirtualFile file = findManifestFile(element, context, context.getArtifactType());
 				if(file == null || !FileUtil.pathsEqual(file.getPath(), path))
 				{
-					PackagingElementFactory.getInstance().addFileCopy(element, MANIFEST_DIR_NAME, path, MANIFEST_FILE_NAME);
+					PackagingElementFactory.getInstance(context.getProject()).addFileCopy(element, MANIFEST_DIR_NAME, path, MANIFEST_FILE_NAME);
 				}
 			}
 		});

@@ -111,7 +111,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
 
     String name = modules.length == 1 ? modules[0].getName() : project.getName();
 
-    final PackagingElementFactory factory = PackagingElementFactory.getInstance();
+    final PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
     final CompositePackagingElement<?> archive = factory.createZipArchive(ArtifactUtil.suggestArtifactFileName(name) + ".jar");
 
     OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(project).orderEntries(Arrays.asList(modules));
@@ -158,7 +158,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
 
   private void addLibraries(Set<Library> libraries, ArtifactRootElement<?> root, CompositePackagingElement<?> archive,
                             List<String> classpath) {
-    PackagingElementFactory factory = PackagingElementFactory.getInstance();
+    PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
     for (Library library : libraries) {
       if (LibraryPackagingElement.getKindForLibrary(library).containsDirectoriesWithClasses()) {
         for (VirtualFile classesRoot : library.getFiles(OrderRootType.CLASSES)) {

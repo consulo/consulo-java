@@ -26,6 +26,7 @@ import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.packaging.artifacts.ArtifactTemplate;
 import com.intellij.packaging.artifacts.ArtifactType;
 import com.intellij.packaging.elements.CompositePackagingElement;
+import com.intellij.packaging.elements.PackagingElementFactory;
 import com.intellij.packaging.elements.PackagingElementOutputKind;
 import com.intellij.packaging.elements.PackagingElementResolvingContext;
 import consulo.java.module.extension.JavaModuleExtension;
@@ -68,7 +69,7 @@ public class JarArtifactType extends ArtifactType
 
 	@Nonnull
 	@Override
-	public CompositePackagingElement<?> createRootElement(@Nonnull String artifactName)
+	public CompositePackagingElement<?> createRootElement(@Nonnull PackagingElementFactory factory, @Nonnull String artifactName)
 	{
 		return new JarArchivePackagingElement(ArtifactUtil.suggestArtifactFileName(artifactName) + ".jar");
 	}
