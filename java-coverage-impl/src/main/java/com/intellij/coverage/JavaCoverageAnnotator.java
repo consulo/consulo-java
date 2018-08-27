@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
@@ -27,6 +30,7 @@ import consulo.psi.PsiPackage;
 /**
  * @author Roman.Chernyatchik
  */
+@Singleton
 public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
   private final Map<String, PackageAnnotator.PackageCoverageInfo> myPackageCoverageInfos = new HashMap<String, PackageAnnotator.PackageCoverageInfo>();
   private final Map<String, PackageAnnotator.PackageCoverageInfo> myFlattenPackageCoverageInfos = new HashMap<String, PackageAnnotator.PackageCoverageInfo>();
@@ -36,6 +40,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     new HashMap<VirtualFile, PackageAnnotator.PackageCoverageInfo>();
   private final Map<String, PackageAnnotator.ClassCoverageInfo> myClassCoverageInfos = new HashMap<String, PackageAnnotator.ClassCoverageInfo>();
 
+  @Inject
   public JavaCoverageAnnotator(final Project project) {
     super(project);
   }

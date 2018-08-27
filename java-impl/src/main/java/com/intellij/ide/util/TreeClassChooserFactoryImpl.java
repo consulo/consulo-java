@@ -25,11 +25,13 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
 
 /**
  * User: anna
  * Date: Jan 25, 2005
  */
+@Singleton
 public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   private final Project myProject;
 

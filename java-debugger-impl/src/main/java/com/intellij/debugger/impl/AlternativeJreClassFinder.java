@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -42,6 +43,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class AlternativeJreClassFinder extends NonClasspathClassFinder
 {
+	@Inject
 	public AlternativeJreClassFinder(Project project, DebuggerManager manager)
 	{
 		super(project);

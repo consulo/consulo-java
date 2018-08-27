@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.problems;
 
+import javax.inject.Inject;
+
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
@@ -27,6 +29,7 @@ import consulo.java.util.JavaProjectRootsUtil;
 public class DefaultProblemFileHighlightFilter implements Condition<VirtualFile> {
   private final Project myProject;
 
+  @Inject
   public DefaultProblemFileHighlightFilter(Project project) {
     myProject = project;
   }

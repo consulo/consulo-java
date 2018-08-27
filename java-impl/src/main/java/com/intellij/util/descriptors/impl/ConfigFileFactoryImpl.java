@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
@@ -43,6 +45,7 @@ import com.intellij.util.descriptors.ConfigFileVersion;
 /**
  * @author nik
  */
+@Singleton
 public class ConfigFileFactoryImpl extends ConfigFileFactory
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.util.descriptors.impl.ConfigFileFactoryImpl");

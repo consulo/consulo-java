@@ -21,14 +21,19 @@
 package com.intellij.codeInsight;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.testIntegration.TestFramework;
 import com.intellij.util.IncorrectOperationException;
 
+@Singleton
 public class TestFrameworksImpl extends TestFrameworks
 {
+	@Inject
 	private TestFrameworksImpl()
 	{
 	}

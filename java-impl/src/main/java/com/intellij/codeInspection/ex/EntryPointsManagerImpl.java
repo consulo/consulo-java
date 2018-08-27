@@ -29,12 +29,14 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jdom.Element;
-import javax.annotation.Nonnull;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -45,6 +47,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.DialogWrapper;
 
+@Singleton
 @State(
 		name = "JavaEntryPointsManager",
 		storages = {
@@ -52,6 +55,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 		})
 public class EntryPointsManagerImpl extends EntryPointsManagerBase implements PersistentStateComponent<Element>
 {
+	@Inject
 	public EntryPointsManagerImpl(Project project)
 	{
 		super(project);

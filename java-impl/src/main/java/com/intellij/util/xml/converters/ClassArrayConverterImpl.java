@@ -15,6 +15,12 @@
  */
 package com.intellij.util.xml.converters;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.inject.Singleton;
+
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -22,14 +28,11 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassRe
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.converters.values.ClassArrayConverter;
-import javax.annotation.Nonnull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User: Sergey.Vasiliev
  */
+@Singleton
 public class ClassArrayConverterImpl extends ClassArrayConverter {
   private static final JavaClassReferenceProvider REFERENCE_PROVIDER = new JavaClassReferenceProvider();
 

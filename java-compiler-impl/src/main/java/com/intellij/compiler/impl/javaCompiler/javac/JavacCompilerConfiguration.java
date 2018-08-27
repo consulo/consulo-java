@@ -16,6 +16,8 @@
 package com.intellij.compiler.impl.javaCompiler.javac;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -26,6 +28,7 @@ import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
+@Singleton
 @State(
   name = "JavacCompilerConfiguration",
   storages = {
@@ -42,6 +45,7 @@ public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJ
   private final JpsJavaCompilerOptions mySettings = new JpsJavaCompilerOptions();
   private final Project myProject;
 
+  @Inject
   public JavacCompilerConfiguration(Project project) {
     myProject = project;
   }

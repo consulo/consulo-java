@@ -21,10 +21,11 @@ import java.util.Arrays;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
@@ -39,10 +40,12 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.IdFilter;
 
+@Singleton
 public class CompositeShortNamesCache extends PsiShortNamesCache
 {
 	private final PsiShortNamesCache[] myCaches;
 
+	@Inject
 	public CompositeShortNamesCache(Project project)
 	{
 		myCaches = project.isDefault() ? new PsiShortNamesCache[0] : project.getExtensions(PsiShortNamesCache.EP_NAME);

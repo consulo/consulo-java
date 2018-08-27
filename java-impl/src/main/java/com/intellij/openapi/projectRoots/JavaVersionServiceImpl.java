@@ -16,6 +16,7 @@
 package com.intellij.openapi.projectRoots;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 
 import com.intellij.psi.PsiElement;
 
@@ -23,6 +24,7 @@ import com.intellij.psi.PsiElement;
  * @author anna
  * @since 3/28/12
  */
+@Singleton
 public class JavaVersionServiceImpl extends JavaVersionService {
   @Override
   public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {

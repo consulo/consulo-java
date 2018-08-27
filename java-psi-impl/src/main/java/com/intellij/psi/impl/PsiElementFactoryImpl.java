@@ -18,10 +18,11 @@ package com.intellij.psi.impl;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageParserDefinitions;
@@ -62,11 +63,13 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
 import consulo.java.psi.JavaLanguageVersion;
 
+@Singleton
 public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements PsiElementFactory
 {
 	private PsiClass myArrayClass;
 	private PsiClass myArrayClass15;
 
+	@Inject
 	public PsiElementFactoryImpl(final PsiManager manager)
 	{
 		super(manager);

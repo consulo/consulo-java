@@ -22,6 +22,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis;
 import com.intellij.codeInspection.dataFlow.ContractInference;
 import com.intellij.codeInspection.dataFlow.HardcodedContracts;
@@ -44,11 +47,13 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import one.util.streamex.StreamEx;
 
+@Singleton
 public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 {
 	private static final Set<String> INFERRED_ANNOTATIONS = ContainerUtil.set(AnnotationUtil.NOT_NULL, AnnotationUtil.NULLABLE, ORG_JETBRAINS_ANNOTATIONS_CONTRACT);
 	private final Project myProject;
 
+	@Inject
 	public InferredAnnotationsManagerImpl(Project project)
 	{
 		myProject = project;

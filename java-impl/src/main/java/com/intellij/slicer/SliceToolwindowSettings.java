@@ -15,11 +15,17 @@
  */
 package com.intellij.slicer;
 
-import com.intellij.openapi.components.*;
+import javax.annotation.Nonnull;
+import javax.inject.Singleton;
+
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
-import javax.annotation.Nonnull;
 
+@Singleton
 @State(
     name = "SliceToolwindowSettings",
     storages = {@Storage( file = StoragePathMacros.WORKSPACE_FILE)}

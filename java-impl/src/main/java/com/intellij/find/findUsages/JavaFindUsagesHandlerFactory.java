@@ -16,6 +16,7 @@
 package com.intellij.find.findUsages;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.lang.java.JavaFindUsagesProvider;
@@ -38,6 +39,7 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     return ContainerUtil.findInstance(Extensions.getExtensions(EP_NAME, project), JavaFindUsagesHandlerFactory.class);
   }
 
+  @Inject
   public JavaFindUsagesHandlerFactory(Project project) {
     myFindClassOptions = new JavaClassFindUsagesOptions(project);
     myFindMethodOptions = new JavaMethodFindUsagesOptions(project);

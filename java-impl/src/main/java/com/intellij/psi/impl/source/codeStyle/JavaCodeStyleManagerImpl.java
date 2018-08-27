@@ -28,10 +28,11 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -63,6 +64,7 @@ import com.intellij.util.containers.ContainerUtil;
 /**
  * @author max
  */
+@Singleton
 public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl");
@@ -82,6 +84,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 
 	private final Project myProject;
 
+	@Inject
 	public JavaCodeStyleManagerImpl(final Project project)
 	{
 		myProject = project;

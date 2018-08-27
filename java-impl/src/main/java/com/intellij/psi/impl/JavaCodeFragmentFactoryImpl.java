@@ -17,6 +17,9 @@ package com.intellij.psi.impl;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaCodeFragment;
 import com.intellij.psi.JavaCodeFragmentFactory;
@@ -31,10 +34,12 @@ import com.intellij.psi.impl.source.PsiJavaCodeReferenceCodeFragmentImpl;
 import com.intellij.psi.impl.source.PsiTypeCodeFragmentImpl;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 
+@Singleton
 public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory
 {
 	private final Project myProject;
 
+	@Inject
 	public JavaCodeFragmentFactoryImpl(Project project)
 	{
 		myProject = project;

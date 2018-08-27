@@ -25,6 +25,9 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.codeInsight.guess.GuessManager;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
@@ -51,6 +54,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.BitUtil;
 import com.intellij.util.containers.ContainerUtil;
 
+@Singleton
 public class GuessManagerImpl extends GuessManager
 {
 
@@ -87,6 +91,7 @@ public class GuessManagerImpl extends GuessManager
 
 	private final Project myProject;
 
+	@Inject
 	public GuessManagerImpl(Project project)
 	{
 		myProject = project;

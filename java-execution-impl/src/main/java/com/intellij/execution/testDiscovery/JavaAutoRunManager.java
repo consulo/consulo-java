@@ -16,6 +16,8 @@
 package com.intellij.execution.testDiscovery;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.execution.testframework.autotest.AbstractAutoTestManager;
 import com.intellij.execution.testframework.autotest.AutoTestWatcher;
@@ -30,6 +32,7 @@ import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 
+@Singleton
 @State(name = "JavaAutoRunManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 public class JavaAutoRunManager extends AbstractAutoTestManager
 {
@@ -39,6 +42,7 @@ public class JavaAutoRunManager extends AbstractAutoTestManager
 		return ServiceManager.getService(project, JavaAutoRunManager.class);
 	}
 
+	@Inject
 	public JavaAutoRunManager(@Nonnull Project project)
 	{
 		super(project);

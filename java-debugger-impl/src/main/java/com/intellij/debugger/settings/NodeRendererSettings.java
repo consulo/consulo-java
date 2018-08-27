@@ -20,12 +20,12 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
 import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
@@ -62,6 +62,7 @@ import com.intellij.util.EventDispatcher;
 import com.intellij.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Value;
 
+@Singleton
 @State(name = "NodeRendererSettings", storages = @Storage("debugger.renderers.xml"))
 public class NodeRendererSettings implements PersistentStateComponent<Element>
 {

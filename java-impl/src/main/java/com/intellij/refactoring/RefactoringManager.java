@@ -15,10 +15,14 @@
  */
 package com.intellij.refactoring;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.refactoring.migration.MigrationManager;
 
+@Singleton
 public class RefactoringManager {
   private final MigrationManager myMigrateManager;
 
@@ -26,6 +30,7 @@ public class RefactoringManager {
     return ServiceManager.getService(project, RefactoringManager.class);
   }
 
+  @Inject
   public RefactoringManager(Project project) {
     myMigrateManager = new MigrationManager(project);
   }

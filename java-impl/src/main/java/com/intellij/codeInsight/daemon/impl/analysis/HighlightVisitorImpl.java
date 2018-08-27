@@ -29,6 +29,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.CheckLevelHighlightInfoHolder;
@@ -128,6 +130,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 		private static final boolean CHECK_ELEMENT_LEVEL = ApplicationManager.getApplication().isUnitTestMode() || ApplicationProperties.isInSandbox();
 	}
 
+	@Inject
 	public HighlightVisitorImpl(@Nonnull PsiResolveHelper resolveHelper)
 	{
 		myResolveHelper = resolveHelper;

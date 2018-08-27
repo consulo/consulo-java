@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -63,6 +64,7 @@ import com.intellij.psi.util.PsiUtil;
 /**
  * The action-handler that does the code generation.
  */
+@Singleton
 public class GenerateToStringActionHandlerImpl implements GenerateToStringActionHandler, CodeInsightActionHandler
 {
 	private static final Logger logger = Logger.getInstance("#GenerateToStringActionHandlerImpl");

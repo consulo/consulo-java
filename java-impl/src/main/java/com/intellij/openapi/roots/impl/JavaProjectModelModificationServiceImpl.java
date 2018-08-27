@@ -18,6 +18,8 @@ package com.intellij.openapi.roots.impl;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -32,10 +34,12 @@ import com.intellij.pom.java.LanguageLevel;
 /**
  * @author nik
  */
+@Singleton
 public class JavaProjectModelModificationServiceImpl extends JavaProjectModelModificationService
 {
 	private final Project myProject;
 
+	@Inject
 	public JavaProjectModelModificationServiceImpl(Project project)
 	{
 		myProject = project;

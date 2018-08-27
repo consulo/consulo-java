@@ -16,6 +16,8 @@
 
 package consulo.java.jam.util.impl;
 
+import javax.inject.Singleton;
+
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.jam.model.util.JamCommonUtil;
 import com.intellij.lang.java.JavaLanguage;
@@ -29,6 +31,7 @@ import consulo.java.jam.util.JamCommonService;
  * @author VISTALL
  * @since 2018-06-21
  */
+@Singleton
 public class JamCommonServiceImpl implements JamCommonService
 {
 	@RequiredReadAction

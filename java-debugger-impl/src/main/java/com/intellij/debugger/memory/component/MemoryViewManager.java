@@ -16,6 +16,7 @@
 package com.intellij.debugger.memory.component;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 
 import com.intellij.debugger.memory.event.MemoryViewManagerListener;
 import com.intellij.openapi.Disposable;
@@ -25,6 +26,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.EventDispatcher;
 
+@Singleton
 @State(name = "MemoryViewSettings", storages = @Storage("memory.view.xml"))
 public class MemoryViewManager implements PersistentStateComponent<MemoryViewManagerState>
 {

@@ -15,6 +15,8 @@
  */
 package com.intellij.execution;
 
+import javax.inject.Singleton;
+
 import com.intellij.execution.configuration.RunConfigurationExtensionsManager;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
@@ -25,6 +27,7 @@ import com.intellij.openapi.diagnostic.Logger;
  * User: anna
  * Date: 10/4/11
  */
+@Singleton
 public class JavaRunConfigurationExtensionManager extends RunConfigurationExtensionsManager<RunConfigurationBase, RunConfigurationExtension> {
   private static final Logger LOG = Logger.getInstance(RunConfigurationExtension.class.getName());
 

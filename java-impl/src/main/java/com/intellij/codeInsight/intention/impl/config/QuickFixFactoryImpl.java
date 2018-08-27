@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
 
 import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
@@ -77,6 +77,7 @@ import consulo.java.JavaQuickFixBundle;
 /**
  * @author cdr
  */
+@Singleton
 public class QuickFixFactoryImpl extends QuickFixFactory
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.config.QuickFixFactoryImpl");

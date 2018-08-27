@@ -15,16 +15,24 @@
  */
 package com.intellij.codeInspection;
 
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInsight.daemon.impl.actions.*;
+import com.intellij.codeInsight.daemon.impl.actions.SuppressAllForClassFix;
+import com.intellij.codeInsight.daemon.impl.actions.SuppressByJavaCommentFix;
+import com.intellij.codeInsight.daemon.impl.actions.SuppressFix;
+import com.intellij.codeInsight.daemon.impl.actions.SuppressForClassFix;
+import com.intellij.codeInsight.daemon.impl.actions.SuppressLocalWithCommentFix;
+import com.intellij.codeInsight.daemon.impl.actions.SuppressParameterFix;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifierListOwner;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import java.util.Collection;
-
+@Singleton
 public class BatchSuppressManagerImpl implements BatchSuppressManager {
   @Nonnull
   @Override

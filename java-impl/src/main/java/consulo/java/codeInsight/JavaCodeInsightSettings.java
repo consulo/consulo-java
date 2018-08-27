@@ -2,6 +2,8 @@ package consulo.java.codeInsight;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -13,6 +15,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
  * @author VISTALL
  * @since 13.10.2015
  */
+@Singleton
 @State(
 		name = "JavaCodeInsightSettings",
 		storages = {

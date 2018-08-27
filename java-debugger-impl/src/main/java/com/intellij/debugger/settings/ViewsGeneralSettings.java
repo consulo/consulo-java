@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger.settings;
 
+import javax.inject.Singleton;
+
 import org.jdom.Element;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
@@ -25,6 +27,7 @@ import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 
+@Singleton
 @State(
   name="ViewsSettings",
   storages= {
@@ -36,9 +39,6 @@ public class ViewsGeneralSettings implements PersistentStateComponent<Element> {
   public boolean SHOW_OBJECTID = true;
   public boolean HIDE_NULL_ARRAY_ELEMENTS = true;
   public boolean AUTOSCROLL_TO_NEW_LOCALS = true;
-
-  public ViewsGeneralSettings() {
-  }
 
   public static ViewsGeneralSettings getInstance() {
     return ServiceManager.getService(ViewsGeneralSettings.class);

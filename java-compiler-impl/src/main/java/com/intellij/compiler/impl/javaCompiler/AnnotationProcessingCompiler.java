@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 
 import com.intellij.CommonBundle;
 import com.intellij.compiler.CompilerException;
@@ -65,6 +66,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 	private final Project myProject;
 	private final JavaCompilerConfiguration myCompilerConfiguration;
 
+	@Inject
 	public AnnotationProcessingCompiler(Project project)
 	{
 		myProject = project;

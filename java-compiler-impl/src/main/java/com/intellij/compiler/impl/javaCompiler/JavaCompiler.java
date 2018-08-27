@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.make.CacheCorruptedException;
@@ -65,6 +67,7 @@ public class JavaCompiler implements TranslatingCompiler
 
 	private final Project myProject;
 
+	@Inject
 	public JavaCompiler(Project project)
 	{
 		myProject = project;

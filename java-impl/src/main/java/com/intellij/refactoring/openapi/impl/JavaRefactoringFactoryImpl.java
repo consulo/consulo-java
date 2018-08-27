@@ -16,6 +16,8 @@
 package com.intellij.refactoring.openapi.impl;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -29,10 +31,12 @@ import com.intellij.refactoring.move.moveInner.MoveInnerImpl;
 /**
  * @author dsl
  */
+@Singleton
 public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.openapi.impl.JavaRefactoringFactoryImpl");
   private final Project myProject;
 
+  @Inject
   public JavaRefactoringFactoryImpl(Project project) {
     myProject = project;
   }

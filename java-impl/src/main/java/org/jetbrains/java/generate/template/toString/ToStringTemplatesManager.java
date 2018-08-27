@@ -17,6 +17,8 @@ package org.jetbrains.java.generate.template.toString;
 
 import java.io.IOException;
 
+import javax.inject.Singleton;
+
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
@@ -25,6 +27,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 
+@Singleton
 @State(
 		name = "ToStringTemplates",
 		storages = {

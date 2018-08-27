@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.file;
 
+import javax.inject.Singleton;
+
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -34,6 +36,7 @@ import com.intellij.psi.util.PsiModificationTracker;
 /**
  * @author yole
  */
+@Singleton
 public class PsiPackageImplementationHelperImpl extends PsiPackageImplementationHelper {
   @Override
   public GlobalSearchScope adjustAllScope(PsiJavaPackage psiPackage, GlobalSearchScope globalSearchScope) {

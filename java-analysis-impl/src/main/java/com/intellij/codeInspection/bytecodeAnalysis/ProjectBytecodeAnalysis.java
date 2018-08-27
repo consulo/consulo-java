@@ -32,6 +32,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
 import com.intellij.openapi.components.ServiceManager;
@@ -64,6 +67,7 @@ import com.intellij.util.indexing.FileBasedIndex;
 /**
  * @author lambdamix
  */
+@Singleton
 public class ProjectBytecodeAnalysis
 {
 	public static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.bytecodeAnalysis");
@@ -78,6 +82,7 @@ public class ProjectBytecodeAnalysis
 		return ServiceManager.getService(project, ProjectBytecodeAnalysis.class);
 	}
 
+	@Inject
 	public ProjectBytecodeAnalysis(Project project)
 	{
 		myProject = project;

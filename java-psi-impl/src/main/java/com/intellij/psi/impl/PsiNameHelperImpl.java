@@ -17,11 +17,15 @@ package com.intellij.psi.impl;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.lexer.JavaLexer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiNameHelper;
 
+@Singleton
 public class PsiNameHelperImpl extends PsiNameHelper {
 
   @Override
@@ -65,6 +69,7 @@ public class PsiNameHelperImpl extends PsiNameHelper {
     };
   }
 
+  @Inject
   private PsiNameHelperImpl() {
   }
 }

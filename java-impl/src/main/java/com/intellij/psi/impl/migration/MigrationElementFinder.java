@@ -15,15 +15,17 @@
  */
 package com.intellij.psi.impl.migration;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElementFinder;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
-import javax.annotation.Nonnull;
-
-import java.util.List;
 
 /**
  * @author yole
@@ -31,6 +33,7 @@ import java.util.List;
 public class MigrationElementFinder extends PsiElementFinder implements DumbAware {
   private final Project myProject;
 
+  @Inject
   public MigrationElementFinder(Project project) {
     myProject = project;
   }

@@ -12,10 +12,11 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jdom.Element;
-
-import javax.annotation.Nullable;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -34,6 +35,7 @@ import consulo.annotations.RequiredReadAction;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
 import consulo.java.module.extension.JavaModuleExtension;
 
+@Singleton
 @State(
 		name = "JavaCompilerConfiguration",
 		storages = {
@@ -78,6 +80,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 	@DeprecationInfo("We used JavaModuleExtension for store info about bytecode version")
 	private final Map<String, String> myModuleBytecodeTarget = new HashMap<String, String>();
 
+	@Inject
 	public JavaCompilerConfiguration(@Nonnull Project project)
 	{
 		myProject = project;

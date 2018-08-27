@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.EmptySubstitutor;
@@ -31,6 +32,7 @@ import com.intellij.psi.PsiTypeParameter;
 /**
  * @author dsl
  */
+@Singleton
 public final class EmptySubstitutorImpl extends EmptySubstitutor
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.EmptySubstitutorImpl");

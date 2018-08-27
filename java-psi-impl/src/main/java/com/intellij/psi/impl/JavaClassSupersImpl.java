@@ -20,6 +20,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -34,6 +36,7 @@ import com.intellij.util.containers.ContainerUtil;
 /**
  * @author peter
  */
+@Singleton
 public class JavaClassSupersImpl extends JavaClassSupers
 {
 	@Override

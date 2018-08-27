@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl;
 
+import javax.inject.Singleton;
+
 import com.intellij.psi.CommonReferenceProviderTypes;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
@@ -22,6 +24,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassRe
 /**
  * @author Dmitry Avdeev
  */
+@Singleton
 public class CommonReferenceProviderTypesImpl extends CommonReferenceProviderTypes {
 
   private final JavaClassReferenceProvider myProvider;

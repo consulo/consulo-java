@@ -15,6 +15,10 @@
  */
 package com.intellij.psi.impl.migration;
 
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -23,8 +27,8 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMigration;
 import com.intellij.psi.impl.PsiManagerEx;
 import com.intellij.psi.impl.PsiManagerImpl;
-import javax.annotation.Nonnull;
 
+@Singleton
 public class PsiMigrationManager {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.migration.PsiMigrationManager");
 
@@ -35,6 +39,7 @@ public class PsiMigrationManager {
   private final Project myProject;
   private PsiMigrationImpl myCurrentMigration;
 
+  @Inject
   public PsiMigrationManager(Project project) {
     myProject = project;
   }

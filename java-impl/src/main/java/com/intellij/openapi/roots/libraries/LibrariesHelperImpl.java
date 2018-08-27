@@ -18,6 +18,8 @@ package com.intellij.openapi.roots.libraries;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,6 +30,7 @@ import consulo.vfs.util.ArchiveVfsUtil;
 /**
  * @author lesya
  */
+@Singleton
 public class LibrariesHelperImpl extends LibrariesHelper
 {
 	@Override

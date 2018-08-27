@@ -15,14 +15,19 @@
  */
 package com.intellij.psi.codeStyle;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.ide.highlighter.JavaFileType;
 
 /**
  * @author yole
  */
+@Singleton
 public class JavaCodeStyleSettingsFacadeImpl extends JavaCodeStyleSettingsFacade {
   private final CodeStyleSettingsManager myManager;
 
+  @Inject
   public JavaCodeStyleSettingsFacadeImpl(ProjectCodeStyleSettingsManager manager) {
     myManager = manager;
   }

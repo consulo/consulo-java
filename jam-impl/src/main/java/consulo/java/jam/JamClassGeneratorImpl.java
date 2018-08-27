@@ -2,6 +2,8 @@ package consulo.java.jam;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Singleton;
+
 import net.sf.cglib.proxy.AdvancedProxy;
 import net.sf.cglib.proxy.InvocationHandler;
 
@@ -14,6 +16,7 @@ import com.intellij.util.NotNullFunction;
  * @author VISTALL
  * @since 14-Jan-17
  */
+@Singleton
 public class JamClassGeneratorImpl extends JamClassGenerator {
   private static class InvocationHandlerImpl<R> implements InvocationHandler {
     private Class<R> myClass;

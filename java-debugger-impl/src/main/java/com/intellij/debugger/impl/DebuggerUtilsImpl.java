@@ -18,10 +18,10 @@ package com.intellij.debugger.impl;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
 
 import org.jdom.Element;
-
-import javax.annotation.Nullable;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.apiAdapters.TransportServiceWrapper;
 import com.intellij.debugger.engine.DebugProcess;
@@ -73,6 +73,7 @@ import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 
+@Singleton
 public class DebuggerUtilsImpl extends DebuggerUtilsEx
 {
 	public static final Key<PsiType> PSI_TYPE_KEY = Key.create("PSI_TYPE_KEY");

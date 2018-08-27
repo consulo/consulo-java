@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.openapi.extensions.Extensions;
@@ -37,10 +39,12 @@ import consulo.psi.PsiPackage;
 /**
  * @author mike
  */
+@Singleton
 public class JavadocManagerImpl implements JavadocManager
 {
 	private final List<JavadocTagInfo> myInfos;
 
+	@Inject
 	public JavadocManagerImpl(Project project)
 	{
 		myInfos = new ArrayList<>();

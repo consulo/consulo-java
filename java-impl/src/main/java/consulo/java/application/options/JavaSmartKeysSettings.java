@@ -1,7 +1,9 @@
 package consulo.java.application.options;
 
-import org.jdom.Element;
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
+
+import org.jdom.Element;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -16,6 +18,7 @@ import com.intellij.util.xmlb.XmlSerializer;
  * @author VISTALL
  * @since 16.08.14
  */
+@Singleton
 @State(
 		name = "JavaSmartKeysSettings",
 		storages = {

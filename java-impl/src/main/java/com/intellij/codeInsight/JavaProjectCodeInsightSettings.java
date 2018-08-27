@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -41,6 +43,7 @@ import com.intellij.util.xmlb.annotations.Tag;
 /**
  * @author peter
  */
+@Singleton
 @State(name = "JavaProjectCodeInsightSettings", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/codeInsightSettings.xml"))
 public class JavaProjectCodeInsightSettings implements PersistentStateComponent<JavaProjectCodeInsightSettings>
 {

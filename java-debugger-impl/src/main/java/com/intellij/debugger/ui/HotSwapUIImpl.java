@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.CommonBundle;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -56,6 +59,7 @@ import com.intellij.util.messages.MessageBusConnection;
  * Date: Oct 2, 2003
  * Time: 6:00:55 PM
  */
+@Singleton
 public class HotSwapUIImpl extends HotSwapUI
 {
 	public static class Listener implements DebuggerManagerListener
@@ -96,6 +100,7 @@ public class HotSwapUIImpl extends HotSwapUI
 	private final Project myProject;
 	private boolean myPerformHotswapAfterThisCompilation = true;
 
+	@Inject
 	public HotSwapUIImpl(final Project project)
 	{
 		myProject = project;

@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.openapi.impl;
 
+import javax.inject.Singleton;
+
 import com.intellij.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.anonymousToInner.AnonymousToInnerHandler;
@@ -40,6 +42,7 @@ import com.intellij.refactoring.turnRefsToSuper.TurnRefsToSuperHandler;
 import com.intellij.refactoring.typeCook.TypeCookHandler;
 import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
 
+@Singleton
 public class JavaRefactoringActionHandlerFactoryImpl extends JavaRefactoringActionHandlerFactory {
   public RefactoringActionHandler createAnonymousToInnerHandler() {
     return new AnonymousToInnerHandler();

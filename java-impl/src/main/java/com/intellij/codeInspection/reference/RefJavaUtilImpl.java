@@ -20,6 +20,8 @@
  */
 package com.intellij.codeInspection.reference;
 
+import javax.inject.Singleton;
+
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -28,6 +30,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.VisibilityUtil;
 
+@Singleton
 public class RefJavaUtilImpl extends RefJavaUtil{
 
   @Override

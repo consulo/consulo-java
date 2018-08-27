@@ -23,6 +23,8 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.Disposable;
@@ -46,6 +48,7 @@ import consulo.ui.migration.SwingImageRef;
  *
  * @since 15
  */
+@Singleton
 public class ProjectIconsAccessor implements Disposable
 {
 	@Nonnull
@@ -67,6 +70,7 @@ public class ProjectIconsAccessor implements Disposable
 
 	private final SLRUMap<String, Pair<Long, Image>> myIconsCache = new SLRUMap<>(500, 1000);
 
+	@Inject
 	ProjectIconsAccessor(Project project)
 	{
 	}

@@ -21,6 +21,9 @@ import java.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ReadActionProcessor;
@@ -52,6 +55,7 @@ import consulo.psi.PsiPackageManager;
 /**
  * @author max
  */
+@Singleton
 public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 {
 	private PsiElementFinder[] myElementFinders; //benign data race
@@ -60,7 +64,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	private final Project myProject;
 	private final PsiPackageManager myPackageManager;
 
-
+	@Inject
 	public JavaPsiFacadeImpl(Project project, PsiPackageManager psiManager)
 	{
 		myProject = project;

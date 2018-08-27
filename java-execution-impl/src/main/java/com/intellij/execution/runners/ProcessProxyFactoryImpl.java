@@ -17,6 +17,8 @@ package com.intellij.execution.runners;
 
 import java.io.File;
 
+import javax.inject.Singleton;
+
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLine;
 import com.intellij.execution.configurations.ParametersList;
@@ -32,6 +34,7 @@ import consulo.java.rt.JavaRtClassNames;
 import consulo.java.rt.execution.application.AppMainV2Constants;
 import consulo.platform.Platform;
 
+@Singleton
 public class ProcessProxyFactoryImpl extends ProcessProxyFactory
 {
 	private static final boolean ourMayUseLauncher = !Boolean.valueOf(Platform.current().getRuntimeProperty("idea.no.launcher"));

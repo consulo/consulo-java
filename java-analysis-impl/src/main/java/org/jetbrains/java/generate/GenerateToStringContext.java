@@ -16,6 +16,8 @@
 package org.jetbrains.java.generate;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
+
 import org.jetbrains.java.generate.config.Config;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
@@ -26,6 +28,7 @@ import com.intellij.openapi.components.StoragePathMacros;
 /**
  * Application context for this plugin.
  */
+@Singleton
 @State(
 		name = "ToStringSettings",
 		storages = {

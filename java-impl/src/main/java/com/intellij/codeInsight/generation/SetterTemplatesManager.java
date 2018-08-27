@@ -18,6 +18,7 @@ package com.intellij.codeInsight.generation;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;
@@ -27,6 +28,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 
+@Singleton
 @State(
 		name = "SetterTemplates",
 		storages = {

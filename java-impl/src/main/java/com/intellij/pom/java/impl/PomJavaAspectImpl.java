@@ -15,6 +15,11 @@
  */
 package com.intellij.pom.java.impl;
 
+import java.util.Collections;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.pom.PomModel;
 import com.intellij.pom.PomModelAspect;
@@ -25,11 +30,11 @@ import com.intellij.pom.tree.TreeAspect;
 import com.intellij.pom.tree.events.TreeChangeEvent;
 import com.intellij.psi.PsiFile;
 
-import java.util.Collections;
-
+@Singleton
 public class PomJavaAspectImpl extends PomJavaAspect {
   private final PomModel myPomModel;
 
+  @Inject
   public PomJavaAspectImpl(TreeAspect treeAspect, PomModel pomModel) {
     myPomModel = pomModel;
     pomModel.registerAspect(PomJavaAspect.class, this, Collections.singleton((PomModelAspect)treeAspect));

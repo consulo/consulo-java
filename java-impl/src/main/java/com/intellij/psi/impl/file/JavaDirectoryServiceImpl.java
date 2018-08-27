@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 
 import com.intellij.core.CoreJavaDirectoryService;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -53,6 +54,7 @@ import consulo.java.module.extension.JavaModuleExtension;
 /**
  * @author max
  */
+@Singleton
 public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.JavaDirectoryServiceImpl");

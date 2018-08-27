@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -62,16 +62,13 @@ import com.intellij.util.containers.Stack;
 /**
  * @author ven
  */
+@Singleton
 public class ExpectedTypesProvider
 {
 	private static final ExpectedTypeInfo VOID_EXPECTED = createInfoImpl(PsiType.VOID,
 			ExpectedTypeInfo.TYPE_OR_SUBTYPE, PsiType.VOID, TailType.SEMICOLON);
 
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.ExpectedTypesProvider");
-
-	private ExpectedTypesProvider()
-	{
-	}
 
 	public static ExpectedTypesProvider getInstance(@Nonnull Project project)
 	{

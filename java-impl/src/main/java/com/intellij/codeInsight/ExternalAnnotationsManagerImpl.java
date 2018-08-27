@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -112,12 +114,14 @@ import com.intellij.util.ui.OptionsMessageDialog;
  * @author anna
  * @since 26-Jun-2007
  */
+@Singleton
 public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsManager
 {
-	private static final Logger LOG = Logger.getInstance("#" + ExternalAnnotationsManagerImpl.class.getName());
+	private static final Logger LOG = Logger.getInstance(ExternalAnnotationsManagerImpl.class);
 
 	private final MessageBus myBus;
 
+	@Inject
 	public ExternalAnnotationsManagerImpl(@Nonnull final Project project, final PsiManager psiManager)
 	{
 		super(psiManager);

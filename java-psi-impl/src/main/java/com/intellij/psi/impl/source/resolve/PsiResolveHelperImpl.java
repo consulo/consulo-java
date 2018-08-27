@@ -17,6 +17,9 @@ package com.intellij.psi.impl.source.resolve;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -29,11 +32,13 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
+@Singleton
 public class PsiResolveHelperImpl implements PsiResolveHelper
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl");
 	private final PsiManager myManager;
 
+	@Inject
 	public PsiResolveHelperImpl(PsiManager manager)
 	{
 		myManager = manager;

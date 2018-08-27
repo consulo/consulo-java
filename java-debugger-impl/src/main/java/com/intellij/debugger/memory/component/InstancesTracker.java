@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.debugger.memory.event.InstancesTrackerListener;
 import com.intellij.debugger.memory.tracking.TrackingType;
 import com.intellij.openapi.Disposable;
@@ -33,6 +35,7 @@ import com.intellij.util.EventDispatcher;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.xmlb.annotations.AbstractCollection;
 
+@Singleton
 @State(name = "InstancesTracker", storages = @Storage(StoragePathMacros.WORKSPACE_FILE))
 public class InstancesTracker implements PersistentStateComponent<InstancesTracker.MyState>
 {

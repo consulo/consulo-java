@@ -21,6 +21,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
@@ -61,12 +64,14 @@ import consulo.roots.types.SourcesOrderRootType;
 /**
  * @author yole
  */
+@Singleton
 public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.JavaPsiImplementationHelperImpl");
 
 	private final Project myProject;
 
+	@Inject
 	public JavaPsiImplementationHelperImpl(Project project)
 	{
 		myProject = project;

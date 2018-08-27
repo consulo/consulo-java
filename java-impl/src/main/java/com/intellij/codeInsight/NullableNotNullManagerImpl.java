@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jdom.Element;
 import com.intellij.codeInspection.dataFlow.HardcodedContracts;
@@ -46,6 +48,7 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.containers.ContainerUtil;
 import one.util.streamex.StreamEx;
 
+@Singleton
 @State(name = "NullableNotNullManager", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
 public class NullableNotNullManagerImpl extends NullableNotNullManager implements PersistentStateComponent<Element>
 {
@@ -58,6 +61,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 
 	public static final String TYPE_QUALIFIER_NICKNAME = "javax.annotation.meta.TypeQualifierNickname";
 
+	@Inject
 	public NullableNotNullManagerImpl(Project project)
 	{
 		super(project);

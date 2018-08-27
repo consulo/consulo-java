@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.ProjectTopics;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.Disposable;
@@ -54,6 +57,7 @@ import com.intellij.util.containers.ContainerUtil;
 /**
  * @author dmitry lomov
  */
+@Singleton
 public class JavaFileManagerImpl implements JavaFileManager, Disposable
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.impl.JavaFileManagerImpl");
@@ -62,6 +66,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 	private volatile Set<String> myNontrivialPackagePrefixes;
 	private boolean myDisposed;
 
+	@Inject
 	public JavaFileManagerImpl(Project project)
 	{
 		myManager = PsiManagerEx.getInstanceEx(project);

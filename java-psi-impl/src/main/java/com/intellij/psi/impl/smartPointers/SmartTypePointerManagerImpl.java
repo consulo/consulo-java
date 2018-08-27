@@ -21,6 +21,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiSubstitutorImpl;
@@ -35,6 +38,7 @@ import com.intellij.util.containers.HashMap;
 /**
  * @author max
  */
+@Singleton
 public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 {
 	private static final SmartTypePointer NULL_POINTER = new SmartTypePointer()
@@ -49,6 +53,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager
 	private final SmartPointerManager myPsiPointerManager;
 	private final Project myProject;
 
+	@Inject
 	public SmartTypePointerManagerImpl(final SmartPointerManager psiPointerManager, final Project project)
 	{
 		myPsiPointerManager = psiPointerManager;

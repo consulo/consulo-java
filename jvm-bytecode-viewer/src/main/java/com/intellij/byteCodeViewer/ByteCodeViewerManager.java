@@ -7,6 +7,9 @@ import java.io.StringWriter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.util.Textifier;
 import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
@@ -38,6 +41,7 @@ import consulo.roots.impl.TestContentFolderTypeProvider;
  * User: anna
  * Date: 5/7/12
  */
+@Singleton
 public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerComponent> {
   private static final Logger LOG = Logger.getInstance("#" + ByteCodeViewerManager.class.getName());
 
@@ -49,6 +53,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     return ServiceManager.getService(project, ByteCodeViewerManager.class);
   }
 
+  @Inject
   public ByteCodeViewerManager(Project project) {
     super(project);
   }

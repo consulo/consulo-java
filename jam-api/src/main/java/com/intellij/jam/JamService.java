@@ -15,6 +15,18 @@
  */
 package com.intellij.jam;
 
+import static com.intellij.jam.model.util.JamCommonUtil.findAnnotatedElements;
+import static com.intellij.jam.model.util.JamCommonUtil.getSuperClassList;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.jam.reflect.JamAnnotationMeta;
 import com.intellij.jam.reflect.JamMemberMeta;
 import com.intellij.openapi.components.ServiceManager;
@@ -25,19 +37,11 @@ import com.intellij.semantic.SemKey;
 import com.intellij.semantic.SemService;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static com.intellij.jam.model.util.JamCommonUtil.findAnnotatedElements;
-import static com.intellij.jam.model.util.JamCommonUtil.getSuperClassList;
 
 /**
  * @author peter
  */
+@Singleton
 public class JamService {
   public static final SemKey<JamMemberMeta> MEMBER_META_KEY = SemKey.createKey("JamMemberMeta");
   public static final SemKey<JamAnnotationMeta> ANNO_META_KEY = SemKey.createKey("JamAnnotationMeta");
@@ -46,6 +50,7 @@ public class JamService {
   private final PsiManager myPsiManager;
   private final SemService mySemService;
 
+  @Inject
   protected JamService(PsiManager psiManager, SemService semService) {
     myPsiManager = psiManager;
     mySemService = semService;

@@ -19,6 +19,8 @@ import java.awt.Font;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.analysis.AnalysisUIOptions;
 import com.intellij.ide.impl.ContentManagerWatcher;
@@ -48,6 +50,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import com.intellij.util.ui.UIUtil;
 
+@Singleton
 @State(name = "SliceManager", storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)})
 public class SliceManager implements PersistentStateComponent<SliceManager.StoredSettingsBean>
 {
@@ -69,6 +72,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
 		return ServiceManager.getService(project, SliceManager.class);
 	}
 
+	@Inject
 	public SliceManager(@Nonnull Project project, PsiManager psiManager)
 	{
 		myProject = project;

@@ -24,11 +24,14 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifierListOwner;
 
+@Singleton
 public class SuppressManagerImpl extends SuppressManager
 {
 	@Override
@@ -52,21 +55,21 @@ public class SuppressManagerImpl extends SuppressManager
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiElement getElementMemberSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID)
 	{
 		return JavaSuppressionUtil.getElementMemberSuppressedIn(owner, inspectionToolID);
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiElement getAnnotationMemberSuppressedIn(@Nonnull final PsiModifierListOwner owner, final String inspectionToolID)
 	{
 		return JavaSuppressionUtil.getAnnotationMemberSuppressedIn(owner, inspectionToolID);
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiElement getDocCommentToolSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID)
 	{
 		return JavaSuppressionUtil.getDocCommentToolSuppressedIn(owner, inspectionToolID);
@@ -87,7 +90,7 @@ public class SuppressManagerImpl extends SuppressManager
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiElement getElementToolSuppressedIn(@Nonnull final PsiElement place, final String toolId)
 	{
 		return JavaSuppressionUtil.getElementToolSuppressedIn(place, toolId);

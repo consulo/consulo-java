@@ -15,12 +15,15 @@
  */
 package com.intellij.debugger.settings;
 
+import javax.inject.Singleton;
+
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
+@Singleton
 @State(name = "ThreadsViewSettings", storages = @Storage("debugger.threadsview.xml"))
 public class ThreadsViewSettings implements PersistentStateComponent<ThreadsViewSettings>
 {

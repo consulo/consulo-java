@@ -15,17 +15,20 @@
  */
 package com.intellij.util.xml.converters;
 
+import javax.annotation.Nonnull;
+import javax.inject.Singleton;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.converters.values.ClassValueConverter;
-import javax.annotation.Nonnull;
 
 /**
  * User: Sergey.Vasiliev
  */
+@Singleton
 public class ClassValueConverterImpl extends ClassValueConverter {
   private static final JavaClassReferenceProvider REFERENCE_PROVIDER = new JavaClassReferenceProvider();
 

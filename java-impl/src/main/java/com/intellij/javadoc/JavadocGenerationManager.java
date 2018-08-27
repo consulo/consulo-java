@@ -16,6 +16,8 @@
 package com.intellij.javadoc;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jdom.Element;
 import com.intellij.CommonBundle;
@@ -32,6 +34,7 @@ import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializer;
 
+@Singleton
 @State(name = "JavadocGenerationManager", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
 public final class JavadocGenerationManager implements PersistentStateComponent<Element>
 {
@@ -43,6 +46,7 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
 		return ServiceManager.getService(project, JavadocGenerationManager.class);
 	}
 
+	@Inject
 	JavadocGenerationManager(Project project)
 	{
 		myProject = project;
