@@ -16,6 +16,9 @@
 package com.intellij.ide.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
@@ -23,9 +26,6 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
-
-import javax.annotation.Nullable;
-import javax.inject.Singleton;
 
 /**
  * User: anna
@@ -35,10 +35,12 @@ import javax.inject.Singleton;
 public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   private final Project myProject;
 
+  @Inject
   public TreeClassChooserFactoryImpl(@Nonnull Project project) {
     myProject = project;
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createWithInnerClassesScopeChooser(String title,
                                                              GlobalSearchScope scope,
@@ -47,6 +49,7 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
     return TreeJavaClassChooserDialog.withInnerClasses(title, myProject, scope, classFilter, initialClass);
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createNoInnerClassesScopeChooser(String title,
                                                            GlobalSearchScope scope,
@@ -55,21 +58,25 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
     return new TreeJavaClassChooserDialog(title, myProject, scope, classFilter, initialClass);
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createProjectScopeChooser(String title, PsiClass initialClass) {
     return new TreeJavaClassChooserDialog(title, myProject, initialClass);
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createProjectScopeChooser(String title) {
     return new TreeJavaClassChooserDialog(title, myProject);
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createAllProjectScopeChooser(String title) {
     return new TreeJavaClassChooserDialog(title, myProject, GlobalSearchScope.allScope(myProject), null, null);
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createInheritanceClassChooser(String title,
                                                         GlobalSearchScope scope,
@@ -81,17 +88,20 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
     return new TreeJavaClassChooserDialog(title, myProject, scope, classFilter, base, null, false);
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createInheritanceClassChooser(String title, GlobalSearchScope scope, PsiClass base, PsiClass initialClass) {
     return createInheritanceClassChooser(title, scope, base, initialClass, null);
   }
 
+  @Override
   @Nonnull
   public TreeClassChooser createInheritanceClassChooser(String title, GlobalSearchScope scope, PsiClass base, PsiClass initialClass,
                                                         ClassFilter classFilter) {
     return new TreeJavaClassChooserDialog(title, myProject, scope, classFilter, base, initialClass, false);
   }
 
+  @Override
   @Nonnull
   public TreeFileChooser createFileChooser(@Nonnull String title,
                                            final PsiFile initialFile,
@@ -100,17 +110,19 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
     return new TreeFileChooserDialog(myProject, title, initialFile, fileType, filter, false, false);
   }
 
+  @Override
   @Nonnull
   public
   TreeFileChooser createFileChooser(@Nonnull String title,
                                     @Nullable PsiFile initialFile,
-                                    @javax.annotation.Nullable FileType fileType,
-                                    @javax.annotation.Nullable TreeFileChooser.PsiFileFilter filter,
+                                    @Nullable FileType fileType,
+                                    @Nullable TreeFileChooser.PsiFileFilter filter,
                                     boolean disableStructureProviders) {
     return new TreeFileChooserDialog(myProject, title, initialFile, fileType, filter, disableStructureProviders, false);
   }
 
 
+  @Override
   @Nonnull
   public TreeFileChooser createFileChooser(@Nonnull String title, @Nullable PsiFile initialFile, @Nullable FileType fileType,
                                            @Nullable TreeFileChooser.PsiFileFilter filter,

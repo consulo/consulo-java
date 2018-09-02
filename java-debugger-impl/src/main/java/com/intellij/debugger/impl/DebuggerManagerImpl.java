@@ -25,6 +25,7 @@ import java.util.jar.Attributes;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.SwingUtilities;
 
@@ -177,30 +178,23 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 		myDispatcher.removeListener(listener);
 	}
 
+	@Inject
 	public DebuggerManagerImpl(Project project, StartupManager startupManager)
 	{
 		myProject = project;
 		myBreakpointManager = new BreakpointManager(myProject, startupManager, this);
-		if(!project.isDefault())
+		if(project.isDefault())
 		{
-			if(!project.isDefault())
-			{
-				DebuggerManagerListener[] extensions = DebuggerManagerListener.EP_NAME.getExtensions(project);
-				for(DebuggerManagerListener extension : extensions)
-				{
-					myDispatcher.addListener(extension);
-				}
-			}
-
-			project.getMessageBus().connect().subscribe(EditorColorsManager.TOPIC, new EditorColorsListener()
-			{
-				@Override
-				public void globalSchemeChange(EditorColorsScheme scheme)
-				{
-					getBreakpointManager().updateBreakpointsUI();
-				}
-			});
+			return;
 		}
+
+		DebuggerManagerListener[] extensions = DebuggerManagerListener.EP_NAME.getExtensions(project);
+		for(DebuggerManagerListener extension : extensions)
+		{
+			myDispatcher.addListener(extension);
+		}
+
+		project.getMessageBus().connect().subscribe(EditorColorsManager.TOPIC, scheme -> getBreakpointManager().updateBreakpointsUI());
 	}
 
 	@Nullable

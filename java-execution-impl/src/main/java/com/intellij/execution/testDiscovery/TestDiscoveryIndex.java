@@ -33,6 +33,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.intellij.openapi.Disposable;
@@ -58,6 +59,7 @@ public class TestDiscoveryIndex implements Disposable
 	private final TestDataController myLocalTestRunDataController;
 	private final TestDataController myRemoteTestRunDataController;
 
+	@Inject
 	public TestDiscoveryIndex(Project project)
 	{
 		this(project, TestDiscoveryExtension.baseTestDiscoveryPathForProject(project));
@@ -65,6 +67,11 @@ public class TestDiscoveryIndex implements Disposable
 
 	public TestDiscoveryIndex(final Project project, @Nonnull Path basePath)
 	{
+		if(project.isDefault())
+		{
+			return;
+		}
+
 		myLocalTestRunDataController = new TestDataController(basePath, false);
 		myRemoteTestRunDataController = new TestDataController(null, true);
 

@@ -17,6 +17,7 @@ package com.intellij.debugger.ui;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.intellij.debugger.DebugEnvironment;
@@ -50,9 +51,15 @@ public class DebuggerPanelsManager
 {
 	private final Project myProject;
 
+	@Inject
 	public DebuggerPanelsManager(Project project)
 	{
 		myProject = project;
+		if(project.isDefault())
+		{
+			return;
+		}
+
 		myProject.getMessageBus().connect(myProject).subscribe(RunContentManager.TOPIC, new RunContentWithExecutorListener()
 		{
 			@Override
@@ -86,9 +93,9 @@ public class DebuggerPanelsManager
 
 	@Nullable
 	public RunContentDescriptor attachVirtualMachine(@Nonnull ExecutionEnvironment environment,
-			RunProfileState state,
-			RemoteConnection remoteConnection,
-			boolean pollConnection) throws ExecutionException
+													 RunProfileState state,
+													 RemoteConnection remoteConnection,
+													 boolean pollConnection) throws ExecutionException
 	{
 		return attachVirtualMachine(new DefaultDebugUIEnvironment(environment, state, remoteConnection, pollConnection));
 	}

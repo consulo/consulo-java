@@ -15,25 +15,21 @@
  */
 package com.intellij.util.xml.impl;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.swing.table.TableCellEditor;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;
 import com.intellij.util.Consumer;
-import com.intellij.util.Function;
 import com.intellij.util.xml.CanonicalPsiTypeConverter;
 import com.intellij.util.xml.CanonicalPsiTypeConverterImpl;
 import com.intellij.util.xml.ConverterManager;
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.JvmPsiTypeConverter;
 import com.intellij.util.xml.JvmPsiTypeConverterImpl;
 import com.intellij.util.xml.PsiClassConverter;
 import com.intellij.util.xml.converters.values.ClassArrayConverter;
 import com.intellij.util.xml.converters.values.ClassValueConverter;
-import com.intellij.util.xml.ui.BaseControl;
 import com.intellij.util.xml.ui.DomUIFactory;
-import com.intellij.util.xml.ui.DomWrapper;
 import com.intellij.util.xml.ui.PsiClassControl;
 import com.intellij.util.xml.ui.PsiClassTableCellEditor;
 import com.intellij.util.xml.ui.PsiTypeControl;
@@ -44,6 +40,7 @@ import com.intellij.util.xml.ui.PsiTypeControl;
 @Singleton
 public class JavaDomApplicationComponent implements Consumer<DomUIFactory>
 {
+	@Inject
 	public JavaDomApplicationComponent(ConverterManager converterManager)
 	{
 		converterManager.addConverter(PsiClass.class, new PsiClassConverter());
@@ -60,27 +57,9 @@ public class JavaDomApplicationComponent implements Consumer<DomUIFactory>
 	@Override
 	public void consume(DomUIFactory factory)
 	{
-		factory.registerCustomControl(PsiClass.class, new Function<DomWrapper<String>, BaseControl>()
-		{
-			public BaseControl fun(final DomWrapper<String> wrapper)
-			{
-				return new PsiClassControl(wrapper, false);
-			}
-		});
-		factory.registerCustomControl(PsiType.class, new Function<DomWrapper<String>, BaseControl>()
-		{
-			public BaseControl fun(final DomWrapper<String> wrapper)
-			{
-				return new PsiTypeControl(wrapper, false);
-			}
-		});
+		factory.registerCustomControl(PsiClass.class, wrapper -> new PsiClassControl(wrapper, false));
+		factory.registerCustomControl(PsiType.class, wrapper -> new PsiTypeControl(wrapper, false));
 
-		factory.registerCustomCellEditor(PsiClass.class, new Function<DomElement, TableCellEditor>()
-		{
-			public TableCellEditor fun(final DomElement element)
-			{
-				return new PsiClassTableCellEditor(element.getManager().getProject(), element.getResolveScope());
-			}
-		});
+		factory.registerCustomCellEditor(PsiClass.class, element -> new PsiClassTableCellEditor(element.getManager().getProject(), element.getResolveScope()));
 	}
 }
