@@ -56,8 +56,8 @@ public class TestDiscoveryIndex implements Disposable
 	static final Logger LOG = Logger.getInstance(TestDiscoveryIndex.class);
 
 	//private volatile TestInfoHolder mySystemHolder;
-	private final TestDataController myLocalTestRunDataController;
-	private final TestDataController myRemoteTestRunDataController;
+	private TestDataController myLocalTestRunDataController;
+	private TestDataController myRemoteTestRunDataController;
 
 	@Inject
 	public TestDiscoveryIndex(Project project)
