@@ -340,28 +340,11 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 	@Override
-	@SuppressWarnings({"HardCodedStringLiteral"})
 	public void setupSdkPaths(Sdk sdk)
 	{
 		final File jdkHome = new File(sdk.getHomePath());
-		List<VirtualFile> classes = findClasses(jdkHome, false);
-		VirtualFile docs = findDocs(jdkHome, "docs/api");
 
 		final SdkModificator sdkModificator = sdk.getSdkModificator();
-		final Set<VirtualFile> previousRoots = new LinkedHashSet<VirtualFile>(Arrays.asList(sdkModificator.getRoots(BinariesOrderRootType
-				.getInstance())));
-		sdkModificator.removeRoots(BinariesOrderRootType.getInstance());
-		previousRoots.removeAll(new HashSet<VirtualFile>(classes));
-		for(VirtualFile aClass : classes)
-		{
-			sdkModificator.addRoot(aClass, BinariesOrderRootType.getInstance());
-		}
-		for(VirtualFile root : previousRoots)
-		{
-			sdkModificator.addRoot(root, BinariesOrderRootType.getInstance());
-		}
-
-		addJavaFxSources(jdkHome, sdkModificator);
 
 		boolean isModuleJdk = false;
 		File jmodsDirectory = new File(jdkHome, "jmods");
@@ -382,9 +365,23 @@ public class JavaSdkImpl extends JavaSdk
 				}
 			}
 		}
+		else
+		{
+			addJavaFxSources(jdkHome, sdkModificator);
+
+			for(VirtualFile aClass : findClasses(jdkHome, false))
+			{
+				sdkModificator.addRoot(aClass, BinariesOrderRootType.getInstance());
+			}
+		}
 
 		boolean noSources = true;
 		VirtualFile srcZipFile = ZipArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(new File(jdkHome, "src.zip").getPath());
+		if(srcZipFile == null)
+		{
+			srcZipFile = ZipArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(new File(jdkHome, "lib/src.zip").getPath());
+		}
+
 		if(srcZipFile != null)
 		{
 			noSources = false;
@@ -406,6 +403,7 @@ public class JavaSdkImpl extends JavaSdk
 			}
 		}
 
+		VirtualFile docs = findDocs(jdkHome, "docs/api");
 		if(docs != null)
 		{
 			sdkModificator.addRoot(docs, DocumentationOrderRootType.getInstance());
