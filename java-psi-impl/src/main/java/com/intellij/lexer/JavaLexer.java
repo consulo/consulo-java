@@ -1,30 +1,14 @@
-/*
- * Copyright 2000-2012 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lexer;
 
 import static com.intellij.psi.PsiKeyword.*;
-
-import gnu.trove.THashSet;
 
 import java.io.IOException;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
@@ -36,189 +20,47 @@ import com.intellij.util.text.CharSequenceHashingStrategy;
 
 public class JavaLexer extends LexerBase
 {
-	private static final HashTable[] TABLES = new HashTable[]{
-			new HashTable(LanguageLevel.JDK_1_5),
-			new HashTable(LanguageLevel.JDK_1_4),
-			new HashTable(LanguageLevel.JDK_1_3)
-	};
+	private static final Set<String> KEYWORDS = ContainerUtil.newTroveSet(
+			ABSTRACT, BOOLEAN, BREAK, BYTE, CASE, CATCH, CHAR, CLASS, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, EXTENDS, FINAL, FINALLY,
+			FLOAT, FOR, GOTO, IF, IMPLEMENTS, IMPORT, INSTANCEOF, INT, INTERFACE, LONG, NATIVE, NEW, PACKAGE, PRIVATE, PROTECTED, PUBLIC,
+			RETURN, SHORT, STATIC, STRICTFP, SUPER, SWITCH, SYNCHRONIZED, THIS, THROW, THROWS, TRANSIENT, TRY, VOID, VOLATILE, WHILE,
+			TRUE, FALSE, NULL);
 
-	private static final Set<CharSequence> JAVA9_KEYWORDS = ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_SENSITIVE, OPEN, MODULE, REQUIRES, EXPORTS, OPENS, USES, PROVIDES, TRANSITIVE,
-			TO, WITH);
+	private static final Set<CharSequence> JAVA9_KEYWORDS = ContainerUtil.newTroveSet(
+			CharSequenceHashingStrategy.CASE_SENSITIVE,
+			OPEN, MODULE, REQUIRES, EXPORTS, OPENS, USES, PROVIDES, TRANSITIVE, TO, WITH);
 
-	private static HashTable getTable(final LanguageLevel level)
+	public static boolean isKeyword(String id, @Nonnull LanguageLevel level)
 	{
-		for(HashTable table : TABLES)
-		{
-			if(level.isAtLeast(table.myLevel))
-			{
-				return table;
-			}
-		}
-		throw new IllegalArgumentException("Unsupported level: " + level);
-	}
-
-	public static boolean isKeyword(String id, LanguageLevel level)
-	{
-		return getTable(level).contains(id);
+		return KEYWORDS.contains(id) ||
+				level.isAtLeast(LanguageLevel.JDK_1_4) && ASSERT.equals(id) ||
+				level.isAtLeast(LanguageLevel.JDK_1_5) && ENUM.equals(id);
 	}
 
 	public static boolean isSoftKeyword(CharSequence id, @Nonnull LanguageLevel level)
 	{
-		return id != null && (level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id) ||
-				level.isAtLeast(LanguageLevel.JDK_10) && VAR.contentEquals(id));
+		return id != null &&
+				(level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id) ||
+						level.isAtLeast(LanguageLevel.JDK_10) && VAR.contentEquals(id));
 	}
 
 	private final _JavaLexer myFlexLexer;
-	private final HashTable myTable;
 	private CharSequence myBuffer;
-	private char[] myBufferArray;
+	private
+	@Nullable
+	char[] myBufferArray;
 	private int myBufferIndex;
 	private int myBufferEndOffset;
 	private int myTokenEndOffset;  // positioned after the last symbol of the current token
 	private IElementType myTokenType;
 
-	public JavaLexer(@Nonnull final LanguageLevel level)
+	public JavaLexer(@Nonnull LanguageLevel level)
 	{
 		myFlexLexer = new _JavaLexer(level);
-		myTable = getTable(level);
-	}
-
-	private static final class HashTable
-	{
-		private static final int NUM_ENTRIES = 999;
-		private static final Logger LOG = Logger.getInstance("com.intellij.Lexer.JavaLexer");
-
-		private final LanguageLevel myLevel;
-		private final char[][] myTable = new char[NUM_ENTRIES][];
-		private final IElementType[] myKeywords = new IElementType[NUM_ENTRIES];
-		private final Set<String> myKeywordsInSet = new THashSet<String>();
-
-		private void add(String s, IElementType tokenType)
-		{
-			char[] chars = s.toCharArray();
-			int hashCode = chars[0] * 2;
-			for(int j = 1; j < chars.length; j++)
-			{
-				hashCode += chars[j];
-			}
-			int modHashCode = hashCode % NUM_ENTRIES;
-			LOG.assertTrue(myTable[modHashCode] == null);
-
-			myTable[modHashCode] = chars;
-			myKeywords[modHashCode] = tokenType;
-			myKeywordsInSet.add(s);
-		}
-
-		public boolean contains(String s)
-		{
-			return myKeywordsInSet.contains(s);
-		}
-
-		private boolean contains(int hashCode, final char[] bufferArray, final CharSequence buffer, int offset)
-		{
-			int modHashCode = hashCode % NUM_ENTRIES;
-			final char[] kwd = myTable[modHashCode];
-			if(kwd == null)
-			{
-				return false;
-			}
-
-			if(bufferArray != null)
-			{
-				for(int j = 0; j < kwd.length; j++)
-				{
-					if(bufferArray[j + offset] != kwd[j])
-					{
-						return false;
-					}
-				}
-			}
-			else
-			{
-				for(int j = 0; j < kwd.length; j++)
-				{
-					if(buffer.charAt(j + offset) != kwd[j])
-					{
-						return false;
-					}
-				}
-			}
-			return true;
-		}
-
-		private IElementType getTokenType(int hashCode)
-		{
-			return myKeywords[hashCode % NUM_ENTRIES];
-		}
-
-		@SuppressWarnings({"HardCodedStringLiteral"})
-		private HashTable(final LanguageLevel level)
-		{
-			myLevel = level;
-			if(level.isAtLeast(LanguageLevel.JDK_1_4))
-			{
-				add("assert", JavaTokenType.ASSERT_KEYWORD);
-				if(level.isAtLeast(LanguageLevel.JDK_1_5))
-				{
-					add("enum", JavaTokenType.ENUM_KEYWORD);
-				}
-			}
-			add("abstract", JavaTokenType.ABSTRACT_KEYWORD);
-			add("default", JavaTokenType.DEFAULT_KEYWORD);
-			add("if", JavaTokenType.IF_KEYWORD);
-			add("private", JavaTokenType.PRIVATE_KEYWORD);
-			add("this", JavaTokenType.THIS_KEYWORD);
-			add("boolean", JavaTokenType.BOOLEAN_KEYWORD);
-			add("do", JavaTokenType.DO_KEYWORD);
-			add("implements", JavaTokenType.IMPLEMENTS_KEYWORD);
-			add("protected", JavaTokenType.PROTECTED_KEYWORD);
-			add("throw", JavaTokenType.THROW_KEYWORD);
-			add("break", JavaTokenType.BREAK_KEYWORD);
-			add("double", JavaTokenType.DOUBLE_KEYWORD);
-			add("import", JavaTokenType.IMPORT_KEYWORD);
-			add("public", JavaTokenType.PUBLIC_KEYWORD);
-			add("throws", JavaTokenType.THROWS_KEYWORD);
-			add("byte", JavaTokenType.BYTE_KEYWORD);
-			add("else", JavaTokenType.ELSE_KEYWORD);
-			add("instanceof", JavaTokenType.INSTANCEOF_KEYWORD);
-			add("return", JavaTokenType.RETURN_KEYWORD);
-			add("transient", JavaTokenType.TRANSIENT_KEYWORD);
-			add("case", JavaTokenType.CASE_KEYWORD);
-			add("extends", JavaTokenType.EXTENDS_KEYWORD);
-			add("int", JavaTokenType.INT_KEYWORD);
-			add("short", JavaTokenType.SHORT_KEYWORD);
-			add("try", JavaTokenType.TRY_KEYWORD);
-			add("catch", JavaTokenType.CATCH_KEYWORD);
-			add("final", JavaTokenType.FINAL_KEYWORD);
-			add("interface", JavaTokenType.INTERFACE_KEYWORD);
-			add("static", JavaTokenType.STATIC_KEYWORD);
-			add("void", JavaTokenType.VOID_KEYWORD);
-			add("char", JavaTokenType.CHAR_KEYWORD);
-			add("finally", JavaTokenType.FINALLY_KEYWORD);
-			add("long", JavaTokenType.LONG_KEYWORD);
-			add("strictfp", JavaTokenType.STRICTFP_KEYWORD);
-			add("volatile", JavaTokenType.VOLATILE_KEYWORD);
-			add("class", JavaTokenType.CLASS_KEYWORD);
-			add("float", JavaTokenType.FLOAT_KEYWORD);
-			add("native", JavaTokenType.NATIVE_KEYWORD);
-			add("super", JavaTokenType.SUPER_KEYWORD);
-			add("while", JavaTokenType.WHILE_KEYWORD);
-			add("const", JavaTokenType.CONST_KEYWORD);
-			add("for", JavaTokenType.FOR_KEYWORD);
-			add("new", JavaTokenType.NEW_KEYWORD);
-			add("switch", JavaTokenType.SWITCH_KEYWORD);
-			add("continue", JavaTokenType.CONTINUE_KEYWORD);
-			add("goto", JavaTokenType.GOTO_KEYWORD);
-			add("package", JavaTokenType.PACKAGE_KEYWORD);
-			add("synchronized", JavaTokenType.SYNCHRONIZED_KEYWORD);
-			add("true", JavaTokenType.TRUE_KEYWORD);
-			add("false", JavaTokenType.FALSE_KEYWORD);
-			add("null", JavaTokenType.NULL_KEYWORD);
-		}
 	}
 
 	@Override
-	public final void start(CharSequence buffer, int startOffset, int endOffset, int initialState)
+	public final void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState)
 	{
 		myBuffer = buffer;
 		myBufferArray = CharArrayUtil.fromSequenceWithoutCopying(buffer);
@@ -238,11 +80,7 @@ public class JavaLexer extends LexerBase
 	@Override
 	public final IElementType getTokenType()
 	{
-		if(myTokenType == null)
-		{
-			_locateToken();
-		}
-
+		locateToken();
 		return myTokenType;
 	}
 
@@ -255,42 +93,33 @@ public class JavaLexer extends LexerBase
 	@Override
 	public final int getTokenEnd()
 	{
-		if(myTokenType == null)
-		{
-			_locateToken();
-		}
+		locateToken();
 		return myTokenEndOffset;
 	}
-
 
 	@Override
 	public final void advance()
 	{
-		if(myTokenType == null)
-		{
-			_locateToken();
-		}
+		locateToken();
 		myTokenType = null;
 	}
 
-	private void _locateToken()
+	private void locateToken()
 	{
+		if(myTokenType != null)
+			return;
+
 		if(myTokenEndOffset == myBufferEndOffset)
 		{
-			myTokenType = null;
 			myBufferIndex = myBufferEndOffset;
 			return;
 		}
 
 		myBufferIndex = myTokenEndOffset;
 
-		final char c = myBufferArray != null ? myBufferArray[myBufferIndex] : myBuffer.charAt(myBufferIndex);
+		char c = charAt(myBufferIndex);
 		switch(c)
 		{
-			default:
-				flexLocateToken();
-				break;
-
 			case ' ':
 			case '\t':
 			case '\n':
@@ -308,8 +137,7 @@ public class JavaLexer extends LexerBase
 				}
 				else
 				{
-					final char nextChar = myBufferArray != null ? myBufferArray[myBufferIndex + 1] : myBuffer.charAt(myBufferIndex + 1);
-
+					char nextChar = charAt(myBufferIndex + 1);
 					if(nextChar == '/')
 					{
 						myTokenType = JavaTokenType.END_OF_LINE_COMMENT;
@@ -317,8 +145,10 @@ public class JavaLexer extends LexerBase
 					}
 					else if(nextChar == '*')
 					{
-						if(myBufferIndex + 2 >= myBufferEndOffset || (myBufferArray != null ? myBufferArray[myBufferIndex + 2] : myBuffer.charAt(myBufferIndex + 2)) != '*' || (myBufferIndex + 3 <
-								myBufferEndOffset && (myBufferArray != null ? myBufferArray[myBufferIndex + 3] : myBuffer.charAt(myBufferIndex + 3)) == '/'))
+						if(myBufferIndex + 2 >= myBufferEndOffset ||
+								(charAt(myBufferIndex + 2)) != '*' ||
+								(myBufferIndex + 3 < myBufferEndOffset &&
+										(charAt(myBufferIndex + 3)) == '/'))
 						{
 							myTokenType = JavaTokenType.C_STYLE_COMMENT;
 							myTokenEndOffset = getClosingComment(myBufferIndex + 2);
@@ -328,10 +158,6 @@ public class JavaLexer extends LexerBase
 							myTokenType = JavaDocElementType.DOC_COMMENT;
 							myTokenEndOffset = getClosingComment(myBufferIndex + 3);
 						}
-					}
-					else if(c > 127 && Character.isJavaIdentifierStart(c))
-					{
-						myTokenEndOffset = getIdentifier(myBufferIndex + 1);
 					}
 					else
 					{
@@ -343,7 +169,16 @@ public class JavaLexer extends LexerBase
 			case '"':
 			case '\'':
 				myTokenType = c == '"' ? JavaTokenType.STRING_LITERAL : JavaTokenType.CHARACTER_LITERAL;
-				myTokenEndOffset = getClosingParenthesis(myBufferIndex + 1, c);
+				myTokenEndOffset = getClosingQuote(myBufferIndex + 1, c);
+				break;
+
+			case '`':
+				myTokenType = JavaTokenType.RAW_STRING_LITERAL;
+				myTokenEndOffset = getRawLiteralEnd(myBufferIndex);
+				break;
+
+			default:
+				flexLocateToken();
 		}
 
 		if(myTokenEndOffset > myBufferEndOffset)
@@ -352,25 +187,22 @@ public class JavaLexer extends LexerBase
 		}
 	}
 
-	private int getWhitespaces(int pos)
+	private int getWhitespaces(int offset)
 	{
-		if(pos >= myBufferEndOffset)
+		if(offset >= myBufferEndOffset)
 		{
 			return myBufferEndOffset;
 		}
-		final CharSequence lBuffer = myBuffer;
-		final char[] lBufferArray = myBufferArray;
 
-		char c = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
+		int pos = offset;
+		char c = charAt(pos);
 
 		while(c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f')
 		{
 			pos++;
 			if(pos == myBufferEndOffset)
-			{
 				return pos;
-			}
-			c = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
+			c = charAt(pos);
 		}
 
 		return pos;
@@ -385,56 +217,43 @@ public class JavaLexer extends LexerBase
 			myTokenEndOffset = myFlexLexer.getTokenEnd();
 		}
 		catch(IOException e)
-		{
-			// Can't be
-		}
+		{ /* impossible */ }
 	}
 
-	private int getClosingParenthesis(int offset, char c)
+	private int getClosingQuote(int offset, char quoteChar)
 	{
-		int pos = offset;
-		final int lBufferEnd = myBufferEndOffset;
-		if(pos >= lBufferEnd)
+		if(offset >= myBufferEndOffset)
 		{
-			return lBufferEnd;
+			return myBufferEndOffset;
 		}
 
-		final CharSequence lBuffer = myBuffer;
-		final char[] lBufferArray = myBufferArray;
-		char cur = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
+		int pos = offset;
+		char c = charAt(pos);
 
 		while(true)
 		{
-			while(cur != c && cur != '\n' && cur != '\r' && cur != '\\')
+			while(c != quoteChar && c != '\n' && c != '\r' && c != '\\')
 			{
 				pos++;
-				if(pos >= lBufferEnd)
-				{
-					return lBufferEnd;
-				}
-				cur = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
+				if(pos >= myBufferEndOffset)
+					return myBufferEndOffset;
+				c = charAt(pos);
 			}
 
-			if(cur == '\\')
+			if(c == '\\')
 			{
 				pos++;
-				if(pos >= lBufferEnd)
-				{
-					return lBufferEnd;
-				}
-				cur = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
-				if(cur == '\n' || cur == '\r')
-				{
+				if(pos >= myBufferEndOffset)
+					return myBufferEndOffset;
+				c = charAt(pos);
+				if(c == '\n' || c == '\r')
 					continue;
-				}
 				pos++;
-				if(pos >= lBufferEnd)
-				{
-					return lBufferEnd;
-				}
-				cur = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
+				if(pos >= myBufferEndOffset)
+					return myBufferEndOffset;
+				c = charAt(pos);
 			}
-			else if(cur == c)
+			else if(c == quoteChar)
 			{
 				break;
 			}
@@ -452,15 +271,10 @@ public class JavaLexer extends LexerBase
 	{
 		int pos = offset;
 
-		final int lBufferEnd = myBufferEndOffset;
-		final CharSequence lBuffer = myBuffer;
-		final char[] lBufferArray = myBufferArray;
-
-		while(pos < lBufferEnd - 1)
+		while(pos < myBufferEndOffset - 1)
 		{
-			final char c = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
-
-			if(c == '*' && (lBufferArray != null ? lBufferArray[pos + 1] : lBuffer.charAt(pos + 1)) == '/')
+			char c = charAt(pos);
+			if(c == '*' && (charAt(pos + 1)) == '/')
 			{
 				break;
 			}
@@ -473,61 +287,46 @@ public class JavaLexer extends LexerBase
 	private int getLineTerminator(int offset)
 	{
 		int pos = offset;
-		final int lBufferEnd = myBufferEndOffset;
-		final CharSequence lBuffer = myBuffer;
-		final char[] lBufferArray = myBufferArray;
 
-		while(pos < lBufferEnd)
+		while(pos < myBufferEndOffset)
 		{
-			final char c = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
+			char c = charAt(pos);
 			if(c == '\r' || c == '\n')
-			{
 				break;
-			}
 			pos++;
 		}
 
 		return pos;
 	}
 
-	private int getIdentifier(int offset)
+	private int getRawLiteralEnd(int offset)
 	{
-		final CharSequence lBuffer = myBuffer;
-		final char[] lBufferArray = myBufferArray;
-
-		int hashCode = (lBufferArray != null ? lBufferArray[offset - 1] : lBuffer.charAt(offset - 1)) * 2;
-		final int lBufferEnd = myBufferEndOffset;
-
 		int pos = offset;
-		if(pos < lBufferEnd)
-		{
-			char c = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
 
-			while(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '$' || c > 127 && Character.isJavaIdentifierPart(c))
-			{
+		while(pos < myBufferEndOffset && charAt(pos) == '`')
+			pos++;
+		int quoteLen = pos - offset;
+
+		int start;
+		do
+		{
+			while(pos < myBufferEndOffset && charAt(pos) != '`')
 				pos++;
-				hashCode += c;
-
-				if(pos == lBufferEnd)
-				{
-					break;
-				}
-				c = lBufferArray != null ? lBufferArray[pos] : lBuffer.charAt(pos);
-			}
+			start = pos;
+			while(pos < myBufferEndOffset && charAt(pos) == '`')
+				pos++;
 		}
-
-		if(myTable.contains(hashCode, lBufferArray, lBuffer, offset - 1))
-		{
-			myTokenType = myTable.getTokenType(hashCode);
-		}
-		else
-		{
-			myTokenType = JavaTokenType.IDENTIFIER;
-		}
+		while(pos - start != quoteLen && pos < myBufferEndOffset);
 
 		return pos;
 	}
 
+	private char charAt(int position)
+	{
+		return myBufferArray != null ? myBufferArray[position] : myBuffer.charAt(position);
+	}
+
+	@Nonnull
 	@Override
 	public CharSequence getBufferSequence()
 	{
@@ -539,63 +338,4 @@ public class JavaLexer extends LexerBase
 	{
 		return myBufferEndOffset;
 	}
-
-  /*
-  public static void main(String[] args) throws IOException {
-    File root = new File(args[0]);
-
-    Stats stats = new Stats();
-    walk(root, stats);
-
-    System.out.println("Scanned " + stats.files + " files, total of " + stats.lines + " lines in " + (stats.time / 1000000) + " ms.");
-    System.out.println("Size:" + stats.bytes);
-
-  }
-
-  private static void lex(File root, Stats stats) throws IOException {
-    stats.files++;
-    BufferedReader reader = new BufferedReader(new FileReader(root));
-    String s;
-    StringBuilder buf = new StringBuilder();
-    while ((s = reader.readLine()) != null) {
-      stats.lines++;
-      buf.append(s).append("\n");
-    }
-    
-    stats.bytes += buf.length();
-
-    long start = System.nanoTime();
-    lexText(buf);
-    stats.time += System.nanoTime() - start;
-  }
-
-  private static void lexText(StringBuilder buf) {
-    JavaLexer lexer = new JavaLexer(LanguageLevel.JDK_1_5);
-    lexer.start(buf);
-    while (lexer.getTokenType() != null) {
-      lexer.advance();
-    }
-  }
-
-  private static class Stats {
-    public int files;
-    public int lines;
-    public long time;
-    public long bytes;
-  }
-
-  private static void walk(File root, Stats stats) throws IOException {
-    if (root.isDirectory()) {
-      System.out.println("Lexing in " + root.getPath());
-      for (File file : root.listFiles()) {
-        walk(file, stats);
-      }
-    }
-    else {
-      if (root.getName().endsWith(".java")) {
-        lex(root, stats);
-      }
-    }
-  }
-  */
 }

@@ -22,6 +22,7 @@ import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;

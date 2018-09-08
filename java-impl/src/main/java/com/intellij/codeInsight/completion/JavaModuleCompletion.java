@@ -17,6 +17,9 @@ package com.intellij.codeInsight.completion;
 
 import static com.intellij.codeInsight.completion.BasicExpressionCompletionContributor.createKeywordLookupItem;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -25,10 +28,15 @@ import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.JavaKeywordCompletion.OverrideableSpace;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.lookup.TailTypeDecorator;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.java.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
@@ -36,6 +44,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
+import consulo.java.JavaIcons;
 import consulo.psi.PsiPackage;
 
 class JavaModuleCompletion
@@ -45,7 +54,7 @@ class JavaModuleCompletion
 		return PsiJavaModule.MODULE_INFO_FILE.equals(file.getName()) && PsiUtil.isLanguageLevel9OrHigher(file);
 	}
 
-	static void addVariants(@Nonnull PsiElement position, @Nonnull CompletionResultSet resultSet)
+	static void addVariants(@Nonnull PsiElement position, @Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet resultSet)
 	{
 		Consumer<LookupElement> result = element ->
 		{
@@ -78,7 +87,7 @@ class JavaModuleCompletion
 			else if(context instanceof PsiJavaModuleReferenceElement)
 			{
 				addRequiresStatementKeywords(context, position, result);
-				addModuleReferences(context, result);
+				addModuleReferences(context, parameters.getOriginalFile(), resultSet);
 			}
 			else if(context instanceof PsiJavaCodeReferenceElement)
 			{
@@ -124,23 +133,51 @@ class JavaModuleCompletion
 		}
 	}
 
-	private static void addModuleReferences(PsiElement context, Consumer<LookupElement> result)
+	private static void addModuleReferences(PsiElement moduleRef, PsiFile originalFile, CompletionResultSet result)
 	{
-		PsiElement statement = context.getParent();
-		if(!(statement instanceof PsiJavaModule))
+		PsiElement statement = moduleRef.getParent();
+		boolean requires;
+		if((requires = statement instanceof PsiRequiresStatement) || statement instanceof PsiPackageAccessibilityStatement)
 		{
-			PsiElement host = statement.getParent();
-			if(host instanceof PsiJavaModule)
+			PsiElement parent = statement.getParent();
+			if(parent != null)
 			{
-				String hostName = ((PsiJavaModule) host).getName();
-				Project project = context.getProject();
+				Project project = moduleRef.getProject();
+				Set<String> filter = new HashSet<>();
+				filter.add(((PsiJavaModule) parent).getName());
+
 				JavaModuleNameIndex index = JavaModuleNameIndex.getInstance();
 				GlobalSearchScope scope = ProjectScope.getAllScope(project);
 				for(String name : index.getAllKeys(project))
 				{
-					if(!name.equals(hostName) && index.get(name, project, scope).size() == 1)
+					if(index.get(name, project, scope).size() > 0 && filter.add(name))
 					{
-						result.consume(new OverrideableSpace(LookupElementBuilder.create(name), TailType.SEMICOLON));
+						LookupElement lookup = LookupElementBuilder.create(name).withIcon(JavaIcons.Nodes.JavaModule);
+						if(requires)
+						{
+							lookup = TailTypeDecorator.withTail(lookup, TailType.SEMICOLON);
+						}
+						result.consume(lookup);
+					}
+				}
+
+				if(requires)
+				{
+					Module module = ModuleUtilCore.findModuleForPsiElement(originalFile);
+					if(module != null)
+					{
+						VirtualFile[] roots = ModuleRootManager.getInstance(module).orderEntries().withoutSdk().librariesOnly().getClassesRoots();
+						scope = GlobalSearchScope.filesScope(project, Arrays.asList(roots));
+						for(String name : JavaAutoModuleNameIndex.getAllKeys(project))
+						{
+							if(JavaAutoModuleNameIndex.getFilesByKey(name, scope).size() > 0 && PsiNameHelper.isValidModuleName(name, parent) && filter.add(name))
+							{
+								LookupElement lookup = LookupElementBuilder.create(name).withIcon(AllIcons.FileTypes.Archive);
+								lookup = TailTypeDecorator.withTail(lookup, TailType.SEMICOLON);
+								lookup = PrioritizedLookupElement.withPriority(lookup, -1);
+								result.addElement(lookup);
+							}
+						}
 					}
 				}
 			}

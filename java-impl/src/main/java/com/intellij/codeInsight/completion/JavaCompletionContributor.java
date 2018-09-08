@@ -264,7 +264,7 @@ public class JavaCompletionContributor extends CompletionContributor
 
 		if(JavaModuleCompletion.isModuleFile(parameters.getOriginalFile()))
 		{
-			JavaModuleCompletion.addVariants(position, result);
+			JavaModuleCompletion.addVariants(position, parameters, result);
 			result.stopHere();
 			return;
 		}

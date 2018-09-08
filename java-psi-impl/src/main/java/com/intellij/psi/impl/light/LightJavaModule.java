@@ -17,16 +17,22 @@ package com.intellij.psi.impl.light;
 
 import static com.intellij.util.ObjectUtils.notNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.openapi.util.text.StringUtil;
@@ -61,7 +67,7 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 		return myJarRoot;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public PsiDocComment getDocComment()
 	{
@@ -217,7 +223,7 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 			return myText;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public PsiPolyVariantReference getReference()
 		{
@@ -248,14 +254,14 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 			return Role.EXPORTS;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public PsiJavaCodeReferenceElement getPackageReference()
 		{
 			return null;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public String getPackageName()
 		{
@@ -295,6 +301,29 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 		});
 	}
 
+	@Nonnull
+	public static String moduleName(@Nonnull VirtualFile jarRoot)
+	{
+		VirtualFile manifest = jarRoot.findFileByRelativePath(JarFile.MANIFEST_NAME);
+		if(manifest != null)
+		{
+			try (InputStream stream = manifest.getInputStream())
+			{
+				String claimed = new Manifest(stream).getMainAttributes().getValue("Automatic-Module-Name");
+				if(claimed != null)
+				{
+					return claimed;
+				}
+			}
+			catch(IOException e)
+			{
+				Logger.getInstance(LightJavaModule.class).warn(e);
+			}
+		}
+
+		return moduleName(jarRoot.getNameWithoutExtension());
+	}
+
 	/**
 	 * Implements a name deriving for  automatic modules as described in ModuleFinder.of(Path...) method documentation.
 	 *
@@ -312,13 +341,11 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 			name = name.substring(0, m.start());
 		}
 
-		// For the module name, then any trailing digits and dots are removed ...
-		name = Patterns.TAIL_VERSION.matcher(name).replaceFirst("");
-		// ... all non-alphanumeric characters ([^A-Za-z0-9]) are replaced with a dot (".") ...
+		// All non-alphanumeric characters ([^A-Za-z0-9]) are replaced with a dot (".") ...
 		name = Patterns.NON_NAME.matcher(name).replaceAll(".");
 		// ... all repeating dots are replaced with one dot ...
 		name = Patterns.DOT_SEQUENCE.matcher(name).replaceAll(".");
-		// ... and all leading and trailing dots are removed
+		// ... and all leading and trailing dots are removed.
 		name = StringUtil.trimLeading(StringUtil.trimTrailing(name, '.'), '.');
 
 		return name;
@@ -327,7 +354,6 @@ public class LightJavaModule extends LightElement implements PsiJavaModule
 	private static class Patterns
 	{
 		private static final Pattern VERSION = Pattern.compile("-(\\d+(\\.|$))");
-		private static final Pattern TAIL_VERSION = Pattern.compile("[0-9.]+$");
 		private static final Pattern NON_NAME = Pattern.compile("[^A-Za-z0-9]");
 		private static final Pattern DOT_SEQUENCE = Pattern.compile("\\.{2,}");
 	}

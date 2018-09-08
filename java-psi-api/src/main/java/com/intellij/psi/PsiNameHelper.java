@@ -25,8 +25,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 
 /**
@@ -139,8 +141,8 @@ public abstract class PsiNameHelper
 
 	@Nonnull
 	public static String getPresentableText(@javax.annotation.Nullable String refName,
-			@Nonnull PsiAnnotation[] annotations,
-			@Nonnull PsiType[] types)
+											@Nonnull PsiAnnotation[] annotations,
+											@Nonnull PsiType[] types)
 	{
 		if(types.length == 0 && annotations.length == 0)
 		{
@@ -318,9 +320,9 @@ public abstract class PsiNameHelper
 	}
 
 	public static void appendTypeArgs(@Nonnull StringBuilder sb,
-			@Nonnull PsiType[] types,
-			boolean canonical,
-			boolean annotated)
+									  @Nonnull PsiType[] types,
+									  boolean canonical,
+									  boolean annotated)
 	{
 		if(types.length == 0)
 		{
@@ -349,15 +351,15 @@ public abstract class PsiNameHelper
 	}
 
 	public static boolean appendAnnotations(@Nonnull StringBuilder sb,
-			@Nonnull PsiAnnotation[] annotations,
-			boolean canonical)
+											@Nonnull PsiAnnotation[] annotations,
+											boolean canonical)
 	{
 		return appendAnnotations(sb, Arrays.asList(annotations), canonical);
 	}
 
 	public static boolean appendAnnotations(@Nonnull StringBuilder sb,
-			@Nonnull List<PsiAnnotation> annotations,
-			boolean canonical)
+											@Nonnull List<PsiAnnotation> annotations,
+											boolean canonical)
 	{
 		boolean updated = false;
 		for(PsiAnnotation annotation : annotations)
@@ -382,5 +384,12 @@ public abstract class PsiNameHelper
 			}
 		}
 		return updated;
+	}
+
+	public static boolean isValidModuleName(@Nonnull String name, @Nonnull PsiElement context)
+	{
+		PsiNameHelper helper = getInstance(context.getProject());
+		LanguageLevel level = PsiUtil.getLanguageLevel(context);
+		return StringUtil.split(name, ".", true, false).stream().allMatch(part -> helper.isIdentifier(part, level));
 	}
 }
