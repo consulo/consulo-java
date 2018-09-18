@@ -341,8 +341,15 @@ public class TestDiscoveryIndex implements Disposable
 	@Override
 	public void dispose()
 	{
-		myLocalTestRunDataController.dispose();
-		myRemoteTestRunDataController.dispose();
+		if(myLocalTestRunDataController != null)
+		{
+			myLocalTestRunDataController.dispose();
+		}
+
+		if(myRemoteTestRunDataController != null)
+		{
+			myRemoteTestRunDataController.dispose();
+		}
 	}
 
 	public void updateFromTestTrace(@Nonnull File file, @javax.annotation.Nullable final String moduleName, @Nonnull final String frameworkPrefix) throws IOException
