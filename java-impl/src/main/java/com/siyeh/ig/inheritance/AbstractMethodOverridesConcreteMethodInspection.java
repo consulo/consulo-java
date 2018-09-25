@@ -17,7 +17,7 @@ package com.siyeh.ig.inheritance;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
@@ -75,7 +75,7 @@ public class AbstractMethodOverridesConcreteMethodInspection
         }
         final String superClassName = superClass.getQualifiedName();
         if (!superClass.isInterface() &&
-            !CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName) &&
+            !JavaClassNames.JAVA_LANG_OBJECT.equals(superClassName) &&
             !superMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
           registerMethodError(method);
           return;

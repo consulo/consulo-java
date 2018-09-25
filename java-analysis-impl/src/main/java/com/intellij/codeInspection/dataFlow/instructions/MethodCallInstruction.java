@@ -33,7 +33,7 @@ import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.codeInspection.dataFlow.SpecialField;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.psi.*;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 
 
@@ -86,7 +86,7 @@ public class MethodCallInstruction extends Instruction
 		myContext = reference;
 		myMethodType = MethodType.METHOD_REFERENCE_CALL;
 		JavaResolveResult resolveResult = reference.advancedResolve(false);
-		myTargetMethod = ObjectUtils.tryCast(resolveResult.getElement(), PsiMethod.class);
+		myTargetMethod = ObjectUtil.tryCast(resolveResult.getElement(), PsiMethod.class);
 		myContracts = Collections.unmodifiableList(contracts);
 		myArgCount = myTargetMethod == null ? 0 : myTargetMethod.getParameterList().getParametersCount();
 		if(myTargetMethod == null)

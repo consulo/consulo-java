@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -47,22 +48,22 @@ public class AutoBoxingInspection extends BaseInspection {
   @NonNls static final Map<String, String> s_boxingClasses = new HashMap<String, String>(8);
 
   static {
-    s_boxingClasses.put("byte", CommonClassNames.JAVA_LANG_BYTE);
-    s_boxingClasses.put("short", CommonClassNames.JAVA_LANG_SHORT);
-    s_boxingClasses.put("int", CommonClassNames.JAVA_LANG_INTEGER);
-    s_boxingClasses.put("long", CommonClassNames.JAVA_LANG_LONG);
-    s_boxingClasses.put("float", CommonClassNames.JAVA_LANG_FLOAT);
-    s_boxingClasses.put("double", CommonClassNames.JAVA_LANG_DOUBLE);
-    s_boxingClasses.put("boolean", CommonClassNames.JAVA_LANG_BOOLEAN);
-    s_boxingClasses.put("char", CommonClassNames.JAVA_LANG_CHARACTER);
+    s_boxingClasses.put("byte", JavaClassNames.JAVA_LANG_BYTE);
+    s_boxingClasses.put("short", JavaClassNames.JAVA_LANG_SHORT);
+    s_boxingClasses.put("int", JavaClassNames.JAVA_LANG_INTEGER);
+    s_boxingClasses.put("long", JavaClassNames.JAVA_LANG_LONG);
+    s_boxingClasses.put("float", JavaClassNames.JAVA_LANG_FLOAT);
+    s_boxingClasses.put("double", JavaClassNames.JAVA_LANG_DOUBLE);
+    s_boxingClasses.put("boolean", JavaClassNames.JAVA_LANG_BOOLEAN);
+    s_boxingClasses.put("char", JavaClassNames.JAVA_LANG_CHARACTER);
   }
 
   @NonNls static final Set<String> convertableBoxedClassNames = new HashSet<String>();
 
   static {
-    convertableBoxedClassNames.add(CommonClassNames.JAVA_LANG_BYTE);
-    convertableBoxedClassNames.add(CommonClassNames.JAVA_LANG_CHARACTER);
-    convertableBoxedClassNames.add(CommonClassNames.JAVA_LANG_SHORT);
+    convertableBoxedClassNames.add(JavaClassNames.JAVA_LANG_BYTE);
+    convertableBoxedClassNames.add(JavaClassNames.JAVA_LANG_CHARACTER);
+    convertableBoxedClassNames.add(JavaClassNames.JAVA_LANG_SHORT);
   }
 
   @Override
@@ -157,44 +158,44 @@ public class AutoBoxingInspection extends BaseInspection {
       if (qualifierExpression == null) {
         return false;
       }
-      if (classToConstruct.equals(CommonClassNames.JAVA_LANG_INTEGER)) {
-        if (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_INTEGER, PsiType.INT, "intValue")) {
+      if (classToConstruct.equals(JavaClassNames.JAVA_LANG_INTEGER)) {
+        if (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_INTEGER, PsiType.INT, "intValue")) {
           expression.replace(qualifierExpression);
           return true;
         }
       }
-      else if (classToConstruct.equals(CommonClassNames.JAVA_LANG_SHORT)) {
-        if (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_SHORT, PsiType.SHORT, "shortValue")) {
+      else if (classToConstruct.equals(JavaClassNames.JAVA_LANG_SHORT)) {
+        if (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_SHORT, PsiType.SHORT, "shortValue")) {
           expression.replace(qualifierExpression);
           return true;
         }
       }
-      else if (classToConstruct.equals(CommonClassNames.JAVA_LANG_BYTE)) {
-        if (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_BYTE, PsiType.BYTE, "byteValue")) {
+      else if (classToConstruct.equals(JavaClassNames.JAVA_LANG_BYTE)) {
+        if (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_BYTE, PsiType.BYTE, "byteValue")) {
           expression.replace(qualifierExpression);
           return true;
         }
       }
-      else if (classToConstruct.equals(CommonClassNames.JAVA_LANG_CHARACTER)) {
-        if (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_CHARACTER, PsiType.CHAR, "charValue")) {
+      else if (classToConstruct.equals(JavaClassNames.JAVA_LANG_CHARACTER)) {
+        if (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_CHARACTER, PsiType.CHAR, "charValue")) {
           expression.replace(qualifierExpression);
           return true;
         }
       }
-      else if (classToConstruct.equals(CommonClassNames.JAVA_LANG_LONG)) {
-        if (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_LONG, PsiType.LONG, "longValue")) {
+      else if (classToConstruct.equals(JavaClassNames.JAVA_LANG_LONG)) {
+        if (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_LONG, PsiType.LONG, "longValue")) {
           expression.replace(qualifierExpression);
           return true;
         }
       }
-      else if (classToConstruct.equals(CommonClassNames.JAVA_LANG_FLOAT)) {
-        if (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_FLOAT, PsiType.FLOAT, "floatValue")) {
+      else if (classToConstruct.equals(JavaClassNames.JAVA_LANG_FLOAT)) {
+        if (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_FLOAT, PsiType.FLOAT, "floatValue")) {
           expression.replace(qualifierExpression);
           return true;
         }
       }
-      else if (classToConstruct.equals(CommonClassNames.JAVA_LANG_DOUBLE)) {
-        if (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_DOUBLE, PsiType.DOUBLE, "doubleValue")) {
+      else if (classToConstruct.equals(JavaClassNames.JAVA_LANG_DOUBLE)) {
+        if (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_DOUBLE, PsiType.DOUBLE, "doubleValue")) {
           expression.replace(qualifierExpression);
           return true;
         }
@@ -344,7 +345,7 @@ public class AutoBoxingInspection extends BaseInspection {
         return false;
       }
       final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      return TypeUtils.expressionHasTypeOrSubtype(qualifier, CommonClassNames.JAVA_UTIL_COLLECTION, CommonClassNames.JAVA_UTIL_MAP) != null;
+      return TypeUtils.expressionHasTypeOrSubtype(qualifier, JavaClassNames.JAVA_UTIL_COLLECTION, JavaClassNames.JAVA_UTIL_MAP) != null;
     }
   }
 }

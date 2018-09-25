@@ -21,6 +21,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -73,7 +74,7 @@ public class ReplaceAllDotInspection extends BaseInspection {
         return;
       }
       final String canonicalText = argumentType.getCanonicalText();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
         return;
       }
       final String argValue =
@@ -91,7 +92,7 @@ public class ReplaceAllDotInspection extends BaseInspection {
         return;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
         return;
       }
       registerMethodCallError(expression);

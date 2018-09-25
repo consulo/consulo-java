@@ -41,7 +41,7 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -309,7 +309,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 			private PsiTypeElementImpl getParentTypeElement()
 			{
 				PsiTypeElement typeElement = parent instanceof PsiMethod ? ((PsiMethod) parent).getReturnTypeElement() : ((PsiVariable) parent).getTypeElement();
-				return (PsiTypeElementImpl) ObjectUtils.assertNotNull(typeElement);
+				return (PsiTypeElementImpl) ObjectUtil.assertNotNull(typeElement);
 			}
 		};
 	}

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl;
 
-import static com.intellij.util.ObjectUtils.assertNotNull;
+import static com.intellij.util.ObjectUtil.assertNotNull;
 
 import gnu.trove.TObjectHashingStrategy;
 

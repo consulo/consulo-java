@@ -56,7 +56,7 @@ import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.EventDispatcher;
 import com.intellij.util.IncorrectOperationException;
@@ -84,7 +84,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 	private final ToStringRenderer myToStringRenderer = new ToStringRenderer();
 	// alternate collections
 	private final NodeRenderer[] myAlternateCollectionRenderers = new NodeRenderer[]{
-			createCompoundReferenceRenderer("Map", CommonClassNames.JAVA_UTIL_MAP, createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("entrySet().toArray()",
+			createCompoundReferenceRenderer("Map", JavaClassNames.JAVA_UTIL_MAP, createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("entrySet().toArray()",
 					"!isEmpty" + "()")),
 			createCompoundReferenceRenderer("Map.Entry", "java.util.Map$Entry", new MapEntryLabelRenderer()/*createLabelRenderer(null, "\" \" + getKey() + \" -> \" + getValue()", null)*/,
 					createEnumerationChildrenRenderer(new String[][]{
@@ -389,11 +389,11 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 		}
 		else if(rendererId.equals(CompoundNodeRenderer.UNIQUE_ID) || rendererId.equals(REFERENCE_RENDERER))
 		{
-			return createCompoundReferenceRenderer("unnamed", CommonClassNames.JAVA_LANG_OBJECT, null, null);
+			return createCompoundReferenceRenderer("unnamed", JavaClassNames.JAVA_LANG_OBJECT, null, null);
 		}
 		else if(rendererId.equals(CompoundTypeRenderer.UNIQUE_ID))
 		{
-			return createCompoundTypeRenderer("unnamed", CommonClassNames.JAVA_LANG_OBJECT, null, null);
+			return createCompoundTypeRenderer("unnamed", JavaClassNames.JAVA_LANG_OBJECT, null, null);
 		}
 		return null;
 	}
@@ -575,7 +575,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 		public ListObjectRenderer(NodeRendererSettings rendererSettings)
 		{
 			super(rendererSettings, "List", createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("toArray()", "!isEmpty()"));
-			setClassName(CommonClassNames.JAVA_UTIL_LIST);
+			setClassName(JavaClassNames.JAVA_UTIL_LIST);
 		}
 
 		@Override

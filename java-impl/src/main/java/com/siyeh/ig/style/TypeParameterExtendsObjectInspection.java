@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class TypeParameterExtendsObjectInspection extends BaseInspection {
 
@@ -126,7 +127,7 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
         return;
       }
       final PsiClassType extendsType = extendsListTypes[0];
-      if (!extendsType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
+      if (!extendsType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
         return;
       }
       final PsiIdentifier nameIdentifier = parameter.getNameIdentifier();

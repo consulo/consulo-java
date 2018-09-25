@@ -18,7 +18,7 @@ package com.intellij.refactoring;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
@@ -59,7 +59,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testIDEADEV3678() throws Exception {
-    doTest(new MockIntroduceVariableHandler("component", true, true, true, CommonClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("component", true, true, true, JavaClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testIDEADEV13369() throws Exception {
@@ -71,7 +71,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testAnonymousClass1() throws Exception {
-    doTest(new MockIntroduceVariableHandler("runnable", false, false, false, CommonClassNames.JAVA_LANG_RUNNABLE));
+    doTest(new MockIntroduceVariableHandler("runnable", false, false, false, JavaClassNames.JAVA_LANG_RUNNABLE));
   }
 
   public void testAnonymousClass2() throws Exception {
@@ -83,7 +83,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testMethodCall() throws Exception {
-    doTest(new MockIntroduceVariableHandler("temp", true, true, true, CommonClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("temp", true, true, true, JavaClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testMethodCallInSwitch() throws Exception {
@@ -135,7 +135,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testSCR22718() throws Exception {
-    doTest(new MockIntroduceVariableHandler("object", true, true, false, CommonClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("object", true, true, false, JavaClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testSCR26075() throws Exception {
@@ -381,7 +381,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testBeforeVoidStatement() throws Exception {
-    doTest(new MockIntroduceVariableHandler("c", false, false, false, CommonClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("c", false, false, false, JavaClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testLambdaExpr() throws Exception {

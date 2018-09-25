@@ -75,13 +75,14 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import one.util.streamex.StreamEx;
 
 @SuppressWarnings("ConditionalExpressionWithIdenticalBranches")
@@ -865,7 +866,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		}
 
 		// no warnings for Void methods, where only null can be possibly returned
-		if(returnType == null || returnType.equalsToText(CommonClassNames.JAVA_LANG_VOID))
+		if(returnType == null || returnType.equalsToText(JavaClassNames.JAVA_LANG_VOID))
 		{
 			return;
 		}
@@ -1199,7 +1200,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		@Override
 		public DfaInstructionState[] visitMethodCall(MethodCallInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 		{
-			PsiMethodCallExpression call = ObjectUtils.tryCast(instruction.getCallExpression(), PsiMethodCallExpression.class);
+			PsiMethodCallExpression call = ObjectUtil.tryCast(instruction.getCallExpression(), PsiMethodCallExpression.class);
 			if(call != null)
 			{
 				String methodName = call.getMethodExpression().getReferenceName();
@@ -1246,7 +1247,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			{
 				return;
 			}
-			PsiMethodCallExpression call = ObjectUtils.tryCast(instruction.getCallExpression(), PsiMethodCallExpression.class);
+			PsiMethodCallExpression call = ObjectUtil.tryCast(instruction.getCallExpression(), PsiMethodCallExpression.class);
 			if(call == null || myBooleanCalls.get(call) == ThreeState.UNSURE)
 			{
 				return;

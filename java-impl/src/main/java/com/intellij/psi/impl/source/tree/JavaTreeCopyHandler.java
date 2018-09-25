@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,27 +34,33 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.JavaTreeCopyHandler");
 
+	private static final Key<Boolean> ALREADY_ESCAPED = new Key<>("ALREADY_ESCAPED");
+	private static final Key<Boolean> ESCAPEMENT_ENGAGED = new Key<>("ESCAPEMENT_ENGAGED");
+	private static final Key<Boolean> INTERFACE_MODIFIERS_FLAG_KEY = Key.create("INTERFACE_MODIFIERS_FLAG_KEY");
+
 	@Override
-	public TreeElement decodeInformation(TreeElement element, final Map<Object, Object> decodingState)
+	public TreeElement decodeInformation(TreeElement element, Map<Object, Object> decodingState)
 	{
 		boolean shallDecodeEscapedTexts = shallEncodeEscapedTexts(element, decodingState);
 		if(element instanceof CompositeElement)
 		{
-			final IElementType elementType = element.getElementType();
-			if(elementType == JavaElementType.JAVA_CODE_REFERENCE || elementType == JavaElementType.REFERENCE_EXPRESSION || elementType == JavaElementType.METHOD_REF_EXPRESSION)
+			IElementType elementType = element.getElementType();
+			if(elementType == JavaElementType.JAVA_CODE_REFERENCE ||
+					elementType == JavaElementType.REFERENCE_EXPRESSION ||
+					elementType == JavaElementType.METHOD_REF_EXPRESSION)
 			{
-				PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement) SourceTreeToPsiMap.treeElementToPsi(element);
-				final PsiClass refClass = element.getCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY);
+				PsiJavaCodeReferenceElement ref = SourceTreeToPsiMap.treeToPsiNotNull(element);
+				PsiClass refClass = element.getCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY);
 				if(refClass != null)
 				{
 					element.putCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY, null);
 
 					PsiManager manager = refClass.getManager();
 					JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(refClass.getProject());
-					PsiElement refElement1 = ref.resolve();
+					PsiElement refElement = ref.resolve();
 					try
 					{
-						if(refClass != refElement1 && !manager.areElementsEquivalent(refClass, refElement1))
+						if(refClass != refElement && !manager.areElementsEquivalent(refClass, refElement))
 						{
 							if(((CompositeElement) element).findChildByRole(ChildRole.QUALIFIER) == null)
 							{
@@ -76,23 +82,27 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 				}
 				else
 				{
-					final PsiMember refMember = element.getCopyableUserData(JavaTreeGenerator.REFERENCED_MEMBER_KEY);
+					PsiMember refMember = element.getCopyableUserData(JavaTreeGenerator.REFERENCED_MEMBER_KEY);
 					if(refMember != null)
 					{
 						LOG.assertTrue(ref instanceof PsiReferenceExpression);
 						element.putCopyableUserData(JavaTreeGenerator.REFERENCED_MEMBER_KEY, null);
-						PsiElement refElement1 = ref.resolve();
-						if(refMember != refElement1 && !refMember.getManager().areElementsEquivalent(refMember, refElement1))
+						PsiElement refElement = ref.resolve();
+						if(refMember != refElement && !refMember.getManager().areElementsEquivalent(refMember, refElement))
 						{
-							try
+							PsiClass containingClass = refMember.getContainingClass();
+							if(containingClass != null)
 							{
-								ref = (PsiJavaCodeReferenceElement) ((PsiReferenceExpression) ref).bindToElementViaStaticImport(refMember.getContainingClass());
+								try
+								{
+									ref = (PsiJavaCodeReferenceElement) ((PsiReferenceExpression) ref).bindToElementViaStaticImport(containingClass);
+								}
+								catch(IncorrectOperationException e)
+								{
+									// TODO[yole] ignore?
+								}
 							}
-							catch(IncorrectOperationException e)
-							{
-								// TODO[yole] ignore?
-							}
-							return (TreeElement) SourceTreeToPsiMap.psiElementToTree(ref);
+							return SourceTreeToPsiMap.psiToTreeNotNull(ref);
 						}
 					}
 				}
@@ -104,14 +114,15 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 					element.putUserData(INTERFACE_MODIFIERS_FLAG_KEY, null);
 					try
 					{
-						PsiModifierList modifierList = (PsiModifierList) SourceTreeToPsiMap.treeElementToPsi(element);
+						PsiModifierList modifierList = SourceTreeToPsiMap.treeToPsiNotNull(element);
 						if(element.getTreeParent().getElementType() == JavaElementType.FIELD)
 						{
 							modifierList.setModifierProperty(PsiModifier.PUBLIC, true);
 							modifierList.setModifierProperty(PsiModifier.STATIC, true);
 							modifierList.setModifierProperty(PsiModifier.FINAL, true);
 						}
-						else if(element.getTreeParent().getElementType() == JavaElementType.METHOD || element.getTreeParent().getElementType() == JavaElementType.ANNOTATION_METHOD)
+						else if(element.getTreeParent().getElementType() == JavaElementType.METHOD ||
+								element.getTreeParent().getElementType() == JavaElementType.ANNOTATION_METHOD)
 						{
 							modifierList.setModifierProperty(PsiModifier.PUBLIC, true);
 							modifierList.setModifierProperty(PsiModifier.ABSTRACT, true);
@@ -128,8 +139,8 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 		{
 			if(!isInCData(element))
 			{
-				final String original = element.getText();
-				final String escaped = StringUtil.escapeXml(original);
+				String original = element.getText();
+				String escaped = StringUtil.escapeXml(original);
 				if(!Comparing.equal(original, escaped) && element.getCopyableUserData(ALREADY_ESCAPED) == null)
 				{
 					LeafElement copy = ((LeafElement) element).replaceWithText(escaped);
@@ -142,9 +153,6 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 		return null;
 	}
 
-	private static final Key<Boolean> ALREADY_ESCAPED = new Key<>("ALREADY_ESCAPED");
-	private static final Key<Boolean> ESCAPEMENT_ENGAGED = new Key<>("ESCAPEMENT_ENGAGED");
-
 	private static boolean conversionMayApply(ASTNode element)
 	{
 		PsiElement psi = element.getPsi();
@@ -153,49 +161,59 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 			return false;
 		}
 
-		/*final PsiFile file = psi.getContainingFile();
-		final Language baseLanguage = file.getViewProvider().getBaseLanguage();
-		return baseLanguage == StdLanguages.JSPX && file.getLanguage() != baseLanguage;*/
 		return false;
+		/*PsiFile file = psi.getContainingFile();
+		Language baseLanguage = file.getViewProvider().getBaseLanguage();
+		return baseLanguage == StdLanguages.JSPX && file.getLanguage() != baseLanguage;   */
 	}
 
-
 	@Override
-	public void encodeInformation(final TreeElement element, final ASTNode original, final Map<Object, Object> encodingState)
+	public void encodeInformation(TreeElement element, ASTNode original, Map<Object, Object> encodingState)
 	{
 		boolean shallEncodeEscapedTexts = shallEncodeEscapedTexts(original, encodingState);
 
 		if(original instanceof CompositeElement)
 		{
-			if(original.getElementType() == JavaElementType.JAVA_CODE_REFERENCE || original.getElementType() == JavaElementType.REFERENCE_EXPRESSION)
+			IElementType originalType = original.getElementType();
+			if(originalType == JavaElementType.JAVA_CODE_REFERENCE || originalType == JavaElementType.REFERENCE_EXPRESSION)
 			{
 				encodeInformationInRef(element, original);
 			}
-			else if(original.getElementType() == JavaElementType.MODIFIER_LIST && (original.getTreeParent().getElementType() == JavaElementType.FIELD || original.getTreeParent().getElementType() ==
-					JavaElementType.METHOD || original.getTreeParent().getElementType() == JavaElementType.ANNOTATION_METHOD) && original.getTreeParent().getTreeParent().getElementType() ==
-					JavaElementType.CLASS && (((PsiClass) SourceTreeToPsiMap.treeElementToPsi(original.getTreeParent().getTreeParent())).isInterface() || ((PsiClass) SourceTreeToPsiMap
-					.treeElementToPsi(original.getTreeParent().getTreeParent())).isAnnotationType()))
+			else if(originalType == JavaElementType.MODIFIER_LIST)
 			{
-				element.putUserData(INTERFACE_MODIFIERS_FLAG_KEY, Boolean.TRUE);
+				ASTNode parent = original.getTreeParent();
+				IElementType parentType = parent.getElementType();
+				if(parentType == JavaElementType.FIELD ||
+						parentType == JavaElementType.METHOD ||
+						parentType == JavaElementType.ANNOTATION_METHOD)
+				{
+					ASTNode grand = parent.getTreeParent();
+					if(grand.getElementType() == JavaElementType.CLASS &&
+							(SourceTreeToPsiMap.<PsiClass>treeToPsiNotNull(grand).isInterface() ||
+									SourceTreeToPsiMap.<PsiClass>treeToPsiNotNull(grand).isAnnotationType()))
+					{
+						element.putUserData(INTERFACE_MODIFIERS_FLAG_KEY, Boolean.TRUE);
+					}
+				}
 			}
 		}
-		else if(shallEncodeEscapedTexts && original instanceof LeafElement && !(original instanceof OuterLanguageElement))
+		else if(shallEncodeEscapedTexts &&
+				original instanceof LeafElement &&
+				!(original instanceof OuterLanguageElement) &&
+				!isInCData(original))
 		{
-			if(!isInCData(original))
+			String originalText = element.getText();
+			String unescapedText = StringUtil.unescapeXml(originalText);
+			if(!Comparing.equal(originalText, unescapedText))
 			{
-				final String originalText = element.getText();
-				final String unescapedText = StringUtil.unescapeXml(originalText);
-				if(!Comparing.equal(originalText, unescapedText))
-				{
-					LeafElement replaced = ((LeafElement) element).rawReplaceWithText(unescapedText);
-					element.putCopyableUserData(ALREADY_ESCAPED, null);
-					replaced.putCopyableUserData(ALREADY_ESCAPED, null);
-				}
+				LeafElement replaced = ((LeafElement) element).rawReplaceWithText(unescapedText);
+				element.putCopyableUserData(ALREADY_ESCAPED, null);
+				replaced.putCopyableUserData(ALREADY_ESCAPED, null);
 			}
 		}
 	}
 
-	private static Boolean shallEncodeEscapedTexts(final ASTNode original, final Map<Object, Object> encodingState)
+	private static Boolean shallEncodeEscapedTexts(ASTNode original, Map<Object, Object> encodingState)
 	{
 		Boolean shallEncodeEscapedTexts = (Boolean) encodingState.get(ESCAPEMENT_ENGAGED);
 		if(shallEncodeEscapedTexts == null)
@@ -213,7 +231,7 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 		{
 			if(leaf instanceof OuterLanguageElement)
 			{
-				return leaf.getText().indexOf("<![CDATA[") >= 0;
+				return leaf.getText().contains("<![CDATA[");
 			}
 
 			leaf = TreeUtil.prevLeaf(leaf);
@@ -224,51 +242,53 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 
 	private static void encodeInformationInRef(TreeElement ref, ASTNode original)
 	{
-		if(original.getElementType() == JavaElementType.REFERENCE_EXPRESSION)
+		IElementType originalType = original.getElementType();
+		if(originalType == JavaElementType.REFERENCE_EXPRESSION)
 		{
-			final PsiJavaCodeReferenceElement javaRefElement = (PsiJavaCodeReferenceElement) SourceTreeToPsiMap.treeElementToPsi(original);
-			assert javaRefElement != null;
-			final JavaResolveResult resolveResult = javaRefElement.advancedResolve(false);
-			final PsiElement target = resolveResult.getElement();
-			if(target instanceof PsiClass && (original.getTreeParent().getElementType() == JavaElementType.REFERENCE_EXPRESSION || original.getTreeParent().getElementType() == JavaElementType
-					.METHOD_REF_EXPRESSION))
+			PsiJavaCodeReferenceElement javaRefElement = SourceTreeToPsiMap.treeToPsiNotNull(original);
+			JavaResolveResult resolveResult = javaRefElement.advancedResolve(false);
+			PsiElement target = resolveResult.getElement();
+			if(target instanceof PsiClass &&
+					(original.getTreeParent().getElementType() == JavaElementType.REFERENCE_EXPRESSION ||
+							original.getTreeParent().getElementType() == JavaElementType.METHOD_REF_EXPRESSION))
 			{
 				ref.putCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY, (PsiClass) target);
 			}
-			else if((target instanceof PsiMethod || target instanceof PsiField) && ((PsiMember) target).hasModifierProperty(PsiModifier.STATIC) && resolveResult.getCurrentFileResolveScope()
-					instanceof PsiImportStaticStatement)
+			else if((target instanceof PsiMethod || target instanceof PsiField) &&
+					((PsiMember) target).hasModifierProperty(PsiModifier.STATIC) &&
+					resolveResult.getCurrentFileResolveScope() instanceof PsiImportStaticStatement)
 			{
 				ref.putCopyableUserData(JavaTreeGenerator.REFERENCED_MEMBER_KEY, (PsiMember) target);
 			}
 		}
-		else if(original.getElementType() == JavaElementType.JAVA_CODE_REFERENCE)
+		else if(originalType == JavaElementType.JAVA_CODE_REFERENCE)
 		{
-			switch(((PsiJavaCodeReferenceElementImpl) original).getKind(((PsiJavaCodeReferenceElementImpl) original).getContainingFile()))
+			PsiJavaCodeReferenceElementImpl.Kind
+					kind = ((PsiJavaCodeReferenceElementImpl) original).getKindEnum(((PsiJavaCodeReferenceElementImpl) original).getContainingFile());
+			switch(kind)
 			{
-				case PsiJavaCodeReferenceElementImpl.CLASS_NAME_KIND:
-				case PsiJavaCodeReferenceElementImpl.CLASS_OR_PACKAGE_NAME_KIND:
-				case PsiJavaCodeReferenceElementImpl.CLASS_IN_QUALIFIED_NEW_KIND:
-					final PsiElement target = SourceTreeToPsiMap.<PsiJavaCodeReferenceElement>treeToPsiNotNull(original).resolve();
+				case CLASS_NAME_KIND:
+				case CLASS_OR_PACKAGE_NAME_KIND:
+				case CLASS_IN_QUALIFIED_NEW_KIND:
+					PsiElement target = SourceTreeToPsiMap.<PsiJavaCodeReferenceElement>treeToPsiNotNull(original).resolve();
 					if(target instanceof PsiClass)
 					{
 						ref.putCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY, (PsiClass) target);
 					}
 					break;
 
-				case PsiJavaCodeReferenceElementImpl.PACKAGE_NAME_KIND:
-				case PsiJavaCodeReferenceElementImpl.CLASS_FQ_NAME_KIND:
-				case PsiJavaCodeReferenceElementImpl.CLASS_FQ_OR_PACKAGE_NAME_KIND:
+				case PACKAGE_NAME_KIND:
+				case CLASS_FQ_NAME_KIND:
+				case CLASS_FQ_OR_PACKAGE_NAME_KIND:
 					break;
 
 				default:
-					LOG.assertTrue(false);
+					LOG.error("Unknown kind: " + kind);
 			}
 		}
 		else
 		{
-			LOG.error("Wrong element type: " + original.getElementType());
+			LOG.error("Wrong element type: " + originalType);
 		}
 	}
-
-	private static final Key<Boolean> INTERFACE_MODIFIERS_FLAG_KEY = Key.create("INTERFACE_MODIFIERS_FLAG_KEY");
 }

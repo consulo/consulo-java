@@ -19,7 +19,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteral;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import javax.annotation.Nonnull;
 
 /**
@@ -30,7 +30,7 @@ public class JamSimpleReference<T> extends PsiReferenceBase<PsiLiteral> {
   private final JamSimpleReferenceConverter<T> myConverter;
 
   public JamSimpleReference(JamStringAttributeElement<T> context) {
-    super(ObjectUtils.assertNotNull(context.getPsiLiteral()));
+    super(ObjectUtil.assertNotNull(context.getPsiLiteral()));
     myContext = context;
     myConverter = (JamSimpleReferenceConverter<T>)context.getConverter();
   }

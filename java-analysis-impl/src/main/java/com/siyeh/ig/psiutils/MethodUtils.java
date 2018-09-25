@@ -33,6 +33,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Query;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.java.module.util.JavaClassNames;
 
 public class MethodUtils
 {
@@ -44,14 +45,14 @@ public class MethodUtils
 	@Contract("null -> false")
 	public static boolean isComparatorCompare(@javax.annotation.Nullable PsiMethod method)
 	{
-		return method != null && methodMatches(method, CommonClassNames.JAVA_UTIL_COMPARATOR, PsiType.INT, "compare", null, null);
+		return method != null && methodMatches(method, JavaClassNames.JAVA_UTIL_COMPARATOR, PsiType.INT, "compare", null, null);
 	}
 
 	@Contract("null -> false")
 	public static boolean isCompareTo(@javax.annotation.Nullable PsiMethod method)
 	{
 		return method != null && methodMatches(method, null, PsiType.INT, HardcodedMethodConstants.COMPARE_TO, PsiType.NULL) && InheritanceUtil.isInheritor(method.getContainingClass(),
-				CommonClassNames.JAVA_LANG_COMPARABLE);
+				JavaClassNames.JAVA_LANG_COMPARABLE);
 	}
 
 	@Contract("null -> false")
@@ -461,6 +462,6 @@ public class MethodUtils
 			return false;
 		}
 		PsiClass aClass = method.getContainingClass();
-		return aClass != null && CommonClassNames.JAVA_LANG_STRING.equals(aClass.getQualifiedName());
+		return aClass != null && JavaClassNames.JAVA_LANG_STRING.equals(aClass.getQualifiedName());
 	}
 }

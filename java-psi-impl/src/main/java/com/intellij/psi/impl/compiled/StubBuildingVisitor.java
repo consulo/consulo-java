@@ -20,9 +20,8 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiNameHelper;
-import com.intellij.psi.PsiReferenceList;
 import com.intellij.psi.impl.cache.ModifierFlags;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.impl.java.stubs.*;
@@ -138,7 +137,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		{
 			if(info.interfaceNames != null && myResult.isAnnotationType())
 			{
-				info.interfaceNames.remove(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION);
+				info.interfaceNames.remove(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION);
 			}
 			newReferenceList(JavaStubElementTypes.EXTENDS_LIST, myResult, ArrayUtil.toStringArray(info.interfaceNames));
 			newReferenceList(JavaStubElementTypes.IMPLEMENTS_LIST, myResult, ArrayUtil.EMPTY_STRING_ARRAY);
@@ -502,7 +501,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		boolean isInnerClassConstructor = isConstructor && myParent instanceof PsiClassStub && !isSet(myModList.getModifiersMask(), Opcodes.ACC_STATIC) && !isGroovyClosure(canonicalMethodName);
 
 		List<String> args = info.argTypes;
-		if(!generic && isEnumConstructor && args.size() >= 2 && CommonClassNames.JAVA_LANG_STRING.equals(args.get(0)) && "int".equals(args.get(1)))
+		if(!generic && isEnumConstructor && args.size() >= 2 && JavaClassNames.JAVA_LANG_STRING.equals(args.get(0)) && "int".equals(args.get(1)))
 		{
 			// omit synthetic enum constructor parameters
 			args = args.subList(2, args.size());

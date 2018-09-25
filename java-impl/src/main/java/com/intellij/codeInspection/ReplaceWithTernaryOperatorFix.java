@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.codeInsight.JavaInspectionsBundle;
 
@@ -135,7 +135,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 		@Override
 		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
-			PsiMethodReferenceExpression element = ObjectUtils.tryCast(descriptor.getPsiElement(), PsiMethodReferenceExpression.class);
+			PsiMethodReferenceExpression element = ObjectUtil.tryCast(descriptor.getPsiElement(), PsiMethodReferenceExpression.class);
 			if(element == null)
 			{
 				return;

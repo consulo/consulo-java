@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_LIST;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_SET;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_LIST;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_SET;
 import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_STREAM_COLLECTORS;
 import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_STREAM_STREAM;
 

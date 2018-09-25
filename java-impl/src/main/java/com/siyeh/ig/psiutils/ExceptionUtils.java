@@ -17,6 +17,8 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,10 +33,10 @@ public class ExceptionUtils {
   private static final Set<String> s_genericExceptionTypes = new HashSet<String>(4);
 
   static {
-    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_THROWABLE);
-    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_EXCEPTION);
-    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION);
-    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_ERROR);
+    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_THROWABLE);
+    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_EXCEPTION);
+    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION);
+    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_ERROR);
   }
 
   @Nonnull

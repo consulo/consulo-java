@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Spacing;
 import com.intellij.formatting.Wrap;
@@ -39,9 +41,15 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 {
 	private final InjectedLanguageBlockBuilder myInjectedBlockBuilder;
 
-	public CommentWithInjectionBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	public CommentWithInjectionBlock(ASTNode node,
+									 Wrap wrap,
+									 Alignment alignment,
+									 Indent indent,
+									 CommonCodeStyleSettings settings,
+									 JavaCodeStyleSettings javaSettings,
+									 @Nonnull FormattingMode formattingMode)
 	{
-		super(node, wrap, alignment, indent, settings, javaSettings);
+		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 		myInjectedBlockBuilder = new JavaCommentInjectedBlockBuilder();
 	}
 

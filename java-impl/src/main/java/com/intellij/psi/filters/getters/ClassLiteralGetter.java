@@ -26,6 +26,8 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 public class ClassLiteralGetter {
@@ -33,11 +35,11 @@ public class ClassLiteralGetter {
   public static void addCompletions(@Nonnull final JavaSmartCompletionParameters parameters,
                                     @Nonnull Consumer<LookupElement> result, final PrefixMatcher matcher) {
     PsiType expectedType = parameters.getExpectedType();
-    if (!InheritanceUtil.isInheritor(expectedType, CommonClassNames.JAVA_LANG_CLASS)) {
+    if (!InheritanceUtil.isInheritor(expectedType, JavaClassNames.JAVA_LANG_CLASS)) {
       return;
     }
 
-    PsiType classParameter = PsiUtil.substituteTypeParameter(expectedType, CommonClassNames.JAVA_LANG_CLASS, 0, false);
+    PsiType classParameter = PsiUtil.substituteTypeParameter(expectedType, JavaClassNames.JAVA_LANG_CLASS, 0, false);
 
     boolean addInheritors = false;
     PsiElement position = parameters.getPosition();
@@ -62,7 +64,7 @@ public class ClassLiteralGetter {
                                                 final PsiType classParameter,
                                                 final Consumer<LookupElement> result, PrefixMatcher matcher) {
     final String canonicalText = classParameter.getCanonicalText();
-    if (CommonClassNames.JAVA_LANG_OBJECT.equals(canonicalText) && StringUtil.isEmpty(matcher.getPrefix())) {
+    if (JavaClassNames.JAVA_LANG_OBJECT.equals(canonicalText) && StringUtil.isEmpty(matcher.getPrefix())) {
       return;
     }
 

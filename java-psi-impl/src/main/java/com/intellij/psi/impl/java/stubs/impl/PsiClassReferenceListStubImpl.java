@@ -30,7 +30,7 @@ import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 /**
  * @author max
@@ -43,7 +43,7 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 	public PsiClassReferenceListStubImpl(@Nonnull JavaClassReferenceListElementType type, StubElement parent, @Nonnull String[] names)
 	{
 		super(parent, type);
-		ObjectUtils.assertAllElementsNotNull(names);
+		ObjectUtil.assertAllElementsNotNull(names);
 		myNames = names;
 	}
 
@@ -83,7 +83,7 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 				try
 				{
 					final PsiJavaCodeReferenceElement ref = factory.createReferenceFromText(myNames[i], psi);
-					((PsiJavaCodeReferenceElementImpl) ref).setKindWhenDummy(PsiJavaCodeReferenceElementImpl.CLASS_NAME_KIND);
+					((PsiJavaCodeReferenceElementImpl) ref).setKindWhenDummy(PsiJavaCodeReferenceElementImpl.Kind.CLASS_NAME_KIND);
 					types[i] = factory.createType(ref);
 				}
 				catch(IncorrectOperationException e)

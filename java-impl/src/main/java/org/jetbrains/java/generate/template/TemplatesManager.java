@@ -40,7 +40,7 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;
@@ -149,7 +149,7 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
 	public static PsiType createFieldListElementType(Project project)
 	{
 		final PsiType classType = createElementType(project, FieldElement.class);
-		final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, GlobalSearchScope.allScope(project));
+		final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_UTIL_LIST, GlobalSearchScope.allScope(project));
 		return listClass != null ? JavaPsiFacade.getElementFactory(project).createType(listClass, classType) : PsiType.NULL;
 	}
 

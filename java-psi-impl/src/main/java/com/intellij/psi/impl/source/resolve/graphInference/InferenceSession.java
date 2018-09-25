@@ -45,6 +45,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.Producer;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * User: anna
@@ -1318,11 +1319,11 @@ public class InferenceSession
 		boolean commonThrowable = false;
 		for(PsiType upperBound : upperBounds)
 		{
-			if(upperBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || !isProperType(upperBound))
+			if(upperBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) || !isProperType(upperBound))
 			{
 				continue;
 			}
-			if(upperBound.equalsToText(CommonClassNames.JAVA_LANG_EXCEPTION) || upperBound.equalsToText(CommonClassNames.JAVA_LANG_THROWABLE))
+			if(upperBound.equalsToText(JavaClassNames.JAVA_LANG_EXCEPTION) || upperBound.equalsToText(JavaClassNames.JAVA_LANG_THROWABLE))
 			{
 				commonThrowable = true;
 			}

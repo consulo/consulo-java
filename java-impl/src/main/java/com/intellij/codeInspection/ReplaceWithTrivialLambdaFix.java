@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMethodReferenceExpression;
 import com.intellij.refactoring.util.LambdaRefactoringUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import consulo.java.codeInsight.JavaInspectionsBundle;
 
 /**
@@ -57,7 +57,7 @@ public class ReplaceWithTrivialLambdaFix implements LocalQuickFix
 	@Override
 	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
-		PsiMethodReferenceExpression methodRef = ObjectUtils.tryCast(descriptor.getStartElement(), PsiMethodReferenceExpression.class);
+		PsiMethodReferenceExpression methodRef = ObjectUtil.tryCast(descriptor.getStartElement(), PsiMethodReferenceExpression.class);
 		if(methodRef == null)
 		{
 			return;

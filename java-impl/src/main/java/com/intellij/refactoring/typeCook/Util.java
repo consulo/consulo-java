@@ -21,6 +21,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.typeCook.deductive.PsiTypeVariableFactory;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -82,7 +83,7 @@ public class Util {
             return null;
           }
 
-          if (pp == Bottom.BOTTOM || (objectBottom && pp.getCanonicalText().equals(CommonClassNames.JAVA_LANG_OBJECT))) {
+          if (pp == Bottom.BOTTOM || (objectBottom && pp.getCanonicalText().equals(JavaClassNames.JAVA_LANG_OBJECT))) {
             anyBottom = true;
           }
 
@@ -275,7 +276,7 @@ public class Util {
                                                  final PsiTypeVariableFactory factory,
                                                  final boolean upper,
                                                  final PsiElement context) {
-    if (t == null || (upper && t.getCanonicalText().equals(CommonClassNames.JAVA_LANG_OBJECT))) {
+    if (t == null || (upper && t.getCanonicalText().equals(JavaClassNames.JAVA_LANG_OBJECT))) {
       return factory.create(context);
     }
 

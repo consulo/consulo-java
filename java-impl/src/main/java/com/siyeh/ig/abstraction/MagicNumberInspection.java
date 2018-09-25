@@ -25,6 +25,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.IntroduceConstantFix;
 import com.siyeh.ig.psiutils.*;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -113,8 +115,8 @@ public class MagicNumberInspection extends BaseInspection {
           final PsiElement parent = expressionList.getParent();
           if (parent instanceof PsiNewExpression) {
             final PsiNewExpression newExpression = (PsiNewExpression)parent;
-            if (TypeUtils.expressionHasTypeOrSubtype(newExpression, CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER,
-                                                 CommonClassNames.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_COLLECTION) != null) {
+            if (TypeUtils.expressionHasTypeOrSubtype(newExpression, JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER,
+                                                 JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_COLLECTION) != null) {
               return;
             }
           }

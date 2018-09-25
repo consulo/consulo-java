@@ -33,6 +33,7 @@ import com.intellij.psi.impl.light.LightTypeParameter;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ik, dsl
@@ -222,7 +223,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 
 			if(type.isExtends())
 			{
-				if(newBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+				if(newBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 				{
 					return PsiWildcardType.createUnbounded(type.getManager());
 				}

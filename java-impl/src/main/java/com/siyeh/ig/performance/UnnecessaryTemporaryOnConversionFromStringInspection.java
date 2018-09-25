@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -41,13 +42,13 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
     new HashMap<String, String>(7);
 
   static {
-    s_conversionMap.put(CommonClassNames.JAVA_LANG_BOOLEAN, "valueOf");
-    s_conversionMap.put(CommonClassNames.JAVA_LANG_BYTE, "parseByte");
-    s_conversionMap.put(CommonClassNames.JAVA_LANG_DOUBLE, "parseDouble");
-    s_conversionMap.put(CommonClassNames.JAVA_LANG_FLOAT, "parseFloat");
-    s_conversionMap.put(CommonClassNames.JAVA_LANG_INTEGER, "parseInt");
-    s_conversionMap.put(CommonClassNames.JAVA_LANG_LONG, "parseLong");
-    s_conversionMap.put(CommonClassNames.JAVA_LANG_SHORT, "parseShort");
+    s_conversionMap.put(JavaClassNames.JAVA_LANG_BOOLEAN, "valueOf");
+    s_conversionMap.put(JavaClassNames.JAVA_LANG_BYTE, "parseByte");
+    s_conversionMap.put(JavaClassNames.JAVA_LANG_DOUBLE, "parseDouble");
+    s_conversionMap.put(JavaClassNames.JAVA_LANG_FLOAT, "parseFloat");
+    s_conversionMap.put(JavaClassNames.JAVA_LANG_INTEGER, "parseInt");
+    s_conversionMap.put(JavaClassNames.JAVA_LANG_LONG, "parseLong");
+    s_conversionMap.put(JavaClassNames.JAVA_LANG_SHORT, "parseShort");
   }
 
   @Override
@@ -99,7 +100,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
     final String qualifierType = type.getPresentableText();
     final String canonicalType = type.getCanonicalText();
     final String conversionName = s_conversionMap.get(canonicalType);
-    if (TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_BOOLEAN, type)) {
+    if (TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_BOOLEAN, type)) {
       if (!PsiUtil.isLanguageLevel5OrHigher(expression)) {
         return qualifierType + '.' + conversionName + '(' +
                arg.getText() + ").booleanValue()";
@@ -174,13 +175,13 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
       new HashMap<String, String>(7);
 
     static {
-      s_basicTypeMap.put(CommonClassNames.JAVA_LANG_BOOLEAN, "booleanValue");
-      s_basicTypeMap.put(CommonClassNames.JAVA_LANG_BYTE, "byteValue");
-      s_basicTypeMap.put(CommonClassNames.JAVA_LANG_DOUBLE, "doubleValue");
-      s_basicTypeMap.put(CommonClassNames.JAVA_LANG_FLOAT, "floatValue");
-      s_basicTypeMap.put(CommonClassNames.JAVA_LANG_INTEGER, "intValue");
-      s_basicTypeMap.put(CommonClassNames.JAVA_LANG_LONG, "longValue");
-      s_basicTypeMap.put(CommonClassNames.JAVA_LANG_SHORT, "shortValue");
+      s_basicTypeMap.put(JavaClassNames.JAVA_LANG_BOOLEAN, "booleanValue");
+      s_basicTypeMap.put(JavaClassNames.JAVA_LANG_BYTE, "byteValue");
+      s_basicTypeMap.put(JavaClassNames.JAVA_LANG_DOUBLE, "doubleValue");
+      s_basicTypeMap.put(JavaClassNames.JAVA_LANG_FLOAT, "floatValue");
+      s_basicTypeMap.put(JavaClassNames.JAVA_LANG_INTEGER, "intValue");
+      s_basicTypeMap.put(JavaClassNames.JAVA_LANG_LONG, "longValue");
+      s_basicTypeMap.put(JavaClassNames.JAVA_LANG_SHORT, "shortValue");
     }
 
     @Override

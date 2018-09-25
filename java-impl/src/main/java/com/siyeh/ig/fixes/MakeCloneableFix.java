@@ -25,6 +25,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class MakeCloneableFix extends InspectionGadgetsFix {
 
@@ -60,7 +61,7 @@ public class MakeCloneableFix extends InspectionGadgetsFix {
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final PsiJavaCodeReferenceElement ref =
       elementFactory.createReferenceElementByFQClassName(
-        CommonClassNames.JAVA_LANG_CLONEABLE, scope);
+        JavaClassNames.JAVA_LANG_CLONEABLE, scope);
     final PsiReferenceList extendsImplementsList;
     if (containingClass.isInterface()) {
       extendsImplementsList = containingClass.getExtendsList();

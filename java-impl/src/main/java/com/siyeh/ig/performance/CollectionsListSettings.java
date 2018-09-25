@@ -32,7 +32,7 @@ import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.util.SmartList;
 import com.siyeh.ig.ui.UiUtils;
 import consulo.java.JavaQuickFixBundle;
@@ -118,6 +118,6 @@ public abstract class CollectionsListSettings
 	{
 		final String title = JavaQuickFixBundle.message("collection.addall.can.be.replaced.with.constructor.fix.options.title");
 		final ListTable table = new ListTable(new ListWrappingTableModel(myCollectionClassesRequiringCapacity, title));
-		return UiUtils.createAddRemoveTreeClassChooserPanel(table, title, CommonClassNames.JAVA_LANG_OBJECT);
+		return UiUtils.createAddRemoveTreeClassChooserPanel(table, title, JavaClassNames.JAVA_LANG_OBJECT);
 	}
 }

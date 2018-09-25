@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiField;
@@ -103,7 +103,7 @@ public class DfaConstValue extends DfaValue
 				return null;
 			}
 			PsiClass psiClass = ((PsiField) variable).getContainingClass();
-			if(psiClass == null || !CommonClassNames.JAVA_LANG_BOOLEAN.equals(psiClass.getQualifiedName()))
+			if(psiClass == null || !JavaClassNames.JAVA_LANG_BOOLEAN.equals(psiClass.getQualifiedName()))
 			{
 				return null;
 			}

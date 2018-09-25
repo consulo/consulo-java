@@ -50,6 +50,7 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
+import consulo.java.module.util.JavaClassNames;
 import consulo.roots.ContentFolderScopes;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
@@ -113,7 +114,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     assertEquals(params[1].getName(), "B");
 
     assertEquals("java.lang.String", params[0].getSupers()[0].getQualifiedName());
-    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, params[1].getSupers()[0].getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, params[1].getSupers()[0].getQualifiedName());
 
     teardownLoadingFilter();
   }
@@ -199,8 +200,8 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     PsiClass aClass = classes[0];
     PsiClass[] superTypes = aClass.getSupers();
     LOG.assertTrue(superTypes.length == 2);
-    LOG.assertTrue(superTypes[0].getQualifiedName().equals(CommonClassNames.JAVA_LANG_STRING));
-    LOG.assertTrue(superTypes[1].getQualifiedName().equals(CommonClassNames.JAVA_LANG_RUNNABLE));
+    LOG.assertTrue(superTypes[0].getQualifiedName().equals(JavaClassNames.JAVA_LANG_STRING));
+    LOG.assertTrue(superTypes[1].getQualifiedName().equals(JavaClassNames.JAVA_LANG_RUNNABLE));
 
     teardownLoadingFilter();
   }
@@ -406,7 +407,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     LOG.assertTrue(type instanceof PsiArrayType);
     PsiType componentType = ((PsiArrayType) type).getComponentType();
 
-    assertTrue(componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
+    assertTrue(componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
     assertFalse(componentType instanceof PsiPrimitiveType);
     assertFalse(componentType instanceof PsiArrayType);
 
@@ -428,7 +429,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
 
     PsiField field3 = aClass.getFields()[2];
     PsiType type3 = ((PsiArrayType) field3.getType()).getComponentType();
-    assertTrue(type3.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
+    assertTrue(type3.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
 
     teardownLoadingFilter();
   }
@@ -468,7 +469,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     PsiType type1 = aClass.getFields()[1].getType();
     PsiElement target1 = PsiUtil.resolveClassInType(type1);
     assertNotNull(target1);
-    PsiClass objectClass = myJavaFacade.findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myProject));
+    PsiClass objectClass = myJavaFacade.findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myProject));
     assertEquals(objectClass, target1);
 
     PsiType type2 = aClass.getFields()[1].getType();
@@ -551,7 +552,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     assertFalse(type2 instanceof PsiPrimitiveType);
     PsiClass target2 = PsiUtil.resolveClassInType(type2);
     assertNotNull(target2);
-    PsiClass objectClass = myJavaFacade.findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myProject));
+    PsiClass objectClass = myJavaFacade.findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myProject));
     assertEquals(objectClass, target2);
 
     checkPackAAA(parms[2].getType());

@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
@@ -32,7 +32,7 @@ import com.intellij.util.containers.ContainerUtil;
 
 public class ChildrenBlocksBuilder
 {
-	private Config myConfig;
+	private final Config myConfig;
 
 	private ChildrenBlocksBuilder(Config builder)
 	{
@@ -56,7 +56,7 @@ public class ChildrenBlocksBuilder
 			Indent indent = myConfig.getIndent(type);
 			Wrap wrap = myConfig.getWrap(type);
 
-			blocks.add(factory.createBlock(child, indent, alignment, wrap));
+			blocks.add(factory.createBlock(child, indent, alignment, wrap, factory.getFormattingMode()));
 		}
 
 		return blocks;
@@ -67,15 +67,16 @@ public class ChildrenBlocksBuilder
 		private static final Alignment NO_ALIGNMENT = Alignment.createAlignment();
 		private static final Wrap NO_WRAP = Wrap.createWrap(0, false);
 
-		private Map<IElementType, Alignment> myAlignments = ContainerUtil.newHashMap();
-		private Map<IElementType, Indent> myIndents = ContainerUtil.newHashMap();
-		private Map<IElementType, Wrap> myWraps = ContainerUtil.newHashMap();
+		private final Map<IElementType, Alignment> myAlignments = ContainerUtil.newHashMap();
+		private final Map<IElementType, Indent> myIndents = ContainerUtil.newHashMap();
+		private final Map<IElementType, Wrap> myWraps = ContainerUtil.newHashMap();
 
-		private Map<IElementType, Condition<ASTNode>> myNoneAlignmentCondition = ContainerUtil.newHashMap();
+		private final Map<IElementType, Condition<ASTNode>> myNoneAlignmentCondition = ContainerUtil.newHashMap();
 
 		private Alignment myDefaultAlignment;
 		private Indent myDefaultIndent;
 		private Wrap myDefaultWrap;
+		private FormattingMode myFormattingMode;
 
 		public ChildrenBlocksBuilder createBuilder()
 		{
@@ -164,5 +165,15 @@ public class ChildrenBlocksBuilder
 			return this;
 		}
 
+		public FormattingMode getFormattingMode()
+		{
+			return myFormattingMode;
+		}
+
+		public Config setFormattingMode(FormattingMode formattingMode)
+		{
+			myFormattingMode = formattingMode;
+			return this;
+		}
 	}
 }

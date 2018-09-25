@@ -29,6 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -373,7 +374,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
         return false;
       }
       final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_UTIL_MAP.equals(className)) {
+      if (!JavaClassNames.JAVA_UTIL_MAP.equals(className)) {
         return false;
       }
       final GetValueFromMapChecker checker = new GetValueFromMapChecker(targetVariable, key);

@@ -64,6 +64,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 import consulo.roots.OrderEntryWithTracking;
 import consulo.vfs.ArchiveFileSystem;
@@ -255,7 +256,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
 	public static void writeExtends(PsiClass aClass, StringBuilder buffer, PsiClassType[] refs)
 	{
-		if(refs.length > 0 || !aClass.isInterface() && !CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName()))
+		if(refs.length > 0 || !aClass.isInterface() && !JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName()))
 		{
 			buffer.append(" extends ");
 			if(refs.length == 0)

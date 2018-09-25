@@ -26,6 +26,7 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.util.IncorrectOperationException;
 
 /**
@@ -118,7 +119,7 @@ public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements Intenti
 		newItemVariable.getTypeElement().replace(newItemTypeElement);
 		newItemVariable.setName(iterationParameterName);
 		final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
-		if(codeStyleSettings.GENERATE_FINAL_LOCALS)
+		if(codeStyleSettings.getCustomSettings(JavaCodeStyleSettings.class).GENERATE_FINAL_LOCALS)
 		{
 			final PsiModifierList modifierList = newItemVariable.getModifierList();
 			if(modifierList != null)

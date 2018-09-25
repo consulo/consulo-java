@@ -15,12 +15,12 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_ASSERTION_ERROR;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_ERROR;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_OBJECT;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_COLLECTION;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_ASSERTION_ERROR;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_ERROR;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_OBJECT;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_COLLECTION;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,7 +60,7 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FList;
@@ -777,7 +777,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 		else if(initializer instanceof PsiReferenceExpression)
 		{
-			PsiVariable initialVariable = ObjectUtils.tryCast(((PsiReferenceExpression) initializer).resolve(), PsiVariable.class);
+			PsiVariable initialVariable = ObjectUtil.tryCast(((PsiReferenceExpression) initializer).resolve(), PsiVariable.class);
 			if((initialVariable instanceof PsiLocalVariable || initialVariable instanceof PsiParameter) && !VariableAccessUtils.variableIsAssigned(initialVariable, statement.getBody()))
 			{
 				origin = myFactory.getVarFactory().createVariableValue(initialVariable, false);
@@ -1807,7 +1807,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 	void addBareCall(@Nullable PsiMethodCallExpression expression, @Nonnull PsiReferenceExpression reference)
 	{
 		addConditionalRuntimeThrow();
-		PsiMethod method = ObjectUtils.tryCast(reference.resolve(), PsiMethod.class);
+		PsiMethod method = ObjectUtil.tryCast(reference.resolve(), PsiMethod.class);
 		List<? extends MethodContract> contracts = method == null ? Collections.emptyList() : getMethodCallContracts(method, expression);
 		MethodCallInstruction instruction;
 		PsiExpression anchor;

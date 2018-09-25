@@ -15,13 +15,13 @@
  */
 package org.jetbrains.java.generate.psi;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_BOOLEAN;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_OBJECT;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_THROWABLE;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_LIST;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_MAP;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_SET;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_BOOLEAN;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_OBJECT;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_THROWABLE;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_LIST;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_MAP;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_SET;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

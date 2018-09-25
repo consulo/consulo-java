@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -203,7 +204,7 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
         }
         final PsiType type = operand.getType();
         if (type == null || type.equals(PsiType.BOOLEAN) ||
-            type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
+            type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
           return;
         }
       }

@@ -26,6 +26,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.ResolveTestCase;
+import consulo.java.module.util.JavaClassNames;
 
 public abstract class ResolveMethodTest extends ResolveTestCase {
   @Override
@@ -200,7 +201,7 @@ public abstract class ResolveMethodTest extends ResolveTestCase {
     assertTrue(target instanceof PsiMethod);
     final PsiMethod method = (PsiMethod)target;
     assertEquals("clone", method.getName());
-    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
   }
 
 

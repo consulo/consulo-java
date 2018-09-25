@@ -57,6 +57,7 @@ import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author cdr
@@ -310,7 +311,7 @@ public class GenericsHighlightUtil
 		for(PsiClassType type1 : bounds)
 		{
 			PsiType bound = substitutor.substitute(type1);
-			if(!bound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && GenericsUtil.checkNotInBounds(type, bound, referenceParameterList))
+			if(!bound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && GenericsUtil.checkNotInBounds(type, bound, referenceParameterList))
 			{
 				PsiClass boundClass = bound instanceof PsiClassType ? ((PsiClassType) bound).resolve() : null;
 
@@ -495,7 +496,7 @@ public class GenericsHighlightUtil
 			{
 				final PsiMethod objectMethod = methodSignature.getMethod();
 				final PsiClass containingClass = objectMethod.getContainingClass();
-				if(containingClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()) && objectMethod.hasModifierProperty(PsiModifier.PUBLIC))
+				if(containingClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()) && objectMethod.hasModifierProperty(PsiModifier.PUBLIC))
 				{
 					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).descriptionAndTooltip("Default method '" + sig.getName() + "' overrides a member of 'java.lang.Object'").range
 							(methodIdentifier).create();
@@ -1239,7 +1240,7 @@ public class GenericsHighlightUtil
 				final PsiMethod psiMethod = superMethod.getMethod();
 				final PsiClass containingClass = psiMethod.getContainingClass();
 				if(containingClass != null &&
-						CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()) &&
+						JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()) &&
 						psiMethod.hasModifierProperty(PsiModifier.PROTECTED))
 				{
 					superMethod = null;

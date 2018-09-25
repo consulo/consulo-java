@@ -34,7 +34,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 {
@@ -47,9 +47,9 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 	{
 		super(modifierListOwner);
 		myAnnotation = fqn;
-		ObjectUtils.assertAllElementsNotNull(values);
+		ObjectUtil.assertAllElementsNotNull(values);
 		myPairs = values;
-		ObjectUtils.assertAllElementsNotNull(annotationsToRemove);
+		ObjectUtil.assertAllElementsNotNull(annotationsToRemove);
 		myAnnotationsToRemove = annotationsToRemove;
 		myText = calcText(modifierListOwner, myAnnotation);
 	}

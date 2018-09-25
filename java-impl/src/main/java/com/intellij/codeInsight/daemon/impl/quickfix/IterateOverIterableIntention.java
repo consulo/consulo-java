@@ -29,6 +29,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -96,7 +98,7 @@ public class IterateOverIterableIntention implements IntentionAction {
       PsiElement parent = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
       if (parent instanceof PsiExpression) {
         final PsiType type = ((PsiExpression)parent).getType();
-        return type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)
+        return type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE)
                ? (PsiExpression)parent
                : null;
       }
@@ -115,7 +117,7 @@ public class IterateOverIterableIntention implements IntentionAction {
       if (parent instanceof PsiMethodCallExpression) continue;
       if (!(parent instanceof PsiExpressionStatement)) return null;
       final PsiType type = ((PsiExpression)element).getType();
-      if (type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)) return (PsiExpression)element;
+      if (type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE)) return (PsiExpression)element;
     }
     return null;
   }

@@ -61,6 +61,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 import consulo.java.psi.JavaLanguageVersion;
 
 @Singleton
@@ -220,7 +221,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 			builder.append(" extends ");
 			for(PsiClassType type : superTypes)
 			{
-				if(type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+				if(type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 				{
 					continue;
 				}

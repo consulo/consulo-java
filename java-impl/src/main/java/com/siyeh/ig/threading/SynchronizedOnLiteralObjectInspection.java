@@ -22,6 +22,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -78,10 +80,10 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
       if (type == null) {
         return;
       }
-      if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING) &&
-          !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN) &&
-          !type.equalsToText(CommonClassNames.JAVA_LANG_CHARACTER)) {
-        final PsiClassType javaLangNumberType = TypeUtils.getType(CommonClassNames.JAVA_LANG_NUMBER, statement);
+      if (!type.equalsToText(JavaClassNames.JAVA_LANG_STRING) &&
+          !type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN) &&
+          !type.equalsToText(JavaClassNames.JAVA_LANG_CHARACTER)) {
+        final PsiClassType javaLangNumberType = TypeUtils.getType(JavaClassNames.JAVA_LANG_NUMBER, statement);
         if (!javaLangNumberType.isAssignableFrom(type)) {
           return;
         }

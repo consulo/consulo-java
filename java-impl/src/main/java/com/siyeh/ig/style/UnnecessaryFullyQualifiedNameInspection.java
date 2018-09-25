@@ -15,6 +15,14 @@
  */
 package com.siyeh.ig.style;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.swing.JComponent;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.diagnostic.Logger;
@@ -22,8 +30,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -33,13 +41,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.HighlightUtils;
 import com.siyeh.ig.psiutils.ImportUtils;
-import javax.annotation.Nonnull;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * com.siyeh.ipp.fqnames.ReplaceFullyQualifiedNameWithImportIntention
@@ -226,7 +227,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
       }
       final List<PsiJavaCodeReferenceElement> references = new ArrayList(2);
       references.add(reference);
-      final CodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(reference.getProject());
+      final JavaCodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(reference.getProject()).getCustomSettings(JavaCodeStyleSettings.class);
       if (styleSettings.INSERT_INNER_CLASS_IMPORTS) {
         collectInnerClassNames(reference, references);
       }

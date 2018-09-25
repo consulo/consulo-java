@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -101,7 +102,7 @@ public class BooleanConstructorInspection extends BaseInspection {
         newExpression = buildText(argument, false);
       }
       else {
-        final PsiClass booleanClass = ClassUtils.findClass(CommonClassNames.JAVA_LANG_BOOLEAN, argument);
+        final PsiClass booleanClass = ClassUtils.findClass(JavaClassNames.JAVA_LANG_BOOLEAN, argument);
         boolean methodFound = false;
         if (booleanClass != null) {
           final PsiMethod[] methods = booleanClass.findMethodsByName("valueOf", false);
@@ -148,13 +149,13 @@ public class BooleanConstructorInspection extends BaseInspection {
     public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
-      if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
+      if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
         return;
       }
       final PsiClass aClass = ClassUtils.getContainingClass(expression);
       if (aClass != null) {
         final String qualifiedName = aClass.getQualifiedName();
-        if (CommonClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName)) {
+        if (JavaClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName)) {
           return;
         }
       }

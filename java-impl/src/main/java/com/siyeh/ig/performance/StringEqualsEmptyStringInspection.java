@@ -28,6 +28,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -157,7 +158,7 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
       }
       final PsiType type = qualifierExpression.getType();
       if (HardcodedMethodConstants.TO_STRING.equals(referenceName) && type != null && (type.equalsToText(
-        CommonClassNames.JAVA_LANG_STRING_BUFFER) || type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUILDER))) {
+        JavaClassNames.JAVA_LANG_STRING_BUFFER) || type.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUILDER))) {
         return qualifierExpression.getText();
       }
       else {

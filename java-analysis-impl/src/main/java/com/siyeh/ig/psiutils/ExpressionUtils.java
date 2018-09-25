@@ -40,8 +40,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.java.module.util.JavaClassNames;
 import one.util.streamex.StreamEx;
 
 public class ExpressionUtils
@@ -51,9 +52,9 @@ public class ExpressionUtils
 
 	static
 	{
-		convertableBoxedClassNames.add(CommonClassNames.JAVA_LANG_BYTE);
-		convertableBoxedClassNames.add(CommonClassNames.JAVA_LANG_CHARACTER);
-		convertableBoxedClassNames.add(CommonClassNames.JAVA_LANG_SHORT);
+		convertableBoxedClassNames.add(JavaClassNames.JAVA_LANG_BYTE);
+		convertableBoxedClassNames.add(JavaClassNames.JAVA_LANG_CHARACTER);
+		convertableBoxedClassNames.add(JavaClassNames.JAVA_LANG_SHORT);
 	}
 
 	private ExpressionUtils()
@@ -211,7 +212,7 @@ public class ExpressionUtils
 				return false;
 			}
 			final PsiType type = castType.getType();
-			return TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type);
+			return TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, type);
 		}
 		return false;
 	}
@@ -606,7 +607,7 @@ public class ExpressionUtils
 
 	public static boolean hasStringType(@javax.annotation.Nullable PsiExpression expression)
 	{
-		return hasType(expression, CommonClassNames.JAVA_LANG_STRING);
+		return hasType(expression, JavaClassNames.JAVA_LANG_STRING);
 	}
 
 	public static boolean isConversionToStringNecessary(PsiExpression expression, boolean throwable)
@@ -616,7 +617,7 @@ public class ExpressionUtils
 		{
 			final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
 			final PsiType type = polyadicExpression.getType();
-			if(!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type))
+			if(!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, type))
 			{
 				return true;
 			}
@@ -840,7 +841,7 @@ public class ExpressionUtils
 		}
 		final PsiPolyadicExpression expression = (PsiPolyadicExpression) element;
 		final PsiType type = expression.getType();
-		return type != null && type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
+		return type != null && type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
 	}
 
 	public static boolean isAnnotatedNotNull(PsiExpression expression)
@@ -1144,7 +1145,7 @@ public class ExpressionUtils
 			return qualifier;
 		}
 		PsiElementFactory factory = JavaPsiFacade.getElementFactory(ref.getProject());
-		PsiMember member = ObjectUtils.tryCast(ref.resolve(), PsiMember.class);
+		PsiMember member = ObjectUtil.tryCast(ref.resolve(), PsiMember.class);
 		if(member != null)
 		{
 			PsiClass memberClass = member.getContainingClass();
@@ -1219,7 +1220,7 @@ public class ExpressionUtils
 		if(expression instanceof PsiReferenceExpression)
 		{
 			PsiReferenceExpression reference = (PsiReferenceExpression) expression;
-			PsiLocalVariable variable = ObjectUtils.tryCast(reference.resolve(), PsiLocalVariable.class);
+			PsiLocalVariable variable = ObjectUtil.tryCast(reference.resolve(), PsiLocalVariable.class);
 			if(variable != null)
 			{
 				PsiExpression initializer = variable.getInitializer();
@@ -1236,12 +1237,12 @@ public class ExpressionUtils
 	@javax.annotation.Nullable
 	public static PsiLocalVariable resolveLocalVariable(@Nullable PsiExpression expression)
 	{
-		PsiReferenceExpression referenceExpression = ObjectUtils.tryCast(expression, PsiReferenceExpression.class);
+		PsiReferenceExpression referenceExpression = ObjectUtil.tryCast(expression, PsiReferenceExpression.class);
 		if(referenceExpression == null)
 		{
 			return null;
 		}
-		return ObjectUtils.tryCast(referenceExpression.resolve(), PsiLocalVariable.class);
+		return ObjectUtil.tryCast(referenceExpression.resolve(), PsiLocalVariable.class);
 	}
 
 	public static boolean isOctalLiteral(PsiLiteralExpression literal)

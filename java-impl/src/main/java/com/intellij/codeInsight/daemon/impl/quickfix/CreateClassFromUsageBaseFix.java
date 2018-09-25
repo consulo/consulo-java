@@ -27,6 +27,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ven
@@ -116,7 +117,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
     if (!isAvailableInContext(element)) return false;
     final String superClassName = getSuperClassName(element);
     if (superClassName != null) {
-      if (superClassName.equals(CommonClassNames.JAVA_LANG_ENUM) && myKind != CreateClassKind.ENUM) return false;
+      if (superClassName.equals(JavaClassNames.JAVA_LANG_ENUM) && myKind != CreateClassKind.ENUM) return false;
       final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(superClassName, GlobalSearchScope.allScope(project));
       if (psiClass != null && psiClass.hasModifierProperty(PsiModifier.FINAL)) return false;
     }
@@ -155,7 +156,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
       if (expectedTypes.length == 1) {
         final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType(expectedTypes[0].getType());
         final PsiClass psiClass = classResolveResult.getElement();
-        if (psiClass != null && CommonClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName())) {
+        if (psiClass != null && JavaClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName())) {
           final PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
           PsiType psiType = typeParameters.length == 1 ? classResolveResult.getSubstitutor().substitute(typeParameters[0]) : null;
           if (psiType instanceof PsiWildcardType && ((PsiWildcardType)psiType).isExtends()) {

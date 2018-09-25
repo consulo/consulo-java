@@ -23,15 +23,34 @@ import javax.annotation.Nonnull;
  * @see PsiCall#getArgumentList()
  * @see PsiExpressionListStatement#getExpressionList()
  */
-public interface PsiExpressionList extends PsiElement {
-  /**
-   * Returns the expressions contained in the list.
-   *
-   * @return the array of expressions contained in the list.
-   */
-  @Nonnull
-  PsiExpression[] getExpressions();
+public interface PsiExpressionList extends PsiElement
+{
+	/**
+	 * Returns the expressions contained in the list.
+	 *
+	 * @return the array of expressions contained in the list.
+	 */
+	@Nonnull
+	PsiExpression[] getExpressions();
 
-  @Nonnull
-  PsiType[] getExpressionTypes();
+	@Nonnull
+	PsiType[] getExpressionTypes();
+
+	/**
+	 * @return number of expressions in the expression list
+	 * @since 2018.1
+	 */
+	default int getExpressionCount()
+	{
+		return getExpressions().length;
+	}
+
+	/**
+	 * @return true if expression list contains no expressions
+	 * @since 2018.1
+	 */
+	default boolean isEmpty()
+	{
+		return getExpressionCount() == 0;
+	}
 }

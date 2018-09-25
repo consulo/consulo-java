@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -32,7 +32,7 @@ import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
@@ -167,7 +167,7 @@ public class ToStringRenderer extends NodeRendererImpl implements OnDemandRender
 		if(type instanceof ClassType)
 		{
 			Method toStringMethod = ((ClassType) type).concreteMethodByName("toString", "()Ljava/lang/String;");
-			return toStringMethod != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(toStringMethod.declaringType().name());
+			return toStringMethod != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(toStringMethod.declaringType().name());
 		}
 		return false;
 	}

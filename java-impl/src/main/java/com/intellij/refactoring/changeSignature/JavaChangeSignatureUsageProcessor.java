@@ -63,6 +63,7 @@ import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
+import consulo.java.module.util.JavaClassNames;
 import consulo.java.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 
 /**
@@ -1244,7 +1245,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
 					PsiType parameterType = info.createType(method, manager);
 					if(parameterType == null)
 					{
-						parameterType = JavaPsiFacade.getElementFactory(method.getProject()).createTypeFromText(CommonClassNames.JAVA_LANG_OBJECT, method);
+						parameterType = JavaPsiFacade.getElementFactory(method.getProject()).createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, method);
 					}
 					PsiParameter param = factory.createParameter(info.getName(), parameterType);
 					prototype.getParameterList().add(param);

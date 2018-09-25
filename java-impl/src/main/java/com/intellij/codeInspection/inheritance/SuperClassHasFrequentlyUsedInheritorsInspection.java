@@ -5,6 +5,7 @@ import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.psi.*;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
@@ -93,7 +94,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
       if (referenceElements.length == 1) {
         PsiClass returnClass = (PsiClass)referenceElements[0].resolve();
         if (returnClass != null &&
-            !CommonClassNames.JAVA_LANG_OBJECT.equals(returnClass.getQualifiedName()) &&
+            !JavaClassNames.JAVA_LANG_OBJECT.equals(returnClass.getQualifiedName()) &&
             !returnClass.isInterface()) {
           return returnClass;
         }

@@ -55,6 +55,7 @@ import com.intellij.util.ReflectionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.completion.CompletionProvider;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -76,7 +77,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 		}
 	};
 
-	private static final ElementExtractorFilter THROWABLES_FILTER = new ElementExtractorFilter(new AssignableFromFilter(CommonClassNames.JAVA_LANG_THROWABLE));
+	private static final ElementExtractorFilter THROWABLES_FILTER = new ElementExtractorFilter(new AssignableFromFilter(JavaClassNames.JAVA_LANG_THROWABLE));
 	public static final ElementPattern<PsiElement> AFTER_NEW = psiElement().afterLeaf(psiElement().withText(PsiKeyword.NEW).andNot(psiElement().afterLeaf(psiElement().withText(PsiKeyword.THROW))));
 	static final ElementPattern<PsiElement> AFTER_THROW_NEW = psiElement().afterLeaf(psiElement().withText(PsiKeyword.NEW).afterLeaf(PsiKeyword.THROW));
 	public static final ElementPattern<PsiElement> INSIDE_EXPRESSION = or(psiElement().withParent(PsiExpression.class).andNot(psiElement().withParent(PsiLiteralExpression.class)).andNot(psiElement()
@@ -301,7 +302,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 		if(psiElement().withParent(psiElement(PsiReferenceExpression.class).withParent(PsiThrowStatement.class)).accepts(position))
 		{
 			final PsiElementFactory factory = JavaPsiFacade.getInstance(position.getProject()).getElementFactory();
-			final PsiClassType classType = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, position.getResolveScope());
+			final PsiClassType classType = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, position.getResolveScope());
 			final List<ExpectedTypeInfo> result = new SmartList<>();
 			result.add(new ExpectedTypeInfoImpl(classType, ExpectedTypeInfo.TYPE_OR_SUBTYPE, classType, TailType.SEMICOLON, null, ExpectedTypeInfoImpl.NULL));
 			final PsiMethod method = PsiTreeUtil.getContextOfType(position, PsiMethod.class, true);

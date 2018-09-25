@@ -51,6 +51,8 @@ import com.intellij.ui.FieldPanel;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
+
 import gnu.trove.THashSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -914,7 +916,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     }
     final Project project = expression.getProject();
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-    final PsiClass throwable = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_THROWABLE, scope);
+    final PsiClass throwable = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_THROWABLE, scope);
     return throwable != null && aClass.isInheritor(throwable, true);
   }
 

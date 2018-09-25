@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection;
 
-import static com.intellij.util.ObjectUtils.tryCast;
+import static com.intellij.util.ObjectUtil.tryCast;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,6 +31,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.siyeh.ig.psiutils.StreamApiUtil;
 import consulo.java.codeInsight.JavaInspectionsBundle;
+import consulo.java.module.util.JavaClassNames;
 
 public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
 {
@@ -136,7 +137,7 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
 			return null;
 		}
 		PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
-		if(qualifier == null || !InheritanceUtil.isInheritor(qualifier.getType(), CommonClassNames.JAVA_UTIL_STREAM_STREAM))
+		if(qualifier == null || !InheritanceUtil.isInheritor(qualifier.getType(), JavaClassNames.JAVA_UTIL_STREAM_STREAM))
 		{
 			return null;
 		}

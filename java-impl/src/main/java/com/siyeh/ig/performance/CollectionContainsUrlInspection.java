@@ -20,6 +20,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -119,10 +120,10 @@ public class CollectionContainsUrlInspection extends BaseInspection {
         return ClassType.OTHER;
       }
       @NonNls final String className = aClass.getQualifiedName();
-      if (CommonClassNames.JAVA_UTIL_SET.equals(className)) {
+      if (JavaClassNames.JAVA_UTIL_SET.equals(className)) {
         return ClassType.SET;
       }
-      else if (CommonClassNames.JAVA_UTIL_MAP.equals(className)) {
+      else if (JavaClassNames.JAVA_UTIL_MAP.equals(className)) {
         return ClassType.MAP;
       }
       final PsiClass[] supers = aClass.getSupers();

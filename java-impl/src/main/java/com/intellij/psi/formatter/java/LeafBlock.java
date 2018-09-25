@@ -44,7 +44,10 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	private static final ArrayList<Block> EMPTY_SUB_BLOCKS = new ArrayList<>();
 	private final Indent myIndent;
 
-	public LeafBlock(final ASTNode node, final Wrap wrap, final Alignment alignment, Indent indent)
+	public LeafBlock(final ASTNode node,
+					 final Wrap wrap,
+					 final Alignment alignment,
+					 Indent indent)
 	{
 		myNode = node;
 		myWrap = wrap;

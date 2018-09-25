@@ -32,7 +32,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightVariableBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import one.util.streamex.StreamEx;
 
 /**
@@ -525,7 +525,7 @@ public class CFGBuilder
 		{
 			PsiMethodReferenceExpression methodRef = (PsiMethodReferenceExpression) stripped;
 			JavaResolveResult resolveResult = methodRef.advancedResolve(false);
-			PsiMethod method = ObjectUtils.tryCast(resolveResult.getElement(), PsiMethod.class);
+			PsiMethod method = ObjectUtil.tryCast(resolveResult.getElement(), PsiMethod.class);
 			if(method != null && !method.isVarArgs())
 			{
 				int expectedArgCount = method.getParameterList().getParametersCount();

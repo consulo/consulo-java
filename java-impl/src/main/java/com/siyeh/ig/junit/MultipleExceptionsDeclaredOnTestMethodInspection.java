@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
@@ -88,7 +88,7 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
       final GlobalSearchScope scope = referenceList.getResolveScope();
       final PsiJavaCodeReferenceElement referenceElement =
         factory.createReferenceElementByFQClassName(
-          CommonClassNames.JAVA_LANG_EXCEPTION, scope);
+          JavaClassNames.JAVA_LANG_EXCEPTION, scope);
       referenceList.add(referenceElement);
     }
   }

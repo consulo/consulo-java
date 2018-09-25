@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class StringBufferToStringInConcatenationInspection
   extends BaseInspection {
@@ -118,8 +119,8 @@ public class StringBufferToStringInConcatenationInspection
         return false;
       }
       final String className = aClass.getQualifiedName();
-      return CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-             CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
+      return JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
+             JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
     }
   }
 }

@@ -20,9 +20,9 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ipp.base.Intention;
@@ -71,7 +71,7 @@ public class ReplaceForEachLoopWithIteratorForLoopIntention extends Intention {
     final String iterator = codeStyleManager.suggestUniqueVariableName("iterator", statement, true);
     newStatement.append(iterator).append("=").append(iteratorCall.getText()).append(';');
     newStatement.append(iterator).append(".hasNext();) {");
-    final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+    final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
     if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
       newStatement.append("final ");
     }

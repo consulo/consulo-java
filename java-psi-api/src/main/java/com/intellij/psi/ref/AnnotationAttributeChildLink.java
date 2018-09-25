@@ -26,7 +26,7 @@ import com.intellij.psi.PsiChildLink;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiKeyword;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 /**
  * @author peter
@@ -57,7 +57,7 @@ public class AnnotationAttributeChildLink extends PsiChildLink<PsiAnnotation, Ps
     psiAnnotation.getText();
     final PsiExpression nullValue = JavaPsiFacade.getElementFactory(psiAnnotation.getProject()).createExpressionFromText(PsiKeyword.NULL, null);
     psiAnnotation.setDeclaredAttributeValue(myAttributeName, nullValue);
-    return ObjectUtils.assertNotNull(psiAnnotation.findDeclaredAttributeValue(myAttributeName));
+    return ObjectUtil.assertNotNull(psiAnnotation.findDeclaredAttributeValue(myAttributeName));
   }
 
   @Override

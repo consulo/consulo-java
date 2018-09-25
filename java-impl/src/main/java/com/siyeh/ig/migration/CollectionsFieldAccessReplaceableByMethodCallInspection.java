@@ -28,6 +28,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -102,18 +103,18 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
           final PsiType bound = wildcardType.getBound();
           if (bound != null) {
             if (!bound.equalsToText(
-              CommonClassNames.JAVA_LANG_OBJECT)) {
+              JavaClassNames.JAVA_LANG_OBJECT)) {
               useTypeParameter = true;
             }
             canonicalTexts[i] = bound.getCanonicalText();
           }
           else {
-            canonicalTexts[i] = CommonClassNames.JAVA_LANG_OBJECT;
+            canonicalTexts[i] = JavaClassNames.JAVA_LANG_OBJECT;
           }
         }
         else {
           if (!parameterType.equalsToText(
-            CommonClassNames.JAVA_LANG_OBJECT)) {
+            JavaClassNames.JAVA_LANG_OBJECT)) {
             useTypeParameter = true;
           }
           canonicalTexts[i] = parameterType.getCanonicalText();
@@ -207,7 +208,7 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
         return;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName)) {
+      if (!JavaClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName)) {
         return;
       }
       registerError(expression, expression, replacement);

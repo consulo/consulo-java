@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.alignment.AlignmentStrategy;
@@ -49,9 +50,15 @@ public class CodeBlockBlock extends AbstractJavaBlock
 
 	private final int myChildrenIndent;
 
-	public CodeBlockBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	public CodeBlockBlock(ASTNode node,
+						  Wrap wrap,
+						  Alignment alignment,
+						  Indent indent,
+						  CommonCodeStyleSettings settings,
+						  JavaCodeStyleSettings javaSettings,
+						  @Nonnull FormattingMode formattingMode)
 	{
-		super(node, wrap, getAlignmentStrategy(alignment, node, settings), indent, settings, javaSettings);
+		super(node, wrap, getAlignmentStrategy(alignment, node, settings), indent, settings, javaSettings, formattingMode);
 		if(isSwitchCodeBlock() && !settings.INDENT_CASE_FROM_SWITCH)
 		{
 			myChildrenIndent = 0;
@@ -90,7 +97,9 @@ public class CodeBlockBlock extends AbstractJavaBlock
 				{
 					alignmentToUse = Alignment.createAlignment();
 				}
-				return AlignmentStrategy.wrap(alignmentToUse, false, JavaTokenType.LBRACE, JavaElementType.JAVA_CODE_REFERENCE, node.getElementType());
+				return AlignmentStrategy.wrap(
+						alignmentToUse, false, JavaTokenType.LBRACE, JavaElementType.JAVA_CODE_REFERENCE, node.getElementType()
+				);
 			}
 			break;
 		}
@@ -138,7 +147,8 @@ public class CodeBlockBlock extends AbstractJavaBlock
 				{
 					child = processCaseAndStatementAfter(result, child, childAlignment, childWrap, indent);
 				}
-				else if((myNode.getPsi() instanceof PsiClass || myNode.getPsi() instanceof PsiJavaModule) && child.getElementType() == JavaTokenType.LBRACE)
+				else if((myNode.getPsi() instanceof PsiClass || myNode.getPsi() instanceof PsiJavaModule) &&
+						child.getElementType() == JavaTokenType.LBRACE)
 				{
 					child = composeCodeBlock(result, child, getCodeBlockExternalIndent(), myChildrenIndent, null);
 				}
@@ -161,7 +171,11 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	}
 
 	@Nullable
-	private ASTNode processCaseAndStatementAfter(final List<Block> result, ASTNode child, final Alignment childAlignment, final Wrap childWrap, final Indent indent)
+	private ASTNode processCaseAndStatementAfter(final List<Block> result,
+												 ASTNode child,
+												 final Alignment childAlignment,
+												 final Wrap childWrap,
+												 final Indent indent)
 	{
 		final List<Block> localResult = new ArrayList<>();
 		processChild(localResult, child, AlignmentStrategy.getNullStrategy(), null, Indent.getNoneIndent());
@@ -204,7 +218,10 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		return JavaElementType.BREAK_STATEMENT == elementType || JavaElementType.RETURN_STATEMENT == elementType;
 	}
 
-	private SyntheticCodeBlock createCaseSectionBlock(final List<Block> localResult, final Alignment childAlignment, final Indent indent, final Wrap childWrap)
+	private SyntheticCodeBlock createCaseSectionBlock(final List<Block> localResult,
+													  final Alignment childAlignment,
+													  final Indent indent,
+													  final Wrap childWrap)
 	{
 		final SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, childAlignment, getSettings(), myJavaSettings, indent, childWrap)
 		{
@@ -222,7 +239,9 @@ public class CodeBlockBlock extends AbstractJavaBlock
 					}
 				}
 
-				if(prevElementType == JavaElementType.BLOCK_STATEMENT || prevElementType == JavaElementType.BREAK_STATEMENT || prevElementType == JavaElementType.RETURN_STATEMENT)
+				if(prevElementType == JavaElementType.BLOCK_STATEMENT
+						|| prevElementType == JavaElementType.BREAK_STATEMENT
+						|| prevElementType == JavaElementType.RETURN_STATEMENT)
 				{
 					return new ChildAttributes(Indent.getNoneIndent(), null);
 				}
@@ -275,6 +294,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	private Indent calcCurrentIndent(final ASTNode child, final int state)
 	{
 		IElementType elementType = child.getElementType();
+
 		if(isRBrace(child) || elementType == JavaTokenType.AT)
 		{
 			return Indent.getNoneIndent();
@@ -289,10 +309,16 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		{
 			return getCodeBlockInternalIndent(myChildrenIndent);
 		}
+
 		if(state == BEFORE_LBRACE)
 		{
-			if(elementType == JavaTokenType.LBRACE || elementType == JavaTokenType.CLASS_KEYWORD || elementType == JavaTokenType.INTERFACE_KEYWORD || elementType == JavaTokenType.IDENTIFIER ||
-					elementType == JavaTokenType.ENUM_KEYWORD || elementType == JavaElementType.MODULE_REFERENCE)
+			if(elementType == JavaTokenType.LBRACE
+					|| elementType == JavaTokenType.CLASS_KEYWORD
+					|| elementType == JavaTokenType.INTERFACE_KEYWORD
+					|| elementType == JavaTokenType.IDENTIFIER
+					|| elementType == JavaTokenType.ENUM_KEYWORD
+					|| elementType == JavaTokenType.MODULE_KEYWORD
+					|| elementType == JavaElementType.MODULE_REFERENCE)
 			{
 				return Indent.getNoneIndent();
 			}
@@ -303,14 +329,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		}
 		else
 		{
-			if(isRBrace(child))
-			{
-				return Indent.getNoneIndent();
-			}
-			else
-			{
-				return getCodeBlockInternalIndent(myChildrenIndent);
-			}
+			return getCodeBlockInternalIndent(myChildrenIndent);
 		}
 	}
 

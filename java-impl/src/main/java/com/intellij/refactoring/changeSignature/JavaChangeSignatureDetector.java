@@ -35,7 +35,7 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.changeSignature.inplace.LanguageChangeSignatureDetector;
 import com.intellij.refactoring.util.CanonicalTypes;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.VisibilityUtil;
 
 public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetector<DetectedJavaChangeInfo>
@@ -156,7 +156,7 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
 				{
 					buf.append(", ");
 				}
-				String paramPresentation = param.getTypeText() + " " + ObjectUtils.notNull(param.getName(), "");
+				String paramPresentation = param.getTypeText() + " " + ObjectUtil.notNull(param.getName(), "");
 				newRanges.add(new TextRange(buf.length(), buf.length() + paramPresentation.length()));
 				buf.append(paramPresentation);
 			}

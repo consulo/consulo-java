@@ -29,6 +29,7 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * User: anna
@@ -618,7 +619,7 @@ public class PsiOldInferenceHelper implements PsiInferenceHelper
 			if(arg == null ||
 					arg.getDeepComponentType() instanceof PsiPrimitiveType ||
 					arg instanceof PsiIntersectionType ||
-					(psiClass != null && (isContraVariantPosition || !CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()) || (arg instanceof PsiArrayType))))
+					(psiClass != null && (isContraVariantPosition || !JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()) || (arg instanceof PsiArrayType))))
 			{
 				PsiType bound = intersectAllExtends(typeParam, arg);
 				return Pair.create(bound, ConstraintType.SUPERTYPE);

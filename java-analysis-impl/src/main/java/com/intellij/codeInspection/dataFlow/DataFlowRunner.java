@@ -49,7 +49,7 @@ import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import one.util.streamex.StreamEx;
@@ -282,7 +282,7 @@ public class DataFlowRunner
 		{
 			return null;
 		}
-		PsiField field = ObjectUtils.tryCast(var.getPsiVariable(), PsiField.class);
+		PsiField field = ObjectUtil.tryCast(var.getPsiVariable(), PsiField.class);
 		if(field == null || DfaUtil.hasInitializationHacks(field))
 		{
 			return null;

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.util;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 import gnu.trove.THashSet;
 
@@ -60,6 +60,7 @@ import com.intellij.util.containers.EmptyIterable;
 import com.intellij.util.containers.HashMap;
 import consulo.annotations.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.util.JavaClassNames;
 import consulo.vfs.ArchiveFileSystem;
 
 public final class PsiUtil extends PsiUtilCore
@@ -1093,7 +1094,7 @@ public final class PsiUtil extends PsiUtilCore
 			for(PsiType boundType : boundTypes)
 			{
 				PsiType substitutedBoundType = captureSubstitutor.substitute(boundType);
-				if(substitutedBoundType != null && !(substitutedBoundType instanceof PsiWildcardType) && !substitutedBoundType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+				if(substitutedBoundType != null && !(substitutedBoundType instanceof PsiWildcardType) && !substitutedBoundType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 				{
 					if(originalBound instanceof PsiArrayType && substitutedBoundType instanceof PsiArrayType && !originalBound.isAssignableFrom(substitutedBoundType) && !substitutedBoundType
 							.isAssignableFrom(originalBound))
@@ -1431,8 +1432,8 @@ public final class PsiUtil extends PsiUtilCore
 	@Nullable
 	public static PsiType extractIterableTypeParameter(@Nullable PsiType psiType, final boolean eraseTypeParameter)
 	{
-		final PsiType type = substituteTypeParameter(psiType, CommonClassNames.JAVA_LANG_ITERABLE, 0, eraseTypeParameter);
-		return type != null ? type : substituteTypeParameter(psiType, CommonClassNames.JAVA_UTIL_COLLECTION, 0, eraseTypeParameter);
+		final PsiType type = substituteTypeParameter(psiType, JavaClassNames.JAVA_LANG_ITERABLE, 0, eraseTypeParameter);
+		return type != null ? type : substituteTypeParameter(psiType, JavaClassNames.JAVA_UTIL_COLLECTION, 0, eraseTypeParameter);
 	}
 
 	@javax.annotation.Nullable
@@ -1549,7 +1550,7 @@ public final class PsiUtil extends PsiUtilCore
 
 		final Project project = resourceClass.getProject();
 		final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-		final PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+		final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
 		if(autoCloseable == null)
 		{
 			return null;
@@ -1595,7 +1596,7 @@ public final class PsiUtil extends PsiUtilCore
 
 		final Project project = resourceClass.getProject();
 		final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-		final PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+		final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
 		if(autoCloseable == null)
 		{
 			return null;

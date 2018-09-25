@@ -41,6 +41,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author yole
@@ -312,7 +313,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 				return "Class cannot be inlined because an interface implemented by it cannot be resolved";
 			}
 			final PsiClass superClass = psiClass.getSuperClass();
-			if(superClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+			if(superClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 			{
 				PsiClassType interfaceType = interfaces[0];
 				if(!isRedundantImplements(superClass, interfaceType))

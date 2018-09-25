@@ -34,7 +34,7 @@ import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -153,7 +153,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 	{
 		protected boolean isEnabled(@Nonnull final HierarchyBrowserBaseEx browser, @Nonnull final PsiElement psiElement)
 		{
-			return super.isEnabled(browser, psiElement) && !CommonClassNames.JAVA_LANG_OBJECT.equals(((PsiClass) psiElement).getQualifiedName());
+			return super.isEnabled(browser, psiElement) && !JavaClassNames.JAVA_LANG_OBJECT.equals(((PsiClass) psiElement).getQualifiedName());
 		}
 	}
 

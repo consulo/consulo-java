@@ -21,7 +21,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;
@@ -55,7 +55,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements IntentionA
 			return false;
 		}
 		final PsiClass resolvedType = ((PsiClassType) myExpectedType).resolve();
-		return resolvedType != null && CommonClassNames.JAVA_LANG_STRING.equals(resolvedType.getQualifiedName()) &&
+		return resolvedType != null && JavaClassNames.JAVA_LANG_STRING.equals(resolvedType.getQualifiedName()) &&
 				myValue instanceof PsiLiteralExpression;
 	}
 

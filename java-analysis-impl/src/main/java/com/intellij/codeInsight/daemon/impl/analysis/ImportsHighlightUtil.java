@@ -20,7 +20,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiImportStaticStatement;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 public class ImportsHighlightUtil
 {
@@ -34,7 +34,7 @@ public class ImportsHighlightUtil
 				PsiElement resolve = ref.resolve();
 				if(resolve != null)
 				{
-					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(ObjectUtils.notNull(ref.getReferenceNameElement(), ref)).descriptionAndTooltip("Class " + ref
+					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(ObjectUtil.notNull(ref.getReferenceNameElement(), ref)).descriptionAndTooltip("Class " + ref
 							.getCanonicalText() + " not found").create();
 				}
 			}

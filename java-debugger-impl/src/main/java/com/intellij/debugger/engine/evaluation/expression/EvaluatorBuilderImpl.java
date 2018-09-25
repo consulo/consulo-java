@@ -58,6 +58,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.java.module.util.JavaClassNames;
 
 public class EvaluatorBuilderImpl implements EvaluatorBuilder
 {
@@ -677,7 +678,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 			// concat with a String
 			if(opCode == JavaTokenType.PLUS)
 			{
-				if((lType instanceof PsiClassType && lType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) || (rType instanceof PsiClassType && rType.equalsToText(CommonClassNames
+				if((lType instanceof PsiClassType && lType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) || (rType instanceof PsiClassType && rType.equalsToText(JavaClassNames
 						.JAVA_LANG_STRING)))
 				{
 					return false;

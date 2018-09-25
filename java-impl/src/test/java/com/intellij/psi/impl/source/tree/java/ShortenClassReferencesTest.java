@@ -27,6 +27,7 @@ import com.intellij.psi.impl.JavaPsiFacadeEx;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author dsl
@@ -52,7 +53,7 @@ public abstract class ShortenClassReferencesTest extends LightCodeInsightFixture
     assertNotNull(body);
     PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)body.getStatements()[0];
     PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)declarationStatement.getFirstChild().getFirstChild();
-    PsiClass javaUtilListClass = facade.findClass(CommonClassNames.JAVA_UTIL_LIST);
+    PsiClass javaUtilListClass = facade.findClass(JavaClassNames.JAVA_UTIL_LIST);
     assertNotNull(javaUtilListClass);
     PsiElement resultingElement = referenceElement.bindToElement(javaUtilListClass);
     assertEquals("List<", resultingElement.getText());

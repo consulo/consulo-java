@@ -30,6 +30,7 @@ import com.intellij.refactoring.introduceparameterobject.IntroduceParameterObjec
 import com.intellij.refactoring.util.VariableData;
 import com.intellij.util.Function;
 import com.intellij.util.VisibilityUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
   @Override
@@ -154,7 +155,7 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
       @Override
       public VariableData[] fun(PsiMethod psiMethod) {
         final PsiParameter parameter = psiMethod.getParameterList().getParameters()[0];
-        final PsiClass collectionClass = getJavaFacade().findClass(CommonClassNames.JAVA_UTIL_COLLECTION);
+        final PsiClass collectionClass = getJavaFacade().findClass(JavaClassNames.JAVA_UTIL_COLLECTION);
         final VariableData variableData =
           new VariableData(parameter, JavaPsiFacade.getElementFactory(getProject()).createType(collectionClass));
         variableData.name = parameter.getName();

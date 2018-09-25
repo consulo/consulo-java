@@ -22,6 +22,8 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -98,7 +100,7 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
         final PsiClass superClass = containingClass.getSuperClass();
         if (superClass != null) {
           final String superClassName = superClass.getQualifiedName();
-          if (CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName)) {
+          if (JavaClassNames.JAVA_LANG_OBJECT.equals(superClassName)) {
             return;
           }
         }

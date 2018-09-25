@@ -38,6 +38,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 public class PsiScopesUtil
 {
@@ -603,7 +604,7 @@ public class PsiScopesUtil
 				processor.setAccessClass((PsiClass) PsiUtil.getAccessObjectClass(qualifier).getElement());
 			}
 			else if(((PsiSuperExpression) qualifier).getQualifier() != null && PsiUtil.isLanguageLevel8OrHigher(qualifier) &&
-					CommonClassNames.JAVA_LANG_CLONEABLE.equals(((PsiClass) resolve).getQualifiedName()) && ((PsiClass) resolve).isInterface())
+					JavaClassNames.JAVA_LANG_CLONEABLE.equals(((PsiClass) resolve).getQualifiedName()) && ((PsiClass) resolve).isInterface())
 			{
 				processor.setAccessClass((PsiClass) resolve);
 			}

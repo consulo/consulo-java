@@ -29,6 +29,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ven
@@ -70,7 +71,7 @@ public class IterableVariableMacro extends VariableTypeMacroBase
 		final GlobalSearchScope scope = file.getResolveScope();
 
 		PsiType iterableType = elementFactory.createTypeByFQClassName("java.lang.Iterable", scope);
-		PsiType mapType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_UTIL_MAP, scope);
+		PsiType mapType = elementFactory.createTypeByFQClassName(JavaClassNames.JAVA_UTIL_MAP, scope);
 
 		PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
 		for(PsiVariable var : variables)

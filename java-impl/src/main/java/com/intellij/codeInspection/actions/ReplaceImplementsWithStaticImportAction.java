@@ -47,6 +47,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ReplaceImplementsWithStaticImportAction.class);
@@ -100,7 +101,7 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
     if (extendsList != null && extendsList.getReferencedTypes().length > 0) {
       final List<PsiMethod> methods = new ArrayList<PsiMethod>(Arrays.asList(targetClass.getAllMethods()));
       final PsiClass objectClass =
-        JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
+        JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
       if (objectClass == null) return false;
       methods.removeAll(Arrays.asList(objectClass.getMethods()));
       if (methods.size() > 0) return false;

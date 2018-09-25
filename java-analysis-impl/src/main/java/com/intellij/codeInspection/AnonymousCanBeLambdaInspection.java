@@ -58,6 +58,7 @@ import com.intellij.psi.util.RedundantCastUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.hash.LinkedHashMap;
 import com.intellij.util.text.UniqueNameGenerator;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * User: anna
@@ -128,7 +129,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 					{
 						final PsiClass baseClass = aClass.getBaseClassType().resolve();
 						LOG.assertTrue(baseClass != null);
-						if(!AnnotationUtil.isAnnotated(baseClass, CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false))
+						if(!AnnotationUtil.isAnnotated(baseClass, JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false))
 						{
 							problemHighlightType = ProblemHighlightType.INFORMATION;
 						}
@@ -263,7 +264,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 			final PsiClassType baseClassType = aClass.getBaseClassType();
 			final PsiClassType.ClassResolveResult resolveResult = baseClassType.resolveGenerics();
 			final PsiClass baseClass = resolveResult.getElement();
-			if(baseClass == null || !reportNotAnnotatedInterfaces && !AnnotationUtil.isAnnotated(baseClass, CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false))
+			if(baseClass == null || !reportNotAnnotatedInterfaces && !AnnotationUtil.isAnnotated(baseClass, JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false))
 			{
 				return false;
 			}
@@ -551,7 +552,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 		if(psiMethod != null && !psiMethod.hasModifierProperty(PsiModifier.STATIC))
 		{
 			final PsiClass containingClass = psiMethod.getContainingClass();
-			if(containingClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
+			if(containingClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
 			{
 				return false;
 			}

@@ -32,6 +32,7 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayFactory;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * Represents a class type.
@@ -105,7 +106,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType
 		}
 		if(!(obj instanceof PsiClassType))
 		{
-			return obj instanceof PsiCapturedWildcardType && ((PsiCapturedWildcardType) obj).getLowerBound().equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && equalsToText(CommonClassNames
+			return obj instanceof PsiCapturedWildcardType && ((PsiCapturedWildcardType) obj).getLowerBound().equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && equalsToText(JavaClassNames
 					.JAVA_LANG_OBJECT);
 		}
 		PsiClassType otherClassType = (PsiClassType) obj;

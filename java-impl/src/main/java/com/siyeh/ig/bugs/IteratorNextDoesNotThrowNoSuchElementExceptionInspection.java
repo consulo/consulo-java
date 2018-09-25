@@ -23,6 +23,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExceptionUtils;
 import com.siyeh.ig.psiutils.IteratorUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.Set;
@@ -61,7 +63,7 @@ public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
-      if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null,
+      if (!MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_ITERATOR, null,
                                      HardcodedMethodConstants.NEXT)) {
         return;
       }

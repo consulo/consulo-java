@@ -31,6 +31,7 @@ import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.FunctionalExpressionSearch;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
+import consulo.java.module.util.JavaClassNames;
 
 public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure
 {
@@ -144,7 +145,7 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure
 
 	private static boolean isJavaLangObject(final PsiClass aClass)
 	{
-		return CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
+		return JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
 	}
 
 	private static PsiClass findSuitableBaseClass(final PsiMethod method)

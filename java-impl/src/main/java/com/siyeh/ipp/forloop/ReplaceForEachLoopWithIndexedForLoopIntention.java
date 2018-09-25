@@ -16,17 +16,20 @@
 package com.siyeh.ipp.forloop;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.*;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 
 public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
 
@@ -66,8 +69,8 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
     final String indexText = createVariableName("i", PsiType.INT, statement);
     createForLoopDeclaration(statement, iteratedValue, isArray, iteratedValueText, newStatement, indexText);
     final Project project = statement.getProject();
-    final CodeStyleSettings codeStyleSettings =
-      CodeStyleSettingsManager.getSettings(project);
+    final JavaCodeStyleSettings codeStyleSettings =
+      CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
     if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
       newStatement.append("final ");
     }

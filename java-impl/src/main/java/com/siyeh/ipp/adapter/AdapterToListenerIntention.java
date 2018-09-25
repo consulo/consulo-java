@@ -15,20 +15,21 @@
  */
 package com.siyeh.ipp.adapter;
 
-import com.siyeh.ipp.base.MutablyNamedIntention;
-import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.IntentionPowerPackBundle;
-import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.openapi.project.Project;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
-import java.util.List;
-import java.util.ArrayList;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.*;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.IncorrectOperationException;
+import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.ipp.base.MutablyNamedIntention;
+import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class AdapterToListenerIntention extends MutablyNamedIntention {
 
@@ -175,8 +176,8 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
     final PsiModifierList modifierList = newMethod.getModifierList();
     modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
     final Project project = aClass.getProject();
-    final CodeStyleSettings codeStyleSettings =
-      CodeStyleSettingsManager.getSettings(project);
+    final JavaCodeStyleSettings codeStyleSettings =
+      CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
     if (codeStyleSettings.INSERT_OVERRIDE_ANNOTATION &&
         PsiUtil.isLanguageLevel6OrHigher(aClass)) {
       modifierList.addAnnotation("java.lang.Override");

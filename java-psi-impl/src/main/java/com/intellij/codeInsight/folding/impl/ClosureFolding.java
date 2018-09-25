@@ -29,7 +29,7 @@ import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.text.CharArrayUtil;
 
 /**
@@ -270,7 +270,7 @@ class ClosureFolding
 	{
 		if(myBuilder.shouldShowExplicitLambdaType(myAnonymousClass, myNewExpression))
 		{
-			String baseClassName = ObjectUtils.assertNotNull(myAnonymousClass.getBaseClassType().resolve()).getName();
+			String baseClassName = ObjectUtil.assertNotNull(myAnonymousClass.getBaseClassType().resolve()).getName();
 			if(baseClassName != null)
 			{
 				return "(" + baseClassName + ") ";

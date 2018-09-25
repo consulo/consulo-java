@@ -23,7 +23,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
@@ -50,7 +50,7 @@ public class SwitchStatementPostfixTemplate extends JavaStatementWrapPostfixTemp
         if (psiClass != null && psiClass.isEnum()) return true;
       }
 
-      if (type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+      if (type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
         if (ApplicationManager.getApplication().isUnitTestMode()) return true; // todo: mock jdk 6 and 7
         PsiFile containingFile = expression.getContainingFile();
         if (containingFile instanceof PsiJavaFile) {

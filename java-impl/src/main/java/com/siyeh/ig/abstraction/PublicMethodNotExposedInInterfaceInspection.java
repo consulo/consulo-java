@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
@@ -163,7 +163,7 @@ public class PublicMethodNotExposedInInterfaceInspection
           return true;
         }
         final String superclassName = superClass.getQualifiedName();
-        if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
+        if (JavaClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
           return true;
         }
         if (exposedInInterface(superMethod)) {

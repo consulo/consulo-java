@@ -22,6 +22,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayFactory;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * Representation of Java type (primitive type, array or class type).
@@ -209,7 +210,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType
 	@Nonnull
 	public static PsiClassType getJavaLangObject(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope)
 	{
-		return getTypeByName(CommonClassNames.JAVA_LANG_OBJECT, manager.getProject(), resolveScope);
+		return getTypeByName(JavaClassNames.JAVA_LANG_OBJECT, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -222,7 +223,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType
 	@Nonnull
 	public static PsiClassType getJavaLangClass(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope)
 	{
-		return getTypeByName(CommonClassNames.JAVA_LANG_CLASS, manager.getProject(), resolveScope);
+		return getTypeByName(JavaClassNames.JAVA_LANG_CLASS, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -235,7 +236,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType
 	@Nonnull
 	public static PsiClassType getJavaLangThrowable(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope)
 	{
-		return getTypeByName(CommonClassNames.JAVA_LANG_THROWABLE, manager.getProject(), resolveScope);
+		return getTypeByName(JavaClassNames.JAVA_LANG_THROWABLE, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -248,7 +249,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType
 	@Nonnull
 	public static PsiClassType getJavaLangString(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope)
 	{
-		return getTypeByName(CommonClassNames.JAVA_LANG_STRING, manager.getProject(), resolveScope);
+		return getTypeByName(JavaClassNames.JAVA_LANG_STRING, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -261,7 +262,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType
 	@Nonnull
 	public static PsiClassType getJavaLangError(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope)
 	{
-		return getTypeByName(CommonClassNames.JAVA_LANG_ERROR, manager.getProject(), resolveScope);
+		return getTypeByName(JavaClassNames.JAVA_LANG_ERROR, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -274,7 +275,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType
 	@Nonnull
 	public static PsiClassType getJavaLangRuntimeException(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope)
 	{
-		return getTypeByName(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, manager.getProject(), resolveScope);
+		return getTypeByName(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, manager.getProject(), resolveScope);
 	}
 
 	/**

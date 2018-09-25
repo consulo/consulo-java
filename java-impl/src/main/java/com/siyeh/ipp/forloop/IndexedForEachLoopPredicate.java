@@ -22,6 +22,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;
+import consulo.java.module.util.JavaClassNames;
 
 class IndexedForEachLoopPredicate implements PsiElementPredicate {
 
@@ -57,7 +58,7 @@ class IndexedForEachLoopPredicate implements PsiElementPredicate {
       final Project project = element.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final PsiClass listInterface =
-        psiFacade.findClass(CommonClassNames.JAVA_UTIL_LIST,
+        psiFacade.findClass(JavaClassNames.JAVA_UTIL_LIST,
                             GlobalSearchScope.allScope(project));
       if (listInterface == null ||
           !InheritanceUtil.isInheritorOrSelf(aClass,

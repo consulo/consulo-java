@@ -23,7 +23,7 @@ import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-import static com.intellij.psi.CommonClassNames.*;
+import static consulo.java.module.util.JavaClassNames.*;
 
 /**
 * @author peter

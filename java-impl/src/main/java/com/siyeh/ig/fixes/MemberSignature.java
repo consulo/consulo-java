@@ -16,6 +16,7 @@
 package com.siyeh.ig.fixes;
 
 import com.intellij.psi.*;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 import java.lang.reflect.Modifier;
@@ -198,7 +199,7 @@ public class MemberSignature implements Comparable<MemberSignature> {
           final String qualifiedName = psiClass.getQualifiedName();
           if (qualifiedName == null) {
             // for type parameters
-            buffer.append(CommonClassNames.JAVA_LANG_OBJECT);
+            buffer.append(JavaClassNames.JAVA_LANG_OBJECT);
           }
           else {
             buffer.append(qualifiedName.replace('.', '/'));

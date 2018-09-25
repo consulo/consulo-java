@@ -29,6 +29,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -335,7 +337,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
             return false;
           }
           final PsiType type = operand.getType();
-          if (type == null || !type.equals(PsiType.BOOLEAN) && !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
+          if (type == null || !type.equals(PsiType.BOOLEAN) && !type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
             return false;
           }
           containsConstant |= (evaluate(operand) != null);

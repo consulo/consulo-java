@@ -103,7 +103,7 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
 	{
 		final byte flags = dataStream.readByte();
 		final StringRef refText = dataStream.readName();
-		return new PsiImportStatementStubImpl(parentStub, refText, flags);
+		return new PsiImportStatementStubImpl(parentStub, StringRef.toString(refText), flags);
 	}
 
 	@Override

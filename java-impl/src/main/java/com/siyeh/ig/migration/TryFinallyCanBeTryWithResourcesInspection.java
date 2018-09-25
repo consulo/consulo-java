@@ -28,6 +28,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -469,7 +470,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
     }
     final PsiClassType classType = (PsiClassType)type;
     final PsiClass aClass = classType.resolve();
-    return aClass != null && InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE);
+    return aClass != null && InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE);
   }
 
   static int findInitialization(PsiElement[] elements, PsiVariable variable,

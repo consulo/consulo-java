@@ -34,8 +34,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -304,7 +304,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo>
 				movedElement = anchor != null ? (PsiMember) myTargetSuperClass.addBefore(methodCopy,
 						anchor) : (PsiMember) myTargetSuperClass.add(methodCopy);
 			}
-			CodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(method.getProject());
+			JavaCodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(method.getProject()).getCustomSettings(JavaCodeStyleSettings.class);
 			if(styleSettings.INSERT_OVERRIDE_ANNOTATION)
 			{
 				if(PsiUtil.isLanguageLevel5OrHigher(mySourceClass) && !myIsTargetInterface || PsiUtil

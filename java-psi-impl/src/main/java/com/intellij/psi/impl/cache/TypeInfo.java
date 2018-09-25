@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -67,10 +67,10 @@ public class TypeInfo
 				"null",
 				"short",
 				"void",
-				CommonClassNames.JAVA_LANG_OBJECT_SHORT,
-				CommonClassNames.JAVA_LANG_OBJECT,
-				CommonClassNames.JAVA_LANG_STRING_SHORT,
-				CommonClassNames.JAVA_LANG_STRING
+				JavaClassNames.JAVA_LANG_OBJECT_SHORT,
+				JavaClassNames.JAVA_LANG_OBJECT,
+				JavaClassNames.JAVA_LANG_STRING_SHORT,
+				JavaClassNames.JAVA_LANG_STRING
 		};
 
 		ourFrequentTypeIndex = new TObjectIntHashMap<String>();

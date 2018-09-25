@@ -26,7 +26,7 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
@@ -67,7 +67,7 @@ public abstract class CreateClassMappingAction<T extends DomElement> extends Cre
       selectedClass = chooser.getSelected();
     }
     else {
-      selectedClass = getBaseClass(context, project, myBaseClass == null ? CommonClassNames.JAVA_LANG_OBJECT : myBaseClass);
+      selectedClass = getBaseClass(context, project, myBaseClass == null ? JavaClassNames.JAVA_LANG_OBJECT : myBaseClass);
     }
     if (selectedClass == null) return null;
 

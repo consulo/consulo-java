@@ -35,7 +35,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.testIntegration.TestFramework;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.hash.HashSet;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.junit.JUnitCommonClassNames;
@@ -247,7 +247,7 @@ public class TestUtils
 			}
 			if(element instanceof PsiLambdaExpression)
 			{
-				PsiExpressionList expressionList = ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprUp(element.getParent()), PsiExpressionList.class);
+				PsiExpressionList expressionList = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprUp(element.getParent()), PsiExpressionList.class);
 				if(expressionList != null)
 				{
 					PsiElement parent = expressionList.getParent();

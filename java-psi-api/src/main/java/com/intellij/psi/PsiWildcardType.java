@@ -21,6 +21,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.search.GlobalSearchScope;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * Represents a wildcard type, with bounds.
@@ -191,11 +192,11 @@ public class PsiWildcardType extends PsiType.Stub
 		PsiWildcardType that = (PsiWildcardType) o;
 		if(myBound == null && that.myBound != null)
 		{
-			return that.isExtends() && that.myBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+			return that.isExtends() && that.myBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
 		}
 		else if(myBound != null && that.myBound == null)
 		{
-			return isExtends() && myBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+			return isExtends() && myBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
 		}
 		return myIsExtending == that.myIsExtending && Comparing.equal(myBound, that.myBound);
 	}

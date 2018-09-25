@@ -20,6 +20,7 @@ import java.util.Set;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * User: anna
@@ -31,9 +32,9 @@ public class TypesDistinctProver
 
 	static
 	{
-		ARRAY_SUPER_CLASSES.add(CommonClassNames.JAVA_IO_SERIALIZABLE);
-		ARRAY_SUPER_CLASSES.add(CommonClassNames.JAVA_LANG_CLONEABLE);
-		ARRAY_SUPER_CLASSES.add(CommonClassNames.JAVA_LANG_OBJECT);
+		ARRAY_SUPER_CLASSES.add(JavaClassNames.JAVA_IO_SERIALIZABLE);
+		ARRAY_SUPER_CLASSES.add(JavaClassNames.JAVA_LANG_CLONEABLE);
+		ARRAY_SUPER_CLASSES.add(JavaClassNames.JAVA_LANG_OBJECT);
 	}
 
 	private TypesDistinctProver()
@@ -84,9 +85,9 @@ public class TypesDistinctProver
 						return false;
 					}
 
-					if(CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass2.getQualifiedName()) && !(boundClass1 instanceof PsiTypeParameter))
+					if(JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass2.getQualifiedName()) && !(boundClass1 instanceof PsiTypeParameter))
 					{
-						return !CommonClassNames.JAVA_LANG_OBJECT.equals(boundClass1.getQualifiedName());
+						return !JavaClassNames.JAVA_LANG_OBJECT.equals(boundClass1.getQualifiedName());
 					}
 
 					return proveExtendsBoundsDistinct(type1, type2, boundClass1, psiClass2);

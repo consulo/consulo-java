@@ -21,6 +21,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
@@ -77,7 +78,7 @@ public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
         return;
       }
       final PsiClass aClass = (PsiClass)target;
-      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
+      if (!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
       if (ignoreWithoutParameters) {

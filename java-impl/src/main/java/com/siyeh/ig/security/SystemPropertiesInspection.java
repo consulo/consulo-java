@@ -21,6 +21,7 @@ import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class SystemPropertiesInspection extends BaseInspection {
@@ -133,7 +134,7 @@ public class SystemPropertiesInspection extends BaseInspection {
       if (className == null) {
         return false;
       }
-      return CommonClassNames.JAVA_LANG_INTEGER.equals(className);
+      return JavaClassNames.JAVA_LANG_INTEGER.equals(className);
     }
 
     private static boolean isBooleanGetBoolean(
@@ -157,7 +158,7 @@ public class SystemPropertiesInspection extends BaseInspection {
       if (className == null) {
         return false;
       }
-      return CommonClassNames.JAVA_LANG_BOOLEAN.equals(className);
+      return JavaClassNames.JAVA_LANG_BOOLEAN.equals(className);
     }
   }
 }

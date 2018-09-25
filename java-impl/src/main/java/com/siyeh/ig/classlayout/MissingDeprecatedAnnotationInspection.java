@@ -27,6 +27,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 
 public class MissingDeprecatedAnnotationInspection extends BaseInspection {
 
@@ -125,7 +126,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
       if (modifierList == null) {
         return false;
       }
-      final PsiAnnotation annotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_DEPRECATED);
+      final PsiAnnotation annotation = modifierList.findAnnotation(JavaClassNames.JAVA_LANG_DEPRECATED);
       return annotation != null;
     }
 

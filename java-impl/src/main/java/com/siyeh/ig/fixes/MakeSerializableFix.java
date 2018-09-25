@@ -25,6 +25,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class MakeSerializableFix extends InspectionGadgetsFix {
 
@@ -46,7 +47,7 @@ public class MakeSerializableFix extends InspectionGadgetsFix {
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final PsiJavaCodeReferenceElement referenceElement =
       elementFactory.createReferenceElementByFQClassName(
-        CommonClassNames.JAVA_IO_SERIALIZABLE, scope);
+        JavaClassNames.JAVA_IO_SERIALIZABLE, scope);
     final PsiReferenceList implementsList =
       containingClass.getImplementsList();
     assert implementsList != null;

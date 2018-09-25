@@ -26,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 
 public class StringToStringInspection extends BaseInspection {
 
@@ -113,7 +114,7 @@ public class StringToStringInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
       registerError(expression);

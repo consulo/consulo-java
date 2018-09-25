@@ -43,11 +43,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.NullableFunction;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.Stack;
+import consulo.java.module.util.JavaClassNames;
 
 public class DfaPsiUtil
 {
@@ -215,7 +216,7 @@ public class DfaPsiUtil
 		{
 			return nullness;
 		}
-		PsiClassType type = ObjectUtils.tryCast(LambdaUtil.getFunctionalInterfaceType(function, true), PsiClassType.class);
+		PsiClassType type = ObjectUtil.tryCast(LambdaUtil.getFunctionalInterfaceType(function, true), PsiClassType.class);
 		PsiMethod sam = LambdaUtil.getFunctionalInterfaceMethod(type);
 		if(sam != null && index < sam.getParameterList().getParametersCount())
 		{
@@ -264,7 +265,7 @@ public class DfaPsiUtil
 		PsiClass type = method.getContainingClass();
 		if(type != null)
 		{
-			if(CommonClassNames.JAVA_UTIL_OPTIONAL.equals(type.getQualifiedName()))
+			if(JavaClassNames.JAVA_UTIL_OPTIONAL.equals(type.getQualifiedName()))
 			{
 				String methodName = method.getName();
 				if((methodName.equals("map") || methodName.equals("filter") || methodName.equals("ifPresent") || methodName.equals("flatMap")) && parameterIndex == 0 && lambdaParameterIndex == 0)
@@ -313,7 +314,7 @@ public class DfaPsiUtil
 				{
 					return parameters.length == 0;
 				}
-				return parameters.length == 1 && parameters[0].getType().equalsToText(CommonClassNames.JAVA_LANG_STRING);
+				return parameters.length == 1 && parameters[0].getType().equalsToText(JavaClassNames.JAVA_LANG_STRING);
 			}
 		}
 		return false;

@@ -28,6 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.WeakestTypeFinder;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -252,7 +253,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
       if (doNotWeakenToJavaLangObject) {
         final Project project = variable.getProject();
         final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        final PsiClass javaLangObjectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, variable.getResolveScope());
+        final PsiClass javaLangObjectClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, variable.getResolveScope());
         weakestClasses.remove(javaLangObjectClass);
       }
       if (onlyWeakentoInterface) {
@@ -293,7 +294,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
       if (doNotWeakenToJavaLangObject) {
         final Project project = method.getProject();
         final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        final PsiClass javaLangObjectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, method.getResolveScope());
+        final PsiClass javaLangObjectClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, method.getResolveScope());
         weakestClasses.remove(javaLangObjectClass);
       }
       if (onlyWeakentoInterface) {

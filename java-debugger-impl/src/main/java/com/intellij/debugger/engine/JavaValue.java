@@ -63,7 +63,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.ui.SimpleTextAttributes;
@@ -356,10 +356,10 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 						if(type != null)
 						{
 							final String typeName = type.componentTypeName();
-							if(TypeConversionUtil.isPrimitive(typeName) || CommonClassNames.JAVA_LANG_STRING.equals(typeName))
+							if(TypeConversionUtil.isPrimitive(typeName) || JavaClassNames.JAVA_LANG_STRING.equals(typeName))
 							{
 								int size = value.length();
-								int max = Math.min(size, CommonClassNames.JAVA_LANG_STRING.equals(typeName) ? 5 : 10);
+								int max = Math.min(size, JavaClassNames.JAVA_LANG_STRING.equals(typeName) ? 5 : 10);
 								//TODO [eu]: this is a quick fix for IDEA-136606, need to move this away from EDT!!!
 								final List<Value> values = value.getValues(0, max);
 								int i = 0;

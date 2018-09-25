@@ -21,6 +21,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.codeStyle.VariableKind;
 
 public class GenerationHelper
@@ -30,7 +31,7 @@ public class GenerationHelper
 	@SuppressWarnings("unused")
 	public static String getUniqueLocalVarName(String base, List<Element> elements, CodeStyleSettings settings)
 	{
-		base = settings.LOCAL_VARIABLE_NAME_PREFIX + base;
+		base = settings.getCustomSettings(JavaCodeStyleSettings.class).LOCAL_VARIABLE_NAME_PREFIX + base;
 		String id = base;
 		int index = 0;
 		while(true)

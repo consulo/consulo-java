@@ -29,7 +29,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -322,6 +322,6 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 	@Nonnull
 	public PsiJavaCodeReferenceElement getReference()
 	{
-		return ObjectUtils.assertNotNull(myReference.compute());
+		return ObjectUtil.assertNotNull(myReference.compute());
 	}
 }

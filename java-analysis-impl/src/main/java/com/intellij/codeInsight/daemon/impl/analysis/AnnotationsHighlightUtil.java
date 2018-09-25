@@ -46,8 +46,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ven
@@ -137,7 +138,7 @@ public class AnnotationsHighlightUtil
 			return null;
 		}
 
-		if(expectedType instanceof PsiClassType && expectedType.equalsToText(CommonClassNames.JAVA_LANG_CLASS))
+		if(expectedType instanceof PsiClassType && expectedType.equalsToText(JavaClassNames.JAVA_LANG_CLASS))
 		{
 			if(!(value instanceof PsiClassObjectAccessExpression))
 			{
@@ -259,7 +260,7 @@ public class AnnotationsHighlightUtil
 				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(element).descriptionAndTooltip(description).create();
 			}
 
-			PsiAnnotation metaAnno = PsiImplUtil.findAnnotation(annotationType.getModifierList(), CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE);
+			PsiAnnotation metaAnno = PsiImplUtil.findAnnotation(annotationType.getModifierList(), JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE);
 			if(metaAnno == null)
 			{
 				String explanation = JavaErrorMessages.message("annotation.non.repeatable", annotationType.getQualifiedName());
@@ -319,7 +320,7 @@ public class AnnotationsHighlightUtil
 		{
 			return null;
 		}
-		if(PsiImplUtil.findAnnotation(contained.getModifierList(), CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE) == null)
+		if(PsiImplUtil.findAnnotation(contained.getModifierList(), JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE) == null)
 		{
 			return null;
 		}
@@ -660,7 +661,7 @@ public class AnnotationsHighlightUtil
 				if(containingClass != null)
 				{
 					final String qualifiedName = containingClass.getQualifiedName();
-					if(CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName) || CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(qualifiedName))
+					if(JavaClassNames.JAVA_LANG_OBJECT.equals(qualifiedName) || JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(qualifiedName))
 					{
 						return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(nameIdentifier).descriptionAndTooltip("@interface member clashes with '" + JavaHighlightUtil.formatMethod
 								(method) + "' in " + HighlightUtil.formatClass(containingClass)).create();
@@ -716,7 +717,7 @@ public class AnnotationsHighlightUtil
 		}
 
 		PsiElement resolved = nameRef.resolve();
-		if(!(resolved instanceof PsiClass) || !CommonClassNames.JAVA_LANG_ANNOTATION_TARGET.equals(((PsiClass) resolved).getQualifiedName()))
+		if(!(resolved instanceof PsiClass) || !JavaClassNames.JAVA_LANG_ANNOTATION_TARGET.equals(((PsiClass) resolved).getQualifiedName()))
 		{
 			return null;
 		}
@@ -755,7 +756,7 @@ public class AnnotationsHighlightUtil
 	@javax.annotation.Nullable
 	static HighlightInfo checkFunctionalInterface(@Nonnull PsiAnnotation annotation, @Nonnull LanguageLevel languageLevel)
 	{
-		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_8) && Comparing.strEqual(annotation.getQualifiedName(), CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE))
+		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_8) && Comparing.strEqual(annotation.getQualifiedName(), JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE))
 		{
 			final PsiAnnotationOwner owner = annotation.getOwner();
 			if(owner instanceof PsiModifierList)
@@ -778,7 +779,7 @@ public class AnnotationsHighlightUtil
 	static HighlightInfo checkRepeatableAnnotation(PsiAnnotation annotation)
 	{
 		String qualifiedName = annotation.getQualifiedName();
-		if(!CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE.equals(qualifiedName))
+		if(!JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE.equals(qualifiedName))
 		{
 			return null;
 		}
@@ -924,7 +925,7 @@ public class AnnotationsHighlightUtil
 
 		if(enclosingClass != null && !enclosingClass.equals(PsiUtil.resolveClassInType(parameter.getType())))
 		{
-			PsiElement range = ObjectUtils.notNull(parameter.getTypeElement(), parameter);
+			PsiElement range = ObjectUtil.notNull(parameter.getTypeElement(), parameter);
 			String text = JavaErrorMessages.message("receiver.type.mismatch");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(range).descriptionAndTooltip(text).create();
 		}
@@ -959,7 +960,7 @@ public class AnnotationsHighlightUtil
 		PsiModifierList modifierList = annotation.getModifierList();
 		if(modifierList != null)
 		{
-			PsiAnnotation retentionAnno = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_ANNOTATION_RETENTION);
+			PsiAnnotation retentionAnno = modifierList.findAnnotation(JavaClassNames.JAVA_LANG_ANNOTATION_RETENTION);
 			if(retentionAnno == null)
 			{
 				return RetentionPolicy.CLASS;
@@ -1021,7 +1022,7 @@ public class AnnotationsHighlightUtil
 			if(classType.getParameters().length > 0)
 			{
 				PsiClassType rawType = classType.rawType();
-				return rawType.equalsToText(CommonClassNames.JAVA_LANG_CLASS);
+				return rawType.equalsToText(JavaClassNames.JAVA_LANG_CLASS);
 			}
 
 			PsiClass aClass = classType.resolve();
@@ -1030,7 +1031,7 @@ public class AnnotationsHighlightUtil
 				return Boolean.TRUE;
 			}
 
-			return classType.equalsToText(CommonClassNames.JAVA_LANG_CLASS) || classType.equalsToText(CommonClassNames.JAVA_LANG_STRING);
+			return classType.equalsToText(JavaClassNames.JAVA_LANG_CLASS) || classType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
 		}
 	}
 

@@ -16,7 +16,7 @@
 package com.intellij.codeInspection.dataFlow.inliner;
 
 import static com.intellij.codeInspection.dataFlow.DfaOptionalSupport.GUAVA_OPTIONAL;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_OPTIONAL;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_OPTIONAL;
 import static com.siyeh.ig.callMatcher.CallMatcher.anyOf;
 import static com.siyeh.ig.callMatcher.CallMatcher.instanceCall;
 import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
@@ -40,7 +40,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import one.util.streamex.StreamEx;
@@ -131,7 +131,7 @@ public class OptionalChainInliner implements CallInliner
 		{
 			return null;
 		}
-		PsiClassType type = ObjectUtils.tryCast(expression.getType(), PsiClassType.class);
+		PsiClassType type = ObjectUtil.tryCast(expression.getType(), PsiClassType.class);
 		if(type == null)
 		{
 			return null;
@@ -201,7 +201,7 @@ public class OptionalChainInliner implements CallInliner
 
 	private static void invokeAndUnwrapOptional(CFGBuilder builder, int argCount, PsiExpression function)
 	{
-		PsiLambdaExpression lambda = ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(function), PsiLambdaExpression.class);
+		PsiLambdaExpression lambda = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(function), PsiLambdaExpression.class);
 		if(lambda != null)
 		{
 			PsiParameter[] parameters = lambda.getParameterList().getParameters();

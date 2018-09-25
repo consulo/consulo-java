@@ -26,6 +26,8 @@ import com.intellij.psi.meta.PsiMetaData;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -123,7 +125,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   @Override
   public PsiClass getSuperClass() {
     return JavaPsiFacade.getInstance(myManager.getProject())
-      .findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myManager.getProject()));
+      .findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myManager.getProject()));
   }
 
   @Override

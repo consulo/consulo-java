@@ -45,6 +45,7 @@ import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.util.Function;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.ui.FormBuilder;
+import consulo.java.module.util.JavaClassNames;
 
 class AnonymousToInnerDialog extends DialogWrapper{
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.anonymousToInner.AnonymousToInnerDialog");
@@ -97,7 +98,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
           if (psiType instanceof PsiClassType) {
             type = TypeConversionUtil.erasure(psiType);
           }
-          if (type == null || type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) return "";
+          if (type == null || type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) return "";
           if (type instanceof PsiArrayType) {
             type = type.getDeepComponentType();
           }

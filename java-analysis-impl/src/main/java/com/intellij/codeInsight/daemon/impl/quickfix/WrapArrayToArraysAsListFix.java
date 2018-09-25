@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClass;
@@ -101,7 +101,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix
 		@javax.annotation.Nullable
 		private static PsiClass getJavaUtilList(final PsiElement context)
 		{
-			return JavaPsiFacade.getInstance(context.getProject()).findClass(CommonClassNames.JAVA_UTIL_LIST,
+			return JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_UTIL_LIST,
 					context.getResolveScope());
 		}
 

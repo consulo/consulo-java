@@ -15,11 +15,20 @@
  */
 package com.siyeh.ig.migration;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.*;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -30,12 +39,13 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.ig.psiutils.*;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import javax.swing.JComponent;
+import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.ig.psiutils.StringUtils;
+import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class ForCanBeForeachInspection extends BaseInspection {
 
@@ -433,8 +443,8 @@ public class ForCanBeForeachInspection extends BaseInspection {
                                                       contentType, null);
         }
         final Project project = forStatement.getProject();
-        final CodeStyleSettings codeStyleSettings =
-          CodeStyleSettingsManager.getSettings(project);
+        final JavaCodeStyleSettings codeStyleSettings =
+          CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
         if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
           finalString = "final ";
         }
@@ -551,7 +561,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
           final String collectionName = arrayReference.getReferenceName();
           contentVariableName = createNewVariableName(forStatement, componentType, collectionName);
           final Project project = forStatement.getProject();
-          final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+          final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
           if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
             finalString = "final ";
           }
@@ -575,7 +585,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
         final String collectionName = arrayReference.getReferenceName();
         contentVariableName = createNewVariableName(forStatement, componentType, collectionName);
         final Project project = forStatement.getProject();
-        final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+        final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
         if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
           finalString = "final ";
         }
@@ -1140,7 +1150,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
     final PsiVariable variable = (PsiVariable)declaredElement;
     if (!TypeUtils.variableHasTypeOrSubtype(variable,
-                                            CommonClassNames.JAVA_UTIL_ITERATOR,
+                                            JavaClassNames.JAVA_UTIL_ITERATOR,
                                             "java.util.ListIterator")) {
       return false;
     }
@@ -1200,9 +1210,9 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return false;
     }
     if (!InheritanceUtil.isInheritor(qualifierClass,
-                                     CommonClassNames.JAVA_LANG_ITERABLE) &&
+                                     JavaClassNames.JAVA_LANG_ITERABLE) &&
         !InheritanceUtil.isInheritor(qualifierClass,
-                                     CommonClassNames.JAVA_UTIL_COLLECTION)) {
+                                     JavaClassNames.JAVA_UTIL_COLLECTION)) {
       return false;
     }
     final PsiExpression condition = forStatement.getCondition();
@@ -1397,7 +1407,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
     final PsiClass aClass = method.getContainingClass();
     return InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_UTIL_LIST);
+                                       JavaClassNames.JAVA_UTIL_LIST);
   }
 
   @Nullable
@@ -1442,7 +1452,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
     final PsiClass containingClass = method.getContainingClass();
     if (!InheritanceUtil.isInheritor(containingClass,
-                                     CommonClassNames.JAVA_UTIL_LIST)) {
+                                     JavaClassNames.JAVA_UTIL_LIST)) {
       return null;
     }
     final PsiExpression qualifierExpression =

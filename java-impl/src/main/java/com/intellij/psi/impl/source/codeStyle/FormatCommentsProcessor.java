@@ -1,31 +1,20 @@
-/*
- * Copyright 2000-2012 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.source.codeStyle;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.application.options.CodeStyle;
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.codeStyle.javadoc.CommentFormatter;
 import com.intellij.psi.javadoc.PsiDocComment;
@@ -37,10 +26,12 @@ public class FormatCommentsProcessor implements PreFormatProcessor
 	public TextRange process(@Nonnull final ASTNode element, @Nonnull final TextRange range)
 	{
 		PsiElement e = SourceTreeToPsiMap.treeElementToPsi(element);
-		assert e != null;
+		assert e != null && e.isValid();
+		final PsiFile file = e.getContainingFile();
 		final Project project = e.getProject();
-		if(!CodeStyleSettingsManager.getSettings(project).ENABLE_JAVADOC_FORMATTING || element.getPsi().getContainingFile().getLanguage() !=
-				JavaLanguage.INSTANCE)
+		if(!CodeStyle.getCustomSettings(file, JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING ||
+				element.getPsi().getContainingFile().getLanguage() != JavaLanguage.INSTANCE
+				|| InjectedLanguageManager.getInstance(project).isInjectedFragment(element.getPsi().getContainingFile()))
 		{
 			return range;
 		}
@@ -55,10 +46,13 @@ public class FormatCommentsProcessor implements PreFormatProcessor
 	{
 		TextRange resultTextRange = markedRange;
 		final PsiElement elementPsi = element.getPsi();
+		assert elementPsi.isValid();
+		final PsiFile file = elementPsi.getContainingFile();
 		boolean shouldFormat = markedRange.contains(element.getTextRange());
 
 		if(shouldFormat)
 		{
+
 			final ASTNode rangeAnchor;
 			// There are two possible cases:
 			//   1. Given element correspond to comment's owner (e.g. field or method);
@@ -75,7 +69,7 @@ public class FormatCommentsProcessor implements PreFormatProcessor
 				rangeAnchor = element;
 			}
 			TextRange before = rangeAnchor.getTextRange();
-			new CommentFormatter(elementPsi).processComment(element);
+			new CommentFormatter(file).processComment(element);
 			int deltaRange = rangeAnchor.getTextRange().getLength() - before.getLength();
 			resultTextRange = new TextRange(markedRange.getStartOffset(), markedRange.getEndOffset() + deltaRange);
 		}
@@ -83,8 +77,8 @@ public class FormatCommentsProcessor implements PreFormatProcessor
 
 		// If element is Psi{Method, Field, DocComment} and was formatted there is no reason to continue - we formatted all possible javadocs.
 		// If element is out of range its children are also out of range. So in both cases formatting is finished. It's just for optimization.
-		if((shouldFormat && (elementPsi instanceof PsiMethod || elementPsi instanceof PsiField || elementPsi instanceof PsiDocComment)) ||
-				markedRange.getEndOffset() < element.getStartOffset())
+		if((shouldFormat && (elementPsi instanceof PsiMethod || elementPsi instanceof PsiField || elementPsi instanceof PsiDocComment))
+				|| markedRange.getEndOffset() < element.getStartOffset())
 		{
 			return resultTextRange;
 		}
@@ -102,5 +96,4 @@ public class FormatCommentsProcessor implements PreFormatProcessor
 
 		return resultTextRange;
 	}
-
 }

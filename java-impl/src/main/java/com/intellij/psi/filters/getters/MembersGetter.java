@@ -41,6 +41,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ik
@@ -101,7 +102,7 @@ public abstract class MembersGetter
 			return;
 		}
 
-		final boolean searchFactoryMethods = searchInheritors && !CommonClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()) && !isPrimitiveClass(where);
+		final boolean searchFactoryMethods = searchInheritors && !JavaClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()) && !isPrimitiveClass(where);
 
 		final Project project = myPlace.getProject();
 		final GlobalSearchScope scope = myPlace.getResolveScope();
@@ -130,7 +131,7 @@ public abstract class MembersGetter
 			}
 		};
 		consumer.consume(baseType);
-		if(searchInheritors && !CommonClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()))
+		if(searchInheritors && !JavaClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()))
 		{
 			CodeInsightUtil.processSubTypes(baseType, myPlace, true, PrefixMatcher.ALWAYS_TRUE, consumer);
 		}
@@ -143,7 +144,7 @@ public abstract class MembersGetter
 		{
 			return false;
 		}
-		return CommonClassNames.JAVA_LANG_STRING.equals(qname) || InheritanceUtil.isInheritor(where, CommonClassNames.JAVA_LANG_NUMBER);
+		return JavaClassNames.JAVA_LANG_STRING.equals(qname) || InheritanceUtil.isInheritor(where, JavaClassNames.JAVA_LANG_NUMBER);
 	}
 
 	private void doProcessMembers(boolean acceptMethods, Consumer<LookupElement> results, boolean isExpectedTypeMember, Collection<? extends PsiElement> declarations)

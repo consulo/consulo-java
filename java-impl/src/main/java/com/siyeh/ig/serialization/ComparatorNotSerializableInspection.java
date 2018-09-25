@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.serialization;
 
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.util.InheritanceUtil;
@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.MakeSerializableFix;
 import com.siyeh.ig.psiutils.SerializationUtils;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -65,7 +66,7 @@ public class ComparatorNotSerializableInspection extends BaseInspection {
         return;
       }
       if (!InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_UTIL_COMPARATOR)) {
+                                       JavaClassNames.JAVA_UTIL_COMPARATOR)) {
         return;
       }
       if (SerializationUtils.isSerializable(aClass)) {

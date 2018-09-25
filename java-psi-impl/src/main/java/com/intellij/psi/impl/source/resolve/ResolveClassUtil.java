@@ -16,6 +16,7 @@
 package com.intellij.psi.impl.source.resolve;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -27,10 +28,10 @@ public class ResolveClassUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.ResolveClassUtil");
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass resolveClass(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiFile containingFile)
 	{
-		if(ref instanceof PsiJavaCodeReferenceElementImpl && ((PsiJavaCodeReferenceElementImpl) ref).getKind(containingFile) == PsiJavaCodeReferenceElementImpl.CLASS_IN_QUALIFIED_NEW_KIND)
+		if(ref instanceof PsiJavaCodeReferenceElementImpl && ((PsiJavaCodeReferenceElementImpl) ref).getKindEnum(containingFile) == PsiJavaCodeReferenceElementImpl.Kind.CLASS_IN_QUALIFIED_NEW_KIND)
 		{
 			PsiElement parent = ref.getParent();
 			if(parent instanceof PsiAnonymousClass)

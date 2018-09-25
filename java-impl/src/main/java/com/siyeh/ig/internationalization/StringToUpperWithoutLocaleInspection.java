@@ -26,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 
 public class StringToUpperWithoutLocaleInspection extends BaseInspection {
 
@@ -99,7 +100,7 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
         return;
       }
       final String className = containingClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
       final PsiExpression qualifier =

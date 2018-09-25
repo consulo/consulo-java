@@ -26,7 +26,7 @@ import java.util.Set;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.GenericsUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -237,11 +237,11 @@ public class InferenceIncorporationPhase
 						{
 							if(mySession.getInferenceVariable(upperBound) == null)
 							{
-								if(paramBounds.length == 1 && paramBounds[0].equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || paramBounds.length == 0)
+								if(paramBounds.length == 1 && paramBounds[0].equalsToText(JavaClassNames.JAVA_LANG_OBJECT) || paramBounds.length == 0)
 								{
 									addConstraint(new StrictSubtypingConstraint(upperBound, extendsBound));
 								}
-								else if(extendsBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && glb != null)
+								else if(extendsBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && glb != null)
 								{
 									addConstraint(new StrictSubtypingConstraint(upperBound, mySession.substituteWithInferenceVariables(glb)));
 								}

@@ -1,6 +1,7 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.psi.*;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -13,7 +14,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
+    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
   }
 
   public void testInferInAssign1 () throws Exception {
@@ -31,7 +32,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
+    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
   }
 
   public void testInferInCast () throws Exception {
@@ -40,7 +41,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals(CommonClassNames.JAVA_LANG_STRING, paramTypes[0].getCanonicalText());
+    assertEquals(JavaClassNames.JAVA_LANG_STRING, paramTypes[0].getCanonicalText());
   }
 
   public void testInferWithBounds () throws Exception {
@@ -65,7 +66,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferRawType () throws Exception {
-    checkResolvesTo(CommonClassNames.JAVA_LANG_OBJECT);
+    checkResolvesTo(JavaClassNames.JAVA_LANG_OBJECT);
   }
 
   private void checkResolvesTo(@NonNls String typeName) throws Exception {
@@ -144,7 +145,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferUnchecked () throws Exception {
-    checkResolvesTo(CommonClassNames.JAVA_LANG_OBJECT);
+    checkResolvesTo(JavaClassNames.JAVA_LANG_OBJECT);
   }
 
   public void testInferNotNull () throws Exception {

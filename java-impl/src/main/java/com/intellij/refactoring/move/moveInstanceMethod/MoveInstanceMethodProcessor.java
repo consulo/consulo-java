@@ -54,6 +54,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ven
@@ -482,7 +483,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor
 			ChangeContextUtil.decodeContextInfo(method, null, null);
 			if(canAddOverride && OverrideImplementUtil.isInsertOverride(method, aClass))
 			{
-				method.getModifierList().addAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
+				method.getModifierList().addAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
 			}
 			return method;
 		}

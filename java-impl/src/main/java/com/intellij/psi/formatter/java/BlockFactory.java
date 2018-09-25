@@ -15,8 +15,10 @@
  */
 package com.intellij.psi.formatter.java;
 
+import javax.annotation.Nonnull;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
@@ -25,9 +27,12 @@ import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 
 public interface BlockFactory
 {
-	Block createBlock(ASTNode node, Indent indent, Alignment alignment, Wrap wrap);
+
+	Block createBlock(ASTNode node, Indent indent, Alignment alignment, Wrap wrap, @Nonnull FormattingMode formattingMode);
 
 	CommonCodeStyleSettings getSettings();
 
 	JavaCodeStyleSettings getJavaSettings();
+
+	FormattingMode getFormattingMode();
 }

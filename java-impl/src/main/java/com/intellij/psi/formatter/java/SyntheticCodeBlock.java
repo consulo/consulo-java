@@ -52,7 +52,12 @@ public class SyntheticCodeBlock implements Block, JavaBlock
 	private ChildAttributes myChildAttributes;
 	private boolean myIsIncomplete;
 
-	public SyntheticCodeBlock(List<Block> subBlocks, Alignment alignment, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings, Indent indent, Wrap wrap)
+	public SyntheticCodeBlock(List<Block> subBlocks,
+							  Alignment alignment,
+							  CommonCodeStyleSettings settings,
+							  JavaCodeStyleSettings javaSettings,
+							  Indent indent,
+							  Wrap wrap)
 	{
 		myJavaSettings = javaSettings;
 		myIndentContent = indent;
@@ -64,7 +69,8 @@ public class SyntheticCodeBlock implements Block, JavaBlock
 		myAlignment = alignment;
 		mySettings = settings;
 		myWrap = wrap;
-		myTextRange = new TextRange(mySubBlocks.get(0).getTextRange().getStartOffset(), mySubBlocks.get(mySubBlocks.size() - 1).getTextRange().getEndOffset());
+		myTextRange = new TextRange(mySubBlocks.get(0).getTextRange().getStartOffset(),
+				mySubBlocks.get(mySubBlocks.size() - 1).getTextRange().getEndOffset());
 	}
 
 	@Override
@@ -102,7 +108,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock
 	@Override
 	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
-		return JavaSpacePropertyProcessor.getSpacing(AbstractJavaBlock.getTreeNode(child2), mySettings, myJavaSettings);
+		return JavaSpacePropertyProcessor.getSpacing(child2, mySettings, myJavaSettings);
 	}
 
 	public String toString()

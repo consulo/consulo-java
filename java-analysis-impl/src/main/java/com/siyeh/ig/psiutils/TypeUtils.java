@@ -30,6 +30,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class TypeUtils
 {
@@ -72,12 +73,12 @@ public class TypeUtils
 
 	public static PsiClassType getObjectType(@Nonnull PsiElement context)
 	{
-		return getType(CommonClassNames.JAVA_LANG_OBJECT, context);
+		return getType(JavaClassNames.JAVA_LANG_OBJECT, context);
 	}
 
 	public static PsiClassType getStringType(@Nonnull PsiElement context)
 	{
-		return getType(CommonClassNames.JAVA_LANG_STRING, context);
+		return getType(JavaClassNames.JAVA_LANG_STRING, context);
 	}
 
 	/**
@@ -93,13 +94,13 @@ public class TypeUtils
 	@Contract("null -> false")
 	public static boolean isJavaLangObject(@Nullable PsiType targetType)
 	{
-		return typeEquals(CommonClassNames.JAVA_LANG_OBJECT, targetType);
+		return typeEquals(JavaClassNames.JAVA_LANG_OBJECT, targetType);
 	}
 
 	@Contract("null -> false")
 	public static boolean isJavaLangString(@Nullable PsiType targetType)
 	{
-		return typeEquals(CommonClassNames.JAVA_LANG_STRING, targetType);
+		return typeEquals(JavaClassNames.JAVA_LANG_STRING, targetType);
 	}
 
 	public static boolean isOptional(@Nullable PsiType type)
@@ -115,7 +116,7 @@ public class TypeUtils
 			return false;
 		}
 		final String qualifiedName = aClass.getQualifiedName();
-		return CommonClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName) || "java.util.OptionalDouble".equals(qualifiedName) || "java.util.OptionalInt".equals(qualifiedName) || ("java.util" +
+		return JavaClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName) || "java.util.OptionalDouble".equals(qualifiedName) || "java.util.OptionalInt".equals(qualifiedName) || ("java.util" +
 				".OptionalLong").equals(qualifiedName) || "com.google.common.base.Optional".equals(qualifiedName);
 	}
 

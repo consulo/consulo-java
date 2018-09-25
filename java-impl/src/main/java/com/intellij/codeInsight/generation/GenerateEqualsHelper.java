@@ -43,6 +43,7 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author dsl
@@ -262,7 +263,7 @@ public class GenerateEqualsHelper implements Runnable
 		{
 			return false;
 		}
-		return !CommonClassNames.JAVA_LANG_OBJECT.equals(superEquals.getContainingClass().getQualifiedName());
+		return !JavaClassNames.JAVA_LANG_OBJECT.equals(superEquals.getContainingClass().getQualifiedName());
 	}
 
 	private PsiMethod createHashCode() throws IncorrectOperationException
@@ -336,7 +337,7 @@ public class GenerateEqualsHelper implements Runnable
 			return false;
 		}
 		final String qName = psiClass.getQualifiedName();
-		return CommonClassNames.JAVA_LANG_OBJECT.equals(qName);
+		return JavaClassNames.JAVA_LANG_OBJECT.equals(qName);
 	}
 
 	public static MethodSignature getHashCodeSignature()

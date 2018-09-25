@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.java.stubs.impl;
 
 import static com.intellij.psi.impl.java.stubs.JavaPackageAccessibilityStatementElementType.typeToRole;
-import static com.intellij.util.ObjectUtils.notNull;
+import static com.intellij.util.ObjectUtil.notNull;
 
 import java.util.Collections;
 import java.util.List;

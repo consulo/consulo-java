@@ -23,6 +23,7 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -156,7 +157,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiClass serializable =
-      psiFacade.findClass(CommonClassNames.JAVA_IO_SERIALIZABLE, scope);
+      psiFacade.findClass(JavaClassNames.JAVA_IO_SERIALIZABLE, scope);
     if (serializable == null) {
       // no jdk defined for project.
       return -1L;

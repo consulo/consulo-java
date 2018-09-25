@@ -31,6 +31,8 @@ import com.siyeh.ig.fixes.EqualityToEqualsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -190,11 +192,11 @@ public class ObjectEqualityInspection extends BaseInspection {
       }
       final PsiClassType classType = (PsiClassType)type;
       final PsiClassType rawType = classType.rawType();
-      return rawType.equalsToText(CommonClassNames.JAVA_LANG_CLASS);
+      return rawType.equalsToText(JavaClassNames.JAVA_LANG_CLASS);
     }
 
     private boolean isEnumType(@javax.annotation.Nullable PsiExpression expression) {
-      return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_ENUM);
+      return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_LANG_ENUM);
     }
 
     private boolean isObjectType(PsiExpression expression) {
@@ -206,7 +208,7 @@ public class ObjectEqualityInspection extends BaseInspection {
              !(type instanceof PsiArrayType) &&
              !(type instanceof PsiPrimitiveType) &&
              !TypeUtils.isJavaLangString(type) &&
-             !TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_NUMBER);
+             !TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_LANG_NUMBER);
     }
   }
 }

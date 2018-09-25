@@ -25,6 +25,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -44,18 +45,18 @@ public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
     final PsiExpression expression = (PsiExpression)infos[0];
     final String type =
       TypeUtils.expressionHasTypeOrSubtype(expression,
-                                           CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
-                                           CommonClassNames.JAVA_LANG_EXCEPTION,
-                                           CommonClassNames.JAVA_LANG_ERROR);
-    if (CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION.equals(type)) {
+                                           JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+                                           JavaClassNames.JAVA_LANG_EXCEPTION,
+                                           JavaClassNames.JAVA_LANG_ERROR);
+    if (JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION.equals(type)) {
       return InspectionGadgetsBundle.message(
         "throwable.instance.never.thrown.runtime.exception.problem.descriptor");
     }
-    else if (CommonClassNames.JAVA_LANG_EXCEPTION.equals(type)) {
+    else if (JavaClassNames.JAVA_LANG_EXCEPTION.equals(type)) {
       return InspectionGadgetsBundle.message(
         "throwable.instance.never.thrown.checked.exception.problem.descriptor");
     }
-    else if (CommonClassNames.JAVA_LANG_ERROR.equals(type)) {
+    else if (JavaClassNames.JAVA_LANG_ERROR.equals(type)) {
       return InspectionGadgetsBundle.message(
         "throwable.instance.never.thrown.error.problem.descriptor");
     }
@@ -82,7 +83,7 @@ public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
     public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!TypeUtils.expressionHasTypeOrSubtype(expression,
-                                                CommonClassNames.JAVA_LANG_THROWABLE)) {
+                                                JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
       final PsiElement parent = getParent(expression.getParent());
@@ -194,7 +195,7 @@ public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
       final PsiParameter[] parameters =
         parameterList.getParameters();
       final PsiType type = parameters[0].getType();
-      if (!type.equalsToText(CommonClassNames.JAVA_LANG_THROWABLE)) {
+      if (!type.equalsToText(JavaClassNames.JAVA_LANG_THROWABLE)) {
         return null;
       }
       return getParent(methodCallExpression.getParent());

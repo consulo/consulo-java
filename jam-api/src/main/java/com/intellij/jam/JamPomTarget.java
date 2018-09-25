@@ -23,7 +23,7 @@ import com.intellij.pom.PsiDeclaredTarget;
 import com.intellij.psi.DelegatePsiTarget;
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiLiteral;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 import javax.annotation.Nullable;
 
@@ -35,7 +35,7 @@ public class JamPomTarget extends DelegatePsiTarget implements PsiDeclaredTarget
   private final JamStringAttributeElement myNameAttr;
 
   public JamPomTarget(JamElement element, JamStringAttributeElement nameAttr) {
-    super(ObjectUtils.assertNotNull(nameAttr.getPsiElement()));
+    super(ObjectUtil.assertNotNull(nameAttr.getPsiElement()));
     myElement = element;
     myNameAttr = nameAttr;
   }

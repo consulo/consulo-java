@@ -26,6 +26,7 @@ import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class JavaVarTypeUtil
 {
@@ -139,7 +140,7 @@ public class JavaVarTypeUtil
 							{
 								targetSubstitutor = targetSubstitutor.put(parameter, PsiWildcardType.createUnbounded(manager));
 							}
-							else if(!U.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && tryUpperBound(aClass, parameter, U))
+							else if(!U.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && tryUpperBound(aClass, parameter, U))
 							{
 								targetSubstitutor = targetSubstitutor.put(parameter, PsiWildcardType.createExtends(manager, U));
 							}

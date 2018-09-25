@@ -15,21 +15,22 @@
  */
 package com.siyeh.ipp.psiutils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImportUtils {
 
@@ -444,7 +445,7 @@ public class ImportUtils {
       return false;
     }
     final List<PsiImportStaticStatement> imports = getMatchingImports(importList, qualifiedName);
-    final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+    final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
     final PsiElementFactory elementFactory = psiFacade.getElementFactory();
     if (imports.size() < codeStyleSettings.NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND) {
       importList.add(elementFactory.createImportStaticStatement(aClass, memberName));

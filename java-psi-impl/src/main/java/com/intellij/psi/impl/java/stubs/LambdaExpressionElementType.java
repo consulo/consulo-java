@@ -35,7 +35,7 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.impl.source.tree.java.PsiLambdaExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.ReplaceExpressionUtil;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 public class LambdaExpressionElementType extends FunctionalExpressionElementType<PsiLambdaExpression>
 {
@@ -104,7 +104,7 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
 	@Override
 	protected String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr)
 	{
-		LighterASTNode parameterList = ObjectUtils.notNull(LightTreeUtil.firstChildOfType(tree, funExpr, JavaStubElementTypes.PARAMETER_LIST));
+		LighterASTNode parameterList = ObjectUtil.notNull(LightTreeUtil.firstChildOfType(tree, funExpr, JavaStubElementTypes.PARAMETER_LIST));
 		return getLambdaPresentableText(tree, parameterList);
 	}
 

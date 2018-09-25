@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nls;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClassType;
@@ -47,7 +47,7 @@ public class ConvertCollectionToArrayFix implements IntentionAction
 		myCollectionExpression = collectionExpression;
 
 		PsiType componentType = arrayType.getComponentType();
-		myNewArrayText = componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
+		myNewArrayText = componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
 	}
 
 	@Nls

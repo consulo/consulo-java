@@ -22,6 +22,7 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ControlFlowUtils;
 import com.siyeh.ipp.psiutils.EquivalenceChecker;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -99,7 +100,7 @@ public class ReplaceIfWithSwitchIntention extends Intention {
     @NonNls final StringBuilder switchStatementText = new StringBuilder();
     switchStatementText.append("switch(").append(switchExpression.getText()).append("){");
     final PsiType type = switchExpression.getType();
-    final boolean castToInt = type != null && type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER);
+    final boolean castToInt = type != null && type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER);
     for (IfStatementBranch branch : branches) {
       boolean hasConflicts = false;
       for (IfStatementBranch testBranch : branches) {

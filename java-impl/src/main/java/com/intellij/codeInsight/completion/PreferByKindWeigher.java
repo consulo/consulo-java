@@ -43,6 +43,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.proximity.KnownElementWeigher;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -94,7 +95,7 @@ public class PreferByKindWeigher extends LookupElementWeigher
 			}
 			if(thrownExceptions.isEmpty())
 			{
-				ContainerUtil.addIfNotNull(thrownExceptions, JavaPsiFacade.getInstance(position.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, position.getResolveScope()));
+				ContainerUtil.addIfNotNull(thrownExceptions, JavaPsiFacade.getInstance(position.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, position.getResolveScope()));
 			}
 			return psiClass ->
 			{
@@ -110,12 +111,12 @@ public class PreferByKindWeigher extends LookupElementWeigher
 		}
 		else if(JavaSmartCompletionContributor.AFTER_THROW_NEW.accepts(position) || INSIDE_METHOD_THROWS_CLAUSE.accepts(position))
 		{
-			return psiClass -> InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_THROWABLE);
+			return psiClass -> InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_THROWABLE);
 		}
 
 		if(IN_RESOURCE.accepts(position))
 		{
-			return psiClass -> InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE);
+			return psiClass -> InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE);
 		}
 
 		if(psiElement().withParents(PsiJavaCodeReferenceElement.class, PsiAnnotation.class).accepts(position))
@@ -189,12 +190,12 @@ public class PreferByKindWeigher extends LookupElementWeigher
 		if(object instanceof PsiMethod)
 		{
 			PsiClass containingClass = ((PsiMethod) object).getContainingClass();
-			if(containingClass != null && CommonClassNames.JAVA_UTIL_COLLECTIONS.equals(containingClass.getQualifiedName()))
+			if(containingClass != null && JavaClassNames.JAVA_UTIL_COLLECTIONS.equals(containingClass.getQualifiedName()))
 			{
 				return MyResult.collectionFactory;
 			}
 		}
-		if(object instanceof PsiClass && CommonClassNames.JAVA_LANG_STRING.equals(((PsiClass) object).getQualifiedName()) && JavaSmartCompletionContributor.AFTER_NEW.accepts(myPosition))
+		if(object instanceof PsiClass && JavaClassNames.JAVA_LANG_STRING.equals(((PsiClass) object).getQualifiedName()) && JavaSmartCompletionContributor.AFTER_NEW.accepts(myPosition))
 		{
 			return MyResult.unlikelyClass;
 		}

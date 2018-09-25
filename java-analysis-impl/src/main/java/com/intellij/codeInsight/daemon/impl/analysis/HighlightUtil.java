@@ -93,12 +93,13 @@ import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.hash.HashSet;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import consulo.annotations.RequiredReadAction;
+import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 
 /**
@@ -823,7 +824,7 @@ public class HighlightUtil extends HighlightUtilBase
 		{
 			PsiType arrayComponentType = ((PsiArrayType) toType).getComponentType();
 			if(!(arrayComponentType instanceof PsiPrimitiveType) && !(PsiUtil.resolveClassInType(arrayComponentType) instanceof PsiTypeParameter) && InheritanceUtil.isInheritor(fromType,
-			CommonClassNames.JAVA_UTIL_COLLECTION))
+			JavaClassNames.JAVA_UTIL_COLLECTION))
 			{
 				PsiType collectionItemType = JavaGenericsUtil.getCollectionItemType(fromType, expression.getResolveScope());
 				if(collectionItemType != null && arrayComponentType.isAssignableFrom(collectionItemType))
@@ -1895,7 +1896,7 @@ public class HighlightUtil extends HighlightUtilBase
 			{
 				return SelectorKind.ENUM;
 			}
-			if(Comparing.strEqual(psiClass.getQualifiedName(), CommonClassNames.JAVA_LANG_STRING))
+			if(Comparing.strEqual(psiClass.getQualifiedName(), JavaClassNames.JAVA_LANG_STRING))
 			{
 				return SelectorKind.STRING;
 			}
@@ -2023,7 +2024,7 @@ public class HighlightUtil extends HighlightUtilBase
 				final PsiElement parent = expr.getParent();
 				final PsiElement resolved = parent instanceof PsiReferenceExpression ? ((PsiReferenceExpression) parent).resolve() : null;
 
-				PsiClass containingClass = ObjectUtils.notNull(resolved instanceof PsiMethod ? ((PsiMethod) resolved).getContainingClass() : null, aClass);
+				PsiClass containingClass = ObjectUtil.notNull(resolved instanceof PsiMethod ? ((PsiMethod) resolved).getContainingClass() : null, aClass);
 				for(PsiClass superClass : classT.getSupers())
 				{
 					if(superClass.isInheritor(containingClass, true))
@@ -2178,7 +2179,7 @@ public class HighlightUtil extends HighlightUtilBase
 	@Nonnull
 	static String buildProblemWithAccessDescription(@Nonnull final PsiElement reference, @Nonnull final JavaResolveResult result)
 	{
-		return buildProblemWithAccessDescription(reference, result, ObjectUtils.notNull(result.getElement()));
+		return buildProblemWithAccessDescription(reference, result, ObjectUtil.notNull(result.getElement()));
 	}
 
 	@Nonnull
@@ -2278,7 +2279,7 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 
 		PsiElementFactory factory = JavaPsiFacade.getInstance(resource.getProject()).getElementFactory();
-		PsiClassType autoCloseable = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, resource.getResolveScope());
+		PsiClassType autoCloseable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, resource.getResolveScope());
 		if(TypeConversionUtil.isAssignable(autoCloseable, type))
 		{
 			return null;
@@ -3586,8 +3587,8 @@ public class HighlightUtil extends HighlightUtilBase
 			String description;
 			if(results.length > 1)
 			{
-				String t1 = format(ObjectUtils.notNull(results[0].getElement()));
-				String t2 = format(ObjectUtils.notNull(results[1].getElement()));
+				String t1 = format(ObjectUtil.notNull(results[0].getElement()));
+				String t2 = format(ObjectUtil.notNull(results[1].getElement()));
 				description = JavaErrorMessages.message("ambiguous.reference", refName.getText(), t1, t2);
 			}
 			else

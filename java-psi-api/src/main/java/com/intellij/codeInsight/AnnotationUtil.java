@@ -41,6 +41,7 @@ import com.intellij.util.Processors;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.DeprecationInfo;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author max
@@ -844,7 +845,7 @@ public class AnnotationUtil
 		{
 			map.put(annotation.getQualifiedName(), annotation);
 		}
-		map.remove(CommonClassNames.JAVA_LANG_OVERRIDE);
+		map.remove(JavaClassNames.JAVA_LANG_OVERRIDE);
 		map.remove("java.lang.SuppressWarnings");
 		return map;
 	}

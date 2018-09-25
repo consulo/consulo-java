@@ -17,10 +17,11 @@ package com.intellij.codeInsight.template.postfix.templates;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
+
 import javax.annotation.Nonnull;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -33,7 +34,7 @@ public class FormatPostfixTemplate extends JavaStatementWrapPostfixTemplate {
         return false;
       }
       PsiType type = ((PsiExpression)expr).getType();
-      return type != null && CommonClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
+      return type != null && JavaClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
     }
   };
 

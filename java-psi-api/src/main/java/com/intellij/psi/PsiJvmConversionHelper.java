@@ -31,6 +31,7 @@ import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmSubstitutor;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.diagnostic.Logger;
+import consulo.java.module.util.JavaClassNames;
 
 class PsiJvmConversionHelper
 {
@@ -91,7 +92,7 @@ class PsiJvmConversionHelper
 		}
 		if(psiClass.isEnum())
 		{
-			return getTypeByName(CommonClassNames.JAVA_LANG_ENUM, psiClass.getProject(), psiClass.getResolveScope());
+			return getTypeByName(JavaClassNames.JAVA_LANG_ENUM, psiClass.getProject(), psiClass.getResolveScope());
 		}
 		if(psiClass instanceof PsiAnonymousClass)
 		{
@@ -106,7 +107,7 @@ class PsiJvmConversionHelper
 				return getJavaLangObject(psiClass.getManager(), psiClass.getResolveScope());
 			}
 		}
-		if(CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()))
+		if(JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()))
 		{
 			return null;
 		}

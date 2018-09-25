@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.alignment.AlignmentStrategy;
@@ -33,9 +35,15 @@ import com.intellij.psi.formatter.FormatterUtil;
 
 public class DocCommentBlock extends AbstractJavaBlock
 {
-	public DocCommentBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	public DocCommentBlock(ASTNode node,
+						   Wrap wrap,
+						   Alignment alignment,
+						   Indent indent,
+						   CommonCodeStyleSettings settings,
+						   JavaCodeStyleSettings javaSettings,
+						   @Nonnull FormattingMode formattingMode)
 	{
-		super(node, wrap, alignment, indent, settings, javaSettings);
+		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}
 
 	@Override
@@ -48,11 +56,11 @@ public class DocCommentBlock extends AbstractJavaBlock
 		{
 			if(child.getElementType() == JavaDocTokenType.DOC_COMMENT_START)
 			{
-				result.add(createJavaBlock(child, mySettings, myJavaSettings, Indent.getNoneIndent(), null, AlignmentStrategy.getNullStrategy()));
+				result.add(createJavaBlock(child, mySettings, myJavaSettings, Indent.getNoneIndent(), null, AlignmentStrategy.getNullStrategy(), getFormattingMode()));
 			}
 			else if(!FormatterUtil.containsWhiteSpacesOnly(child) && !child.getText().trim().isEmpty())
 			{
-				result.add(createJavaBlock(child, mySettings, myJavaSettings, Indent.getSpaceIndent(1), null, AlignmentStrategy.getNullStrategy()));
+				result.add(createJavaBlock(child, mySettings, myJavaSettings, Indent.getSpaceIndent(1), null, AlignmentStrategy.getNullStrategy(), getFormattingMode()));
 			}
 			child = child.getTreeNext();
 		}

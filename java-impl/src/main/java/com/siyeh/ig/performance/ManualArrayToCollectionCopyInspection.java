@@ -32,6 +32,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -605,7 +606,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
       }
       final PsiClass containingClass = method.getContainingClass();
       return InheritanceUtil.isInheritor(containingClass,
-                                         CommonClassNames.JAVA_UTIL_COLLECTION);
+                                         JavaClassNames.JAVA_UTIL_COLLECTION);
     }
   }
 }

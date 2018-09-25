@@ -27,6 +27,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Query;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -69,7 +70,7 @@ public class WeakestTypeFinder {
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(variableOrMethod.getProject());
     final PsiClass lowerBoundClass;
     if (variableOrMethod instanceof PsiResourceVariable) {
-      lowerBoundClass = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, scope);
+      lowerBoundClass = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, scope);
       if (lowerBoundClass == null || variableOrMethodClass.equals(lowerBoundClass)) {
         return Collections.emptyList();
       }
@@ -83,7 +84,7 @@ public class WeakestTypeFinder {
       }
     }
     else {
-      lowerBoundClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, scope);
+      lowerBoundClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, scope);
       if (lowerBoundClass == null || variableOrMethodClass.equals(lowerBoundClass)) {
         return Collections.emptyList();
       }
@@ -137,7 +138,7 @@ public class WeakestTypeFinder {
         if (!Comparing.equal(foreachStatement.getIteratedValue(), referenceElement)) {
           return Collections.emptyList();
         }
-        final PsiClass javaLangIterableClass = facade.findClass(CommonClassNames.JAVA_LANG_ITERABLE, scope);
+        final PsiClass javaLangIterableClass = facade.findClass(JavaClassNames.JAVA_LANG_ITERABLE, scope);
         if (javaLangIterableClass == null) {
           return Collections.emptyList();
         }
@@ -300,8 +301,8 @@ public class WeakestTypeFinder {
         HardcodedMethodConstants.INDEX_OF.equals(methodName) ||
         HardcodedMethodConstants.LAST_INDEX_OF.equals(methodName)) {
       final PsiClass containingClass = method.getContainingClass();
-      if (InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_UTIL_MAP) ||
-          InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_UTIL_COLLECTION)) {
+      if (InheritanceUtil.isInheritor(containingClass, JavaClassNames.JAVA_UTIL_MAP) ||
+          InheritanceUtil.isInheritor(containingClass, JavaClassNames.JAVA_UTIL_COLLECTION)) {
         final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
         final PsiExpression qualifier = methodExpression.getQualifierExpression();
         if (qualifier != null) {
@@ -443,7 +444,7 @@ public class WeakestTypeFinder {
 
   private static boolean findWeakestType(PsiThrowStatement throwStatement, PsiClass variableOrMethodClass,
                                          Set<PsiClass> weakestTypeClasses) {
-    final PsiClassType runtimeExceptionType = TypeUtils.getType(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, throwStatement);
+    final PsiClassType runtimeExceptionType = TypeUtils.getType(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, throwStatement);
     final PsiClass runtimeExceptionClass = runtimeExceptionType.resolve();
     if (runtimeExceptionClass != null && InheritanceUtil.isInheritorOrSelf(variableOrMethodClass, runtimeExceptionClass, true)) {
       if (!checkType(runtimeExceptionType, weakestTypeClasses)) {
@@ -494,8 +495,8 @@ public class WeakestTypeFinder {
       if (aClass == null) {
         return true;
       }
-      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION) &&
-          !InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_ERROR)) {
+      if (!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION) &&
+          !InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_ERROR)) {
         return true;
       }
     }

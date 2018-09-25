@@ -34,7 +34,7 @@ import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.codeInspection.dataFlow.PurityInference;
 import com.intellij.codeInspection.dataFlow.StandardMethodContract;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -198,7 +198,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 				if(containingClass != null)
 				{
 					String className = containingClass.getQualifiedName();
-					if(CommonClassNames.JAVA_UTIL_LIST.equals(className) || CommonClassNames.JAVA_UTIL_SET.equals(className) || CommonClassNames.JAVA_UTIL_MAP.equals(className) || ("java.util" +
+					if(JavaClassNames.JAVA_UTIL_LIST.equals(className) || JavaClassNames.JAVA_UTIL_SET.equals(className) || JavaClassNames.JAVA_UTIL_MAP.equals(className) || ("java.util" +
 							".EnumSet").equals(className))
 					{
 						return ProjectBytecodeAnalysis.getInstance(myProject).getNotNullAnnotation();

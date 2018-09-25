@@ -26,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -264,7 +265,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
             return false;
           }
           return InheritanceUtil.isInheritor(containingClass,
-                                             CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER);
+                                             JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER);
         }
         else if ("valueOf".equals(methodName)) {
           if (arguments.length != 1) {
@@ -272,7 +273,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
           }
           final String qualifiedName =
             containingClass.getQualifiedName();
-          return CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName);
+          return JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName);
         }
         if (!"print".equals(methodName) &&
             !"println".equals(methodName)) {
@@ -305,7 +306,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
         }
         final String qualifiedName = containingClass.getQualifiedName();
         if ("java.util.Formatter".equals(qualifiedName) ||
-            CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
+            JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
           return true;
         }
         if (InheritanceUtil.isInheritor(containingClass,

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.light;
 
-import static com.intellij.util.ObjectUtils.notNull;
+import static com.intellij.util.ObjectUtil.notNull;
 
 import java.io.IOException;
 import java.io.InputStream;

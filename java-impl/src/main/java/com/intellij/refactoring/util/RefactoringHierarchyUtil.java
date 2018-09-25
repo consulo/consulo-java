@@ -32,6 +32,8 @@ import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.*;
@@ -87,7 +89,7 @@ public class RefactoringHierarchyUtil {
     if (superTypes.length > 0) {
       PsiClass resolved = superTypes[0].resolve();
       // if we have no superclass but have interfaces, prefer interfaces to class (IDEADEV-20104)
-      if (resolved != null && CommonClassNames.JAVA_LANG_OBJECT.equals(resolved.getQualifiedName()) && superTypes.length > 1) {
+      if (resolved != null && JavaClassNames.JAVA_LANG_OBJECT.equals(resolved.getQualifiedName()) && superTypes.length > 1) {
         resolved = superTypes [1].resolve();
       }
       if (resolved != null) {
@@ -117,7 +119,7 @@ public class RefactoringHierarchyUtil {
 
     if (!subClass.isInterface()) {
       final PsiManager manager = subClass.getManager();
-      PsiClass javaLangObject = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_OBJECT, subClass.getResolveScope());
+      PsiClass javaLangObject = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_LANG_OBJECT, subClass.getResolveScope());
       if (includeNonProject && javaLangObject != null && !manager.areElementsEquivalent(javaLangObject, subClass)) {
         bases.add(javaLangObject);
       }

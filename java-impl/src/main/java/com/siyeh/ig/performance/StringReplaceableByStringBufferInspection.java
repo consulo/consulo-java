@@ -22,6 +22,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -76,7 +78,7 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
         return;
       }
       final PsiType type = variable.getType();
-      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING,
+      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING,
                                 type)) {
         return;
       }

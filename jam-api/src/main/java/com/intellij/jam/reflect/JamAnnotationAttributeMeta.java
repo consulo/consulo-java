@@ -31,7 +31,7 @@ import com.intellij.semantic.SemRegistrar;
 import com.intellij.semantic.SemService;
 import com.intellij.util.Consumer;
 import com.intellij.util.NullableFunction;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.PairConsumer;
 import com.intellij.util.containers.ContainerUtil;
 import javax.annotation.Nonnull;
@@ -115,7 +115,7 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
     public T getJam(PsiElementRef<PsiAnnotation> anno) {
       final PsiAnnotation psiElement = anno.getPsiElement();
       assert psiElement != null;
-      return ObjectUtils.assertNotNull(JamService.getJamService(anno.getPsiManager().getProject()).getJamElement(myJamKey, psiElement));
+      return ObjectUtil.assertNotNull(JamService.getJamService(anno.getPsiManager().getProject()).getJamElement(myJamKey, psiElement));
     }
 
     @Override
@@ -153,7 +153,7 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
 
     @Nonnull
     public T addAttribute(PsiElementRef<PsiAnnotation> annoRef) {
-      return ObjectUtils.assertNotNull(getJam(addAttribute(annoRef, "@" + myAnnoMeta.getAnnoName(), getAttributeLink())));
+      return ObjectUtil.assertNotNull(getJam(addAttribute(annoRef, "@" + myAnnoMeta.getAnnoName(), getAttributeLink())));
     }
 
     @Override

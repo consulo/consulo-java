@@ -29,7 +29,7 @@ import com.intellij.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -112,10 +112,10 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   @Override
   public PsiElement handleElementRename(final String newElementName) throws IncorrectOperationException {
     CheckUtil.checkWritable(this);
-    final PsiElement firstChildNode = ObjectUtils.assertNotNull(getFirstChild());
-    final PsiElement firstInIdentifier = getClass().isInstance(firstChildNode) ? ObjectUtils.assertNotNull(firstChildNode.getNextSibling()).getNextSibling() : firstChildNode;
+    final PsiElement firstChildNode = ObjectUtil.assertNotNull(getFirstChild());
+    final PsiElement firstInIdentifier = getClass().isInstance(firstChildNode) ? ObjectUtil.assertNotNull(firstChildNode.getNextSibling()).getNextSibling() : firstChildNode;
     getNode().removeRange(firstInIdentifier.getNode(), null);
-    final PsiElement referenceName = ObjectUtils.assertNotNull(parseReference(newElementName).getReferenceNameElement());
+    final PsiElement referenceName = ObjectUtil.assertNotNull(parseReference(newElementName).getReferenceNameElement());
     getNode().addChild(referenceName.getNode());
     return this;
   }

@@ -25,6 +25,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -117,7 +119,7 @@ public class StringEqualsIgnoreCaseInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
       final PsiExpression qualifier =

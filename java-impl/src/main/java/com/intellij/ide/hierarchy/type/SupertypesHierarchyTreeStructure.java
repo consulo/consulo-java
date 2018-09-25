@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFunctionalExpression;
@@ -48,7 +48,7 @@ public final class SupertypesHierarchyTreeStructure extends HierarchyTreeStructu
 			final PsiClass psiClass = (PsiClass) element;
 			final PsiClass[] supers = psiClass.getSupers();
 			final List<HierarchyNodeDescriptor> descriptors = new ArrayList<HierarchyNodeDescriptor>();
-			final PsiClass objectClass = JavaPsiFacade.getInstance(myProject).findClass(CommonClassNames.JAVA_LANG_OBJECT, psiClass.getResolveScope());
+			final PsiClass objectClass = JavaPsiFacade.getInstance(myProject).findClass(JavaClassNames.JAVA_LANG_OBJECT, psiClass.getResolveScope());
 			for(PsiClass aSuper : supers)
 			{
 				if(!psiClass.isInterface() || !aSuper.equals(objectClass))

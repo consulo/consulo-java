@@ -32,6 +32,8 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.List;
@@ -55,7 +57,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     if (!(type instanceof PsiClassType)) return false;
     final PsiClass aClass = ((PsiClassType)type).resolve();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
     if (!InheritanceUtil.isInheritorOrSelf(aClass, autoCloseable, true)) return false;
 
     return true;

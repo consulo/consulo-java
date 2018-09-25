@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,17 @@
  */
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.util.containers.ContainerUtilRt;
 
-/**
- * @author max
- */
+import com.intellij.formatting.IndentInfo;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 
 /**
  * @author Dmitry Skavish
@@ -35,9 +37,11 @@ public class JDComment
 	private String myDescription;
 	private List<String> myUnknownList;
 	private List<String> mySeeAlsoList;
-	private String mySince;
+	private List<String> mySinceList;
 	private String myDeprecated;
 	private boolean myMultiLineComment;
+	private String myFirstLine = "/**";
+	private String myEndLine = "*/";
 
 	public JDComment(@Nonnull CommentFormatter formatter)
 	{
@@ -49,7 +53,7 @@ public class JDComment
 		return s == null || s.trim().isEmpty();
 	}
 
-	protected static boolean isNull(@javax.annotation.Nullable List<?> l)
+	protected static boolean isNull(@Nullable List<?> l)
 	{
 		return l == null || l.isEmpty();
 	}
@@ -59,7 +63,25 @@ public class JDComment
 		myMultiLineComment = value;
 	}
 
-	@javax.annotation.Nullable
+	@Nonnull
+	protected String javadocContinuationIndent()
+	{
+		if(!myFormatter.getSettings().JD_INDENT_ON_CONTINUATION)
+		{
+			return "";
+		}
+		return continuationIndent();
+	}
+
+	@Nonnull
+	protected String continuationIndent()
+	{
+		CodeStyleSettings settings = myFormatter.getSettings().getContainer();
+		CommonCodeStyleSettings.IndentOptions indentOptions = settings.getIndentOptions(JavaFileType.INSTANCE);
+		return new IndentInfo(0, indentOptions.CONTINUATION_INDENT_SIZE, 0).generateNewWhiteSpace(indentOptions);
+	}
+
+	@Nullable
 	public String generate(@Nonnull String indent)
 	{
 		final String prefix;
@@ -74,11 +96,9 @@ public class JDComment
 		}
 
 		StringBuilder sb = new StringBuilder();
-		int start = sb.length();
 
 		if(!isNull(myDescription))
 		{
-			sb.append(prefix);
 			sb.append(myFormatter.getParser().formatJDTagDescription(myDescription, prefix));
 
 			if(myFormatter.getSettings().JD_ADD_BLANK_AFTER_DESCRIPTION)
@@ -90,12 +110,13 @@ public class JDComment
 
 		generateSpecial(prefix, sb);
 
+		final String continuationPrefix = prefix + javadocContinuationIndent();
+
 		if(!isNull(myUnknownList) && myFormatter.getSettings().JD_KEEP_INVALID_TAGS)
 		{
 			for(String aUnknownList : myUnknownList)
 			{
-				sb.append(prefix);
-				sb.append(myFormatter.getParser().formatJDTagDescription(aUnknownList, prefix));
+				sb.append(myFormatter.getParser().formatJDTagDescription(aUnknownList, prefix, continuationPrefix));
 			}
 		}
 
@@ -104,60 +125,59 @@ public class JDComment
 			JDTag tag = JDTag.SEE;
 			for(String aSeeAlsoList : mySeeAlsoList)
 			{
-				sb.append(prefix);
-				sb.append(tag.getWithEndWhitespace());
-				StringBuilder tagDescription = myFormatter.getParser().formatJDTagDescription(aSeeAlsoList, prefix, true,
-						tag.getDescriptionPrefix(prefix).length());
+				StringBuilder tagDescription = myFormatter.getParser()
+						.formatJDTagDescription(aSeeAlsoList, prefix + tag.getWithEndWhitespace(), continuationPrefix);
 				sb.append(tagDescription);
 			}
 		}
 
-		if(!isNull(mySince))
+		if(!isNull(mySinceList))
 		{
 			JDTag tag = JDTag.SINCE;
-			sb.append(prefix);
-			sb.append(tag.getWithEndWhitespace());
-			StringBuilder tagDescription = myFormatter.getParser().formatJDTagDescription(mySince, prefix, true,
-					tag.getDescriptionPrefix(prefix).length());
-			sb.append(tagDescription);
+			for(String since : mySinceList)
+			{
+				StringBuilder tagDescription = myFormatter.getParser()
+						.formatJDTagDescription(since, prefix + tag.getWithEndWhitespace(), continuationPrefix);
+				sb.append(tagDescription);
+			}
 		}
 
 		if(myDeprecated != null)
 		{
 			JDTag tag = JDTag.DEPRECATED;
-			sb.append(prefix);
-			sb.append(tag.getWithEndWhitespace());
-			StringBuilder tagDescription = myFormatter.getParser().formatJDTagDescription(myDeprecated, prefix, true,
-					tag.getDescriptionPrefix(prefix).length());
+			StringBuilder tagDescription = myFormatter.getParser()
+					.formatJDTagDescription(myDeprecated, prefix + tag.getWithEndWhitespace(), continuationPrefix);
 			sb.append(tagDescription);
 		}
 
-		if(sb.length() == start)
+		if(sb.length() > prefix.length())
 		{
-			return null;
+			// if it ends with a blank line delete that
+			int nlen = sb.length() - prefix.length() - 1;
+			if(sb.substring(nlen, sb.length()).equals(prefix + "\n"))
+			{
+				sb.delete(nlen, sb.length());
+			}
+		}
+		else if(sb.length() == 0 && !StringUtil.isEmpty(myEndLine))
+		{
+			sb.append('\n').append('*').append('\n');
 		}
 
-		// if it ends with a blank line delete that
-		int nlen = sb.length() - prefix.length() - 1;
-		if(sb.substring(nlen, sb.length()).equals(prefix + "\n"))
-		{
-			sb.delete(nlen, sb.length());
-		}
-
-		if(myMultiLineComment && myFormatter.getSettings().JD_DO_NOT_WRAP_ONE_LINE_COMMENTS || !myFormatter.getSettings()
-				.JD_DO_NOT_WRAP_ONE_LINE_COMMENTS || sb.indexOf("\n") != sb.length() - 1) // If comment has become multiline after formatting - it
-				// must be shown as multiline.
+		if(myMultiLineComment && myFormatter.getSettings().JD_DO_NOT_WRAP_ONE_LINE_COMMENTS
+				|| !myFormatter.getSettings().JD_DO_NOT_WRAP_ONE_LINE_COMMENTS
+				|| sb.indexOf("\n") != sb.length() - 1) // If comment has become multiline after formatting - it must be shown as multiline.
 		// Last symbol is always '\n', so we need to check if there is one more LF symbol before it.
 		{
-			sb.insert(0, "/**\n");
+			sb.insert(0, myFirstLine + '\n');
 			sb.append(indent);
 		}
 		else
 		{
-			sb.replace(0, prefix.length(), "/** ");
+			sb.replace(0, prefix.length(), myFirstLine + " ");
 			sb.deleteCharAt(sb.length() - 1);
 		}
-		sb.append(" */");
+		sb.append(' ').append(myEndLine);
 
 		return sb.toString();
 	}
@@ -166,11 +186,21 @@ public class JDComment
 	{
 	}
 
+	public void setFirstCommentLine(@Nonnull String firstCommentLine)
+	{
+		myFirstLine = firstCommentLine;
+	}
+
+	public void setLastCommentLine(@Nonnull String lastCommentLine)
+	{
+		myEndLine = lastCommentLine;
+	}
+
 	public void addSeeAlso(@Nonnull String seeAlso)
 	{
 		if(mySeeAlsoList == null)
 		{
-			mySeeAlsoList = ContainerUtilRt.newArrayList();
+			mySeeAlsoList = new ArrayList<>();
 		}
 		mySeeAlsoList.add(seeAlso);
 	}
@@ -179,28 +209,32 @@ public class JDComment
 	{
 		if(myUnknownList == null)
 		{
-			myUnknownList = ContainerUtilRt.newArrayList();
+			myUnknownList = new ArrayList<>();
 		}
 		myUnknownList.add(unknownTag);
 	}
 
-	public void setSince(@javax.annotation.Nullable String since)
+	public void addSince(@Nonnull String since)
 	{
-		this.mySince = since;
+		if(mySinceList == null)
+		{
+			mySinceList = new ArrayList<>();
+		}
+		mySinceList.add(since);
 	}
 
-	public void setDeprecated(@javax.annotation.Nullable String deprecated)
+	public void setDeprecated(@Nullable String deprecated)
 	{
 		this.myDeprecated = deprecated;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getDescription()
 	{
 		return myDescription;
 	}
 
-	public void setDescription(@javax.annotation.Nullable String description)
+	public void setDescription(@Nullable String description)
 	{
 		this.myDescription = description;
 	}

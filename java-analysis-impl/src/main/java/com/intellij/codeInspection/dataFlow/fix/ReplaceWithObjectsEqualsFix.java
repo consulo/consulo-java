@@ -24,7 +24,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -101,7 +101,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 		}
 
 		PsiMethod method = call.resolveMethod();
-		if(method != null && method.getParameterList().getParametersCount() == 1 && method.getParameterList().getParameters()[0].getType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+		if(method != null && method.getParameterList().getParametersCount() == 1 && method.getParameterList().getParameters()[0].getType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 		{
 			return new ReplaceWithObjectsEqualsFix(qualifier.getText(), noParens.getText());
 		}

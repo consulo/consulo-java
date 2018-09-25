@@ -21,6 +21,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 public class UnconstructableTestCaseInspection extends BaseInspection {
@@ -86,7 +88,7 @@ public class UnconstructableTestCaseInspection extends BaseInspection {
           final PsiParameter[] parameters =
             parameterList.getParameters();
           final PsiType type = parameters[0].getType();
-          if (TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING,
+          if (TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING,
                                    type)) {
             hasStringConstructor = true;
           }

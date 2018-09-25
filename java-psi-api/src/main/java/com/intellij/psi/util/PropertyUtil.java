@@ -39,6 +39,7 @@ import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Mike
@@ -213,7 +214,7 @@ public class PropertyUtil
 			return false;
 		}
 		final String className = psiClass.getQualifiedName();
-		return CommonClassNames.JAVA_LANG_OBJECT.equals(className);
+		return JavaClassNames.JAVA_LANG_OBJECT.equals(className);
 	}
 
 	@Nonnull
@@ -476,7 +477,7 @@ public class PropertyUtil
 
 		for(PsiMethod method : methods)
 		{
-			if(CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName()))
+			if(JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName()))
 			{
 				continue;
 			}
@@ -499,7 +500,7 @@ public class PropertyUtil
 
 		for(PsiMethod method : methods)
 		{
-			if(CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName()))
+			if(JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName()))
 			{
 				continue;
 			}

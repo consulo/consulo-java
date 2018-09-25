@@ -27,7 +27,7 @@ import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
@@ -47,7 +47,7 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 	public CompoundTypeRenderer(NodeRendererSettings rendererSettings, String name, ValueLabelRenderer labelRenderer, ChildrenRenderer childrenRenderer)
 	{
 		super(rendererSettings, name, labelRenderer, childrenRenderer);
-		myProperties.setClassName(CommonClassNames.JAVA_LANG_OBJECT);
+		myProperties.setClassName(JavaClassNames.JAVA_LANG_OBJECT);
 		LOG.assertTrue(labelRenderer == null || labelRenderer instanceof TypeRenderer);
 		LOG.assertTrue(childrenRenderer == null || childrenRenderer instanceof TypeRenderer);
 	}

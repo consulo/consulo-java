@@ -25,6 +25,7 @@ import com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * User: anna
@@ -67,7 +68,7 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 		{
 			if(myT == null)
 			{
-				return myS == null || myS.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+				return myS == null || myS.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
 			}
 			if(myS == null)
 			{
@@ -80,7 +81,7 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 		{
 			return false;
 		}
-		if(PsiType.NULL.equals(myS) || myS == null || myT.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+		if(PsiType.NULL.equals(myS) || myS == null || myT.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 		{
 			return true;
 		}

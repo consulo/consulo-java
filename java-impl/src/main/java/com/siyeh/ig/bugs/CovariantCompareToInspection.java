@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class CovariantCompareToInspection extends BaseInspection {
 
@@ -75,7 +76,7 @@ public class CovariantCompareToInspection extends BaseInspection {
       final Project project = method.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final GlobalSearchScope scope = method.getResolveScope();
-      final PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
+      final PsiClass comparableClass = psiFacade.findClass(JavaClassNames.JAVA_LANG_COMPARABLE, scope);
       PsiType substitutedTypeParam = null;
       if (comparableClass != null && comparableClass.getTypeParameters().length == 1) {
         final PsiSubstitutor superSubstitutor = TypeConversionUtil.getClassSubstitutor(comparableClass, aClass, PsiSubstitutor.EMPTY);

@@ -67,9 +67,10 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class JavaKeywordCompletion
 {
@@ -410,7 +411,7 @@ public class JavaKeywordCompletion
 
 		if(!(statement instanceof PsiSwitchLabelStatement) && statement.getParent() instanceof PsiCodeBlock)
 		{
-			return ObjectUtils.tryCast(statement.getParent().getParent(), PsiSwitchStatement.class);
+			return ObjectUtil.tryCast(statement.getParent().getParent(), PsiSwitchStatement.class);
 		}
 		return null;
 	}
@@ -814,7 +815,7 @@ public class JavaKeywordCompletion
 
 	private static boolean expectsClassLiteral(PsiElement position)
 	{
-		return ContainerUtil.find(JavaSmartCompletionContributor.getExpectedTypes(position, false), info -> InheritanceUtil.isInheritor(info.getType(), CommonClassNames.JAVA_LANG_CLASS)) != null;
+		return ContainerUtil.find(JavaSmartCompletionContributor.getExpectedTypes(position, false), info -> InheritanceUtil.isInheritor(info.getType(), JavaClassNames.JAVA_LANG_CLASS)) != null;
 	}
 
 	private static boolean isAtResourceVariableStart(PsiElement position)

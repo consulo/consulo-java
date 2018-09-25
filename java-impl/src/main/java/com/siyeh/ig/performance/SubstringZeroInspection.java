@@ -26,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class SubstringZeroInspection extends BaseInspection {
@@ -112,7 +113,7 @@ public class SubstringZeroInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
       registerError(expression);

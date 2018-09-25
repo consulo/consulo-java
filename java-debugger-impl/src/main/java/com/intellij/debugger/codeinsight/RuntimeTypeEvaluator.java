@@ -33,7 +33,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
@@ -115,7 +115,7 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 		if(type instanceof ClassType)
 		{
 			ClassType superclass = ((ClassType) type).superclass();
-			if(superclass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superclass.name()))
+			if(superclass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superclass.name()))
 			{
 				psiType = findPsiType(project, superclass);
 				if(psiType != null)

@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ImportUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -147,7 +148,7 @@ public class AssertEqualsMayBeAssertSameInspection extends BaseInspection {
       final PsiMethod[] methods = argumentClass.findMethodsByName("equals", true);
       final PsiManager manager = expression.getManager();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(manager.getProject());
-      final PsiClass objectClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_OBJECT, argumentClass.getResolveScope());
+      final PsiClass objectClass = psiFacade.findClass(JavaClassNames.JAVA_LANG_OBJECT, argumentClass.getResolveScope());
       if (objectClass == null) {
         return false;
       }

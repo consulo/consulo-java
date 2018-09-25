@@ -23,7 +23,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
 
 public class ElementClassFilter implements ElementFilter {
-  public static final ElementClassFilter PACKAGE_FILTER = new ElementClassFilter(ElementClassHint.DeclarationKind.PACKAGE);
+  public static final ElementClassFilter PACKAGE = new ElementClassFilter(ElementClassHint.DeclarationKind.PACKAGE);
   public static final ElementClassFilter VARIABLE = new ElementClassFilter(ElementClassHint.DeclarationKind.VARIABLE);
   public static final ElementClassFilter METHOD = new ElementClassFilter(ElementClassHint.DeclarationKind.METHOD);
   public static final ElementClassFilter CLASS = new ElementClassFilter(ElementClassHint.DeclarationKind.CLASS);

@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -128,7 +129,7 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
       if (context == null) {
         return false;
       }
-      if (!TypeUtils.variableHasTypeOrSubtype(variable, CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
+      if (!TypeUtils.variableHasTypeOrSubtype(variable, JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
         return false;
       }
       if (VariableAccessUtils.variableIsAssigned(variable, context)) {
@@ -174,8 +175,8 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
       }
       final PsiClass aClass = (PsiClass)target;
       final String qualifiedName = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) &&
-          !CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName)) {
+      if (!JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) &&
+          !JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName)) {
         return false;
       }
       final PsiExpressionList argumentList = newExpression.getArgumentList();
@@ -312,7 +313,7 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
         return;
       }
       final PsiType type = polyadicExpression.getType();
-      if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+      if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
         return;
       }
       queried = true;

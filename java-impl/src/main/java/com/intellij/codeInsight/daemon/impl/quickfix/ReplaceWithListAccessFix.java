@@ -26,6 +26,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Danila Ponomarenko
@@ -76,7 +77,7 @@ public class ReplaceWithListAccessFix implements IntentionAction {
   @javax.annotation.Nullable
   private PsiType createUtilListType(@Nonnull Project project) {
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, myArrayAccessExpression.getResolveScope());
+    final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_UTIL_LIST, myArrayAccessExpression.getResolveScope());
 
     if (listClass == null) return null;
 

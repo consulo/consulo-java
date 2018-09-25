@@ -62,6 +62,7 @@ import com.intellij.util.FunctionUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
+import consulo.java.module.util.JavaClassNames;
 import consulo.ui.image.Image;
 
 public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
@@ -297,7 +298,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 		{
 			return Collections.emptyList();
 		}
-		if(CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName()))
+		if(JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName()))
 		{
 			return Collections.emptyList(); // It's useless to have overridden markers for object.
 		}

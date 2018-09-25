@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class MapReplaceableByEnumMapInspection extends BaseInspection {
 
@@ -70,7 +71,7 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
       if (!(argumentType instanceof PsiClassType)) {
         return;
       }
-      if (!TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_UTIL_MAP)) {
+      if (!TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_MAP)) {
         return;
       }
       if (null != TypeUtils.expressionHasTypeOrSubtype(expression, "java.util.EnumMap", "java.util.concurrent.ConcurrentMap")) {

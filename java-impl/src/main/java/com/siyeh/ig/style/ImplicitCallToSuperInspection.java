@@ -26,6 +26,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
@@ -117,7 +119,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
         final PsiClass superClass = containingClass.getSuperClass();
         if (superClass != null) {
           final String superClassName = superClass.getQualifiedName();
-          if (CommonClassNames.JAVA_LANG_OBJECT.equals(
+          if (JavaClassNames.JAVA_LANG_OBJECT.equals(
             superClassName)) {
             return;
           }

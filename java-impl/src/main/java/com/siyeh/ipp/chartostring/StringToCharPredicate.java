@@ -19,6 +19,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ArrayUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 class StringToCharPredicate implements PsiElementPredicate {
@@ -114,8 +115,8 @@ class StringToCharPredicate implements PsiElementPredicate {
         return false;
       }
       final String className = type.getCanonicalText();
-      if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-          CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
+      if (JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
+          JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
         @NonNls final String methodName =
           methodExpression.getReferenceName();
         if (!"append".equals(methodName) &&

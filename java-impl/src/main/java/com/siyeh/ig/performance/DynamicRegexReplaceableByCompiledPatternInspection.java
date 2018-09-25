@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.HighlightUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -206,7 +207,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
         return false;
       }
       final String className = containingClass.getQualifiedName();
-      return CommonClassNames.JAVA_LANG_STRING.equals(className);
+      return JavaClassNames.JAVA_LANG_STRING.equals(className);
     }
   }
 }

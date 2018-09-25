@@ -59,6 +59,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import consulo.java.JavaQuickFixBundle;
+import consulo.java.module.util.JavaClassNames;
 import consulo.ui.impl.ModalityPerProjectEAPDescriptor;
 
 /**
@@ -342,7 +343,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 			if(granny instanceof PsiMethod)
 			{
 				final PsiMethod method = (PsiMethod) granny;
-				if(method.getModifierList().findAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE) != null)
+				if(method.getModifierList().findAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE) != null)
 				{
 					PsiClass aClass = method.getContainingClass();
 					final Set<PsiClass> probableTypes = new HashSet<>();

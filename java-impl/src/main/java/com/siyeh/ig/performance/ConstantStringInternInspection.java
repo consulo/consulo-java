@@ -26,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class ConstantStringInternInspection extends BaseInspection {
@@ -116,7 +117,7 @@ public class ConstantStringInternInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
       registerMethodCallError(expression);

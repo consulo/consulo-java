@@ -28,6 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class ComparisonToNaNInspection extends BaseInspection {
@@ -141,7 +142,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
         return false;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      return CommonClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || CommonClassNames.JAVA_LANG_FLOAT.equals(qualifiedName);
+      return JavaClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || JavaClassNames.JAVA_LANG_FLOAT.equals(qualifiedName);
     }
   }
 }

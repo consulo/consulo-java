@@ -11,6 +11,7 @@ package com.intellij.psi.util;
 import com.intellij.psi.*;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
@@ -56,8 +57,8 @@ public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
 
   public void testBooleanPropertyGetters() {
     assertTrue(PropertyUtil.hasGetterName(createMethod("isOk", "boolean")));
-    assertFalse(PropertyUtil.hasGetterName(createMethod("isOk", CommonClassNames.JAVA_LANG_BOOLEAN)));
-    assertTrue(PropertyUtil.hasGetterName(createMethod("getOk", CommonClassNames.JAVA_LANG_BOOLEAN)));
+    assertFalse(PropertyUtil.hasGetterName(createMethod("isOk", JavaClassNames.JAVA_LANG_BOOLEAN)));
+    assertTrue(PropertyUtil.hasGetterName(createMethod("getOk", JavaClassNames.JAVA_LANG_BOOLEAN)));
     assertFalse(PropertyUtil.hasGetterName(createMethod("isOk", "int")));
   }
 

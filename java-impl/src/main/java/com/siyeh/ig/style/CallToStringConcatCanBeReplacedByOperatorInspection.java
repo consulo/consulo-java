@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -110,7 +111,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
       final Project project = expression.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final PsiClass stringClass =
-        psiFacade.findClass(CommonClassNames.JAVA_LANG_STRING,
+        psiFacade.findClass(JavaClassNames.JAVA_LANG_STRING,
                             expression.getResolveScope());
       if (stringClass == null) {
         return;
@@ -118,7 +119,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
       final PsiClassType stringType =
         psiFacade.getElementFactory().createType(stringClass);
       if (!MethodCallUtils.isCallToMethod(expression,
-                                          CommonClassNames.JAVA_LANG_STRING,
+                                          JavaClassNames.JAVA_LANG_STRING,
                                           stringType, "concat", stringType)) {
         return;
       }

@@ -21,6 +21,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.java.module.util.JavaClassNames;
 
 public class CloneUtils {
 
@@ -28,7 +29,7 @@ public class CloneUtils {
 
   public static boolean isCloneable(@Nonnull PsiClass aClass) {
     return InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_LANG_CLONEABLE);
+                                       JavaClassNames.JAVA_LANG_CLONEABLE);
   }
 
   public static boolean isDirectlyCloneable(@Nonnull PsiClass aClass) {
@@ -38,7 +39,7 @@ public class CloneUtils {
         continue;
       }
       final String qualifiedName = anInterface.getQualifiedName();
-      if (CommonClassNames.JAVA_LANG_CLONEABLE.equals(qualifiedName)) {
+      if (JavaClassNames.JAVA_LANG_CLONEABLE.equals(qualifiedName)) {
         return true;
       }
     }

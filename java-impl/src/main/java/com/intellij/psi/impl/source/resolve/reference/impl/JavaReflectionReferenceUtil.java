@@ -44,13 +44,14 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.PlatformIcons;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Pavel.Dolgov
@@ -207,7 +208,7 @@ public class JavaReflectionReferenceUtil
 	{
 		expression = ParenthesesUtils.stripParentheses(expression);
 		final Object computed = JavaConstantExpressionEvaluator.computeConstantExpression(expression, false);
-		return ObjectUtils.tryCast(computed, expectedType);
+		return ObjectUtil.tryCast(computed, expectedType);
 	}
 
 	@Nullable
@@ -261,12 +262,12 @@ public class JavaReflectionReferenceUtil
 
 	static boolean isJavaLangClass(@Nullable PsiClass aClass)
 	{
-		return aClass != null && CommonClassNames.JAVA_LANG_CLASS.equals(aClass.getQualifiedName());
+		return aClass != null && JavaClassNames.JAVA_LANG_CLASS.equals(aClass.getQualifiedName());
 	}
 
 	static boolean isJavaLangObject(@Nullable PsiClass aClass)
 	{
-		return aClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
+		return aClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
 	}
 
 	@Contract("null -> false")
@@ -455,7 +456,7 @@ public class JavaReflectionReferenceUtil
 				final PsiClass otherClass = PsiUtil.resolveClassInType(otherComponentType);
 				if(otherClass != null)
 				{
-					final String otherClassName = otherClass instanceof PsiTypeParameter ? CommonClassNames.JAVA_LANG_OBJECT : otherClass.getQualifiedName();
+					final String otherClassName = otherClass instanceof PsiTypeParameter ? JavaClassNames.JAVA_LANG_OBJECT : otherClass.getQualifiedName();
 					if(otherClassName != null)
 					{
 						return otherClassName.equals(myPsiClass.getQualifiedName());
@@ -504,7 +505,7 @@ public class JavaReflectionReferenceUtil
 			PsiClass psiClass = PsiUtil.resolveClassInType(type);
 			if(psiClass instanceof PsiTypeParameter)
 			{
-				psiClass = findClass(CommonClassNames.JAVA_LANG_OBJECT, context);
+				psiClass = findClass(JavaClassNames.JAVA_LANG_OBJECT, context);
 			}
 			if(psiClass != null)
 			{

@@ -57,7 +57,7 @@ import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
 import consulo.java.JavaQuickFixBundle;
@@ -608,6 +608,6 @@ public class ModuleHighlightUtil
 
 	private static PsiElement range(PsiJavaCodeReferenceElement refElement)
 	{
-		return ObjectUtils.notNull(refElement.getReferenceNameElement(), refElement);
+		return ObjectUtil.notNull(refElement.getReferenceNameElement(), refElement);
 	}
 }

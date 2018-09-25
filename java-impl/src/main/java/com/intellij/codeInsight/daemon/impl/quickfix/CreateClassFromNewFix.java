@@ -31,6 +31,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -141,7 +143,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(targetClass.getProject()).getElementFactory();
     PsiMethod supConstructor = null;
     PsiClass superClass = targetClass.getSuperClass();
-    if (superClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()) &&
+    if (superClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()) &&
         !"java.lang.Enum".equals(superClass.getQualifiedName())) {
       PsiMethod[] constructors = superClass.getConstructors();
       boolean hasDefaultConstructor = false;
@@ -195,7 +197,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
       else {
         PsiReferenceList extendsList = targetClass.getExtendsList();
         assert extendsList != null : targetClass;
-        if (extendsList.getReferencedTypes().length == 0 && !CommonClassNames.JAVA_LANG_OBJECT.equals(classType.getCanonicalText())) {
+        if (extendsList.getReferencedTypes().length == 0 && !JavaClassNames.JAVA_LANG_OBJECT.equals(classType.getCanonicalText())) {
           extendsList.add(factory.createReferenceElementByType(classType));
         }
       }

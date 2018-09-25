@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.SerializationUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class NonSerializableObjectPassedToObjectStreamInspection
   extends BaseInspection {
@@ -56,7 +57,7 @@ public class NonSerializableObjectPassedToObjectStreamInspection
 
       if (!MethodCallUtils.isSimpleCallToMethod(methodCallExpression,
                                                 "java.io.ObjectOutputStream", PsiType.VOID, "writeObject",
-                                                CommonClassNames.JAVA_LANG_OBJECT)) {
+                                                JavaClassNames.JAVA_LANG_OBJECT)) {
         return;
       }
       final PsiExpressionList argumentList =

@@ -53,6 +53,7 @@ import com.intellij.util.BitUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.codeInsight.ExtraExceptionHandler;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author mike
@@ -873,7 +874,7 @@ public class ExceptionUtil
 			return false;
 		}
 		PsiClass containingClass = method.getContainingClass();
-		if(containingClass == null || !CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
+		if(containingClass == null || !JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
 		{
 			return false;
 		}
@@ -895,12 +896,12 @@ public class ExceptionUtil
 
 	public static boolean isUncheckedException(@Nonnull PsiClassType type)
 	{
-		return InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION) || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ERROR);
+		return InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION) || InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ERROR);
 	}
 
 	public static boolean isUncheckedException(@Nonnull PsiClass psiClass)
 	{
-		return InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION) || InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_ERROR);
+		return InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION) || InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_ERROR);
 	}
 
 	public static boolean isUncheckedExceptionOrSuperclass(@Nonnull final PsiClassType type)
@@ -911,7 +912,7 @@ public class ExceptionUtil
 	public static boolean isGeneralExceptionType(@Nonnull final PsiType type)
 	{
 		final String canonicalText = type.getCanonicalText();
-		return CommonClassNames.JAVA_LANG_THROWABLE.equals(canonicalText) || CommonClassNames.JAVA_LANG_EXCEPTION.equals(canonicalText);
+		return JavaClassNames.JAVA_LANG_THROWABLE.equals(canonicalText) || JavaClassNames.JAVA_LANG_EXCEPTION.equals(canonicalText);
 	}
 
 	public static boolean isHandled(@Nonnull PsiClassType exceptionType, @Nonnull PsiElement throwPlace)

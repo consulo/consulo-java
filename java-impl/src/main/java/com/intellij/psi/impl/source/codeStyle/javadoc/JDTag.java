@@ -36,7 +36,6 @@ public enum JDTag
 	SINCE("since"),
 	DEPRECATED("deprecated");
 
-
 	@Nonnull
 	private final String myTag;
 

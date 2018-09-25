@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class ConfusingMainMethodInspection extends BaseInspection {
 
@@ -88,7 +89,7 @@ public class ConfusingMainMethodInspection extends BaseInspection {
       }
       final PsiParameter[] parameters = parameterList.getParameters();
       final PsiType parameterType = parameters[0].getType();
-      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING + "[]",
+      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING + "[]",
                                 parameterType)) {
         registerMethodError(aMethod);
       }

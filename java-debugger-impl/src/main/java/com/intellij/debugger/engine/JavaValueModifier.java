@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 import javax.annotation.Nonnull;
 

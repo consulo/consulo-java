@@ -20,6 +20,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 public class StringBufferMustHaveInitialCapacityInspection
@@ -59,9 +61,9 @@ public class StringBufferMustHaveInitialCapacityInspection
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
 
-      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER,
+      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUFFER,
                                 type) &&
-          !TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUILDER, type)) {
+          !TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUILDER, type)) {
         return;
       }
       final PsiExpressionList argumentList = expression.getArgumentList();

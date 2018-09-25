@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.errorhandling;
 
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifier;
@@ -70,7 +70,7 @@ public class NonFinalFieldOfExceptionInspection extends BaseInspection {
         return;
       }
       if (!InheritanceUtil.isInheritor(containingClass,
-                                       CommonClassNames.JAVA_LANG_EXCEPTION)) {
+                                       JavaClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
       registerFieldError(field, field);

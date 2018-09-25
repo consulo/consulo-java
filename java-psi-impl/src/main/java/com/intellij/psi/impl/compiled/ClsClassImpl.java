@@ -1,7 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.compiled;
 
-import static com.intellij.util.ObjectUtils.assertNotNull;
+import static com.intellij.util.ObjectUtil.assertNotNull;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
@@ -43,6 +43,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredReadAction;
+import consulo.java.module.util.JavaClassNames;
 import consulo.java.psi.augment.JavaEnumAugmentProvider;
 
 public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiExtensibleClass, Queryable
@@ -174,7 +175,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	@Nonnull
 	public PsiClass[] getSupers()
 	{
-		if(CommonClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName()))
+		if(JavaClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName()))
 		{
 			return PsiClass.EMPTY_ARRAY;
 		}
@@ -185,7 +186,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	@Nonnull
 	public PsiClassType[] getSuperTypes()
 	{
-		if(CommonClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName()))
+		if(JavaClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName()))
 		{
 			return PsiClassType.EMPTY_ARRAY;
 		}

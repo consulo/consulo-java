@@ -23,6 +23,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -83,8 +85,8 @@ public class AssignmentToDateFieldFromParameterInspection
         return;
       }
       final String type = TypeUtils.expressionHasTypeOrSubtype(lhs,
-                                                               CommonClassNames.JAVA_UTIL_DATE,
-                                                               CommonClassNames.JAVA_UTIL_CALENDAR);
+                                                               JavaClassNames.JAVA_UTIL_DATE,
+                                                               JavaClassNames.JAVA_UTIL_CALENDAR);
       if (type == null) {
         return;
       }

@@ -56,7 +56,7 @@ import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.list.PopupListElementRenderer;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import consulo.annotations.RequiredReadAction;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
@@ -156,7 +156,7 @@ public class AddImportAction implements QuestionAction
 			@Override
 			public String getTextFor(PsiClass value)
 			{
-				return ObjectUtils.assertNotNull(value.getQualifiedName());
+				return ObjectUtil.assertNotNull(value.getQualifiedName());
 			}
 
 			@Override

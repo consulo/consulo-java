@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.psiutils;
 
-import static com.intellij.util.ObjectUtils.tryCast;
+import static com.intellij.util.ObjectUtil.tryCast;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

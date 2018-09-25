@@ -17,6 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 
@@ -42,7 +43,7 @@ public class FormatUtils {
     formatClassNames.add("java.io.PrintWriter");
     formatClassNames.add("java.io.PrintStream");
     formatClassNames.add("java.util.Formatter");
-    formatClassNames.add(CommonClassNames.JAVA_LANG_STRING);
+    formatClassNames.add(JavaClassNames.JAVA_LANG_STRING);
   }
 
   private FormatUtils() {}

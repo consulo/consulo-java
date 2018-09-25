@@ -26,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class ThrowableResultOfMethodCallIgnoredInspection
   extends BaseInspection {
@@ -71,7 +72,7 @@ public class ThrowableResultOfMethodCallIgnoredInspection
         return;
       }
       if (!TypeUtils.expressionHasTypeOrSubtype(expression,
-                                                CommonClassNames.JAVA_LANG_THROWABLE)) {
+                                                JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
       final PsiMethod method = expression.resolveMethod();
@@ -81,7 +82,7 @@ public class ThrowableResultOfMethodCallIgnoredInspection
       if (!method.hasModifierProperty(PsiModifier.STATIC)) {
         final PsiClass containingClass = method.getContainingClass();
         if (InheritanceUtil.isInheritor(containingClass,
-                                        CommonClassNames.JAVA_LANG_THROWABLE)) {
+                                        JavaClassNames.JAVA_LANG_THROWABLE)) {
           return;
         }
       }

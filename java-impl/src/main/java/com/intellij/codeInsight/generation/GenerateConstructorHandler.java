@@ -34,6 +34,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -243,7 +244,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
     if (baseConstructor != null){
       PsiClass superClass = aClass.getSuperClass();
       LOG.assertTrue(superClass != null);
-      if (!CommonClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
+      if (!JavaClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
         isNotEnum = true;
         if (baseConstructor instanceof PsiCompiledElement){ // to get some parameter names
           PsiClass dummyClass = JVMElementFactories.requireFactory(baseConstructor.getLanguage(), baseConstructor.getProject()).createClass("Dummy");

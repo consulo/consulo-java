@@ -25,7 +25,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import one.util.streamex.StreamEx;
 
 public class StatementExtractor
@@ -84,7 +84,7 @@ public class StatementExtractor
 			{
 				parentElement = parentElement.getParent();
 			}
-			parent = ObjectUtils.tryCast(parentElement, PsiExpression.class);
+			parent = ObjectUtil.tryCast(parentElement, PsiExpression.class);
 			if(parent == null)
 			{
 				String message = PsiTreeUtil.isAncestor(root, expression, false) ? "Expected to have expression parent" : "Supplied root is not the expression ancestor";

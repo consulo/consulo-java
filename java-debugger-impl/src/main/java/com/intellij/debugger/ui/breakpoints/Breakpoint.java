@@ -70,7 +70,7 @@ import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.AppUIUtil;
 import com.intellij.ui.classFilter.ClassFilter;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.xdebugger.XExpression;
 import com.intellij.xdebugger.breakpoints.SuspendPolicy;
@@ -438,7 +438,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		}
 		if(isCountFilterEnabled() && isConditionEnabled())
 		{
-			Long hitCount = ObjectUtils.notNull((Long) event.request().getProperty(HIT_COUNTER), 0L) + 1;
+			Long hitCount = ObjectUtil.notNull((Long) event.request().getProperty(HIT_COUNTER), 0L) + 1;
 			event.request().putProperty(HIT_COUNTER, hitCount);
 			return hitCount % getCountFilter() == 0;
 		}

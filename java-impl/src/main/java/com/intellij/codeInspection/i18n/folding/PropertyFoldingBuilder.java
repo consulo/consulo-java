@@ -42,7 +42,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 /**
  * @author Konstantin Bulenkov
@@ -117,14 +117,14 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 					}
 					if(ok)
 					{
-						result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(parent.getParent().getNode()),
+						result.add(new FoldingDescriptor(ObjectUtil.assertNotNull(parent.getParent().getNode()),
 								parent.getParent().getTextRange(), null, set));
 						return;
 					}
 				}
 			}
 
-			result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(expression.getNode()),
+			result.add(new FoldingDescriptor(ObjectUtil.assertNotNull(expression.getNode()),
 					expression.getTextRange(), null, set));
 		}
 	}

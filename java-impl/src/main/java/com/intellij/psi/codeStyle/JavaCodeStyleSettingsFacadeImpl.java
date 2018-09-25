@@ -24,41 +24,55 @@ import com.intellij.ide.highlighter.JavaFileType;
  * @author yole
  */
 @Singleton
-public class JavaCodeStyleSettingsFacadeImpl extends JavaCodeStyleSettingsFacade {
-  private final CodeStyleSettingsManager myManager;
+public class JavaCodeStyleSettingsFacadeImpl extends JavaCodeStyleSettingsFacade
+{
+	private final CodeStyleSettingsManager myManager;
 
-  @Inject
-  public JavaCodeStyleSettingsFacadeImpl(ProjectCodeStyleSettingsManager manager) {
-    myManager = manager;
-  }
+	@Inject
+	public JavaCodeStyleSettingsFacadeImpl(ProjectCodeStyleSettingsManager manager)
+	{
+		myManager = manager;
+	}
 
-  @Override
-  public int getNamesCountToUseImportOnDemand() {
-    return myManager.getCurrentSettings().NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND;
-  }
+	@Override
+	public int getNamesCountToUseImportOnDemand()
+	{
+		return myManager.getCurrentSettings().getCustomSettings(JavaCodeStyleSettings.class).NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND;
+	}
 
-  @Override
-  public boolean useFQClassNames() {
-    return myManager.getCurrentSettings().USE_FQ_CLASS_NAMES;
-  }
+	@Override
+	public boolean isToImportInDemand(String qualifiedName)
+	{
+		return myManager.getCurrentSettings().getCustomSettings(JavaCodeStyleSettings.class).PACKAGES_TO_USE_IMPORT_ON_DEMAND.contains(qualifiedName);
+	}
 
-  @Override
-  public boolean isJavaDocLeadingAsterisksEnabled() {
-    return myManager.getCurrentSettings().JD_LEADING_ASTERISKS_ARE_ENABLED;
-  }
+	@Override
+	public boolean useFQClassNames()
+	{
+		return myManager.getCurrentSettings().getCustomSettings(JavaCodeStyleSettings.class).USE_FQ_CLASS_NAMES;
+	}
 
-  @Override
-  public int getIndentSize() {
-    return myManager.getCurrentSettings().getIndentSize(JavaFileType.INSTANCE);
-  }
+	@Override
+	public boolean isJavaDocLeadingAsterisksEnabled()
+	{
+		return myManager.getCurrentSettings().getCustomSettings(JavaCodeStyleSettings.class).JD_LEADING_ASTERISKS_ARE_ENABLED;
+	}
 
-  @Override
-  public boolean isGenerateFinalParameters() {
-    return myManager.getCurrentSettings().GENERATE_FINAL_PARAMETERS;
-  }
+	@Override
+	public int getIndentSize()
+	{
+		return myManager.getCurrentSettings().getIndentSize(JavaFileType.INSTANCE);
+	}
 
-  @Override
-  public boolean isGenerateFinalLocals() {
-    return myManager.getCurrentSettings().GENERATE_FINAL_LOCALS;
-  }
+	@Override
+	public boolean isGenerateFinalParameters()
+	{
+		return myManager.getCurrentSettings().getCustomSettings(JavaCodeStyleSettings.class).GENERATE_FINAL_PARAMETERS;
+	}
+
+	@Override
+	public boolean isGenerateFinalLocals()
+	{
+		return myManager.getCurrentSettings().getCustomSettings(JavaCodeStyleSettings.class).GENERATE_FINAL_LOCALS;
+	}
 }

@@ -31,6 +31,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class ExpectedTypeUtils
 {
@@ -362,7 +363,7 @@ public class ExpectedTypeUtils
 			}
 			final PsiClassType classType = (PsiClassType) iteratedValueType;
 			final PsiType[] parameters = classType.getParameters();
-			final PsiClass iterableClass = ClassUtils.findClass(CommonClassNames.JAVA_LANG_ITERABLE, statement);
+			final PsiClass iterableClass = ClassUtils.findClass(JavaClassNames.JAVA_LANG_ITERABLE, statement);
 			if(iterableClass == null)
 			{
 				expectedType = null;

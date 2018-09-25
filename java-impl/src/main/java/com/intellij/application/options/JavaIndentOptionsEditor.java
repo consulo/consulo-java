@@ -15,76 +15,95 @@
  */
 package com.intellij.application.options;
 
+import static com.intellij.psi.codeStyle.CodeStyleConstraints.MAX_INDENT_SIZE;
+import static com.intellij.psi.codeStyle.CodeStyleConstraints.MIN_INDENT_SIZE;
+
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+
+import javax.annotation.Nonnull;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import javax.annotation.Nonnull;
-
-import javax.swing.*;
+import com.intellij.ui.components.fields.IntegerField;
 
 /**
  * @author yole
  */
-public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
-  private JTextField myLabelIndent;
-  private JLabel myLabelIndentLabel;
+public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor
+{
+	private static final String LABEL_INDENT_LABEL = ApplicationBundle.message("editbox.indent.label.indent");
 
-  private JCheckBox myLabelIndentAbsolute;
-  private JCheckBox myCbDontIndentTopLevelMembers;
-  private JCheckBox myCbUseRelativeIndent;
+	private IntegerField myLabelIndent;
+	private JLabel myLabelIndentLabel;
 
-  protected void addComponents() {
-    super.addComponents();
+	private JCheckBox myLabelIndentAbsolute;
+	private JCheckBox myCbDontIndentTopLevelMembers;
+	private JCheckBox myCbUseRelativeIndent;
 
-    myLabelIndent = new JTextField(4);
-    add(myLabelIndentLabel = new JLabel(ApplicationBundle.message("editbox.indent.label.indent")), myLabelIndent);
+	@Override
+	protected void addComponents()
+	{
+		super.addComponents();
 
-    myLabelIndentAbsolute = new JCheckBox(ApplicationBundle.message("checkbox.indent.absolute.label.indent"));
-    add(myLabelIndentAbsolute, true);
+		myLabelIndent = new IntegerField(LABEL_INDENT_LABEL, MIN_INDENT_SIZE, MAX_INDENT_SIZE);
+		myLabelIndent.setColumns(4);
+		add(myLabelIndentLabel = new JLabel(LABEL_INDENT_LABEL), myLabelIndent);
 
-    myCbDontIndentTopLevelMembers = new JCheckBox(ApplicationBundle.message("checkbox.do.not.indent.top.level.class.members"));
-    add(myCbDontIndentTopLevelMembers);
+		myLabelIndentAbsolute = new JCheckBox(ApplicationBundle.message("checkbox.indent.absolute.label.indent"));
+		add(myLabelIndentAbsolute, true);
 
-    myCbUseRelativeIndent = new JCheckBox(ApplicationBundle.message("checkbox.use.relative.indents"));
-    add(myCbUseRelativeIndent);
-  }
+		myCbDontIndentTopLevelMembers = new JCheckBox(ApplicationBundle.message("checkbox.do.not.indent.top.level.class.members"));
+		add(myCbDontIndentTopLevelMembers);
 
-  public boolean isModified(final CodeStyleSettings settings, final CommonCodeStyleSettings.IndentOptions options) {
-    boolean isModified = super.isModified(settings, options);
-    CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
+		myCbUseRelativeIndent = new JCheckBox(ApplicationBundle.message("checkbox.use.relative.indents"));
+		add(myCbUseRelativeIndent);
+	}
 
-    isModified |= isFieldModified(myLabelIndent, options.LABEL_INDENT_SIZE);
-    isModified |= isFieldModified(myLabelIndentAbsolute, options.LABEL_INDENT_ABSOLUTE);
-    isModified |= isFieldModified(myCbDontIndentTopLevelMembers, javaSettings.DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS);
-    isModified |= isFieldModified(myCbUseRelativeIndent, options.USE_RELATIVE_INDENTS);
+	@Override
+	public boolean isModified(final CodeStyleSettings settings, final CommonCodeStyleSettings.IndentOptions options)
+	{
+		boolean isModified = super.isModified(settings, options);
+		CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
 
-    return isModified;
-  }
+		isModified |= isFieldModified(myLabelIndent, options.LABEL_INDENT_SIZE);
+		isModified |= isFieldModified(myLabelIndentAbsolute, options.LABEL_INDENT_ABSOLUTE);
+		isModified |= isFieldModified(myCbDontIndentTopLevelMembers, javaSettings.DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS);
+		isModified |= isFieldModified(myCbUseRelativeIndent, options.USE_RELATIVE_INDENTS);
 
-  public void apply(final CodeStyleSettings settings, final CommonCodeStyleSettings.IndentOptions options) {
-    super.apply(settings, options);
-    options.LABEL_INDENT_SIZE = getFieldValue(myLabelIndent, Integer.MIN_VALUE, options.LABEL_INDENT_SIZE);
+		return isModified;
+	}
 
-    options.LABEL_INDENT_ABSOLUTE = myLabelIndentAbsolute.isSelected();
-    CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
-    javaSettings.DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS = myCbDontIndentTopLevelMembers.isSelected();
-    options.USE_RELATIVE_INDENTS = myCbUseRelativeIndent.isSelected();
-  }
+	@Override
+	public void apply(final CodeStyleSettings settings, final CommonCodeStyleSettings.IndentOptions options)
+	{
+		super.apply(settings, options);
+		options.LABEL_INDENT_SIZE = myLabelIndent.getValue();
 
-  public void reset(@Nonnull final CodeStyleSettings settings, @Nonnull final CommonCodeStyleSettings.IndentOptions options) {
-    super.reset(settings, options);
-    myLabelIndent.setText(Integer.toString(options.LABEL_INDENT_SIZE));
-    myLabelIndentAbsolute.setSelected(options.LABEL_INDENT_ABSOLUTE);
-    CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
-    myCbDontIndentTopLevelMembers.setSelected(javaSettings.DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS);
-    myCbUseRelativeIndent.setSelected(options.USE_RELATIVE_INDENTS);
-  }
+		options.LABEL_INDENT_ABSOLUTE = myLabelIndentAbsolute.isSelected();
+		CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
+		javaSettings.DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS = myCbDontIndentTopLevelMembers.isSelected();
+		options.USE_RELATIVE_INDENTS = myCbUseRelativeIndent.isSelected();
+	}
 
-  public void setEnabled(final boolean enabled) {
-    super.setEnabled(enabled);
-    myLabelIndent.setEnabled(enabled);
-    myLabelIndentLabel.setEnabled(enabled);
-    myLabelIndentAbsolute.setEnabled(enabled);
-  }
+	@Override
+	public void reset(@Nonnull final CodeStyleSettings settings, @Nonnull final CommonCodeStyleSettings.IndentOptions options)
+	{
+		super.reset(settings, options);
+		myLabelIndent.setValue(options.LABEL_INDENT_SIZE);
+		myLabelIndentAbsolute.setSelected(options.LABEL_INDENT_ABSOLUTE);
+		CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
+		myCbDontIndentTopLevelMembers.setSelected(javaSettings.DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS);
+		myCbUseRelativeIndent.setSelected(options.USE_RELATIVE_INDENTS);
+	}
+
+	@Override
+	public void setEnabled(final boolean enabled)
+	{
+		super.setEnabled(enabled);
+		myLabelIndent.setEnabled(enabled);
+		myLabelIndentLabel.setEnabled(enabled);
+		myLabelIndentAbsolute.setEnabled(enabled);
+	}
 }

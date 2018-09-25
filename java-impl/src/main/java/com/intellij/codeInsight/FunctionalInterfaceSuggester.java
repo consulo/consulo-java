@@ -36,14 +36,15 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class FunctionalInterfaceSuggester
 {
 	public static final String[] FUNCTIONAL_INTERFACES = {
 			//old jdk without annotations
-			CommonClassNames.JAVA_LANG_RUNNABLE,
-			CommonClassNames.JAVA_UTIL_CONCURRENT_CALLABLE,
-			CommonClassNames.JAVA_UTIL_COMPARATOR,
+			JavaClassNames.JAVA_LANG_RUNNABLE,
+			JavaClassNames.JAVA_UTIL_CONCURRENT_CALLABLE,
+			JavaClassNames.JAVA_UTIL_COMPARATOR,
 
 			//IDEA
 			"com.intellij.util.Function",
@@ -195,7 +196,7 @@ public class FunctionalInterfaceSuggester
 		};
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
 		final GlobalSearchScope allScope = GlobalSearchScope.allScope(project);
-		final PsiClass functionalInterfaceClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, allScope);
+		final PsiClass functionalInterfaceClass = psiFacade.findClass(JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, allScope);
 		if(functionalInterfaceClass != null)
 		{
 			AnnotatedMembersSearch.search(functionalInterfaceClass, element.getResolveScope()).forEach(consumer);

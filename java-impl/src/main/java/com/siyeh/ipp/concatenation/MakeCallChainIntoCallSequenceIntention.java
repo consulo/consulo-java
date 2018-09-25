@@ -15,21 +15,22 @@
  */
 package com.siyeh.ipp.concatenation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.HighlightUtil;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class MakeCallChainIntoCallSequenceIntention extends Intention {
 
@@ -95,7 +96,7 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
           targetText = "x";
           showRenameTemplate = true;
           final Project project = element.getProject();
-          final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+          final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
           if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
             firstStatement = "final " + rootType.getCanonicalText() + ' ' + targetText + '=' + root.getText() + ';';
           } else {
@@ -128,7 +129,7 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
           targetText = "x";
           showRenameTemplate = true;
           final Project project = element.getProject();
-          final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+          final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
           if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
             firstStatement = "final " + rootType.getCanonicalText() + " x=" + root.getText() + ';';
           } else {

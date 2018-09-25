@@ -4,6 +4,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.navigation.NavigationItem;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -30,7 +31,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertNotNull(element);
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
-    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
   }
 
   public void testStaticImportDirect() throws Exception {

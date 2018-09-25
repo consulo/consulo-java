@@ -29,6 +29,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.ui.JavaReferenceEditorUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class PsiUtilEx {
 
@@ -90,9 +91,9 @@ public class PsiUtilEx {
     if (type instanceof PsiClassType) {
       // optimization. doesn't require resolve
       final String shortName = ((PsiClassType)type).getClassName();
-      if (!Comparing.equal(shortName, CommonClassNames.JAVA_LANG_STRING_SHORT)) return false;
+      if (!Comparing.equal(shortName, JavaClassNames.JAVA_LANG_STRING_SHORT)) return false;
     }
-    return CommonClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
+    return JavaClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
   }
 
   public static boolean isStringOrStringArray(@Nonnull PsiType type) {

@@ -25,6 +25,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -36,10 +38,10 @@ public class CachedNumberConstructorCallInspection
   private static final Set<String> cachedNumberTypes = new HashSet<String>();
 
   static {
-    cachedNumberTypes.add(CommonClassNames.JAVA_LANG_LONG);
-    cachedNumberTypes.add(CommonClassNames.JAVA_LANG_BYTE);
-    cachedNumberTypes.add(CommonClassNames.JAVA_LANG_INTEGER);
-    cachedNumberTypes.add(CommonClassNames.JAVA_LANG_SHORT);
+    cachedNumberTypes.add(JavaClassNames.JAVA_LANG_LONG);
+    cachedNumberTypes.add(JavaClassNames.JAVA_LANG_BYTE);
+    cachedNumberTypes.add(JavaClassNames.JAVA_LANG_INTEGER);
+    cachedNumberTypes.add(JavaClassNames.JAVA_LANG_SHORT);
   }
 
   @Override
@@ -134,7 +136,7 @@ public class CachedNumberConstructorCallInspection
       final PsiType argumentType = argument.getType();
       if (argumentType == null ||
           argumentType.equalsToText(
-            CommonClassNames.JAVA_LANG_STRING)) {
+            JavaClassNames.JAVA_LANG_STRING)) {
         return;
       }
       registerError(expression, expression);

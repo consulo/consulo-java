@@ -20,7 +20,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceRegistrarImpl;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.ProcessingContext;
 
 
@@ -98,7 +98,7 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
 
   @Nonnull
   private List<String> getLookupElementStrings() {
-    return ObjectUtils.assertNotNull(myFixture.getLookupElementStrings());
+    return ObjectUtil.assertNotNull(myFixture.getLookupElementStrings());
   }
 
   public void testSee4() throws Exception {

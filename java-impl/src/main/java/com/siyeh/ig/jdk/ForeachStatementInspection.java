@@ -17,12 +17,13 @@ package com.siyeh.ig.jdk;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
@@ -30,7 +31,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.NonNls;
+import consulo.java.module.util.JavaClassNames;
 
 public class ForeachStatementInspection extends BaseInspection {
 
@@ -66,7 +67,7 @@ public class ForeachStatementInspection extends BaseInspection {
       }
       @NonNls final StringBuilder newStatement = new StringBuilder();
       final PsiParameter iterationParameter = statement.getIterationParameter();
-      final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+      final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
       if (iteratedValue.getType() instanceof PsiArrayType) {
         final PsiType type = iterationParameter.getType();
         final String index = codeStyleManager.suggestUniqueVariableName("i", statement, true);
@@ -140,7 +141,7 @@ public class ForeachStatementInspection extends BaseInspection {
     public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
       super.visitForeachStatement(statement);
       final PsiExpression iteratedValue = statement.getIteratedValue();
-      if (iteratedValue == null || !InheritanceUtil.isInheritor(iteratedValue.getType(), CommonClassNames.JAVA_LANG_ITERABLE)) {
+      if (iteratedValue == null || !InheritanceUtil.isInheritor(iteratedValue.getType(), JavaClassNames.JAVA_LANG_ITERABLE)) {
         return;
       }
       registerStatementError(statement);

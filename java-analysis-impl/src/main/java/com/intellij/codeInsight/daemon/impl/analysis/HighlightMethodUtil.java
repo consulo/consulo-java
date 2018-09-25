@@ -53,11 +53,12 @@ import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.*;
 import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.ui.ColorUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.xml.util.XmlStringUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * Highlight method problems
@@ -221,7 +222,7 @@ public class HighlightMethodUtil
 			return null;
 		}
 		final PsiClass superContainingClass = superMethod.getContainingClass();
-		if(superContainingClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(superContainingClass.getQualifiedName()) && !superMethod.hasModifierProperty(PsiModifier.PUBLIC))
+		if(superContainingClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(superContainingClass.getQualifiedName()) && !superMethod.hasModifierProperty(PsiModifier.PUBLIC))
 		{
 			final PsiClass containingClass = method.getContainingClass();
 			if(containingClass != null && containingClass.isInterface() && !superContainingClass.isInterface())
@@ -458,7 +459,7 @@ public class HighlightMethodUtil
 				if(containingClass != null && containingClass.isInterface())
 				{
 					PsiReferenceExpression methodRef = methodCall.getMethodExpression();
-					PsiElement element = ObjectUtils.notNull(methodRef.getReferenceNameElement(), methodRef);
+					PsiElement element = ObjectUtil.notNull(methodRef.getReferenceNameElement(), methodRef);
 					highlightInfo = HighlightUtil.checkFeature(element, HighlightUtil.Feature.STATIC_INTERFACE_CALLS, languageLevel, file);
 					if(highlightInfo == null)
 					{
@@ -802,7 +803,7 @@ public class HighlightMethodUtil
 			return null;
 		}
 		String description;
-		PsiElement elementToHighlight = ObjectUtils.notNull(referenceToMethod.getReferenceNameElement(), referenceToMethod);
+		PsiElement elementToHighlight = ObjectUtil.notNull(referenceToMethod.getReferenceNameElement(), referenceToMethod);
 		if(element != null && !resolveResult.isAccessible())
 		{
 			description = HighlightUtil.buildProblemWithAccessDescription(referenceToMethod, resolveResult);

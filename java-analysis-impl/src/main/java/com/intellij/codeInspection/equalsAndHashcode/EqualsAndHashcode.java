@@ -31,6 +31,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.MethodSignatureUtil;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -52,7 +53,7 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
               @Override
               @Nullable
               public PsiClass compute() {
-                return psiFacade.findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
+                return psiFacade.findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
               }
             }
         );

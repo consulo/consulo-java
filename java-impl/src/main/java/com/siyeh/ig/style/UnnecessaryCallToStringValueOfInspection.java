@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
@@ -56,7 +57,7 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
       return expression.getText();
     }
     final PsiType type = expression.getType();
-    if (TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type) ||
+    if (TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, type) ||
         ParenthesesUtils.getPrecedence(expression) < ParenthesesUtils.ADDITIVE_PRECEDENCE) {
       return expression.getText();
     }
@@ -129,7 +130,7 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
         return;
       }
       final String qualifiedName = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
         return;
       }
       registerError(expression, calculateReplacementText(argument));
@@ -140,7 +141,7 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
       if (parent instanceof PsiPolyadicExpression) {
         final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
         final PsiType type = polyadicExpression.getType();
-        if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
+        if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, type)) {
           return true;
         }
         final PsiExpression[] operands = polyadicExpression.getOperands();
@@ -152,11 +153,11 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
           }
         }
         if (index > 0) {
-          if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, operands[index - 1].getType())) {
+          if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, operands[index - 1].getType())) {
             return true;
           }
         } else if (operands.length > 1) {
-          if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, operands[index + 1].getType())) {
+          if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, operands[index + 1].getType())) {
             return true;
           }
         } else {

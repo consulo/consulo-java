@@ -17,10 +17,15 @@ package com.siyeh.ig.migration;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.*;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -36,7 +41,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.StringUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NonNls;
+import consulo.java.module.util.JavaClassNames;
 
 public class WhileCanBeForeachInspection extends BaseInspection {
 
@@ -136,7 +141,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
         }
         statementToSkip = null;
       }
-      final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+      final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
       @NonNls final StringBuilder out = new StringBuilder();
       out.append("for(");
       if (codeStyleSettings.GENERATE_FINAL_PARAMETERS) {
@@ -372,7 +377,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
         return false;
       }
       final PsiVariable variable = (PsiVariable)declaredElement;
-      if (!TypeUtils.variableHasTypeOrSubtype(variable, CommonClassNames.JAVA_UTIL_ITERATOR, "java.util.ListIterator")) {
+      if (!TypeUtils.variableHasTypeOrSubtype(variable, JavaClassNames.JAVA_UTIL_ITERATOR, "java.util.ListIterator")) {
         return false;
       }
       final PsiExpression initialValue = variable.getInitializer();
@@ -405,8 +410,8 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       if (qualifierClass == null) {
         return false;
       }
-      if (!InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_LANG_ITERABLE) &&
-          !InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_UTIL_COLLECTION)) {
+      if (!InheritanceUtil.isInheritor(qualifierClass, JavaClassNames.JAVA_LANG_ITERABLE) &&
+          !InheritanceUtil.isInheritor(qualifierClass, JavaClassNames.JAVA_UTIL_COLLECTION)) {
         return false;
       }
       final PsiExpression condition = whileStatement.getCondition();

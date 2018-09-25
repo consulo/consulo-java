@@ -32,6 +32,7 @@ import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -146,7 +147,7 @@ class SmartCastProvider implements CompletionProvider
 		}
 
 		PsiType type = operand.getType();
-		return type == null || type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? null : new ExpectedTypeInfoImpl(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, TailType.NONE, null, () -> null);
+		return type == null || type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? null : new ExpectedTypeInfoImpl(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, TailType.NONE, null, () -> null);
 	}
 
 	private static void addHierarchyTypes(CompletionParameters parameters, PrefixMatcher matcher, ExpectedTypeInfo info, Consumer<PsiType> result, boolean quick)
@@ -157,7 +158,7 @@ class SmartCastProvider implements CompletionProvider
 		{
 			InheritanceUtil.processSupers(infoClass, true, superClass ->
 			{
-				if(!CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+				if(!JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 				{
 					result.consume(JavaPsiFacade.getElementFactory(superClass.getProject()).createType(superClass));
 				}

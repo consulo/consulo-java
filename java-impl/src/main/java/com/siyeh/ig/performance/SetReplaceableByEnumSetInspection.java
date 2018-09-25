@@ -20,6 +20,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 public class SetReplaceableByEnumSetInspection extends BaseInspection {
@@ -67,7 +69,7 @@ public class SetReplaceableByEnumSetInspection extends BaseInspection {
         return;
       }
       if (!TypeUtils.expressionHasTypeOrSubtype(expression,
-                                                CommonClassNames.JAVA_UTIL_SET)) {
+                                                JavaClassNames.JAVA_UTIL_SET)) {
         return;
       }
       if (TypeUtils.expressionHasTypeOrSubtype(expression,

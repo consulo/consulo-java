@@ -21,6 +21,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -97,7 +98,7 @@ public class JDBCExecuteWithNonConstantStringInspection
         return;
       }
       final String typeText = type.getCanonicalText();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(typeText)) {
+      if (!JavaClassNames.JAVA_LANG_STRING.equals(typeText)) {
         return;
       }
       final String stringValue =

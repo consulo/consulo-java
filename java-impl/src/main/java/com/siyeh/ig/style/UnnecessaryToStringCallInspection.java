@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 
 public class UnnecessaryToStringCallInspection extends BaseInspection {
@@ -121,7 +122,7 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
       if (parent instanceof PsiPolyadicExpression) {
       final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
       final PsiType type = polyadicExpression.getType();
-      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
+      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, type)) {
           return true;
       }
       final PsiExpression[] operands = polyadicExpression.getOperands();
@@ -133,11 +134,11 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
         }
       }
       if (index > 0) {
-        if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, operands[index - 1].getType())) {
+        if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, operands[index - 1].getType())) {
             return true;
         }
       } else if (operands.length > 1) {
-        if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, operands[index + 1].getType())) {
+        if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, operands[index + 1].getType())) {
             return true;
         }
       } else {

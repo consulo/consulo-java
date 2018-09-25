@@ -49,12 +49,13 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.completion.CompletionProvider;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -99,13 +100,13 @@ public class JavaInheritorsGetter implements CompletionProvider
 		addArrayTypes(parameters.getPosition(), infos, consumer);
 
 		List<PsiClassType> classTypes = extractClassTypes(infos);
-		boolean arraysWelcome = ContainerUtil.exists(ExpectedTypesGetter.extractTypes(infos, true), t -> t.getDeepComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
+		boolean arraysWelcome = ContainerUtil.exists(ExpectedTypesGetter.extractTypes(infos, true), t -> t.getDeepComponentType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
 		processInheritors(parameters, classTypes, prefixMatcher, type ->
 		{
 			final LookupElement element = addExpectedType(type, parameters);
 			if(element != null)
 			{
-				Supplier<PsiClassType> itemType = () -> (PsiClassType) ObjectUtils.assertNotNull(element.as(TypedLookupItem.CLASS_CONDITION_KEY)).getType();
+				Supplier<PsiClassType> itemType = () -> (PsiClassType) ObjectUtil.assertNotNull(element.as(TypedLookupItem.CLASS_CONDITION_KEY)).getType();
 				JavaConstructorCallElement.wrap(element, (PsiClass) element.getObject(), parameters.getPosition(), itemType).forEach(consumer::consume);
 			}
 			if(arraysWelcome)

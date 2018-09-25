@@ -37,6 +37,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -98,7 +99,7 @@ public class HardcodedContracts
 				return failIfNull(0, paramCount);
 			}
 		}
-		else if(CommonClassNames.JAVA_LANG_STRING.equals(className))
+		else if(JavaClassNames.JAVA_LANG_STRING.equals(className))
 		{
 			if(("charAt".equals(methodName) || "codePointAt".equals(methodName)) && paramCount == 1)
 			{
@@ -122,22 +123,22 @@ public class HardcodedContracts
 				return SpecialField.STRING_LENGTH.getEmptyContracts();
 			}
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_COLLECTION, PsiType.BOOLEAN, "isEmpty"))
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_COLLECTION, PsiType.BOOLEAN, "isEmpty"))
 		{
 			return SpecialField.COLLECTION_SIZE.getEmptyContracts();
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_COLLECTION, PsiType.BOOLEAN, "contains", (PsiType) null))
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_COLLECTION, PsiType.BOOLEAN, "contains", (PsiType) null))
 		{
 			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ, ContractValue.zero(),
 					FALSE_VALUE));
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_SET, PsiType.BOOLEAN, "equals", (PsiType) null) || MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_LIST,
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_SET, PsiType.BOOLEAN, "equals", (PsiType) null) || MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_LIST,
 				PsiType.BOOLEAN, "equals", (PsiType) null))
 		{
 			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.NE, ContractValue.argument(0)
 					.specialField(SpecialField.COLLECTION_SIZE), FALSE_VALUE));
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_LIST, null, "get", PsiType.INT))
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_LIST, null, "get", PsiType.INT))
 		{
 			return Arrays.asList(nonnegativeArgumentContract(0), specialFieldRangeContract(0, RelationType.LT, SpecialField.COLLECTION_SIZE));
 		}
@@ -146,21 +147,21 @@ public class HardcodedContracts
 			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ, ContractValue.zero(),
 					THROW_EXCEPTION));
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, "isEmpty"))
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, "isEmpty"))
 		{
 			return SpecialField.MAP_SIZE.getEmptyContracts();
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, CONTAINS_KEY_VALUE, (PsiType) null))
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, CONTAINS_KEY_VALUE, (PsiType) null))
 		{
 			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.MAP_SIZE), RelationType.EQ, ContractValue.zero(),
 					FALSE_VALUE));
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, "equals", (PsiType) null))
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, "equals", (PsiType) null))
 		{
 			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.MAP_SIZE), RelationType.NE, ContractValue.argument(0)
 					.specialField(SpecialField.MAP_SIZE), FALSE_VALUE));
 		}
-		else if(MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ARRAYS, null, ARRAY_RANGED_METHODS, (PsiType[]) null) && paramCount >= 3)
+		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_ARRAYS, null, ARRAY_RANGED_METHODS, (PsiType[]) null) && paramCount >= 3)
 		{
 			return ARRAY_RANGE_CONTRACTS;
 		}
@@ -376,7 +377,7 @@ public class HardcodedContracts
 		{
 			return false;
 		}
-		if(CommonClassNames.JAVA_UTIL_ARRAYS.equals(className))
+		if(JavaClassNames.JAVA_UTIL_ARRAYS.equals(className))
 		{
 			return name.equals("binarySearch") || name.equals("spliterator") || name.equals("stream");
 		}

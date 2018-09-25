@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class ClassUtils {
 
@@ -55,15 +56,15 @@ public class ClassUtils {
     primitiveNumericTypes.add(PsiType.FLOAT);
     primitiveNumericTypes.add(PsiType.DOUBLE);
 
-    immutableTypes.add(CommonClassNames.JAVA_LANG_BOOLEAN);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_CHARACTER);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_SHORT);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_INTEGER);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_LONG);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_FLOAT);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_DOUBLE);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_BYTE);
-    immutableTypes.add(CommonClassNames.JAVA_LANG_STRING);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_BOOLEAN);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_CHARACTER);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_SHORT);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_INTEGER);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_LONG);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_FLOAT);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_DOUBLE);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_BYTE);
+    immutableTypes.add(JavaClassNames.JAVA_LANG_STRING);
     immutableTypes.add("java.awt.Font");
     immutableTypes.add("java.awt.Color");
     immutableTypes.add("java.math.BigDecimal");
@@ -85,7 +86,7 @@ public class ClassUtils {
 
   @Nullable
   public static PsiClass findObjectClass(PsiElement context) {
-    return findClass(CommonClassNames.JAVA_LANG_OBJECT, context);
+    return findClass(JavaClassNames.JAVA_LANG_OBJECT, context);
   }
 
   public static boolean isPrimitive(PsiType type) {

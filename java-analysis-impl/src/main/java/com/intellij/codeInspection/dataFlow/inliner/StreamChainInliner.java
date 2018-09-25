@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection.dataFlow.inliner;
 
-import static com.intellij.psi.CommonClassNames.*;
+import static consulo.java.module.util.JavaClassNames.*;
 import static com.siyeh.ig.callMatcher.CallMatcher.anyOf;
 import static com.siyeh.ig.callMatcher.CallMatcher.instanceCall;
 import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
@@ -42,7 +42,7 @@ import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodCallUtils;
@@ -319,7 +319,7 @@ public class StreamChainInliner implements CallInliner
 		{
 			super(call, next, null);
 			// Try to inline smoothly .flatMap(x -> stream().call().chain())
-			PsiLambdaExpression lambda = ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(myCall.getArgumentList().getExpressions()[0]), PsiLambdaExpression.class);
+			PsiLambdaExpression lambda = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(myCall.getArgumentList().getExpressions()[0]), PsiLambdaExpression.class);
 			Step chain = null;
 			PsiParameter parameter = null;
 			PsiExpression streamSource = null;
@@ -499,7 +499,7 @@ public class StreamChainInliner implements CallInliner
 	static void buildStreamCFG(CFGBuilder builder, Step firstStep, PsiExpression originalQualifier)
 	{
 		PsiType inType = StreamApiUtil.getStreamElementType(originalQualifier.getType());
-		PsiMethodCallExpression sourceCall = ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(originalQualifier), PsiMethodCallExpression.class);
+		PsiMethodCallExpression sourceCall = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(originalQualifier), PsiMethodCallExpression.class);
 		if(STREAM_GENERATE.test(sourceCall))
 		{
 			PsiExpression fn = sourceCall.getArgumentList().getExpressions()[0];

@@ -30,6 +30,8 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.ig.ui.UiUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -274,7 +276,7 @@ public class MismatchedCollectionQueryUpdateInspection
         return;
       }
       final PsiType type = polyadicExpression.getType();
-      if (type ==  null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+      if (type ==  null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
         return;
       }
       mayBeQueried = true; // query by concatenation ("" + list)

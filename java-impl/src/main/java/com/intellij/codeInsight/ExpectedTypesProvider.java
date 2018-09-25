@@ -58,6 +58,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.Stack;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ven
@@ -684,7 +685,7 @@ public class ExpectedTypesProvider
 		public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement)
 		{
 			PsiElementFactory factory = JavaPsiFacade.getInstance(statement.getProject()).getElementFactory();
-			PsiType objectType = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_OBJECT,
+			PsiType objectType = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_OBJECT,
 					myExpr.getResolveScope());
 			myResult.add(createInfoImpl(objectType, objectType));
 		}
@@ -906,7 +907,7 @@ public class ExpectedTypesProvider
 			}
 			else if(i == JavaTokenType.PLUS)
 			{
-				if(anotherType == null || anotherType.equalsToText(CommonClassNames.JAVA_LANG_STRING))
+				if(anotherType == null || anotherType.equalsToText(JavaClassNames.JAVA_LANG_STRING))
 				{
 					PsiClassType objectType = PsiType.getJavaLangObject(expr.getManager(), expr.getResolveScope());
 					myResult.add(createInfoImpl(objectType, anotherType != null ? anotherType : objectType));
@@ -1495,7 +1496,7 @@ public class ExpectedTypesProvider
 			@NonNls final String name = method.getName();
 			if("contains".equals(name) || "remove".equals(name))
 			{
-				final PsiType type = checkMethod(method, CommonClassNames.JAVA_UTIL_COLLECTION,
+				final PsiType type = checkMethod(method, JavaClassNames.JAVA_UTIL_COLLECTION,
 						new NullableFunction<PsiClass, PsiType>()
 				{
 					@Override
@@ -1512,7 +1513,7 @@ public class ExpectedTypesProvider
 			if("containsKey".equals(name) || "remove".equals(name) || "get".equals(name) || "containsValue".equals
 					(name))
 			{
-				final PsiType type = checkMethod(method, CommonClassNames.JAVA_UTIL_MAP,
+				final PsiType type = checkMethod(method, JavaClassNames.JAVA_UTIL_MAP,
 						new NullableFunction<PsiClass, PsiType>()
 				{
 					@Override
@@ -1531,7 +1532,7 @@ public class ExpectedTypesProvider
 			final PsiElementFactory factory = JavaPsiFacade.getElementFactory(containingClass.getProject());
 			if("equals".equals(name))
 			{
-				final PsiType type = checkMethod(method, CommonClassNames.JAVA_LANG_OBJECT,
+				final PsiType type = checkMethod(method, JavaClassNames.JAVA_LANG_OBJECT,
 						new NullableFunction<PsiClass, PsiType>()
 				{
 					@Override
@@ -1566,7 +1567,7 @@ public class ExpectedTypesProvider
 					.getParametersCount() == argCount)
 			{
 				if(argCount == 2 || argCount == 3 && method.getParameterList().getParameters()[0].getType()
-						.equalsToText(CommonClassNames.JAVA_LANG_STRING))
+						.equalsToText(JavaClassNames.JAVA_LANG_STRING))
 				{
 					int other = index == argCount - 1 ? index - 1 : index + 1;
 					if(args.length > other)
@@ -1583,9 +1584,9 @@ public class ExpectedTypesProvider
 			{
 				if(parameterType instanceof PsiClassType)
 				{
-					PsiType typeArg = PsiUtil.substituteTypeParameter(parameterType, CommonClassNames.JAVA_LANG_CLASS,
+					PsiType typeArg = PsiUtil.substituteTypeParameter(parameterType, JavaClassNames.JAVA_LANG_CLASS,
 							0, true);
-					if(typeArg != null && TypeConversionUtil.erasure(typeArg).equalsToText(CommonClassNames
+					if(typeArg != null && TypeConversionUtil.erasure(typeArg).equalsToText(JavaClassNames
 							.JAVA_LANG_OBJECT))
 					{
 						PsiClass placeClass = PsiTreeUtil.getContextOfType(argument, PsiClass.class);

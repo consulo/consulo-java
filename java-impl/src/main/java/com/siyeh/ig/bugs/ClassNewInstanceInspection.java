@@ -26,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -194,7 +195,7 @@ public class ClassNewInstanceInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_CLASS.equals(className)) {
+      if (!JavaClassNames.JAVA_LANG_CLASS.equals(className)) {
         return;
       }
       registerMethodCallError(expression);

@@ -17,7 +17,7 @@ package com.siyeh.ig.naming;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiTypeParameter;
 import com.intellij.psi.util.InheritanceUtil;
@@ -84,7 +84,7 @@ public class ExceptionNameDoesntEndWithExceptionInspection
         return;
       }
       if (!InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_LANG_EXCEPTION)) {
+                                       JavaClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
       registerClassError(aClass);

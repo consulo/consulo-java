@@ -27,6 +27,7 @@ import com.intellij.codeInspection.dataFlow.MethodContract;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PropertyUtil;
+import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 import one.util.streamex.StreamEx;
 
@@ -255,7 +256,7 @@ public class SideEffectChecker
 		String packageName = classPackage == null ? null : classPackage.getQualifiedName();
 
 		// all Throwable descendants from java.lang are side effects free
-		if(CommonClassNames.DEFAULT_PACKAGE.equals(packageName) || "java.io".equals(packageName))
+		if(JavaClassNames.DEFAULT_PACKAGE.equals(packageName) || "java.io".equals(packageName))
 		{
 			PsiClass throwableClass = JavaPsiFacade.getInstance(aClass.getProject()).findClass("java.lang.Throwable", aClass.getResolveScope());
 			if(throwableClass != null && com.intellij.psi.util.InheritanceUtil.isInheritorOrSelf(aClass, throwableClass, true))

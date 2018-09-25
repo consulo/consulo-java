@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.typeMigration;
 
-import static com.intellij.util.ObjectUtils.assertNotNull;
+import static com.intellij.util.ObjectUtil.assertNotNull;
 
 import gnu.trove.THashSet;
 

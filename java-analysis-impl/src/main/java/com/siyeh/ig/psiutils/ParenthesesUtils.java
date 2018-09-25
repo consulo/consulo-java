@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class ParenthesesUtils
 {
@@ -611,7 +612,7 @@ public class ParenthesesUtils
 			{
 				return true;
 			}
-			if(childType.equalsToText(CommonClassNames.JAVA_LANG_STRING) && !PsiTreeUtil.isAncestor(parentPolyadicExpression.getOperands()[0], childPolyadicExpression, true))
+			if(childType.equalsToText(JavaClassNames.JAVA_LANG_STRING) && !PsiTreeUtil.isAncestor(parentPolyadicExpression.getOperands()[0], childPolyadicExpression, true))
 			{
 				final PsiExpression[] operands = childPolyadicExpression.getOperands();
 				for(PsiExpression operand : operands)

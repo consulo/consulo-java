@@ -34,6 +34,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.JavaQuickFixBundle;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Dmitry Batkovich
@@ -142,7 +143,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 		}
 		final PsiClassType.ClassResolveResult resolve = ((PsiClassType) parameterType).resolveGenerics();
 		final PsiClass resolvedClass = resolve.getElement();
-		if(resolvedClass == null || !CommonClassNames.JAVA_UTIL_OPTIONAL.equals(resolvedClass.getQualifiedName()))
+		if(resolvedClass == null || !JavaClassNames.JAVA_UTIL_OPTIONAL.equals(resolvedClass.getQualifiedName()))
 		{
 			return false;
 		}
@@ -183,7 +184,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 		}
 		final Nullness nullability = toCheckNullability == null ? Nullness.NOT_NULL : DfaPsiUtil.getElementNullability(expression.getType(), toCheckNullability);
 		String methodName = nullability == Nullness.NOT_NULL ? "of" : "ofNullable";
-		final String newExpressionText = CommonClassNames.JAVA_UTIL_OPTIONAL + "." + methodName + "(" + expression.getText() + ")";
+		final String newExpressionText = JavaClassNames.JAVA_UTIL_OPTIONAL + "." + methodName + "(" + expression.getText() + ")";
 		return JavaPsiFacade.getElementFactory(project).createExpressionFromText(newExpressionText, expression);
 	}
 }

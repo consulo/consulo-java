@@ -19,9 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.application.options.CodeStyle;
 import com.intellij.lang.java.JavaLanguage;
@@ -310,7 +311,7 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void importLegacySettings(@NotNull CodeStyleSettings rootSettings)
+	protected void importLegacySettings(@Nonnull CodeStyleSettings rootSettings)
 	{
 		USE_EXTERNAL_ANNOTATIONS = rootSettings.USE_EXTERNAL_ANNOTATIONS;
 		INSERT_OVERRIDE_ANNOTATION = rootSettings.INSERT_OVERRIDE_ANNOTATION;
@@ -406,14 +407,14 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
 	}
 
 	@Override
-	public void writeExternal(Element parentElement, @NotNull CustomCodeStyleSettings parentSettings) throws WriteExternalException
+	public void writeExternal(Element parentElement, @Nonnull CustomCodeStyleSettings parentSettings) throws WriteExternalException
 	{
 		super.writeExternal(parentElement, parentSettings);
 		writeExternalCollection(parentElement, myRepeatAnnotations, REPEAT_ANNOTATIONS, REPEAT_ANNOTATIONS_ITEM);
 		writeExternalCollection(parentElement, myDoNotImportInner, DO_NOT_IMPORT_INNER, DO_NOT_IMPORT_INNER_ITEM);
 	}
 
-	public static JavaCodeStyleSettings getInstance(@NotNull PsiFile file)
+	public static JavaCodeStyleSettings getInstance(@Nonnull PsiFile file)
 	{
 		return CodeStyle.getCustomSettings(file, JavaCodeStyleSettings.class);
 	}
@@ -422,7 +423,7 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
 	 * For production code use {@link #getInstance(PsiFile)}
 	 */
 	@TestOnly
-	public static JavaCodeStyleSettings getInstance(@NotNull Project project)
+	public static JavaCodeStyleSettings getInstance(@Nonnull Project project)
 	{
 		return CodeStyle.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
 	}

@@ -101,7 +101,7 @@ import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.openapi.wm.impl.status.StatusBarUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -1274,7 +1274,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 										if(((ArrayType) arrayRef.referenceType()).componentType() instanceof InterfaceType)
 										{
 											List<String> argTypes = myMethod.argumentTypeNames();
-											if(argTypes.size() > lastIndex && argTypes.get(lastIndex).startsWith(CommonClassNames.JAVA_LANG_OBJECT))
+											if(argTypes.size() > lastIndex && argTypes.get(lastIndex).startsWith(JavaClassNames.JAVA_LANG_OBJECT))
 											{
 												// unwrap array of interfaces for vararg param
 												myArgs.remove(lastIndex);
@@ -1658,7 +1658,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		qName = reformatArrayName(qName);
 		ReferenceType refType = null;
 		VirtualMachineProxyImpl virtualMachine = getVirtualMachineProxy();
-		ClassType classClassType = (ClassType) ContainerUtil.getFirstItem(virtualMachine.classesByName(CommonClassNames.JAVA_LANG_CLASS));
+		ClassType classClassType = (ClassType) ContainerUtil.getFirstItem(virtualMachine.classesByName(JavaClassNames.JAVA_LANG_CLASS));
 		if(classClassType != null)
 		{
 			final Method forNameMethod;

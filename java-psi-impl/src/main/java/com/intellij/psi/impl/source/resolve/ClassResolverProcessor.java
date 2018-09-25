@@ -34,11 +34,12 @@ import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.SmartList;
+import consulo.java.module.util.JavaClassNames;
 
 public class ClassResolverProcessor extends BaseScopeProcessor implements NameHint, ElementClassHint
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.ClassResolverProcessor");
-	private static final String[] DEFAULT_PACKAGES = {CommonClassNames.DEFAULT_PACKAGE};
+	private static final String[] DEFAULT_PACKAGES = {JavaClassNames.DEFAULT_PACKAGE};
 
 	private final String myClassName;
 	@Nonnull

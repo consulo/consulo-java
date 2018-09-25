@@ -53,6 +53,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.refactoring.util.RefactoringChangeUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class HighlightClassUtil
 {
@@ -354,7 +355,7 @@ public class HighlightClassUtil
 	{
 		String name = aClass.getQualifiedName();
 
-		if(CommonClassNames.DEFAULT_PACKAGE.equals(name))
+		if(JavaClassNames.DEFAULT_PACKAGE.equals(name))
 		{
 			String message = JavaErrorMessages.message("class.clashes.with.package", name);
 			TextRange range = HighlightNamesUtil.getClassDeclarationTextRange(aClass);
@@ -793,7 +794,7 @@ public class HighlightClassUtil
 			{
 				while(superType instanceof PsiClass)
 				{
-					if(!CommonClassNames.JAVA_LANG_OBJECT.equals(((PsiClass) superType).getQualifiedName()))
+					if(!JavaClassNames.JAVA_LANG_OBJECT.equals(((PsiClass) superType).getQualifiedName()))
 					{
 						PsiClass circularClass = getCircularClass((PsiClass) superType, usedClasses);
 						if(circularClass != null)

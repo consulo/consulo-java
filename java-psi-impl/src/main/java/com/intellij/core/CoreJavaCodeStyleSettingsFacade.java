@@ -20,34 +20,47 @@ import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
 /**
  * @author yole
  */
-public class CoreJavaCodeStyleSettingsFacade extends JavaCodeStyleSettingsFacade {
-  @Override
-  public int getNamesCountToUseImportOnDemand() {
-    return 0;
-  }
+public class CoreJavaCodeStyleSettingsFacade extends JavaCodeStyleSettingsFacade
+{
+	@Override
+	public int getNamesCountToUseImportOnDemand()
+	{
+		return 0;
+	}
 
-  @Override
-  public boolean useFQClassNames() {
-    return false;
-  }
+	@Override
+	public boolean isToImportInDemand(String qualifiedName)
+	{
+		return false;
+	}
 
-  @Override
-  public boolean isJavaDocLeadingAsterisksEnabled() {
-    return false;
-  }
+	@Override
+	public boolean useFQClassNames()
+	{
+		return false;
+	}
 
-  @Override
-  public int getIndentSize() {
-    return 4;
-  }
+	@Override
+	public boolean isJavaDocLeadingAsterisksEnabled()
+	{
+		return false;
+	}
 
-  @Override
-  public boolean isGenerateFinalParameters() {
-    return false;
-  }
+	@Override
+	public int getIndentSize()
+	{
+		return 4;
+	}
 
-  @Override
-  public boolean isGenerateFinalLocals() {
-    return false;
-  }
+	@Override
+	public boolean isGenerateFinalParameters()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isGenerateFinalLocals()
+	{
+		return false;
+	}
 }

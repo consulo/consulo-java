@@ -17,6 +17,8 @@ package com.intellij.psi.util;
 
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
+import consulo.java.module.util.JavaClassNames;
+
 import gnu.trove.THashMap;
 
 import java.util.Map;
@@ -88,7 +90,7 @@ public class IsConstantExpressionVisitor extends JavaElementVisitor {
       operand.accept(this);
       if (!myIsConstant) return;
       final PsiType type = operand.getType();
-      if (type != null && !(type instanceof PsiPrimitiveType) && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+      if (type != null && !(type instanceof PsiPrimitiveType) && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
         myIsConstant = false;
         return;
       }

@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class ObjectToStringInspection extends BaseInspection {
@@ -91,7 +92,7 @@ public class ObjectToStringInspection extends BaseInspection {
       }
       else if ("append".equals(name)) {
         final PsiExpression qualifier = methodExpression.getQualifierExpression();
-        if (!TypeUtils.expressionHasTypeOrSubtype(qualifier, CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
+        if (!TypeUtils.expressionHasTypeOrSubtype(qualifier, JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
           return;
         }
         final PsiExpressionList argumentList = expression.getArgumentList();
@@ -109,7 +110,7 @@ public class ObjectToStringInspection extends BaseInspection {
         }
         final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)qualifierExpression;
         final String canonicalText = referenceExpression.getCanonicalText();
-        if (!CommonClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
+        if (!JavaClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
           return;
         }
         final PsiExpressionList argumentList = expression.getArgumentList();
@@ -131,7 +132,7 @@ public class ObjectToStringInspection extends BaseInspection {
         return;
       }
       final PsiClassType classType = (PsiClassType)type;
-      if (type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
+      if (type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
         return;
       }
       final PsiClass referencedClass = classType.resolve();
@@ -155,7 +156,7 @@ public class ObjectToStringInspection extends BaseInspection {
           continue;
         }
         final String name = containingClass.getQualifiedName();
-        if (CommonClassNames.JAVA_LANG_OBJECT.equals(name)) {
+        if (JavaClassNames.JAVA_LANG_OBJECT.equals(name)) {
           continue;
         }
         final PsiParameterList parameterList = method.getParameterList();

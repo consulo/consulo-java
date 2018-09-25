@@ -32,6 +32,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import consulo.codeInsight.completion.CompletionProvider;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -62,7 +63,7 @@ class CatchTypeProvider implements CompletionProvider
 			}
 		}
 
-		final Collection<PsiClassType> expectedClassTypes = Collections.singletonList(JavaPsiFacade.getElementFactory(tryBlock.getProject()).createTypeByFQClassName(CommonClassNames
+		final Collection<PsiClassType> expectedClassTypes = Collections.singletonList(JavaPsiFacade.getElementFactory(tryBlock.getProject()).createTypeByFQClassName(JavaClassNames
 				.JAVA_LANG_THROWABLE));
 		JavaInheritorsGetter.processInheritors(parameters, expectedClassTypes, result.getPrefixMatcher(), type ->
 		{

@@ -31,6 +31,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
+import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 
 public class JavaResolveUtil
@@ -289,7 +290,7 @@ public class JavaResolveUtil
 			}
 		}
 
-		PsiPackage langPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage(CommonClassNames.DEFAULT_PACKAGE);
+		PsiPackage langPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage(JavaClassNames.DEFAULT_PACKAGE);
 		if(langPackage != null)
 		{
 			if(!langPackage.processDeclarations(processor, state, null, place))

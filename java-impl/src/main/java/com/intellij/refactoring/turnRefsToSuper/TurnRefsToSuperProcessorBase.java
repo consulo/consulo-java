@@ -45,6 +45,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.Queue;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 
@@ -507,7 +508,7 @@ public abstract class TurnRefsToSuperProcessorBase extends BaseRefactoringProces
     }
     else if (variable instanceof PsiResourceVariable) {
       final PsiJavaParserFacade facade = JavaPsiFacade.getInstance(myProject).getParserFacade();
-      checkConstrainingType(type, facade.createTypeFromText(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, variable));
+      checkConstrainingType(type, facade.createTypeFromText(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, variable));
     }
   }
 

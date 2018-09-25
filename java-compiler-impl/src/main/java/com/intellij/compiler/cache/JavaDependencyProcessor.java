@@ -41,7 +41,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElementFactory;
@@ -120,7 +120,7 @@ class JavaDependencyProcessor {
                                                                             newClassesCache.getGenericSignature(qName));
 
     boolean superclassesDiffer = cache.getSuperQualifiedName(qName) != newClassesCache.getSuperQualifiedName(qName);
-    boolean wasDerivedFromObject = CommonClassNames.JAVA_LANG_OBJECT.equals(javaDependencyCache.resolve(cache.getSuperQualifiedName(qName)));
+    boolean wasDerivedFromObject = JavaClassNames.JAVA_LANG_OBJECT.equals(javaDependencyCache.resolve(cache.getSuperQualifiedName(qName)));
     mySuperClassChanged = !wasDerivedFromObject && superclassesDiffer;
     mySuperClassAdded = wasDerivedFromObject && superclassesDiffer;
   }
@@ -976,7 +976,7 @@ class JavaDependencyProcessor {
     }
     else {
       final String qName = myJavaDependencyCache.resolve(superQName);
-      if (!CommonClassNames.JAVA_LANG_OBJECT.equals(qName)) {
+      if (!JavaClassNames.JAVA_LANG_OBJECT.equals(qName)) {
         if (hasBaseAbstractMethods2(qName, methodsToCheck)) {
           return true;
         }

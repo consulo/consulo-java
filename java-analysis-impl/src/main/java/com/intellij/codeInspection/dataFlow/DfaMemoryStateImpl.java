@@ -48,7 +48,7 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Stack;
 import com.siyeh.ig.psiutils.MethodUtils;
@@ -1647,7 +1647,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 
 		int[] classes = myIdToEqClassesIndices.get(idPlain);
 		int[] negatedClasses = myIdToEqClassesIndices.get(idNegated);
-		int[] result = ArrayUtil.mergeArrays(ObjectUtils.notNull(classes, ArrayUtil.EMPTY_INT_ARRAY), ObjectUtils.notNull(negatedClasses, ArrayUtil.EMPTY_INT_ARRAY));
+		int[] result = ArrayUtil.mergeArrays(ObjectUtil.notNull(classes, ArrayUtil.EMPTY_INT_ARRAY), ObjectUtil.notNull(negatedClasses, ArrayUtil.EMPTY_INT_ARRAY));
 
 		int interruptCount = 0;
 

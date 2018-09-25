@@ -15,10 +15,21 @@
  */
 package com.siyeh.ig.migration;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.*;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.InheritanceUtil;
@@ -31,12 +42,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.PsiElementOrderComparator;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import consulo.java.module.util.JavaClassNames;
 
 public class EnumerationCanBeIterationInspection extends BaseInspection {
 
@@ -190,12 +196,12 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       throws IncorrectOperationException {
       @NonNls final StringBuilder newStatementText = new StringBuilder();
       final Project project = methodCallExpression.getProject();
-      final CodeStyleSettings codeStyleSettings =
-        CodeStyleSettingsManager.getSettings(project);
+      final JavaCodeStyleSettings codeStyleSettings =
+        CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
       if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
         newStatementText.append("final ");
       }
-      newStatementText.append(CommonClassNames.JAVA_UTIL_ITERATOR);
+      newStatementText.append(JavaClassNames.JAVA_UTIL_ITERATOR);
       if (parameterType != null) {
         final String typeText = parameterType.getCanonicalText();
         newStatementText.append('<');
@@ -338,7 +344,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       final PsiElementFactory factory = facade.getElementFactory();
       final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
       final PsiClass iteratorClass =
-        facade.findClass(CommonClassNames.JAVA_UTIL_ITERATOR, scope);
+        facade.findClass(JavaClassNames.JAVA_UTIL_ITERATOR, scope);
       if (iteratorClass == null) {
         return "iterator";
       }

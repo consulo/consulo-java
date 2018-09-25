@@ -18,6 +18,7 @@ package com.intellij.jam;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.*;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -43,7 +44,7 @@ public class JamTypeAttributeElement extends JamAttributeElement<PsiType> {
     if (psiAnnotationMemberValue instanceof PsiClassObjectAccessExpression) {
       psiType = ((PsiClassObjectAccessExpression)psiAnnotationMemberValue).getOperand().getType();
     }
-    if (psiType != null && CommonClassNames.JAVA_LANG_OBJECT.equals(psiType.getCanonicalText())) {
+    if (psiType != null && JavaClassNames.JAVA_LANG_OBJECT.equals(psiType.getCanonicalText())) {
       return null;
     }
     return psiType;

@@ -25,6 +25,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.EqualityToEqualsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class NumberEqualityInspection extends BaseInspection {
 
@@ -88,7 +89,7 @@ public class NumberEqualityInspection extends BaseInspection {
 
     private static boolean hasNumberType(PsiExpression expression) {
       return TypeUtils.expressionHasTypeOrSubtype(expression,
-                                                  CommonClassNames.JAVA_LANG_NUMBER);
+                                                  JavaClassNames.JAVA_LANG_NUMBER);
     }
   }
 }

@@ -22,8 +22,10 @@ package com.intellij.lang.java;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.formatting.Block;
+import com.intellij.formatting.FormatTextRanges;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.FormattingModel;
-import com.intellij.formatting.FormattingModelBuilder;
+import com.intellij.formatting.FormattingModelBuilderEx;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
@@ -41,35 +43,50 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.codeStyle.PsiBasedFormatterModelWithShiftIndentInside;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;import consulo.annotations.RequiredReadAction;
+import com.intellij.psi.impl.source.tree.TreeUtil;
 
-public class JavaFormattingModelBuilder implements FormattingModelBuilder
+public class JavaFormattingModelBuilder implements FormattingModelBuilderEx
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.lang.java.JavaFormattingModelBuilder");
+	private static final Logger LOG = Logger.getInstance(JavaFormattingModelBuilder.class);
 
 	@Override
 	@Nonnull
-	@RequiredReadAction
-	public FormattingModel createModel(final PsiElement element, final CodeStyleSettings settings)
+	public FormattingModel createModel(@Nonnull final PsiElement element,
+									   @Nonnull final CodeStyleSettings settings,
+									   @Nonnull final FormattingMode formattingMode)
 	{
 		final FileElement fileElement = TreeUtil.getFileElement((TreeElement) SourceTreeToPsiMap.psiElementToTree(element));
 		LOG.assertTrue(fileElement != null, "File element should not be null for " + element);
 		CommonCodeStyleSettings commonSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
 		JavaCodeStyleSettings customJavaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
-		Block block = AbstractJavaBlock.newJavaBlock(fileElement, commonSettings, customJavaSettings);
+		Block block = AbstractJavaBlock.newJavaBlock(fileElement, commonSettings, customJavaSettings, formattingMode);
 		FormattingDocumentModelImpl model = FormattingDocumentModelImpl.createOn(element.getContainingFile());
 		return new PsiBasedFormatterModelWithShiftIndentInside(element.getContainingFile(), block, model);
 	}
 
+	@Nullable
 	@Override
-	@RequiredReadAction
+	public CommonCodeStyleSettings.IndentOptions getIndentOptionsToUse(@Nonnull PsiFile file,
+																	   @Nonnull FormatTextRanges ranges,
+																	   @Nonnull CodeStyleSettings settings)
+	{
+		return null;
+	}
+
+	@Nonnull
+	@Override
+	public FormattingModel createModel(PsiElement element, CodeStyleSettings settings)
+	{
+		return createModel(element, settings, FormattingMode.REFORMAT);
+	}
+
+	@Override
 	public TextRange getRangeAffectingIndent(PsiFile file, int offset, ASTNode elementAtOffset)
 	{
 		return doGetRangeAffectingIndent(elementAtOffset);
 	}
 
 	@Nullable
-	@RequiredReadAction
 	public static TextRange doGetRangeAffectingIndent(final ASTNode elementAtOffset)
 	{
 		ASTNode current = elementAtOffset;
@@ -115,8 +132,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 	 * @param node target node
 	 * @return given node range if there is no error-element before it; combined range otherwise
 	 */
-	@javax.annotation.Nullable
-	@RequiredReadAction
+	@Nullable
 	private static TextRange combineWithErrorElementIfPossible(@Nonnull ASTNode node)
 	{
 		if(node.getElementType() == TokenType.ERROR_ELEMENT)
@@ -140,7 +156,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static ASTNode findNearestExpressionParent(final ASTNode current)
 	{
 		ASTNode result = current;

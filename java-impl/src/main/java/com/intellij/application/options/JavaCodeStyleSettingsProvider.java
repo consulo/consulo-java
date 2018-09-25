@@ -16,6 +16,7 @@
 package com.intellij.application.options;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -56,14 +57,14 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider
 		return "Java";
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Language getLanguage()
 	{
 		return JavaLanguage.INSTANCE;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings)
 	{

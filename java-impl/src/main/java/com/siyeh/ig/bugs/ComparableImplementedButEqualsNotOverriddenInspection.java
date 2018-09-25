@@ -26,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class ComparableImplementedButEqualsNotOverriddenInspection
   extends BaseInspection {
@@ -64,7 +65,7 @@ public class ComparableImplementedButEqualsNotOverriddenInspection
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final GlobalSearchScope scope = aClass.getResolveScope();
       final PsiClass comparableClass =
-        psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE,
+        psiFacade.findClass(JavaClassNames.JAVA_LANG_COMPARABLE,
                             scope);
       if (comparableClass == null) {
         return;

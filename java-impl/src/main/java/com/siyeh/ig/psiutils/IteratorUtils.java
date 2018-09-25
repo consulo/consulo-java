@@ -17,6 +17,8 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import java.util.regex.Pattern;
@@ -53,7 +55,7 @@ public class IteratorUtils {
   public static boolean isCallToHasNext(
     PsiMethodCallExpression methodCallExpression) {
     return MethodCallUtils.isCallToMethod(methodCallExpression,
-                                          CommonClassNames.JAVA_UTIL_ITERATOR, PsiType.BOOLEAN, "hasNext");
+                                          JavaClassNames.JAVA_UTIL_ITERATOR, PsiType.BOOLEAN, "hasNext");
   }
 
   private static class CallsIteratorNextVisitor
@@ -90,14 +92,14 @@ public class IteratorUtils {
       super.visitMethodCallExpression(expression);
       if (checkScanner) {
         if (!MethodCallUtils.isCallToMethod(expression,
-                                            CommonClassNames.JAVA_UTIL_ITERATOR, null,
+                                            JavaClassNames.JAVA_UTIL_ITERATOR, null,
                                             SCANNER_PATTERN)) {
           return;
         }
       }
       else {
         if (!MethodCallUtils.isCallToMethod(expression,
-                                            CommonClassNames.JAVA_UTIL_ITERATOR, null,
+                                            JavaClassNames.JAVA_UTIL_ITERATOR, null,
                                             HardcodedMethodConstants.NEXT)) {
           return;
         }

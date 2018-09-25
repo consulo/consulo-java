@@ -27,7 +27,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.java.JavaQuickFixBundle;
 
@@ -52,7 +52,7 @@ public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElemen
 	@Override
 	public String getText()
 	{
-		return ObjectUtils.notNull(myText, getFamilyName());
+		return ObjectUtil.notNull(myText, getFamilyName());
 	}
 
 	@Nls

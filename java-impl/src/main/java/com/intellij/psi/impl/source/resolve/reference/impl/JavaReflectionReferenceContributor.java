@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source.resolve.reference.impl;
 import static com.intellij.patterns.PsiJavaPatterns.psiLiteral;
 import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
 import static com.intellij.patterns.StandardPatterns.or;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_CLASS;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_CLASS;
 import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.FOR_NAME;
 import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_DECLARED_FIELD;
 import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_DECLARED_METHOD;

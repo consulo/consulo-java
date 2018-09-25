@@ -17,7 +17,7 @@ package com.intellij.codeInspection.dataFlow.inliner;
 
 import static com.intellij.codeInspection.dataFlow.SpecialField.COLLECTION_SIZE;
 import static com.intellij.codeInspection.dataFlow.SpecialField.MAP_SIZE;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_COLLECTIONS;
 import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
 
 import javax.annotation.Nonnull;

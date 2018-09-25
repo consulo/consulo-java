@@ -49,7 +49,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.PlatformIcons;
@@ -264,7 +264,7 @@ public class StackFrameItem
 			ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
 			String type = classRenderer.renderTypeName(myType);
 			Icon icon = myVarType == VariableItem.VarType.PARAM ? PlatformIcons.PARAMETER_ICON : AllIcons.Debugger.Value;
-			if(myType != null && myType.startsWith(CommonClassNames.JAVA_LANG_STRING + "@"))
+			if(myType != null && myType.startsWith(JavaClassNames.JAVA_LANG_STRING + "@"))
 			{
 				node.setPresentation(icon, new XStringValuePresentation(myValue)
 				{

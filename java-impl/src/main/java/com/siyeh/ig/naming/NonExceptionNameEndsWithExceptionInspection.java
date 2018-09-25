@@ -28,6 +28,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class NonExceptionNameEndsWithExceptionInspection
@@ -94,7 +95,7 @@ public class NonExceptionNameEndsWithExceptionInspection
       final GlobalSearchScope scope = aClass.getResolveScope();
       final PsiJavaCodeReferenceElement reference =
         factory.createReferenceElementByFQClassName(
-          CommonClassNames.JAVA_LANG_EXCEPTION, scope);
+          JavaClassNames.JAVA_LANG_EXCEPTION, scope);
       final PsiJavaCodeReferenceElement[] referenceElements =
         extendsList.getReferenceElements();
       for (PsiJavaCodeReferenceElement referenceElement :
@@ -130,7 +131,7 @@ public class NonExceptionNameEndsWithExceptionInspection
         return;
       }
       if (InheritanceUtil.isInheritor(aClass,
-                                      CommonClassNames.JAVA_LANG_EXCEPTION)) {
+                                      JavaClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
       registerClassError(aClass, className,

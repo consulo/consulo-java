@@ -21,6 +21,7 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -83,7 +84,7 @@ public class WaitNotInSynchronizedContextInspection
         return;
       }
       final String qualifiedName = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)) {
+      if (!JavaClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)) {
         return;
       }
       final PsiExpression qualifier =

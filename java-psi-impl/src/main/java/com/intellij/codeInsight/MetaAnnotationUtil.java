@@ -47,6 +47,7 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @since 2016.3
@@ -156,7 +157,7 @@ public class MetaAnnotationUtil
 		{
 			GlobalSearchScope scope = GlobalSearchScope.allScope(project);
 			Set<VirtualFile> allAnnotationFiles = new HashSet<>();
-			for(PsiClass javaLangAnnotation : JavaPsiFacade.getInstance(project).findClasses(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope))
+			for(PsiClass javaLangAnnotation : JavaPsiFacade.getInstance(project).findClasses(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope))
 			{
 				DirectClassInheritorsSearch.search(javaLangAnnotation, scope, false).forEach(annotationClass ->
 				{

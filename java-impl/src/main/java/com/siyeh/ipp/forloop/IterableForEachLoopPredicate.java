@@ -20,6 +20,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;
+import consulo.java.module.util.JavaClassNames;
 
 class IterableForEachLoopPredicate implements PsiElementPredicate {
 
@@ -42,7 +43,7 @@ class IterableForEachLoopPredicate implements PsiElementPredicate {
       return false;
     }
     final PsiType type = iteratedValue.getType();
-    if (!InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)) {
+    if (!InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE)) {
       return false;
     }
     return !ErrorUtil.containsError(foreachStatement);

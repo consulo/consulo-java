@@ -17,6 +17,7 @@ package com.siyeh.ipp.psiutils;
 
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
+import consulo.java.module.util.JavaClassNames;
 
 public class ConcatenationUtils {
 
@@ -44,11 +45,11 @@ public class ConcatenationUtils {
       }
       return false;
     }
-    return type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
+    return type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
   }
 
   private static boolean hasStringType(PsiExpression expression) {
     final PsiType type = expression.getType();
-    return type != null && type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
+    return type != null && type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
   }
 }

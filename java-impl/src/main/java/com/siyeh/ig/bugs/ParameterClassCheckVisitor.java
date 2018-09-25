@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.java.module.util.JavaClassNames;
 
 class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 {
@@ -74,7 +75,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 			return false;
 		}
 		final String className = aClass.getQualifiedName();
-		if(!CommonClassNames.JAVA_LANG_CLASS.equals(className))
+		if(!JavaClassNames.JAVA_LANG_CLASS.equals(className))
 		{
 			return false;
 		}
@@ -113,7 +114,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 			return false;
 		}
 		final String className = aClass.getQualifiedName();
-		if(!CommonClassNames.JAVA_LANG_OBJECT.equals(className))
+		if(!JavaClassNames.JAVA_LANG_OBJECT.equals(className))
 		{
 			return false;
 		}

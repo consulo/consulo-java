@@ -26,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 
 public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
@@ -122,7 +123,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
       }
       final PsiClass aClass = constructor.getContainingClass();
       if (!InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
+                                       JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
         return;
       }
       registerNewExpressionError(expression, argument);

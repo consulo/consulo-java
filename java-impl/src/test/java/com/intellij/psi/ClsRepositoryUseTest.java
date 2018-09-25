@@ -45,6 +45,7 @@ import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.java.module.extension.JavaModuleExtensionImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.module.util.JavaClassNames;
 
 @PlatformTestCase.WrapInCommand
 public abstract class ClsRepositoryUseTest extends PsiTestCase {
@@ -416,7 +417,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     LOG.assertTrue(type instanceof PsiArrayType);
     PsiType componentType = ((PsiArrayType)type).getComponentType();
 
-    assertTrue(componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
+    assertTrue(componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
     assertEquals("Object", componentType.getPresentableText());
     assertFalse(componentType instanceof PsiPrimitiveType);
     assertFalse(componentType instanceof PsiArrayType);
@@ -435,7 +436,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     PsiType type2 = ((PsiArrayType)field2.getType()).getComponentType();
     assertTrue(type2 instanceof PsiClassType);
 
-    assertTrue(type2.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
+    assertTrue(type2.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
     assertEquals("Object", type2.getPresentableText());
   }
 
@@ -447,7 +448,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     PsiType type1 = aClass.getFields()[1].getType();
     PsiElement target1 = PsiUtil.resolveClassInType(type1);
     assertNotNull(target1);
-    PsiClass objectClass = myJavaFacade.findClasses(CommonClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
+    PsiClass objectClass = myJavaFacade.findClasses(JavaClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
     assertEquals(objectClass, target1);
   }
 
@@ -529,12 +530,12 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
 
     PsiType type2 = parameters[1].getType();
     assertEquals("Object", type2.getPresentableText());
-    assertTrue(type2.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
+    assertTrue(type2.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
     assertFalse(type2 instanceof PsiArrayType);
     assertFalse(type2 instanceof PsiPrimitiveType);
     PsiClass target2 = PsiUtil.resolveClassInType(type2);
     assertNotNull(target2);
-    PsiClass objectClass = myJavaFacade.findClasses(CommonClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
+    PsiClass objectClass = myJavaFacade.findClasses(JavaClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
     assertEquals(objectClass, target2);
 
     parameters[0].getModifierList();
@@ -551,7 +552,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     final PsiClassType.ClassResolveResult setResolveResult = ret.resolveGenerics();
     final PsiClass setResolveResultElement = setResolveResult.getElement();
     assert setResolveResultElement != null : setResolveResult;
-    assertEquals(CommonClassNames.JAVA_UTIL_SET, setResolveResultElement.getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_UTIL_SET, setResolveResultElement.getQualifiedName());
     final PsiTypeParameter typeParameter = setResolveResultElement.getTypeParameters()[0];
 
     final PsiType substitutedResult = setResolveResult.getSubstitutor().substitute(typeParameter);
@@ -589,7 +590,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
   public void testGenericReturnType() throws Exception {
     disableJdk();
 
-    final PsiClass map = myJavaFacade.findClass(CommonClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
+    final PsiClass map = myJavaFacade.findClass(JavaClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
     assert map != null;
     final PsiElementFactory factory = myJavaFacade.getElementFactory();
     final PsiClassType typeMapStringToInteger =
@@ -630,7 +631,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
 
   public void testSimplerGenericInheritance() throws Exception {
     PsiElementFactory factory = myJavaFacade.getElementFactory();
-    PsiClass map = myJavaFacade.findClass(CommonClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
+    PsiClass map = myJavaFacade.findClass(JavaClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
     PsiClass hashMap = myJavaFacade.findClass("java.util.HashMap", RESOLVE_SCOPE);
     assert map != null && hashMap != null;
     assertTrue(factory.createType(map).isAssignableFrom(factory.createType(hashMap)));

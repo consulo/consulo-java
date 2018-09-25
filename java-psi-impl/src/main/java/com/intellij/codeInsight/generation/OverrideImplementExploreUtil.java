@@ -25,6 +25,7 @@ import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
+import consulo.java.module.util.JavaClassNames;
 
 public class OverrideImplementExploreUtil
 {
@@ -122,7 +123,7 @@ public class OverrideImplementExploreUtil
 				{
 					PsiMethod abstractOne = abstracts.get(signature);
 					if(abstractOne == null || !abstractOne.getContainingClass().isInheritor(concrete.getContainingClass(), true) ||
-							CommonClassNames.JAVA_LANG_OBJECT.equals(concrete.getContainingClass().getQualifiedName()))
+							JavaClassNames.JAVA_LANG_OBJECT.equals(concrete.getContainingClass().getQualifiedName()))
 					{
 						PsiSubstitutor subst = correctSubstitutor(concrete, signature.getSubstitutor());
 						CandidateInfo info = new CandidateInfo(concrete, subst);

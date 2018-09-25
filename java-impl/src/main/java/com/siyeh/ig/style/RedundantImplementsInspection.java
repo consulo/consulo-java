@@ -24,6 +24,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -155,12 +157,12 @@ public class RedundantImplementsInspection extends BaseInspection {
       PsiJavaCodeReferenceElement[] implementsElements) {
       final String qualifiedName = implementedClass.getQualifiedName();
       if (ignoreSerializable &&
-          CommonClassNames.JAVA_IO_SERIALIZABLE.equals(
+          JavaClassNames.JAVA_IO_SERIALIZABLE.equals(
             qualifiedName)) {
         return;
       }
       else if (ignoreCloneable &&
-               CommonClassNames.JAVA_LANG_CLONEABLE.equals(
+               JavaClassNames.JAVA_LANG_CLONEABLE.equals(
                  qualifiedName)) {
         return;
       }

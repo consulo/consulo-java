@@ -24,6 +24,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Tagir Valeev
@@ -73,7 +74,7 @@ public class ConstructionUtils
 		}
 		final PsiClass aClass = (PsiClass) target;
 		final String qualifiedName = aClass.getQualifiedName();
-		if(!CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) && !CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName))
+		if(!JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) && !JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName))
 		{
 			return null;
 		}
@@ -116,7 +117,7 @@ public class ConstructionUtils
 			if(argumentList != null && argumentList.getExpressions().length == 0)
 			{
 				PsiType type = expression.getType();
-				return com.intellij.psi.util.InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_COLLECTION) || com.intellij.psi.util.InheritanceUtil.isInheritor(type, CommonClassNames
+				return com.intellij.psi.util.InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_COLLECTION) || com.intellij.psi.util.InheritanceUtil.isInheritor(type, JavaClassNames
 						.JAVA_UTIL_MAP);
 			}
 		}
@@ -172,12 +173,12 @@ public class ConstructionUtils
 			{
 				return false;
 			}
-			if(!com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_COLLECTION) && !com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, CommonClassNames
+			if(!com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_COLLECTION) && !com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, JavaClassNames
 					.JAVA_UTIL_MAP))
 			{
 				return false;
 			}
-			Predicate<PsiType> allowedParameterType = t -> t instanceof PsiPrimitiveType || com.intellij.psi.util.InheritanceUtil.isInheritor(t, CommonClassNames.JAVA_LANG_CLASS);
+			Predicate<PsiType> allowedParameterType = t -> t instanceof PsiPrimitiveType || com.intellij.psi.util.InheritanceUtil.isInheritor(t, JavaClassNames.JAVA_LANG_CLASS);
 			return Stream.of(constructor.getParameterList().getParameters()).map(PsiParameter::getType).allMatch(allowedParameterType);
 		}
 		if(expression instanceof PsiMethodCallExpression)

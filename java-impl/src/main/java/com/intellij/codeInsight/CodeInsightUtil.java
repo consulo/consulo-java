@@ -48,6 +48,7 @@ import com.intellij.util.Query;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBTreeTraverser;
 import consulo.java.codeInsight.JavaCodeInsightUtilCore;
+import consulo.java.module.util.JavaClassNames;
 
 public class CodeInsightUtil extends JavaCodeInsightUtilCore
 {
@@ -310,7 +311,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore
 						arg = bound != null ? bound : ((PsiWildcardType) arg).getExtendsBound();
 					}
 					PsiType substitution = resolveHelper.getSubstitutionForTypeParameter(inheritorParameter, substituted, arg, true, PsiUtil.getLanguageLevel(context));
-					if(PsiType.NULL.equals(substitution) || substitution != null && substitution.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || substitution instanceof PsiWildcardType)
+					if(PsiType.NULL.equals(substitution) || substitution != null && substitution.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) || substitution instanceof PsiWildcardType)
 					{
 						continue;
 					}

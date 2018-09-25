@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.completion;
 
 import static com.intellij.patterns.PsiJavaPatterns.*;
-import static com.intellij.util.ObjectUtils.assertNotNull;
+import static com.intellij.util.ObjectUtil.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,7 +137,7 @@ public class JavaCompletionContributor extends CompletionContributor
 
 		if(JavaKeywordCompletion.DECLARATION_START.getValue().accepts(position) || JavaKeywordCompletion.isInsideParameterList(position) || isInsideAnnotationName(position))
 		{
-			return new OrFilter(ElementClassFilter.CLASS, ElementClassFilter.PACKAGE_FILTER);
+			return new OrFilter(ElementClassFilter.CLASS, ElementClassFilter.PACKAGE);
 		}
 
 		if(psiElement().afterLeaf(PsiKeyword.INSTANCEOF).accepts(position))
@@ -211,7 +211,7 @@ public class JavaCompletionContributor extends CompletionContributor
 
 	private static ElementFilter createAnnotationFilter(PsiElement position)
 	{
-		OrFilter orFilter = new OrFilter(ElementClassFilter.CLASS, ElementClassFilter.PACKAGE_FILTER, new AndFilter(new ClassFilter(PsiField.class), new ModifierFilter(PsiModifier.STATIC,
+		OrFilter orFilter = new OrFilter(ElementClassFilter.CLASS, ElementClassFilter.PACKAGE, new AndFilter(new ClassFilter(PsiField.class), new ModifierFilter(PsiModifier.STATIC,
 				PsiModifier.FINAL)));
 		if(psiElement().insideStarting(psiNameValuePair()).accepts(position))
 		{
@@ -572,7 +572,7 @@ public class JavaCompletionContributor extends CompletionContributor
 			return isSecondCompletion;
 		}
 
-		if(parent instanceof PsiJavaCodeReferenceElementImpl && ((PsiJavaCodeReferenceElementImpl) parent).getKind(parent.getContainingFile()) == PsiJavaCodeReferenceElementImpl.PACKAGE_NAME_KIND)
+		if(parent instanceof PsiJavaCodeReferenceElementImpl && ((PsiJavaCodeReferenceElementImpl) parent).getKindEnum(parent.getContainingFile()) == PsiJavaCodeReferenceElementImpl.Kind.PACKAGE_NAME_KIND)
 		{
 			return false;
 		}

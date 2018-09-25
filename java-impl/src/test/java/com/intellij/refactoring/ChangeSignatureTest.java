@@ -35,6 +35,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author dsl
@@ -279,7 +280,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 
 	public void testCovariantReturnType() throws Exception
 	{
-		doTest(CommonClassNames.JAVA_LANG_RUNNABLE, new ParameterInfoImpl[0], false);
+		doTest(JavaClassNames.JAVA_LANG_RUNNABLE, new ParameterInfoImpl[0], false);
 	}
 
 	public void testReorderExceptions() throws Exception

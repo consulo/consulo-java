@@ -21,6 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -42,11 +43,11 @@ public class IntegerDivisionInFloatingPointContextInspection
     s_integralTypes.add("short");
     s_integralTypes.add("byte");
     s_integralTypes.add("char");
-    s_integralTypes.add(CommonClassNames.JAVA_LANG_INTEGER);
-    s_integralTypes.add(CommonClassNames.JAVA_LANG_LONG);
-    s_integralTypes.add(CommonClassNames.JAVA_LANG_SHORT);
-    s_integralTypes.add(CommonClassNames.JAVA_LANG_BYTE);
-    s_integralTypes.add(CommonClassNames.JAVA_LANG_CHARACTER);
+    s_integralTypes.add(JavaClassNames.JAVA_LANG_INTEGER);
+    s_integralTypes.add(JavaClassNames.JAVA_LANG_LONG);
+    s_integralTypes.add(JavaClassNames.JAVA_LANG_SHORT);
+    s_integralTypes.add(JavaClassNames.JAVA_LANG_BYTE);
+    s_integralTypes.add(JavaClassNames.JAVA_LANG_CHARACTER);
   }
 
   @Override

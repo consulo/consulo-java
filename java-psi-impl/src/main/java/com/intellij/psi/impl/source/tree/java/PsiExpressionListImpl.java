@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,161 +19,189 @@ import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.source.tree.*;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiExpressionList;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.source.tree.ChildRole;
+import com.intellij.psi.impl.source.tree.CompositePsiElement;
+import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.psi.impl.source.tree.Factory;
+import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.psi.impl.source.tree.JavaSourceUtil;
+import com.intellij.psi.impl.source.tree.LeafElement;
+import com.intellij.psi.impl.source.tree.SharedImplUtil;
+import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
 
-public class PsiExpressionListImpl extends CompositePsiElement implements PsiExpressionList {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiExpressionListImpl");
+public class PsiExpressionListImpl extends CompositePsiElement implements PsiExpressionList
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiExpressionListImpl");
 
-  public PsiExpressionListImpl() {
-    super(JavaElementType.EXPRESSION_LIST);
-  }
+	public PsiExpressionListImpl()
+	{
+		super(JavaElementType.EXPRESSION_LIST);
+	}
 
-  @Override
-  @Nonnull
-  public PsiExpression[] getExpressions() {
-    return getChildrenAsPsiElements(ElementType.EXPRESSION_BIT_SET, PsiExpression.ARRAY_FACTORY);
-  }
+	@Override
+	@Nonnull
+	public PsiExpression[] getExpressions()
+	{
+		return getChildrenAsPsiElements(ElementType.EXPRESSION_BIT_SET, PsiExpression.ARRAY_FACTORY);
+	}
 
-  @Override
-  @Nonnull
-  public PsiType[] getExpressionTypes() {
-    PsiExpression[] expressions = getExpressions();
-    PsiType[] types = new PsiType[expressions.length];
+	@Override
+	public int getExpressionCount()
+	{
+		return countChildren(ElementType.EXPRESSION_BIT_SET);
+	}
 
-    for (int i = 0; i < types.length; i++) {
-      types[i] = expressions[i].getType();
-    }
+	@Override
+	public boolean isEmpty()
+	{
+		return findChildByType(ElementType.EXPRESSION_BIT_SET) == null;
+	}
 
-    return types;
-  }
+	@Override
+	@Nonnull
+	public PsiType[] getExpressionTypes()
+	{
+		PsiExpression[] expressions = getExpressions();
+		PsiType[] types = PsiType.createArray(expressions.length);
 
-  @Override
-  public ASTNode findChildByRole(int role) {
-    LOG.assertTrue(ChildRole.isUnique(role));
-    switch (role) {
-      default:
-        return null;
+		for(int i = 0; i < types.length; i++)
+		{
+			types[i] = expressions[i].getType();
+		}
 
-      case ChildRole.LPARENTH:
-        return getFirstChildNode() != null && getFirstChildNode().getElementType() == JavaTokenType.LPARENTH ? getFirstChildNode() : null;
+		return types;
+	}
 
-      case ChildRole.RPARENTH:
-        if (getLastChildNode() != null && getLastChildNode().getElementType() == JavaTokenType.RPARENTH) {
-          return getLastChildNode();
-        }
-        else {
-          return null;
-        }
-    }
-  }
+	@Override
+	public ASTNode findChildByRole(int role)
+	{
+		LOG.assertTrue(ChildRole.isUnique(role));
+		switch(role)
+		{
+			default:
+				return null;
 
-  @Override
-  public int getChildRole(ASTNode child) {
-    LOG.assertTrue(child.getTreeParent() == this);
-    IElementType i = child.getElementType();
-    if (i == JavaTokenType.COMMA) {
-      return ChildRole.COMMA;
-    }
-    else if (i == JavaTokenType.LPARENTH) {
-      return ChildRole.LPARENTH;
-    }
-    else if (i == JavaTokenType.RPARENTH) {
-      return ChildRole.RPARENTH;
-    }
-    else {
-      if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
-        return ChildRole.EXPRESSION_IN_LIST;
-      }
-      return ChildRoleBase.NONE;
-    }
-  }
+			case ChildRole.LPARENTH:
+				return getFirstChildNode() != null && getFirstChildNode().getElementType() == JavaTokenType.LPARENTH ? getFirstChildNode() : null;
 
-  @Override
-  public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before) {
-    final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
-    if (anchor == null) {
-      if (before == null || before.booleanValue()) {
-        anchor = findChildByRole(ChildRole.RPARENTH);
-        if (anchor == null) {
-          LeafElement lparenth = Factory.createSingleLeafElement(JavaTokenType.LPARENTH, "(", 0, 1, treeCharTab, getManager());
-          super.addInternal(lparenth, lparenth, null, Boolean.FALSE);
-          LeafElement rparenth = Factory.createSingleLeafElement(JavaTokenType.RPARENTH, ")", 0, 1, treeCharTab, getManager());
-          super.addInternal(rparenth, rparenth, null, Boolean.TRUE);
-          anchor = findChildByRole(ChildRole.RPARENTH);
-          LOG.assertTrue(anchor != null);
-        }
-        before = Boolean.TRUE;
-      }
-      else {
-        anchor = findChildByRole(ChildRole.LPARENTH);
-        if (anchor == null) {
-          LeafElement lparenth = Factory.createSingleLeafElement(JavaTokenType.LPARENTH, "(", 0, 1, treeCharTab, getManager());
-          super.addInternal(lparenth, lparenth, null, Boolean.FALSE);
-          LeafElement rparenth = Factory.createSingleLeafElement(JavaTokenType.RPARENTH, ")", 0, 1, treeCharTab, getManager());
-          super.addInternal(rparenth, rparenth, null, Boolean.TRUE);
-          anchor = findChildByRole(ChildRole.LPARENTH);
-          LOG.assertTrue(anchor != null);
-        }
-        before = Boolean.FALSE;
-      }
-    }
-    TreeElement firstAdded = super.addInternal(first, last, anchor, before);
-    if (ElementType.EXPRESSION_BIT_SET.contains(first.getElementType())) {
-      ASTNode element = first;
-      for (ASTNode child = element.getTreeNext(); child != null; child = child.getTreeNext()) {
-        if (child.getElementType() == JavaTokenType.COMMA) break;
-        if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
-          TreeElement comma = Factory.createSingleLeafElement(JavaTokenType.COMMA, ",", 0, 1, treeCharTab, getManager());
-          super.addInternal(comma, comma, element, Boolean.FALSE);
-          break;
-        }
-      }
-      for (ASTNode child = element.getTreePrev(); child != null; child = child.getTreePrev()) {
-        final IElementType t = child.getElementType();
-        if (t == JavaTokenType.COMMA) break;
-        if (ElementType.EXPRESSION_BIT_SET.contains(t) || ElementType.JAVA_COMMENT_BIT_SET.contains(t)) {
-          TreeElement comma = Factory.createSingleLeafElement(JavaTokenType.COMMA, ",", 0, 1, treeCharTab, getManager());
-          super.addInternal(comma, comma, child, Boolean.FALSE);
-          break;
-        }
-      }
-    }
-    return firstAdded;
-  }
+			case ChildRole.RPARENTH:
+				if(getLastChildNode() != null && getLastChildNode().getElementType() == JavaTokenType.RPARENTH)
+				{
+					return getLastChildNode();
+				}
+				else
+				{
+					return null;
+				}
+		}
+	}
 
-  @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
-    if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
-      ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
-      if (next != null && next.getElementType() == JavaTokenType.COMMA) {
-        deleteChildInternal(next);
-      }
-      else {
-        ASTNode prev = PsiImplUtil.skipWhitespaceAndCommentsBack(child.getTreePrev());
-        if (prev != null && prev.getElementType() == JavaTokenType.COMMA) {
-          deleteChildInternal(prev);
-        }
-      }
-    }
-    super.deleteChildInternal(child);
-  }
+	@Override
+	public int getChildRole(@Nonnull ASTNode child)
+	{
+		LOG.assertTrue(child.getTreeParent() == this);
+		IElementType i = child.getElementType();
+		if(i == JavaTokenType.COMMA)
+		{
+			return ChildRole.COMMA;
+		}
+		else if(i == JavaTokenType.LPARENTH)
+		{
+			return ChildRole.LPARENTH;
+		}
+		else if(i == JavaTokenType.RPARENTH)
+		{
+			return ChildRole.RPARENTH;
+		}
+		else
+		{
+			if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()))
+			{
+				return ChildRole.EXPRESSION_IN_LIST;
+			}
+			return ChildRoleBase.NONE;
+		}
+	}
 
-  @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitExpressionList(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before)
+	{
+		final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
+		if(anchor == null)
+		{
+			if(before == null || before.booleanValue())
+			{
+				anchor = findChildByRole(ChildRole.RPARENTH);
+				if(anchor == null)
+				{
+					LeafElement lparenth = Factory.createSingleLeafElement(JavaTokenType.LPARENTH, "(", 0, 1, treeCharTab, getManager());
+					super.addInternal(lparenth, lparenth, null, Boolean.FALSE);
+					LeafElement rparenth = Factory.createSingleLeafElement(JavaTokenType.RPARENTH, ")", 0, 1, treeCharTab, getManager());
+					super.addInternal(rparenth, rparenth, null, Boolean.TRUE);
+					anchor = findChildByRole(ChildRole.RPARENTH);
+					LOG.assertTrue(anchor != null);
+				}
+				before = Boolean.TRUE;
+			}
+			else
+			{
+				anchor = findChildByRole(ChildRole.LPARENTH);
+				if(anchor == null)
+				{
+					LeafElement lparenth = Factory.createSingleLeafElement(JavaTokenType.LPARENTH, "(", 0, 1, treeCharTab, getManager());
+					super.addInternal(lparenth, lparenth, null, Boolean.FALSE);
+					LeafElement rparenth = Factory.createSingleLeafElement(JavaTokenType.RPARENTH, ")", 0, 1, treeCharTab, getManager());
+					super.addInternal(rparenth, rparenth, null, Boolean.TRUE);
+					anchor = findChildByRole(ChildRole.LPARENTH);
+					LOG.assertTrue(anchor != null);
+				}
+				before = Boolean.FALSE;
+			}
+		}
+		TreeElement firstAdded = super.addInternal(first, last, anchor, before);
+		if(ElementType.EXPRESSION_BIT_SET.contains(first.getElementType()))
+		{
+			JavaSourceUtil.addSeparatingComma(this, first, ElementType.EXPRESSION_BIT_SET);
+		}
+		return firstAdded;
+	}
 
-  public String toString() {
-    return "PsiExpressionList";
-  }
+	@Override
+	public void deleteChildInternal(@Nonnull ASTNode child)
+	{
+		if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()))
+		{
+			JavaSourceUtil.deleteSeparatingComma(this, child);
+		}
+
+		super.deleteChildInternal(child);
+	}
+
+	@Override
+	public void accept(@Nonnull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitExpressionList(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PsiExpressionList";
+	}
 }

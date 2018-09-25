@@ -22,6 +22,8 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -154,7 +156,7 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
           continue;
         }
         if (!InheritanceUtil.isInheritor(declaredClass,
-                                         CommonClassNames.JAVA_UTIL_ITERATOR)) {
+                                         JavaClassNames.JAVA_UTIL_ITERATOR)) {
           continue;
         }
         final PsiExpression initialValue = variable.getInitializer();

@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.WrapType;
@@ -35,9 +36,15 @@ import com.intellij.psi.formatter.FormatterUtil;
 
 public class LabeledJavaBlock extends AbstractJavaBlock
 {
-	public LabeledJavaBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	public LabeledJavaBlock(ASTNode node,
+							Wrap wrap,
+							Alignment alignment,
+							Indent indent,
+							CommonCodeStyleSettings settings,
+							JavaCodeStyleSettings javaSettings,
+							@Nonnull FormattingMode formattingMode)
 	{
-		super(node, wrap, alignment, indent, settings, javaSettings);
+		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 		{
 			if(!FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0)
 			{
-				result.add(createJavaBlock(child, mySettings, myJavaSettings, currentIndent, currentWrap, AlignmentStrategy.getNullStrategy()));
+				result.add(createJavaBlock(child, mySettings, myJavaSettings, currentIndent, currentWrap, AlignmentStrategy.getNullStrategy(), getFormattingMode()));
 				if(child.getElementType() == JavaTokenType.COLON)
 				{
 					currentIndent = Indent.getNoneIndent();

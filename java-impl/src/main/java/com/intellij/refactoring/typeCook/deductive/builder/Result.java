@@ -23,6 +23,7 @@ import com.intellij.refactoring.typeCook.Settings;
 import com.intellij.refactoring.typeCook.Util;
 import com.intellij.refactoring.typeCook.deductive.resolver.Binding;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.HashMap;
@@ -69,7 +70,7 @@ public class Result {
     if (myBinding != null) {
       final PsiType type = myBinding.substitute(myTypes.get(element));
 
-      @NonNls final String objectFQName = CommonClassNames.JAVA_LANG_OBJECT;
+      @NonNls final String objectFQName = JavaClassNames.JAVA_LANG_OBJECT;
       if (originalType.getCanonicalText().equals(objectFQName)) {
         if (type == null) {
           return originalType;

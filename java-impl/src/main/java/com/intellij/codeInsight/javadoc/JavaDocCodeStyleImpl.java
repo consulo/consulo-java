@@ -3,28 +3,33 @@ package com.intellij.codeInsight.javadoc;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 
 @Singleton
-public class JavaDocCodeStyleImpl extends JavaDocCodeStyle {
-  private final Project myProject;
+public class JavaDocCodeStyleImpl extends JavaDocCodeStyle
+{
+	private final Project myProject;
 
-  @Inject
-  public JavaDocCodeStyleImpl(Project project) {
-    myProject = project;
-  }
+	@Inject
+	public JavaDocCodeStyleImpl(Project project)
+	{
+		myProject = project;
+	}
 
-  @Override
-  public boolean spaceBeforeComma() {
-    CodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(myProject);
-    return styleSettings.SPACE_BEFORE_COMMA;
-  }
+	@Override
+	public boolean spaceBeforeComma()
+	{
+		CommonCodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(myProject).getCommonSettings(JavaLanguage.INSTANCE);
+		return styleSettings.SPACE_BEFORE_COMMA;
+	}
 
-  @Override
-  public boolean spaceAfterComma() {
-    CodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(myProject);
-    return styleSettings.SPACE_AFTER_COMMA;
-  }
+	@Override
+	public boolean spaceAfterComma()
+	{
+		CommonCodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(myProject).getCommonSettings(JavaLanguage.INSTANCE);
+		return styleSettings.SPACE_AFTER_COMMA;
+	}
 }

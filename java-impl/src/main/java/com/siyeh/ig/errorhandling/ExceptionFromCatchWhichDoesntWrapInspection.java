@@ -25,6 +25,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -101,7 +102,7 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
           final PsiClass exceptionClass = classType.resolve();
           if (exceptionClass != null) {
             final PsiMethod[] constructors = exceptionClass.getConstructors();
-            final PsiClassType throwableType = TypeUtils.getType(CommonClassNames.JAVA_LANG_THROWABLE, statement);
+            final PsiClassType throwableType = TypeUtils.getType(JavaClassNames.JAVA_LANG_THROWABLE, statement);
             boolean canWrap = false;
             outer:
             for (PsiMethod constructor : constructors) {

@@ -16,6 +16,7 @@
 package com.siyeh.ipp.exceptions;
 
 import com.intellij.psi.*;
+import consulo.java.module.util.JavaClassNames;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -234,7 +235,7 @@ class ExceptionUtils {
 
   private static PsiClassType getJavaLangAutoCloseable(PsiElement context) {
     final PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
-    return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, context.getResolveScope());
+    return factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, context.getResolveScope());
   }
 
   private static void calculateExceptionsThrownForIfStatement(PsiIfStatement ifStatement, Set<PsiType> exceptionTypes) {

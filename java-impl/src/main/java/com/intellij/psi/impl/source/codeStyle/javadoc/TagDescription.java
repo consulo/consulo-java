@@ -15,29 +15,29 @@
  */
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
-*
-* @author Dmitry Skavish
-*/
-public class NameDesc {
+ * @author Dmitry Skavish
+ */
+public class TagDescription
+{
+	@Nonnull
+	public final String name;
+	@Nullable
+	public final String desc;
 
-  public String name;
-  public String desc;
-  private String type;
+	public TagDescription(@Nonnull String name, @Nullable String desc)
+	{
+		this.name = name;
+		this.desc = desc;
+	}
 
-  public NameDesc(String name, String desc) {
-    this.name = name;
-    this.desc = desc;
-  }
-
-  public NameDesc(String name, String desc, String type) {
-    this.name = name;
-    this.desc = desc;
-    this.type = type;
-  }
-
-  public String toString() {
-    if (type == null) return name;
-    return name + ": " + type;
-  }
+	@Nonnull
+	@Override
+	public String toString()
+	{
+		return name;
+	}
 }

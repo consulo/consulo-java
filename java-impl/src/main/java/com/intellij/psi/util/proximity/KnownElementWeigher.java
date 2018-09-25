@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.util.proximity;
 
-import static com.intellij.psi.CommonClassNames.*;
+import static consulo.java.module.util.JavaClassNames.*;
 
 import java.util.Set;
 

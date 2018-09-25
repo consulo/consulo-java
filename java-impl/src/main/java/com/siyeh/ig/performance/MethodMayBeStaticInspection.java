@@ -33,6 +33,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class MethodMayBeStaticInspection extends BaseInspection
 {
@@ -251,7 +252,7 @@ public class MethodMayBeStaticInspection extends BaseInspection
 					return false;
 				}
 				final PsiType returnType = method.getReturnType();
-				if(returnType == null || !returnType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+				if(returnType == null || !returnType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 				{
 					return false;
 				}

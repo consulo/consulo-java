@@ -21,21 +21,25 @@ import com.intellij.openapi.project.Project;
 /**
  * @author yole
  */
-public abstract class JavaCodeStyleSettingsFacade {
-  public abstract int getNamesCountToUseImportOnDemand();
+public abstract class JavaCodeStyleSettingsFacade
+{
+	public abstract int getNamesCountToUseImportOnDemand();
 
-  public abstract boolean useFQClassNames();
+	public abstract boolean isToImportInDemand(String qualifiedName);
 
-  public abstract boolean isJavaDocLeadingAsterisksEnabled();
+	public abstract boolean useFQClassNames();
 
-  public abstract int getIndentSize();
+	public abstract boolean isJavaDocLeadingAsterisksEnabled();
 
-  public abstract boolean isGenerateFinalParameters();
+	public abstract int getIndentSize();
 
-  public abstract boolean isGenerateFinalLocals();
+	public abstract boolean isGenerateFinalParameters();
+
+	public abstract boolean isGenerateFinalLocals();
 
 
-  public static JavaCodeStyleSettingsFacade getInstance(Project project) {
-    return ServiceManager.getService(project, JavaCodeStyleSettingsFacade.class);
-  }
+	public static JavaCodeStyleSettingsFacade getInstance(Project project)
+	{
+		return ServiceManager.getService(project, JavaCodeStyleSettingsFacade.class);
+	}
 }

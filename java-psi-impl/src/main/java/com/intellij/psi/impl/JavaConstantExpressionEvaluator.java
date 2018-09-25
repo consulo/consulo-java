@@ -35,7 +35,7 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.ConcurrencyUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalkingVisitor {
@@ -44,7 +44,7 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
 
   private static final Key<CachedValue<ConcurrentMap<PsiElement,Object>>> CONSTANT_VALUE_WO_OVERFLOW_MAP_KEY = Key.create("CONSTANT_VALUE_WO_OVERFLOW_MAP_KEY");
   private static final Key<CachedValue<ConcurrentMap<PsiElement,Object>>> CONSTANT_VALUE_WITH_OVERFLOW_MAP_KEY = Key.create("CONSTANT_VALUE_WITH_OVERFLOW_MAP_KEY");
-  private static final Object NO_VALUE = ObjectUtils.NULL;
+  private static final Object NO_VALUE = ObjectUtil.NULL;
   private final ConstantExpressionVisitor myConstantExpressionVisitor;
 
   private JavaConstantExpressionEvaluator(Set<PsiVariable> visitedVars, final boolean throwExceptionOnOverflow, final Project project, final PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {

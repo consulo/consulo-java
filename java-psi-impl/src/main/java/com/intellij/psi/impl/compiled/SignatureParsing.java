@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.cls.ClsFormatException;
@@ -85,7 +85,7 @@ public class SignatureParsing
 			}
 			if(bounds == null)
 			{
-				if(CommonClassNames.JAVA_LANG_OBJECT.equals(bound))
+				if(JavaClassNames.JAVA_LANG_OBJECT.equals(bound))
 				{
 					jlo = true;
 					continue;
@@ -93,7 +93,7 @@ public class SignatureParsing
 				bounds = ContainerUtil.newSmartList();
 				if(jlo)
 				{
-					bounds.add(CommonClassNames.JAVA_LANG_OBJECT);
+					bounds.add(JavaClassNames.JAVA_LANG_OBJECT);
 				}
 			}
 			bounds.add(bound);

@@ -72,6 +72,7 @@ import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.util.JavaClassNames;
 
 public class RefactoringUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.RefactoringUtil");
@@ -444,7 +445,7 @@ public class RefactoringUtil {
     ExpectedTypeInfo[] expectedTypes = ExpectedTypesProvider.getInstance(expr.getProject()).getExpectedTypes(expr, false);
     if (expectedTypes.length == 1) {
       type = expectedTypes[0].getType();
-      if (!type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) return type;
+      if (!type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) return type;
     }
     return null;
   }
@@ -481,7 +482,7 @@ public class RefactoringUtil {
         type = infos[0].getType();
       }
       else {
-        type = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_OBJECT, expr.getResolveScope());
+        type = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_OBJECT, expr.getResolveScope());
       }
     }
 

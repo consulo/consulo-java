@@ -1,22 +1,10 @@
-/*
- * Copyright 2000-2013 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.intellij.application.options.CodeStyle;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
@@ -27,13 +15,11 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMember;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiUtil;
@@ -44,22 +30,33 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class CommentFormatter
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.javadoc.CommentFormatter");
+	private static final Logger LOG = Logger.getInstance(CommentFormatter.class);
 
 	private final CodeStyleSettings mySettings;
 	private final JDParser myParser;
 	private final Project myProject;
 
-	public CommentFormatter(@Nonnull PsiElement element)
+	/**
+	 * @deprecated Use {@link ##CommentFormatter(PsiFile)} instead.
+	 */
+	@Deprecated
+	public CommentFormatter(@Nonnull Project project)
 	{
-		mySettings = CodeStyleSettingsManager.getSettings(element.getProject());
-		myParser = new JDParser(mySettings, PsiUtil.getLanguageLevel(element));
-		myProject = element.getProject();
+		mySettings = CodeStyle.getSettings(project);
+		myParser = new JDParser(mySettings);
+		myProject = project;
 	}
 
-	public CodeStyleSettings getSettings()
+	public CommentFormatter(@Nonnull PsiFile file)
 	{
-		return mySettings;
+		mySettings = CodeStyle.getSettings(file);
+		myParser = new JDParser(mySettings);
+		myProject = file.getProject();
+	}
+
+	public JavaCodeStyleSettings getSettings()
+	{
+		return mySettings.getCustomSettings(JavaCodeStyleSettings.class);
 	}
 
 	public JDParser getParser()
@@ -67,7 +64,7 @@ public class CommentFormatter
 		return myParser;
 	}
 
-	public void processComment(@javax.annotation.Nullable ASTNode element)
+	public void processComment(@Nullable ASTNode element)
 	{
 		if(!getSettings().ENABLE_JAVADOC_FORMATTING)
 		{
@@ -75,35 +72,14 @@ public class CommentFormatter
 		}
 
 		PsiElement psiElement = SourceTreeToPsiMap.treeElementToPsi(element);
-		processElementComment(psiElement);
-	}
-
-	private void processElementComment(@Nullable PsiElement psiElement)
-	{
-		if(psiElement instanceof PsiClass)
+		if(psiElement != null)
 		{
-			String newCommentText = formatClassComment((PsiClass) psiElement);
-			replaceDocComment(newCommentText, (PsiDocCommentOwner) psiElement);
-		}
-		else if(psiElement instanceof PsiMethod)
-		{
-			String newCommentText = formatMethodComment((PsiMethod) psiElement);
-			replaceDocComment(newCommentText, (PsiDocCommentOwner) psiElement);
-		}
-		else if(psiElement instanceof PsiField)
-		{
-			String newCommentText = formatFieldComment((PsiField) psiElement);
-			replaceDocComment(newCommentText, (PsiDocCommentOwner) psiElement);
-		}
-		else if(psiElement instanceof PsiDocComment)
-		{
-			processElementComment(psiElement.getParent());
+			getParser().formatCommentText(psiElement, this);
 		}
 	}
 
-	private void replaceDocComment(@javax.annotation.Nullable String newCommentText, @Nonnull final PsiDocCommentOwner psiDocCommentOwner)
+	public void replaceCommentText(@Nullable String newCommentText, @Nullable PsiDocComment oldComment)
 	{
-		final PsiDocComment oldComment = psiDocCommentOwner.getDocComment();
 		if(newCommentText != null)
 		{
 			newCommentText = stripSpaces(newCommentText);
@@ -114,7 +90,8 @@ public class CommentFormatter
 		}
 		try
 		{
-			PsiComment newComment = JavaPsiFacade.getInstance(myProject).getElementFactory().createCommentFromText(newCommentText, null);
+			PsiComment newComment = JavaPsiFacade.getInstance(myProject).getElementFactory().createCommentFromText(
+					newCommentText, null);
 			final ASTNode oldNode = oldComment.getNode();
 			final ASTNode newNode = newComment.getNode();
 			assert oldNode != null && newNode != null;
@@ -156,114 +133,12 @@ public class CommentFormatter
 		return text.substring(0, idx);
 	}
 
-	@Nullable
-	private String formatClassComment(@Nonnull PsiClass psiClass)
-	{
-		final String info = getOrigCommentInfo(psiClass);
-		if(info == null)
-		{
-			return null;
-		}
-
-		JDComment comment = getParser().parse(info, new JDClassComment(this));
-		return comment.generate(getIndent(psiClass));
-	}
-
-	@javax.annotation.Nullable
-	private String formatMethodComment(@Nonnull PsiMethod psiMethod)
-	{
-		final String info = getOrigCommentInfo(psiMethod);
-		if(info == null)
-		{
-			return null;
-		}
-
-		JDComment comment = getParser().parse(info, new JDMethodComment(this));
-		return comment.generate(getIndent(psiMethod));
-	}
-
-	@Nullable
-	private String formatFieldComment(@Nonnull PsiField psiField)
-	{
-		final String info = getOrigCommentInfo(psiField);
-		if(info == null)
-		{
-			return null;
-		}
-
-		JDComment comment = getParser().parse(info, new JDComment(this));
-		return comment.generate(getIndent(psiField));
-	}
-
-	/**
-	 * Returns the original comment info of the specified element or null
-	 *
-	 * @param element the specified element
-	 * @return text chunk
-	 */
-	@Nullable
-	private static String getOrigCommentInfo(PsiDocCommentOwner element)
-	{
-		StringBuilder sb = new StringBuilder();
-		PsiElement e = element.getFirstChild();
-		if(!(e instanceof PsiComment))
-		{
-			// no comments for this element
-			return null;
-		}
-		else
-		{
-			boolean first = true;
-			while(true)
-			{
-				if(e instanceof PsiDocComment)
-				{
-					PsiComment cm = (PsiComment) e;
-					String text = cm.getText();
-					if(text.startsWith("//"))
-					{
-						if(!first)
-						{
-							sb.append('\n');
-						}
-						sb.append(text.substring(2).trim());
-					}
-					else if(text.startsWith("/*"))
-					{
-						if(text.charAt(2) == '*')
-						{
-							text = text.substring(3, Math.max(3, text.length() - 2));
-						}
-						else
-						{
-							text = text.substring(2, Math.max(2, text.length() - 2));
-						}
-						sb.append(text);
-					}
-				}
-				else if(!(e instanceof PsiWhiteSpace) && !(e instanceof PsiComment))
-				{
-					break;
-				}
-				first = false;
-				e = e.getNextSibling();
-			}
-
-			return sb.toString();
-		}
-	}
-
-	/**
-	 * Computes indentation of PsiClass, PsiMethod and PsiField elements after formatting
-	 *
-	 * @param element PsiClass or PsiMethod or PsiField
-	 * @return indentation size
-	 */
 	private int getIndentSpecial(@Nonnull PsiElement element)
 	{
-		assert (element instanceof PsiClass ||
-				element instanceof PsiField ||
-				element instanceof PsiMethod);
+		if(!(element instanceof PsiMember))
+		{
+			return 0;
+		}
 
 		int indentSize = mySettings.getIndentSize(JavaFileType.INSTANCE);
 		boolean doNotIndentTopLevelClassMembers = mySettings.getCommonSettings(JavaLanguage.INSTANCE).DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS;
@@ -284,13 +159,10 @@ public class CommentFormatter
 	}
 
 	/**
-	 * Used while formatting javadocs. We need precise element indentation after formatting to wrap comments correctly.
-	 * Used only for PsiClass, PsiMethod and PsiFields.
-	 *
-	 * @return indent which would be used for the given element when it's formatted according to the current code style settings
+	 * Used while formatting Javadoc. We need precise element indentation after formatting to wrap comments correctly.
 	 */
 	@Nonnull
-	private String getIndent(@Nonnull PsiElement element)
+	public String getIndent(@Nonnull PsiElement element)
 	{
 		return StringUtil.repeatSymbol(' ', getIndentSpecial(element));
 	}

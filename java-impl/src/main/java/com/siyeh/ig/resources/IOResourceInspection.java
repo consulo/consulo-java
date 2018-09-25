@@ -26,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.ui.UiUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -179,7 +180,7 @@ public class IOResourceInspection extends ResourceInspection {
     if (qualifier == null) {
       return false;
     }
-    return TypeUtils.expressionHasTypeOrSubtype(qualifier, CommonClassNames.JAVA_LANG_CLASS, "java.lang.ClassLoader") != null;
+    return TypeUtils.expressionHasTypeOrSubtype(qualifier, JavaClassNames.JAVA_LANG_CLASS, "java.lang.ClassLoader") != null;
   }
 
   public boolean isIOResource(PsiExpression expression) {

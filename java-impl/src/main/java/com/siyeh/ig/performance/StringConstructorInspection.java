@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -172,7 +173,7 @@ public class StringConstructorInspection extends BaseInspection {
       }
       final String className = aClass.getQualifiedName();
       @NonNls final String methodName = method.getName();
-      return CommonClassNames.JAVA_LANG_STRING.equals(className) &&
+      return JavaClassNames.JAVA_LANG_STRING.equals(className) &&
              methodName.equals("substring");
     }
   }

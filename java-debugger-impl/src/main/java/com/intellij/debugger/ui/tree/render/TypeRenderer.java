@@ -21,7 +21,7 @@ import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import consulo.internal.com.sun.jdi.Type;
 
 public abstract class TypeRenderer implements Renderer
@@ -31,7 +31,7 @@ public abstract class TypeRenderer implements Renderer
 
 	protected TypeRenderer()
 	{
-		this(CommonClassNames.JAVA_LANG_OBJECT);
+		this(JavaClassNames.JAVA_LANG_OBJECT);
 	}
 
 	protected TypeRenderer(@Nonnull String className)

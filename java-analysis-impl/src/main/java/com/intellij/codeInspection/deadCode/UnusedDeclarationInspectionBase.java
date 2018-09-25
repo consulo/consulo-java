@@ -80,6 +80,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 
 public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 {
@@ -316,7 +317,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		{
 			return false;
 		}
-		if(!method.getReturnType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+		if(!method.getReturnType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 		{
 			return false;
 		}
@@ -340,7 +341,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 		{
 			return false;
 		}
-		if(!method.getReturnType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+		if(!method.getReturnType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 		{
 			return false;
 		}

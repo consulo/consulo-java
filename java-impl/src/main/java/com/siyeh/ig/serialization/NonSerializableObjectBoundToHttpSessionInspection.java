@@ -21,6 +21,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.SerializationUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 public class NonSerializableObjectBoundToHttpSessionInspection
@@ -54,12 +56,12 @@ public class NonSerializableObjectBoundToHttpSessionInspection
       super.visitMethodCallExpression(methodCallExpression);
       if (!MethodCallUtils.isSimpleCallToMethod(methodCallExpression,
                                                 "javax.servlet.http.HttpSession", PsiType.VOID,
-                                                "putValue", CommonClassNames.JAVA_LANG_STRING,
-                                                CommonClassNames.JAVA_LANG_OBJECT) &&
+                                                "putValue", JavaClassNames.JAVA_LANG_STRING,
+                                                JavaClassNames.JAVA_LANG_OBJECT) &&
           !MethodCallUtils.isSimpleCallToMethod(methodCallExpression,
                                                 "javax.servlet.http.HttpSession", PsiType.VOID,
-                                                "setAttribute", CommonClassNames.JAVA_LANG_STRING,
-                                                CommonClassNames.JAVA_LANG_OBJECT)) {
+                                                "setAttribute", JavaClassNames.JAVA_LANG_STRING,
+                                                JavaClassNames.JAVA_LANG_OBJECT)) {
         return;
       }
       final PsiExpressionList argumentList =

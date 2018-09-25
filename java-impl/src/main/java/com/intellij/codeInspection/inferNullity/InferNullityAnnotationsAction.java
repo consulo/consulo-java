@@ -84,7 +84,7 @@ import com.intellij.usages.UsageTarget;
 import com.intellij.usages.UsageView;
 import com.intellij.usages.UsageViewManager;
 import com.intellij.usages.UsageViewPresentation;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.SequentialModalProgressTask;
 import com.intellij.util.containers.ContainerUtil;
@@ -388,7 +388,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction
 			@Override
 			protected UsageInfo[] findUsages()
 			{
-				return ObjectUtils.notNull(InferNullityAnnotationsAction.this.findUsages(project, scope, scope.getFileCount()), UsageInfo.EMPTY_ARRAY);
+				return ObjectUtil.notNull(InferNullityAnnotationsAction.this.findUsages(project, scope, scope.getFileCount()), UsageInfo.EMPTY_ARRAY);
 			}
 
 			@Override

@@ -23,7 +23,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementWeigher;
 import com.intellij.patterns.PsiMethodPattern;
 import com.intellij.patterns.StandardPatterns;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
@@ -34,7 +34,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 {
 	private static final PsiMethodPattern OBJECT_METHOD_PATTERN = psiMethod().withName(StandardPatterns.string().oneOf("hashCode", "equals", "finalize", "wait", "notify", "notifyAll", "getClass",
 			"clone", "toString")).
-			inClass(CommonClassNames.JAVA_LANG_OBJECT);
+			inClass(JavaClassNames.JAVA_LANG_OBJECT);
 
 	private final boolean myConstructorSuggestion;
 
@@ -120,6 +120,6 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 		{
 			return false;
 		}
-		return rawType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+		return rawType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
 	}
 }

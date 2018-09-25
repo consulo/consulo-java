@@ -15,11 +15,11 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_INTEGER;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_LONG;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_MATH;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_LIST;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_INTEGER;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_LONG;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_MATH;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_LIST;
 import static com.siyeh.ig.callMatcher.CallMatcher.anyOf;
 import static com.siyeh.ig.callMatcher.CallMatcher.instanceCall;
 import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
@@ -42,7 +42,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiMethodReferenceExpression;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
 
 /**
@@ -89,8 +89,8 @@ public class CustomMethodHandlers
 		{
 			return Collections.emptyList();
 		}
-		String leftConst = ObjectUtils.tryCast(getConstantValue(memState, args.myQualifier), String.class);
-		String rightConst = ObjectUtils.tryCast(getConstantValue(memState, arg), String.class);
+		String leftConst = ObjectUtil.tryCast(getConstantValue(memState, args.myQualifier), String.class);
+		String rightConst = ObjectUtil.tryCast(getConstantValue(memState, arg), String.class);
 		if(leftConst != null && rightConst != null)
 		{
 			return singleResult(memState, factory.getBoolean(ends ? leftConst.endsWith(rightConst) : leftConst.startsWith(rightConst)));
@@ -109,8 +109,8 @@ public class CustomMethodHandlers
 		{
 			return Collections.emptyList();
 		}
-		String leftConst = ObjectUtils.tryCast(getConstantValue(memState, args.myQualifier), String.class);
-		String rightConst = ObjectUtils.tryCast(getConstantValue(memState, arg), String.class);
+		String leftConst = ObjectUtil.tryCast(getConstantValue(memState, args.myQualifier), String.class);
+		String rightConst = ObjectUtil.tryCast(getConstantValue(memState, arg), String.class);
 		if(leftConst != null && rightConst != null)
 		{
 			return singleResult(memState, factory.getBoolean(ignoreCase ? leftConst.equalsIgnoreCase(rightConst) : leftConst.equals(rightConst)));

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import static com.intellij.util.ObjectUtils.notNull;
+import static com.intellij.util.ObjectUtil.notNull;
 
 import java.util.Arrays;
 import java.util.List;

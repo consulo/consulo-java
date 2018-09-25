@@ -101,6 +101,7 @@ import com.intellij.xdebugger.impl.ui.ExecutionPointHighlighter;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.EventSet;
+import consulo.java.module.util.JavaClassNames;
 
 public abstract class DebuggerUtilsEx extends DebuggerUtils
 {
@@ -160,7 +161,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 
 	public static boolean isAssignableFrom(@Nonnull final String baseQualifiedName, @Nonnull ReferenceType checkedType)
 	{
-		if(CommonClassNames.JAVA_LANG_OBJECT.equals(baseQualifiedName))
+		if(JavaClassNames.JAVA_LANG_OBJECT.equals(baseQualifiedName))
 		{
 			return true;
 		}

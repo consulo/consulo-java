@@ -27,7 +27,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
 
@@ -61,7 +61,7 @@ public class AnnotationDocGenerator
 			LOG.debug(e);
 			indexNotReady = true;
 		}
-		myTargetClass = ObjectUtils.tryCast(target, PsiClass.class);
+		myTargetClass = ObjectUtil.tryCast(target, PsiClass.class);
 		myResolveNotPossible = indexNotReady;
 	}
 

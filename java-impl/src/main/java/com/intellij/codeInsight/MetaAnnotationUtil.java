@@ -36,7 +36,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
@@ -163,7 +163,7 @@ public class MetaAnnotationUtil
 		{
 			GlobalSearchScope scope = GlobalSearchScope.allScope(project);
 			Set<VirtualFile> allAnnotationFiles = new HashSet<>();
-			for(PsiClass javaLangAnnotation : JavaPsiFacade.getInstance(project).findClasses(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope))
+			for(PsiClass javaLangAnnotation : JavaPsiFacade.getInstance(project).findClasses(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope))
 			{
 				DirectClassInheritorsSearch.search(javaLangAnnotation, scope, false).forEach(annotationClass ->
 				{

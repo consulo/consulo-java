@@ -37,6 +37,7 @@ import com.intellij.refactoring.typeCook.Util;
 import com.intellij.refactoring.typeCook.deductive.PsiTypeVariableFactory;
 import com.intellij.refactoring.typeCook.deductive.util.VictimCollector;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * Created by IntelliJ IDEA.
@@ -903,7 +904,7 @@ public class SystemBuilder {
     if (elemenType != null) {
       addBoundConstraintsImpl(definedType, elemenType, system);
 
-      if (mySettings.cookObjects() && elemenType.getCanonicalText().equals(CommonClassNames.JAVA_LANG_OBJECT)) {
+      if (mySettings.cookObjects() && elemenType.getCanonicalText().equals(JavaClassNames.JAVA_LANG_OBJECT)) {
         system.addSubtypeConstraint(definedType, elemenType);
       }
     }

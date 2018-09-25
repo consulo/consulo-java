@@ -28,6 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class LengthOneStringsInConcatenationInspection
@@ -148,8 +149,8 @@ public class LengthOneStringsInConcatenationInspection
         return false;
       }
       final String className = methodClass.getQualifiedName();
-      return CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-             CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
+      return JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
+             JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
     }
   }
 }

@@ -22,6 +22,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -85,8 +86,8 @@ public class AbstractExpectedTypeSkipper extends CompletionPreselectSkipper {
     if (toImplement > 0) return Result.ACCEPT;
 
     if (psiClass.hasModifierProperty(PsiModifier.ABSTRACT)) return Result.ABSTRACT;
-    if (!isDefaultType && CommonClassNames.JAVA_LANG_STRING.equals(psiClass.getQualifiedName())) return Result.STRING;
-    if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) return Result.NON_DEFAULT;
+    if (!isDefaultType && JavaClassNames.JAVA_LANG_STRING.equals(psiClass.getQualifiedName())) return Result.STRING;
+    if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) return Result.NON_DEFAULT;
 
     return Result.ACCEPT;
   }

@@ -45,6 +45,7 @@ import com.intellij.util.Producer;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * User: anna
@@ -303,7 +304,7 @@ public class LambdaUtil
 		{
 			final PsiMethod method = psiMethod.getMethod();
 			final PsiClass containingClass = method.getContainingClass();
-			if(containingClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
+			if(containingClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
 			{
 				if(method.hasModifierProperty(PsiModifier.PUBLIC))
 				{

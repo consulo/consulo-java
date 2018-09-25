@@ -28,6 +28,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.JavaClassSupers;
+import consulo.java.module.util.JavaClassNames;
 
 public class InheritanceImplUtil
 {
@@ -50,12 +51,12 @@ public class InheritanceImplUtil
 
 	static boolean hasObjectQualifiedName(@Nonnull PsiClass candidateClass)
 	{
-		if(!CommonClassNames.JAVA_LANG_OBJECT_SHORT.equals(candidateClass.getName()))
+		if(!JavaClassNames.JAVA_LANG_OBJECT_SHORT.equals(candidateClass.getName()))
 		{
 			return false;
 		}
 		PsiElement parent = candidateClass.getParent();
-		return parent instanceof PsiJavaFile && CommonClassNames.DEFAULT_PACKAGE.equals(((PsiJavaFile) parent).getPackageName());
+		return parent instanceof PsiJavaFile && JavaClassNames.DEFAULT_PACKAGE.equals(((PsiJavaFile) parent).getPackageName());
 	}
 
 	private static boolean isInheritor(@Nonnull PsiManager manager, @Nonnull PsiClass candidateClass, @Nonnull PsiClass baseClass, boolean checkDeep, @javax.annotation.Nullable Set<PsiClass> checkedClasses)
@@ -81,7 +82,7 @@ public class InheritanceImplUtil
 		JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
 		if(hasObjectQualifiedName(baseClass))
 		{
-			PsiClass objectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, candidateClass.getResolveScope());
+			PsiClass objectClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, candidateClass.getResolveScope());
 			if(manager.areElementsEquivalent(baseClass, objectClass))
 			{
 				if(manager.areElementsEquivalent(candidateClass, objectClass))
@@ -106,11 +107,11 @@ public class InheritanceImplUtil
 					return false;
 				}
 
-				if(CommonClassNames.JAVA_LANG_ENUM.equals(baseQName) && candidateClass.isEnum())
+				if(JavaClassNames.JAVA_LANG_ENUM.equals(baseQName) && candidateClass.isEnum())
 				{
 					return facade.findClass(baseQName, candidateClass.getResolveScope()) != null;
 				}
-				if(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(baseQName) && candidateClass.isAnnotationType())
+				if(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(baseQName) && candidateClass.isAnnotationType())
 				{
 					return facade.findClass(baseQName, candidateClass.getResolveScope()) != null;
 				}

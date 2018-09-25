@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import static com.intellij.util.ObjectUtils.notNull;
+import static com.intellij.util.ObjectUtil.notNull;
 
 import java.io.File;
 import java.io.FilenameFilter;

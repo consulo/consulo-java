@@ -78,9 +78,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class JavaDocInfoGenerator
 {
@@ -346,7 +347,7 @@ public class JavaDocInfoGenerator
 
 	protected String convertReference(String href)
 	{
-		return ObjectUtils.notNull(createReferenceForRelativeLink(href, myElement), href);
+		return ObjectUtil.notNull(createReferenceForRelativeLink(href, myElement), href);
 	}
 
 	/**
@@ -685,12 +686,12 @@ public class JavaDocInfoGenerator
 
 		String qName = aClass.getQualifiedName();
 
-		if(refs.length > 0 || !aClass.isInterface() && (qName == null || !qName.equals(CommonClassNames.JAVA_LANG_OBJECT)))
+		if(refs.length > 0 || !aClass.isInterface() && (qName == null || !qName.equals(JavaClassNames.JAVA_LANG_OBJECT)))
 		{
 			buffer.append("extends ");
 			if(refs.length == 0)
 			{
-				generateLink(buffer, CommonClassNames.JAVA_LANG_OBJECT, null, aClass, false);
+				generateLink(buffer, JavaClassNames.JAVA_LANG_OBJECT, null, aClass, false);
 			}
 			else
 			{
@@ -1098,7 +1099,7 @@ public class JavaDocInfoGenerator
 				{
 					String text = o.toString();
 					PsiType type = variable.getType();
-					if(type.equalsToText(CommonClassNames.JAVA_LANG_STRING))
+					if(type.equalsToText(JavaClassNames.JAVA_LANG_STRING))
 					{
 						text = "\"" + StringUtil.escapeStringCharacters(StringUtil.shortenPathWithEllipsis(text, 120)) + "\"";
 					}
@@ -1367,7 +1368,7 @@ public class JavaDocInfoGenerator
 
 	public static boolean isRepeatableAnnotationType(@Nullable PsiElement annotationType)
 	{
-		return annotationType instanceof PsiClass && AnnotationUtil.isAnnotated((PsiClass) annotationType, CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE, false, true);
+		return annotationType instanceof PsiClass && AnnotationUtil.isAnnotated((PsiClass) annotationType, JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE, false, true);
 	}
 
 	private void generateMethodParameterJavaDoc(StringBuilder buffer, PsiParameter parameter, boolean generatePrologueAndEpilogue)
@@ -1570,7 +1571,7 @@ public class JavaDocInfoGenerator
 			{
 				return loadSyntheticDocComment(method, "/javadoc/EnumValues.java.template");
 			}
-			if(method.getName().equals("valueOf") && parameterList.getParametersCount() == 1 && parameterList.getParameters()[0].getType().equalsToText(CommonClassNames.JAVA_LANG_STRING))
+			if(method.getName().equals("valueOf") && parameterList.getParametersCount() == 1 && parameterList.getParameters()[0].getType().equalsToText(JavaClassNames.JAVA_LANG_STRING))
 			{
 				return loadSyntheticDocComment(method, "/javadoc/EnumValueOf.java.template");
 			}

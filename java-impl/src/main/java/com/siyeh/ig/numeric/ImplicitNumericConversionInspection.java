@@ -29,6 +29,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import gnu.trove.TObjectIntHashMap;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -352,7 +354,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
         return false;
       }
       final String className = aClass.getQualifiedName();
-      return CommonClassNames.JAVA_LANG_STRING.equals(className);
+      return JavaClassNames.JAVA_LANG_STRING.equals(className);
     }
   }
 

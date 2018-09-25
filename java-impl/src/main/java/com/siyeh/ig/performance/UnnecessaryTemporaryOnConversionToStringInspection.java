@@ -24,6 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -139,14 +140,14 @@ public class UnnecessaryTemporaryOnConversionToStringInspection
     private static final Set<String> s_basicTypes = new HashSet<String>(8);
 
     static {
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_BOOLEAN);
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_BYTE);
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_CHARACTER);
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_DOUBLE);
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_FLOAT);
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_INTEGER);
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_LONG);
-      s_basicTypes.add(CommonClassNames.JAVA_LANG_SHORT);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_BOOLEAN);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_BYTE);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_CHARACTER);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_DOUBLE);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_FLOAT);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_INTEGER);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_LONG);
+      s_basicTypes.add(JavaClassNames.JAVA_LANG_SHORT);
     }
 
     @Override
@@ -179,7 +180,7 @@ public class UnnecessaryTemporaryOnConversionToStringInspection
       final PsiType argumentType = argument.getType();
       if (argumentType != null &&
           argumentType.equalsToText(
-            CommonClassNames.JAVA_LANG_STRING)) {
+            JavaClassNames.JAVA_LANG_STRING)) {
         return;
       }
       final PsiType type = qualifier.getType();

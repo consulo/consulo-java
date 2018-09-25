@@ -22,6 +22,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class RuntimeExecWithNonConstantStringInspection extends BaseInspection {
@@ -78,7 +79,7 @@ public class RuntimeExecWithNonConstantStringInspection extends BaseInspection {
       }
       final PsiExpression argument = arguments[0];
       final PsiType type = argument.getType();
-      if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+      if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
         return;
       }
       if (PsiUtil.isConstantExpression(argument)) {

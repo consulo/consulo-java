@@ -18,6 +18,7 @@ package com.intellij.psi.impl.source.tree.java;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.*;
 import com.intellij.testFramework.LightCodeInsightTestCase;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  *  @author dsl
@@ -92,7 +93,7 @@ public abstract class ExtendsBoundListTest extends LightCodeInsightTestCase {
   public void testAddBound() throws Exception {
     final PsiTypeParameter typeParameter = getTypeParameter();
     final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_RUNNABLE);
+    final PsiClass cloneableClass = getJavaFacade().findClass(JavaClassNames.JAVA_LANG_RUNNABLE);
     assertNotNull(cloneableClass);
     final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.add(reference);

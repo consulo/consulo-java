@@ -63,13 +63,14 @@ import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.indexing.IndexingDataKeys;
 import consulo.annotations.RequiredReadAction;
+import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 
 public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJavaFile
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiJavaFileBaseImpl");
 	@NonNls
-	private static final String[] IMPLICIT_IMPORTS = {CommonClassNames.DEFAULT_PACKAGE};
+	private static final String[] IMPLICIT_IMPORTS = {JavaClassNames.DEFAULT_PACKAGE};
 	private final CachedValue<MostlySingularMultiMap<String, SymbolCollectingProcessor.ResultWithContext>> myResolveCache;
 	private volatile String myPackageName;
 

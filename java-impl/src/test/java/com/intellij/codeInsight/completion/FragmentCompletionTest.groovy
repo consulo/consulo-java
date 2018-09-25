@@ -13,13 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.codeInsight.completion;
-
-import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.JavaCodeFragmentFactory;
-import com.intellij.psi.PsiFile
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+package com.intellij.codeInsight.completion
 
 /**
  * @author peter

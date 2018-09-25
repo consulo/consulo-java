@@ -18,6 +18,7 @@ package com.siyeh.ipp.concatenation;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
+import consulo.java.module.util.JavaClassNames;
 
 class StringConcatPredicate implements PsiElementPredicate {
 
@@ -39,7 +40,7 @@ class StringConcatPredicate implements PsiElementPredicate {
     }
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
     final PsiType type = polyadicExpression.getType();
-    if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+    if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
       return false;
     }
     final PsiExpression[] operands = polyadicExpression.getOperands();
@@ -53,11 +54,11 @@ class StringConcatPredicate implements PsiElementPredicate {
         if (!(previous instanceof PsiLiteralExpression) || !(operand instanceof PsiLiteralExpression)) {
           return false;
         }
-        return stringTypeSeen || (i == 1 && operandType != null && operandType.equalsToText(CommonClassNames.JAVA_LANG_STRING));
+        return stringTypeSeen || (i == 1 && operandType != null && operandType.equalsToText(JavaClassNames.JAVA_LANG_STRING));
       }
       previous = operand;
       if (!stringTypeSeen) {
-        stringTypeSeen = operandType != null && operandType.equalsToText(CommonClassNames.JAVA_LANG_STRING);
+        stringTypeSeen = operandType != null && operandType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
       }
     }
     return false;

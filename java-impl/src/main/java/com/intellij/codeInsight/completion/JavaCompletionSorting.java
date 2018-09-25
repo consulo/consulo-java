@@ -48,6 +48,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -481,11 +482,11 @@ public class JavaCompletionSorting
 			if(type instanceof PsiClassType)
 			{
 				final PsiClass psiClass = ((PsiClassType) type).resolve();
-				if(psiClass != null && CommonClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName()))
+				if(psiClass != null && JavaClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName()))
 				{
 					PsiClassType erased = (PsiClassType) GenericsUtil.eliminateWildcards(type);
 					PsiType[] parameters = erased.getParameters();
-					if(parameters.length == 1 && !parameters[0].equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+					if(parameters.length == 1 && !parameters[0].equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 					{
 						return erased;
 					}
@@ -618,7 +619,7 @@ public class JavaCompletionSorting
 			myExpectedTypes = expectedTypes;
 			for(ExpectedTypeInfo info : expectedTypes)
 			{
-				ContainerUtil.addIfNotNull(myExpectedClasses, PsiUtil.substituteTypeParameter(info.getDefaultType(), CommonClassNames.JAVA_LANG_CLASS, 0, false));
+				ContainerUtil.addIfNotNull(myExpectedClasses, PsiUtil.substituteTypeParameter(info.getDefaultType(), JavaClassNames.JAVA_LANG_CLASS, 0, false));
 			}
 
 			myExpectedMemberName = calcExpectedMemberNameByParentCall(position);

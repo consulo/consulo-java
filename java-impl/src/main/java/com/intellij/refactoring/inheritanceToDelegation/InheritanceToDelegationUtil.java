@@ -16,6 +16,7 @@
 package com.intellij.refactoring.inheritanceToDelegation;
 
 import com.intellij.psi.*;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author dsl
@@ -35,7 +36,7 @@ public class InheritanceToDelegationUtil {
       if (baseMethod != null) {
         PsiClass containingClass = baseMethod.getContainingClass();
         String qName = containingClass.getQualifiedName();
-        if (qName == null || !CommonClassNames.JAVA_LANG_OBJECT.equals(qName)) return true;
+        if (qName == null || !JavaClassNames.JAVA_LANG_OBJECT.equals(qName)) return true;
       }
     }
     return false;

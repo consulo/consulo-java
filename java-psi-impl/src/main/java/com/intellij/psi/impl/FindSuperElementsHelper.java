@@ -30,7 +30,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiAnchor;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -59,7 +59,7 @@ public class FindSuperElementsHelper
 			for(Iterator<PsiClass> iterator = allSupers.iterator(); iterator.hasNext(); )
 			{
 				PsiClass superClass = iterator.next();
-				if(CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+				if(JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 				{
 					iterator.remove();
 				}
@@ -140,7 +140,7 @@ public class FindSuperElementsHelper
 				!method.hasModifierProperty(PsiModifier.NATIVE) &&
 				method.hasModifierProperty(PsiModifier.PUBLIC) &&
 				!containingClass.isInterface() &&
-				!CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName());
+				!JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName());
 	}
 
 	public static class SiblingInfo

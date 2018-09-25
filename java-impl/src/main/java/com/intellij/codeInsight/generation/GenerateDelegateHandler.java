@@ -49,6 +49,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author mike
@@ -335,7 +336,7 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
 		for(PsiMethod method : allMethods)
 		{
 			final PsiClass superClass = method.getContainingClass();
-			if(CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+			if(JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 			{
 				continue;
 			}
@@ -502,7 +503,7 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
 		for(PsiMethod method : methods)
 		{
 			final PsiClass containingClass = method.getContainingClass();
-			if(containingClass == null || CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
+			if(containingClass == null || JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName()))
 			{
 				continue;
 			}

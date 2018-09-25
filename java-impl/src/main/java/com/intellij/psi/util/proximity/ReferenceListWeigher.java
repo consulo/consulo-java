@@ -26,7 +26,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
@@ -133,7 +133,7 @@ public class ReferenceListWeigher extends ProximityWeigher
 		}
 		if(condition == Preference.Exceptions)
 		{
-			return InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_THROWABLE) ? applicableByKind : inapplicable;
+			return InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_THROWABLE) ? applicableByKind : inapplicable;
 		}
 		return unknown;
 	}

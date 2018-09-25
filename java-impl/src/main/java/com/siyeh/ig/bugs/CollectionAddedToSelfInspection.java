@@ -24,6 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
+import consulo.java.module.util.JavaClassNames;
 
 public class CollectionAddedToSelfInspection extends BaseInspection {
 
@@ -94,9 +95,9 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
         return;
       }
       if (!InheritanceUtil.isInheritor(qualifierClass,
-                                       CommonClassNames.JAVA_UTIL_COLLECTION) &&
+                                       JavaClassNames.JAVA_UTIL_COLLECTION) &&
           !InheritanceUtil.isInheritor(qualifierClass,
-                                       CommonClassNames.JAVA_UTIL_MAP)) {
+                                       JavaClassNames.JAVA_UTIL_MAP)) {
         return;
       }
       registerError(qualifier);

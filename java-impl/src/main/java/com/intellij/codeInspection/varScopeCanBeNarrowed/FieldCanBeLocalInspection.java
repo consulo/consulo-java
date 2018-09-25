@@ -38,6 +38,8 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
+import consulo.java.module.util.JavaClassNames;
+
 import gnu.trove.THashSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -211,7 +213,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   private static boolean isImmutableState(PsiType type) {
     return type instanceof PsiPrimitiveType ||
            PsiPrimitiveType.getUnboxedType(type) != null ||
-           Comparing.strEqual(CommonClassNames.JAVA_LANG_STRING, type.getCanonicalText());
+           Comparing.strEqual(JavaClassNames.JAVA_LANG_STRING, type.getCanonicalText());
   }
 
   private static Collection<PsiVariable> getWrittenVariables(ControlFlow controlFlow, Ref<Collection<PsiVariable>> writtenVariables) {

@@ -19,17 +19,18 @@ import javax.annotation.Nonnull;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class SerializationUtils {
 
   private SerializationUtils() {}
 
   public static boolean isSerializable(@javax.annotation.Nullable PsiClass aClass) {
-    return InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_IO_SERIALIZABLE);
+    return InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_IO_SERIALIZABLE);
   }
 
   public static boolean isExternalizable(@javax.annotation.Nullable PsiClass aClass) {
-    return InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_IO_EXTERNALIZABLE);
+    return InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_IO_EXTERNALIZABLE);
   }
 
   public static boolean isDirectlySerializable(@Nonnull PsiClass aClass) {
@@ -44,7 +45,7 @@ public class SerializationUtils {
         continue;
       }
       final String name = implemented.getQualifiedName();
-      if (CommonClassNames.JAVA_IO_SERIALIZABLE.equals(name)) {
+      if (JavaClassNames.JAVA_IO_SERIALIZABLE.equals(name)) {
         return true;
       }
     }
@@ -102,11 +103,11 @@ public class SerializationUtils {
   }
 
   public static boolean isReadResolve(@Nonnull PsiMethod method) {
-    return MethodUtils.simpleMethodMatches(method, null, CommonClassNames.JAVA_LANG_OBJECT, "readResolve");
+    return MethodUtils.simpleMethodMatches(method, null, JavaClassNames.JAVA_LANG_OBJECT, "readResolve");
   }
 
   public static boolean isWriteReplace(@Nonnull PsiMethod method) {
-    return MethodUtils.simpleMethodMatches(method, null, CommonClassNames.JAVA_LANG_OBJECT, "writeReplace");
+    return MethodUtils.simpleMethodMatches(method, null, JavaClassNames.JAVA_LANG_OBJECT, "writeReplace");
   }
 
   public static boolean isProbablySerializable(PsiType type) {
@@ -130,8 +131,8 @@ public class SerializationUtils {
       if (isExternalizable(psiClass)) {
         return true;
       }
-      if (InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_UTIL_COLLECTION) ||
-          InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_UTIL_MAP)) {
+      if (InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_UTIL_COLLECTION) ||
+          InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_UTIL_MAP)) {
         final PsiType[] parameters = classTYpe.getParameters();
         for (PsiType parameter : parameters) {
           if (!isProbablySerializable(parameter)) {

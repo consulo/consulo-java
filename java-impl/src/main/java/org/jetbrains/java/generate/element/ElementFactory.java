@@ -17,7 +17,7 @@ package org.jetbrains.java.generate.element;
 
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElementFactory;
@@ -56,7 +56,7 @@ public class ElementFactory
 
 		// super
 		PsiClass superClass = clazz.getSuperClass();
-		if(superClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+		if(superClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 		{
 			ce.setSuperName(superClass.getName());
 		}

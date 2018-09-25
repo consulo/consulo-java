@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.util.ObjectUtils.assertNotNull;
+import static com.intellij.util.ObjectUtil.assertNotNull;
 
 import java.util.ArrayList;
 

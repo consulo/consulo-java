@@ -27,6 +27,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
  * @author yole
  */
 public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
+  @Override
   @Nonnull
   public Configurable createSettingsPage(final CodeStyleSettings settings, final CodeStyleSettings originalSettings) {
     return new CodeStyleGenerationConfigurable(settings);

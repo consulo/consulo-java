@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
+import com.intellij.application.options.CodeStyle;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -43,6 +44,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.codeStyle.ReferenceAdjuster;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
@@ -60,6 +62,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author max
@@ -302,10 +305,10 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	@Nonnull
 	@Override
 	public SuggestedNameInfo suggestVariableName(@Nonnull final VariableKind kind,
-			@javax.annotation.Nullable final String propertyName,
-			@javax.annotation.Nullable final PsiExpression expr,
-			@Nullable PsiType type,
-			final boolean correctKeywords)
+												 @javax.annotation.Nullable final String propertyName,
+												 @javax.annotation.Nullable final PsiExpression expr,
+												 @Nullable PsiType type,
+												 final boolean correctKeywords)
 	{
 		LinkedHashSet<String> names = new LinkedHashSet<String>();
 
@@ -425,7 +428,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 		{
 			if(type.equals(PsiType.NULL))
 			{
-				longTypeName = CommonClassNames.JAVA_LANG_OBJECT;
+				longTypeName = JavaClassNames.JAVA_LANG_OBJECT;
 			}
 			String name = map.nameByType(longTypeName);
 			if(name != null && isIdentifier(name))
@@ -442,7 +445,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 		{
 			suggestNamesForCollectionInheritors(type, variableKind, suggestions, correctKeywords);
 
-			if(psiClass != null && CommonClassNames.JAVA_UTIL_OPTIONAL.equals(psiClass.getQualifiedName()) && ((PsiClassType) type).getParameterCount() == 1)
+			if(psiClass != null && JavaClassNames.JAVA_UTIL_OPTIONAL.equals(psiClass.getQualifiedName()) && ((PsiClassType) type).getParameterCount() == 1)
 			{
 				PsiType optionalContent = ((PsiClassType) type).getParameters()[0];
 				Collections.addAll(suggestions, suggestVariableNameByType(optionalContent, variableKind, correctKeywords, false));
@@ -610,12 +613,12 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 		else if(type instanceof PsiWildcardType)
 		{
 			final PsiType bound = ((PsiWildcardType) type).getBound();
-			return bound != null ? getLongTypeName(bound) : CommonClassNames.JAVA_LANG_OBJECT;
+			return bound != null ? getLongTypeName(bound) : JavaClassNames.JAVA_LANG_OBJECT;
 		}
 		else if(type instanceof PsiCapturedWildcardType)
 		{
 			final PsiType bound = ((PsiCapturedWildcardType) type).getWildcard().getBound();
-			return bound != null ? getLongTypeName(bound) : CommonClassNames.JAVA_LANG_OBJECT;
+			return bound != null ? getLongTypeName(bound) : JavaClassNames.JAVA_LANG_OBJECT;
 		}
 		else if(type instanceof PsiIntersectionType)
 		{
@@ -1304,66 +1307,56 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	@Nonnull
 	public String getPrefixByVariableKind(@Nonnull VariableKind variableKind)
 	{
-		String prefix = "";
+		String prefix = null;
 		switch(variableKind)
 		{
 			case FIELD:
-				prefix = getSettings().FIELD_NAME_PREFIX;
+				prefix = getJavaSettings().FIELD_NAME_PREFIX;
 				break;
 			case STATIC_FIELD:
-				prefix = getSettings().STATIC_FIELD_NAME_PREFIX;
+				prefix = getJavaSettings().STATIC_FIELD_NAME_PREFIX;
 				break;
 			case PARAMETER:
-				prefix = getSettings().PARAMETER_NAME_PREFIX;
+				prefix = getJavaSettings().PARAMETER_NAME_PREFIX;
 				break;
 			case LOCAL_VARIABLE:
-				prefix = getSettings().LOCAL_VARIABLE_NAME_PREFIX;
+				prefix = getJavaSettings().LOCAL_VARIABLE_NAME_PREFIX;
 				break;
 			case STATIC_FINAL_FIELD:
-				prefix = "";
 				break;
 			default:
 				LOG.assertTrue(false);
 				break;
 		}
-		if(prefix == null)
-		{
-			prefix = "";
-		}
-		return prefix;
+		return prefix == null ? "" : prefix;
 	}
 
 	@Override
 	@Nonnull
 	public String getSuffixByVariableKind(@Nonnull VariableKind variableKind)
 	{
-		String suffix = "";
+		String suffix = null;
 		switch(variableKind)
 		{
 			case FIELD:
-				suffix = getSettings().FIELD_NAME_SUFFIX;
+				suffix = getJavaSettings().FIELD_NAME_SUFFIX;
 				break;
 			case STATIC_FIELD:
-				suffix = getSettings().STATIC_FIELD_NAME_SUFFIX;
+				suffix = getJavaSettings().STATIC_FIELD_NAME_SUFFIX;
 				break;
 			case PARAMETER:
-				suffix = getSettings().PARAMETER_NAME_SUFFIX;
+				suffix = getJavaSettings().PARAMETER_NAME_SUFFIX;
 				break;
 			case LOCAL_VARIABLE:
-				suffix = getSettings().LOCAL_VARIABLE_NAME_SUFFIX;
+				suffix = getJavaSettings().LOCAL_VARIABLE_NAME_SUFFIX;
 				break;
 			case STATIC_FINAL_FIELD:
-				suffix = "";
 				break;
 			default:
 				LOG.assertTrue(false);
 				break;
 		}
-		if(suffix == null)
-		{
-			suffix = "";
-		}
-		return suffix;
+		return suffix == null ? "" : suffix;
 	}
 
 	@Nullable
@@ -1371,19 +1364,19 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	{
 		if(variableKind == VariableKind.FIELD)
 		{
-			return getSettings().FIELD_TYPE_TO_NAME;
+			return getJavaSettings().FIELD_TYPE_TO_NAME;
 		}
 		if(variableKind == VariableKind.STATIC_FIELD)
 		{
-			return getSettings().STATIC_FIELD_TYPE_TO_NAME;
+			return getJavaSettings().STATIC_FIELD_TYPE_TO_NAME;
 		}
 		if(variableKind == VariableKind.PARAMETER)
 		{
-			return getSettings().PARAMETER_TYPE_TO_NAME;
+			return getJavaSettings().PARAMETER_TYPE_TO_NAME;
 		}
 		if(variableKind == VariableKind.LOCAL_VARIABLE)
 		{
-			return getSettings().LOCAL_VARIABLE_TYPE_TO_NAME;
+			return getJavaSettings().LOCAL_VARIABLE_TYPE_TO_NAME;
 		}
 		return null;
 	}
@@ -1402,6 +1395,12 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	private boolean isIdentifier(@Nonnull String name)
 	{
 		return PsiNameHelper.getInstance(myProject).isIdentifier(name, LanguageLevel.HIGHEST);
+	}
+
+	@Nonnull
+	private JavaCodeStyleSettings getJavaSettings()
+	{
+		return CodeStyle.getSettings(myProject).getCustomSettings(JavaCodeStyleSettings.class);
 	}
 
 	@Nonnull

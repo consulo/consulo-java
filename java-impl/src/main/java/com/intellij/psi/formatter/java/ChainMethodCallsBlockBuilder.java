@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
@@ -42,7 +44,14 @@ class ChainMethodCallsBlockBuilder
 	private final Alignment myBlockAlignment;
 	private final Indent myBlockIndent;
 
-	public ChainMethodCallsBlockBuilder(Alignment alignment, Wrap wrap, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	private final FormattingMode myFormattingMode;
+
+	public ChainMethodCallsBlockBuilder(Alignment alignment,
+										Wrap wrap,
+										Indent indent,
+										CommonCodeStyleSettings settings,
+										JavaCodeStyleSettings javaSettings,
+										@Nonnull FormattingMode formattingMode)
 	{
 		myBlockWrap = wrap;
 		myBlockAlignment = alignment;
@@ -50,6 +59,7 @@ class ChainMethodCallsBlockBuilder
 		mySettings = settings;
 		myIndentSettings = settings.getIndentOptions();
 		myJavaSettings = javaSettings;
+		myFormattingMode = formattingMode;
 	}
 
 	public Block build(List<ASTNode> nodes)
@@ -89,7 +99,7 @@ class ChainMethodCallsBlockBuilder
 				chainedCallsAlignment = null;
 			}
 
-			CallChunkBlockBuilder builder = new CallChunkBlockBuilder(mySettings, myJavaSettings);
+			CallChunkBlockBuilder builder = new CallChunkBlockBuilder(mySettings, myJavaSettings, myFormattingMode);
 			blocks.add(builder.create(currentCallChunk.nodes, wrap, chainedCallsAlignment));
 		}
 
@@ -122,7 +132,9 @@ class ChainMethodCallsBlockBuilder
 
 	private boolean shouldAlignMethod(ChainedCallChunk currentMethodChunk, List<ChainedCallChunk> methodCall)
 	{
-		return mySettings.ALIGN_MULTILINE_CHAINED_METHODS && !currentMethodChunk.isEmpty() && !chunkIsFirstInChainMethodCall(currentMethodChunk, methodCall);
+		return mySettings.ALIGN_MULTILINE_CHAINED_METHODS
+				&& !currentMethodChunk.isEmpty()
+				&& !chunkIsFirstInChainMethodCall(currentMethodChunk, methodCall);
 	}
 
 	private static boolean chunkIsFirstInChainMethodCall(@Nonnull ChainedCallChunk callChunk, @Nonnull List<ChainedCallChunk> methodCall)
@@ -160,7 +172,9 @@ class ChainMethodCallsBlockBuilder
 	private Alignment createCallChunkAlignment(int chunkIndex, @Nonnull List<ChainedCallChunk> methodCall)
 	{
 		ChainedCallChunk current = methodCall.get(chunkIndex);
-		return shouldAlignMethod(current, methodCall) ? AbstractJavaBlock.createAlignment(mySettings.ALIGN_MULTILINE_CHAINED_METHODS, null) : null;
+		return shouldAlignMethod(current, methodCall)
+				? AbstractJavaBlock.createAlignment(mySettings.ALIGN_MULTILINE_CHAINED_METHODS, null)
+				: null;
 	}
 
 	private static boolean isMethodCall(@Nonnull ChainedCallChunk callChunk)

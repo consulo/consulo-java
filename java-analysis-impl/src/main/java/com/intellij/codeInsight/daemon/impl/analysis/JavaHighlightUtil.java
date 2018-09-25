@@ -29,6 +29,7 @@ import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiMatcherImpl;
 import com.intellij.psi.util.PsiMatchers;
 import com.intellij.psi.util.TypeConversionUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class JavaHighlightUtil {
   public static boolean isSerializable(@Nonnull PsiClass aClass) {
@@ -55,13 +56,13 @@ public class JavaHighlightUtil {
     if ("readResolve".equals(name)) {
       return parameters.length == 0
              && returnType != null
-             && returnType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)
+             && returnType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)
              && (containingClass.hasModifierProperty(PsiModifier.ABSTRACT) || isSerializable(containingClass));
     }
     if ("writeReplace".equals(name)) {
       return parameters.length == 0
              && returnType != null
-             && returnType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)
+             && returnType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)
              && (containingClass.hasModifierProperty(PsiModifier.ABSTRACT) || isSerializable(containingClass));
     }
     if ("writeObject".equals(name)) {

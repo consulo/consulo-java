@@ -28,6 +28,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class LengthOneStringInIndexOfInspection
@@ -145,7 +146,7 @@ public class LengthOneStringInIndexOfInspection
         return false;
       }
       final String className = methodClass.getQualifiedName();
-      return CommonClassNames.JAVA_LANG_STRING.equals(className);
+      return JavaClassNames.JAVA_LANG_STRING.equals(className);
     }
   }
 }

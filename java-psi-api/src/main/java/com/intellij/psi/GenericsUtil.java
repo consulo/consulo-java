@@ -24,10 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Couple;
@@ -40,6 +39,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.psi.util.TypesDistinctProver;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ven
@@ -110,12 +110,12 @@ public class GenericsUtil
 			final PsiType componentType1 = ((PsiArrayType) type1).getComponentType();
 			final PsiType componentType2 = ((PsiArrayType) type2).getComponentType();
 			final PsiType componentType = getLeastUpperBound(componentType1, componentType2, compared, manager);
-			if(componentType1 instanceof PsiPrimitiveType && componentType2 instanceof PsiPrimitiveType && componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+			if(componentType1 instanceof PsiPrimitiveType && componentType2 instanceof PsiPrimitiveType && componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 			{
 				final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 				final GlobalSearchScope resolveScope = GlobalSearchScope.allScope(manager.getProject());
-				final PsiClassType cloneable = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_CLONEABLE, resolveScope);
-				final PsiClassType serializable = factory.createTypeByFQClassName(CommonClassNames.JAVA_IO_SERIALIZABLE, resolveScope);
+				final PsiClassType cloneable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_CLONEABLE, resolveScope);
+				final PsiClassType serializable = factory.createTypeByFQClassName(JavaClassNames.JAVA_IO_SERIALIZABLE, resolveScope);
 				return PsiIntersectionType.createIntersection(componentType, cloneable, serializable);
 			}
 			return componentType.createArrayType();
@@ -205,8 +205,8 @@ public class GenericsUtil
 		{
 			PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 			GlobalSearchScope all = GlobalSearchScope.allScope(manager.getProject());
-			PsiClassType serializable = factory.createTypeByFQClassName(CommonClassNames.JAVA_IO_SERIALIZABLE, all);
-			PsiClassType cloneable = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_CLONEABLE, all);
+			PsiClassType serializable = factory.createTypeByFQClassName(JavaClassNames.JAVA_IO_SERIALIZABLE, all);
+			PsiClassType cloneable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_CLONEABLE, all);
 			PsiType arraySupers = PsiIntersectionType.createIntersection(serializable, cloneable);
 			return getLeastUpperBound(arraySupers, type2, compared, manager);
 		}
@@ -322,9 +322,9 @@ public class GenericsUtil
 	}
 
 	public static Pair<PsiTypeParameter, PsiType> findTypeParameterWithBoundError(final PsiTypeParameter[] typeParams,
-			final PsiSubstitutor substitutor,
-			final PsiElement context,
-			final boolean allowUncheckedConversion)
+																				  final PsiSubstitutor substitutor,
+																				  final PsiElement context,
+																				  final boolean allowUncheckedConversion)
 	{
 		for(PsiTypeParameter typeParameter : typeParams)
 		{
@@ -436,7 +436,7 @@ public class GenericsUtil
 						}
 						return acceptedBound;
 					}
-					if(wildcardType.isExtends() && acceptedBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+					if(wildcardType.isExtends() && acceptedBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 					{
 						return PsiWildcardType.createUnbounded(manager);
 					}
@@ -702,5 +702,28 @@ public class GenericsUtil
 		{
 			return !TypeConversionUtil.isAssignable(bound, type, allowUncheckedConversion);
 		}
+	}
+
+	public static boolean isGenericReference(PsiJavaCodeReferenceElement referenceElement, PsiJavaCodeReferenceElement qualifierElement)
+	{
+		final PsiReferenceParameterList qualifierParameterList = qualifierElement.getParameterList();
+		if(qualifierParameterList != null)
+		{
+			final PsiTypeElement[] typeParameterElements = qualifierParameterList.getTypeParameterElements();
+			if(typeParameterElements.length > 0)
+			{
+				return true;
+			}
+		}
+		final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+		if(parameterList != null)
+		{
+			final PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
+			if(typeParameterElements.length > 0)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.FormattingMode;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.alignment.AlignmentStrategy;
@@ -47,9 +48,15 @@ public class SimpleJavaBlock extends AbstractJavaBlock
 	private Indent myCurrentIndent;
 	private ASTNode myCurrentChild;
 
-	public SimpleJavaBlock(ASTNode node, Wrap wrap, AlignmentStrategy alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	public SimpleJavaBlock(ASTNode node,
+						   Wrap wrap,
+						   AlignmentStrategy alignment,
+						   Indent indent,
+						   CommonCodeStyleSettings settings,
+						   JavaCodeStyleSettings javaSettings,
+						   @Nonnull FormattingMode formattingMode)
 	{
-		super(node, wrap, alignment, indent, settings, javaSettings);
+		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}
 
 	@Override
@@ -82,7 +89,8 @@ public class SimpleJavaBlock extends AbstractJavaBlock
 		IElementType nodeType = myNode.getElementType();
 		if(nodeType == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION)
 		{
-			myReservedAlignment2 = myReservedAlignment != null ? Alignment.createChildAlignment(myReservedAlignment) : Alignment.createAlignment();
+			myReservedAlignment2 = myReservedAlignment != null ? Alignment.createChildAlignment(myReservedAlignment)
+					: Alignment.createAlignment();
 		}
 	}
 
@@ -95,7 +103,9 @@ public class SimpleJavaBlock extends AbstractJavaBlock
 				final ASTNode astNode = myCurrentChild;
 				AlignmentStrategy alignmentStrategyToUse = AlignmentStrategy.wrap(chooseAlignment(myReservedAlignment, myReservedAlignment2, myCurrentChild));
 
-				if(myNode.getElementType() == JavaElementType.FIELD || myNode.getElementType() == JavaElementType.DECLARATION_STATEMENT || myNode.getElementType() == JavaElementType.LOCAL_VARIABLE)
+				if(myNode.getElementType() == JavaElementType.FIELD
+						|| myNode.getElementType() == JavaElementType.DECLARATION_STATEMENT
+						|| myNode.getElementType() == JavaElementType.LOCAL_VARIABLE)
 				{
 					alignmentStrategyToUse = myAlignmentStrategy;
 				}
@@ -127,7 +137,12 @@ public class SimpleJavaBlock extends AbstractJavaBlock
 		{
 			if(StdTokenSets.COMMENT_BIT_SET.contains(myCurrentChild.getElementType()) || myCurrentChild.getElementType() == JavaDocElementType.DOC_COMMENT)
 			{
-				Block commentBlock = createJavaBlock(myCurrentChild, mySettings, myJavaSettings, Indent.getNoneIndent(), null, AlignmentStrategy.getNullStrategy());
+				Block commentBlock = createJavaBlock(
+						myCurrentChild,
+						mySettings, myJavaSettings,
+						Indent.getNoneIndent(), null, AlignmentStrategy.getNullStrategy(),
+						getFormattingMode()
+				);
 				result.add(commentBlock);
 				myCurrentIndent = Indent.getNoneIndent();
 			}

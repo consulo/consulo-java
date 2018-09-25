@@ -22,6 +22,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 
 public class ErrorRethrownInspection extends BaseInspection {
@@ -75,7 +77,7 @@ public class ErrorRethrownInspection extends BaseInspection {
         return;
       }
       if (!InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_LANG_ERROR)) {
+                                       JavaClassNames.JAVA_LANG_ERROR)) {
         return;
       }
       if (TypeUtils.typeEquals("java.lang.ThreadDeath", type)) {

@@ -25,6 +25,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 
 public class ExtendsObjectInspection extends BaseInspection {
 
@@ -104,7 +105,7 @@ public class ExtendsObjectInspection extends BaseInspection {
       }
       final PsiClassType[] types = aClass.getExtendsListTypes();
       for (final PsiClassType type : types) {
-        if (type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
+        if (type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
           registerClassError(aClass);
         }
       }

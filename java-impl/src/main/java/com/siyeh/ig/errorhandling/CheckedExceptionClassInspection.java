@@ -17,7 +17,7 @@ package com.siyeh.ig.errorhandling;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -50,11 +50,11 @@ public class CheckedExceptionClassInspection extends BaseInspection {
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_LANG_THROWABLE)) {
+                                       JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
       if (InheritanceUtil.isInheritor(aClass,
-                                      CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
+                                      JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
         return;
       }
       registerClassError(aClass);

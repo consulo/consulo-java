@@ -96,6 +96,7 @@ import com.intellij.util.xml.ElementPresentationManager;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.ModelMergerUtil;
 import consulo.java.jam.util.JamCommonService;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Gregory.Shrago
@@ -171,7 +172,7 @@ public class JamCommonUtil
 
 	public static boolean processSuperClassList(@Nullable final PsiClass firstClass, @Nonnull final Collection<PsiClass> supers, final Processor<PsiClass> processor)
 	{
-		for(PsiClass curClass = firstClass; curClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(curClass.getQualifiedName()) && !supers.contains(curClass); curClass = curClass.getSuperClass())
+		for(PsiClass curClass = firstClass; curClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(curClass.getQualifiedName()) && !supers.contains(curClass); curClass = curClass.getSuperClass())
 		{
 			ProgressManager.checkCanceled();
 			if(!processor.process(curClass))
@@ -766,7 +767,7 @@ public class JamCommonUtil
 				psiClass = JavaPsiFacade.getInstance(psiAnnotationMemberValue.getProject()).findClass(className, psiAnnotationMemberValue.getResolveScope());
 			}
 		}
-		if(psiClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()))
+		if(psiClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()))
 		{
 			return null;
 		}

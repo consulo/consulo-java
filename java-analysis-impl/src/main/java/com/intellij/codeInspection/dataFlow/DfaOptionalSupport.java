@@ -21,7 +21,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -41,7 +41,7 @@ public class DfaOptionalSupport
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.DfaOptionalSupport");
 	public static final String GUAVA_OPTIONAL = "com.google.common.base.Optional";
 
-	public static final CallMatcher JDK_OPTIONAL_OF_NULLABLE = CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_OPTIONAL, "ofNullable").parameterCount(1);
+	public static final CallMatcher JDK_OPTIONAL_OF_NULLABLE = CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_OPTIONAL, "ofNullable").parameterCount(1);
 	public static final CallMatcher GUAVA_OPTIONAL_FROM_NULLABLE = CallMatcher.staticCall(GUAVA_OPTIONAL, "fromNullable").parameterCount(1);
 	public static final CallMatcher OPTIONAL_OF_NULLABLE = CallMatcher.anyOf(JDK_OPTIONAL_OF_NULLABLE, GUAVA_OPTIONAL_FROM_NULLABLE);
 
@@ -54,7 +54,7 @@ public class DfaOptionalSupport
 		if(containingClass != null && "of".equals(method.getName()))
 		{
 			final String qualifiedName = containingClass.getQualifiedName();
-			if(CommonClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName))
+			if(JavaClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName))
 			{
 				return new ReplaceOptionalCallFix("ofNullable", false);
 			}

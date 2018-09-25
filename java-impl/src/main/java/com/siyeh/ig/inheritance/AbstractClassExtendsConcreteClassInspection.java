@@ -17,7 +17,7 @@ package com.siyeh.ig.inheritance;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
@@ -66,7 +66,7 @@ public class AbstractClassExtendsConcreteClassInspection
         return;
       }
       final String superclassName = superClass.getQualifiedName();
-      if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
+      if (JavaClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
         return;
       }
       registerClassError(aClass);

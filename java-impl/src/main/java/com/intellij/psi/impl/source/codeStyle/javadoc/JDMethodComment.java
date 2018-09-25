@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.util.containers.ContainerUtilRt;
 
 /**
@@ -29,7 +30,7 @@ import com.intellij.util.containers.ContainerUtilRt;
 public class JDMethodComment extends JDParamListOwnerComment
 {
 	private String myReturnTag;
-	private List<NameDesc> myThrowsList;
+	private List<TagDescription> myThrowsList;
 
 	public JDMethodComment(@Nonnull CommentFormatter formatter)
 	{
@@ -46,9 +47,10 @@ public class JDMethodComment extends JDParamListOwnerComment
 			if(myFormatter.getSettings().JD_KEEP_EMPTY_RETURN || !myReturnTag.trim().isEmpty())
 			{
 				JDTag tag = JDTag.RETURN;
-				sb.append(prefix);
-				sb.append(tag.getWithEndWhitespace());
-				sb.append(myFormatter.getParser().formatJDTagDescription(myReturnTag, prefix, true, tag.getDescriptionPrefix(prefix).length()));
+				sb.append(myFormatter.getParser().formatJDTagDescription(myReturnTag,
+						prefix + tag.getWithEndWhitespace(),
+						prefix + javadocContinuationIndent()));
+
 				if(myFormatter.getSettings().JD_ADD_BLANK_AFTER_RETURN)
 				{
 					sb.append(prefix);
@@ -60,8 +62,11 @@ public class JDMethodComment extends JDParamListOwnerComment
 		if(myThrowsList != null)
 		{
 			JDTag tag = myFormatter.getSettings().JD_USE_THROWS_NOT_EXCEPTION ? JDTag.THROWS : JDTag.EXCEPTION;
-			generateList(prefix, sb, myThrowsList, tag.getWithEndWhitespace(), myFormatter.getSettings().JD_ALIGN_EXCEPTION_COMMENTS,
-					myFormatter.getSettings().JD_KEEP_EMPTY_EXCEPTION, myFormatter.getSettings().JD_PARAM_DESCRIPTION_ON_NEW_LINE);
+			generateList(prefix, sb, myThrowsList, tag.getWithEndWhitespace(),
+					myFormatter.getSettings().JD_ALIGN_EXCEPTION_COMMENTS,
+					myFormatter.getSettings().JD_KEEP_EMPTY_EXCEPTION,
+					myFormatter.getSettings().JD_PARAM_DESCRIPTION_ON_NEW_LINE
+			);
 		}
 	}
 
@@ -76,6 +81,6 @@ public class JDMethodComment extends JDParamListOwnerComment
 		{
 			myThrowsList = ContainerUtilRt.newArrayList();
 		}
-		myThrowsList.add(new NameDesc(className, description));
+		myThrowsList.add(new TagDescription(className, description));
 	}
 }

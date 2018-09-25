@@ -168,7 +168,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 		return clsFile;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile)
 	{
@@ -237,7 +237,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 		return importHelper.getDefaultAnchor(list, statement);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member)
 	{
@@ -297,32 +297,6 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 			return aClass.getRBrace();
 		}
 		return null;
-	}
-
-	// TODO remove as soon as an arrangement sub-system is provided for groovy.
-	public static int getMemberOrderWeight(PsiElement member, CodeStyleSettings settings)
-	{
-		if(member instanceof PsiField)
-		{
-			if(member instanceof PsiEnumConstant)
-			{
-				return 1;
-			}
-			return ((PsiField) member).hasModifierProperty(PsiModifier.STATIC) ? settings.STATIC_FIELDS_ORDER_WEIGHT + 1 : settings.FIELDS_ORDER_WEIGHT + 1;
-		}
-		if(member instanceof PsiMethod)
-		{
-			if(((PsiMethod) member).isConstructor())
-			{
-				return settings.CONSTRUCTORS_ORDER_WEIGHT + 1;
-			}
-			return ((PsiMethod) member).hasModifierProperty(PsiModifier.STATIC) ? settings.STATIC_METHODS_ORDER_WEIGHT + 1 : settings.METHODS_ORDER_WEIGHT + 1;
-		}
-		if(member instanceof PsiClass)
-		{
-			return ((PsiClass) member).hasModifierProperty(PsiModifier.STATIC) ? settings.STATIC_INNER_CLASSES_ORDER_WEIGHT + 1 : settings.INNER_CLASSES_ORDER_WEIGHT + 1;
-		}
-		return -1;
 	}
 
 	@Override

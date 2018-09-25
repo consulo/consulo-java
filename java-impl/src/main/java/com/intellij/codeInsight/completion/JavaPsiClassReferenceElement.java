@@ -43,7 +43,7 @@ import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 
 /**
  * @author peter
@@ -122,7 +122,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 	@Override
 	public PsiClass getObject()
 	{
-		return ObjectUtils.assertNotNull(myClass.getElement());
+		return ObjectUtil.assertNotNull(myClass.getElement());
 	}
 
 	@Override

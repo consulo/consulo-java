@@ -49,6 +49,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Pavel.Dolgov
@@ -65,7 +66,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 
 	private static final Set<String> DECLARED_NAMES = ContainerUtil.immutableSet(DECLARED_CONSTRUCTOR, DECLARED_ANNOTATION, DECLARED_ANNOTATIONS_BY_TYPE);
 	private static final ElementPattern<? extends PsiElement> CONSTRUCTOR_ARGUMENTS = psiElement(PsiExpressionList.class).withParent(psiExpression().methodCall(psiMethod().withName(CONSTRUCTOR,
-			DECLARED_CONSTRUCTOR).definedInClass(CommonClassNames.JAVA_LANG_CLASS)));
+			DECLARED_CONSTRUCTOR).definedInClass(JavaClassNames.JAVA_LANG_CLASS)));
 
 	private static final ElementPattern<? extends PsiElement> ANNOTATION_ARGUMENTS = psiElement(PsiExpressionList.class).withParent(psiExpression().methodCall(psiMethod().withName(ANNOTATION,
 			DECLARED_ANNOTATION, ANNOTATIONS_BY_TYPE, DECLARED_ANNOTATIONS_BY_TYPE).with(new MethodDefinedInInterfacePatternCondition(ANNOTATED_ELEMENT))));

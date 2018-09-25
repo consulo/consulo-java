@@ -65,6 +65,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.hash.HashSet;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author max
@@ -416,7 +417,7 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 		public void visitMethod(PsiMethod method)
 		{
 			super.visitMethod(method);
-			PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_OVERRIDE);
+			PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, JavaClassNames.JAVA_LANG_OVERRIDE);
 			if(annotation != null)
 			{
 				final Module module = ModuleUtilCore.findModuleForPsiElement(annotation);

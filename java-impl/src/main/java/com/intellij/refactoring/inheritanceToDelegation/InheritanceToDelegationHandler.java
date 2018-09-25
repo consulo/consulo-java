@@ -37,7 +37,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -112,7 +112,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) return;
 
     final PsiClass[] bases = aClass.getSupers();
-    @NonNls final String javaLangObject = CommonClassNames.JAVA_LANG_OBJECT;
+    @NonNls final String javaLangObject = JavaClassNames.JAVA_LANG_OBJECT;
     if (bases.length == 0 || bases.length == 1 && javaLangObject.equals(bases[0].getQualifiedName())) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("class.does.not.have.base.classes.or.interfaces", aClass.getQualifiedName()));
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);

@@ -28,6 +28,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.InspectionGadgetsBundle;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 
 public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
@@ -147,7 +148,7 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
       final PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (!TypeUtils.expressionHasTypeOrSubtype(qualifier,
-                                                CommonClassNames.JAVA_LANG_ENUM)) {
+                                                JavaClassNames.JAVA_LANG_ENUM)) {
         return;
       }
       registerMethodCallError(expression, expression);

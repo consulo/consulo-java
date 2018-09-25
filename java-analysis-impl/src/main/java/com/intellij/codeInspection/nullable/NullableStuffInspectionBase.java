@@ -63,9 +63,10 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.codeInsight.JavaInspectionsBundle;
+import consulo.java.module.util.JavaClassNames;
 
 public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionTool
 {
@@ -234,7 +235,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 				for(PsiMethod method : aClass.getConstructors())
 				{
 					PsiParameterList list = method.getParameterList();
-					if(list.getParametersCount() == 1 && list.getParameters()[0].getType().equalsToText(CommonClassNames.JAVA_LANG_STRING))
+					if(list.getParametersCount() == 1 && list.getParameters()[0].getType().equalsToText(JavaClassNames.JAVA_LANG_STRING))
 					{
 						return true;
 					}
@@ -369,8 +370,8 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 
 				for(int i = 0; i <= 1; i++)
 				{
-					PsiType expectedArg = PsiUtil.substituteTypeParameter(expectedType, CommonClassNames.JAVA_UTIL_MAP, i, false);
-					PsiType assignedArg = PsiUtil.substituteTypeParameter(assignedType, CommonClassNames.JAVA_UTIL_MAP, i, false);
+					PsiType expectedArg = PsiUtil.substituteTypeParameter(expectedType, JavaClassNames.JAVA_UTIL_MAP, i, false);
+					PsiType assignedArg = PsiUtil.substituteTypeParameter(assignedType, JavaClassNames.JAVA_UTIL_MAP, i, false);
 					if(isNullityConflict(expectedArg, assignedArg) || expectedArg != null && assignedArg != null && isNullableNotNullCollectionConflict(place, expectedArg, assignedArg))
 					{
 						return true;
@@ -390,7 +391,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
 	private void checkMethodReference(PsiMethodReferenceExpression expression, @Nonnull ProblemsHolder holder)
 	{
 		PsiMethod superMethod = LambdaUtil.getFunctionalInterfaceMethod(expression);
-		PsiMethod targetMethod = ObjectUtils.tryCast(expression.resolve(), PsiMethod.class);
+		PsiMethod targetMethod = ObjectUtil.tryCast(expression.resolve(), PsiMethod.class);
 		if(superMethod == null || targetMethod == null)
 		{
 			return;

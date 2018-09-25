@@ -48,12 +48,13 @@ import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
 import com.intellij.util.containers.MultiMap;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -225,7 +226,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 	{
 		MultiMap<String, PsiClass> map = new MultiMap<>();
 		GlobalSearchScope scope = context.getResolveScope();
-		PsiClass annotation = JavaPsiFacade.getInstance(context.getProject()).findClass(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope);
+		PsiClass annotation = JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope);
 		if(annotation != null)
 		{
 			DirectClassInheritorsSearch.search(annotation, scope, false).forEach(psiClass ->
@@ -235,7 +236,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 					return true;
 				}
 
-				String name = ObjectUtils.assertNotNull(psiClass.getName());
+				String name = ObjectUtil.assertNotNull(psiClass.getName());
 				if(!matcher.prefixMatches(name))
 				{
 					name = getClassNameWithContainers(psiClass);
@@ -254,7 +255,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 	@Nonnull
 	private static String getClassNameWithContainers(@Nonnull PsiClass psiClass)
 	{
-		String name = ObjectUtils.assertNotNull(psiClass.getName());
+		String name = ObjectUtil.assertNotNull(psiClass.getName());
 		for(PsiClass parent : JBIterable.generate(psiClass, PsiClass::getContainingClass))
 		{
 			name = parent.getName() + "." + name;

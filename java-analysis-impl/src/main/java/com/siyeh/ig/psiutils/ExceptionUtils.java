@@ -25,6 +25,7 @@ import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.util.RefactoringChangeUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class ExceptionUtils
 {
@@ -37,10 +38,10 @@ public class ExceptionUtils
 
 	static
 	{
-		s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_THROWABLE);
-		s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_EXCEPTION);
-		s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION);
-		s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_ERROR);
+		s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_THROWABLE);
+		s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_EXCEPTION);
+		s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION);
+		s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_ERROR);
 	}
 
 	@Nonnull
@@ -268,7 +269,7 @@ public class ExceptionUtils
 		if(newExpression != null)
 		{
 			final PsiType newExpressionType = newExpression.getType();
-			if(com.intellij.psi.util.InheritanceUtil.isInheritor(newExpressionType, CommonClassNames.JAVA_LANG_THROWABLE))
+			if(com.intellij.psi.util.InheritanceUtil.isInheritor(newExpressionType, JavaClassNames.JAVA_LANG_THROWABLE))
 			{
 				return true;
 			}

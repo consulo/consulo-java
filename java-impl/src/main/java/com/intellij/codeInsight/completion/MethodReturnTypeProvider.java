@@ -33,6 +33,7 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -65,7 +66,7 @@ class MethodReturnTypeProvider implements CompletionProvider
 			{
 				if(myProcessed.add(type))
 				{
-					int priority = type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? 1 : 1000 - myProcessed.size();
+					int priority = type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? 1 : 1000 - myProcessed.size();
 					consumer.consume(PrioritizedLookupElement.withPriority(PsiTypeLookupItem.createLookupItem(type, position), priority));
 				}
 				return type;

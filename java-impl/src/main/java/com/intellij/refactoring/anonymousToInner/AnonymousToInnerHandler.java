@@ -52,6 +52,7 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.classMembers.ElementNeedsThis;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 public class AnonymousToInnerHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.anonymousToInner.AnonymousToInnerHandler");
@@ -335,7 +336,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     }
     PsiJavaCodeReferenceElement baseClassRef = myAnonClass.getBaseClassReference();
     PsiClass baseClass = (PsiClass)baseClassRef.resolve();
-    if (baseClass == null || !CommonClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName())) {
+    if (baseClass == null || !JavaClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName())) {
       PsiReferenceList refList = baseClass != null && baseClass.isInterface() ?
                                  aClass.getImplementsList() :
                                  aClass.getExtendsList();

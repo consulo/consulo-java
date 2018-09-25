@@ -57,6 +57,7 @@ import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -142,11 +143,11 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 		addLookupItems(set, suggestedNameInfo, matcher, project, suggestedNames);
 		if(!hasStartMatches(set, matcher))
 		{
-			if(type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && matcher.prefixMatches("object"))
+			if(type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && matcher.prefixMatches("object"))
 			{
 				set.add(withInsertHandler(suggestedNameInfo, LookupElementBuilder.create("object")));
 			}
-			if(type.equalsToText(CommonClassNames.JAVA_LANG_STRING) && matcher.prefixMatches("string"))
+			if(type.equalsToText(JavaClassNames.JAVA_LANG_STRING) && matcher.prefixMatches("string"))
 			{
 				set.add(withInsertHandler(suggestedNameInfo, LookupElementBuilder.create("string")));
 			}

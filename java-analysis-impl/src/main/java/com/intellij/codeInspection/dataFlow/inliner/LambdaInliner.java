@@ -27,7 +27,7 @@ import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiTypeCastExpression;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import one.util.streamex.EntryStream;
 
 /**
@@ -44,12 +44,12 @@ public class LambdaInliner implements CallInliner
 		{
 			return false;
 		}
-		PsiTypeCastExpression typeCastExpression = ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression()), PsiTypeCastExpression.class);
+		PsiTypeCastExpression typeCastExpression = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression()), PsiTypeCastExpression.class);
 		if(typeCastExpression == null)
 		{
 			return false;
 		}
-		PsiLambdaExpression lambda = ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(typeCastExpression.getOperand()), PsiLambdaExpression.class);
+		PsiLambdaExpression lambda = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(typeCastExpression.getOperand()), PsiLambdaExpression.class);
 		if(lambda == null || lambda.getBody() == null)
 		{
 			return false;

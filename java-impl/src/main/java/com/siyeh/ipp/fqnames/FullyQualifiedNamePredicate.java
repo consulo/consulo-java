@@ -17,8 +17,8 @@ package com.siyeh.ipp.fqnames;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ImportUtils;
@@ -51,7 +51,7 @@ class FullyQualifiedNamePredicate implements PsiElementPredicate {
         return false;
       }
       final Project project = element.getProject();
-      final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+      final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
       if (!codeStyleSettings.INSERT_INNER_CLASS_IMPORTS) {
         return false;
       }

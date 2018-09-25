@@ -22,6 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.SynchronizationUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class CallToNativeMethodWhileLockedInspection
   extends BaseInspection {
@@ -63,7 +64,7 @@ public class CallToNativeMethodWhileLockedInspection
         return;
       }
       final String className = containingClass.getQualifiedName();
-      if (CommonClassNames.JAVA_LANG_OBJECT.equals(className)) {
+      if (JavaClassNames.JAVA_LANG_OBJECT.equals(className)) {
         return;
       }
       if (!SynchronizationUtil.isInSynchronizedContext(expression)) {

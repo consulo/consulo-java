@@ -29,7 +29,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -80,7 +80,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, Dir
 		});
 
 		final Project project = PsiUtilCore.getProjectInReadAction(aClass);
-		if(CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName))
+		if(JavaClassNames.JAVA_LANG_OBJECT.equals(qualifiedName))
 		{
 			//[pasynkov]: WTF?
 			//final SearchScope scope = useScope.intersectWith(GlobalSearchScope.notScope(GlobalSearchScope.getScopeRestrictedByFileTypes(
@@ -97,7 +97,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, Dir
 						return consumer.process(psiClass);
 					}
 					final PsiClass superClass = psiClass.getSuperClass();
-					if(superClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(ApplicationManager.getApplication().runReadAction(new Computable<String>()
+					if(superClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(ApplicationManager.getApplication().runReadAction(new Computable<String>()
 					{
 						public String compute()
 						{

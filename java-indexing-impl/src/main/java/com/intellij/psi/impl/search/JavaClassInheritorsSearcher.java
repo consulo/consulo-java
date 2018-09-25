@@ -29,7 +29,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Ref;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiAnchor;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiBundle;
@@ -195,7 +195,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 			@Override
 			public Boolean compute()
 			{
-				return baseClass.isValid() && CommonClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName());
+				return baseClass.isValid() && JavaClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName());
 			}
 		});
 	}

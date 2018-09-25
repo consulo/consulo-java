@@ -27,6 +27,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -177,7 +179,7 @@ public class GuessTypeParameters {
     if (!types.isEmpty()) {
       Project project = typeElement.getProject();
       PsiType substituted = rawingSubstitutor.substitute(type);
-      if (!CommonClassNames.JAVA_LANG_OBJECT.equals(substituted.getCanonicalText()) && (toplevel || substituted.equals(type))) {
+      if (!JavaClassNames.JAVA_LANG_OBJECT.equals(substituted.getCanonicalText()) && (toplevel || substituted.equals(type))) {
         types.add(substituted);
       }
       

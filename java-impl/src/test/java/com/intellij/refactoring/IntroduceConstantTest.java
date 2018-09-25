@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -134,7 +134,7 @@ public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
   }
 
   public void testResultedType() throws Exception {
-    checkDefaultType(CommonClassNames.JAVA_LANG_OBJECT);
+    checkDefaultType(JavaClassNames.JAVA_LANG_OBJECT);
   }
 
   public void testResultedTypeWhenNonLocal() throws Exception {

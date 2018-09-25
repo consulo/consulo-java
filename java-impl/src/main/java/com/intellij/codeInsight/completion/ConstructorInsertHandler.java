@@ -43,6 +43,7 @@ import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -376,7 +377,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
 		{
 			for(PsiTypeElement parameter : parameters)
 			{
-				if(parameter.getType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+				if(parameter.getType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 				{
 					return true;
 				}

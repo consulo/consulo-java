@@ -22,6 +22,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class SuspiciousToArrayCallInspection extends BaseInspection {
@@ -79,7 +80,7 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
       final PsiClass aClass = classType.resolve();
       if (aClass == null ||
           !InheritanceUtil.isInheritor(aClass,
-                                       CommonClassNames.JAVA_UTIL_COLLECTION)) {
+                                       JavaClassNames.JAVA_UTIL_COLLECTION)) {
         return;
       }
       final PsiExpressionList argumentList = expression.getArgumentList();

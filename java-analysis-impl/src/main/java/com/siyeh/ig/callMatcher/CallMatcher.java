@@ -29,7 +29,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import one.util.streamex.StreamEx;
@@ -220,7 +220,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 			{
 				return false;
 			}
-			PsiMethod method = ObjectUtils.tryCast(methodRef.resolve(), PsiMethod.class);
+			PsiMethod method = ObjectUtil.tryCast(methodRef.resolve(), PsiMethod.class);
 			if(!methodMatches(method))
 			{
 				return false;

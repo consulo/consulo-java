@@ -16,7 +16,7 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiTypeParameter;
@@ -47,11 +47,11 @@ public class InheritanceUtil {
     }
 
     final String className = class1.getQualifiedName();
-    if (CommonClassNames.JAVA_LANG_OBJECT.equals(className)) {
+    if (JavaClassNames.JAVA_LANG_OBJECT.equals(className)) {
       return true;
     }
     final String class2Name = class2.getQualifiedName();
-    if (CommonClassNames.JAVA_LANG_OBJECT.equals(class2Name)) {
+    if (JavaClassNames.JAVA_LANG_OBJECT.equals(class2Name)) {
       return true;
     }
     if (class1.isInheritor(class2, true) ||

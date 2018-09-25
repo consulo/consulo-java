@@ -27,7 +27,7 @@ import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
@@ -66,7 +66,7 @@ public enum SpecialField
 					return arrayClass.findFieldByName("length", false);
 				}
 			},
-	STRING_LENGTH(CommonClassNames.JAVA_LANG_STRING, "length", true, LongRangeSet.indexRange())
+	STRING_LENGTH(JavaClassNames.JAVA_LANG_STRING, "length", true, LongRangeSet.indexRange())
 			{
 				@Override
 				public DfaValue createFromConstant(DfaValueFactory factory, @Nonnull Object obj)
@@ -74,8 +74,8 @@ public enum SpecialField
 					return obj instanceof String ? factory.getConstFactory().createFromValue(((String) obj).length(), PsiType.INT, null) : null;
 				}
 			},
-	COLLECTION_SIZE(CommonClassNames.JAVA_UTIL_COLLECTION, "size", false, LongRangeSet.indexRange()),
-	MAP_SIZE(CommonClassNames.JAVA_UTIL_MAP, "size", false, LongRangeSet.indexRange());
+	COLLECTION_SIZE(JavaClassNames.JAVA_UTIL_COLLECTION, "size", false, LongRangeSet.indexRange()),
+	MAP_SIZE(JavaClassNames.JAVA_UTIL_MAP, "size", false, LongRangeSet.indexRange());
 
 	private final String myClassName;
 	private final String myMethodName;

@@ -22,6 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExceptionUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
@@ -90,7 +91,7 @@ public class ExpectedExceptionNeverThrownInspection
       final PsiClassType classType = (PsiClassType)type;
       final PsiClass aClass = classType.resolve();
       if (InheritanceUtil.isInheritor(aClass,
-                                      CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
+                                      JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
         return;
       }
       final Set<PsiClassType> exceptionsThrown =

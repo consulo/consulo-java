@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -49,17 +50,17 @@ public class StandardVariableNamesInspection extends BaseInspection {
     s_expectedTypes.put("m", "int");
     s_expectedTypes.put("n", "int");
     s_expectedTypes.put("l", "long");
-    s_expectedTypes.put("s", CommonClassNames.JAVA_LANG_STRING);
-    s_expectedTypes.put("str", CommonClassNames.JAVA_LANG_STRING);
+    s_expectedTypes.put("s", JavaClassNames.JAVA_LANG_STRING);
+    s_expectedTypes.put("str", JavaClassNames.JAVA_LANG_STRING);
 
-    s_boxingClasses.put("int", CommonClassNames.JAVA_LANG_INTEGER);
-    s_boxingClasses.put("short", CommonClassNames.JAVA_LANG_SHORT);
-    s_boxingClasses.put("boolean", CommonClassNames.JAVA_LANG_BOOLEAN);
-    s_boxingClasses.put("long", CommonClassNames.JAVA_LANG_LONG);
-    s_boxingClasses.put("byte", CommonClassNames.JAVA_LANG_BYTE);
-    s_boxingClasses.put("float", CommonClassNames.JAVA_LANG_FLOAT);
-    s_boxingClasses.put("double", CommonClassNames.JAVA_LANG_DOUBLE);
-    s_boxingClasses.put("char", CommonClassNames.JAVA_LANG_CHARACTER);
+    s_boxingClasses.put("int", JavaClassNames.JAVA_LANG_INTEGER);
+    s_boxingClasses.put("short", JavaClassNames.JAVA_LANG_SHORT);
+    s_boxingClasses.put("boolean", JavaClassNames.JAVA_LANG_BOOLEAN);
+    s_boxingClasses.put("long", JavaClassNames.JAVA_LANG_LONG);
+    s_boxingClasses.put("byte", JavaClassNames.JAVA_LANG_BYTE);
+    s_boxingClasses.put("float", JavaClassNames.JAVA_LANG_FLOAT);
+    s_boxingClasses.put("double", JavaClassNames.JAVA_LANG_DOUBLE);
+    s_boxingClasses.put("char", JavaClassNames.JAVA_LANG_CHARACTER);
   }
 
   @SuppressWarnings("PublicField")

@@ -32,7 +32,7 @@ import com.intellij.psi.PsiJavaReference;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 /**
@@ -50,7 +50,7 @@ class SuperCalls
 		for(final String className : getContainingClassNames(element))
 		{
 			PsiReferenceExpression fakeSuper = JavaCompletionUtil.createReference(className + ".super.rulez", element);
-			PsiElement leaf = ObjectUtils.assertNotNull(fakeSuper.getReferenceNameElement());
+			PsiElement leaf = ObjectUtil.assertNotNull(fakeSuper.getReferenceNameElement());
 
 			JavaCompletionProcessor superProcessor = new JavaCompletionProcessor(leaf, elementFilter, options, nameCondition);
 			fakeSuper.processVariants(superProcessor);

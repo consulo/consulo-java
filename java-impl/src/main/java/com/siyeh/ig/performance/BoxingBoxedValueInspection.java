@@ -25,6 +25,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -39,14 +40,14 @@ public class BoxingBoxedValueInspection extends BaseInspection {
     new HashMap<String, String>(8);
 
   static {
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_INTEGER, "int");
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_SHORT, "short");
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_BOOLEAN, "boolean");
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_LONG, "long");
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_BYTE, "byte");
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_FLOAT, "float");
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_DOUBLE, "double");
-    boxedPrimitiveMap.put(CommonClassNames.JAVA_LANG_CHARACTER, "char");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_INTEGER, "int");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_SHORT, "short");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_BOOLEAN, "boolean");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_LONG, "long");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_BYTE, "byte");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_FLOAT, "float");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_DOUBLE, "double");
+    boxedPrimitiveMap.put(JavaClassNames.JAVA_LANG_CHARACTER, "char");
   }
 
   @Override

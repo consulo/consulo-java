@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class CollectionUtils
 {
@@ -55,21 +56,21 @@ public class CollectionUtils
 		allCollectionClassesAndInterfaces.add("java.util.AbstractSet");
 		allCollectionClassesAndInterfaces.add("java.util.ArrayList");
 		allCollectionClassesAndInterfaces.add("java.util.ArrayDeque");
-		allCollectionClassesAndInterfaces.add(CommonClassNames.JAVA_UTIL_COLLECTION);
-		allCollectionClassesAndInterfaces.add(CommonClassNames.JAVA_UTIL_DICTIONARY);
+		allCollectionClassesAndInterfaces.add(JavaClassNames.JAVA_UTIL_COLLECTION);
+		allCollectionClassesAndInterfaces.add(JavaClassNames.JAVA_UTIL_DICTIONARY);
 		allCollectionClassesAndInterfaces.add("java.util.EnumMap");
-		allCollectionClassesAndInterfaces.add(CommonClassNames.JAVA_UTIL_HASH_MAP);
-		allCollectionClassesAndInterfaces.add(CommonClassNames.JAVA_UTIL_HASH_SET);
+		allCollectionClassesAndInterfaces.add(JavaClassNames.JAVA_UTIL_HASH_MAP);
+		allCollectionClassesAndInterfaces.add(JavaClassNames.JAVA_UTIL_HASH_SET);
 		allCollectionClassesAndInterfaces.add("java.util.Hashtable");
 		allCollectionClassesAndInterfaces.add("java.util.IdentityHashMap");
 		allCollectionClassesAndInterfaces.add("java.util.LinkedHashMap");
 		allCollectionClassesAndInterfaces.add("java.util.LinkedHashSet");
 		allCollectionClassesAndInterfaces.add("java.util.LinkedList");
-		allCollectionClassesAndInterfaces.add(CommonClassNames.JAVA_UTIL_LIST);
-		allCollectionClassesAndInterfaces.add(CommonClassNames.JAVA_UTIL_MAP);
+		allCollectionClassesAndInterfaces.add(JavaClassNames.JAVA_UTIL_LIST);
+		allCollectionClassesAndInterfaces.add(JavaClassNames.JAVA_UTIL_MAP);
 		allCollectionClassesAndInterfaces.add("java.util.PriorityQueue");
 		allCollectionClassesAndInterfaces.add("java.util.Queue");
-		allCollectionClassesAndInterfaces.add(CommonClassNames.JAVA_UTIL_SET);
+		allCollectionClassesAndInterfaces.add(JavaClassNames.JAVA_UTIL_SET);
 		allCollectionClassesAndInterfaces.add("java.util.SortedMap");
 		allCollectionClassesAndInterfaces.add("java.util.SortedSet");
 		allCollectionClassesAndInterfaces.add("java.util.Stack");
@@ -126,21 +127,21 @@ public class CollectionUtils
 		s_interfaceForCollection.put("TreeSet", "SortedSet");
 		s_interfaceForCollection.put("Vector", "List");
 		s_interfaceForCollection.put("WeakHashMap", "Map");
-		s_interfaceForCollection.put("java.util.ArrayList", CommonClassNames.JAVA_UTIL_LIST);
-		s_interfaceForCollection.put("java.util.EnumMap", CommonClassNames.JAVA_UTIL_MAP);
-		s_interfaceForCollection.put("java.util.EnumSet", CommonClassNames.JAVA_UTIL_SET);
-		s_interfaceForCollection.put("java.util.HashMap", CommonClassNames.JAVA_UTIL_MAP);
-		s_interfaceForCollection.put("java.util.HashSet", CommonClassNames.JAVA_UTIL_SET);
-		s_interfaceForCollection.put("java.util.Hashtable", CommonClassNames.JAVA_UTIL_MAP);
-		s_interfaceForCollection.put("java.util.IdentityHashMap", CommonClassNames.JAVA_UTIL_MAP);
-		s_interfaceForCollection.put("java.util.LinkedHashMap", CommonClassNames.JAVA_UTIL_MAP);
-		s_interfaceForCollection.put("java.util.LinkedHashSet", CommonClassNames.JAVA_UTIL_SET);
-		s_interfaceForCollection.put("java.util.LinkedList", CommonClassNames.JAVA_UTIL_LIST);
+		s_interfaceForCollection.put("java.util.ArrayList", JavaClassNames.JAVA_UTIL_LIST);
+		s_interfaceForCollection.put("java.util.EnumMap", JavaClassNames.JAVA_UTIL_MAP);
+		s_interfaceForCollection.put("java.util.EnumSet", JavaClassNames.JAVA_UTIL_SET);
+		s_interfaceForCollection.put("java.util.HashMap", JavaClassNames.JAVA_UTIL_MAP);
+		s_interfaceForCollection.put("java.util.HashSet", JavaClassNames.JAVA_UTIL_SET);
+		s_interfaceForCollection.put("java.util.Hashtable", JavaClassNames.JAVA_UTIL_MAP);
+		s_interfaceForCollection.put("java.util.IdentityHashMap", JavaClassNames.JAVA_UTIL_MAP);
+		s_interfaceForCollection.put("java.util.LinkedHashMap", JavaClassNames.JAVA_UTIL_MAP);
+		s_interfaceForCollection.put("java.util.LinkedHashSet", JavaClassNames.JAVA_UTIL_SET);
+		s_interfaceForCollection.put("java.util.LinkedList", JavaClassNames.JAVA_UTIL_LIST);
 		s_interfaceForCollection.put("java.util.PriorityQueue", "java.util.Queue");
-		s_interfaceForCollection.put("java.util.TreeMap", CommonClassNames.JAVA_UTIL_MAP);
-		s_interfaceForCollection.put("java.util.TreeSet", CommonClassNames.JAVA_UTIL_SET);
-		s_interfaceForCollection.put("java.util.Vector", CommonClassNames.JAVA_UTIL_LIST);
-		s_interfaceForCollection.put("java.util.WeakHashMap", CommonClassNames.JAVA_UTIL_MAP);
+		s_interfaceForCollection.put("java.util.TreeMap", JavaClassNames.JAVA_UTIL_MAP);
+		s_interfaceForCollection.put("java.util.TreeSet", JavaClassNames.JAVA_UTIL_SET);
+		s_interfaceForCollection.put("java.util.Vector", JavaClassNames.JAVA_UTIL_LIST);
+		s_interfaceForCollection.put("java.util.WeakHashMap", JavaClassNames.JAVA_UTIL_MAP);
 		s_interfaceForCollection.put("com.sun.java.util.collections.HashSet", "com.sun.java.util.collections.Set");
 		s_interfaceForCollection.put("com.sun.java.util.collections.TreeSet", "com.sun.java.util.collections.Set");
 		s_interfaceForCollection.put("com.sun.java.util.collections.Vector", "com.sun.java.util.collections.List");
@@ -184,7 +185,7 @@ public class CollectionUtils
 		{
 			return false;
 		}
-		if(!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_COLLECTION) && !InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_MAP))
+		if(!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_COLLECTION) && !InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_MAP))
 		{
 			return false;
 		}
@@ -204,7 +205,7 @@ public class CollectionUtils
 		{
 			return false;
 		}
-		return InheritanceUtil.isInheritor(resolved, CommonClassNames.JAVA_UTIL_COLLECTION) || InheritanceUtil.isInheritor(resolved, CommonClassNames.JAVA_UTIL_MAP) || InheritanceUtil.isInheritor
+		return InheritanceUtil.isInheritor(resolved, JavaClassNames.JAVA_UTIL_COLLECTION) || InheritanceUtil.isInheritor(resolved, JavaClassNames.JAVA_UTIL_MAP) || InheritanceUtil.isInheritor
 				(resolved, "com.google.common.collect.Multimap") || InheritanceUtil.isInheritor(resolved, "com.google.common.collect.Table");
 	}
 

@@ -29,6 +29,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class StringConcatenationInsideStringBufferAppendInspection extends BaseInspection {
@@ -124,8 +125,8 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
         return;
       }
       final String className = containingClass.getQualifiedName();
-      if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-          CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
+      if (JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
+          JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
         registerMethodCallError(expression, containingClass);
         return;
       }
@@ -156,7 +157,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
       if (type == null) {
         return false;
       }
-      return type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
+      return type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
     }
   }
 }

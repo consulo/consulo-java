@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import static com.intellij.util.ObjectUtils.notNull;
+import static com.intellij.util.ObjectUtil.notNull;
 
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;
@@ -75,6 +75,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import consulo.application.ApplicationProperties;
+import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 
 public class HighlightVisitorImpl extends JavaElementVisitor implements HighlightVisitor
@@ -297,6 +298,26 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 		}
 	}
 
+	@Nullable
+	public static JavaResolveResult resolveJavaReference(@Nonnull PsiReference reference)
+	{
+		if(reference instanceof PsiJavaReference)
+		{
+			PsiJavaReference psiJavaReference = (PsiJavaReference) reference;
+			return psiJavaReference.advancedResolve(false);
+		}
+		if(reference instanceof PsiPolyVariantReference &&
+				reference instanceof ResolvingHint && ((ResolvingHint) reference).canResolveTo(PsiClass.class))
+		{
+			ResolveResult[] resolve = ((PsiPolyVariantReference) reference).multiResolve(false);
+			if(resolve.length == 1 && resolve[0] instanceof JavaResolveResult)
+			{
+				return (JavaResolveResult) resolve[0];
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public void visitAnnotation(PsiAnnotation annotation)
 	{
@@ -333,7 +354,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 		{
 			myHolder.add(AnnotationsHighlightUtil.checkRepeatableAnnotation(annotation));
 		}
-		if(CommonClassNames.JAVA_LANG_OVERRIDE.equals(annotation.getQualifiedName()))
+		if(JavaClassNames.JAVA_LANG_OVERRIDE.equals(annotation.getQualifiedName()))
 		{
 			PsiAnnotationOwner owner = annotation.getOwner();
 			PsiElement parent = owner instanceof PsiModifierList ? ((PsiModifierList) owner).getParent() : null;

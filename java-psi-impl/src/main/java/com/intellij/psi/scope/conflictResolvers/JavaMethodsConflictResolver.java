@@ -53,6 +53,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.FactoryMap;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * Created by IntelliJ IDEA.
@@ -323,7 +324,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 				else
 				{
 					final PsiClass aClass = superMethod.getContainingClass();
-					if(aClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName()))
+					if(aClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName()))
 					{
 						superMethods.add(superMethod);
 					}
@@ -358,12 +359,12 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			PsiClass existingClass = existingMethod.getContainingClass();
 			if(class1 != null && existingClass != null)
 			{ //prefer interface methods to methods from Object
-				if(class1.isInterface() && CommonClassNames.JAVA_LANG_OBJECT.equals(existingClass.getQualifiedName()))
+				if(class1.isInterface() && JavaClassNames.JAVA_LANG_OBJECT.equals(existingClass.getQualifiedName()))
 				{
 					signatures.put(signature, info);
 					continue;
 				}
-				else if(existingClass.isInterface() && CommonClassNames.JAVA_LANG_OBJECT.equals(class1.getQualifiedName()))
+				else if(existingClass.isInterface() && JavaClassNames.JAVA_LANG_OBJECT.equals(class1.getQualifiedName()))
 				{
 					conflicts.remove(info);
 					i--;
@@ -743,8 +744,8 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			{
 				if(type1 instanceof PsiEllipsisType && type2 instanceof PsiEllipsisType &&
 						params1.length == params2.length &&
-						(class1 != null && !JavaVersionService.getInstance().isAtLeast(class1, JavaSdkVersion.JDK_1_7) || ((PsiArrayType) type1).getComponentType().equalsToText(CommonClassNames
-								.JAVA_LANG_OBJECT) || ((PsiArrayType) type2).getComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT)))
+						(class1 != null && !JavaVersionService.getInstance().isAtLeast(class1, JavaSdkVersion.JDK_1_7) || ((PsiArrayType) type1).getComponentType().equalsToText(JavaClassNames
+								.JAVA_LANG_OBJECT) || ((PsiArrayType) type2).getComponentType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT)))
 				{
 					type1 = ((PsiEllipsisType) type1).toArrayType();
 					type2 = ((PsiEllipsisType) type2).toArrayType();

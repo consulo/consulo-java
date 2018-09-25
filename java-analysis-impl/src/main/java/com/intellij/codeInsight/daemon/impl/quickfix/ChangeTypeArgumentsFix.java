@@ -38,6 +38,7 @@ import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
+import consulo.java.module.util.JavaClassNames;
 
 public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityAction {
   private final PsiMethod myTargetMethod;
@@ -64,7 +65,7 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
       @Override
       public String fun(PsiTypeParameter typeParameter) {
         final PsiType substituted = substitutor.substitute(typeParameter);
-        return substituted != null ? substituted.getPresentableText() : CommonClassNames.JAVA_LANG_OBJECT;
+        return substituted != null ? substituted.getPresentableText() : JavaClassNames.JAVA_LANG_OBJECT;
       }
     }, ", ") + ">";
   }

@@ -99,7 +99,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
 			try
 			{
 				final PsiJavaCodeReferenceElement ref = factory.createReferenceFromText(refText, context);
-				((PsiJavaCodeReferenceElementImpl) ref).setKindWhenDummy(PsiJavaCodeReferenceElementImpl.CLASS_NAME_KIND);
+				((PsiJavaCodeReferenceElementImpl) ref).setKindWhenDummy(PsiJavaCodeReferenceElementImpl.Kind.CLASS_NAME_KIND);
 				type = factory.createType(ref);
 			}
 			catch(IncorrectOperationException e)

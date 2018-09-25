@@ -26,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
@@ -170,16 +171,16 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
   }
 
   static boolean isIntegerGetInteger(PsiMethodCallExpression expression) {
-    return isCallTo(expression, CommonClassNames.JAVA_LANG_INTEGER,
+    return isCallTo(expression, JavaClassNames.JAVA_LANG_INTEGER,
                     "getInteger");
   }
 
   static boolean isLongGetLong(PsiMethodCallExpression expression) {
-    return isCallTo(expression, CommonClassNames.JAVA_LANG_LONG, "getLong");
+    return isCallTo(expression, JavaClassNames.JAVA_LANG_LONG, "getLong");
   }
 
   static boolean isBooleanGetBoolean(PsiMethodCallExpression expression) {
-    return isCallTo(expression, CommonClassNames.JAVA_LANG_BOOLEAN,
+    return isCallTo(expression, JavaClassNames.JAVA_LANG_BOOLEAN,
                     "getBoolean");
   }
 

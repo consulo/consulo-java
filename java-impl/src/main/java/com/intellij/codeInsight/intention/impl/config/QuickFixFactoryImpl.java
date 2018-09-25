@@ -73,6 +73,7 @@ import com.intellij.psi.util.PropertyMemberType;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.JavaQuickFixBundle;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author cdr
@@ -923,7 +924,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 		if(parent instanceof PsiForeachStatement)
 		{
 			final PsiType type = expression.getType();
-			if(InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_ITERATOR))
+			if(InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_ITERATOR))
 			{
 				return new ReplaceIteratorForEachLoopWithIteratorForLoopFix((PsiForeachStatement) parent);
 			}

@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.ConstructionUtils;
+import consulo.java.module.util.JavaClassNames;
 
 public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseInspection
 {
@@ -103,7 +104,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
 				return;
 			}
 			final PsiClass containingClass = method.getContainingClass();
-			if(!InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_UTIL_COLLECTION))
+			if(!InheritanceUtil.isInheritor(containingClass, JavaClassNames.JAVA_UTIL_COLLECTION))
 			{
 				return;
 			}

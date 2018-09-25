@@ -31,6 +31,7 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author max
@@ -542,7 +543,7 @@ public class RedundantCastUtil {
     }
 
     if (operand instanceof PsiLambdaExpression || operand instanceof PsiMethodReferenceExpression) {
-      if (castType instanceof PsiClassType && InheritanceUtil.isInheritor(PsiUtil.resolveClassInType(castType), CommonClassNames.JAVA_IO_SERIALIZABLE)) return true;
+      if (castType instanceof PsiClassType && InheritanceUtil.isInheritor(PsiUtil.resolveClassInType(castType), JavaClassNames.JAVA_IO_SERIALIZABLE)) return true;
       if (castType instanceof PsiIntersectionType) {
         boolean redundant = false;
         final PsiType[] conjuncts = ((PsiIntersectionType)castType).getConjuncts();
@@ -618,6 +619,6 @@ public class RedundantCastUtil {
   private static boolean isPolymorphicMethod(PsiMethodCallExpression expression) {
     final PsiElement method = expression.getMethodExpression().resolve();
     return method instanceof PsiMethod &&
-           AnnotationUtil.isAnnotated((PsiMethod)method, CommonClassNames.JAVA_LANG_INVOKE_MH_POLYMORPHIC, false, true);
+           AnnotationUtil.isAnnotated((PsiMethod)method, JavaClassNames.JAVA_LANG_INVOKE_MH_POLYMORPHIC, false, true);
   }
 }

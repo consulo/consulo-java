@@ -31,7 +31,7 @@ import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -63,7 +63,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
     final PsiClass aClass = ((PsiClassType)type).resolve();
     Project project = element.getProject();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
     if (!InheritanceUtil.isInheritorOrSelf(aClass, autoCloseable, true)) return false;
 
     return true;

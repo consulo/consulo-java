@@ -26,6 +26,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
+import consulo.java.module.util.JavaClassNames;
 
 import javax.annotation.Nullable;
 
@@ -70,7 +71,7 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
 
   @Nullable
   private PsiType getSuperType(PsiClass aClass, boolean checkImmediateSuperInterfaces) {
-    if (CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) return null;
+    if (JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) return null;
 
     final PsiClass containingClass = checkImmediateSuperInterfaces ? PsiTreeUtil.getParentOfType(this, PsiClass.class) : null;
     if (containingClass != null) {

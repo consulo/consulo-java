@@ -47,11 +47,12 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.java.module.util.JavaClassNames;
 import one.util.streamex.StreamEx;
 
 /**
@@ -63,8 +64,8 @@ public class StandardInstructionVisitor extends InstructionVisitor
 	private static final Object ANY_VALUE = new Object();
 
 	private static final CallMapper<LongRangeSet> KNOWN_METHOD_RANGES = new CallMapper<LongRangeSet>().register(CallMatcher.instanceCall("java.time.LocalDateTime", "getHour"), LongRangeSet.range(0,
-			23)).register(CallMatcher.instanceCall("java.time.LocalDateTime", "getMinute", "getSecond"), LongRangeSet.range(0, 59)).register(CallMatcher.staticCall(CommonClassNames.JAVA_LANG_LONG,
-			"numberOfLeadingZeros", "numberOfTrailingZeros", "bitCount"), LongRangeSet.range(0, Long.SIZE)).register(CallMatcher.staticCall(CommonClassNames.JAVA_LANG_INTEGER,
+			23)).register(CallMatcher.instanceCall("java.time.LocalDateTime", "getMinute", "getSecond"), LongRangeSet.range(0, 59)).register(CallMatcher.staticCall(JavaClassNames.JAVA_LANG_LONG,
+			"numberOfLeadingZeros", "numberOfTrailingZeros", "bitCount"), LongRangeSet.range(0, Long.SIZE)).register(CallMatcher.staticCall(JavaClassNames.JAVA_LANG_INTEGER,
 			"numberOfLeadingZeros", "numberOfTrailingZeros", "bitCount"), LongRangeSet.range(0, Integer.SIZE));
 
 	private final Set<BinopInstruction> myReachable = new THashSet<>();
@@ -197,7 +198,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 			return;
 		}
 		JavaResolveResult resolveResult = methodRef.advancedResolve(false);
-		PsiMethod method = ObjectUtils.tryCast(resolveResult.getElement(), PsiMethod.class);
+		PsiMethod method = ObjectUtil.tryCast(resolveResult.getElement(), PsiMethod.class);
 		if(method == null || !ControlFlowAnalyzer.isPure(method))
 		{
 			return;

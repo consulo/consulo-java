@@ -46,6 +46,7 @@ import com.intellij.util.SmartList;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.hash.EqualityPolicy;
 import com.intellij.util.containers.hash.LinkedHashMap;
+import consulo.java.module.util.JavaClassNames;
 
 public class PsiSuperMethodImplUtil
 {
@@ -133,7 +134,7 @@ public class PsiSuperMethodImplUtil
 			return false;
 		}
 		PsiClass parentClass = method.getContainingClass();
-		return parentClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(parentClass.getQualifiedName());
+		return parentClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(parentClass.getQualifiedName());
 	}
 
 	@javax.annotation.Nullable
@@ -422,7 +423,7 @@ public class PsiSuperMethodImplUtil
 		PsiClass containingClass = method.getContainingClass();
 		if(!superMethod.isConstructor() && !aClass.equals(superClass) && MethodSignatureUtil.isSubsignature(superSignatureHierarchical, hierarchicalMethodSignature) && superClass != null)
 		{
-			if(superClass.isInterface() || CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+			if(superClass.isInterface() || JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 			{
 				if(superMethod.hasModifierProperty(PsiModifier.STATIC) || superMethod.hasModifierProperty(PsiModifier.DEFAULT) && method.hasModifierProperty(PsiModifier.STATIC) && !InheritanceUtil
 						.isInheritorOrSelf(containingClass, superClass, true))

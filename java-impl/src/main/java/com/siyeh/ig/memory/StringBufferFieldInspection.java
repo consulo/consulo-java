@@ -15,12 +15,13 @@
  */
 package com.siyeh.ig.memory;
 
-import com.intellij.psi.CommonClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+
 import javax.annotation.Nonnull;
 
 public class StringBufferFieldInspection extends BaseInspection {
@@ -53,8 +54,8 @@ public class StringBufferFieldInspection extends BaseInspection {
     public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       final PsiType type = field.getType();
-      if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER) &&
-          !type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUILDER)) {
+      if (!type.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUFFER) &&
+          !type.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUILDER)) {
         return;
       }
       registerFieldError(field, type);

@@ -20,6 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
@@ -60,7 +61,7 @@ public class ComparatorMethodParameterNotUsedInspection
     public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       if (!MethodUtils.methodMatches(method,
-                                     CommonClassNames.JAVA_UTIL_COMPARATOR,
+                                     JavaClassNames.JAVA_UTIL_COMPARATOR,
                                      PsiType.INT, "compare", PsiType.NULL, PsiType.NULL)) {
         return;
       }

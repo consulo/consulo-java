@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.psiutils;
 
-import static com.intellij.util.ObjectUtils.tryCast;
+import static com.intellij.util.ObjectUtil.tryCast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +34,7 @@ import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.java.module.util.JavaClassNames;
 
 public class MethodCallUtils
 {
@@ -243,7 +244,7 @@ public class MethodCallUtils
 			return false;
 		}
 		final String className = containingClass.getQualifiedName();
-		return CommonClassNames.JAVA_LANG_STRING.equals(className) || "java.util.regex.Pattern".equals(className);
+		return JavaClassNames.JAVA_LANG_STRING.equals(className) || "java.util.regex.Pattern".equals(className);
 	}
 
 	public static boolean isCallDuringObjectConstruction(PsiMethodCallExpression expression)
@@ -464,7 +465,7 @@ public class MethodCallUtils
 			return false;
 		}
 		final PsiType type = argument.getType();
-		if(type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING))
+		if(type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING))
 		{
 			return false;
 		}

@@ -41,7 +41,7 @@ import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ide.IconDescriptorUpdaters;
@@ -71,7 +71,7 @@ public class JavaGenerateMemberCompletionContributor
 		}
 		else if(psiElement(PsiIdentifier.class).withParents(PsiJavaCodeReferenceElement.class, PsiAnnotation.class, PsiModifierList.class, PsiClass.class).accepts(position))
 		{
-			PsiAnnotation annotation = ObjectUtils.assertNotNull(PsiTreeUtil.getParentOfType(position, PsiAnnotation.class));
+			PsiAnnotation annotation = ObjectUtil.assertNotNull(PsiTreeUtil.getParentOfType(position, PsiAnnotation.class));
 			int annoStart = annotation.getTextRange().getStartOffset();
 			suggestGeneratedMethods(result.withPrefixMatcher(annotation.getText().substring(0, parameters.getOffset() - annoStart)), position);
 		}
@@ -80,7 +80,7 @@ public class JavaGenerateMemberCompletionContributor
 
 	private static void suggestGeneratedMethods(CompletionResultSet result, PsiElement position)
 	{
-		PsiClass parent = CompletionUtil.getOriginalElement(ObjectUtils.assertNotNull(PsiTreeUtil.getParentOfType(position, PsiClass.class)));
+		PsiClass parent = CompletionUtil.getOriginalElement(ObjectUtil.assertNotNull(PsiTreeUtil.getParentOfType(position, PsiClass.class)));
 		if(parent != null)
 		{
 			Set<MethodSignature> addedSignatures = ContainerUtil.newHashSet();

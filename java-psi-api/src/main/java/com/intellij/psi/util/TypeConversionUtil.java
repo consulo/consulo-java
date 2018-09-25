@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.util;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;
@@ -46,6 +46,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
 
 public class TypeConversionUtil
 {
@@ -873,7 +874,7 @@ public class TypeConversionUtil
 		{
 			if(resultTypeRank > MAX_NUMERIC_RANK)
 			{
-				isApplicable = ltypeRank == resultTypeRank || ltype.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+				isApplicable = ltypeRank == resultTypeRank || ltype.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
 			}
 			else
 			{
@@ -1158,7 +1159,7 @@ public class TypeConversionUtil
 				}
 				else
 				{
-					return left.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+					return left.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
 				}
 			}
 			PsiType lCompType = ((PsiArrayType) left).getComponentType();
@@ -1465,13 +1466,13 @@ public class TypeConversionUtil
 			{
 				return true;
 			}
-			if(leftBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+			if(leftBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 			{
 				if(!leftWildcard.isSuper())
 				{
 					return true;
 				}
-				if(typeRight.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+				if(typeRight.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
 				{
 					return true;
 				}
@@ -1753,8 +1754,8 @@ public class TypeConversionUtil
 			return false;
 		}
 		return isPrimitiveWrapper(type) ||
-				type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ||
-				type.equalsToText(CommonClassNames.JAVA_LANG_NUMBER);
+				type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ||
+				type.equalsToText(JavaClassNames.JAVA_LANG_NUMBER);
 	}
 
 	@Contract("null -> false")

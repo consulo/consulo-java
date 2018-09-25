@@ -26,6 +26,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.module.util.JavaClassNames;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -83,7 +85,7 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
       }
       final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
       final String type =
-        TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
+        TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_DATE, JavaClassNames.JAVA_UTIL_CALENDAR);
       if (type == null) {
         return;
       }
@@ -115,7 +117,7 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
         return;
       }
       final String type = TypeUtils.expressionHasTypeOrSubtype(
-        returnValue, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
+        returnValue, JavaClassNames.JAVA_UTIL_DATE, JavaClassNames.JAVA_UTIL_CALENDAR);
       if (type == null) {
         return;
       }
