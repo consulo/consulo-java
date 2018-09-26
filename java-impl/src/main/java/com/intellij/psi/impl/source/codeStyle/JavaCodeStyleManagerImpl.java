@@ -179,13 +179,13 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	@Override
 	public PsiImportList prepareOptimizeImportsResult(@Nonnull PsiJavaFile file)
 	{
-		return new ImportHelper(getSettings()).prepareOptimizeImportsResult(file);
+		return new ImportHelper(JavaCodeStyleSettings.getInstance(file)).prepareOptimizeImportsResult(file);
 	}
 
 	@Override
 	public boolean addImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass refClass)
 	{
-		return new ImportHelper(getSettings()).addImport(file, refClass);
+		return new ImportHelper(JavaCodeStyleSettings.getInstance(file)).addImport(file, refClass);
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public Collection<PsiImportStatementBase> findRedundantImports(@Nonnull final PsiJavaFile file)
 	{
 		final PsiImportList importList = file.getImportList();
@@ -305,8 +305,8 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	@Nonnull
 	@Override
 	public SuggestedNameInfo suggestVariableName(@Nonnull final VariableKind kind,
-												 @javax.annotation.Nullable final String propertyName,
-												 @javax.annotation.Nullable final PsiExpression expr,
+												 @Nullable final String propertyName,
+												 @Nullable final PsiExpression expr,
 												 @Nullable PsiType type,
 												 final boolean correctKeywords)
 	{
@@ -541,7 +541,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 		return getTypeName(type, true);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getTypeName(@Nonnull PsiType type, boolean withIndices)
 	{
 		type = type.getDeepComponentType();

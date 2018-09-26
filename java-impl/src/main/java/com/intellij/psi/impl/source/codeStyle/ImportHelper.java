@@ -1095,9 +1095,9 @@ public class ImportHelper
 	{
 		Set<Pair<String, Boolean>> names = new THashSet<>();
 
-		/*final JspFile jspFile = JspPsiUtil.getJspFile(file);
-		collectNamesToImport(names, comments, file, jspFile);
-		if(jspFile != null)
+		//final JspFile jspFile = JspPsiUtil.getJspFile(file);
+		collectNamesToImport(names, comments, file, null);
+		/*if(jspFile != null)
 		{
 			PsiFile[] files = ArrayUtil.mergeArrays(JspSpiUtil.getIncludingFiles(jspFile), JspSpiUtil.getIncludedFiles(jspFile));
 			for(PsiFile includingFile : files)
@@ -1108,7 +1108,7 @@ public class ImportHelper
 					collectNamesToImport(names, comments, (PsiJavaFile) javaRoot, jspFile);
 				}
 			}
-		}   */
+		} */
 
 		addUnresolvedImportNames(names, file);
 

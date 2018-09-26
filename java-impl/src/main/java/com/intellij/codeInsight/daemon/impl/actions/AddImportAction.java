@@ -1,46 +1,18 @@
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInsight.daemon.impl.actions;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbService;
@@ -56,11 +28,18 @@ import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.list.PopupListElementRenderer;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
-import consulo.annotations.RequiredReadAction;
+import com.intellij.util.ObjectUtils;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddImportAction implements QuestionAction
 {
@@ -71,7 +50,10 @@ public class AddImportAction implements QuestionAction
 	private final PsiClass[] myTargetClasses;
 	private final Editor myEditor;
 
-	public AddImportAction(@Nonnull Project project, @Nonnull PsiReference ref, @Nonnull Editor editor, @Nonnull PsiClass... targetClasses)
+	public AddImportAction(@NotNull Project project,
+						   @NotNull PsiReference ref,
+						   @NotNull Editor editor,
+						   @NotNull PsiClass... targetClasses)
 	{
 		myProject = project;
 		myReference = ref;
@@ -112,60 +94,59 @@ public class AddImportAction implements QuestionAction
 	{
 		CodeInsightUtil.sortIdenticalShortNamedMembers(myTargetClasses, myReference);
 
-		final BaseListPopupStep<PsiClass> step = new BaseListPopupStep<PsiClass>(JavaQuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses)
-		{
-			@Override
-			public boolean isAutoSelectionEnabled()
-			{
-				return false;
-			}
-
-			@Override
-			public boolean isSpeedSearchEnabled()
-			{
-				return true;
-			}
-
-			@Override
-			public PopupStep onChosen(PsiClass selectedValue, boolean finalChoice)
-			{
-				if(selectedValue == null)
+		final BaseListPopupStep<PsiClass> step =
+				new BaseListPopupStep<PsiClass>(JavaQuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses)
 				{
-					return FINAL_CHOICE;
-				}
-
-				if(finalChoice)
-				{
-					return doFinalStep(() ->
+					@Override
+					public boolean isAutoSelectionEnabled()
 					{
-						PsiDocumentManager.getInstance(myProject).commitAllDocuments();
-						addImport(myReference, selectedValue);
-					});
-				}
+						return false;
+					}
 
-				return getExcludesStep(selectedValue.getQualifiedName(), myProject);
-			}
+					@Override
+					public boolean isSpeedSearchEnabled()
+					{
+						return true;
+					}
 
-			@Override
-			public boolean hasSubstep(PsiClass selectedValue)
-			{
-				return true;
-			}
+					@Override
+					public PopupStep onChosen(PsiClass selectedValue, boolean finalChoice)
+					{
+						if(selectedValue == null)
+						{
+							return FINAL_CHOICE;
+						}
 
-			@Nonnull
-			@Override
-			public String getTextFor(PsiClass value)
-			{
-				return ObjectUtil.assertNotNull(value.getQualifiedName());
-			}
+						if(finalChoice)
+						{
+							return doFinalStep(() -> {
+								PsiDocumentManager.getInstance(myProject).commitAllDocuments();
+								addImport(myReference, selectedValue);
+							});
+						}
 
-			@Override
-			@RequiredReadAction
-			public Icon getIconFor(PsiClass aValue)
-			{
-				return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
-			}
-		};
+						return getExcludesStep(selectedValue.getQualifiedName(), myProject);
+					}
+
+					@Override
+					public boolean hasSubstep(PsiClass selectedValue)
+					{
+						return true;
+					}
+
+					@NotNull
+					@Override
+					public String getTextFor(PsiClass value)
+					{
+						return ObjectUtils.assertNotNull(value.getQualifiedName());
+					}
+
+					@Override
+					public Icon getIconFor(PsiClass aValue)
+					{
+						return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
+					}
+				};
 		ListPopupImpl popup = new ListPopupImpl(step)
 		{
 			@Override
@@ -191,7 +172,7 @@ public class AddImportAction implements QuestionAction
 		popup.showInBestPositionFor(myEditor);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PopupStep getExcludesStep(String qname, final Project project)
 	{
 		if(qname == null)
@@ -203,7 +184,7 @@ public class AddImportAction implements QuestionAction
 
 		return new BaseListPopupStep<String>(null, toExclude)
 		{
-			@Nonnull
+			@NotNull
 			@Override
 			public String getTextFor(String value)
 			{
@@ -225,8 +206,7 @@ public class AddImportAction implements QuestionAction
 
 	public static void excludeFromImport(final Project project, final String prefix)
 	{
-		ApplicationManager.getApplication().invokeLater(() ->
-		{
+		ApplicationManager.getApplication().invokeLater(() -> {
 			if(project.isDisposed())
 			{
 				return;
@@ -237,7 +217,7 @@ public class AddImportAction implements QuestionAction
 		});
 	}
 
-	public static List<String> getAllExcludableStrings(@Nonnull String qname)
+	public static List<String> getAllExcludableStrings(@NotNull String qname)
 	{
 		List<String> toExclude = new ArrayList<>();
 		while(true)
@@ -255,31 +235,21 @@ public class AddImportAction implements QuestionAction
 
 	private void addImport(final PsiReference ref, final PsiClass targetClass)
 	{
-		if(!ref.getElement().isValid() || !targetClass.isValid() || ref.resolve() == targetClass)
-		{
-			return;
-		}
-		if(!FileModificationService.getInstance().preparePsiElementForWrite(ref.getElement()))
-		{
-			return;
-		}
+		DumbService.getInstance(myProject).withAlternativeResolveEnabled(() -> {
+			if(!ref.getElement().isValid() || !targetClass.isValid() || ref.resolve() == targetClass)
+			{
+				return;
+			}
 
-		StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
-		CommandProcessor.getInstance().executeCommand(myProject, () -> ApplicationManager.getApplication().runWriteAction(() -> DumbService.getInstance(myProject).withAlternativeResolveEnabled(() ->
-				_addImport(ref, targetClass))), JavaQuickFixBundle.message("add.import"), null);
+			StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
+			WriteCommandAction.runWriteCommandAction(myProject, JavaQuickFixBundle.message("add.import"), null,
+					() -> _addImport(ref, targetClass),
+					ref.getElement().getContainingFile());
+		});
 	}
 
 	private void _addImport(PsiReference ref, PsiClass targetClass)
 	{
-		int caretOffset = myEditor.getCaretModel().getOffset();
-		RangeMarker caretMarker = myEditor.getDocument().createRangeMarker(caretOffset, caretOffset);
-		int colByOffset = myEditor.offsetToLogicalPosition(caretOffset).column;
-		int col = myEditor.getCaretModel().getLogicalPosition().column;
-		int virtualSpace = col == colByOffset ? 0 : col - colByOffset;
-		int line = myEditor.getCaretModel().getLogicalPosition().line;
-		LogicalPosition pos = new LogicalPosition(line, 0);
-		myEditor.getCaretModel().moveToLogicalPosition(pos);
-
 		try
 		{
 			bindReference(ref, targetClass);
@@ -294,17 +264,7 @@ public class AddImportAction implements QuestionAction
 		{
 			LOG.error(e);
 		}
-
-		line = myEditor.getCaretModel().getLogicalPosition().line;
-		LogicalPosition pos1 = new LogicalPosition(line, col);
-		myEditor.getCaretModel().moveToLogicalPosition(pos1);
-		if(caretMarker.isValid())
-		{
-			LogicalPosition pos2 = myEditor.offsetToLogicalPosition(caretMarker.getStartOffset());
-			int newCol = pos2.column + virtualSpace;
-			myEditor.getCaretModel().moveToLogicalPosition(new LogicalPosition(pos2.line, newCol));
-			myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-		}
+		myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
 	}
 
 	protected void bindReference(PsiReference ref, PsiClass targetClass)
