@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,18 @@
 
 package com.intellij.lang.java;
 
-import javax.annotation.Nonnull;
-
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.EmptyRunnable;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -54,7 +53,8 @@ public class JavaImportOptimizer implements ImportOptimizer
 
 		return new CollectingInfoRunnable()
 		{
-			private int myImportListLengthDiff;
+			private int myImportsAdded;
+			private int myImportsRemoved;
 
 			@Override
 			public void run()
@@ -68,13 +68,37 @@ public class JavaImportOptimizer implements ImportOptimizer
 						manager.commitDocument(document);
 					}
 					final PsiImportList oldImportList = ((PsiJavaFile) file).getImportList();
-					if(oldImportList == null)
+					assert oldImportList != null;
+					final Multiset<PsiElement> oldImports = HashMultiset.create();
+					for(PsiImportStatement statement : oldImportList.getImportStatements())
 					{
-						return;
+						oldImports.add(statement.resolve());
 					}
-					int importsBefore = oldImportList.getAllImportStatements().length;
+
+					final Multiset<PsiElement> oldStaticImports = HashMultiset.create();
+					for(PsiImportStaticStatement statement : oldImportList.getImportStaticStatements())
+					{
+						oldStaticImports.add(statement.resolve());
+					}
+
 					oldImportList.replace(newImportList);
-					myImportListLengthDiff = importsBefore - newImportList.getAllImportStatements().length;
+					for(PsiImportStatement statement : newImportList.getImportStatements())
+					{
+						if(!oldImports.remove(statement.resolve()))
+						{
+							myImportsAdded++;
+						}
+					}
+					myImportsRemoved += oldImports.size();
+
+					for(PsiImportStaticStatement statement : newImportList.getImportStaticStatements())
+					{
+						if(!oldStaticImports.remove(statement.resolve()))
+						{
+							myImportsAdded++;
+						}
+					}
+					myImportsRemoved += oldStaticImports.size();
 				}
 				catch(IncorrectOperationException e)
 				{
@@ -82,15 +106,27 @@ public class JavaImportOptimizer implements ImportOptimizer
 				}
 			}
 
-			@javax.annotation.Nullable
 			@Override
 			public String getUserNotificationInfo()
 			{
-				if(myImportListLengthDiff > 0)
+				if(myImportsRemoved == 0)
 				{
-					return "removed " + myImportListLengthDiff + " import" + (myImportListLengthDiff > 1 ? "s" : "");
+					return "rearranged imports";
 				}
-				return null;
+				final StringBuilder notification = new StringBuilder("removed ").append(myImportsRemoved).append(" import");
+				if(myImportsRemoved > 1)
+				{
+					notification.append('s');
+				}
+				if(myImportsAdded > 0)
+				{
+					notification.append(", added ").append(myImportsAdded).append(" import");
+					if(myImportsAdded > 1)
+					{
+						notification.append('s');
+					}
+				}
+				return notification.toString();
 			}
 		};
 	}
