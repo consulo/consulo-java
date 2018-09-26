@@ -15,20 +15,34 @@
  */
 package com.intellij.ide;
 
-import javax.annotation.Nonnull;
+import static com.intellij.application.options.JavaDocFormattingPanel.ALIGNMENT_GROUP;
+import static com.intellij.application.options.JavaDocFormattingPanel.BLANK_LINES_GROUP;
+import static com.intellij.application.options.JavaDocFormattingPanel.INVALID_TAGS_GROUP;
+import static com.intellij.application.options.JavaDocFormattingPanel.OTHER_GROUP;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import com.intellij.application.options.CodeStyleAbstractConfigurable;
+import com.intellij.application.options.CodeStyleAbstractPanel;
+import com.intellij.application.options.CodeStyleBean;
 import com.intellij.application.options.IndentOptionsEditor;
+import com.intellij.application.options.JavaCodeStyleMainPanel;
 import com.intellij.application.options.JavaIndentOptionsEditor;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
+import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
+import com.intellij.psi.codeStyle.DocCommentSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleBean;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import com.intellij.psi.util.PsiUtil;
@@ -39,6 +53,33 @@ import com.intellij.util.LocalTimeCounter;
  */
 public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider
 {
+	@Nonnull
+	@Override
+	public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings modelSettings)
+	{
+		return new CodeStyleAbstractConfigurable(settings, modelSettings, "Java")
+		{
+			@Override
+			protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings)
+			{
+				return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
+			}
+
+			@Override
+			public String getHelpTopic()
+			{
+				return "reference.settingsdialog.codestyle.java";
+			}
+		};
+	}
+
+	@Nullable
+	@Override
+	public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings)
+	{
+		return new JavaCodeStyleSettings(settings);
+	}
+
 	@Nonnull
 	@Override
 	public Language getLanguage()
@@ -91,31 +132,113 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 			consumer.showCustomOption(JavaCodeStyleSettings.class, "SPACE_BEFORE_OPENING_ANGLE_BRACKET_IN_TYPE_PARAMETER", ApplicationBundle.message("checkbox.spaces.before.opening.angle.bracket"),
 					groupName);
 			consumer.showCustomOption(JavaCodeStyleSettings.class, "SPACE_AROUND_TYPE_BOUNDS_IN_TYPE_PARAMETERS", "Around type bounds", groupName);
+
+			groupName = CodeStyleSettingsCustomizable.SPACES_OTHER;
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "SPACE_BEFORE_COLON_IN_FOREACH", ApplicationBundle.message(
+					"checkbox.spaces.before.colon.in.foreach"), groupName);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "SPACE_INSIDE_ONE_LINE_ENUM_BRACES", ApplicationBundle.message(
+					"checkbox.spaces.inside.one.line.enum"), groupName);
 		}
 		else if(settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS)
 		{
-			consumer.showStandardOptions("RIGHT_MARGIN", "WRAP_ON_TYPING", "KEEP_CONTROL_STATEMENT_IN_ONE_LINE", "LINE_COMMENT_AT_FIRST_COLUMN", "BLOCK_COMMENT_AT_FIRST_COLUMN", "KEEP_LINE_BREAKS",
-					"KEEP_FIRST_COLUMN_COMMENT", "CALL_PARAMETERS_WRAP", "PREFER_PARAMETERS_WRAP", "CALL_PARAMETERS_LPAREN_ON_NEXT_LINE", "CALL_PARAMETERS_RPAREN_ON_NEXT_LINE",
-					"METHOD_PARAMETERS_WRAP", "METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE", "METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE", "RESOURCE_LIST_WRAP", "RESOURCE_LIST_LPAREN_ON_NEXT_LINE",
-					"RESOURCE_LIST_RPAREN_ON_NEXT_LINE", "EXTENDS_LIST_WRAP", "THROWS_LIST_WRAP", "EXTENDS_KEYWORD_WRAP", "THROWS_KEYWORD_WRAP", "METHOD_CALL_CHAIN_WRAP",
-					"PARENTHESES_EXPRESSION_LPAREN_WRAP", "PARENTHESES_EXPRESSION_RPAREN_WRAP", "BINARY_OPERATION_WRAP", "BINARY_OPERATION_SIGN_ON_NEXT_LINE", "TERNARY_OPERATION_WRAP",
-					"TERNARY_OPERATION_SIGNS_ON_NEXT_LINE", "MODIFIER_LIST_WRAP", "KEEP_SIMPLE_BLOCKS_IN_ONE_LINE", "KEEP_SIMPLE_METHODS_IN_ONE_LINE", "KEEP_SIMPLE_LAMBDAS_IN_ONE_LINE",
-					"KEEP_SIMPLE_CLASSES_IN_ONE_LINE", "KEEP_MULTIPLE_EXPRESSIONS_IN_ONE_LINE", "FOR_STATEMENT_WRAP", "FOR_STATEMENT_LPAREN_ON_NEXT_LINE", "FOR_STATEMENT_RPAREN_ON_NEXT_LINE",
-					"ARRAY_INITIALIZER_WRAP", "ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE", "ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE", "ASSIGNMENT_WRAP", "PLACE_ASSIGNMENT_SIGN_ON_NEXT_LINE",
-					"LABELED_STATEMENT_WRAP", "ASSERT_STATEMENT_WRAP", "ASSERT_STATEMENT_COLON_ON_NEXT_LINE", "IF_BRACE_FORCE", "DOWHILE_BRACE_FORCE", "WHILE_BRACE_FORCE", "FOR_BRACE_FORCE",
-					"WRAP_LONG_LINES", "METHOD_ANNOTATION_WRAP", "CLASS_ANNOTATION_WRAP", "FIELD_ANNOTATION_WRAP", "PARAMETER_ANNOTATION_WRAP", "VARIABLE_ANNOTATION_WRAP",
-					"ALIGN_MULTILINE_CHAINED_METHODS", "ALIGN_MULTILINE_PARAMETERS", "ALIGN_MULTILINE_PARAMETERS_IN_CALLS", "ALIGN_MULTILINE_RESOURCES", "ALIGN_MULTILINE_FOR", "INDENT_WHEN_CASES",
-					"ALIGN_MULTILINE_BINARY_OPERATION", "ALIGN_MULTILINE_ASSIGNMENT", "ALIGN_MULTILINE_TERNARY_OPERATION", "ALIGN_MULTILINE_THROWS_LIST", "ALIGN_THROWS_KEYWORD",
-					"ALIGN_MULTILINE_EXTENDS_LIST", "ALIGN_MULTILINE_METHOD_BRACKETS", "ALIGN_MULTILINE_PARENTHESIZED_EXPRESSION", "ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION",
-					"ALIGN_GROUP_FIELD_DECLARATIONS", "BRACE_STYLE", "CLASS_BRACE_STYLE", "METHOD_BRACE_STYLE", "USE_FLYING_GEESE_BRACES", "FLYING_GEESE_BRACES_GAP",
-					"DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS", "ELSE_ON_NEW_LINE", "WHILE_ON_NEW_LINE", "CATCH_ON_NEW_LINE", "FINALLY_ON_NEW_LINE", "INDENT_CASE_FROM_SWITCH",
-					"SPECIAL_ELSE_IF_TREATMENT", "ENUM_CONSTANTS_WRAP", "ALIGN_CONSECUTIVE_VARIABLE_DECLARATIONS", "ALIGN_SUBSEQUENT_SIMPLE_METHODS", "WRAP_FIRST_METHOD_IN_CALL_CHAIN");
+			consumer.showStandardOptions("RIGHT_MARGIN",
+					"WRAP_ON_TYPING",
+					"KEEP_CONTROL_STATEMENT_IN_ONE_LINE",
+					"KEEP_LINE_BREAKS",
+					"KEEP_FIRST_COLUMN_COMMENT",
+					"CALL_PARAMETERS_WRAP",
+					"PREFER_PARAMETERS_WRAP",
+					"CALL_PARAMETERS_LPAREN_ON_NEXT_LINE",
+					"CALL_PARAMETERS_RPAREN_ON_NEXT_LINE",
+					"METHOD_PARAMETERS_WRAP",
+					"METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE",
+					"METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE",
+					"RESOURCE_LIST_WRAP",
+					"RESOURCE_LIST_LPAREN_ON_NEXT_LINE",
+					"RESOURCE_LIST_RPAREN_ON_NEXT_LINE",
+					"EXTENDS_LIST_WRAP",
+					"THROWS_LIST_WRAP",
+					"EXTENDS_KEYWORD_WRAP",
+					"THROWS_KEYWORD_WRAP",
+					"METHOD_CALL_CHAIN_WRAP",
+					"PARENTHESES_EXPRESSION_LPAREN_WRAP",
+					"PARENTHESES_EXPRESSION_RPAREN_WRAP",
+					"BINARY_OPERATION_WRAP",
+					"BINARY_OPERATION_SIGN_ON_NEXT_LINE",
+					"TERNARY_OPERATION_WRAP",
+					"TERNARY_OPERATION_SIGNS_ON_NEXT_LINE",
+					"MODIFIER_LIST_WRAP",
+					"KEEP_SIMPLE_BLOCKS_IN_ONE_LINE",
+					"KEEP_SIMPLE_METHODS_IN_ONE_LINE",
+					"KEEP_SIMPLE_LAMBDAS_IN_ONE_LINE",
+					"KEEP_SIMPLE_CLASSES_IN_ONE_LINE",
+					"KEEP_MULTIPLE_EXPRESSIONS_IN_ONE_LINE",
+					"FOR_STATEMENT_WRAP",
+					"FOR_STATEMENT_LPAREN_ON_NEXT_LINE",
+					"FOR_STATEMENT_RPAREN_ON_NEXT_LINE",
+					"ARRAY_INITIALIZER_WRAP",
+					"ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE",
+					"ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE",
+					"ASSIGNMENT_WRAP",
+					"PLACE_ASSIGNMENT_SIGN_ON_NEXT_LINE",
+					"LABELED_STATEMENT_WRAP",
+					"ASSERT_STATEMENT_WRAP",
+					"ASSERT_STATEMENT_COLON_ON_NEXT_LINE",
+					"IF_BRACE_FORCE",
+					"DOWHILE_BRACE_FORCE",
+					"WHILE_BRACE_FORCE",
+					"FOR_BRACE_FORCE",
+					"WRAP_LONG_LINES",
+					"METHOD_ANNOTATION_WRAP",
+					"CLASS_ANNOTATION_WRAP",
+					"FIELD_ANNOTATION_WRAP",
+					"PARAMETER_ANNOTATION_WRAP",
+					"VARIABLE_ANNOTATION_WRAP",
+					"ALIGN_MULTILINE_CHAINED_METHODS",
+					"ALIGN_MULTILINE_PARAMETERS",
+					"ALIGN_MULTILINE_PARAMETERS_IN_CALLS",
+					"ALIGN_MULTILINE_RESOURCES",
+					"ALIGN_MULTILINE_FOR",
+					"INDENT_WHEN_CASES",
+					"ALIGN_MULTILINE_BINARY_OPERATION",
+					"ALIGN_MULTILINE_ASSIGNMENT",
+					"ALIGN_MULTILINE_TERNARY_OPERATION",
+					"ALIGN_MULTILINE_THROWS_LIST",
+					"ALIGN_THROWS_KEYWORD",
+					"ALIGN_MULTILINE_EXTENDS_LIST",
+					"ALIGN_MULTILINE_METHOD_BRACKETS",
+					"ALIGN_MULTILINE_PARENTHESIZED_EXPRESSION",
+					"ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION",
+					"ALIGN_GROUP_FIELD_DECLARATIONS",
+					"BRACE_STYLE",
+					"CLASS_BRACE_STYLE",
+					"METHOD_BRACE_STYLE",
+					"LAMBDA_BRACE_STYLE",
+					"USE_FLYING_GEESE_BRACES",
+					"FLYING_GEESE_BRACES_GAP",
+					"DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS",
+					"ELSE_ON_NEW_LINE",
+					"WHILE_ON_NEW_LINE",
+					"CATCH_ON_NEW_LINE",
+					"FINALLY_ON_NEW_LINE",
+					"INDENT_CASE_FROM_SWITCH",
+					"CASE_STATEMENT_ON_NEW_LINE",
+					"SPECIAL_ELSE_IF_TREATMENT",
+					"ENUM_CONSTANTS_WRAP",
+					"ALIGN_CONSECUTIVE_VARIABLE_DECLARATIONS",
+					"ALIGN_SUBSEQUENT_SIMPLE_METHODS",
+					"WRAP_FIRST_METHOD_IN_CALL_CHAIN");
 
-			consumer.showCustomOption(JavaCodeStyleSettings.class, "ANNOTATION_PARAMETER_WRAP", ApplicationBundle.message("wrapping.annotation.parameters"), null, CodeStyleSettingsCustomizable
-					.WRAP_OPTIONS, CodeStyleSettingsCustomizable.WRAP_VALUES);
+			consumer.showCustomOption(JavaCodeStyleSettings.class,
+					"ANNOTATION_PARAMETER_WRAP",
+					ApplicationBundle.message("wrapping.annotation.parameters"),
+					null,
+					CodeStyleSettingsCustomizable.WRAP_OPTIONS, CodeStyleSettingsCustomizable.WRAP_VALUES);
 
-			consumer.showCustomOption(JavaCodeStyleSettings.class, "ALIGN_MULTILINE_ANNOTATION_PARAMETERS", ApplicationBundle.message("wrapping.align.when.multiline"), ApplicationBundle.message
-					("wrapping.annotation.parameters"));
+			consumer.showCustomOption(JavaCodeStyleSettings.class,
+					"ALIGN_MULTILINE_ANNOTATION_PARAMETERS",
+					ApplicationBundle.message("wrapping.align.when.multiline"),
+					ApplicationBundle.message("wrapping.annotation.parameters"));
 
 			String groupName = ApplicationBundle.message("wrapping.fields.annotation");
 			consumer.showCustomOption(JavaCodeStyleSettings.class, "DO_NOT_WRAP_AFTER_SINGLE_ANNOTATION", "Do not wrap after single annotation", groupName);
@@ -126,9 +249,70 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 			consumer.showCustomOption(JavaCodeStyleSettings.class, "BLANK_LINES_AROUND_INITIALIZER", ApplicationBundle.message("editbox.blanklines.around.initializer"), CodeStyleSettingsCustomizable
 					.BLANK_LINES);
 		}
-	/*else if (settingsType == SettingsType.COMMENTER_SETTINGS) {
-      consumer.showStandardOptions("LINE_COMMENT_ADD_SPACE");
-    }  */
+		else if(settingsType == SettingsType.COMMENTER_SETTINGS)
+		{
+			consumer.showAllStandardOptions();
+		}
+		else if(settingsType == SettingsType.LANGUAGE_SPECIFIC)
+		{
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_ALIGN_PARAM_COMMENTS",
+					ApplicationBundle.message("checkbox.align.parameter.descriptions"),
+					ALIGNMENT_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_ALIGN_EXCEPTION_COMMENTS",
+					ApplicationBundle.message("checkbox.align.thrown.exception.descriptions"),
+					ALIGNMENT_GROUP);
+
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_ADD_BLANK_AFTER_DESCRIPTION",
+					ApplicationBundle.message("checkbox.after.description"),
+					BLANK_LINES_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_ADD_BLANK_AFTER_PARM_COMMENTS",
+					ApplicationBundle.message("checkbox.after.parameter.descriptions"),
+					BLANK_LINES_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_ADD_BLANK_AFTER_RETURN",
+					ApplicationBundle.message("checkbox.after.return.tag"),
+					BLANK_LINES_GROUP);
+
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_KEEP_INVALID_TAGS",
+					ApplicationBundle.message("checkbox.keep.invalid.tags"),
+					INVALID_TAGS_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_KEEP_EMPTY_PARAMETER",
+					ApplicationBundle.message("checkbox.keep.empty.param.tags"),
+					INVALID_TAGS_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_KEEP_EMPTY_RETURN",
+					ApplicationBundle.message("checkbox.keep.empty.return.tags"),
+					INVALID_TAGS_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_KEEP_EMPTY_EXCEPTION",
+					ApplicationBundle.message("checkbox.keep.empty.throws.tags"),
+					INVALID_TAGS_GROUP);
+
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_LEADING_ASTERISKS_ARE_ENABLED",
+					ApplicationBundle.message("checkbox.enable.leading.asterisks"),
+					OTHER_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_USE_THROWS_NOT_EXCEPTION",
+					ApplicationBundle.message("checkbox.use.throws.rather.than.exception"),
+					OTHER_GROUP);
+			consumer.showStandardOptions("WRAP_COMMENTS");
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_P_AT_EMPTY_LINES",
+					ApplicationBundle.message("checkbox.generate.p.on.empty.lines"),
+					OTHER_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_KEEP_EMPTY_LINES",
+					ApplicationBundle.message("checkbox.keep.empty.lines"),
+					OTHER_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_DO_NOT_WRAP_ONE_LINE_COMMENTS",
+					ApplicationBundle.message("checkbox.do.not.wrap.one.line.comments"),
+					OTHER_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_PRESERVE_LINE_FEEDS",
+					ApplicationBundle.message("checkbox.preserve.line.feeds"),
+					OTHER_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_PARAM_DESCRIPTION_ON_NEW_LINE",
+					ApplicationBundle.message("checkbox.param.description.on.new.line"),
+					OTHER_GROUP);
+			consumer.showCustomOption(JavaCodeStyleSettings.class, "JD_INDENT_ON_CONTINUATION",
+					ApplicationBundle.message("checkbox.param.indent.on.continuation"),
+					OTHER_GROUP);
+
+
+		}
 		else
 		{
 			consumer.showAllStandardOptions();
@@ -138,7 +322,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 	@Override
 	public PsiFile createFileFromText(final Project project, final String text)
 	{
-		final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText("sample.java", JavaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), true, false);
+		final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText("sample.java", JavaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), false, false);
 		file.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.HIGHEST);
 		return file;
 	}
@@ -157,43 +341,269 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 		return new JavaIndentOptionsEditor();
 	}
 
-	private static final String GENERAL_CODE_SAMPLE = "public class Foo {\n" + "  public int[] X = new int[]{1, 3, 5, 7, 9, 11};\n" + "\n" + "  public void foo(boolean a, int x, int y, int z) {\n" +
-			"    label1:\n" + "    do {\n" + "      try {\n" + "        if (x > 0) {\n" + "          int someVariable = a ? x : y;\n" + "          int anotherVariable = a ? x : y;\n" + "        }\n"
-			+ "        else if (x < 0) {\n" + "          int someVariable = (y + z);\n" + "          someVariable = x = x + y;\n" + "        }\n" + "        else {\n" + "          label2:\n" + "    " +
-			"      for (int i = 0; i < 5; i++) doSomething(i);\n" + "        }\n" + "        switch (a) {\n" + "          case 0:\n" + "            doCase0();\n" + "            break;\n" + "        " +
-			"  default:\n" + "            doDefault();\n" + "        }\n" + "      }\n" + "      catch (Exception e) {\n" + "        processException(e.getMessage(), x + y, z, a);\n" + "      }\n" +
-			"      finally {\n" + "        processFinally();\n" + "      }\n" + "    }\n" + "    while (true);\n" + "\n" + "    if (2 < 3) return;\n" + "    if (3 < 4) return;\n" + "    do {\n" + " " +
-			"     x++;\n" + "    }\n" + "    while (x < 10000);\n" + "    while (x < 50000) x++;\n" + "    for (int i = 0; i < 5; i++) System.out.println(i);\n" + "  }\n" + "\n" + "  private class " +
-			"InnerClass implements I1, I2 {\n" + "    public void bar() throws E1, E2 {\n" + "    }\n" + "  }\n" + "}";
 
-	private static final String BLANK_LINE_SAMPLE = "/*\n" + " * This is a sample file.\n" + " */\n" + "package com.intellij.samples;\n" + "\n" + "import com.intellij.idea.Main;\n" + "\n" + "import " +
-			"javax.swing.*;\n" + "import java.util.Vector;\n" + "\n" + "public class Foo {\n" + "  private int field1;\n" + "  private int field2;\n" + "\n" + "  {\n" + "      field1 = 2;\n" + "  " +
-			"}\n" + "\n" + "  public void foo1() {\n" + "      new Runnable() {\n" + "          public void run() {\n" + "          }\n" + "      };\n" + "  }\n" + "\n" + "  public class InnerClass " +
-			"{\n" + "  }\n" + "}\n" + "class AnotherClass {\n" + "}\n" + "interface TestInterface {\n" + "    int MAX = 10;\n" + "    int MIN = 1;\n" + "    void method1();\n" + "    void method2();" +
-			"\n" + "}";
+	@Override
+	@Nonnull
+	public DocCommentSettings getDocCommentSettings(@Nonnull CodeStyleSettings rootSettings)
+	{
+		return new DocCommentSettings()
+		{
+			private final JavaCodeStyleSettings mySettings =
+					rootSettings.getCustomSettings(JavaCodeStyleSettings.class);
 
-	private static final String SPACING_SAMPLE = "@Annotation(param1 = \"value1\", param2 = \"value2\")\n" + "@SuppressWarnings({\"ALL\"})\n" + "public class Foo<T extends Bar & Abba, U> {\n" + "  " +
-			"int[] X = new int[]{1, 3, 5, 6, 7, 87, 1213, 2};\n" + "  int[] empty = new int[]{};" + "\n" + "  public void foo(int x, int y) {\n" + "    Runnable r = () -> {};\n" + "    Runnable r1 =" +
-			" this :: bar;\n" + "    for (int i = 0; i < x; i++) {\n" + "      y += (y ^ 0x123) << 2;\n" + "    }\n" + "    do {\n" + "      try(MyResource r1 = getResource(); MyResource r2 = null) " +
-			"{\n" + "        if (0 < x && x < 10) {\n" + "          while (x != y) {\n" + "            x = f(x * 3 + 5);\n" + "          }\n" + "        }\n" + "        else {\n" + "          " +
-			"synchronized (this) {\n" + "            switch (e.getCode()) {\n" + "              //...\n" + "            }\n" + "          }\n" + "        }\n" + "      }\n" + "      catch " +
-			"(MyException e) {\n" + "      }\n" + "      finally {\n" + "        int[] arr = (int[])g(y);\n" + "        x = y >= 0 ? arr[y] : -1;\n" + "        Map<String, String> sMap = new " +
-			"HashMap<String, String>();\n" + "        Bar.<String, Integer>mess(null);\n" + "      }\n" + "    }\n" + "    while (true);\n" + "  }\n" + "  void bar(){{return;}}\n" + "}\n" + "class " +
-			"Bar {\n" + "    static <U, T> U mess(T t) {\n" + "        return null;\n" + "    }\n" + "}\n" + "interface Abba {}";
+			@Override
+			public boolean isDocFormattingEnabled()
+			{
+				return mySettings.ENABLE_JAVADOC_FORMATTING;
+			}
 
-	private static final String WRAPPING_CODE_SAMPLE = "/*\n" + " * This is a sample file.\n" + " */\n" + "\n" + "public class ThisIsASampleClass extends C1 implements I1, I2, I3, I4, I5 {\n" + "  " +
-			"private int f1 = 1;\n" + "  private String field2 = \"\";\n" + "  public void foo1(int i1, int i2, int i3, int i4, int i5, int i6, int i7) {}\n" + "  public static void longerMethod() " +
-			"throws Exception1, Exception2, Exception3 {\n" + "// todo something\n" + "    int\n" + "i = 0;\n" + "    int[] a = new int[] {1, 2, 0x0052, 0x0053, 0x0054};\n" + "    int[] empty = new " +
-			"int[] {};\n" + "    int var1 = 1; int var2 = 2;\n" + "    foo1(0x0051, 0x0052, 0x0053, 0x0054, 0x0055, 0x0056, 0x0057);\n" + "    int x = (3 + 4 + 5 + 6) * (7 + 8 + 9 + 10) * (11 + 12 +" +
-			" 13 + 14 + 0xFFFFFFFF);\n" + "    String s1, s2, s3;\n" + "    s1 = s2 = s3 = \"012345678901456\";\n" + "    assert i + j + k + l + n+ m <= 2 : \"assert description\";" + "    int y = 2" +
-			" > 3 ? 7 + 8 + 9 : 11 + 12 + 13;\n" + "    super.getFoo().foo().getBar().bar();\n" + "\n" + "    label: " + "    if (2 < 3) return; else if (2 > 3) return; else return;\n" + "    for " +
-			"(int i = 0; i < 0xFFFFFF; i += 2) System.out.println(i);\n" + "    while (x < 50000) x++;\n" + "    do x++; while (x < 10000);\n" + "    switch (a) {\n" + "    case 0:\n" + "      " +
-			"doCase0();\n" + "      break;\n" + "    default:\n" + "      doDefault();\n" + "    }\n" + "    try (MyResource r1 = getResource(); MyResource r2 = null) {\n" + "      doSomething();\n"
-			+ "    } catch (Exception e) {\n" + "      processException(e);\n" + "    } finally {\n" + "      processFinally();\n" + "    }\n" + "    do {\n" + "        x--;\n" + "    } while (x > " +
-			"10); \n" + "    try (MyResource r1 = getResource();\n" + "      MyResource r2 = null) {\n" + "      doSomething();\n" + "    }\n" + "    Runnable r = () -> {};\n" + "  }\n" + "    " +
-			"public static void test() \n" + "        throws Exception { \n" + "        foo.foo().bar(\"arg1\", \n" + "                      \"arg2\"); \n" + "        new Object() {};" + "    } \n"
-			+ "    class TestInnerClass {}\n" + "    interface TestInnerInterface {}\n" + "}\n" + "\n" + "enum Breed {\n" + "    Dalmatian(), Labrador(), Dachshund()\n" + "}\n" + "\n" +
-			"@Annotation1 @Annotation2 @Annotation3(param1=\"value1\", param2=\"value2\") @Annotation4 class Foo {\n" + "    @Annotation1 @Annotation3(param1=\"value1\", param2=\"value2\") public " +
-			"static void foo(){\n" + "    }\n" + "    @Annotation1 @Annotation3(param1=\"value1\", param2=\"value2\") public static int myFoo;\n" + "    public void method(@Annotation1 @Annotation3" +
-			"(param1=\"value1\", param2=\"value2\") final int param){\n" + "        @Annotation1 @Annotation3(param1=\"value1\", param2=\"value2\") final int localVariable;" + "    }\n" + "}";
+			@Override
+			public void setDocFormattingEnabled(boolean formattingEnabled)
+			{
+				mySettings.ENABLE_JAVADOC_FORMATTING = formattingEnabled;
+			}
+
+			@Override
+			public boolean isLeadingAsteriskEnabled()
+			{
+				return mySettings.JD_LEADING_ASTERISKS_ARE_ENABLED;
+			}
+
+			@Override
+			public boolean isRemoveEmptyTags()
+			{
+				return mySettings.JD_KEEP_EMPTY_EXCEPTION || mySettings.JD_KEEP_EMPTY_PARAMETER || mySettings.JD_KEEP_EMPTY_RETURN;
+			}
+
+			@Override
+			public void setRemoveEmptyTags(boolean removeEmptyTags)
+			{
+				mySettings.JD_KEEP_EMPTY_RETURN = !removeEmptyTags;
+				mySettings.JD_KEEP_EMPTY_PARAMETER = !removeEmptyTags;
+				mySettings.JD_KEEP_EMPTY_EXCEPTION = !removeEmptyTags;
+			}
+		};
+
+	}
+
+	@Nullable
+	@Override
+	public CodeStyleBean createBean()
+	{
+		return new JavaCodeStyleBean();
+	}
+
+	private static final String GENERAL_CODE_SAMPLE =
+			"public class Foo {\n" +
+					"  public int[] X = new int[]{1, 3, 5, 7, 9, 11};\n" +
+					"\n" +
+					"  public void foo(boolean a, int x, int y, int z) {\n" +
+					"    label1:\n" +
+					"    do {\n" +
+					"      try {\n" +
+					"        if (x > 0) {\n" +
+					"          int someVariable = a ? x : y;\n" +
+					"          int anotherVariable = a ? x : y;\n" +
+					"        }\n" +
+					"        else if (x < 0) {\n" +
+					"          int someVariable = (y + z);\n" +
+					"          someVariable = x = x + y;\n" +
+					"        }\n" +
+					"        else {\n" +
+					"          label2:\n" +
+					"          for (int i = 0; i < 5; i++) doSomething(i);\n" +
+					"        }\n" +
+					"        switch (a) {\n" +
+					"          case 0:\n" +
+					"            doCase0();\n" +
+					"            break;\n" +
+					"          default:\n" +
+					"            doDefault();\n" +
+					"        }\n" +
+					"      }\n" +
+					"      catch (Exception e) {\n" +
+					"        processException(e.getMessage(), x + y, z, a);\n" +
+					"      }\n" +
+					"      finally {\n" +
+					"        processFinally();\n" +
+					"      }\n" +
+					"    }\n" +
+					"    while (true);\n" +
+					"\n" +
+					"    if (2 < 3) return;\n" +
+					"    if (3 < 4) return;\n" +
+					"    do {\n" +
+					"      x++;\n" +
+					"    }\n" +
+					"    while (x < 10000);\n" +
+					"    while (x < 50000) x++;\n" +
+					"    for (int i = 0; i < 5; i++) System.out.println(i);\n" +
+					"  }\n" +
+					"\n" +
+					"  private class InnerClass implements I1, I2 {\n" +
+					"    public void bar() throws E1, E2 {\n" +
+					"    }\n" +
+					"  }\n" +
+					"}";
+
+	private static final String BLANK_LINE_SAMPLE =
+			"/*\n" +
+					" * This is a sample file.\n" +
+					" */\n" +
+					"package com.intellij.samples;\n" +
+					"\n" +
+					"import com.intellij.idea.Main;\n" +
+					"\n" +
+					"import javax.swing.*;\n" +
+					"import java.util.Vector;\n" +
+					"\n" +
+					"public class Foo {\n" +
+					"  private int field1;\n" +
+					"  private int field2;\n" +
+					"\n" +
+					"  {\n" +
+					"      field1 = 2;\n" +
+					"  }\n" +
+					"\n" +
+					"  public void foo1() {\n" +
+					"      new Runnable() {\n" +
+					"          public void run() {\n" +
+					"          }\n" +
+					"      };\n" +
+					"  }\n" +
+					"\n" +
+					"  public class InnerClass {\n" +
+					"  }\n" +
+					"}\n" +
+					"class AnotherClass {\n" +
+					"}\n" +
+					"interface TestInterface {\n" +
+					"    int MAX = 10;\n" +
+					"    int MIN = 1;\n" +
+					"    void method1();\n" +
+					"    void method2();\n" +
+					"}";
+
+	private static final String SPACING_SAMPLE =
+			"@Annotation(param1 = \"value1\", param2 = \"value2\")\n" +
+					"@SuppressWarnings({\"ALL\"})\n" +
+					"public class Foo<T extends Bar & Abba, U> {\n" +
+					"  int[] X = new int[]{1, 3, 5, 6, 7, 87, 1213, 2};\n" +
+					"  int[] empty = new int[]{};" +
+					"\n" +
+					"  public void foo(int x, int y) {\n" +
+					"    Runnable r = () -> {};\n" +
+					"    Runnable r1 = this :: bar;\n" +
+					"    for (int i = 0; i < x; i++) {\n" +
+					"      y += (y ^ 0x123) << 2;\n" +
+					"    }\n" +
+					"    do {\n" +
+					"      try(MyResource r1 = getResource(); MyResource r2 = null) {\n" +
+					"        if (0 < x && x < 10) {\n" +
+					"          while (x != y) {\n" +
+					"            x = f(x * 3 + 5);\n" +
+					"          }\n" +
+					"        }\n" +
+					"        else {\n" +
+					"          synchronized (this) {\n" +
+					"            switch (e.getCode()) {\n" +
+					"              //...\n" +
+					"            }\n" +
+					"          }\n" +
+					"        }\n" +
+					"      }\n" +
+					"      catch (MyException e) {\n" +
+					"      }\n" +
+					"      finally {\n" +
+					"        int[] arr = (int[])g(y);\n" +
+					"        x = y >= 0 ? arr[y] : -1;\n" +
+					"        Map<String, String> sMap = new HashMap<String, String>();\n" +
+					"        Bar.<String, Integer>mess(null);\n" +
+					"      }\n" +
+					"    }\n" +
+					"    while (true);\n" +
+					"  }\n" +
+					"  void bar(){{return;}}\n" +
+					"}\n" +
+					"class Bar {\n" +
+					"    static <U, T> U mess(T t) {\n" +
+					"        return null;\n" +
+					"    }\n" +
+					"}\n" +
+					"interface Abba {}";
+
+	private static final String WRAPPING_CODE_SAMPLE =
+			"/*\n" +
+					" * This is a sample file.\n" +
+					" */\n" +
+					"\n" +
+					"public class ThisIsASampleClass extends C1 implements I1, I2, I3, I4, I5 {\n" +
+					"  private int f1 = 1;\n" +
+					"  private String field2 = \"\";\n" +
+					"  public void foo1(int i1, int i2, int i3, int i4, int i5, int i6, int i7) {}\n" +
+					"  public static void longerMethod() throws Exception1, Exception2, Exception3 {\n" +
+					"// todo something\n" +
+					"    int\n" +
+					"i = 0;\n" +
+					"    int[] a = new int[] {1, 2, 0x0052, 0x0053, 0x0054};\n" +
+					"    int[] empty = new int[] {};\n" +
+					"    int var1 = 1; int var2 = 2;\n" +
+					"    foo1(0x0051, 0x0052, 0x0053, 0x0054, 0x0055, 0x0056, 0x0057);\n" +
+					"    int x = (3 + 4 + 5 + 6) * (7 + 8 + 9 + 10) * (11 + 12 + 13 + 14 + 0xFFFFFFFF);\n" +
+					"    String s1, s2, s3;\n" +
+					"    s1 = s2 = s3 = \"012345678901456\";\n" +
+					"    assert i + j + k + l + n+ m <= 2 : \"assert description\";" +
+					"    int y = 2 > 3 ? 7 + 8 + 9 : 11 + 12 + 13;\n" +
+					"    super.getFoo().foo().getBar().bar();\n" +
+					"\n" +
+					"    label: " +
+					"    if (2 < 3) {return;} else if (2 > 3) return; else return;\n" +
+					"    for (int i = 0; i < 0xFFFFFF; i += 2) System.out.println(i);\n" +
+					"    while (x < 50000) x++;\n" +
+					"    do x++; while (x < 10000);\n" +
+					"    switch (a) {\n" +
+					"    case 0:\n" +
+					"      doCase0();\n" +
+					"      break;\n" +
+					"    default:\n" +
+					"      doDefault();\n" +
+					"    }\n" +
+					"    try (MyResource r1 = getResource(); MyResource r2 = null) {\n" +
+					"      doSomething();\n" +
+					"    } catch (Exception e) {\n" +
+					"      processException(e);\n" +
+					"    } finally {\n" +
+					"      processFinally();\n" +
+					"    }\n" +
+					"    do {\n" +
+					"        x--;\n" +
+					"    } while (x > 10); \n" +
+					"    try (MyResource r1 = getResource();\n" +
+					"      MyResource r2 = null) {\n" +
+					"      doSomething();\n" +
+					"    }\n" +
+					"    Runnable r = () -> {};\n" +
+					"  }\n" +
+					"    public static void test() \n" +
+					"        throws Exception { \n" +
+					"        foo.foo().bar(\"arg1\", \n" +
+					"                      \"arg2\"); \n" +
+					"        new Object() {};" +
+					"    } \n" +
+					"    class TestInnerClass {}\n" +
+					"    interface TestInnerInterface {}\n" +
+					"}\n" +
+					"\n" +
+					"enum Breed {\n" +
+					"    Dalmatian(), Labrador(), Dachshund()\n" +
+					"}\n" +
+					"\n" +
+					"@Annotation1 @Annotation2 @Annotation3(param1=\"value1\", param2=\"value2\") @Annotation4 class Foo {\n" +
+					"    @Annotation1 @Annotation3(param1=\"value1\", param2=\"value2\") public static void foo(){\n" +
+					"    }\n" +
+					"    @Annotation1 @Annotation3(param1=\"value1\", param2=\"value2\") public static int myFoo;\n" +
+					"    public void method(@Annotation1 @Annotation3(param1=\"value1\", param2=\"value2\") final int param){\n" +
+					"        @Annotation1 @Annotation3(param1=\"value1\", param2=\"value2\") final int localVariable;" +
+					"    }\n" +
+					"}";
 }

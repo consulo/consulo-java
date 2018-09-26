@@ -23,23 +23,27 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
 /**
  * @author Rustam Vishnyakov
  */
-public class JavaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel {
+public class JavaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel
+{
+	public JavaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings)
+	{
+		super(JavaLanguage.INSTANCE, currentSettings, settings);
+	}
 
-  protected JavaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
-    super(JavaLanguage.INSTANCE, currentSettings, settings);
-  }
-
-  @Override
-  protected void initTabs(CodeStyleSettings settings) {
-    super.initTabs(settings);
-    addTab(new JavaDocFormattingPanel(settings));
-    addTab(new CodeStyleImportsPanelWrapper(settings));
-    addTab(new JavaArrangementPanel(settings));
-    for (CodeStyleSettingsProvider provider : Extensions.getExtensions(CodeStyleSettingsProvider.EXTENSION_POINT_NAME)) {
-      if (provider.getLanguage() == JavaLanguage.INSTANCE && !provider.hasSettingsPage()) {
-        createTab(provider);
-      }
-    }
-  }
+	@Override
+	protected void initTabs(CodeStyleSettings settings)
+	{
+		super.initTabs(settings);
+		addTab(new JavaDocFormattingPanel(settings));
+		addTab(new CodeStyleImportsPanelWrapper(settings));
+		addTab(new JavaArrangementPanel(settings));
+		for(CodeStyleSettingsProvider provider : Extensions.getExtensions(CodeStyleSettingsProvider.EXTENSION_POINT_NAME))
+		{
+			if(provider.getLanguage() == JavaLanguage.INSTANCE && !provider.hasSettingsPage())
+			{
+				createTab(provider);
+			}
+		}
+	}
 
 }

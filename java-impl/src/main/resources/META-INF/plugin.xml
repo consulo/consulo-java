@@ -886,10 +886,6 @@
 		<applicationService serviceInterface="com.intellij.codeInsight.intention.QuickFixFactory"
 							serviceImplementation="com.intellij.codeInsight.intention.impl.config.QuickFixFactoryImpl"/>
 
-		<!--<applicationService serviceInterface="com.intellij.psi.impl.source.codeStyle.IndentHelper"
-							serviceImplementation="com.intellij.psi.impl.source.codeStyle.JavaIndentHelper"
-							overrides="true"/>     -->
-
 		<applicationService serviceInterface="com.intellij.codeInsight.TestFrameworks"
 							serviceImplementation="com.intellij.codeInsight.TestFrameworksImpl"/>
 
@@ -2057,6 +2053,8 @@
 		<projectService serviceImplementation="com.intellij.execution.testDiscovery.TestDiscoveryIndex" lazy="false" />
 		<projectService serviceInterface="com.intellij.debugger.DebuggerManager" serviceImplementation="com.intellij.debugger.impl.DebuggerManagerImpl" lazy="false" />
 		<projectService serviceInterface="com.intellij.pom.java.PomJavaAspect" serviceImplementation="com.intellij.pom.java.impl.PomJavaAspectImpl" lazy="false" />
+
+		<codeStyleIndentHelperExtension implementation="com.intellij.psi.impl.source.codeStyle.JavaIndentHelper" />
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

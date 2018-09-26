@@ -18,11 +18,14 @@ package com.intellij.codeInsight.editorActions;
 import static com.intellij.formatting.Indent.Type.CONTINUATION;
 import static com.intellij.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
 
-import javax.annotation.Nonnull;
+import java.util.HashMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.formatting.Indent;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaDocTokenType;
 import com.intellij.psi.JavaTokenType;
@@ -30,7 +33,6 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.source.codeStyle.SemanticEditorPosition;
 import com.intellij.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.util.containers.HashMap;
 
 /**
  * @author Rustam Vishnyakov
@@ -53,6 +55,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 		SYNTAX_MAP.put(JavaTokenType.CASE_KEYWORD, SwitchCase);
 		SYNTAX_MAP.put(JavaTokenType.DEFAULT_KEYWORD, SwitchDefault);
 		SYNTAX_MAP.put(JavaTokenType.IF_KEYWORD, IfKeyword);
+		SYNTAX_MAP.put(JavaTokenType.WHILE_KEYWORD, IfKeyword);
 		SYNTAX_MAP.put(JavaTokenType.ELSE_KEYWORD, ElseKeyword);
 		SYNTAX_MAP.put(JavaTokenType.FOR_KEYWORD, ForKeyword);
 		SYNTAX_MAP.put(JavaTokenType.DO_KEYWORD, DoKeyword);
@@ -64,7 +67,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 		SYNTAX_MAP.put(JavaTokenType.TRY_KEYWORD, TryKeyword);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected SemanticEditorPosition.SyntaxElement mapType(@Nonnull IElementType tokenType)
 	{
@@ -77,22 +80,47 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 		return language.isKindOf(JavaLanguage.INSTANCE);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
-	protected Indent.Type getIndentTypeInBlock(@Nonnull Project project, @javax.annotation.Nullable Language language, @Nonnull SemanticEditorPosition blockStartPosition)
+	protected Indent getIndentInBlock(@Nonnull Project project,
+									  @Nullable Language language,
+									  @Nonnull SemanticEditorPosition blockStartPosition)
 	{
 		SemanticEditorPosition beforeStart = blockStartPosition.before().beforeOptional(Whitespace);
-		if(beforeStart.isAt(JavaTokenType.EQ) || beforeStart.isAt(JavaTokenType.RBRACKET) || beforeStart.isAt(JavaTokenType.LPARENTH))
+		if(beforeStart.isAt(JavaTokenType.EQ) ||
+				beforeStart.isAt(JavaTokenType.RBRACKET) ||
+				beforeStart.isAt(JavaTokenType.LPARENTH)
+				)
 		{
 			// For arrays like int x = {<caret>0, 1, 2}
-			return CONTINUATION;
+			return getDefaultIndentFromType(CONTINUATION);
 		}
-		return super.getIndentTypeInBlock(project, language, blockStartPosition);
+		return super.getIndentInBlock(project, language, blockStartPosition);
 	}
 
 	@Override
 	protected boolean isInsideForLikeConstruction(SemanticEditorPosition position)
 	{
 		return position.isAfterOnSameLine(ForKeyword, TryKeyword);
+	}
+
+	@Override
+	protected boolean isInArray(@Nonnull Editor editor, int offset)
+	{
+		SemanticEditorPosition position = getPosition(editor, offset);
+		position.moveBefore();
+		if(position.isAt(JavaTokenType.LBRACE))
+		{
+			if(position.before().beforeOptional(Whitespace).isAt(JavaTokenType.RBRACKET))
+				return true;
+		}
+		return super.isInArray(editor, offset);
+	}
+
+	@Override
+	protected boolean isIndentProvider(@Nonnull SemanticEditorPosition position, boolean ignoreLabels)
+	{
+		return !(position.afterOptionalMix(Whitespace, BlockComment).after().isAt(Colon)
+				&& position.isAt(JavaTokenType.IDENTIFIER));
 	}
 }
