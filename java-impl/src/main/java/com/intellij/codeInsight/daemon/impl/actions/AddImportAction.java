@@ -1,6 +1,18 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInsight.daemon.impl.actions;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.swing.Icon;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+
+import javax.annotation.Nullable;
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
@@ -32,14 +44,6 @@ import com.intellij.util.ObjectUtils;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddImportAction implements QuestionAction
 {
@@ -50,10 +54,10 @@ public class AddImportAction implements QuestionAction
 	private final PsiClass[] myTargetClasses;
 	private final Editor myEditor;
 
-	public AddImportAction(@NotNull Project project,
-						   @NotNull PsiReference ref,
-						   @NotNull Editor editor,
-						   @NotNull PsiClass... targetClasses)
+	public AddImportAction(@Nonnull Project project,
+						   @Nonnull PsiReference ref,
+						   @Nonnull Editor editor,
+						   @Nonnull PsiClass... targetClasses)
 	{
 		myProject = project;
 		myReference = ref;
@@ -134,7 +138,7 @@ public class AddImportAction implements QuestionAction
 						return true;
 					}
 
-					@NotNull
+					@Nonnull
 					@Override
 					public String getTextFor(PsiClass value)
 					{
@@ -184,7 +188,7 @@ public class AddImportAction implements QuestionAction
 
 		return new BaseListPopupStep<String>(null, toExclude)
 		{
-			@NotNull
+			@Nonnull
 			@Override
 			public String getTextFor(String value)
 			{
@@ -217,7 +221,7 @@ public class AddImportAction implements QuestionAction
 		});
 	}
 
-	public static List<String> getAllExcludableStrings(@NotNull String qname)
+	public static List<String> getAllExcludableStrings(@Nonnull String qname)
 	{
 		List<String> toExclude = new ArrayList<>();
 		while(true)
