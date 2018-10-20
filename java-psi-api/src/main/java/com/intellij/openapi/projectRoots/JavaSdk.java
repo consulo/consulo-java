@@ -18,10 +18,9 @@ package com.intellij.openapi.projectRoots;
 import java.io.File;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.projectRoots.impl.SdkVersionUtil;
 
 public abstract class JavaSdk extends SdkType implements JavaSdkType {
@@ -62,7 +61,7 @@ public abstract class JavaSdk extends SdkType implements JavaSdkType {
     return JdkUtil.checkForJre(file);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static String getJdkVersion(final String sdkHome) {
     return SdkVersionUtil.detectJdkVersion(sdkHome);
   }

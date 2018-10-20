@@ -22,49 +22,56 @@
  */
 package com.intellij.execution.util;
 
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.openapi.projectRoots.OwnJdkVersionDetector;
 import com.intellij.openapi.projectRoots.Sdk;
+import consulo.java.module.extension.JavaModuleExtension;
 
-public class JreVersionDetector {
-  private String myLastAlternativeJrePath = null; //awful hack
-  private boolean myLastIsJre50;
+public class JreVersionDetector
+{
+	private String myLastAlternativeJrePath = null; //awful hack
+	private boolean myLastIsJre50;
 
 
-  public boolean isModuleJre50Configured(final ModuleBasedConfiguration configuration) {
-    final Module module = configuration.getConfigurationModule().getModule();
-    if (module != null && !module.isDisposed()) {
-      final Sdk sdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
-      return isJre50(sdk);
-    }
+	public boolean isModuleJre50Configured(final ModuleBasedConfiguration configuration)
+	{
+		final Module module = configuration.getConfigurationModule().getModule();
+		if(module != null && !module.isDisposed())
+		{
+			final Sdk sdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
+			return isJre50(sdk);
+		}
 
-    return false;
-  }
+		return false;
+	}
 
-  public boolean isJre50Configured(final CommonJavaRunConfigurationParameters configuration) {
-    if (configuration.isAlternativeJrePathEnabled()) {
-      if (configuration.getAlternativeJrePath().equals(myLastAlternativeJrePath)) return myLastIsJre50;
-      myLastAlternativeJrePath = configuration.getAlternativeJrePath();
-      final String versionString = JavaSdk.getJdkVersion(myLastAlternativeJrePath);
-      myLastIsJre50 = versionString != null && isJre50(versionString);
-      return myLastIsJre50;
-    }
-    return false;
-  }
+	public boolean isJre50Configured(final CommonJavaRunConfigurationParameters configuration)
+	{
+		if(configuration.isAlternativeJrePathEnabled())
+		{
+			if(configuration.getAlternativeJrePath().equals(myLastAlternativeJrePath))
+			{
+				return myLastIsJre50;
+			}
+			myLastAlternativeJrePath = configuration.getAlternativeJrePath();
+			OwnJdkVersionDetector.JdkVersionInfo jdkInfo = OwnJdkVersionDetector.getInstance().detectJdkVersionInfo(myLastAlternativeJrePath);
+			myLastIsJre50 = jdkInfo != null && jdkInfo.version.feature >= 5;
+			return myLastIsJre50;
+		}
+		return false;
+	}
 
-  private static boolean isJre50(final Sdk jdk) {
-    if (jdk == null) return false;
-    return JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5);
-  }
-
-  private static boolean isJre50(final @javax.annotation.Nullable String versionString) {
-    if (versionString == null) return false;
-    JavaSdkVersion version = JavaSdk.getInstance().getVersion(versionString);
-    return version != null && version.isAtLeast(JavaSdkVersion.JDK_1_5);
-  }
+	private static boolean isJre50(final Sdk jdk)
+	{
+		if(jdk == null)
+		{
+			return false;
+		}
+		return JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5);
+	}
 }

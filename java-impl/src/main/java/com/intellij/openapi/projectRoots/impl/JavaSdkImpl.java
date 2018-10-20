@@ -18,19 +18,14 @@ package com.intellij.openapi.projectRoots.impl;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -40,6 +35,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.openapi.projectRoots.OwnJdkVersionDetector;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.SdkTable;
@@ -54,7 +50,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.HashMap;
 import consulo.fileTypes.ZipArchiveFileType;
 import consulo.java.JavaIcons;
 import consulo.java.fileTypes.JModFileType;
@@ -175,7 +170,7 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public Collection<String> suggestHomePaths()
 	{
-		List<String> list = new SmartList<String>();
+		List<String> list = new SmartList<>();
 		if(SystemInfo.isMac)
 		{
 			collectJavaPathsAtMac(list, "/Library/Java/JavaVirtualMachines");
@@ -474,27 +469,11 @@ public class JavaSdkImpl extends JavaSdk
 		return true;
 	}
 
-	private final Map<String, String> myCachedVersionStrings = new HashMap<String, String>();
-
 	@Override
 	public final String getVersionString(final String sdkHome)
 	{
-		if(myCachedVersionStrings.containsKey(sdkHome))
-		{
-			return myCachedVersionStrings.get(sdkHome);
-		}
-		String versionString = getJdkVersion(sdkHome);
-		if(versionString != null && versionString.isEmpty())
-		{
-			versionString = null;
-		}
-
-		if(versionString != null)
-		{
-			myCachedVersionStrings.put(sdkHome, versionString);
-		}
-
-		return versionString;
+		OwnJdkVersionDetector.JdkVersionInfo jdkInfo = OwnJdkVersionDetector.getInstance().detectJdkVersionInfo(sdkHome);
+		return jdkInfo != null ? OwnJdkVersionDetector.formatVersionString(jdkInfo.version) : null;
 	}
 
 	@Override
@@ -680,16 +659,6 @@ public class JavaSdkImpl extends JavaSdk
 			return;
 		}
 		sdkModificator.addRoot(archiveRootForLocalFile, SourcesOrderRootType.getInstance());
-	}
-
-	@SuppressWarnings({"HardCodedStringLiteral"})
-	private static void addDocs(File file, SdkModificator rootContainer)
-	{
-		VirtualFile vFile = findDocs(file, "docs/api");
-		if(vFile != null)
-		{
-			rootContainer.addRoot(vFile, DocumentationOrderRootType.getInstance());
-		}
 	}
 
 	@Nullable
