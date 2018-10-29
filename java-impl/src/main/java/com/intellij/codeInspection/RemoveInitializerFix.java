@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableFix;
 import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
@@ -34,7 +35,7 @@ import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.AccessRule;
 
 public class RemoveInitializerFix implements LocalQuickFix
 {
@@ -64,6 +65,12 @@ public class RemoveInitializerFix implements LocalQuickFix
 		sideEffectAwareRemove(project, psiInitializer, psiInitializer, variable);
 	}
 
+	@Override
+	public boolean startInWriteAction()
+	{
+		return false;
+	}
+
 	protected void sideEffectAwareRemove(Project project, PsiElement psiInitializer, PsiElement elementToDelete, PsiVariable variable)
 	{
 		if(!FileModificationService.getInstance().prepareFileForWrite(elementToDelete.getContainingFile()))
@@ -72,9 +79,9 @@ public class RemoveInitializerFix implements LocalQuickFix
 		}
 
 		final PsiElement declaration = variable.getParent();
-		final List<PsiElement> sideEffects = new ArrayList<PsiElement>();
+		final List<PsiElement> sideEffects = new ArrayList<>();
 		boolean hasSideEffects = RemoveUnusedVariableUtil.checkSideEffects(psiInitializer, variable, sideEffects);
-		int res = RemoveUnusedVariableUtil.DELETE_ALL;
+		int res;
 		if(hasSideEffects)
 		{
 			hasSideEffects = PsiUtil.isStatement(psiInitializer);
@@ -85,8 +92,12 @@ public class RemoveInitializerFix implements LocalQuickFix
 					";<br>" +
 					PsiExpressionTrimRenderer.render((PsiExpression) psiInitializer));
 		}
-		try
+		else
 		{
+			res = RemoveUnusedVariableUtil.DELETE_ALL;
+		}
+
+		AccessRule.writeAsync(() -> {
 			if(res == RemoveUnusedVariableUtil.DELETE_ALL)
 			{
 				elementToDelete.delete();
@@ -106,11 +117,7 @@ public class RemoveInitializerFix implements LocalQuickFix
 					elementToDelete.delete();
 				}
 			}
-		}
-		catch(IncorrectOperationException e)
-		{
-			LOG.error(e);
-		}
+		});
 	}
 
 	@Override
