@@ -88,7 +88,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected RunContentDescriptor attachVirtualMachine(RunProfileState state, @Nonnull ExecutionEnvironment env, RemoteConnection connection, boolean pollConnection) throws ExecutionException
 	{
 		DebugEnvironment environment = new DefaultDebugEnvironment(env, state, connection, pollConnection);
@@ -119,7 +119,6 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 			if(executionResult instanceof DefaultExecutionResult)
 			{
 				sessionImpl.addRestartActions(((DefaultExecutionResult) executionResult).getRestartActions());
-				sessionImpl.addExtraStopActions(((DefaultExecutionResult) executionResult).getAdditionalStopActions());
 			}
 			return JavaDebugProcess.create(session, debuggerSession);
 		}).getRunContentDescriptor();
