@@ -54,14 +54,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element>
 	@Override
 	public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category)
 	{
-		Getter<DebuggerSettings> settingsGetter = new Getter<DebuggerSettings>()
-		{
-			@Override
-			public DebuggerSettings get()
-			{
-				return DebuggerSettings.getInstance();
-			}
-		};
+		Getter<DebuggerSettings> settingsGetter = () -> DebuggerSettings.getInstance();
 
 		switch(category)
 		{
