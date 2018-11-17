@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 
 import org.jdom.Element;
 import com.intellij.debugger.DebuggerBundle;
@@ -42,7 +44,8 @@ import com.intellij.xdebugger.settings.XDebuggerSettings;
  */
 public class JavaDebuggerSettings extends XDebuggerSettings<Element>
 {
-	protected JavaDebuggerSettings()
+	@Inject
+	public JavaDebuggerSettings()
 	{
 		super("java");
 	}
@@ -102,7 +105,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element>
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Element getState()
 	{
