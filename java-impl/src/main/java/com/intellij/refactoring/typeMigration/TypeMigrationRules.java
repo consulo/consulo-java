@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.impl.LibraryScopeCache;
 import com.intellij.openapi.util.Pair;
@@ -43,7 +41,7 @@ public class TypeMigrationRules
 	public TypeMigrationRules(@Nonnull Project project)
 	{
 		myProject = project;
-		final TypeConversionRule[] extensions = Extensions.getExtensions(TypeConversionRule.EP_NAME);
+		TypeConversionRule[] extensions = TypeConversionRule.EP_NAME.getExtensions();
 		myConversionRules = new ArrayList<>(extensions.length + 2);
 		myConversionRules.add(new RootTypeConversionRule());
 		myConversionRules.add(new DisjunctionTypeConversionRule());

@@ -30,7 +30,7 @@ import com.intellij.refactoring.typeMigration.TypeMigrationLabeler;
  */
 public abstract class TypeConversionRule
 {
-	public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create("com.intellij.conversion.rule");
+	public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create("consulo.java.conversion.rule");
 
 	@Nullable
 	public abstract TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context, final TypeMigrationLabeler labeler);
