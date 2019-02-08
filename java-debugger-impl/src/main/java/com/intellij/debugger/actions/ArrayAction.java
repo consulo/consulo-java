@@ -41,6 +41,7 @@ import com.intellij.xdebugger.frame.XValue;
 import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.RequiredUIAccess;
 
 public abstract class ArrayAction extends DebuggerAction
 {
@@ -205,15 +206,16 @@ public abstract class ArrayAction extends DebuggerAction
 	{
 		@Nonnull
 		@Override
+		@RequiredUIAccess
 		protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title)
 		{
 			ArrayRenderer clonedRenderer = original.clone();
 			clonedRenderer.setForced(true);
-			if(ShowSettingsUtil.getInstance().editConfigurable(debuggerContext.getProject(), new NamedArrayConfigurable(title, clonedRenderer)))
-			{
-				return AsyncResult.done(clonedRenderer);
-			}
-			return AsyncResult.rejected();
+			AsyncResult<ArrayRenderer> result = AsyncResult.undefined();
+			AsyncResult<Void> showResult = ShowSettingsUtil.getInstance().editConfigurable(debuggerContext.getProject(), new NamedArrayConfigurable(title, clonedRenderer));
+			showResult.doWhenDone(() -> result.setDone(clonedRenderer));
+			showResult.doWhenRejected((Runnable) result::setRejected);
+			return result;
 		}
 	}
 
