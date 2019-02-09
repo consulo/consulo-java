@@ -16,10 +16,9 @@
 package com.intellij.codeInspection.defaultFileTemplateUsage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -116,15 +115,13 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 		{
 			final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
 			configurable.setTemplate(myTemplateToEdit, null);
-			boolean ok = ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
-			if(ok)
-			{
+			ShowSettingsUtil.getInstance().editConfigurable(project, configurable).doWhenDone(() -> {
 				WriteCommandAction.runWriteCommandAction(project, () ->
 				{
 					FileTemplateManager.getInstance(project).saveAllTemplates();
 					myReplaceTemplateFix.applyFix(project, descriptor);
 				});
-			}
+			});
 		}
 	}
 }

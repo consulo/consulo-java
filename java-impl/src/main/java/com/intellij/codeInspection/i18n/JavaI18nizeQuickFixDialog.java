@@ -166,15 +166,13 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog
 							configurable.setTemplate(template, null);
 						}
 					});
-					boolean ok = ShowSettingsUtil.getInstance().editConfigurable(myPanel, configurable);
-					if(ok)
-					{
+					ShowSettingsUtil.getInstance().editConfigurable(myPanel, configurable).doWhenDone(() -> {
 						somethingChanged();
 						if(myShowJavaCodeInfo)
 						{
 							suggestAvailableResourceBundleExpressions();
 						}
-					}
+					});
 				}
 			});
 			myHyperLinkPanel.add(link, BorderLayout.CENTER);

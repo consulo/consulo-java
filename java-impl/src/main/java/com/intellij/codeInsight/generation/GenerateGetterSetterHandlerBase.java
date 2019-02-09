@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -30,8 +31,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
-
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
@@ -154,10 +153,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
 					}
 				};
 				ui.selectNodeInTree(templatesManager.getDefaultTemplate());
-				if(ShowSettingsUtil.getInstance().editConfigurable(panel, ui))
-				{
-					setComboboxModel(templatesManager, comboBox);
-				}
+				ShowSettingsUtil.getInstance().editConfigurable(panel, ui).doWhenDone(() -> setComboboxModel(templatesManager, comboBox));
 			}
 		});
 
