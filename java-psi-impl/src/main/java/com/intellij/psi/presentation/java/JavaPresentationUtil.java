@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.presentation.java;
 
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 
 import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.ItemPresentation;
@@ -33,8 +33,8 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
 
 public class JavaPresentationUtil {
   private JavaPresentationUtil() {
@@ -65,8 +65,8 @@ public class JavaPresentationUtil {
       }
 
       @Override
-      public Icon getIcon(boolean open) {
-        return TargetAWT.to(IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY));
+      public Image getIcon() {
+        return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY);
       }
     };
   }
@@ -92,13 +92,13 @@ public class JavaPresentationUtil {
       }
 
       @Override
-      public Icon getIcon(boolean open) {
-        return TargetAWT.to(IconDescriptorUpdaters.getIcon(psiField, Iconable.ICON_FLAG_VISIBILITY));
+      public Image getIcon() {
+        return IconDescriptorUpdaters.getIcon(psiField, Iconable.ICON_FLAG_VISIBILITY);
       }
     };
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getJavaSymbolContainerText(final PsiElement element) {
     final String result;
     PsiElement container = PsiTreeUtil.getParentOfType(element, PsiMember.class, PsiFile.class);

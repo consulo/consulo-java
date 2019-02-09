@@ -15,6 +15,11 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.annotation.Nullable;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.Group;
@@ -25,11 +30,7 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.util.PsiUtil;
-import javax.annotation.Nullable;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import consulo.ui.image.Image;
 
 public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvider{
   private final SmartPsiElementPointer mySuperClassPointer;
@@ -60,7 +61,7 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
     return this;
   }
 
-  public Icon getIcon(boolean open) {
+  public Image getIcon() {
     switch (myOverrides) {
       case IMPLEMENTS:
         return AllIcons.General.ImplementingMethod;

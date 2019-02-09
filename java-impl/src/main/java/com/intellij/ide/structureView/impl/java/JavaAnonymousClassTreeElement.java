@@ -15,13 +15,13 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
+import java.util.Set;
+
+import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.JavaAnonymousClassesHelper;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
-import com.intellij.util.PlatformIcons;
-
-import javax.swing.*;
-import java.util.Set;
+import consulo.ui.image.Image;
 
 /**
  * @author Konstantin Bulenkov
@@ -77,7 +77,7 @@ public class JavaAnonymousClassTreeElement extends JavaClassTreeElement {
   }
 
   @Override
-  public Icon getIcon(boolean open) {
-    return PlatformIcons.ANONYMOUS_CLASS_ICON;
+  public Image getIcon() {
+    return AllIcons.Nodes.AnonymousClass;
   }
 }

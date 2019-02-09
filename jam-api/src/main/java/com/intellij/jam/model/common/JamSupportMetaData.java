@@ -15,19 +15,22 @@
  */
 package com.intellij.jam.model.common;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.TypePresentationService;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.meta.PsiPresentableMetaData;
 import com.intellij.psi.meta.PsiWritableMetaData;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.SmartList;
-import com.intellij.util.xml.*;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.diagnostic.Logger;
-import org.jetbrains.annotations.NonNls;
-
-import javax.swing.*;
-import java.util.List;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.DomUtil;
+import com.intellij.util.xml.ElementPresentationManager;
+import com.intellij.util.xml.ModelMergerUtil;
+import consulo.ui.image.Image;
 
 /**
  * @author peter
@@ -83,7 +86,7 @@ public abstract class JamSupportMetaData<T extends CommonModelElement> implement
     return TypePresentationService.getInstance().getTypePresentableName(myElement.getClass());
   }
 
-  public Icon getIcon() {
+  public Image getIcon() {
     return ElementPresentationManager.getIcon(myElement);
   }
 

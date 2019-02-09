@@ -19,13 +19,13 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.PsiLambdaNameHelper;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiType;
+import consulo.ui.image.Image;
 
 public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExpression>
 {
@@ -101,7 +101,7 @@ public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExp
 	}
 
 	@Override
-	public Icon getIcon(boolean open)
+	public Image getIcon()
 	{
 		return AllIcons.Nodes.Function;
 	}

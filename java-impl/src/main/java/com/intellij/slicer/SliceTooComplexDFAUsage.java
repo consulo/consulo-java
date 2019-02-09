@@ -17,9 +17,8 @@ package com.intellij.slicer;
 
 import java.awt.Font;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nonnull;
+
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
@@ -28,6 +27,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.usages.TextChunk;
 import com.intellij.usages.UsagePresentation;
 import com.intellij.util.Processor;
+import consulo.ui.image.Image;
 
 /**
  * User: cdr
@@ -69,7 +69,7 @@ public class SliceTooComplexDFAUsage extends SliceUsage
 			}
 
 			@Override
-			public Icon getIcon()
+			public Image getIcon()
 			{
 				return presentation.getIcon();
 			}

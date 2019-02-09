@@ -15,14 +15,13 @@
  */
 package com.intellij.psi.presentation.java;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiJavaPackage;
-import com.intellij.util.PlatformIcons;
-
-import javax.swing.*;
+import consulo.ui.image.Image;
 
 public class PackagePresentationProvider implements ItemPresentationProvider<PsiJavaPackage> {
   @Override
@@ -44,8 +43,8 @@ public class PackagePresentationProvider implements ItemPresentationProvider<Psi
       }
 
       @Override
-      public Icon getIcon(boolean open) {
-        return PlatformIcons.PACKAGE_ICON;
+      public Image getIcon() {
+        return AllIcons.Nodes.Package;
       }
     };
   }

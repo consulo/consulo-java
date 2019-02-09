@@ -16,13 +16,13 @@
 package com.intellij.slicer;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.usages.TextChunk;
 import com.intellij.usages.UsagePresentation;
 import com.intellij.util.Processor;
+import consulo.ui.image.Image;
 
 /**
  * User: cdr
@@ -63,7 +63,7 @@ public class SliceDereferenceUsage extends SliceUsage
 			}
 
 			@Override
-			public Icon getIcon()
+			public Image getIcon()
 			{
 				return presentation.getIcon();
 			}

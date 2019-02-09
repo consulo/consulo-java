@@ -15,6 +15,15 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import org.jetbrains.annotations.NonNls;
+import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.treeView.WeighedItem;
 import com.intellij.ide.util.treeView.smartTree.Group;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
@@ -26,15 +35,17 @@ import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.SmartPointerManager;
+import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import consulo.ui.image.Image;
 
 public class PropertyGroup implements Group, ColoredItemPresentation, AccessLevelProvider, WeighedItem {
   private final String myPropertyName;
@@ -44,12 +55,12 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
   private SmartPsiElementPointer myGetterPointer;
   private SmartPsiElementPointer mySetterPointer;
   private boolean myIsStatic;
-  public static final Icon PROPERTY_READ_ICON = loadIcon("/nodes/propertyRead.png");
-  public static final Icon PROPERTY_READ_STATIC_ICON = loadIcon("/nodes/propertyReadStatic.png");
-  public static final Icon PROPERTY_WRITE_ICON = loadIcon("/nodes/propertyWrite.png");
-  public static final Icon PROPERTY_WRITE_STATIC_ICON = loadIcon("/nodes/propertyWriteStatic.png");
-  public static final Icon PROPERTY_READ_WRITE_ICON = loadIcon("/nodes/propertyReadWrite.png");
-  public static final Icon PROPERTY_READ_WRITE_STATIC_ICON = loadIcon("/nodes/propertyReadWriteStatic.png");
+  public static final Image PROPERTY_READ_ICON = AllIcons.Nodes.PropertyRead;
+  public static final Image PROPERTY_READ_STATIC_ICON = AllIcons.Nodes.PropertyReadStatic;
+  public static final Image PROPERTY_WRITE_ICON = AllIcons.Nodes.PropertyWrite;
+  public static final Image PROPERTY_WRITE_STATIC_ICON = AllIcons.Nodes.PropertyWriteStatic;
+  public static final Image PROPERTY_READ_WRITE_ICON = AllIcons.Nodes.PropertyReadWrite;
+  public static final Image PROPERTY_READ_WRITE_STATIC_ICON = AllIcons.Nodes.PropertyReadWriteStatic;
   private final Project myProject;
   private final Collection<TreeElement> myChildren = new ArrayList<TreeElement>();
 
@@ -98,7 +109,7 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
     return this;
   }
 
-  public Icon getIcon(boolean open) {
+  public Image getIcon() {
     if (isStatic()) {
       if (getGetter() != null && getSetter() != null) {
         return PROPERTY_READ_WRITE_STATIC_ICON;

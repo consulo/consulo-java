@@ -24,6 +24,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
+import consulo.awt.TargetAWT;
 
 /**
 * @author VISTALL
@@ -75,7 +76,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
     if (item instanceof NavigationItem) {
       ItemPresentation itemPresentation = ItemPresentationProviders.getItemPresentation((NavigationItem)item);
       if (itemPresentation != null) {
-        return itemPresentation.getIcon(false);
+        return TargetAWT.to(itemPresentation.getIcon());
       }
     }
     return null;

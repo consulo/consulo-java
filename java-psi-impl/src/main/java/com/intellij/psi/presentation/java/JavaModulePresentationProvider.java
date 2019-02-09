@@ -18,10 +18,9 @@ package com.intellij.psi.presentation.java;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.openapi.module.Module;
@@ -29,8 +28,8 @@ import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.impl.PsiImplUtil;
-import consulo.awt.TargetAWT;
 import consulo.java.JavaIcons;
+import consulo.ui.image.Image;
 
 public class JavaModulePresentationProvider implements ItemPresentationProvider<PsiJavaModule>
 {
@@ -75,9 +74,9 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
 
 			@Nullable
 			@Override
-			public Icon getIcon(boolean unused)
+			public Image getIcon()
 			{
-				return TargetAWT.to(JavaIcons.Nodes.JavaModule);
+				return JavaIcons.Nodes.JavaModule;
 			}
 		};
 	}

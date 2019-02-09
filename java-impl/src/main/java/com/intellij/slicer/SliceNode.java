@@ -257,7 +257,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 			int row,
 			boolean hasFocus)
 	{
-		renderer.setIcon(getPresentation().getIcon(expanded));
+		renderer.setIcon(getPresentation().getIcon());
 		if(isValid())
 		{
 			SliceUsage sliceUsage = getValue();
