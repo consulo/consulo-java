@@ -18,8 +18,6 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.hint.HintManager;
@@ -43,6 +41,7 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
+import consulo.ui.image.Image;
 
 /**
  * User: anna
@@ -66,7 +65,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
   }
 
   @Override
-  public Icon getIcon(int flags) {
+  public Image getIcon(int flags) {
     return AllIcons.Actions.RefactoringBulb;
   }
 

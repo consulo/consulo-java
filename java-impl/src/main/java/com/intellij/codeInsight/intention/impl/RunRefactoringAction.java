@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import javax.annotation.Nonnull;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -22,9 +24,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.BaseRefactoringIntentionAction;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
-
-import javax.swing.*;
+import consulo.ui.image.Image;
 
 /**
  * User: anna
@@ -67,7 +67,7 @@ public class RunRefactoringAction extends BaseRefactoringIntentionAction {
   }
 
   @Override
-  public Icon getIcon(@IconFlags int flags) {
+  public Image getIcon(@IconFlags int flags) {
     return AllIcons.Actions.RefactoringBulb;
   }
 }

@@ -20,9 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.ClassMember;
 import com.intellij.codeInsight.hint.HintManager;
@@ -50,6 +49,7 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.ui.image.Image;
 
 public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction
 {
@@ -69,7 +69,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
 	}
 
 	@Override
-	public Icon getIcon(int flags)
+	public Image getIcon(int flags)
 	{
 		return AllIcons.Actions.RefactoringBulb;
 	}
