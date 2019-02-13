@@ -17,18 +17,18 @@ package com.intellij.debugger.ui.tree.render;
 
 import java.awt.Color;
 
-import javax.swing.Icon;
-
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
-import com.intellij.util.ui.ColorIcon;
+import consulo.awt.TargetAWT;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.IntegerValue;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 
 /**
  * Created by Egor on 04.10.2014.
@@ -43,7 +43,7 @@ class ColorObjectRenderer extends ToStringBasedRenderer
 	}
 
 	@Override
-	public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+	public Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
 	{
 		final Value value = descriptor.getValue();
 		if(value instanceof ObjectReference)
@@ -60,7 +60,7 @@ class ColorObjectRenderer extends ToStringBasedRenderer
 					{
 						@SuppressWarnings("UseJBColor")
 						final Color color = new Color(((IntegerValue) rgbValue).value(), true);
-						return new ColorIcon(16, 12, color, true);
+						return ImageEffects.colorFilled(16, 16, TargetAWT.from(color));
 					}
 				}
 			}

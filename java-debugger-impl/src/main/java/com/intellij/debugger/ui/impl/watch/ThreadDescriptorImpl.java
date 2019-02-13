@@ -30,8 +30,7 @@ import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.icons.AllIcons;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
-
-import javax.swing.*;
+import consulo.ui.image.Image;
 
 public class ThreadDescriptorImpl extends NodeDescriptorImpl implements ThreadDescriptor{
   private final ThreadReferenceProxyImpl myThread;
@@ -149,7 +148,7 @@ public class ThreadDescriptorImpl extends NodeDescriptorImpl implements ThreadDe
     return myIsSuspended;
   }
 
-  public Icon getIcon() {
+  public Image getIcon() {
     if(isCurrent()) {
       return AllIcons.Debugger.ThreadCurrent;
     }

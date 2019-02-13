@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -41,12 +42,15 @@ import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
+import consulo.awt.TargetAWT;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ByteValue;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 
 /**
  * Created by Egor on 04.10.2014.
@@ -62,26 +66,29 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 		setEnabled(true);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext, final ValueDescriptorImpl valueDescriptor)
 	{
 		return new IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext)
 		{
 			@Override
-			protected Icon getData()
+			protected Image getData()
 			{
 				return getIcon(getEvaluationContext(), valueDescriptor.getValue(), "imageToBytes");
 			}
 		};
 	}
 
-	static JComponent createIconViewer(@javax.annotation.Nullable Icon icon)
+	static JComponent createIconViewer(@Nullable Image uiImage)
 	{
-		if(icon == null)
+		if(uiImage == null)
 		{
 			return new JLabel("No data", SwingConstants.CENTER);
 		}
+
+		Icon icon = TargetAWT.to(uiImage);
+
 		final int w = icon.getIconWidth();
 		final int h = icon.getIconHeight();
 		final BufferedImage image = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(w, h, Transparency.TRANSLUCENT);
@@ -92,8 +99,8 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 		return ImageEditorManagerImpl.createImageEditorUI(image);
 	}
 
-	@javax.annotation.Nullable
-	static ImageIcon getIcon(EvaluationContext evaluationContext, Value obj, String methodName)
+	@Nullable
+	static Image getIcon(EvaluationContext evaluationContext, Value obj, String methodName)
 	{
 		try
 		{
@@ -101,7 +108,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 			byte[] data = readBytes(bytes);
 			if(data != null)
 			{
-				return new ImageIcon(data);
+				return Image.fromBytes(data, 16, 16);
 			}
 		}
 		catch(Exception e)
@@ -151,7 +158,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 		return null;
 	}
 
-	static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Icon>
+	static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Image>
 	{
 		public IconPopupEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext)
 		{
@@ -159,7 +166,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 		}
 
 		@Override
-		protected JComponent createComponent(Icon data)
+		protected JComponent createComponent(Image data)
 		{
 			return createIconViewer(data);
 		}

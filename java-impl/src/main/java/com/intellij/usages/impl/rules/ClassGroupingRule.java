@@ -16,7 +16,6 @@
 package com.intellij.usages.impl.rules;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.navigation.NavigationItemFileStatus;
@@ -41,8 +40,8 @@ import com.intellij.usages.UsageGroup;
 import com.intellij.usages.UsageView;
 import com.intellij.usages.rules.PsiElementUsage;
 import com.intellij.usages.rules.UsageGroupingRule;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
 
 /**
  * @author max
@@ -110,13 +109,13 @@ public class ClassGroupingRule implements UsageGroupingRule {
     private final SmartPsiElementPointer myClassPointer;
     private final String myText;
     private final String myQName;
-    private final Icon myIcon;
+    private final Image myIcon;
 
     public ClassUsageGroup(@Nonnull PsiClass aClass) {
       myQName = aClass.getQualifiedName();
       myText = createText(aClass);
       myClassPointer = SmartPointerManager.getInstance(aClass.getProject()).createSmartPsiElementPointer(aClass);
-      myIcon = TargetAWT.to(IconDescriptorUpdaters.getIcon(aClass, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS));
+      myIcon = IconDescriptorUpdaters.getIcon(aClass, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
     }
 
     @Override
@@ -134,7 +133,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     @Override
-    public Icon getIcon(boolean isOpen) {
+    public Image getIcon() {
       return myIcon;
     }
 

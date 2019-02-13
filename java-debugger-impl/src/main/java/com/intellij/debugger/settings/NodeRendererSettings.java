@@ -22,7 +22,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
-import javax.swing.Icon;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -56,11 +55,12 @@ import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
-import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.EventDispatcher;
 import com.intellij.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.java.module.util.JavaClassNames;
+import consulo.ui.image.Image;
 
 @Singleton
 @State(name = "NodeRendererSettings", storages = @Storage("debugger.renderers.xml"))
@@ -486,7 +486,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 		}
 
 		@Override
-		public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+		public Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
 		{
 			return null;
 		}

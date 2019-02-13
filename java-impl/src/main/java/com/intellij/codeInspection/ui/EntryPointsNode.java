@@ -15,14 +15,15 @@
  */
 package com.intellij.codeInspection.ui;
 
+import javax.annotation.Nonnull;
+import javax.swing.Icon;
+
 import com.intellij.codeInspection.deadCode.DummyEntryPointsEP;
 import com.intellij.codeInspection.ex.GlobalInspectionContextImpl;
 import com.intellij.codeInspection.ex.GlobalInspectionToolWrapper;
 import com.intellij.codeInspection.ex.InspectionToolWrapper;
 import com.intellij.icons.AllIcons;
-import javax.annotation.Nonnull;
-
-import javax.swing.*;
+import consulo.awt.TargetAWT;
 
 /**
  * @author max
@@ -39,7 +40,7 @@ public class EntryPointsNode extends InspectionNode {
   }
 
   @Override
-  public Icon getIcon(boolean expanded) {
-    return AllIcons.Nodes.EntryPoints;
+  public Icon getIcon() {
+    return TargetAWT.to(AllIcons.Nodes.EntryPoints);
   }
 }

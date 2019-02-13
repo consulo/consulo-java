@@ -15,9 +15,8 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.FullValueEvaluatorProvider;
@@ -25,7 +24,13 @@ import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
-import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.image.Image;
 
 /**
  * @author egor
@@ -76,7 +81,7 @@ public class GraphicsObjectRenderer extends ToStringBasedRenderer implements Ful
 			return new ImageObjectRenderer.IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext)
 			{
 				@Override
-				protected Icon getData()
+				protected Image getData()
 				{
 					return ImageObjectRenderer.getIcon(getEvaluationContext(), bufImgValue, "imageToBytes");
 				}

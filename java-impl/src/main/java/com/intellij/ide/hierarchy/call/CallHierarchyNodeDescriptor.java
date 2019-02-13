@@ -52,10 +52,11 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
-import com.intellij.ui.LayeredIcon;
 import consulo.annotations.RequiredDispatchThread;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 
 public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor implements Navigatable
 {
@@ -129,13 +130,10 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
 			return true;
 		}
 
-		Icon newIcon = TargetAWT.to(IconDescriptorUpdaters.getIcon(enclosingElement, flags));
+		Image newIcon = IconDescriptorUpdaters.getIcon(enclosingElement, flags);
 		if(changes && myIsBase)
 		{
-			final LayeredIcon icon = new LayeredIcon(2);
-			icon.setIcon(newIcon, 0);
-			icon.setIcon(AllIcons.Hierarchy.Base, 1, -AllIcons.Hierarchy.Base.getIconWidth() / 2, 0);
-			newIcon = icon;
+			newIcon = ImageEffects.appendRight(AllIcons.Hierarchy.Base, newIcon);
 		}
 		setIcon(newIcon);
 

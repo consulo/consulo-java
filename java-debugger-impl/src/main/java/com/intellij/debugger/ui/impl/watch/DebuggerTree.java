@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -79,6 +79,7 @@ import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
+import consulo.ui.image.Image;
 
 public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvider
 {
@@ -613,7 +614,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 				// add context exceptions
 				for(Pair<Breakpoint, Event> pair : DebuggerUtilsEx.getEventDescriptors(getSuspendContext()))
 				{
-					final consulo.internal.com.sun.jdi.event.Event debugEvent = pair.getSecond();
+					final Event debugEvent = pair.getSecond();
 					if(debugEvent instanceof ExceptionEvent)
 					{
 						final ObjectReference exception = ((ExceptionEvent) debugEvent).exception();
@@ -752,12 +753,12 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		}
 
 		@Override
-		public void setErrorMessage(@Nonnull String errorMessage, @javax.annotation.Nullable XDebuggerTreeNodeHyperlink link)
+		public void setErrorMessage(@Nonnull String errorMessage, @Nullable XDebuggerTreeNodeHyperlink link)
 		{
 		}
 
 		@Override
-		public void setMessage(@Nonnull String message, @javax.annotation.Nullable Icon icon, @Nonnull SimpleTextAttributes attributes, @javax.annotation.Nullable XDebuggerTreeNodeHyperlink link)
+		public void setMessage(@Nonnull String message, @Nullable Image icon, @Nonnull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
 		{
 		}
 

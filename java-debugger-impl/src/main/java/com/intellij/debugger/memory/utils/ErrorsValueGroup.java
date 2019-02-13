@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.frame.XCompositeNode;
 import com.intellij.xdebugger.frame.XNamedValue;
 import com.intellij.xdebugger.frame.XValueChildrenList;
 import com.intellij.xdebugger.frame.XValueGroup;
+import consulo.ui.image.Image;
 
 public class ErrorsValueGroup extends XValueGroup
 {
@@ -58,7 +58,7 @@ public class ErrorsValueGroup extends XValueGroup
 
 	@Nullable
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.General.Error;
 	}

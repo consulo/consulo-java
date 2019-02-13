@@ -18,10 +18,9 @@ package com.intellij.debugger.ui.impl;
 import java.awt.Color;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
+import javax.annotation.Nullable;
 import javax.swing.JTree;
 
-import javax.annotation.Nullable;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
@@ -37,11 +36,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.LayeredIcon;
-import com.intellij.ui.RowIcon;
 import com.intellij.ui.SimpleColoredText;
 import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.PlatformIcons;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
@@ -51,6 +47,8 @@ import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 
 public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 {
@@ -75,9 +73,9 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 	}
 
 	@Nullable
-	public static Icon getDescriptorIcon(NodeDescriptor descriptor)
+	public static Image getDescriptorIcon(NodeDescriptor descriptor)
 	{
-		Icon nodeIcon = null;
+		Image nodeIcon = null;
 		if(descriptor instanceof ThreadGroupDescriptorImpl)
 		{
 			nodeIcon = (((ThreadGroupDescriptorImpl) descriptor).isCurrent() ? AllIcons.Debugger.ThreadGroupCurrent : AllIcons.Debugger.ThreadGroup);
@@ -120,13 +118,13 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 		return nodeIcon;
 	}
 
-	public static Icon getValueIcon(ValueDescriptorImpl valueDescriptor, @Nullable ValueDescriptorImpl parentDescriptor)
+	public static Image getValueIcon(ValueDescriptorImpl valueDescriptor, @Nullable ValueDescriptorImpl parentDescriptor)
 	{
-		Icon nodeIcon;
+		Image nodeIcon;
 		if(valueDescriptor instanceof FieldDescriptorImpl)
 		{
 			FieldDescriptorImpl fieldDescriptor = (FieldDescriptorImpl) valueDescriptor;
-			nodeIcon = PlatformIcons.FIELD_ICON;
+			nodeIcon = AllIcons.Nodes.Field;
 			if(parentDescriptor != null)
 			{
 				Value value = valueDescriptor.getValue();
@@ -137,11 +135,11 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 			}
 			if(fieldDescriptor.getField().isFinal())
 			{
-				nodeIcon = new LayeredIcon(nodeIcon, AllIcons.Nodes.FinalMark);
+				nodeIcon = ImageEffects.layered(nodeIcon, AllIcons.Nodes.FinalMark);
 			}
 			if(fieldDescriptor.isStatic())
 			{
-				nodeIcon = new LayeredIcon(nodeIcon, AllIcons.Nodes.StaticMark);
+				nodeIcon = ImageEffects.layered(nodeIcon, AllIcons.Nodes.StaticMark);
 			}
 		}
 		else if(valueDescriptor instanceof ThrownExceptionValueDescriptorImpl)
@@ -154,11 +152,11 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 		}
 		else if(isParameter(valueDescriptor))
 		{
-			nodeIcon = PlatformIcons.PARAMETER_ICON;
+			nodeIcon = AllIcons.Nodes.Parameter;
 		}
 		else if(valueDescriptor.isEnumConstant())
 		{
-			nodeIcon = PlatformIcons.ENUM_ICON;
+			nodeIcon = AllIcons.Nodes.Enum;
 		}
 		else if(valueDescriptor.isArray())
 		{
@@ -200,10 +198,10 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 			}
 		}
 
-		final Icon valueIcon = valueDescriptor.getValueIcon();
+		final Image valueIcon = valueDescriptor.getValueIcon();
 		if(nodeIcon != null && valueIcon != null)
 		{
-			nodeIcon = new RowIcon(nodeIcon, valueIcon);
+			nodeIcon = ImageEffects.appendRight(nodeIcon, valueIcon);
 		}
 		return nodeIcon;
 	}

@@ -15,8 +15,6 @@
  */
 package com.intellij.ide.util;
 
-import javax.swing.Icon;
-
 import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
@@ -24,6 +22,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ui.image.Image;
 
 public class MethodOrFunctionalExpressionCellRenderer extends PsiElementListCellRenderer<NavigatablePsiElement>
 {
@@ -45,7 +44,7 @@ public class MethodOrFunctionalExpressionCellRenderer extends PsiElementListCell
 		return element instanceof PsiMethod ? myMethodCellRenderer.getElementText((PsiMethod) element) : PsiExpressionTrimRenderer.render((PsiExpression) element);
 	}
 
-	protected Icon getIcon(PsiElement element)
+	protected Image getIcon(PsiElement element)
 	{
 		return element instanceof PsiMethod ? myMethodCellRenderer.getIcon(element) : super.getIcon(element);
 	}

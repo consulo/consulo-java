@@ -22,9 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
@@ -49,10 +48,8 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import consulo.java.module.util.JavaClassNames;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.EmptyIcon;
 import com.intellij.util.ui.JBUI;
@@ -73,6 +70,8 @@ import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.StringReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.java.module.util.JavaClassNames;
+import consulo.ui.image.Image;
 
 public class StackFrameItem
 {
@@ -263,7 +262,7 @@ public class StackFrameItem
 		{
 			ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
 			String type = classRenderer.renderTypeName(myType);
-			Icon icon = myVarType == VariableItem.VarType.PARAM ? PlatformIcons.PARAMETER_ICON : AllIcons.Debugger.Value;
+			Image icon = myVarType == VariableItem.VarType.PARAM ? AllIcons.Nodes.Parameter : AllIcons.Debugger.Value;
 			if(myType != null && myType.startsWith(JavaClassNames.JAVA_LANG_STRING + "@"))
 			{
 				node.setPresentation(icon, new XStringValuePresentation(myValue)

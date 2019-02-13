@@ -16,7 +16,6 @@
 package com.intellij.debugger.ui.tree.render;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import org.jdom.Element;
 import com.intellij.debugger.DebuggerContext;
@@ -31,6 +30,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.image.Image;
 
 /**
  * @author Eugene Zhuravlev
@@ -93,7 +93,7 @@ public abstract class NodeRendererImpl implements NodeRenderer
 	}
 
 	@Override
-	public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+	public Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
 	{
 		return null;
 	}

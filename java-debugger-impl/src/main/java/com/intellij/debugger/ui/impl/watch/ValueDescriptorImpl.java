@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Icon;
 
-import javax.annotation.Nullable;
 import com.intellij.Patches;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
@@ -55,6 +55,7 @@ import com.intellij.util.concurrency.Semaphore;
 import com.intellij.xdebugger.frame.XValueModifier;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
+import consulo.ui.image.Image;
 
 public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements ValueDescriptor
 {
@@ -75,7 +76,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	private boolean myFullValue = false;
 
 	@Nullable
-	private Icon myValueIcon;
+	private Image myValueIcon;
 
 	protected boolean myIsNew = true;
 	private boolean myIsDirty = false;
@@ -268,7 +269,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		myIsNew = false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static ObjectReference getTargetExceptionWithStackTraceFilled(final EvaluationContextImpl evaluationContext, EvaluateException ex)
 	{
 		final ObjectReference exceptionObj = ex.getExceptionFromTargetVM();
@@ -442,13 +443,13 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	public Icon setValueIcon(Icon icon)
+	public Image setValueIcon(Image icon)
 	{
 		return myValueIcon = icon;
 	}
 
-	@javax.annotation.Nullable
-	public Icon getValueIcon()
+	@Nullable
+	public Image getValueIcon()
 	{
 		return myValueIcon;
 	}
@@ -464,7 +465,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		return name;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getDeclaredType()
 	{
 		return null;
@@ -514,7 +515,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	//returns expression that evaluates tree to this descriptor
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiElement getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException
 	{
 		JavaValue parent = value.getParent();
@@ -674,7 +675,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public ValueMarkup getMarkup(final DebugProcess debugProcess)
 	{
 		final Value value = getValue();
@@ -691,7 +692,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	public void setMarkup(final DebugProcess debugProcess, @javax.annotation.Nullable final ValueMarkup markup)
+	public void setMarkup(final DebugProcess debugProcess, @Nullable final ValueMarkup markup)
 	{
 		final Value value = getValue();
 		if(value instanceof ObjectReference)

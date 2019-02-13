@@ -22,11 +22,9 @@ package com.intellij.debugger.ui.impl.watch;
 
 import java.util.Map;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.MutableTreeNode;
-
-import javax.annotation.Nonnull;
 
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
@@ -46,10 +44,11 @@ import com.intellij.ui.SimpleColoredText;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.ui.image.Image;
 
 public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTreeNode, NodeDescriptorProvider, MutableTreeNode
 {
-	private Icon myIcon;
+	private Image myIcon;
 	private SimpleColoredText myText;
 	private String myMarkupTooltipText;
 	private final DebuggerTree myTree;
@@ -119,7 +118,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		}
 	}
 
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return myIcon;
 	}

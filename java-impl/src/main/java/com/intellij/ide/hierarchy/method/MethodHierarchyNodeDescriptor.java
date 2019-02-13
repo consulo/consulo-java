@@ -17,11 +17,7 @@ package com.intellij.ide.hierarchy.method;
 
 import java.awt.Font;
 
-import javax.swing.Icon;
-
 import com.intellij.icons.AllIcons;
-import consulo.awt.TargetAWT;
-import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.JavaHierarchyUtil;
@@ -36,14 +32,15 @@ import com.intellij.psi.PsiFunctionalExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
-import com.intellij.ui.LayeredIcon;
-import com.intellij.ui.RowIcon;
+import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 
 public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 {
 
-	private Icon myRawIcon;
-	private Icon myStateIcon;
+	private Image myRawIcon;
+	private Image myStateIcon;
 	private MethodHierarchyTreeStructure myTreeStructure;
 
 	public MethodHierarchyNodeDescriptor(final Project project,
@@ -117,8 +114,8 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 			return true;
 		}
 
-		final Icon newRawIcon = TargetAWT.to(IconDescriptorUpdaters.getIcon(psiClass, flags));
-		final Icon newStateIcon = psiClass instanceof PsiClass ? calculateState((PsiClass) psiClass) : AllIcons.Hierarchy.MethodDefined;
+		final Image newRawIcon = IconDescriptorUpdaters.getIcon(psiClass, flags);
+		final Image newStateIcon = psiClass instanceof PsiClass ? calculateState((PsiClass) psiClass) : AllIcons.Hierarchy.MethodDefined;
 
 		if(changes || newRawIcon != myRawIcon || newStateIcon != myStateIcon)
 		{
@@ -127,19 +124,16 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 			myRawIcon = newRawIcon;
 			myStateIcon = newStateIcon;
 
-			Icon newIcon = myRawIcon;
+			Image newIcon = myRawIcon;
 
 			if(myIsBase)
 			{
-				final LayeredIcon icon = new LayeredIcon(2);
-				icon.setIcon(newIcon, 0);
-				icon.setIcon(AllIcons.Hierarchy.Base, 1, -AllIcons.Hierarchy.Base.getIconWidth() / 2, 0);
-				newIcon = icon;
+				newIcon = ImageEffects.appendRight(AllIcons.Hierarchy.Base, newIcon);
 			}
 
 			if(myStateIcon != null)
 			{
-				newIcon = new RowIcon(myStateIcon, newIcon);
+				newIcon = ImageEffects.appendRight(myStateIcon, newIcon);
 			}
 
 			setIcon(newIcon);
@@ -171,7 +165,7 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 		return changes;
 	}
 
-	private Icon calculateState(final PsiClass psiClass)
+	private Image calculateState(final PsiClass psiClass)
 	{
 		final PsiMethod method = getMethod(psiClass, false);
 		if(method != null)

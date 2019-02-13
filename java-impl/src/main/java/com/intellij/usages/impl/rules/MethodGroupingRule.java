@@ -16,7 +16,6 @@
 package com.intellij.usages.impl.rules;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.navigation.NavigationItemFileStatus;
@@ -49,8 +48,8 @@ import com.intellij.usages.UsageView;
 import com.intellij.usages.UsageViewSettings;
 import com.intellij.usages.rules.PsiElementUsage;
 import com.intellij.usages.rules.UsageGroupingRule;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
 
 /**
  * @author max
@@ -89,7 +88,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
   private static class MethodUsageGroup implements UsageGroup, TypeSafeDataProvider {
     private final SmartPsiElementPointer<PsiMethod> myMethodPointer;
     private final String myName;
-    private final Icon myIcon;
+    private final Image myIcon;
     private final Project myProject;
 
     public MethodUsageGroup(PsiMethod psiMethod) {
@@ -109,8 +108,8 @@ public class MethodGroupingRule implements UsageGroupingRule {
     public void update() {
     }
 
-    private static Icon getIconImpl(PsiMethod psiMethod) {
-      return TargetAWT.to(IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS));
+    private static Image getIconImpl(PsiMethod psiMethod) {
+      return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
     }
 
     public int hashCode() {
@@ -127,7 +126,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
     }
 
     @Override
-    public Icon getIcon(boolean isOpen) {
+    public Image getIcon() {
       return myIcon;
     }
 

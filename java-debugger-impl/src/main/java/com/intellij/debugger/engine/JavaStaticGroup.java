@@ -18,9 +18,8 @@ package com.intellij.debugger.engine;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
@@ -34,6 +33,7 @@ import com.intellij.xdebugger.frame.XValueChildrenList;
 import com.intellij.xdebugger.frame.XValueGroup;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.ui.image.Image;
 
 /**
  * @author egor
@@ -62,7 +62,7 @@ public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvid
 
 	@Nullable
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return AllIcons.Nodes.Static;
 	}

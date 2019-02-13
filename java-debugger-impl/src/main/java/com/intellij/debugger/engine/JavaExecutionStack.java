@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
 
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -37,6 +36,7 @@ import com.intellij.xdebugger.frame.XStackFrame;
 import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.ui.image.Image;
 
 /**
  * @author egor
@@ -58,7 +58,7 @@ public class JavaExecutionStack extends XExecutionStack
 		myDebugProcess = debugProcess;
 	}
 
-	private static Icon calcIcon(ThreadReferenceProxyImpl threadProxy, boolean current)
+	private static Image calcIcon(ThreadReferenceProxyImpl threadProxy, boolean current)
 	{
 		if(current)
 		{

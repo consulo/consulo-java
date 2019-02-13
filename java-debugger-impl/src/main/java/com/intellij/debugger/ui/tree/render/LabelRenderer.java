@@ -15,11 +15,10 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -33,6 +32,7 @@ import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.image.Image;
 
 public class LabelRenderer extends TypeRenderer implements ValueLabelRenderer, OnDemandRenderer
 {
@@ -61,7 +61,7 @@ public class LabelRenderer extends TypeRenderer implements ValueLabelRenderer, O
 		return clone;
 	}
 
-	public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+	public Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
 	{
 		return null;
 	}

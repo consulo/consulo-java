@@ -18,9 +18,8 @@ package com.intellij.debugger.ui.impl.watch;
 import java.awt.Color;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.ContextUtil;
 import com.intellij.debugger.engine.DebugProcess;
@@ -51,6 +50,7 @@ import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.ui.image.Image;
 
 /**
  * Nodes of this type cannot be updated, because StackFrame objects become invalid as soon as VM has been resumed
@@ -68,7 +68,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	private Color myBackgroundColor;
 	private SourcePosition mySourcePosition;
 
-	private Icon myIcon = AllIcons.Debugger.StackFrame;
+	private Image myIcon = AllIcons.Debugger.StackFrame;
 
 	public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker)
 	{
@@ -330,7 +330,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	}
 
 	@Nonnull
-	private Icon calcIcon()
+	private Image calcIcon()
 	{
 		try
 		{
@@ -345,7 +345,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return AllIcons.Debugger.StackFrame;
 	}
 
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return myIcon;
 	}

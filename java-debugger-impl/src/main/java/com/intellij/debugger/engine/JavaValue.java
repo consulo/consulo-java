@@ -20,9 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.actions.JavaReferringObjectsValue;
@@ -63,7 +62,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.util.text.StringUtil;
-import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.ui.SimpleTextAttributes;
@@ -84,6 +82,8 @@ import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.java.module.util.JavaClassNames;
+import consulo.ui.image.Image;
 
 /**
  * @author egor
@@ -191,7 +191,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 					@Override
 					public void labelChanged()
 					{
-						Icon nodeIcon = DebuggerTreeRenderer.getValueIcon(myValueDescriptor, myParent != null ? myParent.getDescriptor() : null);
+						Image nodeIcon = DebuggerTreeRenderer.getValueIcon(myValueDescriptor, myParent != null ? myParent.getDescriptor() : null);
 						final String value = getValueString();
 						@SuppressWarnings("ThrowableResultOfMethodCallIgnored") EvaluateException exception = myValueDescriptor.getEvaluateException();
 						XValuePresentation presentation = new JavaValuePresentation(value, myValueDescriptor.getIdLabel(), exception != null ? exception.getMessage() : null, myValueDescriptor);
@@ -310,7 +310,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 		private final String myError;
 		private final ValueDescriptorImpl myValueDescriptor;
 
-		public JavaValuePresentation(@Nonnull String value, @javax.annotation.Nullable String type, @javax.annotation.Nullable String error, ValueDescriptorImpl valueDescriptor)
+		public JavaValuePresentation(@Nonnull String value, @Nullable String type, @Nullable String error, ValueDescriptorImpl valueDescriptor)
 		{
 			myValue = value;
 			myType = type;
@@ -318,7 +318,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 			myValueDescriptor = valueDescriptor;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public String getType()
 		{
@@ -332,7 +332,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 		}
 
 		@Override
-		public void renderValue(@Nonnull XValueTextRenderer renderer, @javax.annotation.Nullable XValueNodeImpl node)
+		public void renderValue(@Nonnull XValueTextRenderer renderer, @Nullable XValueNodeImpl node)
 		{
 			boolean compact = node != null;
 			if(myError != null)
@@ -509,7 +509,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 					}
 
 					@Override
-					public void setMessage(@Nonnull String message, @javax.annotation.Nullable Icon icon, @Nonnull SimpleTextAttributes attributes, @javax.annotation.Nullable XDebuggerTreeNodeHyperlink link)
+					public void setMessage(@Nonnull String message, @Nullable Image icon, @Nonnull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
 					{
 						node.setMessage(message, icon, attributes, link);
 					}
@@ -540,7 +540,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 					}
 
 					@Override
-					public void setErrorMessage(@Nonnull String errorMessage, @javax.annotation.Nullable XDebuggerTreeNodeHyperlink link)
+					public void setErrorMessage(@Nonnull String errorMessage, @Nullable XDebuggerTreeNodeHyperlink link)
 					{
 						node.setErrorMessage(errorMessage, link);
 					}
@@ -668,7 +668,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 			}
 
 			@Override
-			protected void doAction(@javax.annotation.Nullable final SourcePosition sourcePosition)
+			protected void doAction(@Nullable final SourcePosition sourcePosition)
 			{
 				if(sourcePosition != null)
 				{
@@ -678,7 +678,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 		});
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XValueModifier getModifier()
 	{
@@ -749,7 +749,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 		return myValueDescriptor.getValueText();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XReferrersProvider getReferrersProvider()
 	{
@@ -763,7 +763,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 		};
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XInstanceEvaluator getInstanceEvaluator()
 	{

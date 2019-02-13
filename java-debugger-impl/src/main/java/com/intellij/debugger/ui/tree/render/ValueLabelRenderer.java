@@ -15,11 +15,12 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import javax.annotation.Nullable;
+
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
-
-import javax.swing.*;
+import consulo.ui.image.Image;
 
 /**
  * User: lex
@@ -29,6 +30,6 @@ import javax.swing.*;
 public interface ValueLabelRenderer extends Renderer {
   String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException;
 
-  @javax.annotation.Nullable
-  Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException;
+  @Nullable
+  Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException;
 }

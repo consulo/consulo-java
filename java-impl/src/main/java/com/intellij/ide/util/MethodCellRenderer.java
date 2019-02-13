@@ -15,11 +15,14 @@
  */
 package com.intellij.ide.util;
 
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
-
-import javax.swing.*;
+import consulo.ui.image.Image;
 
 public class MethodCellRenderer extends PsiElementListCellRenderer<PsiMethod>{
   private final boolean myShowMethodNames;
@@ -44,7 +47,7 @@ public class MethodCellRenderer extends PsiElementListCellRenderer<PsiMethod>{
     return text;
   }
 
-  protected Icon getIcon(PsiElement element) {
+  protected Image getIcon(PsiElement element) {
     return super.getIcon(myShowMethodNames ? element : fetchContainer((PsiMethod)element));
   }
 

@@ -15,12 +15,12 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.FullValueEvaluatorProvider;
+import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -29,8 +29,9 @@ import com.intellij.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
-import com.intellij.icons.AllIcons;
+import com.intellij.util.ui.JBUI;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
+import consulo.ui.image.Image;
 
 /**
  * Created by Egor on 04.10.2014.
@@ -45,7 +46,7 @@ class IconObjectRenderer extends ToStringBasedRenderer implements FullValueEvalu
 	}
 
 	@Override
-	public Icon calcValueIcon(final ValueDescriptor descriptor, final EvaluationContext evaluationContext, final DescriptorLabelListener listener) throws EvaluateException
+	public Image calcValueIcon(final ValueDescriptor descriptor, final EvaluationContext evaluationContext, final DescriptorLabelListener listener) throws EvaluateException
 	{
 		EvaluationContextImpl evalContext = ((EvaluationContextImpl) evaluationContext);
 		DebugProcessImpl debugProcess = evalContext.getDebugProcess();
@@ -58,9 +59,9 @@ class IconObjectRenderer extends ToStringBasedRenderer implements FullValueEvalu
 		debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(evalContext.getSuspendContext())
 		{
 			@Override
-			public void contextAction() throws Exception
+			public void contextAction(SuspendContextImpl context) throws Exception
 			{
-				String getterName = AllIcons.Debugger.Value.getIconHeight() <= 16 ? "iconToBytesPreviewNormal" : "iconToBytesPreviewRetina";
+				String getterName = JBUI.sysScale() > 1 ? "iconToBytesPreviewRetina" : "iconToBytesPreviewNormal";
 				descriptor.setValueIcon(ImageObjectRenderer.getIcon(evaluationContext, descriptor.getValue(), getterName));
 				listener.labelChanged();
 			}
@@ -75,7 +76,7 @@ class IconObjectRenderer extends ToStringBasedRenderer implements FullValueEvalu
 		return new ImageObjectRenderer.IconPopupEvaluator(DebuggerBundle.message("message.node.show.icon"), evaluationContext)
 		{
 			@Override
-			protected Icon getData()
+			protected Image getData()
 			{
 				return ImageObjectRenderer.getIcon(getEvaluationContext(), valueDescriptor.getValue(), "iconToBytes");
 			}

@@ -22,9 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -85,6 +84,7 @@ import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
+import consulo.ui.image.Image;
 
 /**
  * @author egor
@@ -96,7 +96,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 			XDebuggerUIConstants.INFORMATION_MESSAGE_ICON);
 
 	private final DebugProcessImpl myDebugProcess;
-	@javax.annotation.Nullable
+	@Nullable
 	private final XSourcePosition myXSourcePosition;
 	private final NodeManagerImpl myNodeManager;
 	@Nonnull
@@ -137,7 +137,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		return myEvaluator;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XSourcePosition getSourcePosition()
 	{
@@ -448,7 +448,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		}
 	}
 
-	public static XNamedValue createMessageNode(String text, Icon icon)
+	public static XNamedValue createMessageNode(String text, Image icon)
 	{
 		return new DummyMessageValueNode(text, icon);
 	}
@@ -456,9 +456,9 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 	static class DummyMessageValueNode extends XNamedValue
 	{
 		private final String myMessage;
-		private final Icon myIcon;
+		private final Image myIcon;
 
-		public DummyMessageValueNode(String message, Icon icon)
+		public DummyMessageValueNode(String message, Image icon)
 		{
 			super("");
 			myMessage = message;
@@ -506,7 +506,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 		return myDescriptor.getFrameProxy();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Object getEqualityObject()
 	{

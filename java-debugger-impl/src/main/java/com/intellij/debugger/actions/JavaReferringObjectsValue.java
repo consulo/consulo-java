@@ -18,9 +18,8 @@ package com.intellij.debugger.actions;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.JavaValue;
@@ -44,6 +43,7 @@ import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.image.Image;
 
 public class JavaReferringObjectsValue extends JavaValue
 {
@@ -162,7 +162,7 @@ public class JavaReferringObjectsValue extends JavaValue
 			super.computePresentation(new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl()
 			{
 				@Override
-				public void applyPresentation(@Nullable Icon icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren)
+				public void applyPresentation(@Nullable Image icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren)
 				{
 					node.setPresentation(icon, new XValuePresentation()
 					{

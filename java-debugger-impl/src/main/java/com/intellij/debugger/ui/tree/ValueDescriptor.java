@@ -15,9 +15,8 @@
  */
 package com.intellij.debugger.ui.tree;
 
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
+
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -25,6 +24,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.image.Image;
 
 public interface ValueDescriptor extends NodeDescriptor
 {
@@ -43,7 +43,7 @@ public interface ValueDescriptor extends NodeDescriptor
 
 	String setValueLabelFailed(EvaluateException e);
 
-	Icon setValueIcon(Icon icon);
+	Image setValueIcon(Image icon);
 
 	boolean isArray();
 
