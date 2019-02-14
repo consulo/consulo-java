@@ -2,10 +2,10 @@ package consulo.java.manifest.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.beans.PropertyChangeListener;
 import java.util.EventObject;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -13,7 +13,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Header;
@@ -54,6 +53,7 @@ import consulo.java.manifest.editor.models.ClauseTableModel;
 import consulo.java.manifest.editor.models.FileTableModel;
 import consulo.java.manifest.editor.models.HeaderTableModel;
 import consulo.java.manifest.lang.headerparser.HeaderUtil;
+import kava.beans.PropertyChangeListener;
 
 /**
  * @author VISTALL
