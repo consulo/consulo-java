@@ -29,7 +29,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.*;
+import com.intellij.psi.NonClasspathClassFinder;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiModificationTracker;
 
@@ -37,68 +41,84 @@ import com.intellij.psi.util.PsiModificationTracker;
  * @author yole
  */
 @Singleton
-public class PsiPackageImplementationHelperImpl extends PsiPackageImplementationHelper {
-  @Override
-  public GlobalSearchScope adjustAllScope(PsiJavaPackage psiPackage, GlobalSearchScope globalSearchScope) {
-    return NonClasspathClassFinder.addNonClasspathScope(psiPackage.getProject(), globalSearchScope);
-  }
+public class PsiPackageImplementationHelperImpl extends PsiPackageImplementationHelper
+{
+	@Override
+	public GlobalSearchScope adjustAllScope(PsiJavaPackage psiPackage, GlobalSearchScope globalSearchScope)
+	{
+		return NonClasspathClassFinder.addNonClasspathScope(psiPackage.getProject(), globalSearchScope);
+	}
 
-  @Override
-  public VirtualFile[] occursInPackagePrefixes(PsiJavaPackage psiPackage) {
-    return VirtualFile.EMPTY_ARRAY;
-  }
+	@Override
+	public VirtualFile[] occursInPackagePrefixes(PsiJavaPackage psiPackage)
+	{
+		return VirtualFile.EMPTY_ARRAY;
+	}
 
-  @Override
-  public void handleQualifiedNameChange(final PsiJavaPackage psiPackage, final String newQualifiedName) {
+	@Override
+	public void handleQualifiedNameChange(final PsiJavaPackage psiPackage, final String newQualifiedName)
+	{
 
-  }
+	}
 
-  @Override
-  public void navigate(final PsiJavaPackage psiPackage, final boolean requestFocus) {
-    final Project project = psiPackage.getProject();
-    ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow(ToolWindowId.PROJECT_VIEW);
-    window.activate(null);
-    window.getActivation().doWhenDone(new Runnable() {
-      @Override
-      public void run() {
-        final ProjectView projectView = ProjectView.getInstance(project);
-        PsiDirectory[] directories = suggestMostAppropriateDirectories(psiPackage);
-        if (directories.length == 0) return;
-        projectView.select(directories[0], directories[0].getVirtualFile(), requestFocus);
-      }
-    });
-  }
+	@Override
+	public void navigate(final PsiJavaPackage psiPackage, final boolean requestFocus)
+	{
+		final Project project = psiPackage.getProject();
+		ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow(ToolWindowId.PROJECT_VIEW);
+		window.activate(() -> {
+			final ProjectView projectView = ProjectView.getInstance(project);
+			PsiDirectory[] directories = suggestMostAppropriateDirectories(psiPackage);
+			if(directories.length == 0)
+			{
+				return;
+			}
+			projectView.select(directories[0], directories[0].getVirtualFile(), requestFocus);
+		});
+	}
 
-  private static PsiDirectory[] suggestMostAppropriateDirectories(PsiJavaPackage psiPackage) {
-    final Project project = psiPackage.getProject();
-    PsiDirectory[] directories = null;
-    final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-    if (editor != null) {
-      final Document document = editor.getDocument();
-      final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
-      if (psiFile != null) {
-        final Module module = ModuleUtil.findModuleForPsiElement(psiFile);
-        if (module != null) {
-          directories = psiPackage.getDirectories(GlobalSearchScope.moduleWithDependenciesScope(module));
-        } else {
-          directories = psiPackage.getDirectories(GlobalSearchScope.notScope(GlobalSearchScope.projectScope(project)));
-        }
-      }
-    }
+	private static PsiDirectory[] suggestMostAppropriateDirectories(PsiJavaPackage psiPackage)
+	{
+		final Project project = psiPackage.getProject();
+		PsiDirectory[] directories = null;
+		final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+		if(editor != null)
+		{
+			final Document document = editor.getDocument();
+			final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+			if(psiFile != null)
+			{
+				final Module module = ModuleUtil.findModuleForPsiElement(psiFile);
+				if(module != null)
+				{
+					directories = psiPackage.getDirectories(GlobalSearchScope.moduleWithDependenciesScope(module));
+				}
+				else
+				{
+					directories = psiPackage.getDirectories(GlobalSearchScope.notScope(GlobalSearchScope.projectScope(project)));
+				}
+			}
+		}
 
-    if (directories == null || directories.length == 0) {
-      directories = psiPackage.getDirectories();
-    }
-    return directories;
-  }
+		if(directories == null || directories.length == 0)
+		{
+			directories = psiPackage.getDirectories();
+		}
+		return directories;
+	}
 
-  @Override
-  public boolean packagePrefixExists(PsiJavaPackage psiPackage) {
-    return false;
-  }
+	@Override
+	public boolean packagePrefixExists(PsiJavaPackage psiPackage)
+	{
+		return false;
+	}
 
-  @Override
-  public Object[] getDirectoryCachedValueDependencies(PsiJavaPackage psiPackage) {
-    return new Object[] { PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT, ProjectRootManager.getInstance(psiPackage.getProject()) };
-  }
+	@Override
+	public Object[] getDirectoryCachedValueDependencies(PsiJavaPackage psiPackage)
+	{
+		return new Object[]{
+				PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT,
+				ProjectRootManager.getInstance(psiPackage.getProject())
+		};
+	}
 }
