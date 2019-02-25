@@ -65,13 +65,13 @@ public abstract class LightAdvHighlightingPerformanceTest extends LightDaemonAna
     void block() {
       myExtensions = myEp.getExtensions();
       for (T extension : myExtensions) {
-        myEp.unregisterExtension(extension);
+       // myEp.unregisterExtension(extension);
       }
     }
 
     void unblock() {
       for (T extension : myExtensions) {
-        myEp.registerExtension(extension);
+        //myEp.registerExtension(extension);
       }
       myExtensions = null;
     }

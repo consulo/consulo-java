@@ -130,14 +130,14 @@ public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTe
     assertEquals(2, infos.size()); // unused class and unused method
 
     try {
-      point.registerExtension(extension);
+      //point.registerExtension(extension);
 
       infos = doHighlighting(HighlightSeverity.WARNING);
       HighlightInfo info = assertOneElement(infos);
       assertEquals("Class 'WithMain' is never used", info.getDescription());
     }
     finally {
-      point.unregisterExtension(extension);
+      //point.unregisterExtension(extension);
     }
   }
 

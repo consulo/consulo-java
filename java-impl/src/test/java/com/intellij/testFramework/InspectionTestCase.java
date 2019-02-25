@@ -222,13 +222,13 @@ public abstract class InspectionTestCase extends PsiTestCase {
       }
     };
 
-    point.registerExtension(myUnusedCodeExtension);
+    //point.registerExtension(myUnusedCodeExtension);
   }
 
   @Override
   protected void tearDown() throws Exception {
     ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
-    point.unregisterExtension(myUnusedCodeExtension);
+   // point.unregisterExtension(myUnusedCodeExtension);
     myUnusedCodeExtension = null;
     ext_src = null;
     super.tearDown();

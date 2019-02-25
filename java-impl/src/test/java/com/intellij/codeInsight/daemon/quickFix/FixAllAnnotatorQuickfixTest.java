@@ -31,7 +31,6 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
-import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -47,13 +46,13 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
   public void testAnnotator() throws Exception {
     Annotator annotator = new MyAnnotator();
     Language javaLanguage = JavaFileType.INSTANCE.getLanguage();
-    LanguageAnnotators.INSTANCE.addExplicitExtension(javaLanguage, annotator);
+    //LanguageAnnotators.INSTANCE.addExplicitExtension(javaLanguage, annotator);
     enableInspectionTool(new DefaultHighlightVisitorBasedInspection.AnnotatorBasedInspection());
     try {
       doAllTests();
     }
     finally {
-      LanguageAnnotators.INSTANCE.removeExplicitExtension(javaLanguage, annotator);
+      //LanguageAnnotators.INSTANCE.removeExplicitExtension(javaLanguage, annotator);
     }
   }
 

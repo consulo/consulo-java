@@ -257,7 +257,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
       public void writeExternal(Element element) { }
     };
 
-    point.registerExtension(extension);
+    //point.registerExtension(extension);
 
     try {
       UnusedDeclarationInspection deadCodeInspection = new UnusedDeclarationInspection();
@@ -266,7 +266,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
       doTest(true, false);
     }
     finally {
-      point.unregisterExtension(extension);
+      //point.unregisterExtension(extension);
     }
   }
   public void testUnusedNonPrivateMembersReferencedFromText() {
@@ -327,14 +327,14 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
   public void testInjectedAnnotator() {
     Annotator annotator = new MyAnnotator();
     Language xml = XMLLanguage.INSTANCE;
-    LanguageAnnotators.INSTANCE.addExplicitExtension(xml, annotator);
+    //LanguageAnnotators.INSTANCE.addExplicitExtension(xml, annotator);
     try {
       List<Annotator> list = LanguageAnnotators.INSTANCE.allForLanguage(xml);
       assertTrue(list.toString(), list.contains(annotator));
       doTest(BASE_PATH + "/" + getTestName(false) + ".xml",true,false);
     }
     finally {
-      LanguageAnnotators.INSTANCE.removeExplicitExtension(xml, annotator);
+      //LanguageAnnotators.INSTANCE.removeExplicitExtension(xml, annotator);
     }
 
     List<Annotator> list = LanguageAnnotators.INSTANCE.allForLanguage(xml);
