@@ -18,7 +18,6 @@ package com.intellij.psi.impl.source.tree.injected;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -27,10 +26,8 @@ import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.openapi.extensions.ExtensionPointListener;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.ModificationTracker;
@@ -59,20 +56,11 @@ public class JavaConcatenationInjectorManager implements ModificationTracker
 	public JavaConcatenationInjectorManager(Project project, PsiManager psiManager)
 	{
 		final ExtensionPoint<ConcatenationAwareInjector> concatPoint = Extensions.getArea(project).getExtensionPoint(CONCATENATION_INJECTOR_EP_NAME);
-		concatPoint.addExtensionPointListener(new ExtensionPointListener<ConcatenationAwareInjector>()
+		for(ConcatenationAwareInjector injector : concatPoint.getExtensionList())
 		{
-			@Override
-			public void extensionAdded(@Nonnull ConcatenationAwareInjector injector, @Nullable PluginDescriptor pluginDescriptor)
-			{
-				registerConcatenationInjector(injector);
-			}
+			registerConcatenationInjector(injector);
+		}
 
-			@Override
-			public void extensionRemoved(@Nonnull ConcatenationAwareInjector injector, @Nullable PluginDescriptor pluginDescriptor)
-			{
-				unregisterConcatenationInjector(injector);
-			}
-		});
 		((PsiManagerEx) psiManager).registerRunnableToRunOnAnyChange(new Runnable()
 		{
 			@Override
