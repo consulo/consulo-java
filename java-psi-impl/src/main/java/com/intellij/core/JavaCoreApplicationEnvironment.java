@@ -26,8 +26,6 @@ import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.projectRoots.JavaVersionService;
-import com.intellij.openapi.util.ClassExtension;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.*;
 import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.EmptySubstitutorImpl;
@@ -78,15 +76,5 @@ public class JavaCoreApplicationEnvironment extends CoreApplicationEnvironment {
 
   protected CoreJavaDirectoryService createJavaDirectoryService() {
     return new CoreJavaDirectoryService();
-  }
-
-  public <T> void addExplicitExtension(final ClassExtension<T> instance, final Class clazz, final T object) {
-    instance.addExplicitExtension(clazz, object);
-    Disposer.register(getParentDisposable(), new Disposable() {
-      @Override
-      public void dispose() {
-        instance.removeExplicitExtension(clazz, object);
-      }
-    });
   }
 }

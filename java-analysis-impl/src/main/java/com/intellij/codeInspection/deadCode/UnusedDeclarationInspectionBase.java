@@ -34,11 +34,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -49,7 +48,6 @@ import com.intellij.codeInspection.GlobalInspectionTool;
 import com.intellij.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
-import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.ProblemDescriptionsProcessor;
 import com.intellij.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
@@ -61,12 +59,9 @@ import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.openapi.extensions.ExtensionPointListener;
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -80,6 +75,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.java.codeInspection.JavaExtensionPoints;
 import consulo.java.module.util.JavaClassNames;
 
 public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
@@ -1030,48 +1026,21 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	{
 		super.initialize(context);
 		myContext = context;
-		ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME);
-		point.addExtensionPointListener(new ExtensionPointListener<EntryPoint>()
+		for(EntryPoint extension : JavaExtensionPoints.DEAD_CODE_EP_NAME.getExtensionList())
 		{
-			@Override
-			public void extensionAdded(@Nonnull final EntryPoint extension, @Nullable PluginDescriptor
-					pluginDescriptor)
+			boolean alreadyAdded = ContainerUtil.find(myExtensions, point -> point.getClass().equals(extension.getClass())) != null;
+			if(!alreadyAdded)
 			{
-				boolean alreadyAdded = ContainerUtil.find(myExtensions, new Condition<EntryPoint>()
+				try
 				{
-					@Override
-					public boolean value(EntryPoint point)
-					{
-						return point.getClass().equals(extension.getClass());
-					}
-				}) != null;
-				if(!alreadyAdded)
+					myExtensions.add(extension.clone());
+				}
+				catch(CloneNotSupportedException e)
 				{
-					try
-					{
-						myExtensions.add(extension.clone());
-					}
-					catch(CloneNotSupportedException e)
-					{
-						LOG.error(e);
-					}
+					LOG.error(e);
 				}
 			}
-
-			@Override
-			public void extensionRemoved(@Nonnull final EntryPoint extension,
-					@Nullable PluginDescriptor pluginDescriptor)
-			{
-				ContainerUtil.retainAll(myExtensions, new Condition<EntryPoint>()
-				{
-					@Override
-					public boolean value(EntryPoint point)
-					{
-						return !point.getClass().equals(extension.getClass());
-					}
-				});
-			}
-		}, getEntryPointsManager());
+		}
 	}
 
 	@Override

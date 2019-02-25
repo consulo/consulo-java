@@ -36,16 +36,11 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.openapi.extensions.ExtensionPointListener;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizableStringList;
-import com.intellij.profile.codeInspection.InspectionProfileManager;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -53,7 +48,6 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.UIUtil;
 import consulo.java.JavaQuickFixBundle;
 import consulo.java.codeInspection.JavaExtensionPoints;
 
@@ -106,36 +100,6 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 		myTemporaryEntryPoints = new HashSet<RefElement>();
 		myPersistentEntryPoints = new LinkedHashMap<String, SmartRefElementPointer>(); // To keep the order between readExternal to writeExternal
 		Disposer.register(project, this);
-		final ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME);
-		point.addExtensionPointListener(new ExtensionPointListener<EntryPoint>()
-		{
-			@Override
-			public void extensionAdded(@Nonnull EntryPoint extension, @javax.annotation.Nullable PluginDescriptor pluginDescriptor)
-			{
-				extensionRemoved(extension, pluginDescriptor);
-			}
-
-			@Override
-			public void extensionRemoved(@Nonnull EntryPoint extension, @javax.annotation.Nullable PluginDescriptor pluginDescriptor)
-			{
-				if(ADDITIONAL_ANNOS != null)
-				{
-					ADDITIONAL_ANNOS = null;
-					UIUtil.invokeLaterIfNeeded(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							if(ApplicationManager.getApplication().isDisposed())
-							{
-								return;
-							}
-							InspectionProfileManager.getInstance().fireProfileChanged(null);
-						}
-					});
-				}
-			}
-		}, this);
 	}
 
 	public static EntryPointsManagerBase getInstance(Project project)
