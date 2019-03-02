@@ -24,6 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -177,7 +178,7 @@ public abstract class PsiConcurrencyStressTest extends PsiTestCase {
           public void visitElement(final PsiElement element) {
             super.visitElement(element);
 
-            final HighlightInfoHolder infoHolder = new HighlightInfoHolder(myFile, HighlightInfoFilter.EMPTY_ARRAY);
+            final HighlightInfoHolder infoHolder = new HighlightInfoHolder(myFile, Collections.emptyList());
             final HighlightVisitorImpl visitor = new HighlightVisitorImpl(PsiResolveHelper.SERVICE.getInstance(getProject()));
             visitor.analyze(myFile, false, infoHolder, new Runnable() {
               @Override
