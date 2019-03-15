@@ -48,7 +48,6 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -88,7 +87,7 @@ public class HotSwapUIImpl extends HotSwapUI
 				final MessageBusConnection conn = myConn;
 				if(conn != null)
 				{
-					Disposer.dispose(conn);
+					conn.disconnect();
 					myConn = null;
 				}
 			}
