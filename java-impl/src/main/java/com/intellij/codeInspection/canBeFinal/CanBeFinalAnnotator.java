@@ -15,14 +15,30 @@
  */
 package com.intellij.codeInspection.canBeFinal;
 
-import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.codeInspection.reference.*;
-import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.*;
-import com.intellij.util.containers.ContainerUtil;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
-import java.util.*;
+import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
+import com.intellij.codeInspection.reference.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassInitializer;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiVariable;
+import com.intellij.psi.controlFlow.AnalysisCanceledException;
+import com.intellij.psi.controlFlow.ControlFlow;
+import com.intellij.psi.controlFlow.ControlFlowFactory;
+import com.intellij.psi.controlFlow.ControlFlowUtil;
+import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
+import com.intellij.util.containers.ContainerUtil;
 
 /**
  * User: anna
@@ -30,7 +46,7 @@ import java.util.*;
  */
 class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
   private final RefManager myManager;
-  public static int CAN_BE_FINAL_MASK;
+  public static long CAN_BE_FINAL_MASK;
 
   public CanBeFinalAnnotator(@Nonnull RefManager manager) {
     myManager = manager;

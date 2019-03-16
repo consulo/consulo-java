@@ -140,7 +140,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 			for(int i = 0; i < paramList.length; i++)
 			{
 				PsiParameter parameter = paramList[i];
-				myParameters[i] = getRefJavaManager().getParameterReference(parameter, i);
+				myParameters[i] = getRefJavaManager().getParameterReference(parameter, i, this);
 			}
 		}
 

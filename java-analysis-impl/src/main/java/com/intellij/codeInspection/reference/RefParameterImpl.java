@@ -30,7 +30,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiTreeUtil;
 
 public class RefParameterImpl extends RefJavaElementImpl implements RefParameter
 {
@@ -41,13 +40,13 @@ public class RefParameterImpl extends RefJavaElementImpl implements RefParameter
 	private final short myIndex;
 	private String myActualValueTemplate;
 
-	RefParameterImpl(PsiParameter parameter, int index, RefManager manager)
+	RefParameterImpl(PsiParameter parameter, int index, RefManager manager, RefMethod refMethod)
 	{
 		super(parameter, manager);
 
 		myIndex = (short) index;
 		myActualValueTemplate = VALUE_UNDEFINED;
-		final RefElementImpl owner = (RefElementImpl) manager.getReference(PsiTreeUtil.getParentOfType(parameter, PsiMethod.class));
+		final RefElementImpl owner = (RefElementImpl) refMethod;
 		if(owner != null)
 		{
 			owner.add(this);

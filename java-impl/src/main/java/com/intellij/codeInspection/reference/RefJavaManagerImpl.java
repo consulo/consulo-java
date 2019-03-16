@@ -17,6 +17,10 @@ package com.intellij.codeInspection.reference;
 
 import gnu.trove.THashMap;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -35,6 +39,8 @@ import com.intellij.codeInspection.ex.Tools;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.UserDataCache;
@@ -51,7 +57,11 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class RefJavaManagerImpl extends RefJavaManager
 {
-	private static final Logger LOG = Logger.getInstance("#" + RefJavaManagerImpl.class.getName());
+	private static final Logger LOG = Logger.getInstance(RefJavaManagerImpl.class.getName());
+	private static final Condition<PsiElement> PROBLEM_ELEMENT_CONDITION =
+			Conditions.or(Conditions.instanceOf(PsiFile.class, PsiJavaModule.class),
+					Conditions.and(Conditions.notInstanceOf(PsiTypeParameter.class), psi -> (psi instanceof PsiField || !(psi instanceof PsiVariable)) && (!(psi instanceof PsiClassInitializer))));
+
 	private PsiMethod myAppMainPattern;
 	private PsiMethod myAppPremainPattern;
 	private PsiClass myApplet;
@@ -150,6 +160,36 @@ public class RefJavaManagerImpl extends RefJavaManager
 		return file != null ? DEAD_CODE_TOOL.get(file, myRefManager).get() : null;
 	}
 
+	@Nullable
+	@Override
+	public PsiNamedElement getElementContainer(@Nonnull PsiElement psiElement)
+	{
+		return (PsiNamedElement) PsiTreeUtil.findFirstParent(psiElement, PROBLEM_ELEMENT_CONDITION);
+	}
+
+	@Override
+	public boolean shouldProcessExternalFile(@Nonnull PsiFile file)
+	{
+		return file instanceof PsiClassOwner;
+	}
+
+	@Nonnull
+	@Override
+	public Stream<? extends PsiElement> extractExternalFileImplicitReferences(@Nonnull PsiFile psiFile)
+	{
+		return Arrays
+				.stream(((PsiClassOwner) psiFile).getClasses())
+				.flatMap(c -> Arrays.stream(c.getSuperTypes()))
+				.map(PsiClassType::resolve)
+				.filter(Objects::nonNull);
+	}
+
+	@Override
+	public void markExternalReferencesProcessed(@Nonnull RefElement file)
+	{
+		getEntryPointsManager().addEntryPoint(file, false);
+	}
+
 	@Override
 	public RefPackage getDefaultPackage()
 	{
@@ -185,19 +225,15 @@ public class RefJavaManagerImpl extends RefJavaManager
 	}
 
 	@Override
-	public RefParameter getParameterReference(PsiParameter param, int index)
+	public RefParameter getParameterReference(PsiParameter param, int index, RefMethod refMethod)
 	{
 		LOG.assertTrue(myRefManager.isValidPointForReference(), "References may become invalid after process is finished");
-		RefElement ref = myRefManager.getFromRefTable(param);
 
-		if(ref == null)
-		{
-			ref = new RefParameterImpl(param, index, myRefManager);
-			((RefParameterImpl) ref).initialize();
-			myRefManager.putToRefTable(param, ref);
-		}
-
-		return (RefParameter) ref;
+		return myRefManager.getFromRefTableOrCache(param, () -> {
+			RefParameterImpl ref = new RefParameterImpl(param, index, myRefManager, refMethod);
+			ref.initialize();
+			return ref;
+		});
 	}
 
 	@Override
