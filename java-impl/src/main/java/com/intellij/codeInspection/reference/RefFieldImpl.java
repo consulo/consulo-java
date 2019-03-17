@@ -194,6 +194,6 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
   }
 
   @Override
-  protected void initialize() {
+  public void initialize() {
   }
 }

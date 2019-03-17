@@ -75,7 +75,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 
 	@Override
 	@RequiredReadAction
-	protected void initialize()
+	public void initialize()
 	{
 		myDefaultConstructor = null;
 

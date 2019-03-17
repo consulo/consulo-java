@@ -170,7 +170,7 @@ public class RefParameterImpl extends RefJavaElementImpl implements RefParameter
 	}
 
 	@Override
-	protected void initialize()
+	public void initialize()
 	{
 	}
 

@@ -91,7 +91,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod
 	}
 
 	@Override
-	protected void initialize()
+	public void initialize()
 	{
 		final PsiMethod method = (PsiMethod) getElement();
 		LOG.assertTrue(method != null);
