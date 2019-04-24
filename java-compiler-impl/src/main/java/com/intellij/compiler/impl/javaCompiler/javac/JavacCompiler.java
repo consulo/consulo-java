@@ -55,6 +55,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkType;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.openapi.projectRoots.OwnJdkVersionDetector;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
@@ -158,9 +159,17 @@ public class JavacCompiler extends ExternalCompiler
 				return false;
 			}
 
-			if(CompilerUtil.isOfVersion(versionString, "1.0"))
+			JavaSdkVersion javaSdkVersion = JavaSdkVersion.fromVersionString(versionString);
+			if(javaSdkVersion == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
+						.getErrorIcon());
+				return false;
+			}
+
+			if(!javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_5))
+			{
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.target.jdk.not.supported"), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 		}
