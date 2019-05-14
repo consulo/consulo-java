@@ -21,6 +21,7 @@ import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.AbstractTreeUi;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -60,6 +61,8 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 		List<AbstractTreeNode> result = new ArrayList<>();
 		for(final AbstractTreeNode child : children)
 		{
+			ProgressManager.checkCanceled();
+
 			Object o = child.getValue();
 			if(o instanceof PsiClassOwner/* && !(o instanceof JspFile)*/)
 			{
