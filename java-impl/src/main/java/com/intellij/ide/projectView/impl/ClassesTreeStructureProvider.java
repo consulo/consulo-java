@@ -15,15 +15,12 @@
  */
 package com.intellij.ide.projectView.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.annotation.Nullable;
 import com.intellij.ide.projectView.SelectableTreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
+import com.intellij.ide.util.treeView.AbstractTreeUi;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -34,6 +31,12 @@ import consulo.annotations.RequiredReadAction;
 import consulo.java.ide.JavaModuleIconDescriptorUpdater;
 import consulo.java.ide.projectView.impl.JavaModuleRootTreeNode;
 import consulo.java.util.JavaProjectRootsUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class ClassesTreeStructureProvider implements SelectableTreeStructureProvider, DumbAware
 {
@@ -48,7 +51,13 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 	@RequiredReadAction
 	public Collection<AbstractTreeNode> modify(AbstractTreeNode parent, Collection<AbstractTreeNode> children, ViewSettings settings)
 	{
-		ArrayList<AbstractTreeNode> result = new ArrayList<>();
+		return AbstractTreeUi.calculateYieldingToWriteAction(() -> doModify(children, settings));
+	}
+
+	@Nonnull
+	private List<AbstractTreeNode> doModify(Collection<AbstractTreeNode> children, ViewSettings settings)
+	{
+		List<AbstractTreeNode> result = new ArrayList<>();
 		for(final AbstractTreeNode child : children)
 		{
 			Object o = child.getValue();
