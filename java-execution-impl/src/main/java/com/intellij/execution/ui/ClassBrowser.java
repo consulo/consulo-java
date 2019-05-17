@@ -23,7 +23,6 @@ import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ex.MessagesEx;
@@ -33,6 +32,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiMethodUtil;
+
 import javax.annotation.Nullable;
 
 public abstract class ClassBrowser extends BrowseModuleValueActionListener {
@@ -94,12 +94,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
 
       @Nullable
       private PsiMethod findMainMethod(final PsiClass aClass) {
-        return new ReadAction<PsiMethod>() {
-          @Override
-          protected void run(Result<PsiMethod> result) throws Throwable {
-            result.setResult(PsiMethodUtil.findMainMethod(aClass));
-          }
-        }.execute().getResultObject();
+        return ReadAction.compute(() -> PsiMethodUtil.findMainMethod(aClass));
       }
     };
     return new MainClassBrowser(project, moduleSelector, ExecutionBundle.message("choose.main.class.dialog.title")) {
