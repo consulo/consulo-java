@@ -15,26 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import javax.annotation.Nullable;
 import com.intellij.ProjectTopics;
 import com.intellij.codeEditor.JavaEditorFileSwapper;
 import com.intellij.codeInsight.AttachSourcesProvider;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -44,11 +30,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.roots.LibraryOrderEntry;
-import com.intellij.openapi.roots.ModuleRootAdapter;
-import com.intellij.openapi.roots.ModuleRootEvent;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.ui.configuration.PathUIUtils;
 import com.intellij.openapi.ui.Messages;
@@ -76,6 +58,14 @@ import consulo.editor.notifications.EditorNotificationProvider;
 import consulo.java.JavaBundle;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author Dmitry Avdeev
@@ -330,17 +320,12 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			{
 				return ActionCallback.REJECTED;
 			}
-			new WriteAction()
-			{
-				@Override
-				protected void run(@Nonnull final Result result)
+			WriteAction.run(() -> {
+				for(Library.ModifiableModel model : modelsToCommit)
 				{
-					for(Library.ModifiableModel model : modelsToCommit)
-					{
-						model.commit();
-					}
+					model.commit();
 				}
-			}.execute();
+			});
 
 			return ActionCallback.DONE;
 		}

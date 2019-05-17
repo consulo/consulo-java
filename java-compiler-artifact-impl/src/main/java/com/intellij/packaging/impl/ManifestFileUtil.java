@@ -16,25 +16,11 @@
 
 package com.intellij.packaging.impl;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.CommonBundle;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.deployment.DeploymentUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -71,6 +57,18 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.util.PathUtil;
+
+import javax.annotation.Nonnull;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 /**
  * @author nik
@@ -198,7 +196,10 @@ public class ManifestFileUtil
 		}
 	}
 
-	public static void updateManifest(@Nonnull VirtualFile file, final @javax.annotation.Nullable String mainClass, final @javax.annotation.Nullable List<String> classpath, final boolean replaceValues)
+	public static void updateManifest(@Nonnull VirtualFile file,
+									  final @javax.annotation.Nullable String mainClass,
+									  final @javax.annotation.Nullable List<String> classpath,
+									  final boolean replaceValues)
 	{
 		final Manifest manifest = readManifest(file);
 		final Attributes mainAttributes = manifest.getMainAttributes();
@@ -328,37 +329,29 @@ public class ManifestFileUtil
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		final Ref<IOException> exc = Ref.create(null);
-		final VirtualFile file = new WriteAction<VirtualFile>()
-		{
-			protected void run(final Result<VirtualFile> result)
+		final VirtualFile file = WriteAction.compute(() -> {
+			VirtualFile dir = directory;
+			try
 			{
-				VirtualFile dir = directory;
-				try
+				if(!dir.getName().equals(MANIFEST_DIR_NAME))
 				{
-					if(!dir.getName().equals(MANIFEST_DIR_NAME))
-					{
-						dir = VfsUtil.createDirectoryIfMissing(dir, MANIFEST_DIR_NAME);
-					}
-					final VirtualFile file = dir.createChildData(this, MANIFEST_FILE_NAME);
-					final OutputStream output = file.getOutputStream(this);
-					try
-					{
-						final Manifest manifest = new Manifest();
-						ManifestBuilder.setVersionAttribute(manifest.getMainAttributes());
-						manifest.write(output);
-					}
-					finally
-					{
-						output.close();
-					}
-					result.setResult(file);
+					dir = VfsUtil.createDirectoryIfMissing(dir, MANIFEST_DIR_NAME);
 				}
-				catch(IOException e)
+				final VirtualFile f = dir.createChildData(ManifestFileUtil.class, MANIFEST_FILE_NAME);
+				try (OutputStream output = f.getOutputStream(ManifestFileUtil.class))
 				{
-					exc.set(e);
+					final Manifest manifest = new Manifest();
+					ManifestBuilder.setVersionAttribute(manifest.getMainAttributes());
+					manifest.write(output);
 				}
+				return f;
 			}
-		}.execute().getResultObject();
+			catch(IOException e)
+			{
+				exc.set(e);
+				return null;
+			}
+		});
 
 		final IOException exception = exc.get();
 		if(exception != null)

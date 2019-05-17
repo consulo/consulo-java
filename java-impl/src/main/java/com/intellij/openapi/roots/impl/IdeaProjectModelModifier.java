@@ -15,27 +15,14 @@
  */
 package com.intellij.openapi.roots.impl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.daemon.impl.quickfix.LocateLibraryDialog;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.roots.DependencyScope;
-import com.intellij.openapi.roots.ExternalLibraryDescriptor;
-import com.intellij.openapi.roots.JavaProjectModelModifier;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.roots.libraries.LibraryUtil;
@@ -44,6 +31,11 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredReadAction;
 import consulo.java.module.extension.JavaMutableModuleExtension;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author nik
@@ -83,23 +75,20 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 			}
 			else
 			{
-				new WriteAction()
+				WriteAction.run(() ->
 				{
-					protected void run(@Nonnull Result result)
+					Library library = LibraryUtil.createLibrary(LibraryTablesRegistrar.getInstance().getLibraryTable(myProject), descriptor.getPresentableName());
+					Library.ModifiableModel model = library.getModifiableModel();
+					for(String url : urls)
 					{
-						Library library = LibraryUtil.createLibrary(LibraryTablesRegistrar.getInstance().getLibraryTable(myProject), descriptor.getPresentableName());
-						Library.ModifiableModel model = library.getModifiableModel();
-						for(String url : urls)
-						{
-							model.addRoot(url, OrderRootType.CLASSES);
-						}
-						model.commit();
-						for(Module module : modules)
-						{
-							ModuleRootModificationUtil.addDependency(module, library, scope, false);
-						}
+						model.addRoot(url, OrderRootType.CLASSES);
 					}
-				}.execute();
+					model.commit();
+					for(Module module : modules)
+					{
+						ModuleRootModificationUtil.addDependency(module, library, scope, false);
+					}
+				});
 			}
 		}
 		return AsyncResult.done(null);

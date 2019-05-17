@@ -15,16 +15,6 @@
  */
 package com.intellij.testFramework;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.junit.Assert;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileTypes.FileType;
@@ -40,206 +30,237 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.util.IncorrectOperationException;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.junit.Assert;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * @author Mike
  */
-public abstract class PsiTestCase extends ModuleTestCase {
-  protected PsiManagerImpl myPsiManager;
-  protected PsiFile myFile;
-  protected PsiTestData myTestDataBefore;
-  protected PsiTestData myTestDataAfter;
-  private String myDataRoot;
+public abstract class PsiTestCase extends ModuleTestCase
+{
+	protected PsiManagerImpl myPsiManager;
+	protected PsiFile myFile;
+	protected PsiTestData myTestDataBefore;
+	protected PsiTestData myTestDataAfter;
+	private String myDataRoot;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    myPsiManager = (PsiManagerImpl) PsiManager.getInstance(myProject);
-  }
+	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+		myPsiManager = (PsiManagerImpl) PsiManager.getInstance(myProject);
+	}
 
-  @Override
-  protected void tearDown() throws Exception {
-    myPsiManager = null;
-    myFile = null;
-    myTestDataBefore = null;
-    myTestDataAfter = null;
-    super.tearDown();
-  }
+	@Override
+	protected void tearDown() throws Exception
+	{
+		myPsiManager = null;
+		myFile = null;
+		myTestDataBefore = null;
+		myTestDataAfter = null;
+		super.tearDown();
+	}
 
-  protected PsiFile createDummyFile(String fileName, String text) throws IncorrectOperationException {
-    FileType type = FileTypeRegistry.getInstance().getFileTypeByFileName(fileName);
-    return PsiFileFactory.getInstance(myProject).createFileFromText(fileName, type, text);
-  }
+	protected PsiFile createDummyFile(String fileName, String text) throws IncorrectOperationException
+	{
+		FileType type = FileTypeRegistry.getInstance().getFileTypeByFileName(fileName);
+		return PsiFileFactory.getInstance(myProject).createFileFromText(fileName, type, text);
+	}
 
-  protected PsiFile createFile(@NonNls String fileName, String text) throws Exception {
-    return createFile(myModule, fileName, text);
-  }
-  protected PsiFile createFile(Module module, String fileName, String text) throws Exception {
-    File dir = createTempDirectory();
-    VirtualFile vDir = LocalFileSystem.getInstance().refreshAndFindFileByPath(dir.getCanonicalPath().replace(File.separatorChar, '/'));
+	protected PsiFile createFile(@NonNls String fileName, String text) throws Exception
+	{
+		return createFile(myModule, fileName, text);
+	}
 
-    return createFile(module, vDir, fileName, text);
-  }
+	protected PsiFile createFile(Module module, String fileName, String text) throws Exception
+	{
+		File dir = createTempDirectory();
+		VirtualFile vDir = LocalFileSystem.getInstance().refreshAndFindFileByPath(dir.getCanonicalPath().replace(File.separatorChar, '/'));
 
-  protected PsiFile createFile(final Module module, final VirtualFile vDir, final String fileName, final String text) throws IOException {
-    return new WriteAction<PsiFile>() {
-      @Override
-      protected void run(Result<PsiFile> result) throws Throwable {
-        if (!ModuleRootManager.getInstance(module).getFileIndex().isInSourceContent(vDir)) {
-          addSourceContentToRoots(module, vDir);
-        }
+		return createFile(module, vDir, fileName, text);
+	}
 
-        final VirtualFile vFile = vDir.createChildData(vDir, fileName);
-        VfsUtil.saveText(vFile, text);
-        Assert.assertNotNull(vFile);
-        final PsiFile file = myPsiManager.findFile(vFile);
-        Assert.assertNotNull(file);
-        result.setResult(file);
-      }
-    }.execute().getResultObject();
-  }
+	protected PsiFile createFile(final Module module, final VirtualFile vDir, final String fileName, final String text) throws IOException
+	{
+		return WriteAction.compute(() -> {
+			if(!ModuleRootManager.getInstance(module).getFileIndex().isInSourceContent(vDir))
+			{
+				addSourceContentToRoots(module, vDir);
+			}
 
-  protected void addSourceContentToRoots(final Module module, final VirtualFile vDir) {
-    PsiTestUtil.addSourceContentToRoots(module, vDir);
-  }
+			final VirtualFile vFile = vDir.createChildData(vDir, fileName);
+			VfsUtil.saveText(vFile, text);
+			Assert.assertNotNull(vFile);
+			final PsiFile file = myPsiManager.findFile(vFile);
+			Assert.assertNotNull(file);
+			return file;
+		});
+	}
 
-  protected PsiElement configureByFileWithMarker(String filePath, String marker) throws Exception{
-    final VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(filePath.replace(File.separatorChar, '/'));
-    Assert.assertNotNull("file " + filePath + " not found", vFile);
+	protected void addSourceContentToRoots(final Module module, final VirtualFile vDir)
+	{
+		PsiTestUtil.addSourceContentToRoots(module, vDir);
+	}
 
-    String fileText = VfsUtil.loadText(vFile);
-    fileText = StringUtil.convertLineSeparators(fileText);
+	protected PsiElement configureByFileWithMarker(String filePath, String marker) throws Exception
+	{
+		final VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(filePath.replace(File.separatorChar, '/'));
+		Assert.assertNotNull("file " + filePath + " not found", vFile);
 
-    int offset = fileText.indexOf(marker);
-    Assert.assertTrue(offset >= 0);
-    fileText = fileText.substring(0, offset) + fileText.substring(offset + marker.length());
+		String fileText = VfsUtil.loadText(vFile);
+		fileText = StringUtil.convertLineSeparators(fileText);
 
-    myFile = createFile(vFile.getName(), fileText);
+		int offset = fileText.indexOf(marker);
+		Assert.assertTrue(offset >= 0);
+		fileText = fileText.substring(0, offset) + fileText.substring(offset + marker.length());
 
-    return myFile.findElementAt(offset);
-  }
+		myFile = createFile(vFile.getName(), fileText);
 
-  protected void configure(String path, String dataName) throws Exception {
-    myDataRoot = getTestDataPath() + path;
+		return myFile.findElementAt(offset);
+	}
 
-    myTestDataBefore = loadData(dataName);
+	protected void configure(String path, String dataName) throws Exception
+	{
+		myDataRoot = getTestDataPath() + path;
 
-    PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
-    VirtualFile vDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, myDataRoot, myFilesToDelete);
+		myTestDataBefore = loadData(dataName);
 
-    final VirtualFile vFile = vDir.findChild(myTestDataBefore.getTextFile());
-    myFile = myPsiManager.findFile(vFile);
-  }
+		PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
+		VirtualFile vDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, myDataRoot, myFilesToDelete);
 
-  protected String getTestDataPath() {
-    return "/";
-  }
+		final VirtualFile vFile = vDir.findChild(myTestDataBefore.getTextFile());
+		myFile = myPsiManager.findFile(vFile);
+	}
 
-  protected String loadFile(String name) throws Exception {
-    String result = FileUtil.loadFile(new File(getTestDataPath() + File.separatorChar + name));
-    return StringUtil.convertLineSeparators(result);
-  }
+	protected String getTestDataPath()
+	{
+		return "/";
+	}
 
-  private PsiTestData loadData(String dataName) throws Exception {
-    Document document = JDOMUtil.loadDocument(new File(myDataRoot + "/" + "data.xml"));
+	protected String loadFile(String name) throws Exception
+	{
+		String result = FileUtil.loadFile(new File(getTestDataPath() + File.separatorChar + name));
+		return StringUtil.convertLineSeparators(result);
+	}
 
-    PsiTestData data = createData();
-    Element documentElement = document.getRootElement();
+	private PsiTestData loadData(String dataName) throws Exception
+	{
+		Document document = JDOMUtil.loadDocument(new File(myDataRoot + "/" + "data.xml"));
 
-    final List nodes = documentElement.getChildren("data");
+		PsiTestData data = createData();
+		Element documentElement = document.getRootElement();
 
-    for (Object node1 : nodes) {
-      Element node = (Element)node1;
-      String value = node.getAttributeValue("name");
+		final List nodes = documentElement.getChildren("data");
 
-      if (value.equals(dataName)) {
-        DefaultJDOMExternalizer.readExternal(data, node);
-        data.loadText(myDataRoot);
+		for(Object node1 : nodes)
+		{
+			Element node = (Element) node1;
+			String value = node.getAttributeValue("name");
 
-        return data;
-      }
-    }
+			if(value.equals(dataName))
+			{
+				DefaultJDOMExternalizer.readExternal(data, node);
+				data.loadText(myDataRoot);
 
-    throw new IllegalArgumentException("Cannot find data chunk '" + dataName + "'");
-  }
+				return data;
+			}
+		}
 
-  protected PsiTestData createData() {
-    return new PsiTestData();
-  }
+		throw new IllegalArgumentException("Cannot find data chunk '" + dataName + "'");
+	}
 
-  protected void checkResult(String dataName) throws Exception {
-    myTestDataAfter = loadData(dataName);
+	protected PsiTestData createData()
+	{
+		return new PsiTestData();
+	}
 
-    final String textExpected = myTestDataAfter.getText();
-    final String actualText = myFile.getText();
+	protected void checkResult(String dataName) throws Exception
+	{
+		myTestDataAfter = loadData(dataName);
 
-    if (!textExpected.equals(actualText)) {
-      System.out.println("Text mismatch: " + getTestName(false) + "(" + getClass().getName() + ")");
-      System.out.println("Text expected:");
-      printText(textExpected);
-      System.out.println("Text found:");
-      printText(actualText);
+		final String textExpected = myTestDataAfter.getText();
+		final String actualText = myFile.getText();
 
-      Assert.fail("text");
-    }
+		if(!textExpected.equals(actualText))
+		{
+			System.out.println("Text mismatch: " + getTestName(false) + "(" + getClass().getName() + ")");
+			System.out.println("Text expected:");
+			printText(textExpected);
+			System.out.println("Text found:");
+			printText(actualText);
 
-//    assertEquals(myTestDataAfter.getText(), myFile.getText());
-  }
+			Assert.fail("text");
+		}
 
-  protected static void printText(String text) {
-    final String q = "\"";
-    System.out.print(q);
+		//    assertEquals(myTestDataAfter.getText(), myFile.getText());
+	}
 
-    text = StringUtil.convertLineSeparators(text);
+	protected static void printText(String text)
+	{
+		final String q = "\"";
+		System.out.print(q);
 
-    StringTokenizer tokenizer = new StringTokenizer(text, "\n", true);
-    while (tokenizer.hasMoreTokens()) {
-      final String token = tokenizer.nextToken();
+		text = StringUtil.convertLineSeparators(text);
 
-      if (token.equals("\n")) {
-        System.out.print(q);
-        System.out.println();
-        System.out.print(q);
-        continue;
-      }
+		StringTokenizer tokenizer = new StringTokenizer(text, "\n", true);
+		while(tokenizer.hasMoreTokens())
+		{
+			final String token = tokenizer.nextToken();
 
-      System.out.print(token);
-    }
+			if(token.equals("\n"))
+			{
+				System.out.print(q);
+				System.out.println();
+				System.out.print(q);
+				continue;
+			}
 
-    System.out.print(q);
-    System.out.println();
-  }
+			System.out.print(token);
+		}
 
-  protected void addLibraryToRoots(final VirtualFile jarFile, OrderRootType rootType) {
-    addLibraryToRoots(myModule, jarFile, rootType);
-  }
+		System.out.print(q);
+		System.out.println();
+	}
 
-  protected static void addLibraryToRoots(final Module module, final VirtualFile root, final OrderRootType rootType) {
-    Assert.assertEquals(OrderRootType.CLASSES, rootType);
-    ModuleRootModificationUtil.addModuleLibrary(module, root.getUrl());
-  }
+	protected void addLibraryToRoots(final VirtualFile jarFile, OrderRootType rootType)
+	{
+		addLibraryToRoots(myModule, jarFile, rootType);
+	}
+
+	protected static void addLibraryToRoots(final Module module, final VirtualFile root, final OrderRootType rootType)
+	{
+		Assert.assertEquals(OrderRootType.CLASSES, rootType);
+		ModuleRootModificationUtil.addModuleLibrary(module, root.getUrl());
+	}
 
 
-  public PsiFile getFile() {
-    return myFile;
-  }
+	public PsiFile getFile()
+	{
+		return myFile;
+	}
 
-  public com.intellij.openapi.editor.Document getDocument(PsiFile file) {
-    return PsiDocumentManager.getInstance(getProject()).getDocument(file);
-  }
+	public com.intellij.openapi.editor.Document getDocument(PsiFile file)
+	{
+		return PsiDocumentManager.getInstance(getProject()).getDocument(file);
+	}
 
-  public com.intellij.openapi.editor.Document getDocument(VirtualFile file) {
-    return FileDocumentManager.getInstance().getDocument(file);
-  }
+	public com.intellij.openapi.editor.Document getDocument(VirtualFile file)
+	{
+		return FileDocumentManager.getInstance().getDocument(file);
+	}
 
-  public void commitDocument(com.intellij.openapi.editor.Document document) {
-    PsiDocumentManager.getInstance(getProject()).commitDocument(document);
-  }
+	public void commitDocument(com.intellij.openapi.editor.Document document)
+	{
+		PsiDocumentManager.getInstance(getProject()).commitDocument(document);
+	}
 }

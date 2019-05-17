@@ -15,10 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -31,6 +27,9 @@ import com.intellij.openapi.roots.JavaProjectModelModificationService;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author nik
@@ -43,9 +42,9 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	private final String myQualifiedClassName;
 
 	public AddExternalLibraryToDependenciesQuickFix(@Nonnull Module currentModule,
-			@Nonnull ExternalLibraryDescriptor libraryDescriptor,
-			@Nonnull PsiReference reference,
-			@javax.annotation.Nullable String qualifiedClassName)
+													@Nonnull ExternalLibraryDescriptor libraryDescriptor,
+													@Nonnull PsiReference reference,
+													@javax.annotation.Nullable String qualifiedClassName)
 	{
 		super(reference);
 		myCurrentModule = currentModule;
@@ -79,20 +78,16 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	public void invoke(@Nonnull Project project, final Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
-		JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibraryDescriptor, scope).doWhenDone(aVoid -> new WriteAction()
-		{
-			protected void run(@Nonnull final Result result)
+		JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibraryDescriptor, scope).doWhenDone(aVoid -> WriteAction.run(() -> {
+			try
 			{
-				try
-				{
-					importClass(myCurrentModule, editor, myReference, myQualifiedClassName);
-				}
-				catch(IndexNotReadyException e)
-				{
-					LOG.info(e);
-				}
+				importClass(myCurrentModule, editor, myReference, myQualifiedClassName);
 			}
-		}.execute());
+			catch(IndexNotReadyException e)
+			{
+				LOG.info(e);
+			}
+		}));
 	}
 
 	@Override
