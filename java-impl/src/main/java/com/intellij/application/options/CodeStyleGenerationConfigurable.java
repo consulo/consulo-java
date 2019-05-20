@@ -15,20 +15,6 @@
  */
 package com.intellij.application.options;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import com.intellij.application.options.codeStyle.CommenterForm;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.lang.java.JavaLanguage;
@@ -37,10 +23,16 @@ import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.RequiredUIAccess;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class CodeStyleGenerationConfigurable implements Configurable
 {
@@ -77,7 +69,7 @@ public class CodeStyleGenerationConfigurable implements Configurable
 		myPanel.setBorder(JBUI.Borders.empty(2));
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public JComponent createComponent()
 	{
@@ -100,30 +92,32 @@ public class CodeStyleGenerationConfigurable implements Configurable
 
 	public void reset(CodeStyleSettings settings)
 	{
-		myCbPreferLongerNames.setSelected(settings.PREFER_LONGER_NAMES);
+		JavaCodeStyleSettings customSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
 
-		myFieldPrefixField.setText(settings.FIELD_NAME_PREFIX);
-		myStaticFieldPrefixField.setText(settings.STATIC_FIELD_NAME_PREFIX);
-		myParameterPrefixField.setText(settings.PARAMETER_NAME_PREFIX);
-		myLocalVariablePrefixField.setText(settings.LOCAL_VARIABLE_NAME_PREFIX);
+		myCbPreferLongerNames.setSelected(customSettings.PREFER_LONGER_NAMES);
 
-		myFieldSuffixField.setText(settings.FIELD_NAME_SUFFIX);
-		myStaticFieldSuffixField.setText(settings.STATIC_FIELD_NAME_SUFFIX);
-		myParameterSuffixField.setText(settings.PARAMETER_NAME_SUFFIX);
-		myLocalVariableSuffixField.setText(settings.LOCAL_VARIABLE_NAME_SUFFIX);
+		myFieldPrefixField.setText(customSettings.FIELD_NAME_PREFIX);
+		myStaticFieldPrefixField.setText(customSettings.STATIC_FIELD_NAME_PREFIX);
+		myParameterPrefixField.setText(customSettings.PARAMETER_NAME_PREFIX);
+		myLocalVariablePrefixField.setText(customSettings.LOCAL_VARIABLE_NAME_PREFIX);
+
+		myFieldSuffixField.setText(customSettings.FIELD_NAME_SUFFIX);
+		myStaticFieldSuffixField.setText(customSettings.STATIC_FIELD_NAME_SUFFIX);
+		myParameterSuffixField.setText(customSettings.PARAMETER_NAME_SUFFIX);
+		myLocalVariableSuffixField.setText(customSettings.LOCAL_VARIABLE_NAME_SUFFIX);
 
 		myCommenterForm.reset(settings);
 
-		myCbGenerateFinalLocals.setSelected(settings.GENERATE_FINAL_LOCALS);
-		myCbGenerateFinalParameters.setSelected(settings.GENERATE_FINAL_PARAMETERS);
+		myCbGenerateFinalLocals.setSelected(customSettings.GENERATE_FINAL_LOCALS);
+		myCbGenerateFinalParameters.setSelected(customSettings.GENERATE_FINAL_PARAMETERS);
 		myMembersOrderList.reset(mySettings);
 
-		myCbUseExternalAnnotations.setSelected(settings.USE_EXTERNAL_ANNOTATIONS);
-		myInsertOverrideAnnotationCheckBox.setSelected(settings.INSERT_OVERRIDE_ANNOTATION);
-		myRepeatSynchronizedCheckBox.setSelected(settings.REPEAT_SYNCHRONIZED);
+		myCbUseExternalAnnotations.setSelected(customSettings.USE_EXTERNAL_ANNOTATIONS);
+		myInsertOverrideAnnotationCheckBox.setSelected(customSettings.INSERT_OVERRIDE_ANNOTATION);
+		myRepeatSynchronizedCheckBox.setSelected(customSettings.REPEAT_SYNCHRONIZED);
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void reset()
 	{
@@ -132,25 +126,27 @@ public class CodeStyleGenerationConfigurable implements Configurable
 
 	public void apply(CodeStyleSettings settings)
 	{
-		settings.PREFER_LONGER_NAMES = myCbPreferLongerNames.isSelected();
+		JavaCodeStyleSettings customSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
 
-		settings.FIELD_NAME_PREFIX = myFieldPrefixField.getText().trim();
-		settings.STATIC_FIELD_NAME_PREFIX = myStaticFieldPrefixField.getText().trim();
-		settings.PARAMETER_NAME_PREFIX = myParameterPrefixField.getText().trim();
-		settings.LOCAL_VARIABLE_NAME_PREFIX = myLocalVariablePrefixField.getText().trim();
+		customSettings.PREFER_LONGER_NAMES = myCbPreferLongerNames.isSelected();
 
-		settings.FIELD_NAME_SUFFIX = myFieldSuffixField.getText().trim();
-		settings.STATIC_FIELD_NAME_SUFFIX = myStaticFieldSuffixField.getText().trim();
-		settings.PARAMETER_NAME_SUFFIX = myParameterSuffixField.getText().trim();
-		settings.LOCAL_VARIABLE_NAME_SUFFIX = myLocalVariableSuffixField.getText().trim();
+		customSettings.FIELD_NAME_PREFIX = myFieldPrefixField.getText().trim();
+		customSettings.STATIC_FIELD_NAME_PREFIX = myStaticFieldPrefixField.getText().trim();
+		customSettings.PARAMETER_NAME_PREFIX = myParameterPrefixField.getText().trim();
+		customSettings.LOCAL_VARIABLE_NAME_PREFIX = myLocalVariablePrefixField.getText().trim();
+
+		customSettings.FIELD_NAME_SUFFIX = myFieldSuffixField.getText().trim();
+		customSettings.STATIC_FIELD_NAME_SUFFIX = myStaticFieldSuffixField.getText().trim();
+		customSettings.PARAMETER_NAME_SUFFIX = myParameterSuffixField.getText().trim();
+		customSettings.LOCAL_VARIABLE_NAME_SUFFIX = myLocalVariableSuffixField.getText().trim();
 
 		myCommenterForm.apply(settings);
-		settings.GENERATE_FINAL_LOCALS = myCbGenerateFinalLocals.isSelected();
-		settings.GENERATE_FINAL_PARAMETERS = myCbGenerateFinalParameters.isSelected();
+		customSettings.GENERATE_FINAL_LOCALS = myCbGenerateFinalLocals.isSelected();
+		customSettings.GENERATE_FINAL_PARAMETERS = myCbGenerateFinalParameters.isSelected();
 
-		settings.USE_EXTERNAL_ANNOTATIONS = myCbUseExternalAnnotations.isSelected();
-		settings.INSERT_OVERRIDE_ANNOTATION = myInsertOverrideAnnotationCheckBox.isSelected();
-		settings.REPEAT_SYNCHRONIZED = myRepeatSynchronizedCheckBox.isSelected();
+		customSettings.USE_EXTERNAL_ANNOTATIONS = myCbUseExternalAnnotations.isSelected();
+		customSettings.INSERT_OVERRIDE_ANNOTATION = myInsertOverrideAnnotationCheckBox.isSelected();
+		customSettings.REPEAT_SYNCHRONIZED = myRepeatSynchronizedCheckBox.isSelected();
 
 		myMembersOrderList.apply(settings);
 
@@ -160,7 +156,7 @@ public class CodeStyleGenerationConfigurable implements Configurable
 		}
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void apply()
 	{
@@ -169,33 +165,35 @@ public class CodeStyleGenerationConfigurable implements Configurable
 
 	public boolean isModified(CodeStyleSettings settings)
 	{
-		boolean isModified = isModified(myCbPreferLongerNames, settings.PREFER_LONGER_NAMES);
+		JavaCodeStyleSettings customSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
 
-		isModified |= isModified(myFieldPrefixField, settings.FIELD_NAME_PREFIX);
-		isModified |= isModified(myStaticFieldPrefixField, settings.STATIC_FIELD_NAME_PREFIX);
-		isModified |= isModified(myParameterPrefixField, settings.PARAMETER_NAME_PREFIX);
-		isModified |= isModified(myLocalVariablePrefixField, settings.LOCAL_VARIABLE_NAME_PREFIX);
+		boolean isModified = isModified(myCbPreferLongerNames, customSettings.PREFER_LONGER_NAMES);
+
+		isModified |= isModified(myFieldPrefixField, customSettings.FIELD_NAME_PREFIX);
+		isModified |= isModified(myStaticFieldPrefixField, customSettings.STATIC_FIELD_NAME_PREFIX);
+		isModified |= isModified(myParameterPrefixField, customSettings.PARAMETER_NAME_PREFIX);
+		isModified |= isModified(myLocalVariablePrefixField, customSettings.LOCAL_VARIABLE_NAME_PREFIX);
 
 		isModified |= isModified(myFieldSuffixField, settings.FIELD_NAME_SUFFIX);
-		isModified |= isModified(myStaticFieldSuffixField, settings.STATIC_FIELD_NAME_SUFFIX);
-		isModified |= isModified(myParameterSuffixField, settings.PARAMETER_NAME_SUFFIX);
-		isModified |= isModified(myLocalVariableSuffixField, settings.LOCAL_VARIABLE_NAME_SUFFIX);
+		isModified |= isModified(myStaticFieldSuffixField, customSettings.STATIC_FIELD_NAME_SUFFIX);
+		isModified |= isModified(myParameterSuffixField, customSettings.PARAMETER_NAME_SUFFIX);
+		isModified |= isModified(myLocalVariableSuffixField, customSettings.LOCAL_VARIABLE_NAME_SUFFIX);
 
 		isModified |= myCommenterForm.isModified(settings);
 
-		isModified |= isModified(myCbGenerateFinalLocals, settings.GENERATE_FINAL_LOCALS);
-		isModified |= isModified(myCbGenerateFinalParameters, settings.GENERATE_FINAL_PARAMETERS);
+		isModified |= isModified(myCbGenerateFinalLocals, customSettings.GENERATE_FINAL_LOCALS);
+		isModified |= isModified(myCbGenerateFinalParameters, customSettings.GENERATE_FINAL_PARAMETERS);
 
-		isModified |= isModified(myCbUseExternalAnnotations, settings.USE_EXTERNAL_ANNOTATIONS);
-		isModified |= isModified(myInsertOverrideAnnotationCheckBox, settings.INSERT_OVERRIDE_ANNOTATION);
-		isModified |= isModified(myRepeatSynchronizedCheckBox, settings.REPEAT_SYNCHRONIZED);
+		isModified |= isModified(myCbUseExternalAnnotations, customSettings.USE_EXTERNAL_ANNOTATIONS);
+		isModified |= isModified(myInsertOverrideAnnotationCheckBox, customSettings.INSERT_OVERRIDE_ANNOTATION);
+		isModified |= isModified(myRepeatSynchronizedCheckBox, customSettings.REPEAT_SYNCHRONIZED);
 
 		isModified |= myMembersOrderList.isModified(settings);
 
 		return isModified;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public boolean isModified()
 	{
