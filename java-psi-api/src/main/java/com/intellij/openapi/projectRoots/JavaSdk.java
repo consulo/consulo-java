@@ -15,13 +15,10 @@
  */
 package com.intellij.openapi.projectRoots;
 
-import java.io.File;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.projectRoots.impl.SdkVersionUtil;
 
 public abstract class JavaSdk extends SdkType implements JavaSdkType {
   public JavaSdk(@NonNls String name) {
@@ -50,19 +47,4 @@ public abstract class JavaSdk extends SdkType implements JavaSdkType {
   public abstract JavaSdkVersion getVersion(@Nonnull String versionString);
 
   public abstract boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version);
-
-  @Deprecated
-  public static boolean checkForJdk(File file) {
-    return JdkUtil.checkForJdk(file);
-  }
-
-  @Deprecated
-  public static boolean checkForJre(String file) {
-    return JdkUtil.checkForJre(file);
-  }
-
-  @Nullable
-  public static String getJdkVersion(final String sdkHome) {
-    return SdkVersionUtil.detectJdkVersion(sdkHome);
-  }
 }
