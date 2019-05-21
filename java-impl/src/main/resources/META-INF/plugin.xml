@@ -1828,9 +1828,10 @@
 
 		<qualifiedNameProvider implementation="com.intellij.ide.actions.JavaQualifiedNameProvider"/>
 
-		<fileStructureGroupRuleProvider implementation="com.intellij.usages.impl.rules.NonJavaFileGroupRuleProvider"/>
 		<fileStructureGroupRuleProvider implementation="com.intellij.usages.impl.rules.JavaClassGroupRuleProvider"/>
 		<fileStructureGroupRuleProvider implementation="com.intellij.usages.impl.rules.JavaMethodGroupRuleProvider"/>
+		<fileStructureGroupRuleProvider implementation="com.intellij.usages.impl.rules.NonJavaFileGroupRuleProvider"/>
+
 		<usageTypeProvider implementation="com.intellij.usages.impl.rules.JavaUsageTypeProvider"/>
 		<usageContextPanelProvider implementation="com.intellij.usageView.UsageContextDataflowToPanel$Provider"/>
 		<usageContextPanelProvider implementation="com.intellij.usageView.UsageContextDataflowFromPanel$Provider"/>
