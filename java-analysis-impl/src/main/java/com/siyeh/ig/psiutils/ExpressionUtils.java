@@ -15,35 +15,29 @@
  */
 package com.siyeh.ig.psiutils;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.ConstantExpressionUtil;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtil;
 import com.siyeh.HardcodedMethodConstants;
 import consulo.java.module.util.JavaClassNames;
 import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class ExpressionUtils
 {
@@ -1339,5 +1333,102 @@ public class ExpressionUtils
 	public static boolean isNewObject(@Nullable PsiExpression expression)
 	{
 		return expression != null && nonStructuralChildren(expression).allMatch(PsiNewExpression.class::isInstance);
+	}
+
+
+	/**
+	 * Returns true if expression is evaluated in void context (i.e. its return value is not used)
+	 *
+	 * @param expression expression to check
+	 * @return true if expression is evaluated in void context.
+	 */
+	public static boolean isVoidContext(PsiExpression expression)
+	{
+		PsiElement element = PsiUtil.skipParenthesizedExprUp(expression.getParent());
+		if(element instanceof PsiExpressionStatement)
+		{
+			/*if(element.getParent() instanceof PsiSwitchLabeledRuleStatement)
+			{
+				PsiSwitchBlock block = ((PsiSwitchLabeledRuleStatement) element.getParent()).getEnclosingSwitchBlock();
+				return !(block instanceof PsiSwitchExpression);
+			*/
+			return true;
+		}
+		if(element instanceof PsiExpressionList && element.getParent() instanceof PsiExpressionListStatement)
+		{
+			return true;
+		}
+		if(element instanceof PsiLambdaExpression)
+		{
+			if(PsiType.VOID.equals(LambdaUtil.getFunctionalInterfaceReturnType((PsiLambdaExpression) element)))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns an effective qualifier for a reference. If qualifier is not specified, then tries to construct it
+	 * e.g. creating a corresponding {@link PsiThisExpression}.
+	 *
+	 * @param ref a reference expression to get an effective qualifier for
+	 * @return a qualifier or created (non-physical) {@link PsiThisExpression}.
+	 * May return null if reference points to local or member of anonymous class referred from inner class
+	 */
+	@Nullable
+	public static PsiExpression getEffectiveQualifier(@Nonnull PsiReferenceExpression ref)
+	{
+		PsiExpression qualifier = ref.getQualifierExpression();
+		if(qualifier != null)
+		{
+			return qualifier;
+		}
+		PsiElementFactory factory = JavaPsiFacade.getElementFactory(ref.getProject());
+		PsiMember member = ObjectUtil.tryCast(ref.resolve(), PsiMember.class);
+		if(member == null)
+		{
+			// Reference resolves to non-member: probably variable/parameter/etc.
+			return null;
+		}
+		PsiClass memberClass = member.getContainingClass();
+		if(memberClass != null)
+		{
+			PsiClass containingClass = ClassUtils.getContainingClass(ref);
+			if(containingClass == null)
+			{
+				containingClass = PsiTreeUtil.getContextOfType(ref, PsiClass.class);
+			}
+			if(containingClass != null && member.hasModifierProperty(PsiModifier.STATIC))
+			{
+				return factory.createReferenceExpression(containingClass);
+			}
+			if(!InheritanceUtil.isInheritorOrSelf(containingClass, memberClass, true))
+			{
+				containingClass = ClassUtils.getContainingClass(containingClass);
+				while(containingClass != null && !InheritanceUtil.isInheritorOrSelf(containingClass, memberClass, true))
+				{
+					containingClass = ClassUtils.getContainingClass(containingClass);
+				}
+				if(containingClass != null)
+				{
+					String thisQualifier = containingClass.getQualifiedName();
+					if(thisQualifier == null)
+					{
+						if(PsiUtil.isLocalClass(containingClass))
+						{
+							thisQualifier = containingClass.getName();
+						}
+						else
+						{
+							// Cannot qualify anonymous class
+							return null;
+						}
+					}
+					return factory.createExpressionFromText(thisQualifier + "." + PsiKeyword.THIS, ref);
+				}
+			}
+		}
+		return factory.createExpressionFromText(PsiKeyword.THIS, ref);
 	}
 }

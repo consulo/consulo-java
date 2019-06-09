@@ -15,21 +15,16 @@
  */
 package com.siyeh.ig.psiutils;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
+import com.intellij.psi.*;
+import com.intellij.psi.util.InheritanceUtil;
+import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
-import consulo.java.module.util.JavaClassNames;
+import java.util.*;
 
 public class CollectionUtils
 {
@@ -151,6 +146,17 @@ public class CollectionUtils
 		s_interfaceForCollection.put("com.sun.java.util.collections.HashMap", "com.sun.java.util.collections.Map");
 		s_interfaceForCollection.put("com.sun.java.util.collections.Hashtable", "com.sun.java.util.collections.Map");
 	}
+
+	/**
+	 * Matches a call which creates collection of the same size as the qualifier collection
+	 */
+	public static final CallMatcher DERIVED_COLLECTION =
+			CallMatcher.anyOf(
+					CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "keySet", "values", "entrySet").parameterCount(0),
+					CallMatcher.instanceCall("java.util.NavigableMap", "descendingKeySet", "descendingMap", "navigableKeySet").parameterCount(0),
+					CallMatcher.instanceCall("java.util.NavigableSet", "descendingSet").parameterCount(0)
+			);
+
 
 	private CollectionUtils()
 	{
