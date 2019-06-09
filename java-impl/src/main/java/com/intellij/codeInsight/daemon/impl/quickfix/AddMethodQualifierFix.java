@@ -15,16 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
-import org.jetbrains.annotations.TestOnly;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -38,14 +30,18 @@ import consulo.annotations.RequiredWriteAction;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Dmitry Batkovich
  */
 public class AddMethodQualifierFix implements IntentionAction
 {
-	private static final boolean UNIT_TEST_MODE = ApplicationManager.getApplication().isUnitTestMode();
-
 	private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
 	private List<PsiVariable> myCandidates = null;
 
@@ -76,7 +72,7 @@ public class AddMethodQualifierFix implements IntentionAction
 	@Override
 	public String getFamilyName()
 	{
-		return getText();
+		return JavaQuickFixBundle.message("add.method.qualifier.fix.family");
 	}
 
 	@Override
@@ -151,7 +147,7 @@ public class AddMethodQualifierFix implements IntentionAction
 			return;
 		}
 		List<PsiVariable> candidates = getOrFindCandidates();
-		if(candidates.size() == 1 || UNIT_TEST_MODE)
+		if(candidates.size() == 1)
 		{
 			qualify(candidates.get(0), editor);
 		}
