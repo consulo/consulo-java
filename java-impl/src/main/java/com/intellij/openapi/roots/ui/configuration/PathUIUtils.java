@@ -49,7 +49,7 @@ public class PathUIUtils {
   public static VirtualFile[] scanAndSelectDetectedJavaSourceRoots(Component parentComponent, final VirtualFile[] rootCandidates) {
     final List<OrderRoot> orderRoots = RootDetectionUtil.detectRoots(Arrays.asList(rootCandidates), parentComponent, null,
                                                                      new LibraryRootsDetectorImpl(Collections.singletonList(new JavaSourceRootDetector())),
-                                                                     new OrderRootType[0]);
+                                                                     Collections.emptyList());
     final List<VirtualFile> result = new ArrayList<VirtualFile>();
     for (OrderRoot root : orderRoots) {
       result.add(root.getFile());
