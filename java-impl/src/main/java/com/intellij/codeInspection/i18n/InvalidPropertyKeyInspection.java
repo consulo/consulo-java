@@ -15,27 +15,13 @@
  */
 package com.intellij.codeInspection.i18n;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.FileCheckingInspection;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.codeInspection.*;
 import com.intellij.lang.properties.PropertiesReferenceManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -46,14 +32,15 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
 /**
  * @author max
  * @author Konstantin Bulenkov
  */
 public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
-  private static final ExtensionPointName<FileCheckingInspection> EP_NAME =
-    ExtensionPointName.create("consulo.java.invalidPropertyKeyInspectionTool");
-
   @Override
   @Nonnull
   public String getGroupDisplayName() {
@@ -131,19 +118,6 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
     element.accept(visitor);
     List<ProblemDescriptor> problems = visitor.getProblems();
     return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
-  }
-
-  @Override
-  @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, boolean isOnTheFly) {
-    for (FileCheckingInspection obj : EP_NAME.getExtensions()) {
-      ProblemDescriptor[] descriptors = obj.checkFile(file, manager, isOnTheFly);
-      if (descriptors != null) {
-        return descriptors;
-      }
-    }
-
-    return null;
   }
 
   private static class UnresolvedPropertyVisitor extends JavaRecursiveElementWalkingVisitor {

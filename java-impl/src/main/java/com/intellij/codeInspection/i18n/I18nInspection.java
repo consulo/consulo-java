@@ -29,7 +29,6 @@ import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -52,13 +51,12 @@ import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
-
 import gnu.trove.THashSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -91,9 +89,6 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
   @Nullable private Pattern myCachedNonNlsPattern;
   @NonNls private static final String TO_STRING = "toString";
-
-  private static final ExtensionPointName<FileCheckingInspection> EP_NAME =
-    ExtensionPointName.create("consulo.java.i18nInspectionTool");
 
   public I18nInspection() {
     cacheNonNlsCommentPattern();
@@ -403,19 +398,6 @@ public class I18nInspection extends BaseLocalInspectionTool {
     if (field instanceof PsiEnumConstant) {
       return checkElement(((PsiEnumConstant)field).getArgumentList(), manager, isOnTheFly);
     }
-    return null;
-  }
-
-  @Override
-  @javax.annotation.Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
-    for(FileCheckingInspection obj: EP_NAME.getExtensions()) {
-      ProblemDescriptor[] descriptors = obj.checkFile(file, manager, isOnTheFly);
-      if (descriptors != null) {
-        return descriptors;
-      }
-    }
-
     return null;
   }
 
