@@ -15,38 +15,14 @@
  */
 package com.intellij.codeInspection.java15api;
 
-import gnu.trove.THashSet;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.lang.ref.Reference;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jdom.Element;
-
-import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.codeInspection.FileCheckingInspection;
-import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -66,6 +42,21 @@ import com.intellij.reference.SoftReference;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.hash.HashSet;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashSet;
+import org.jdom.Element;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.Reference;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author max
@@ -73,7 +64,6 @@ import consulo.java.module.util.JavaClassNames;
 public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTool
 {
 	public static final String SHORT_NAME = "Since15";
-	public static final ExtensionPointName<FileCheckingInspection> EP_NAME = ExtensionPointName.create("consulo.java.java15InspectionTool");
 
 	private static final String EFFECTIVE_LL = "effectiveLL";
 
@@ -237,8 +227,6 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 	{
 		private final ProblemsHolder myHolder;
 		private final boolean myOnTheFly;
-		private final ExtensionPoint<FileCheckingInspection> point = Extensions.getRootArea().getExtensionPoint
-				(EP_NAME);
 
 		public MyVisitor(final ProblemsHolder holder, boolean onTheFly)
 		{
@@ -465,23 +453,6 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 						getShortName(api)));
 			}
 		}
-
-		@Override
-		public void visitFile(PsiFile file)
-		{
-			for(FileCheckingInspection inspection : point.getExtensions())
-			{
-				ProblemDescriptor[] descriptors = inspection.checkFile(file, InspectionManager.getInstance(file
-						.getProject()), myOnTheFly);
-				if(descriptors != null)
-				{
-					for(ProblemDescriptor descriptor : descriptors)
-					{
-						myHolder.registerProblem(descriptor);
-					}
-				}
-			}
-		}
 	}
 
 	private static String getJdkName(LanguageLevel languageLevel)
@@ -522,8 +493,8 @@ public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTo
 	}
 
 	private static boolean isForbiddenSignature(@Nonnull String signature,
-			@Nonnull LanguageLevel languageLevel,
-			@Nonnull Set<String> forbiddenApi)
+												@Nonnull LanguageLevel languageLevel,
+												@Nonnull Set<String> forbiddenApi)
 	{
 		if(forbiddenApi.contains(signature))
 		{
