@@ -15,29 +15,6 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.Action;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -52,13 +29,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.ComboBoxVisibilityPanel;
-import com.intellij.refactoring.ui.ConflictsDialog;
-import com.intellij.refactoring.ui.JavaComboBoxVisibilityPanel;
-import com.intellij.refactoring.ui.MethodSignatureComponent;
-import com.intellij.refactoring.ui.NameSuggestionsField;
-import com.intellij.refactoring.ui.TypeSelector;
-import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.refactoring.ui.*;
 import com.intellij.refactoring.util.ConflictsUtil;
 import com.intellij.refactoring.util.ParameterTablePanel;
 import com.intellij.refactoring.util.VariableData;
@@ -72,6 +43,16 @@ import com.intellij.util.containers.MultiMap;
 import com.intellij.util.ui.DialogUtil;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import consulo.java.refactoring.JavaRefactoringBundle;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.*;
 
 
 /**
@@ -376,7 +357,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 			myMakeStatic.setSelected(myStaticFlag);
 			if(myVariableData.hasInstanceFields())
 			{
-				myMakeStatic.setText(RefactoringBundle.message("declare.static.pass.fields.checkbox"));
+				myMakeStatic.setText(JavaRefactoringBundle.message("declare.static.pass.fields.checkbox"));
 			}
 			myMakeStatic.addItemListener(new ItemListener()
 			{
@@ -449,7 +430,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 		if(myNullness != null && myNullness != Nullness.UNKNOWN)
 		{
 			final boolean isSelected = PropertiesComponent.getInstance(myProject).getBoolean(EXTRACT_METHOD_GENERATE_ANNOTATIONS, true);
-			myGenerateAnnotations = new JCheckBox(RefactoringBundle.message("declare.generated.annotations"), isSelected);
+			myGenerateAnnotations = new JCheckBox(JavaRefactoringBundle.message("declare.generated.annotations"), isSelected);
 			myGenerateAnnotations.addItemListener(new ItemListener()
 			{
 				@Override
