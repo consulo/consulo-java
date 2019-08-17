@@ -15,8 +15,6 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.RecursionGuard;
@@ -25,6 +23,9 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.psi.infos.CandidateInfo;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Service for resolving references to declarations.
  *
@@ -32,8 +33,8 @@ import com.intellij.psi.infos.CandidateInfo;
  */
 public interface PsiResolveHelper
 {
-	RecursionGuard ourGuard = RecursionManager.createGuard("typeArgInference");
-	RecursionGuard ourGraphGuard = RecursionManager.createGuard("graphTypeArgInference");
+	RecursionGuard<PsiExpression> ourGuard = RecursionManager.createGuard("typeArgInference");
+	RecursionGuard<PsiElement> ourGraphGuard = RecursionManager.createGuard("graphTypeArgInference");
 
 	class SERVICE
 	{

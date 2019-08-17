@@ -15,18 +15,17 @@
  */
 package com.intellij.psi;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.util.PsiUtil;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class PsiDiamondType extends PsiType
 {
-	public static final RecursionGuard ourDiamondGuard = RecursionManager.createGuard("diamondInference");
+	public static final RecursionGuard<PsiElement> ourDiamondGuard = RecursionManager.createGuard("diamondInference");
 
 	public PsiDiamondType()
 	{

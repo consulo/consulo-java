@@ -15,13 +15,6 @@
  */
 package com.intellij.psi.infos;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.MagicConstant;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
@@ -36,13 +29,18 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
+import org.intellij.lang.annotations.MagicConstant;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * @author ik, dsl
  */
 public class MethodCandidateInfo extends CandidateInfo
 {
-	public static final RecursionGuard ourOverloadGuard = RecursionManager.createGuard("overload.guard");
+	public static final RecursionGuard<PsiElement> ourOverloadGuard = RecursionManager.createGuard("overload.guard");
 	public static final ThreadLocal<Map<PsiElement, CurrentCandidateProperties>> CURRENT_CANDIDATE = new ThreadLocal<>();
 	@ApplicabilityLevelConstant
 	private volatile int myApplicabilityLevel;

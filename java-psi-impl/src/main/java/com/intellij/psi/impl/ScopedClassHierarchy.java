@@ -15,30 +15,12 @@
  */
 package com.intellij.psi.impl;
 
-import static com.intellij.util.ObjectUtil.assertNotNull;
-
-import gnu.trove.TObjectHashingStrategy;
-
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchScopeUtil;
 import com.intellij.psi.util.CachedValueProvider;
@@ -48,6 +30,16 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
+import gnu.trove.TObjectHashingStrategy;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import static com.intellij.util.ObjectUtil.assertNotNull;
 
 /**
  * @author peter
@@ -74,7 +66,7 @@ class ScopedClassHierarchy
 			return o1.getManager().areElementsEquivalent(o1, o2);
 		}
 	};
-	private static final RecursionGuard ourGuard = RecursionManager.createGuard("ScopedClassHierarchy");
+	private static final RecursionGuard<Object> ourGuard = RecursionManager.createGuard("ScopedClassHierarchy");
 	private final PsiClass myPlaceClass;
 	private final GlobalSearchScope myResolveScope;
 	private volatile Map<PsiClass, PsiClassType.ClassResolveResult> mySupersWithSubstitutors;

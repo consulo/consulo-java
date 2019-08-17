@@ -15,31 +15,10 @@
  */
 package com.intellij.psi.util;
 
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
-
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectIntHashMap;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootModificationTracker;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.NotNullComputable;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
+import com.intellij.openapi.util.*;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -47,6 +26,16 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+import gnu.trove.TObjectIntHashMap;
+import org.jetbrains.annotations.Contract;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 public class TypeConversionUtil
 {
@@ -1454,7 +1443,7 @@ public class TypeConversionUtil
 		return true;
 	}
 
-	private static final RecursionGuard ourGuard = RecursionManager.createGuard("isAssignable");
+	private static final RecursionGuard<Object> ourGuard = RecursionManager.createGuard("isAssignable");
 
 	public static boolean typesAgree(final @Nonnull PsiType typeLeft, final @Nonnull PsiType typeRight, final boolean allowUncheckedConversion)
 	{

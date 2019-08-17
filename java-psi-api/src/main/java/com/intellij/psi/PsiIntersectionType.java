@@ -15,21 +15,15 @@
  */
 package com.intellij.psi;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * Intersection types arise in a process of computing least upper bound.
@@ -77,14 +71,7 @@ public class PsiIntersectionType extends PsiType.Stub
 	{
 		try
 		{
-			final Set<PsiType> flattenConjuncts = PsiCapturedWildcardType.guard.doPreventingRecursion(conjuncts, true, new Computable<Set<PsiType>>()
-			{
-				@Override
-				public Set<PsiType> compute()
-				{
-					return flatten(conjuncts, ContainerUtil.<PsiType>newLinkedHashSet());
-				}
-			});
+			final Set<PsiType> flattenConjuncts = PsiCapturedWildcardType.guard.doPreventingRecursion(conjuncts, true, () -> flatten(conjuncts, ContainerUtil.<PsiType>newLinkedHashSet()));
 			if(flattenConjuncts == null)
 			{
 				return conjuncts;

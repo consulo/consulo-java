@@ -15,35 +15,27 @@
  */
 package com.intellij.psi.impl.source;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.PsiJavaParserFacadeImpl;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.JavaSharedImplUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeElement
 {
@@ -222,7 +214,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 					if(!(e instanceof PsiArrayInitializerExpression) && !isSelfReferenced((PsiExpression) e, parent))
 					{
 						PsiExpression expression = (PsiExpression) e;
-						PsiType type = JavaVarTypeUtil.ourVarGuard.doPreventingRecursion(expression, true, () -> expression.getType());
+						PsiType type = RecursionManager.doPreventingRecursion(expression, true, () -> expression.getType());
 						return type == null ? null : JavaVarTypeUtil.getUpwardProjection(type);
 					}
 					return null;

@@ -15,11 +15,6 @@
  */
 package com.intellij.lang.java.parser;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.util.Key;
 import com.intellij.pom.java.LanguageLevel;
@@ -28,6 +23,10 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JavadocParser
 {
@@ -325,13 +324,13 @@ public class JavadocParser
 
 	private static int getBraceScope(@Nonnull final PsiBuilder builder)
 	{
-		final Integer braceScope = builder.getUserDataUnprotected(BRACE_SCOPE_KEY);
+		final Integer braceScope = builder.getUserData(BRACE_SCOPE_KEY);
 		return braceScope != null ? braceScope : 0;
 	}
 
 	private static void setBraceScope(@Nonnull final PsiBuilder builder, final int braceScope)
 	{
-		builder.putUserDataUnprotected(BRACE_SCOPE_KEY, braceScope);
+		builder.putUserData(BRACE_SCOPE_KEY, braceScope);
 	}
 
 	private static void remapAndAdvance(@Nonnull final PsiBuilder builder)

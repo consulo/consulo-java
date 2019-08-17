@@ -15,14 +15,14 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author ven
@@ -59,7 +59,7 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 		myUpperBound = PsiType.getJavaLangObject(myContext.getManager(), getResolveScope());
 	}
 
-	public static RecursionGuard guard = RecursionManager.createGuard("captureGuard");
+	public static RecursionGuard<Object> guard = RecursionManager.createGuard("captureGuard");
 
 	public static boolean isCapture()
 	{
@@ -124,14 +124,7 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 
 		if(myParameter != null)
 		{
-			final Boolean sameUpperBounds = guard.doPreventingRecursion(myContext, true, new Computable<Boolean>()
-			{
-				@Override
-				public Boolean compute()
-				{
-					return Comparing.equal(myUpperBound, captured.myUpperBound);
-				}
-			});
+			final Boolean sameUpperBounds = guard.doPreventingRecursion(myContext, true, () -> Comparing.equal(myUpperBound, captured.myUpperBound));
 
 			if(sameUpperBounds == null || sameUpperBounds)
 			{

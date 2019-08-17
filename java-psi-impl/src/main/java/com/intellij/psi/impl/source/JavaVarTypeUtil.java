@@ -15,11 +15,6 @@
  */
 package com.intellij.psi.impl.source;
 
-import java.util.Arrays;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
@@ -28,10 +23,12 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+
 public class JavaVarTypeUtil
 {
-	public static final RecursionGuard ourVarGuard = RecursionManager.createGuard("var.guard");
-
 	public static PsiType getUpwardProjection(@Nonnull PsiType t)
 	{
 		return t.accept(new UpwardProjectionTypeVisitor());
@@ -62,8 +59,6 @@ public class JavaVarTypeUtil
 
 	private static class UpwardProjectionTypeVisitor extends PsiTypeVisitorEx<PsiType>
 	{
-		private static final RecursionGuard upwardGuard = RecursionManager.createGuard("upwardProjectionGuard");
-
 		@Override
 		public PsiType visitType(PsiType type)
 		{
@@ -135,7 +130,7 @@ public class JavaVarTypeUtil
 						}
 						else
 						{
-							PsiType U = upwardGuard.doPreventingRecursion(ai, true, () -> ai.accept(this));
+							PsiType U = RecursionManager.doPreventingRecursion(ai, true, () -> ai.accept(this));
 							if(U == null)
 							{
 								targetSubstitutor = targetSubstitutor.put(parameter, PsiWildcardType.createUnbounded(manager));

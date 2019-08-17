@@ -15,18 +15,6 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
-import java.util.function.Function;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.Icon;
-
-import org.jetbrains.annotations.Contract;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
@@ -52,6 +40,13 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.Contract;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author Pavel.Dolgov
@@ -104,7 +99,7 @@ public class JavaReflectionReferenceUtil
 	public static final String LOAD_CLASS = "loadClass";
 	public static final String GET_CLASS = "getClass";
 
-	private static final RecursionGuard ourGuard = RecursionManager.createGuard("JavaLangClassMemberReference");
+	private static final RecursionGuard<PsiElement> ourGuard = RecursionManager.createGuard("JavaLangClassMemberReference");
 
 	@Nullable
 	public static ReflectiveType getReflectiveType(@Nullable PsiExpression context)
