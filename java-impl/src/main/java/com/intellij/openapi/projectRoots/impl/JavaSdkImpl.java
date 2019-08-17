@@ -20,6 +20,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.intellij.util.SystemProperties;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.ide.plugins.PluginManager;
@@ -129,6 +131,18 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			return "http://download.java.net/jdk9/docs/api/";
 		}
+		if(version == JavaSdkVersion.JDK_10)
+		{
+			return "https://docs.oracle.com/javase/10/docs/api/";
+		}
+		if(version == JavaSdkVersion.JDK_11)
+		{
+			return "https://docs.oracle.com/en/java/javase/11/docs/api/";
+		}
+		if(version == JavaSdkVersion.JDK_12)
+		{
+			return "https://docs.oracle.com/en/java/javase/12/docs/api/";
+		}
 		return null;
 	}
 
@@ -191,11 +205,30 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			collectJavaPathsAtWindows(list, "ProgramFiles");
 			collectJavaPathsAtWindows(list, "ProgramFiles(x86)");
-			ContainerUtil.addIfNotNull(list, System.getProperty("java.home"));
+			ContainerUtil.addIfNotNull(list, SystemProperties.getJavaHome());
+		}
+
+		// JDKs in SDKMan located at $HOME/.sdkman/candidates/java/
+		File sdkmanJavaDir = new File(SystemProperties.getUserHome(), "/.sdkman/candidates/java/");
+		if(sdkmanJavaDir.exists())
+		{
+			collectJavaPathsAtSdkman(list, sdkmanJavaDir);
 		}
 
 		return list;
 	}
+
+	private void collectJavaPathsAtSdkman(List<String> list, File sdkmanJavaDir)
+	{
+		for(File dir : Objects.requireNonNull(sdkmanJavaDir.listFiles()))
+		{
+			if(!dir.getName().equals("current")) // skip "current" directory, because it's link
+			{
+				list.add(dir.getAbsolutePath());
+			}
+		}
+	}
+
 
 	private static void collectJavaPathsAtMac(List<String> list, String path)
 	{
