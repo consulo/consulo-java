@@ -129,6 +129,18 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			return "http://download.java.net/jdk9/docs/api/";
 		}
+		if(version == JavaSdkVersion.JDK_10)
+		{
+			return "https://docs.oracle.com/javase/10/docs/api/";
+		}
+		if(version == JavaSdkVersion.JDK_11)
+		{
+			return "https://docs.oracle.com/en/java/javase/11/docs/api/";
+		}
+		if(version == JavaSdkVersion.JDK_12)
+		{
+			return "https://docs.oracle.com/en/java/javase/12/docs/api/";
+		}
 		return null;
 	}
 
