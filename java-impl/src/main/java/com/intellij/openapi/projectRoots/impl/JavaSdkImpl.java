@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.intellij.util.SystemProperties;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.ide.plugins.PluginManager;
@@ -204,11 +205,11 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			collectJavaPathsAtWindows(list, "ProgramFiles");
 			collectJavaPathsAtWindows(list, "ProgramFiles(x86)");
-			ContainerUtil.addIfNotNull(list, System.getProperty("java.home"));
+			ContainerUtil.addIfNotNull(list, SystemProperties.getJavaHome());
 		}
 
 		// JDKs in SDKMan located at $HOME/.sdkman/candidates/java/
-		File sdkmanJavaDir = new File(System.getProperty("user.home"), "/.sdkman/candidates/java/");
+		File sdkmanJavaDir = new File(SystemProperties.getUserHome(), "/.sdkman/candidates/java/");
 		if(sdkmanJavaDir.exists())
 		{
 			collectJavaPathsAtSdkman(list, sdkmanJavaDir);
