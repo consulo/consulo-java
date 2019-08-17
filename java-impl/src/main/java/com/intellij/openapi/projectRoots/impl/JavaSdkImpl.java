@@ -20,6 +20,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -206,8 +207,21 @@ public class JavaSdkImpl extends JavaSdk
 			ContainerUtil.addIfNotNull(list, System.getProperty("java.home"));
 		}
 
+		// JDKs in SDKMan located at $HOME/.sdkman/candidates/java/
+		File sdkmanJavaDir = new File(System.getProperty("user.home"), "/.sdkman/candidates/java/");
+		if (sdkmanJavaDir.exists())
+			collectJavaPathsAtSdkman(list, sdkmanJavaDir);
+
 		return list;
 	}
+
+	private void collectJavaPathsAtSdkman(List<String> list, File sdkmanJavaDir) {
+		for (File dir : Objects.requireNonNull(sdkmanJavaDir.listFiles())) {
+			if (!dir.getName().equals("current")) // skip "current" directory, because it's link
+				list.add(dir.getAbsolutePath());
+		}
+	}
+
 
 	private static void collectJavaPathsAtMac(List<String> list, String path)
 	{
