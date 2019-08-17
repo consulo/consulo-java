@@ -209,16 +209,22 @@ public class JavaSdkImpl extends JavaSdk
 
 		// JDKs in SDKMan located at $HOME/.sdkman/candidates/java/
 		File sdkmanJavaDir = new File(System.getProperty("user.home"), "/.sdkman/candidates/java/");
-		if (sdkmanJavaDir.exists())
+		if(sdkmanJavaDir.exists())
+		{
 			collectJavaPathsAtSdkman(list, sdkmanJavaDir);
+		}
 
 		return list;
 	}
 
-	private void collectJavaPathsAtSdkman(List<String> list, File sdkmanJavaDir) {
-		for (File dir : Objects.requireNonNull(sdkmanJavaDir.listFiles())) {
-			if (!dir.getName().equals("current")) // skip "current" directory, because it's link
+	private void collectJavaPathsAtSdkman(List<String> list, File sdkmanJavaDir)
+	{
+		for(File dir : Objects.requireNonNull(sdkmanJavaDir.listFiles()))
+		{
+			if(!dir.getName().equals("current")) // skip "current" directory, because it's link
+			{
 				list.add(dir.getAbsolutePath());
+			}
 		}
 	}
 
