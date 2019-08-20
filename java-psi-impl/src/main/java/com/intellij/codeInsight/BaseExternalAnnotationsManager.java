@@ -15,51 +15,17 @@
  */
 package com.intellij.codeInsight;
 
-import static com.intellij.openapi.util.Pair.pair;
-
-import gnu.trove.THashSet;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
-
-import javax.annotation.Nonnull;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import javax.annotation.Nullable;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.LowMemoryWatcher;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiNameValuePair;
-import com.intellij.psi.impl.source.CharTableImpl;
-import com.intellij.psi.impl.source.DummyHolder;
-import com.intellij.psi.impl.source.DummyHolderFactory;
-import com.intellij.psi.impl.source.JavaDummyElement;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.*;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.util.Function;
@@ -68,19 +34,35 @@ import com.intellij.util.SmartList;
 import com.intellij.util.containers.ConcurrentMostlySingularMultiMap;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MostlySingularMultiMap;
-import com.intellij.util.containers.WeakKeyWeakValueHashMap;
 import com.intellij.util.text.CharSequenceReader;
+import consulo.logging.Logger;
+import gnu.trove.THashSet;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ConcurrentMap;
+
+import static com.intellij.openapi.util.Pair.pair;
 
 public abstract class BaseExternalAnnotationsManager extends ExternalAnnotationsManager
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.BaseExternalAnnotationsManager");
+	private static final Logger LOG = Logger.getInstance(BaseExternalAnnotationsManager.class);
 	private static final Key<Boolean> EXTERNAL_ANNO_MARKER = Key.create("EXTERNAL_ANNO_MARKER");
 	private static final List<PsiFile> NULL_LIST = Collections.emptyList();
 
 	protected final PsiManager myPsiManager;
 
 	private final ConcurrentMap<VirtualFile, List<PsiFile>> myExternalAnnotations = ContainerUtil.createConcurrentSoftValueMap();
-	private final Map<AnnotationData, AnnotationData> myAnnotationDataCache = new WeakKeyWeakValueHashMap<AnnotationData, AnnotationData>();
+	private final Map<AnnotationData, AnnotationData> myAnnotationDataCache = ContainerUtil.createWeakKeyWeakValueMap();
 	private final ConcurrentMap<PsiFile, Pair<MostlySingularMultiMap<String, AnnotationData>, Long>> myAnnotationFileToDataAndModStamp = ContainerUtil.createConcurrentSoftMap();
 
 	public BaseExternalAnnotationsManager(@Nonnull PsiManager psiManager)
