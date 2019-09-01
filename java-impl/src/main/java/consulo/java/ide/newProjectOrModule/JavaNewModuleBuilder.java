@@ -16,8 +16,6 @@
 
 package consulo.java.ide.newProjectOrModule;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
@@ -29,6 +27,10 @@ import consulo.ide.newProject.NewModuleBuilderProcessor;
 import consulo.ide.newProject.NewModuleContext;
 import consulo.java.module.extension.JavaMutableModuleExtension;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.ui.wizard.WizardStep;
+
+import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 /**
  * @author VISTALL
@@ -41,43 +43,55 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 	{
 		NewModuleContext.Group group = context.createGroup("java", "Java");
 
-		group.add("Empty", AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleBuilderPanel>()
+		group.add("Empty", AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>()
 		{
 			@Nonnull
 			@Override
-			public JavaNewModuleBuilderPanel createConfigurationPanel()
+			public JavaNewModuleWizardContext createContext(boolean isNewProject)
 			{
-				return new JavaNewModuleBuilderPanel();
+				return new JavaNewModuleWizardContext(isNewProject);
 			}
 
 			@Override
-			public void setupModule(@Nonnull JavaNewModuleBuilderPanel panel, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
+			public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context)
 			{
-				JavaNewModuleBuilder.setupModule(panel, contentEntry, modifiableRootModel);
+				consumer.accept(new JavaSdkSelectStep(context));
+			}
+
+			@Override
+			public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
+			{
+				setupModule(context, contentEntry, modifiableRootModel);
 			}
 		});
 
-		group.add("Console Application", AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleBuilderPanel>("/moduleTemplates/#JavaHelloWorld.zip")
+		group.add("Console Application", AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip")
 		{
 			@Nonnull
 			@Override
-			public JavaNewModuleBuilderPanel createConfigurationPanel()
+			public JavaNewModuleWizardContext createContext(boolean isNewProject)
 			{
-				return new JavaNewModuleBuilderPanel();
+				return new JavaNewModuleWizardContext(isNewProject);
 			}
 
 			@Override
-			public void setupModule(@Nonnull JavaNewModuleBuilderPanel panel, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
+			public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context)
+			{
+				consumer.accept(new JavaSdkSelectStep(context));
+			}
+
+			@Override
+			public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
 			{
 				unzip(modifiableRootModel);
 
-				JavaNewModuleBuilder.setupModule(panel, contentEntry, modifiableRootModel);
+				setupModule(context, contentEntry, modifiableRootModel);
 			}
 		});
 	}
 
 	@RequiredReadAction
-	private static void setupModule(@Nonnull JavaNewModuleBuilderPanel panel, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
+	private static void setupModule(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
 	{
 		// need get by id - due, extension can be from original Java impl, or from other plugin, like IKVM.NET
 		JavaMutableModuleExtension<?> javaMutableModuleExtension = modifiableRootModel.getExtensionWithoutCheck("java");
@@ -85,7 +99,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 
 		javaMutableModuleExtension.setEnabled(true);
 
-		Sdk sdk = panel.getSdk();
+		Sdk sdk = context.getSdk();
 		if(sdk != null)
 		{
 			javaMutableModuleExtension.getInheritableSdk().set(null, sdk);

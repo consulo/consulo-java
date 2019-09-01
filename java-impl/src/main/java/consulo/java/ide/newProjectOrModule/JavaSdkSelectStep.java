@@ -16,37 +16,41 @@
 
 package consulo.java.ide.newProjectOrModule;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JPanel;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
+import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.Conditions;
+import consulo.ide.newProject.ui.ProjectOrModuleNameStep;
 import consulo.roots.ui.configuration.SdkComboBox;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * @author VISTALL
  * @since 05.06.14
  */
-public class JavaNewModuleBuilderPanel extends JPanel
+public class JavaSdkSelectStep extends ProjectOrModuleNameStep<JavaNewModuleWizardContext>
 {
 	private SdkComboBox myComboBox;
 
-	public JavaNewModuleBuilderPanel()
+	public JavaSdkSelectStep(JavaNewModuleWizardContext context)
 	{
-		super(new VerticalFlowLayout());
+		super(context);
 
-		ProjectSdksModel sdksModel = new ProjectSdksModel();
-		sdksModel.reset();
+		myComboBox = new SdkComboBox(SdkTable.getInstance(), Conditions.instanceOf(JavaSdk.class), false);
 
-		myComboBox = new SdkComboBox(sdksModel, Conditions.instanceOf(JavaSdk.class), false);
+		myAdditionalContentPanel.add(LabeledComponent.create(myComboBox, "JDK"), BorderLayout.NORTH);
+	}
 
-		add(LabeledComponent.create(myComboBox, "JDK").setLabelLocation(BorderLayout.WEST));
+	@Override
+	public void onStepLeave(@Nonnull JavaNewModuleWizardContext context)
+	{
+		super.onStepLeave(context);
+
+		context.setSdk(myComboBox.getSelectedSdk());
 	}
 
 	@Nullable
