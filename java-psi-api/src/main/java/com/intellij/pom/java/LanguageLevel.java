@@ -15,8 +15,6 @@
  */
 package com.intellij.pom.java;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
@@ -25,6 +23,9 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.java.psi.JavaLanguageVersion;
 import consulo.util.pointers.Named;
 import consulo.util.pointers.NamedPointer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author dsl
@@ -41,9 +42,10 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	JDK_10("10", JavaCoreBundle.message("jdk.10.language.level.description"), "1.10", "10"),
 	JDK_11("11", JavaCoreBundle.message("jdk.11.language.level.description"), "1.11", "11"),
 	JDK_12("12", JavaCoreBundle.message("jdk.12.language.level.description"), "1.12", "12"),
-	JDK_X("1.10", JavaCoreBundle.message("jdk.X.language.level.description"), "");
+	JDK_13("13", JavaCoreBundle.message("jdk.13.language.level.description"), "13"),
+	JDK_X("X", JavaCoreBundle.message("jdk.X.language.level.description"), "");
 
-	public static final LanguageLevel HIGHEST = JDK_11;
+	public static final LanguageLevel HIGHEST = JDK_12;
 	public static final Key<LanguageLevel> KEY = Key.create("LANGUAGE_LEVEL");
 
 	private final String myShortText;

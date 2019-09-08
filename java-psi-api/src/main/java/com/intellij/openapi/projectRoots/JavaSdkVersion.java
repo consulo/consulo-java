@@ -1,12 +1,12 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.openapi.projectRoots;
 
-import java.util.Arrays;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.lang.JavaVersion;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
 
 /**
  * Represents version of Java SDK. Use {@code JavaSdk#getVersion(Sdk)} method to obtain version of an {@code Sdk}.
@@ -28,9 +28,10 @@ public enum JavaSdkVersion
 	JDK_1_9(LanguageLevel.JDK_1_9),
 	JDK_10(LanguageLevel.JDK_10),
 	JDK_11(LanguageLevel.JDK_11),
-	JDK_12(LanguageLevel.JDK_12);
+	JDK_12(LanguageLevel.JDK_12),
+	JDK_13(LanguageLevel.JDK_13);
 
-	public static JavaSdkVersion MAX_JDK = JDK_11;
+	public static JavaSdkVersion MAX_JDK = JDK_12;
 
 	private final LanguageLevel myMaxLanguageLevel;
 
@@ -82,14 +83,14 @@ public enum JavaSdkVersion
 	/**
 	 * See {@link JavaVersion#parse(String)} for supported formats.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static JavaSdkVersion fromVersionString(@Nonnull String versionString)
 	{
 		JavaVersion version = JavaVersion.tryParse(versionString);
 		return version != null ? fromJavaVersion(version) : null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static JavaSdkVersion fromJavaVersion(@Nonnull JavaVersion version)
 	{
 		JavaSdkVersion[] values = values();
