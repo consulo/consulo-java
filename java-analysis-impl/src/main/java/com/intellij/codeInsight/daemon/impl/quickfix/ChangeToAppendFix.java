@@ -16,10 +16,6 @@
 
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -28,7 +24,12 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.JavaQuickFixBundle;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -97,9 +98,9 @@ public class ChangeToAppendFix implements IntentionAction {
   }
 
   @Nullable
-  private static StringBuilder buildAppendExpression(PsiExpression concatenation, boolean useStringValueOf, @NonNls StringBuilder out)
+  private static StringBuilder buildAppendExpression(@Nullable PsiExpression concatenation, boolean useStringValueOf, @NonNls StringBuilder out)
     throws IncorrectOperationException {
-    final PsiType type = concatenation.getType();
+    final PsiType type = concatenation == null ? null : concatenation.getType();
     if (type == null) {
       return null;
     }
