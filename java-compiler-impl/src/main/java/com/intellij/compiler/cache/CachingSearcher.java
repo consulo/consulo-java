@@ -15,9 +15,6 @@
  */
 package com.intellij.compiler.cache;
 
-import java.util.Collection;
-import java.util.Map;
-
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -26,7 +23,10 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Query;
-import com.intellij.util.containers.SoftHashMap;
+import com.intellij.util.containers.ContainerUtil;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Eugene Zhuravlev
@@ -35,14 +35,14 @@ import com.intellij.util.containers.SoftHashMap;
  */
 public class CachingSearcher {
   private final Project myProject;
-  private final Map<Pair<PsiElement, Boolean>, Collection<PsiReference>> myElementToReferencersMap = new SoftHashMap<Pair<PsiElement, Boolean>, Collection<PsiReference>>();
+  private final Map<Pair<PsiElement, Boolean>, Collection<PsiReference>> myElementToReferencersMap = ContainerUtil.createSoftMap();
 
   public CachingSearcher(Project project) {
     myProject = project;
   }
 
   public Collection<PsiReference> findReferences(PsiElement element, final boolean ignoreAccessScope) {
-    final Pair<PsiElement, Boolean> key = new Pair<PsiElement, Boolean>(element, ignoreAccessScope? Boolean.TRUE : Boolean.FALSE);
+    final Pair<PsiElement, Boolean> key = Pair.create(element, ignoreAccessScope? Boolean.TRUE : Boolean.FALSE);
     Collection<PsiReference> psiReferences = myElementToReferencersMap.get(key);
     if (psiReferences == null) {
       GlobalSearchScope searchScope = GlobalSearchScope.projectScope(myProject);
