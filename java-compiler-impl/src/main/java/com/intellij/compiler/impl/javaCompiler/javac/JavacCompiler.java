@@ -506,7 +506,7 @@ public class JavacCompiler extends ExternalCompiler
 
 	private static boolean isAtLeast(@Nonnull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @Nonnull JavaSdkVersion target)
 	{
-		return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(version.getMaxLanguageLevel()));
+		return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(target.getMaxLanguageLevel()));
 	}
 
 	@Nonnull
