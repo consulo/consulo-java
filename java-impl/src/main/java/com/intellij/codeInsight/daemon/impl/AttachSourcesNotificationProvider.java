@@ -30,6 +30,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectBundle;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.ui.configuration.PathUIUtils;
@@ -43,7 +44,6 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.compiled.ClsParsingUtil;
@@ -206,7 +206,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return panel;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getClassFileInfo(VirtualFile file)
 	{
 		try
@@ -221,10 +221,10 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 						int minor = stream.readUnsignedShort();
 						int major = stream.readUnsignedShort();
 						StringBuilder info = new StringBuilder().append("bytecode version: ").append(major).append('.').append(minor);
-						LanguageLevel level = ClsParsingUtil.getLanguageLevelByVersion(major);
-						if(level != null)
+						JavaSdkVersion sdkVersion = ClsParsingUtil.getJdkVersionByBytecode(major);
+						if(sdkVersion != null)
 						{
-							info.append(" (").append(level == LanguageLevel.JDK_1_3 ? level.getFullText() + " or older" : level.getFullText()).append(')');
+							info.append(" (Java ").append(sdkVersion.getDescription()).append(')');
 						}
 						return info.toString();
 					}
@@ -242,7 +242,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 	{
 		List<LibraryOrderEntry> entries = null;
 
-		ProjectFileIndex index = ProjectFileIndex.SERVICE.getInstance(myProject);
+		ProjectFileIndex index = ProjectFileIndex.getInstance(myProject);
 		for(OrderEntry entry : index.getOrderEntriesForFile(file))
 		{
 			if(entry instanceof LibraryOrderEntry)

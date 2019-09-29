@@ -15,10 +15,6 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
@@ -35,6 +31,10 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.lang.JavaVersion;
+import consulo.internal.org.objectweb.asm.Opcodes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author ven
@@ -205,45 +205,6 @@ public class ClsParsingUtil
 	public static boolean isJavaIdentifier(@Nonnull String identifier, @Nonnull LanguageLevel level)
 	{
 		return StringUtil.isJavaIdentifier(identifier) && !JavaLexer.isKeyword(identifier, level);
-	}
-
-	@Nullable
-	public static LanguageLevel getLanguageLevelByVersion(int major)
-	{
-		switch(major)
-		{
-			case Opcodes.V1_1:
-			case 45:  // other variant of 1.1
-			case Opcodes.V1_2:
-			case Opcodes.V1_3:
-				return LanguageLevel.JDK_1_3;
-
-			case Opcodes.V1_4:
-				return LanguageLevel.JDK_1_4;
-
-			case Opcodes.V1_5:
-				return LanguageLevel.JDK_1_5;
-
-			case Opcodes.V1_6:
-				return LanguageLevel.JDK_1_6;
-
-			case Opcodes.V1_7:
-				return LanguageLevel.JDK_1_7;
-
-			case Opcodes.V1_8:
-				return LanguageLevel.JDK_1_8;
-
-			case Opcodes.V9:
-				return LanguageLevel.JDK_1_9;
-
-			case Opcodes.V10:
-				return LanguageLevel.JDK_10;
-
-			case Opcodes.V11:
-				return LanguageLevel.JDK_11;
-			default:
-				return null;
-		}
 	}
 
 	@Nullable
