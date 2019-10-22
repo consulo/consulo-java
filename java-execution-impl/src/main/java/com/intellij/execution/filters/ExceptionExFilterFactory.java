@@ -15,14 +15,6 @@
  */
 package com.intellij.execution.filters;
 
-import gnu.trove.THashMap;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -31,16 +23,16 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.Trinity;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiCompiledFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiTryStatement;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ui.UIUtil;
+import gnu.trove.THashMap;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
+import java.util.Map;
 
 /**
  * @author gregsh
@@ -76,7 +68,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory
 		}
 
 		@Override
-		public void applyHeavyFilter(@Nonnull final Document copiedFragment, final int startOffset, int startLineNumber, @Nonnull final Consumer<AdditionalHighlight> consumer)
+		public void applyHeavyFilter(@Nonnull final Document copiedFragment, final int startOffset, int startLineNumber, @Nonnull final Consumer<? super AdditionalHighlight> consumer)
 		{
 			Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new THashMap<String, Trinity<TextRange, TextRange, TextRange>>();
 			final Trinity<TextRange, TextRange, TextRange> emptyInfo = Trinity.create(null, null, null);
