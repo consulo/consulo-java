@@ -1709,13 +1709,13 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@javax.annotation.Nullable
+	@Nonnull
 	static Collection<HighlightInfo> checkWithImprovedCatchAnalysis(@Nonnull PsiParameter parameter, @Nonnull Collection<PsiClassType> thrownInTryStatement, @Nonnull PsiFile containingFile)
 	{
 		final PsiElement scope = parameter.getDeclarationScope();
 		if(!(scope instanceof PsiCatchSection))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
 		final PsiCatchSection catchSection = (PsiCatchSection) scope;
@@ -1723,7 +1723,7 @@ public class HighlightUtil extends HighlightUtilBase
 		final int idx = ArrayUtilRt.find(allCatchSections, catchSection);
 		if(idx <= 0)
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
 		final Collection<PsiClassType> thrownTypes = ContainerUtil.newHashSet(thrownInTryStatement);
@@ -3129,12 +3129,12 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@Nullable
+	@Nonnull
 	static Collection<HighlightInfo> checkCatchTypeIsDisjoint(@Nonnull final PsiParameter parameter)
 	{
 		if(!(parameter.getType() instanceof PsiDisjunctionType))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
 		final Collection<HighlightInfo> result = ContainerUtil.newArrayList();
@@ -3173,13 +3173,13 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 
-	@javax.annotation.Nullable
+	@Nonnull
 	static Collection<HighlightInfo> checkExceptionAlreadyCaught(@Nonnull final PsiParameter parameter)
 	{
 		final PsiElement scope = parameter.getDeclarationScope();
 		if(!(scope instanceof PsiCatchSection))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
 		final PsiCatchSection catchSection = (PsiCatchSection) scope;
@@ -3187,7 +3187,7 @@ public class HighlightUtil extends HighlightUtilBase
 		final int startFrom = ArrayUtilRt.find(allCatchSections, catchSection) - 1;
 		if(startFrom < 0)
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
 		final List<PsiTypeElement> typeElements = PsiUtil.getParameterTypeElements(parameter);
@@ -3229,7 +3229,7 @@ public class HighlightUtil extends HighlightUtilBase
 			}
 		}
 
-		return result.isEmpty() ? null : result;
+		return result;
 	}
 
 	private static boolean checkMultipleTypes(final PsiClass catchClass, @Nonnull final List<PsiType> upperCatchTypes)
