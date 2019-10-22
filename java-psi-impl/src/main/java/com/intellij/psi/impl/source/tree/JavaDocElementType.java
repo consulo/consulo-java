@@ -15,13 +15,6 @@
  */
 package com.intellij.psi.impl.source.tree;
 
-import java.lang.reflect.Constructor;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.PsiBuilder;
@@ -37,18 +30,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.javadoc.PsiDocCommentImpl;
-import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
-import com.intellij.psi.impl.source.javadoc.PsiDocParamRef;
-import com.intellij.psi.impl.source.javadoc.PsiDocTagImpl;
-import com.intellij.psi.impl.source.javadoc.PsiInlineDocTagImpl;
-import com.intellij.psi.tree.ICompositeElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ILazyParseableElementType;
-import com.intellij.psi.tree.IReparseableElementType;
-import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.impl.source.javadoc.*;
+import com.intellij.psi.tree.*;
 import com.intellij.psi.tree.java.IJavaDocElementType;
 import com.intellij.util.ReflectionUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
 
 public interface JavaDocElementType
 {
@@ -154,13 +144,14 @@ public interface JavaDocElementType
 		}
 
 		@Override
-		public boolean isParsable(@Nonnull PsiFile psiFile, CharSequence buffer, Language fileLanguage, final Project project)
+		public boolean isParsable(@Nullable ASTNode parent, @Nonnull CharSequence buffer, @Nonnull Language fileLanguage, @Nonnull Project project)
 		{
 			if(!StringUtil.startsWith(buffer, "/**") || !StringUtil.endsWith(buffer, "*/"))
 			{
 				return false;
 			}
 
+			PsiFile psiFile = parent.getPsi().getContainingFile();
 			final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
 			LanguageLevel languageLevel = moduleForPsiElement == null ? LanguageLevel.HIGHEST : EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(moduleForPsiElement);
 

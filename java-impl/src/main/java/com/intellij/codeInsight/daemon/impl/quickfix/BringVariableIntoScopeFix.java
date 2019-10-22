@@ -15,13 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import gnu.trove.THashMap;
-
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import consulo.java.JavaQuickFixBundle;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -29,12 +22,13 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.JavaQuickFixBundle;
+import gnu.trove.THashMap;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
 
 /**
  * @author ven
@@ -153,8 +147,6 @@ public class BringVariableIntoScopeFix implements IntentionAction {
     if (HighlightControlFlowUtil.checkVariableInitializedBeforeUsage(myUnresolvedReference, addedVar, new THashMap<PsiElement, Collection<PsiReferenceExpression>>(),file) != null) {
       initialize(addedVar);
     }
-
-    DaemonCodeAnalyzer.getInstance(project).updateVisibleHighlighters(editor);
   }
 
   private static void initialize(final PsiLocalVariable variable) throws IncorrectOperationException {

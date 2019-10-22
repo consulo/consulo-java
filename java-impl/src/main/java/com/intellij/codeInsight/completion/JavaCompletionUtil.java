@@ -15,30 +15,11 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.codeInsight.completion.ReferenceExpressionCompletionContributor.findConstantsUsedInSwitch;
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.inapplicable;
-
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.codeInsight.AutoPopupController;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.CodeInsightUtilCore;
-import com.intellij.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.JavaProjectCodeInsightSettings;
-import com.intellij.codeInsight.TailType;
+import com.intellij.codeInsight.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.completion.scope.CompletionElement;
 import com.intellij.codeInsight.completion.scope.JavaCompletionProcessor;
+import com.intellij.codeInsight.completion.util.CompletionStyleUtil;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.codeInsight.guess.GuessManager;
@@ -51,11 +32,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.NullableLazyKey;
-import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PsiJavaPatterns;
 import com.intellij.psi.*;
@@ -73,11 +50,7 @@ import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.psi.util.proximity.ReferenceListWeigher;
 import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
@@ -86,6 +59,15 @@ import com.intellij.util.PairFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
 import consulo.java.codeInsight.completion.JavaCompletionUtilCore;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static com.intellij.codeInsight.completion.ReferenceExpressionCompletionContributor.findConstantsUsedInSwitch;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.inapplicable;
 
 public class JavaCompletionUtil extends JavaCompletionUtilCore
 {
@@ -528,7 +510,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 					final PsiElement qualifier = ref.getQualifier();
 					if(qualifier != null)
 					{
-						final CommonCodeStyleSettings settings = context.getCodeStyleSettings();
+						final CommonCodeStyleSettings settings = CompletionStyleUtil.getCodeStyleSettings(context);
 
 						final String parenSpace = settings.SPACE_WITHIN_PARENTHESES ? " " : "";
 						document.insertString(qualifier.getTextRange().getEndOffset(), parenSpace + ")");
@@ -903,7 +885,7 @@ public class JavaCompletionUtil extends JavaCompletionUtilCore
 
 		context.commitDocument();
 
-		final CommonCodeStyleSettings styleSettings = context.getCodeStyleSettings();
+		final CommonCodeStyleSettings styleSettings = CompletionStyleUtil.getCodeStyleSettings(context);
 		final PsiElement elementAt = file.findElementAt(context.getStartOffset());
 		if(elementAt == null || !(elementAt.getParent() instanceof PsiMethodReferenceExpression))
 		{

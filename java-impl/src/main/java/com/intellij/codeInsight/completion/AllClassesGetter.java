@@ -15,13 +15,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import gnu.trove.THashSet;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -29,19 +22,18 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.search.AllClassesSearchExecutor;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -193,7 +185,7 @@ public class AllClassesGetter
 				names.add(s);
 			}
 		});
-		LinkedHashSet<String> sorted = CompletionUtil.sortMatching(prefixMatcher, names);
+		LinkedHashSet<String> sorted = prefixMatcher.sortMatching(names);
 		AllClassesSearchExecutor.processClassesByNames(project, scope, sorted, processor);
 	}
 

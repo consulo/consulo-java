@@ -15,16 +15,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.codeInsight.completion.JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER;
-import static com.intellij.patterns.PsiJavaPatterns.psiClass;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiJavaElement;
-
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -55,6 +45,14 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
 import com.intellij.util.containers.MultiMap;
 import consulo.java.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
+
+import static com.intellij.codeInsight.completion.JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER;
+import static com.intellij.patterns.PsiJavaPatterns.*;
 
 /**
  * @author peter
@@ -114,7 +112,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor
 				item.addLookupStrings(getClassNameWithContainers(anno));
 				consumer.consume(item);
 			});
-			for(String name : CompletionUtil.sortMatching(matcher, annoMap.keySet()))
+			for(String name : matcher.sortMatching(annoMap.keySet()))
 			{
 				if(!ContainerUtil.process(annoMap.get(name), processor))
 				{

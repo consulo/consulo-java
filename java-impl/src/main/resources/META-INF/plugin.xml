@@ -959,12 +959,9 @@
 		<applicationService serviceInterface="com.intellij.codeInsight.folding.JavaCodeFoldingSettings"
 							serviceImplementation="com.intellij.codeInsight.folding.impl.JavaCodeFoldingSettingsImpl"/>
 
-		<projectService serviceInterface="com.intellij.psi.impl.source.tree.injected.JavaConcatenationInjectorManager"
-						serviceImplementation="com.intellij.psi.impl.source.tree.injected.JavaConcatenationInjectorManager"/>
-
 		<multiHostInjector
 				forClass="com.intellij.psi.PsiLiteralExpression"
-				implementationClass="com.intellij.psi.impl.source.tree.injected.JavaConcatenationInjectorManager$Concatenation2InjectorAdapter"
+				implementationClass="com.intellij.psi.impl.source.tree.injected.JavaConcatenationToInjectorAdapter"
 				order="last"/>
 
 		<projectService serviceInterface="com.intellij.psi.SmartTypePointerManager"

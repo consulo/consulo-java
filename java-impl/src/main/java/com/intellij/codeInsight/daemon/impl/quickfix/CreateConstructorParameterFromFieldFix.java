@@ -17,6 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.util.containers.ContainerUtil;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.generation.PsiElementClassMember;
@@ -46,7 +47,6 @@ import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ConcurrentWeakHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -188,7 +188,7 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction {
   @Nonnull
   private Collection<SmartPsiElementPointer<PsiField>> getFieldsToFix() {
     Map<SmartPsiElementPointer<PsiField>, Boolean> fields = myClass.getUserData(FIELDS);
-    if (fields == null) myClass.putUserData(FIELDS, fields = new ConcurrentWeakHashMap<SmartPsiElementPointer<PsiField>,Boolean>(1));
+    if (fields == null) myClass.putUserData(FIELDS, fields = ContainerUtil.createConcurrentWeakMap());
     final Map<SmartPsiElementPointer<PsiField>, Boolean> finalFields = fields;
     return new AbstractCollection<SmartPsiElementPointer<PsiField>>() {
       @Override

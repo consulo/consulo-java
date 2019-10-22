@@ -1,23 +1,9 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.compiled;
 
-import java.io.IOException;
-import java.lang.ref.Reference;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.internal.org.objectweb.asm.Attribute;
-import consulo.internal.org.objectweb.asm.ClassReader;
-import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.diagnostic.PluginException;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.plugins.PluginManagerCore;
-import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
@@ -52,13 +38,13 @@ import com.intellij.psi.impl.java.stubs.impl.PsiJavaFileStubImpl;
 import com.intellij.psi.impl.source.PsiFileImpl;
 import com.intellij.psi.impl.source.PsiFileWithStubSupport;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import com.intellij.psi.impl.source.StubbedSpine;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.stubs.PsiClassHolderFileStub;
 import com.intellij.psi.stubs.PsiFileStubImpl;
-import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.stubs.StubTreeLoader;
 import com.intellij.psi.util.CachedValueProvider;
@@ -71,6 +57,18 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.cls.ClsFormatException;
 import consulo.annotations.RequiredReadAction;
 import consulo.annotations.RequiredWriteAction;
+import consulo.internal.org.objectweb.asm.Attribute;
+import consulo.internal.org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.Opcodes;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.lang.ref.Reference;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx, Queryable, PsiClassOwnerEx, PsiCompiledFile
 {
@@ -611,11 +609,11 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
 		return stubTree;
 	}
 
-	@RequiredReadAction
+	@Nonnull
 	@Override
-	public ASTNode findTreeForStub(final StubTree tree, final StubElement<?> stub)
+	public StubbedSpine getStubbedSpine()
 	{
-		return null;
+		return getStubTree().getSpine();
 	}
 
 	@Override

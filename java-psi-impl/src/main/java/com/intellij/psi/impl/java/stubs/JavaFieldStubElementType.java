@@ -173,16 +173,4 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
 			}
 		}
 	}
-
-	@Override
-	public String getId(final PsiFieldStub stub)
-	{
-		final String name = stub.getName();
-		if(name != null)
-		{
-			return name;
-		}
-
-		return super.getId(stub);
-	}
 }

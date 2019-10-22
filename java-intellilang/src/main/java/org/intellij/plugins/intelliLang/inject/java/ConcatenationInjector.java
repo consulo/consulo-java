@@ -15,29 +15,6 @@
  */
 package org.intellij.plugins.intelliLang.inject.java;
 
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
-import org.intellij.plugins.intelliLang.inject.InjectorUtils;
-import org.intellij.plugins.intelliLang.inject.LanguageInjectionSupport;
-import org.intellij.plugins.intelliLang.inject.TemporaryPlacesRegistry;
-import org.intellij.plugins.intelliLang.inject.config.BaseInjection;
-import org.intellij.plugins.intelliLang.inject.config.InjectionPlace;
-import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
-import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
-import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import com.intellij.lang.Language;
 import com.intellij.lang.injection.ConcatenationAwareInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
@@ -56,17 +33,27 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.PatternValuesIndex;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.psi.injection.impl.ProjectInjectionConfiguration;
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+import org.intellij.plugins.intelliLang.Configuration;
+import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
+import org.intellij.plugins.intelliLang.inject.InjectorUtils;
+import org.intellij.plugins.intelliLang.inject.LanguageInjectionSupport;
+import org.intellij.plugins.intelliLang.inject.TemporaryPlacesRegistry;
+import org.intellij.plugins.intelliLang.inject.config.BaseInjection;
+import org.intellij.plugins.intelliLang.inject.config.InjectionPlace;
+import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
+import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
+import org.intellij.plugins.intelliLang.util.PsiUtilEx;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author cdr
@@ -113,10 +100,10 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
             if (element instanceof PsiParameter) {
               final PsiElement scope = ((PsiParameter)element).getDeclarationScope();
               if (scope instanceof PsiNamedElement) {
-                ContainerUtil.addIfNotNull(((PsiNamedElement)scope).getName(), result);
+                ContainerUtil.addIfNotNull(result, ((PsiNamedElement)scope).getName());
               }
               else {
-                ContainerUtil.addIfNotNull(((PsiNamedElement)element).getName(), result);
+                ContainerUtil.addIfNotNull(result, ((PsiNamedElement)element).getName());
               }
             }
             else if (element instanceof PsiNamedElement) {
@@ -125,7 +112,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
                 if (!annoClasses.contains(s)) annoClasses.add(s);
               }
               else {
-                ContainerUtil.addIfNotNull(((PsiNamedElement)element).getName(), result);
+                ContainerUtil.addIfNotNull(result, ((PsiNamedElement)element).getName());
               }
             }
           }
@@ -135,7 +122,8 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
     }, false);
   }
 
-  public void getLanguagesToInject(@Nonnull final MultiHostRegistrar registrar, @Nonnull PsiElement... operands) {
+  @Override
+  public void inject(@Nonnull final MultiHostRegistrar registrar, @Nonnull PsiElement... operands) {
     if (operands.length == 0) return;
     boolean hasLiteral = false;
     InjectedLanguage tempInjectedLanguage = null;
@@ -161,7 +149,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
                                       boolean settingsAvailable,
                                       boolean unparsable) {
         InjectorUtils.registerInjection(language, list, finalContainingFile, registrar);
-        InjectorUtils.registerSupport(mySupport, settingsAvailable, registrar);
+        InjectorUtils.registerSupport(mySupport, settingsAvailable, list.get(0).getFirst(), language);
         InjectorUtils.putInjectedFileUserData(registrar, InjectedLanguageUtil.FRANKENSTEIN_INJECTION, unparsable ? Boolean.TRUE : null);
       }
 

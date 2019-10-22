@@ -1,16 +1,11 @@
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
-import java.util.Collections;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.simple.RParenthTailType;
+import com.intellij.codeInsight.completion.util.CompletionStyleUtil;
 import com.intellij.codeInsight.guess.GuessManager;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -33,6 +28,12 @@ import com.intellij.util.ProcessingContext;
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
 import consulo.java.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
  * @author peter
@@ -222,7 +223,7 @@ class SmartCastProvider implements CompletionProvider
 					document.deleteString(context.getSelectionEndOffset(), context.getOffsetMap().getOffset(CompletionInitializationContext.IDENTIFIER_END_OFFSET));
 				}
 
-				final CommonCodeStyleSettings csSettings = context.getCodeStyleSettings();
+				final CommonCodeStyleSettings csSettings = CompletionStyleUtil.getCodeStyleSettings(context);
 				final int oldTail = context.getTailOffset();
 				context.setTailOffset(RParenthTailType.addRParenth(editor, oldTail, csSettings.SPACE_WITHIN_CAST_PARENTHESES));
 

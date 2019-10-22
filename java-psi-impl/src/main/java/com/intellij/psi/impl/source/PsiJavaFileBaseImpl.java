@@ -15,13 +15,6 @@
  */
 package com.intellij.psi.impl.source;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -50,12 +43,7 @@ import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.Processor;
@@ -65,6 +53,12 @@ import com.intellij.util.indexing.IndexingDataKeys;
 import consulo.annotations.RequiredReadAction;
 import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJavaFile
 {
@@ -177,11 +171,8 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 			{
 				return nodes[0];
 			}
-			if(nodes.length == 0)
-			{
-				return null;
-			}
-			reportStubAstMismatch(stub + "; " + stub.getChildrenStubs(), getStubTree());
+			assert nodes.length == 0;
+			return null;
 		}
 
 		ASTNode node = calcTreeElement().findChildByType(JavaElementType.IMPORT_LIST);

@@ -15,16 +15,6 @@
  */
 package com.intellij.psi;
 
-import static com.intellij.psi.impl.compiled.ClsFileImpl.EMPTY_ATTRIBUTES;
-
-import java.io.IOException;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.internal.org.objectweb.asm.ClassReader;
-import consulo.internal.org.objectweb.asm.ClassVisitor;
-import consulo.internal.org.objectweb.asm.Opcodes;
-import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.components.ServiceManager;
@@ -38,6 +28,15 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.impl.compiled.ClsFileImpl;
 import com.intellij.psi.impl.file.PsiBinaryFileImpl;
+import consulo.internal.org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.ClassVisitor;
+import consulo.internal.org.objectweb.asm.Opcodes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+
+import static com.intellij.psi.impl.compiled.ClsFileImpl.EMPTY_ATTRIBUTES;
 
 /**
  * @author max
@@ -53,7 +52,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 
 	public ClassFileViewProvider(@Nonnull PsiManager manager, @Nonnull VirtualFile file, boolean eventSystemEnabled)
 	{
-		super(manager, file, eventSystemEnabled, JavaLanguage.INSTANCE, JavaClassFileType.INSTANCE);
+		super(manager, file, eventSystemEnabled, JavaLanguage.INSTANCE);
 	}
 
 	@Override

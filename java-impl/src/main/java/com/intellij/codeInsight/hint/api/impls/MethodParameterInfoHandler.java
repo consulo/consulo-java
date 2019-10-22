@@ -15,28 +15,15 @@
  */
 package com.intellij.codeInsight.hint.api.impls;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.completion.CompletionMemory;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.javadoc.JavaDocInfoGenerator;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.lang.parameterInfo.CreateParameterInfoContext;
-import com.intellij.lang.parameterInfo.ParameterInfoContext;
-import com.intellij.lang.parameterInfo.ParameterInfoHandlerWithTabActionSupport;
-import com.intellij.lang.parameterInfo.ParameterInfoUIContext;
-import com.intellij.lang.parameterInfo.ParameterInfoUtils;
-import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
+import com.intellij.lang.parameterInfo.*;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.*;
@@ -52,6 +39,13 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Maxim.Mossienko
@@ -120,11 +114,9 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
 	private static PsiExpressionList findMethodsForArgumentList(final CreateParameterInfoContext context, @Nonnull final PsiExpressionList argumentList)
 	{
-
 		CandidateInfo[] candidates = getMethods(argumentList);
 		if(candidates.length == 0)
 		{
-			DaemonCodeAnalyzer.getInstance(context.getProject()).updateVisibleHighlighters(context.getEditor());
 			return null;
 		}
 		context.setItemsToShow(candidates);

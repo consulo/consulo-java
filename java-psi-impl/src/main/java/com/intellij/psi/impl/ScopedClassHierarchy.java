@@ -33,7 +33,6 @@ import com.intellij.util.containers.ContainerUtil;
 import gnu.trove.TObjectHashingStrategy;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -72,15 +71,7 @@ class ScopedClassHierarchy
 	private volatile Map<PsiClass, PsiClassType.ClassResolveResult> mySupersWithSubstitutors;
 	private volatile List<PsiClassType.ClassResolveResult> myImmediateSupersWithCapturing;
 	@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-	private final Map<LanguageLevel, Map<PsiClass, PsiSubstitutor>> myAllSupersWithCapturing = new ConcurrentFactoryMap<LanguageLevel, Map<PsiClass, PsiSubstitutor>>()
-	{
-		@javax.annotation.Nullable
-		@Override
-		protected Map<PsiClass, PsiSubstitutor> create(LanguageLevel key)
-		{
-			return calcAllMemberSupers(key);
-		}
-	};
+	private final Map<LanguageLevel, Map<PsiClass, PsiSubstitutor>> myAllSupersWithCapturing = ConcurrentFactoryMap.createMap(languageLevel -> calcAllMemberSupers(languageLevel));
 
 	private ScopedClassHierarchy(PsiClass psiClass, GlobalSearchScope resolveScope)
 	{
@@ -132,15 +123,7 @@ class ScopedClassHierarchy
 			@Override
 			public Result<Map<GlobalSearchScope, ScopedClassHierarchy>> compute()
 			{
-				Map<GlobalSearchScope, ScopedClassHierarchy> result = new ConcurrentFactoryMap<GlobalSearchScope, ScopedClassHierarchy>()
-				{
-					@Nullable
-					@Override
-					protected ScopedClassHierarchy create(GlobalSearchScope resolveScope)
-					{
-						return new ScopedClassHierarchy(psiClass, resolveScope);
-					}
-				};
+				Map<GlobalSearchScope, ScopedClassHierarchy> result = ConcurrentFactoryMap.createMap(it -> new ScopedClassHierarchy(psiClass, it));
 				return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
 			}
 		}).get(resolveScope);

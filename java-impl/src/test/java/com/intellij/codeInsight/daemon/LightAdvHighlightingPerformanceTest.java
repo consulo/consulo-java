@@ -15,11 +15,6 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.concurrency.JobSchedulerImpl;
@@ -30,10 +25,14 @@ import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.impl.source.tree.injected.JavaConcatenationInjectorManager;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ThrowableRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.fail;
 
 public abstract class LightAdvHighlightingPerformanceTest extends LightDaemonAnalyzerTestCase {
   private final Disposable my = Disposer.newDisposable();
@@ -43,7 +42,6 @@ public abstract class LightAdvHighlightingPerformanceTest extends LightDaemonAna
 
     Disposer.register(my, BlockExtensions.create(Extensions.getRootArea().getExtensionPoint(LanguageAnnotators.EP_NAME)));
     Disposer.register(my, BlockExtensions.create(Extensions.getRootArea().getExtensionPoint(LineMarkerProviders.EP_NAME)));
-    Disposer.register(my, BlockExtensions.create(Extensions.getArea(getProject()).getExtensionPoint(JavaConcatenationInjectorManager.CONCATENATION_INJECTOR_EP_NAME)));
     Disposer.register(my, BlockExtensions.create(Extensions.getArea(getProject()).getExtensionPoint(MultiHostInjector.EP_NAME)));
 
     IntentionManager.getInstance().getAvailableIntentionActions();  // hack to avoid slowdowns in PyExtensionFactory

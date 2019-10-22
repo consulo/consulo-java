@@ -33,10 +33,10 @@ import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ConcurrentWeakHashMap;
+import com.intellij.util.containers.ContainerUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 
 /**
@@ -116,7 +116,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   @Nonnull
   private static Collection<SmartPsiElementPointer<PsiParameter>> getUnboundedParams(PsiMethod psiMethod) {
     Map<SmartPsiElementPointer<PsiParameter>, Boolean> params = psiMethod.getUserData(PARAMS);
-    if (params == null) psiMethod.putUserData(PARAMS, params = new ConcurrentWeakHashMap<SmartPsiElementPointer<PsiParameter>, Boolean>(1));
+    if (params == null) psiMethod.putUserData(PARAMS, params = ContainerUtil.createConcurrentWeakMap());
     final Map<SmartPsiElementPointer<PsiParameter>, Boolean> finalParams = params;
     return new AbstractCollection<SmartPsiElementPointer<PsiParameter>>() {
       @Override
