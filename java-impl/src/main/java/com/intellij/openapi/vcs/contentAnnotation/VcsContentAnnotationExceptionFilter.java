@@ -15,15 +15,6 @@
  */
 package com.intellij.openapi.vcs.contentAnnotation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.execution.filters.ExceptionInfoCache;
 import com.intellij.execution.filters.ExceptionWorker;
 import com.intellij.execution.filters.Filter;
@@ -47,14 +38,14 @@ import com.intellij.openapi.vcs.changes.ChangeListManager;
 import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import com.intellij.openapi.vcs.impl.UpToDateLineNumberProviderImpl;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.PsiCallExpression;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Consumer;
 import com.intellij.util.SmartList;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -110,7 +101,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin
 	}
 
 	@Override
-	public void applyHeavyFilter(@Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @Nonnull Consumer<AdditionalHighlight> consumer)
+	public void applyHeavyFilter(@Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @Nonnull Consumer<? super AdditionalHighlight> consumer)
 	{
 		VcsContentAnnotation vcsContentAnnotation = VcsContentAnnotationImpl.getInstance(myProject);
 		final LocalChangesCorrector localChangesCorrector = new LocalChangesCorrector(myProject);
