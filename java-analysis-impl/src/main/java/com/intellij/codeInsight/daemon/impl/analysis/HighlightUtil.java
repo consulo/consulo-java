@@ -15,41 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import gnu.trove.THashMap;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.ContainerProvider;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.quickfix.AddTypeArgumentsConditionalFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.ChangeNewOperatorTypeFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.DeleteRepeatedInterfaceFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.FlipIntersectionSidesFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.QualifySuperArgumentFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixActionRegistrarImpl;
-import com.intellij.codeInsight.daemon.impl.quickfix.ReplaceAssignmentFromVoidWithStatementIntentionAction;
-import com.intellij.codeInsight.daemon.impl.quickfix.VariableArrayTypeFix;
+import com.intellij.codeInsight.daemon.impl.quickfix.*;
 import com.intellij.codeInsight.highlighting.HighlightUsagesDescriptionLocation;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
@@ -101,6 +72,17 @@ import com.intellij.xml.util.XmlStringUtil;
 import consulo.annotations.RequiredReadAction;
 import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
+import gnu.trove.THashMap;
+import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.PropertyKey;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author cdr
@@ -1628,30 +1610,30 @@ public class HighlightUtil extends HighlightUtilBase
 		return thrownTypes;
 	}
 
-	@javax.annotation.Nullable
+	@Nonnull
 	static List<HighlightInfo> checkExceptionThrownInTry(@Nonnull final PsiParameter parameter, @Nonnull final Set<PsiClassType> thrownTypes)
 	{
 		final PsiElement declarationScope = parameter.getDeclarationScope();
 		if(!(declarationScope instanceof PsiCatchSection))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
 		final PsiType caughtType = parameter.getType();
 		if(caughtType instanceof PsiClassType)
 		{
 			HighlightInfo info = checkSimpleCatchParameter(parameter, thrownTypes, (PsiClassType) caughtType);
-			return info == null ? null : Collections.singletonList(info);
+			return info == null ? Collections.emptyList() : Collections.singletonList(info);
 		}
 		if(caughtType instanceof PsiDisjunctionType)
 		{
 			return checkMultiCatchParameter(parameter, thrownTypes);
 		}
 
-		return null;
+		return Collections.emptyList();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static HighlightInfo checkSimpleCatchParameter(@Nonnull final PsiParameter parameter, @Nonnull final Collection<PsiClassType> thrownTypes, @Nonnull final PsiClassType caughtType)
 	{
 		if(ExceptionUtil.isUncheckedExceptionOrSuperclass(caughtType))
