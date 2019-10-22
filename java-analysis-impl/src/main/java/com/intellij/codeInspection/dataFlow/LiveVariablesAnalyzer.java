@@ -15,23 +15,7 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.codeInspection.dataFlow.instructions.AssignInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.ConditionalGotoInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.FinishElementInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.FlushVariableInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.GotoInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.Instruction;
-import com.intellij.codeInspection.dataFlow.instructions.PushInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.ReturnInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.*;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
@@ -41,13 +25,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.util.PairFunction;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.FactoryMap;
-import com.intellij.util.containers.FilteringIterator;
-import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.Queue;
+import com.intellij.util.containers.*;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author peter
@@ -59,7 +44,7 @@ public class LiveVariablesAnalyzer
 	private final MultiMap<Instruction, Instruction> myForwardMap;
 	private final MultiMap<Instruction, Instruction> myBackwardMap;
 	@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-	private final Map<PsiElement, List<DfaVariableValue>> myClosureReads = FactoryMap.createMap(closure ->
+	private final Map<PsiElement, List<DfaVariableValue>> myClosureReads = FactoryMap.create(closure ->
 	{
 		final Set<DfaVariableValue> result = ContainerUtil.newLinkedHashSet();
 		closure.accept(new PsiRecursiveElementWalkingVisitor()

@@ -16,6 +16,7 @@
 
 /**
  * created at Feb 24, 2002
+ *
  * @author Jeka
  */
 package com.intellij.compiler.classParsing;
@@ -23,13 +24,28 @@ package com.intellij.compiler.classParsing;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ConstantValue {
-  public static final ConstantValue EMPTY_CONSTANT_VALUE = new ConstantValue();
+public class ConstantValue
+{
+	public static final ConstantValue EMPTY_CONSTANT_VALUE = new ConstantValue()
+	{
+		@Override
+		public int hashCode()
+		{
+			return 0;
+		}
 
-  protected ConstantValue() {
-  }
+		@Override
+		public boolean equals(Object obj)
+		{
+			return obj == this;
+		}
+	};
 
-  public void save(DataOutput out) throws IOException {
-  }
+	protected ConstantValue()
+	{
+	}
 
+	public void save(DataOutput out) throws IOException
+	{
+	}
 }

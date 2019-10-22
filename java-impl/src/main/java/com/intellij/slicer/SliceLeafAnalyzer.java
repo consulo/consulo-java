@@ -180,17 +180,7 @@ public class SliceLeafAnalyzer {
   }
 
   public static Map<SliceNode, Collection<PsiElement>> createMap() {
-    return new FactoryMap<SliceNode, Collection<PsiElement>>() {
-      @Override
-      protected Map<SliceNode, Collection<PsiElement>> createMap() {
-        return ContainerUtil.newConcurrentMap(ContainerUtil.<SliceNode>identityStrategy());
-      }
-
-      @Override
-      protected Collection<PsiElement> create(SliceNode key) {
-        return ContainerUtil.newConcurrentSet(SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY);
-      }
-    };
+    return FactoryMap.createMap(sliceNode -> ContainerUtil.newConcurrentSet(SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY), () -> ContainerUtil.newConcurrentMap(ContainerUtil.<SliceNode>identityStrategy()));
   }
 
   static class SliceNodeGuide implements WalkingState.TreeGuide<SliceNode> {

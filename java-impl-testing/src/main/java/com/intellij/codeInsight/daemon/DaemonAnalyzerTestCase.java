@@ -390,7 +390,8 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 		}
 
 		String text = myEditor.getDocument().getText();
-		data.checkLineMarkers(DaemonCodeAnalyzerImpl.getLineMarkers(getDocument(getFile()), getProject()), text);
+		List lineMarkers = DaemonCodeAnalyzerImpl.getLineMarkers(getDocument(getFile()), getProject());
+		data.checkLineMarkers(lineMarkers, text);
 		data.checkResult(infos, text);
 		return infos;
 	}

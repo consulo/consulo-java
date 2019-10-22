@@ -15,26 +15,11 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.UnusedImportProvider;
-import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil;
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx;
-import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator;
-import com.intellij.codeInsight.daemon.impl.FileStatusMap;
-import com.intellij.codeInsight.daemon.impl.GlobalUsageHelper;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.JavaHighlightInfoTypes;
-import com.intellij.codeInsight.daemon.impl.UnusedSymbolUtil;
+import com.intellij.codeInsight.daemon.impl.*;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
 import com.intellij.codeInsight.intention.EmptyIntentionAction;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -72,6 +57,12 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import consulo.psi.PsiPackage;
+import org.jetbrains.annotations.PropertyKey;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class PostHighlightingVisitor
 {
@@ -363,10 +354,10 @@ class PostHighlightingVisitor
 
 	@javax.annotation.Nullable
 	private HighlightInfo processField(@Nonnull final Project project,
-			@Nonnull final PsiField field,
-			@Nonnull PsiIdentifier identifier,
-			@Nonnull ProgressIndicator progress,
-			@Nonnull GlobalUsageHelper helper)
+									   @Nonnull final PsiField field,
+									   @Nonnull PsiIdentifier identifier,
+									   @Nonnull ProgressIndicator progress,
+									   @Nonnull GlobalUsageHelper helper)
 	{
 		if(HighlightUtil.isSerializationImplicitlyUsedField(field))
 		{
@@ -445,17 +436,11 @@ class PostHighlightingVisitor
 		return highlightInfo;
 	}
 
-	@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-	private final Map<PsiMethod, Boolean> isOverriddenOrOverrides = new ConcurrentFactoryMap<PsiMethod, Boolean>()
+	private final Map<PsiMethod, Boolean> isOverriddenOrOverrides = ConcurrentFactoryMap.createMap(method ->
 	{
-		@javax.annotation.Nullable
-		@Override
-		protected Boolean create(PsiMethod method)
-		{
-			boolean overrides = SuperMethodsSearch.search(method, null, true, false).findFirst() != null;
-			return overrides || OverridingMethodsSearch.search(method).findFirst() != null;
-		}
-	};
+		boolean overrides = SuperMethodsSearch.search(method, null, true, false).findFirst() != null;
+		return overrides || OverridingMethodsSearch.search(method).findFirst() != null;
+	});
 
 	private boolean isOverriddenOrOverrides(@Nonnull PsiMethod method)
 	{
@@ -515,10 +500,10 @@ class PostHighlightingVisitor
 
 	@javax.annotation.Nullable
 	private HighlightInfo processMethod(@Nonnull final Project project,
-			@Nonnull final PsiMethod method,
-			@Nonnull PsiIdentifier identifier,
-			@Nonnull ProgressIndicator progress,
-			@Nonnull GlobalUsageHelper helper)
+										@Nonnull final PsiMethod method,
+										@Nonnull PsiIdentifier identifier,
+										@Nonnull ProgressIndicator progress,
+										@Nonnull GlobalUsageHelper helper)
 	{
 		if(UnusedSymbolUtil.isMethodReferenced(myProject, myFile, method, progress, helper))
 		{
@@ -576,12 +561,12 @@ class PostHighlightingVisitor
 
 
 	private static HighlightInfo formatUnusedSymbolHighlightInfo(@Nonnull final Project project,
-			@Nonnull @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String pattern,
-			@Nonnull final PsiNameIdentifierOwner aClass,
-			@Nonnull final String element,
-			HighlightDisplayKey highlightDisplayKey,
-			@Nonnull HighlightInfoType highlightInfoType,
-			@Nonnull PsiElement identifier)
+																 @Nonnull @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String pattern,
+																 @Nonnull final PsiNameIdentifierOwner aClass,
+																 @Nonnull final String element,
+																 HighlightDisplayKey highlightDisplayKey,
+																 @Nonnull HighlightInfoType highlightInfoType,
+																 @Nonnull PsiElement identifier)
 	{
 		String symbolName = aClass.getName();
 		String message = JavaErrorMessages.message(pattern, symbolName);

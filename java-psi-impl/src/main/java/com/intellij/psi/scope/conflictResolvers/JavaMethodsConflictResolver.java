@@ -15,18 +15,6 @@
  */
 package com.intellij.psi.scope.conflictResolvers;
 
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TIntArrayList;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
@@ -43,17 +31,18 @@ import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.scope.PsiConflictResolver;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.ImportsUtil;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.FactoryMap;
 import com.intellij.util.containers.HashSet;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+import gnu.trove.TIntArrayList;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -115,15 +104,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			return conflicts.get(0);
 		}
 
-		final FactoryMap<MethodCandidateInfo, PsiSubstitutor> map = new FactoryMap<MethodCandidateInfo, PsiSubstitutor>()
-		{
-			@javax.annotation.Nullable
-			@Override
-			protected PsiSubstitutor create(MethodCandidateInfo key)
-			{
-				return key.getSubstitutor(false);
-			}
-		};
+		final Map<MethodCandidateInfo, PsiSubstitutor> map = FactoryMap.create(key -> key.getSubstitutor(false));
 		boolean atLeastOneMatch = checkParametersNumber(conflicts, getActualParametersLength(), map, true);
 		if(conflicts.size() == 1)
 		{
@@ -229,7 +210,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 
 	public void checkSpecifics(@Nonnull List<CandidateInfo> conflicts,
 			@MethodCandidateInfo.ApplicabilityLevelConstant int applicabilityLevel,
-			FactoryMap<MethodCandidateInfo, PsiSubstitutor> map,
+			Map<MethodCandidateInfo, PsiSubstitutor> map,
 			@Nonnull LanguageLevel languageLevel)
 	{
 		final boolean applicable = applicabilityLevel > MethodCandidateInfo.ApplicabilityLevel.NOT_APPLICABLE;
@@ -303,7 +284,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 		checkSameSignatures(conflicts, null);
 	}
 
-	protected void checkSameSignatures(@Nonnull List<CandidateInfo> conflicts, FactoryMap<MethodCandidateInfo, PsiSubstitutor> map)
+	protected void checkSameSignatures(@Nonnull List<CandidateInfo> conflicts, Map<MethodCandidateInfo, PsiSubstitutor> map)
 	{
 		// candidates should go in order of class hierarchy traversal
 		// in order for this to work
@@ -487,7 +468,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 	}
 
 	@Nonnull
-	private static PsiSubstitutor getSubstitutor(MethodCandidateInfo existing, FactoryMap<MethodCandidateInfo, PsiSubstitutor> map)
+	private static PsiSubstitutor getSubstitutor(MethodCandidateInfo existing, Map<MethodCandidateInfo, PsiSubstitutor> map)
 	{
 		return map != null ? map.get(existing) : existing.getSubstitutor(false);
 	}
@@ -571,7 +552,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 		return null;
 	}
 
-	public boolean checkParametersNumber(@Nonnull List<CandidateInfo> conflicts, final int argumentsCount, FactoryMap<MethodCandidateInfo, PsiSubstitutor> map, boolean ignoreIfStaticsProblem)
+	public boolean checkParametersNumber(@Nonnull List<CandidateInfo> conflicts, final int argumentsCount, Map<MethodCandidateInfo, PsiSubstitutor> map, boolean ignoreIfStaticsProblem)
 	{
 		boolean atLeastOneMatch = false;
 		TIntArrayList unmatchedIndices = null;
@@ -711,7 +692,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 	private Specifics isMoreSpecific(@Nonnull MethodCandidateInfo info1,
 			@Nonnull MethodCandidateInfo info2,
 			@MethodCandidateInfo.ApplicabilityLevelConstant int applicabilityLevel,
-			FactoryMap<MethodCandidateInfo, PsiSubstitutor> map,
+			Map<MethodCandidateInfo, PsiSubstitutor> map,
 			@Nonnull LanguageLevel languageLevel)
 	{
 		PsiMethod method1 = info1.getElement();

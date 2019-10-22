@@ -16,22 +16,8 @@
 
 package com.intellij.codeInspection.dataFlow.value;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiMember;
-import static com.intellij.patterns.PsiJavaPatterns.psiParameter;
-import static com.intellij.patterns.StandardPatterns.or;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInspection.dataFlow.DfaControlTransferValue;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.DfaUtil;
-import com.intellij.codeInspection.dataFlow.Nullness;
-import com.intellij.codeInspection.dataFlow.TransferTarget;
-import com.intellij.codeInspection.dataFlow.Trap;
+import com.intellij.codeInspection.dataFlow.*;
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
 import com.intellij.openapi.util.Pair;
@@ -41,6 +27,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FList;
 import com.intellij.util.containers.FactoryMap;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
+
+import static com.intellij.patterns.PsiJavaPatterns.psiMember;
+import static com.intellij.patterns.PsiJavaPatterns.psiParameter;
+import static com.intellij.patterns.StandardPatterns.or;
 
 public class DfaValueFactory
 {
@@ -245,7 +240,7 @@ public class DfaValueFactory
 		return myControlTransfers.get(Pair.create(kind, traps));
 	}
 
-	private final Map<Pair<TransferTarget, FList<Trap>>, DfaControlTransferValue> myControlTransfers = FactoryMap.createMap(p -> new DfaControlTransferValue(this, p.first, p.second));
+	private final Map<Pair<TransferTarget, FList<Trap>>, DfaControlTransferValue> myControlTransfers = FactoryMap.create(p -> new DfaControlTransferValue(this, p.first, p.second));
 
 	private final DfaVariableValue.Factory myVarFactory;
 	private final DfaConstValue.Factory myConstFactory;

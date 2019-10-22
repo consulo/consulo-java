@@ -2330,16 +2330,16 @@ public class HighlightUtil extends HighlightUtilBase
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(text).create();
 	}
 
-	@javax.annotation.Nullable
+	@Nonnull
 	static Collection<HighlightInfo> checkArrayInitializer(final PsiExpression initializer, PsiType type)
 	{
 		if(!(initializer instanceof PsiArrayInitializerExpression))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 		if(!(type instanceof PsiArrayType))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
 		final PsiType componentType = ((PsiArrayType) type).getComponentType();

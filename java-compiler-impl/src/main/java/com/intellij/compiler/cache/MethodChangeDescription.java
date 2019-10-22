@@ -83,7 +83,7 @@ class MethodChangeDescription extends ChangeDescription {
 
     final ConstantValue oldDefault = oldMethod.getAnnotationDefault();
     final ConstantValue newDefault = newMethod.getAnnotationDefault();
-    removedAnnotationDefault = (oldDefault != null && !ConstantValue.EMPTY_CONSTANT_VALUE.equals(oldDefault)) && (newDefault == null || ConstantValue.EMPTY_CONSTANT_VALUE.equals(newDefault));
+    removedAnnotationDefault = (!ConstantValue.EMPTY_CONSTANT_VALUE.equals(oldDefault)) && (ConstantValue.EMPTY_CONSTANT_VALUE.equals(newDefault));
   }
 
   public boolean isChanged() {

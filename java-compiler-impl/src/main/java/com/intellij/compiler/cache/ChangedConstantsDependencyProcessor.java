@@ -20,12 +20,6 @@
  */
 package com.intellij.compiler.cache;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.compiler.classParsing.FieldInfo;
 import com.intellij.compiler.impl.ExitException;
 import com.intellij.compiler.impl.ExitStatus;
@@ -40,14 +34,14 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PackageScope;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.TextOccurenceProcessor;
-import com.intellij.psi.search.UsageSearchContext;
+import com.intellij.psi.search.*;
 import com.intellij.psi.util.PsiUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ChangedConstantsDependencyProcessor {
   private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.make.ChangedConstantsDependencyProcessor");
@@ -346,7 +340,7 @@ public class ChangedConstantsDependencyProcessor {
       final FieldChangeInfo fieldChangeInfo = (FieldChangeInfo)o;
 
       if (isAccessibilityChange != fieldChangeInfo.isAccessibilityChange) return false;
-      if (!fieldInfo.equals(fieldChangeInfo.fieldInfo)) return false;
+      if (!fieldInfo.isNameAndDescriptorEqual(fieldChangeInfo.fieldInfo)) return false;
 
       return true;
     }

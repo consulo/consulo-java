@@ -60,7 +60,7 @@ public class MemberReferenceInfo extends ReferenceInfo {
     if (!super.equals(o)) {
       return false;
     }
-    return myMemberInfo.equals(((MemberReferenceInfo)o).myMemberInfo);
+    return myMemberInfo.isNameAndDescriptorEqual(((MemberReferenceInfo)o).myMemberInfo);
   }
 
   public int hashCode() {

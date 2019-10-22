@@ -456,6 +456,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
+	@Nonnull
 	static Collection<HighlightInfo> checkOverrideEquivalentMethods(@Nonnull PsiClass aClass)
 	{
 		List<HighlightInfo> result = new ArrayList<>();
@@ -481,7 +482,7 @@ public class GenericsHighlightUtil
 			}
 		}
 
-		return result.isEmpty() ? null : result;
+		return result;
 	}
 
 	static HighlightInfo checkDefaultMethodOverrideEquivalentToObjectNonPrivate(@Nonnull LanguageLevel languageLevel,

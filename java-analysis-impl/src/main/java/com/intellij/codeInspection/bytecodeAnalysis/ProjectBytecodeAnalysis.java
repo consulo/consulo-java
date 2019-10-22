@@ -15,26 +15,6 @@
  */
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import static com.intellij.codeInspection.bytecodeAnalysis.Direction.In;
-import static com.intellij.codeInspection.bytecodeAnalysis.Direction.NullableOut;
-import static com.intellij.codeInspection.bytecodeAnalysis.Direction.Out;
-import static com.intellij.codeInspection.bytecodeAnalysis.Direction.Pure;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
 import com.intellij.openapi.components.ServiceManager;
@@ -44,15 +24,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.psi.util.CachedValueProvider;
@@ -63,6 +35,16 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.Stack;
 import com.intellij.util.indexing.FileBasedIndex;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+
+import static com.intellij.codeInspection.bytecodeAnalysis.Direction.*;
 
 /**
  * @author lambdamix
@@ -313,15 +295,7 @@ public class ProjectBytecodeAnalysis
 			@Override
 			public Result<Map<String, PsiAnnotation>> compute()
 			{
-				Map<String, PsiAnnotation> map = new ConcurrentFactoryMap<String, PsiAnnotation>()
-				{
-					@Nullable
-					@Override
-					protected PsiAnnotation create(String attrs)
-					{
-						return createAnnotationFromText("@org.jetbrains.annotations.Contract(" + attrs + ")");
-					}
-				};
+				Map<String, PsiAnnotation> map = ConcurrentFactoryMap.createMap(attrs -> createAnnotationFromText("@org.jetbrains.annotations.Contract(" + attrs + ")"));
 				return CachedValueProvider.Result.create(map, ModificationTracker.NEVER_CHANGED);
 			}
 		});

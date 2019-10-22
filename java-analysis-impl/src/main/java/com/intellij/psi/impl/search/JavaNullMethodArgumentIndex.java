@@ -15,27 +15,6 @@
  */
 package com.intellij.psi.impl.search;
 
-import static com.intellij.psi.impl.source.tree.JavaElementType.ANONYMOUS_CLASS;
-import static com.intellij.psi.impl.source.tree.JavaElementType.EXPRESSION_LIST;
-import static com.intellij.psi.impl.source.tree.JavaElementType.JAVA_CODE_REFERENCE;
-import static com.intellij.psi.impl.source.tree.JavaElementType.LITERAL_EXPRESSION;
-import static com.intellij.psi.impl.source.tree.JavaElementType.METHOD_CALL_EXPRESSION;
-import static com.intellij.psi.impl.source.tree.JavaElementType.NEW_EXPRESSION;
-import static com.intellij.psi.impl.source.tree.JavaElementType.REFERENCE_EXPRESSION;
-
-import gnu.trove.THashMap;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -53,18 +32,21 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.IntArrayList;
-import com.intellij.util.indexing.DataIndexer;
-import com.intellij.util.indexing.DefaultFileTypeSpecificInputFilter;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.intellij.util.indexing.FileContent;
-import com.intellij.util.indexing.FileContentImpl;
-import com.intellij.util.indexing.ID;
-import com.intellij.util.indexing.PsiDependentIndex;
-import com.intellij.util.indexing.ScalarIndexExtension;
+import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import com.intellij.util.text.StringSearcher;
+import gnu.trove.THashMap;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.*;
+
+import static com.intellij.psi.impl.source.tree.JavaElementType.*;
 
 public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMethodArgumentIndex.MethodCallData> implements PsiDependentIndex
 {
@@ -98,7 +80,7 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 				return Collections.emptyMap();
 			}
 
-			LighterAST lighterAst = ((FileContentImpl) inputData).getLighterASTForPsiDependentIndex();
+			LighterAST lighterAst = ((PsiDependentFileContent) inputData).getLighterAST();
 			Set<LighterASTNode> calls = findCallsWithNulls(lighterAst, nullOffsets);
 			if(calls.isEmpty())
 			{
