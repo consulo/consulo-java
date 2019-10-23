@@ -15,19 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
@@ -58,6 +45,12 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author cdr
@@ -1140,12 +1133,12 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nonnull
 	static Collection<HighlightInfo> checkCatchParameterIsClass(PsiParameter parameter)
 	{
 		if(!(parameter.getDeclarationScope() instanceof PsiCatchSection))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 		final Collection<HighlightInfo> result = ContainerUtil.newArrayList();
 
@@ -1392,7 +1385,7 @@ public class GenericsHighlightUtil
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nonnull
 	static List<HighlightInfo> checkEnumConstantModifierList(PsiModifierList modifierList)
 	{
 		List<HighlightInfo> list = null;
@@ -1409,7 +1402,7 @@ public class GenericsHighlightUtil
 				list.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(child).descriptionAndTooltip(description).create());
 			}
 		}
-		return list;
+		return ContainerUtil.notNullize(list);
 	}
 
 	@javax.annotation.Nullable
