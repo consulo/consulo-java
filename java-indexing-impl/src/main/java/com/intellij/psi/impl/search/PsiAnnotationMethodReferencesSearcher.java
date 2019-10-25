@@ -15,7 +15,7 @@ import com.intellij.openapi.application.ReadActionProcessor;
  */
 public class PsiAnnotationMethodReferencesSearcher implements QueryExecutor<PsiReference, ReferencesSearch.SearchParameters> {
   @Override
-  public boolean execute(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer) {
+  public boolean execute(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
     final PsiElement refElement = p.getElementToSearch();
     if (PsiUtil.isAnnotationMethod(refElement)) {
       PsiMethod method = (PsiMethod)refElement;
@@ -28,7 +28,7 @@ public class PsiAnnotationMethodReferencesSearcher implements QueryExecutor<PsiR
     return true;
   }
 
-  public static ReadActionProcessor<PsiReference> createImplicitDefaultAnnotationMethodConsumer(final Processor<PsiReference> consumer) {
+  public static ReadActionProcessor<PsiReference> createImplicitDefaultAnnotationMethodConsumer(final Processor<? super PsiReference> consumer) {
     return new ReadActionProcessor<PsiReference>() {
       @Override
       public boolean processInReadAction(final PsiReference reference) {

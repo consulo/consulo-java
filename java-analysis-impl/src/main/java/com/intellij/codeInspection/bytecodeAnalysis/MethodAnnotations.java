@@ -24,11 +24,12 @@ import java.util.Set;
 class MethodAnnotations
 {
 	// @NotNull keys
-	final Set<HKey> notNulls = new HashSet<HKey>(1);
+	final Set<EKey> notNulls = new HashSet<>(1);
 	// @Nullable keys
-	final Set<HKey> nullables = new HashSet<HKey>(1);
+	final Set<EKey> nullables = new HashSet<>(1);
 	// @Contract(pure=true) part of contract
-	final Set<HKey> pures = new HashSet<HKey>(1);
+	final Set<EKey> pures = new HashSet<>(1);
 	// @Contracts
-	final Map<HKey, String> contractsValues = new HashMap<HKey, String>();
+	final Map<EKey, String> contractsValues = new HashMap<>();
+	DataValue returnValue = DataValue.UnknownDataValue1;
 }

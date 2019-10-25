@@ -15,16 +15,6 @@
  */
 package com.intellij.codeInsight.intention.impl.config;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.inject.Singleton;
-
-import org.jetbrains.annotations.Nls;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
@@ -40,12 +30,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInsight.intention.impl.ReplaceAssignmentWithComparisonFix;
-import com.intellij.codeInspection.InspectionProfile;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
-import com.intellij.codeInspection.SuppressIntentionActionFromFix;
-import com.intellij.codeInspection.SuppressQuickFix;
+import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.codeInspection.ex.EntryPointsManagerBase;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
@@ -72,8 +57,16 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PropertyMemberType;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.siyeh.ig.fixes.CreateDefaultBranchFix;
+import com.siyeh.ig.fixes.CreateMissingSwitchBranchesFix;
 import consulo.java.JavaQuickFixBundle;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.Nls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
+import java.util.*;
 
 /**
  * @author cdr
@@ -93,9 +86,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	@Nonnull
 	@Override
 	public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(@Nonnull PsiModifierListOwner owner,
-			@Nonnull final String modifier,
-			final boolean shouldHave,
-			final boolean showContainingClass)
+																			 @Nonnull final String modifier,
+																			 final boolean shouldHave,
+																			 final boolean showContainingClass)
 	{
 		return new ModifierFix(owner, modifier, shouldHave, showContainingClass);
 	}
@@ -205,7 +198,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public IntentionAction createCreateClassOrPackageFix(@Nonnull final PsiElement context, @Nonnull final String qualifiedName, final boolean createClass, final String superClass)
 	{
 		return CreateClassOrPackageFix.createFix(qualifiedName, context, createClass ? ClassKind.CLASS : null, superClass);
@@ -221,10 +214,10 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	@Nonnull
 	@Override
 	public IntentionAction createCreateFieldOrPropertyFix(@Nonnull final PsiClass aClass,
-			@Nonnull final String name,
-			@Nonnull final PsiType type,
-			@Nonnull final PropertyMemberType targetMember,
-			@Nonnull final PsiAnnotation... annotations)
+														  @Nonnull final String name,
+														  @Nonnull final PsiType type,
+														  @Nonnull final PropertyMemberType targetMember,
+														  @Nonnull final PsiAnnotation... annotations)
 	{
 		return new CreateFieldOrPropertyFix(aClass, name, type, targetMember, annotations);
 	}
@@ -420,7 +413,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 
 	@Nonnull
 	@Override
-	public IntentionAction createSurroundWithArrayFix(@Nullable PsiCall methodCall, @javax.annotation.Nullable PsiExpression expression)
+	public IntentionAction createSurroundWithArrayFix(@Nullable PsiCall methodCall, @Nullable PsiExpression expression)
 	{
 		return new SurroundWithArrayFix(methodCall, expression);
 	}
@@ -526,11 +519,11 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	@Nonnull
 	@Override
 	public IntentionAction createChangeMethodSignatureFromUsageFix(@Nonnull PsiMethod targetMethod,
-			@Nonnull PsiExpression[] expressions,
-			@Nonnull PsiSubstitutor substitutor,
-			@Nonnull PsiElement context,
-			boolean changeAllUsages,
-			int minUsagesNumberToShowDialog)
+																   @Nonnull PsiExpression[] expressions,
+																   @Nonnull PsiSubstitutor substitutor,
+																   @Nonnull PsiElement context,
+																   boolean changeAllUsages,
+																   int minUsagesNumberToShowDialog)
 	{
 		return new ChangeMethodSignatureFromUsageFix(targetMethod, expressions, substitutor, context, changeAllUsages, minUsagesNumberToShowDialog);
 	}
@@ -538,11 +531,11 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	@Nonnull
 	@Override
 	public IntentionAction createChangeMethodSignatureFromUsageReverseOrderFix(@Nonnull PsiMethod targetMethod,
-			@Nonnull PsiExpression[] expressions,
-			@Nonnull PsiSubstitutor substitutor,
-			@Nonnull PsiElement context,
-			boolean changeAllUsages,
-			int minUsagesNumberToShowDialog)
+																			   @Nonnull PsiExpression[] expressions,
+																			   @Nonnull PsiSubstitutor substitutor,
+																			   @Nonnull PsiElement context,
+																			   boolean changeAllUsages,
+																			   int minUsagesNumberToShowDialog)
 	{
 		return new ChangeMethodSignatureFromUsageReverseOrderFix(targetMethod, expressions, substitutor, context, changeAllUsages, minUsagesNumberToShowDialog);
 	}
@@ -780,9 +773,10 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	public IntentionAction createAddToDependencyInjectionAnnotationsFix(@Nonnull Project project, @Nonnull String qualifiedName, @Nonnull String element)
 	{
 		final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
-		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName), JavaQuickFixBundle.message
+		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName), JavaQuickFixBundle
+				.message
 				("fix" +
-				".unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
+						".unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
 	}
 
 	@Nonnull
@@ -835,7 +829,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 		return new SafeDeleteFix(element);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public List<LocalQuickFix> registerOrderEntryFixes(@Nonnull QuickFixActionRegistrar registrar, @Nonnull PsiReference reference)
 	{
@@ -882,8 +876,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	@Nonnull
 	@Override
 	public IntentionAction createAddMissingRequiredAnnotationParametersFix(@Nonnull final PsiAnnotation annotation,
-			@Nonnull final PsiMethod[] annotationMethods,
-			@Nonnull final Collection<String> missedElements)
+																		   @Nonnull final PsiMethod[] annotationMethods,
+																		   @Nonnull final Collection<String> missedElements)
 	{
 		return new AddMissingRequiredAnnotationParametersFix(annotation, annotationMethods, missedElements);
 	}
@@ -904,7 +898,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 
 	@Nonnull
 	@Override
-	public IntentionAction createWrapLongWithMathToIntExactFix(@javax.annotation.Nullable PsiType type, @Nonnull PsiExpression expression)
+	public IntentionAction createWrapWithAdapterFix(@Nullable PsiType type, @Nonnull PsiExpression expression)
 	{
 		return new WrapLongWithMathToIntExactFix(type, expression);
 	}
@@ -1006,15 +1000,36 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 
 	@Nonnull
 	@Override
-	public IntentionAction createWrapStringWithFileFix(@javax.annotation.Nullable PsiType type, @Nonnull PsiExpression expression)
+	public IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, @Nonnull PsiExpression expression)
 	{
 		return new WrapStringWithFileFix(type, expression);
 	}
 
 	@Nonnull
 	@Override
+	public IntentionAction createAddMissingEnumBranchesFix(@Nonnull PsiSwitchBlock switchBlock, @Nonnull Set<String> missingCases)
+	{
+		return new CreateMissingSwitchBranchesFix(switchBlock, missingCases);
+	}
+
+	@Nonnull
+	@Override
+	public IntentionAction createAddSwitchDefaultFix(@Nonnull PsiSwitchBlock switchBlock, @Nullable String message)
+	{
+		return new CreateDefaultBranchFix(switchBlock, message);
+	}
+
+	@Nonnull
+	@Override
+	public IntentionAction createWrapSwitchRuleStatementsIntoBlockFix(PsiSwitchLabeledRuleStatement rule)
+	{
+		return new WrapSwitchRuleStatementsIntoBlockFix(rule);
+	}
+
+	@Nonnull
+	@Override
 	public IntentionAction createDeleteSideEffectAwareFix(@Nonnull PsiExpressionStatement statement)
 	{
-		return new DeleteSideEffectsAwareFix(statement);
+		return new DeleteSideEffectsAwareFix(statement, statement.getExpression());
 	}
 }

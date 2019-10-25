@@ -41,7 +41,7 @@ import com.intellij.util.containers.MultiMap;
 public class JavaAllOverridingMethodsSearcher implements QueryExecutor<Pair<PsiMethod, PsiMethod>, AllOverridingMethodsSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@Nonnull final AllOverridingMethodsSearch.SearchParameters p, @Nonnull final Processor<Pair<PsiMethod, PsiMethod>> consumer)
+	public boolean execute(@Nonnull final AllOverridingMethodsSearch.SearchParameters p, @Nonnull final Processor<? super Pair<PsiMethod, PsiMethod>> consumer)
 	{
 		final PsiClass psiClass = p.getPsiClass();
 

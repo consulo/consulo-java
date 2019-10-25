@@ -15,24 +15,19 @@
  */
 package com.intellij.psi.impl.search;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
-import com.intellij.psi.HierarchicalMethodSignature;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
+import com.intellij.psi.*;
 import com.intellij.psi.search.searches.SuperMethodsSearch;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author ven
@@ -42,7 +37,7 @@ public class MethodSuperSearcher implements QueryExecutor<MethodSignatureBackedB
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.MethodSuperSearcher");
 
 	@Override
-	public boolean execute(@Nonnull final SuperMethodsSearch.SearchParameters queryParameters, @Nonnull final Processor<MethodSignatureBackedByPsiMethod> consumer)
+	public boolean execute(@Nonnull final SuperMethodsSearch.SearchParameters queryParameters, @Nonnull final Processor<? super MethodSignatureBackedByPsiMethod> consumer)
 	{
 		final PsiClass parentClass = queryParameters.getPsiClass();
 		final PsiMethod method = queryParameters.getMethod();
@@ -77,7 +72,7 @@ public class MethodSuperSearcher implements QueryExecutor<MethodSignatureBackedB
 			final PsiClass parentClass,
 			final boolean allowStaticMethod,
 			final boolean checkBases,
-			final Processor<MethodSignatureBackedByPsiMethod> consumer)
+			final Processor<? super MethodSignatureBackedByPsiMethod> consumer)
 	{
 		PsiMethod signatureMethod = signature.getMethod();
 		PsiClass hisClass = signatureMethod.getContainingClass();

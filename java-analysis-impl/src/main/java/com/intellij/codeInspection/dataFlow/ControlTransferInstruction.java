@@ -16,69 +16,53 @@
 
 package com.intellij.codeInspection.dataFlow;
 
+import com.intellij.codeInspection.dataFlow.instructions.Instruction;
+import com.intellij.util.containers.ContainerUtil;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.codeInspection.dataFlow.instructions.Instruction;
-
 /**
+ * Instruction which performs complex control transfer (handling exception; processing finally blocks; exiting inlined lambda, etc.)
+ * <p>
  * from kotlin
  */
 public class ControlTransferInstruction extends Instruction
 {
-	@javax.annotation.Nullable
-	private DfaControlTransferValue myTransfer;
+	@Nonnull
+	private DfaControlTransferValue transfer;
 
-	public ControlTransferInstruction(@javax.annotation.Nullable DfaControlTransferValue transfer)
+	public ControlTransferInstruction(@Nonnull DfaControlTransferValue transfer)
 	{
-		myTransfer = transfer;
+		this.transfer = transfer;
+		this.transfer.getTraps().forEach(trap -> trap.link(this));
 	}
 
 	@Override
 	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState state, InstructionVisitor visitor)
 	{
-		DfaControlTransferValue transferValue = myTransfer == null ? (DfaControlTransferValue) state.pop() : myTransfer;
-
-		List<DfaInstructionState> iteration = new ControlTransferHandler(state, runner, transferValue.getTarget()).iteration(transferValue.getTraps());
-		return iteration.toArray(new DfaInstructionState[iteration.size()]);
+		return visitor.visitControlTransfer(this, runner, state);
 	}
 
-	@javax.annotation.Nullable
+	@Nonnull
 	public DfaControlTransferValue getTransfer()
 	{
-		return myTransfer;
-	}
-
-	@Override
-	public String toString()
-	{
-		return myTransfer == null ? "null" : myTransfer.toString();
+		return transfer;
 	}
 
 	@Nonnull
 	public List<Integer> getPossibleTargetIndices()
 	{
-		if(myTransfer == null)
-		{
-			return Collections.emptyList();
-		}
+		List<Integer> trapPossibleTargets = transfer.getTraps().stream().flatMap(trap -> trap.getPossibleTargets().stream()).collect(Collectors.toList());
 
-		List<Integer> result = new ArrayList<>(myTransfer.getTraps().stream().flatMap(trap -> trap.getPossibleTargets().stream()).collect(Collectors.toList()));
-		if(myTransfer.getTarget() instanceof InstructionTransfer)
-		{
-			result.add(((InstructionTransfer) myTransfer.getTarget()).getControlFlowOffset().getInstructionOffset());
-		}
-		return result;
+		return ContainerUtil.concat(trapPossibleTargets, new ArrayList<>(transfer.getTarget().getPossibleTargets()));
 	}
 
-	@Nonnull
-	public Collection<? extends Instruction> getPossibleTargetInstructions(Instruction[] allInstruction)
+	@Override
+	public String toString()
 	{
-		return getPossibleTargetIndices().stream().map(it -> allInstruction[it]).collect(Collectors.toList());
+		return "TRANSFER " + transfer + " [targets " + getPossibleTargetIndices() + "]";
 	}
 }

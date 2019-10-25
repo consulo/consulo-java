@@ -45,7 +45,7 @@ import com.intellij.util.Processor;
 public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters>
 {
 	@Override
-	public void processQuery(@Nonnull final MethodReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer)
+	public void processQuery(@Nonnull final MethodReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer)
 	{
 		final PsiMethod method = p.getMethod();
 		final boolean[] isConstructor = new boolean[1];

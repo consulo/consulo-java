@@ -15,18 +15,6 @@
  */
 package com.intellij.psi.util;
 
-import gnu.trove.THashMap;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -35,6 +23,15 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashMap;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class PsiTypesUtil
 {
@@ -233,10 +230,10 @@ public class PsiTypesUtil
 	}
 
 	public static PsiType patchMethodGetClassReturnType(@Nonnull PsiExpression call,
-			@Nonnull PsiReferenceExpression methodExpression,
-			@Nonnull PsiMethod method,
-			@javax.annotation.Nullable Condition<IElementType> condition,
-			@Nonnull LanguageLevel languageLevel)
+														@Nonnull PsiReferenceExpression methodExpression,
+														@Nonnull PsiMethod method,
+														@javax.annotation.Nullable Condition<IElementType> condition,
+														@Nonnull LanguageLevel languageLevel)
 	{
 		//JLS3 15.8.2
 		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_5) && isGetClass(method))
@@ -504,6 +501,16 @@ public class PsiTypesUtil
 		targetType.accept(searcher);
 		Set<PsiTypeParameter> parameters = searcher.getTypeParameters();
 		return parameters.stream().allMatch(parameter -> isAccessibleAt(parameter, context));
+	}
+
+	@Nonnull
+	public static PsiType createArrayType(@Nonnull PsiType newType, int arrayDim)
+	{
+		for(int i = 0; i < arrayDim; i++)
+		{
+			newType = newType.createArrayType();
+		}
+		return newType;
 	}
 
 	public static class TypeParameterSearcher extends PsiTypeVisitor<Boolean>

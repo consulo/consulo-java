@@ -16,141 +16,200 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import java.util.Set;
-
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
 
-class AbstractValues {
-  static final class ParamValue extends BasicValue
-  {
-    ParamValue(Type tp) {
-      super(tp);
-    }
-  }
-  static final BasicValue InstanceOfCheckValue = new BasicValue(Type.INT_TYPE) {
-    @Override
-    public boolean equals(Object value) {
-      return this == value;
-    }
-  };
+import java.util.Set;
 
-  static final BasicValue TrueValue = new BasicValue(Type.INT_TYPE) {
-    @Override
-    public boolean equals(Object value) {
-      return this == value;
-    }
-  };
+class AbstractValues
+{
+	static final class ParamValue extends BasicValue
+	{
+		ParamValue(Type tp)
+		{
+			super(tp);
+		}
+	}
 
-  static final BasicValue FalseValue = new BasicValue(Type.INT_TYPE) {
-    @Override
-    public boolean equals(Object value) {
-      return this == value;
-    }
-  };
+	static final BasicValue InstanceOfCheckValue = new BasicValue(Type.INT_TYPE)
+	{
+		@Override
+		public boolean equals(Object value)
+		{
+			return this == value;
+		}
+	};
 
-  static final BasicValue NullValue = new BasicValue(Type.getObjectType("null")) {
-    @Override
-    public boolean equals(Object value) {
-      return this == value;
-    }
-  };
-  static final class NotNullValue extends BasicValue {
-    NotNullValue(Type tp) {
-      super(tp);
-    }
-  }
-  static final class CallResultValue extends BasicValue {
-    final Set<Key> inters;
-    CallResultValue(Type tp, Set<Key> inters) {
-      super(tp);
-      this.inters = inters;
-    }
-  }
+	static final BasicValue TrueValue = new BasicValue(Type.INT_TYPE)
+	{
+		@Override
+		public boolean equals(Object value)
+		{
+			return this == value;
+		}
+	};
 
-  static final BasicValue CLASS_VALUE = new NotNullValue(Type.getObjectType("java/lang/Class"));
-  static final BasicValue METHOD_VALUE = new NotNullValue(Type.getObjectType("java/lang/invoke/MethodType"));
-  static final BasicValue STRING_VALUE = new NotNullValue(Type.getObjectType("java/lang/String"));
-  static final BasicValue METHOD_HANDLE_VALUE = new NotNullValue(Type.getObjectType("java/lang/invoke/MethodHandle"));
+	static final BasicValue FalseValue = new BasicValue(Type.INT_TYPE)
+	{
+		@Override
+		public boolean equals(Object value)
+		{
+			return this == value;
+		}
+	};
+
+	static final BasicValue NullValue = new BasicValue(Type.getObjectType("null"))
+	{
+		@Override
+		public boolean equals(Object value)
+		{
+			return this == value;
+		}
+	};
+
+	static final class NotNullValue extends BasicValue
+	{
+		NotNullValue(Type tp)
+		{
+			super(tp);
+		}
+	}
+
+	static final class CallResultValue extends BasicValue
+	{
+		final Set<EKey> inters;
+
+		CallResultValue(Type tp, Set<EKey> inters)
+		{
+			super(tp);
+			this.inters = inters;
+		}
+	}
+
+	static final class NthParamValue extends BasicValue
+	{
+		final int n;
+
+		NthParamValue(Type type, int n)
+		{
+			super(type);
+			this.n = n;
+		}
+	}
+
+	static final BasicValue CLASS_VALUE = new NotNullValue(Type.getObjectType("java/lang/Class"));
+	static final BasicValue METHOD_VALUE = new NotNullValue(Type.getObjectType("java/lang/invoke/MethodType"));
+	static final BasicValue STRING_VALUE = new NotNullValue(Type.getObjectType("java/lang/String"));
+	static final BasicValue METHOD_HANDLE_VALUE = new NotNullValue(Type.getObjectType("java/lang/invoke/MethodHandle"));
 
 
-  static boolean isInstance(Conf curr, Conf prev) {
-    if (curr.insnIndex != prev.insnIndex) {
-      return false;
-    }
-    Frame<BasicValue> currFr = curr.frame;
-    Frame<BasicValue> prevFr = prev.frame;
-    for (int i = 0; i < currFr.getLocals(); i++) {
-      if (!isInstance(currFr.getLocal(i), prevFr.getLocal(i))) {
-        return false;
-      }
-    }
-    for (int i = 0; i < currFr.getStackSize(); i++) {
-      if (!isInstance(currFr.getStack(i), prevFr.getStack(i))) {
-        return false;
-      }
-    }
-    return true;
-  }
+	static boolean isInstance(Conf curr, Conf prev)
+	{
+		if(curr.insnIndex != prev.insnIndex)
+		{
+			return false;
+		}
+		Frame<BasicValue> currFr = curr.frame;
+		Frame<BasicValue> prevFr = prev.frame;
+		for(int i = 0; i < currFr.getLocals(); i++)
+		{
+			if(!isInstance(currFr.getLocal(i), prevFr.getLocal(i)))
+			{
+				return false;
+			}
+		}
+		for(int i = 0; i < currFr.getStackSize(); i++)
+		{
+			if(!isInstance(currFr.getStack(i), prevFr.getStack(i)))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
-  static boolean isInstance(BasicValue curr, BasicValue prev) {
-    if (prev instanceof ParamValue) {
-      return curr instanceof ParamValue;
-    }
-    if (InstanceOfCheckValue == prev) {
-      return InstanceOfCheckValue == curr;
-    }
-    if (TrueValue == prev) {
-      return TrueValue == curr;
-    }
-    if (FalseValue == prev) {
-      return FalseValue == curr;
-    }
-    if (NullValue == prev) {
-      return NullValue == curr;
-    }
-    if (prev instanceof NotNullValue) {
-      return curr instanceof NotNullValue;
-    }
-    if (prev instanceof CallResultValue) {
-      if (curr instanceof CallResultValue) {
-        CallResultValue prevCall = (CallResultValue) prev;
-        CallResultValue currCall = (CallResultValue) curr;
-        return prevCall.inters.equals(currCall.inters);
-      }
-      else {
-        return false;
-      }
-    }
-    return true;
-  }
+	static boolean isInstance(BasicValue curr, BasicValue prev)
+	{
+		if(prev instanceof ParamValue)
+		{
+			return curr instanceof ParamValue;
+		}
+		if(InstanceOfCheckValue == prev)
+		{
+			return InstanceOfCheckValue == curr;
+		}
+		if(TrueValue == prev)
+		{
+			return TrueValue == curr;
+		}
+		if(FalseValue == prev)
+		{
+			return FalseValue == curr;
+		}
+		if(NullValue == prev)
+		{
+			return NullValue == curr;
+		}
+		if(prev instanceof NotNullValue)
+		{
+			return curr instanceof NotNullValue;
+		}
+		if(prev instanceof CallResultValue)
+		{
+			if(curr instanceof CallResultValue)
+			{
+				CallResultValue prevCall = (CallResultValue) prev;
+				CallResultValue currCall = (CallResultValue) curr;
+				return prevCall.inters.equals(currCall.inters);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
-  static boolean equiv(Conf curr, Conf prev) {
-    Frame<BasicValue> currFr = curr.frame;
-    Frame<BasicValue> prevFr = prev.frame;
-    for (int i = currFr.getStackSize() - 1; i >= 0; i--) {
-      if (!equiv(currFr.getStack(i), prevFr.getStack(i))) {
-        return false;
-      }
-    }
-    for (int i = currFr.getLocals() - 1; i >= 0; i--) {
-      if (!equiv(currFr.getLocal(i), prevFr.getLocal(i))) {
-        return false;
-      }
-    }
-    return true;
-  }
+	static boolean equiv(Conf curr, Conf prev)
+	{
+		Frame<BasicValue> currFr = curr.frame;
+		Frame<BasicValue> prevFr = prev.frame;
+		for(int i = currFr.getStackSize() - 1; i >= 0; i--)
+		{
+			if(!equiv(currFr.getStack(i), prevFr.getStack(i)))
+			{
+				return false;
+			}
+		}
+		for(int i = currFr.getLocals() - 1; i >= 0; i--)
+		{
+			if(!equiv(currFr.getLocal(i), prevFr.getLocal(i)))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
-  static boolean equiv(BasicValue curr, BasicValue prev) {
-    if (curr.getClass() == prev.getClass()) {
-      if (curr instanceof CallResultValue && prev instanceof CallResultValue) {
-        Set<Key> keys1 = ((CallResultValue)prev).inters;
-        Set<Key> keys2 = ((CallResultValue)curr).inters;
-        return keys1.equals(keys2);
-      }
-      else return true;
-    }
-    else return false;
-  }
+	static boolean equiv(BasicValue curr, BasicValue prev)
+	{
+		if(curr.getClass() == prev.getClass())
+		{
+			if(curr instanceof CallResultValue && prev instanceof CallResultValue)
+			{
+				Set<EKey> keys1 = ((CallResultValue) prev).inters;
+				Set<EKey> keys2 = ((CallResultValue) curr).inters;
+				return keys1.equals(keys2);
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

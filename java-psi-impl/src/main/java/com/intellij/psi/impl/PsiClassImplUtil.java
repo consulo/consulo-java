@@ -51,9 +51,8 @@ import consulo.java.module.util.JavaClassNames;
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
 import javax.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
@@ -430,7 +429,7 @@ public class PsiClassImplUtil
 			FilterScopeProcessor<MethodCandidateInfo> processor = new FilterScopeProcessor<MethodCandidateInfo>(filter)
 			{
 				@Override
-				protected void add(@NotNull PsiElement element, @NotNull PsiSubstitutor substitutor)
+				protected void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor)
 				{
 					if(key == MemberType.CLASS && element instanceof PsiClass || key == MemberType.METHOD && element instanceof PsiMethod || key == MemberType.FIELD && element instanceof PsiField)
 					{
@@ -443,7 +442,7 @@ public class PsiClassImplUtil
 				}
 
 				@Override
-				public <K> K getHint(@NotNull Key<K> hintKey)
+				public <K> K getHint(@Nonnull Key<K> hintKey)
 				{
 					//noinspection unchecked
 					return ElementClassHint.KEY == hintKey ? (K) classHint : super.getHint(hintKey);

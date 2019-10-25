@@ -15,37 +15,24 @@
  */
 package com.intellij.psi;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.*;
-import com.intellij.util.Consumer;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.Producer;
-import com.intellij.util.SystemProperties;
+import com.intellij.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.Contract;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * User: anna
@@ -1175,6 +1162,35 @@ public class LambdaUtil
 	public static String createLambda(@Nonnull PsiVariable variable, @Nonnull PsiExpression expression)
 	{
 		return variable.getName() + " -> " + expression.getText();
+	}
+
+	public static PsiElement copyWithExpectedType(PsiElement expression, PsiType type)
+	{
+		String canonicalText = type.getCanonicalText();
+		if(!PsiUtil.isLanguageLevel8OrHigher(expression))
+		{
+			final String arrayInitializer = "new " + canonicalText + "[]{0}";
+			PsiNewExpression newExpr = (PsiNewExpression) createExpressionFromText(arrayInitializer, expression);
+			final PsiArrayInitializerExpression initializer = newExpr.getArrayInitializer();
+			LOG.assertTrue(initializer != null);
+			return initializer.getInitializers()[0].replace(expression);
+		}
+
+		final String callableWithExpectedType = "(java.util.concurrent.Callable<" + canonicalText + ">)() -> x";
+		PsiTypeCastExpression typeCastExpr = (PsiTypeCastExpression) createExpressionFromText(callableWithExpectedType, expression);
+		PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) typeCastExpr.getOperand();
+		LOG.assertTrue(lambdaExpression != null);
+		PsiElement body = lambdaExpression.getBody();
+		LOG.assertTrue(body instanceof PsiExpression);
+		return body.replace(expression);
+	}
+
+	private static PsiExpression createExpressionFromText(String exprText, PsiElement context)
+	{
+		PsiExpression expr = JavaPsiFacade.getElementFactory(context.getProject())
+				.createExpressionFromText(exprText, context);
+		//ensure refs to inner classes are collapsed to avoid raw types (container type would be raw in qualified text)
+		return (PsiExpression) JavaCodeStyleManager.getInstance(context.getProject()).shortenClassReferences(expr);
 	}
 
 	public static class TypeParamsChecker extends PsiTypeVisitor<Boolean>

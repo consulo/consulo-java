@@ -1,79 +1,55 @@
-/*
- * Copyright 2000-2015 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInsight;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.DataManager;
-import com.intellij.ide.util.ClassFilter;
-import com.intellij.ide.util.TreeClassChooser;
-import com.intellij.ide.util.TreeClassChooserFactory;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Splitter;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ui.EmptyIcon;
 import com.intellij.util.ui.JBUI;
+import javax.annotation.Nonnull;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class NullableNotNullDialog extends DialogWrapper
 {
 	private final Project myProject;
-	private AnnotationsPanel myNullablePanel;
-	private AnnotationsPanel myNotNullPanel;
+	private final AnnotationsPanel myNullablePanel;
+	private final AnnotationsPanel myNotNullPanel;
+	private final boolean myShowInstrumentationOptions;
 
 	public NullableNotNullDialog(@Nonnull Project project)
 	{
+		this(project, false);
+	}
+
+	private NullableNotNullDialog(@Nonnull Project project, boolean showInstrumentationOptions)
+	{
 		super(project, true);
 		myProject = project;
+		myShowInstrumentationOptions = showInstrumentationOptions;
+
+		NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
+		myNullablePanel = new AnnotationsPanel(project,
+				"Nullable",
+				manager.getDefaultNullable(),
+				manager.getNullables(), NullableNotNullManager.DEFAULT_NULLABLES,
+				Collections.emptySet(), false, true);
+		myNotNullPanel = new AnnotationsPanel(project,
+				"NotNull",
+				manager.getDefaultNotNull(),
+				manager.getNotNulls(), NullableNotNullManager.DEFAULT_NOT_NULLS,
+				new HashSet<>(manager.getInstrumentedNotNulls()), showInstrumentationOptions, true);
+
 		init();
-		setTitle("Nullable/NotNull configuration");
+		setTitle("Nullable/NotNull Configuration");
 	}
 
 	public static JButton createConfigureAnnotationsButton(Component context)
@@ -96,24 +72,32 @@ public class NullableNotNullDialog extends DialogWrapper
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				Project project = DataManager.getInstance().getDataContext(context).getData(CommonDataKeys.PROJECT);
-				if(project == null)
-				{
-					project = ProjectManager.getInstance().getDefaultProject();
-				}
-				new NullableNotNullDialog(project).show();
+				showDialog(context, false);
 			}
 		};
+	}
+
+	public static void showDialogWithInstrumentationOptions(@Nonnull Component context)
+	{
+		showDialog(context, true);
+	}
+
+	private static void showDialog(Component context, boolean showInstrumentationOptions)
+	{
+		Project project = DataManager.getInstance().getDataContext(context).getData(CommonDataKeys.PROJECT);
+		if(project == null)
+		{
+			project = ProjectManager.getInstance().getDefaultProject();
+		}
+		NullableNotNullDialog dialog = new NullableNotNullDialog(project, showInstrumentationOptions);
+		dialog.show();
 	}
 
 	@Override
 	protected JComponent createCenterPanel()
 	{
-		final NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
 		final Splitter splitter = new Splitter(true);
-		myNullablePanel = new AnnotationsPanel("Nullable", manager.getDefaultNullable(), manager.getNullables(), NullableNotNullManager.DEFAULT_NULLABLES);
 		splitter.setFirstComponent(myNullablePanel.getComponent());
-		myNotNullPanel = new AnnotationsPanel("NotNull", manager.getDefaultNotNull(), manager.getNotNulls(), ArrayUtil.toStringArray(manager.getPredefinedNotNulls()));
 		splitter.setSecondComponent(myNotNullPanel.getComponent());
 		splitter.setHonorComponentsMinimumSize(true);
 		splitter.setPreferredSize(JBUI.size(300, 400));
@@ -131,170 +115,11 @@ public class NullableNotNullDialog extends DialogWrapper
 		manager.setNullables(myNullablePanel.getAnnotations());
 		manager.setDefaultNullable(myNullablePanel.getDefaultAnnotation());
 
+		if(myShowInstrumentationOptions)
+		{
+			manager.setInstrumentedNotNulls(myNotNullPanel.getCheckedAnnotations());
+		}
+
 		super.doOKAction();
-	}
-
-	private class AnnotationsPanel
-	{
-		private String myDefaultAnnotation;
-		private final Set<String> myDefaultAnnotations;
-		private final JBList myList;
-		private final JPanel myComponent;
-
-		private AnnotationsPanel(final String name, final String defaultAnnotation, final Collection<String> annotations, final String[] defaultAnnotations)
-		{
-			myDefaultAnnotation = defaultAnnotation;
-			myDefaultAnnotations = new HashSet(Arrays.asList(defaultAnnotations));
-			myList = new JBList(annotations);
-			myList.setCellRenderer(new ColoredListCellRenderer()
-			{
-				@Override
-				protected void customizeCellRenderer(@Nonnull JList list, Object value, int index, boolean selected, boolean hasFocus)
-				{
-					append((String) value, SimpleTextAttributes.REGULAR_ATTRIBUTES);
-					if(value.equals(myDefaultAnnotation))
-					{
-						setIcon(AllIcons.Diff.CurrentLine);
-					}
-					else
-					{
-						setIcon(EmptyIcon.ICON_16);
-					}
-					//if (myDefaultAnnotations.contains(value)) {
-					//  append(" (built in)", SimpleTextAttributes.GRAY_ATTRIBUTES);
-					//}
-				}
-			});
-
-			final AnActionButton selectButton = new AnActionButton("Select annotation used for code generation", AllIcons.Actions.Checked)
-			{
-				@Override
-				public void actionPerformed(AnActionEvent e)
-				{
-					final String selectedValue = (String) myList.getSelectedValue();
-					if(selectedValue == null)
-					{
-						return;
-					}
-					myDefaultAnnotation = selectedValue;
-					final DefaultListModel model = (DefaultListModel) myList.getModel();
-
-					// to show the new default value in the ui
-					model.setElementAt(myList.getSelectedValue(), myList.getSelectedIndex());
-				}
-
-				@Override
-				public void updateButton(AnActionEvent e)
-				{
-					final String selectedValue = (String) myList.getSelectedValue();
-					final boolean enabled = selectedValue != null && !selectedValue.equals(myDefaultAnnotation);
-					if(!enabled)
-					{
-						e.getPresentation().setEnabled(enabled);
-					}
-				}
-			};
-
-			final ToolbarDecorator toolbarDecorator = ToolbarDecorator.createDecorator(myList).disableUpDownActions().setAddAction(new AnActionButtonRunnable()
-			{
-				@Override
-				public void run(AnActionButton anActionButton)
-				{
-					chooseAnnotation(name, myList);
-				}
-			}).setRemoveAction(new AnActionButtonRunnable()
-			{
-				@Override
-				public void run(AnActionButton anActionButton)
-				{
-					final String selectedValue = (String) myList.getSelectedValue();
-					if(selectedValue == null)
-					{
-						return;
-					}
-					if(myDefaultAnnotation.equals(selectedValue))
-					{
-						myDefaultAnnotation = (String) myList.getModel().getElementAt(0);
-					}
-
-					((DefaultListModel) myList.getModel()).removeElement(selectedValue);
-				}
-			}).addExtraAction(selectButton);
-			final JPanel panel = toolbarDecorator.createPanel();
-			myComponent = new JPanel(new BorderLayout());
-			myComponent.setBorder(IdeBorderFactory.createTitledBorder(name + " annotations", false, new Insets(10, 0, 0, 0)));
-			myComponent.add(panel);
-			final AnActionButton removeButton = ToolbarDecorator.findRemoveButton(myComponent);
-			myList.addListSelectionListener(new ListSelectionListener()
-			{
-				@Override
-				public void valueChanged(ListSelectionEvent e)
-				{
-					if(e.getValueIsAdjusting())
-					{
-						return;
-					}
-					final String selectedValue = (String) myList.getSelectedValue();
-					if(myDefaultAnnotations.contains(selectedValue))
-					{
-						SwingUtilities.invokeLater(() -> removeButton.setEnabled(false));
-					}
-				}
-			});
-			myList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			myList.setSelectedValue(myDefaultAnnotation, true);
-		}
-
-		private void chooseAnnotation(String title, JBList list)
-		{
-			final TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createNoInnerClassesScopeChooser("Choose " + title + " annotation", GlobalSearchScope.allScope(myProject),
-					new ClassFilter()
-			{
-				@Override
-				public boolean isAccepted(PsiClass aClass)
-				{
-					return aClass.isAnnotationType();
-				}
-			}, null);
-			chooser.showDialog();
-			final PsiClass selected = chooser.getSelected();
-			if(selected == null)
-			{
-				return;
-			}
-			final String qualifiedName = selected.getQualifiedName();
-			final DefaultListModel model = (DefaultListModel) list.getModel();
-			final int index = model.indexOf(qualifiedName);
-			if(index < 0)
-			{
-				model.addElement(qualifiedName);
-			}
-			else
-			{
-				myList.setSelectedIndex(index);
-			}
-		}
-
-		public JComponent getComponent()
-		{
-			return myComponent;
-		}
-
-		public String getDefaultAnnotation()
-		{
-			return myDefaultAnnotation;
-		}
-
-		public String[] getAnnotations()
-		{
-			final ListModel model = myList.getModel();
-			final int size = model.getSize();
-			final String[] result = new String[size];
-			for(int i = 0; i < size; i++)
-			{
-				result[i] = (String) model.getElementAt(i);
-			}
-			return result;
-		}
 	}
 }

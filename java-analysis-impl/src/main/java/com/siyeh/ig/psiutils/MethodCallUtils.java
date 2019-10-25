@@ -15,26 +15,23 @@
  */
 package com.siyeh.ig.psiutils;
 
-import static com.intellij.util.ObjectUtil.tryCast;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.siyeh.HardcodedMethodConstants;
+import com.intellij.util.ArrayUtil;import com.siyeh.HardcodedMethodConstants;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.NonNls;import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.intellij.util.ObjectUtil.tryCast;
 
 public class MethodCallUtils
 {
@@ -408,7 +405,7 @@ public class MethodCallUtils
 	 * @param call a call to test
 	 * @return true if call is resolved to the var-arg method and var-arg form is actually used
 	 */
-	public static boolean isVarArgCall(PsiMethodCallExpression call)
+	public static boolean isVarArgCall(PsiCall call)
 	{
 		JavaResolveResult result = call.resolveMethodGenerics();
 		PsiMethod method = tryCast(result.getElement(), PsiMethod.class);
@@ -495,6 +492,43 @@ public class MethodCallUtils
 	public static PsiMethodCallExpression getQualifierMethodCall(@Nonnull PsiMethodCallExpression methodCall)
 	{
 		return tryCast(PsiUtil.skipParenthesizedExprDown(methodCall.getMethodExpression().getQualifierExpression()), PsiMethodCallExpression.class);
+	}
+
+
+	/**
+	 * Returns a method/constructor parameter which corresponds to given argument
+	 *
+	 * @param argument an argument to find the corresponding parameter
+	 * @return a parameter or null if supplied expression is not a call argument, call is not resolved or expression is a var-arg
+	 * argument.
+	 */
+	@Nullable
+	public static PsiParameter getParameterForArgument(@Nonnull PsiExpression argument)
+	{
+		PsiExpressionList argList = tryCast(argument.getParent(), PsiExpressionList.class);
+		if(argList == null)
+			return null;
+		PsiElement parent = argList.getParent();
+		if(parent instanceof PsiAnonymousClass)
+		{
+			parent = parent.getParent();
+		}
+		PsiCall call = tryCast(parent, PsiCall.class);
+		if(call == null)
+			return null;
+		PsiExpression[] args = argList.getExpressions();
+		int index = ArrayUtil.indexOf(args, argument);
+		if(index == -1)
+			return null;
+		PsiMethod method = call.resolveMethod();
+		if(method == null)
+			return null;
+		PsiParameter[] parameters = method.getParameterList().getParameters();
+		if(index >= parameters.length)
+			return null;
+		if(isVarArgCall(call) && index >= parameters.length - 1)
+			return null;
+		return parameters[index];
 	}
 
 	private static class SuperCallVisitor extends JavaRecursiveElementWalkingVisitor

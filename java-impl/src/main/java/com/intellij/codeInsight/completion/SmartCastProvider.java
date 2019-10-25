@@ -1,3 +1,4 @@
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.ExpectedTypeInfo;
@@ -25,13 +26,13 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
+import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
-import consulo.java.module.util.JavaClassNames;
-
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+
 import java.util.Collections;
+import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -65,12 +66,12 @@ class SmartCastProvider implements CompletionProvider
 
 	@RequiredReadAction
 	@Override
-	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
+	public void addCompletions(@Nonnull final CompletionParameters parameters, @Nonnull final ProcessingContext context, @Nonnull final CompletionResultSet result)
 	{
 		addCastVariants(parameters, result.getPrefixMatcher(), result, false);
 	}
 
-	static void addCastVariants(@Nonnull CompletionParameters parameters, PrefixMatcher matcher, @Nonnull Consumer<LookupElement> result, boolean quick)
+	static void addCastVariants(@Nonnull CompletionParameters parameters, PrefixMatcher matcher, @Nonnull Consumer<? super LookupElement> result, boolean quick)
 	{
 		if(!shouldSuggestCast(parameters))
 		{
@@ -93,8 +94,7 @@ class SmartCastProvider implements CompletionProvider
 						result.consume(PsiTypeLookupItem.createLookupItem(info.getType(), parent));
 					}
 				}
-				ExpectedTypeInfo info = getParenthesizedCastExpectationByOperandType(position);
-				if(info != null)
+				for(ExpectedTypeInfo info : getParenthesizedCastExpectationByOperandType(position))
 				{
 					addHierarchyTypes(parameters, matcher, info, type -> result.consume(PsiTypeLookupItem.createLookupItem(type, parent)), quick);
 				}
@@ -131,45 +131,45 @@ class SmartCastProvider implements CompletionProvider
 		}
 	}
 
-	@Nullable
-	static ExpectedTypeInfo getParenthesizedCastExpectationByOperandType(PsiElement position)
+	@Nonnull
+	static List<ExpectedTypeInfo> getParenthesizedCastExpectationByOperandType(PsiElement position)
 	{
 		PsiElement parenthesisOwner = getParenthesisOwner(position);
 		PsiExpression operand = getCastedExpression(parenthesisOwner);
 		if(operand == null || !(parenthesisOwner.getParent() instanceof PsiParenthesizedExpression))
 		{
-			return null;
+			return Collections.emptyList();
 		}
 
-		PsiType dfaType = GuessManager.getInstance(operand.getProject()).getControlFlowExpressionType(operand);
-		if(dfaType != null)
+		List<PsiType> dfaTypes = GuessManager.getInstance(operand.getProject()).getControlFlowExpressionTypeConjuncts(operand);
+		if(!dfaTypes.isEmpty())
 		{
-			return new ExpectedTypeInfoImpl(dfaType, ExpectedTypeInfo.TYPE_OR_SUPERTYPE, dfaType, TailType.NONE, null, () -> null);
+			return ContainerUtil.map(dfaTypes, dfaType ->
+					new ExpectedTypeInfoImpl(dfaType, ExpectedTypeInfo.TYPE_OR_SUPERTYPE, dfaType, TailType.NONE, null, () -> null));
 		}
 
 		PsiType type = operand.getType();
-		return type == null || type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? null : new ExpectedTypeInfoImpl(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, TailType.NONE, null, () -> null);
+		return type == null || type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? Collections.emptyList() :
+				Collections.singletonList(new ExpectedTypeInfoImpl(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, TailType.NONE, null, () -> null));
 	}
 
-	private static void addHierarchyTypes(CompletionParameters parameters, PrefixMatcher matcher, ExpectedTypeInfo info, Consumer<PsiType> result, boolean quick)
+	private static void addHierarchyTypes(CompletionParameters parameters, PrefixMatcher matcher, ExpectedTypeInfo info, Consumer<? super PsiType> result, boolean quick)
 	{
 		PsiType infoType = info.getType();
 		PsiClass infoClass = PsiUtil.resolveClassInClassTypeOnly(infoType);
 		if(info.getKind() == ExpectedTypeInfo.TYPE_OR_SUPERTYPE)
 		{
-			InheritanceUtil.processSupers(infoClass, true, superClass ->
-			{
-				if(!JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+			InheritanceUtil.processSupers(infoClass, true, superClass -> {
+				if(!CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 				{
-					result.consume(JavaPsiFacade.getElementFactory(superClass.getProject()).createType(superClass));
+					result.consume(JavaPsiFacade.getElementFactory(superClass.getProject()).createType(CompletionUtil.getOriginalOrSelf(superClass)));
 				}
 				return true;
 			});
 		}
 		else if(infoType instanceof PsiClassType && !quick)
 		{
-			JavaInheritorsGetter.processInheritors(parameters, Collections.singleton((PsiClassType) infoType), matcher, type ->
-			{
+			JavaInheritorsGetter.processInheritors(parameters, Collections.singleton((PsiClassType) infoType), matcher, type -> {
 				if(!infoType.equals(type))
 				{
 					result.consume(type);
@@ -194,7 +194,7 @@ class SmartCastProvider implements CompletionProvider
 		if(parenthesisOwner instanceof PsiParenthesizedExpression)
 		{
 			PsiElement next = parenthesisOwner.getNextSibling();
-			while(next != null && (next instanceof PsiEmptyExpressionImpl || next instanceof PsiErrorElement || next instanceof PsiWhiteSpace))
+			while((next instanceof PsiEmptyExpressionImpl || next instanceof PsiErrorElement || next instanceof PsiWhiteSpace))
 			{
 				next = next.getNextSibling();
 			}
@@ -208,11 +208,12 @@ class SmartCastProvider implements CompletionProvider
 
 	private static LookupElement createSmartCastElement(final CompletionParameters parameters, final boolean overwrite, final PsiType type)
 	{
-		return AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE.applyPolicy(new LookupElementDecorator<PsiTypeLookupItem>(PsiTypeLookupItem.createLookupItem(type, parameters.getPosition()))
+		return AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE.applyPolicy(new LookupElementDecorator<PsiTypeLookupItem>(
+				PsiTypeLookupItem.createLookupItem(type, parameters.getPosition()))
 		{
 
 			@Override
-			public void handleInsert(InsertionContext context)
+			public void handleInsert(@Nonnull InsertionContext context)
 			{
 				FeatureUsageTracker.getInstance().triggerFeatureUsed("editing.completion.smarttype.casting");
 
@@ -220,7 +221,8 @@ class SmartCastProvider implements CompletionProvider
 				final Document document = editor.getDocument();
 				if(overwrite)
 				{
-					document.deleteString(context.getSelectionEndOffset(), context.getOffsetMap().getOffset(CompletionInitializationContext.IDENTIFIER_END_OFFSET));
+					document.deleteString(context.getSelectionEndOffset(),
+							context.getOffsetMap().getOffset(CompletionInitializationContext.IDENTIFIER_END_OFFSET));
 				}
 
 				final CommonCodeStyleSettings csSettings = CompletionStyleUtil.getCodeStyleSettings(context);

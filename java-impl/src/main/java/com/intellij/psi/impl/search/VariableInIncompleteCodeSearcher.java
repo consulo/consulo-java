@@ -35,7 +35,7 @@ public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiRefer
   }
 
   @Override
-  public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer) {
+  public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
     final PsiElement refElement = p.getElementToSearch();
     if (!refElement.isValid() || !(refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter)) return;
 

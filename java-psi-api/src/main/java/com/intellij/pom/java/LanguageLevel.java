@@ -43,6 +43,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	JDK_11("11", JavaCoreBundle.message("jdk.11.language.level.description"), "1.11", "11"),
 	JDK_12("12", JavaCoreBundle.message("jdk.12.language.level.description"), "1.12", "12"),
 	JDK_13("13", JavaCoreBundle.message("jdk.13.language.level.description"), "13"),
+	JDK_13_PREVIEW("13", JavaCoreBundle.message("jdk.13.preview.language.level.description"), "13"),
 	JDK_14("14", JavaCoreBundle.message("jdk.14.language.level.description"), "14"),
 	JDK_X("X", JavaCoreBundle.message("jdk.X.language.level.description"), "");
 
@@ -52,6 +53,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	private final String myShortText;
 	private final String myPresentableText;
 	private final String[] myCompilerComplianceOptions;
+	private final boolean myPreview;
 
 	private JavaLanguageVersion myLangVersion;
 
@@ -65,6 +67,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 		myPresentableText = presentableText;
 		myCompilerComplianceOptions = compilerComplianceOptions;
 		myLangVersion = new JavaLanguageVersion(name(), shortText, this);
+		myPreview = name().endsWith("_PREVIEW");
 	}
 
 	/**
@@ -73,6 +76,11 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	public String getCompilerComplianceDefaultOption()
 	{
 		return myCompilerComplianceOptions[0];
+	}
+
+	public boolean isPreview()
+	{
+		return myPreview;
 	}
 
 	@Nonnull

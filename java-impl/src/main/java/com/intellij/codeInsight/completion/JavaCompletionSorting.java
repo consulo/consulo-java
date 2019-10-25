@@ -15,25 +15,11 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.completion.impl.CompletionSorterImpl;
 import com.intellij.codeInsight.completion.impl.LiftShorterItemsClassifier;
-import com.intellij.codeInsight.lookup.Classifier;
-import com.intellij.codeInsight.lookup.ClassifierFactory;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementWeigher;
-import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
+import com.intellij.codeInsight.lookup.*;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Pair;
@@ -49,6 +35,15 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 /**
  * @author peter
@@ -125,15 +120,15 @@ public class JavaCompletionSorting
 			return ExpectedTypeInfo.EMPTY_ARRAY;
 		}
 
-		ExpectedTypeInfo castExpectation = SmartCastProvider.getParenthesizedCastExpectationByOperandType(position);
-		if(castExpectation != null)
+		List<ExpectedTypeInfo> castExpectation = SmartCastProvider.getParenthesizedCastExpectationByOperandType(position);
+		if(!castExpectation.isEmpty())
 		{
-			return new ExpectedTypeInfo[]{castExpectation};
+			return castExpectation.toArray(ExpectedTypeInfo.EMPTY_ARRAY);
 		}
 		return JavaSmartCompletionContributor.getExpectedTypes(parameters);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static LookupElementWeigher recursion(CompletionParameters parameters, final ExpectedTypeInfo[] expectedInfos)
 	{
 		final PsiElement position = parameters.getPosition();
@@ -207,7 +202,7 @@ public class JavaCompletionSorting
 		};
 	}
 
-	private static ExpectedTypeMatching getExpectedTypeMatching(LookupElement item, ExpectedTypeInfo[] expectedInfos, @javax.annotation.Nullable String expectedMemberName)
+	private static ExpectedTypeMatching getExpectedTypeMatching(LookupElement item, ExpectedTypeInfo[] expectedInfos, @Nullable String expectedMemberName)
 	{
 		PsiType itemType = JavaCompletionUtil.getLookupElementType(item);
 
@@ -261,7 +256,7 @@ public class JavaCompletionSorting
 	}
 
 	@Nonnull
-	private static ExpectedTypeMatching preferByMemberName(@javax.annotation.Nullable String expectedMemberName, @javax.annotation.Nullable PsiType itemType)
+	private static ExpectedTypeMatching preferByMemberName(@Nullable String expectedMemberName, @Nullable PsiType itemType)
 	{
 		if(expectedMemberName != null)
 		{
@@ -292,7 +287,7 @@ public class JavaCompletionSorting
 		return hasNonVoid;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getLookupObjectName(Object o)
 	{
 		if(o instanceof PsiVariable)
@@ -625,7 +620,7 @@ public class JavaCompletionSorting
 			myExpectedMemberName = calcExpectedMemberNameByParentCall(position);
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		private static String calcExpectedMemberNameByParentCall(PsiElement position)
 		{
 			if(position.getParent() instanceof PsiJavaCodeReferenceElement)

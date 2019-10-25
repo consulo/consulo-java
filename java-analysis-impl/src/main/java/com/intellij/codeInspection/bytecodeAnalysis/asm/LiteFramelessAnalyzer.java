@@ -15,10 +15,9 @@
  */
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
-import java.util.List;
-
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
-import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+
+import java.util.List;
 
 /**
  * Specialized lite version of {@link FramelessAnalyzer}.
@@ -26,31 +25,43 @@ import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
  *
  * @author lambdamix
  */
-public class LiteFramelessAnalyzer extends FramelessAnalyzer {
+public class LiteFramelessAnalyzer extends FramelessAnalyzer
+{
+	public LiteFramelessAnalyzer(EdgeCreator creator)
+	{
+		super(creator);
+	}
 
-  @Override
-  protected void findSubroutine(int insn, Subroutine sub, List<AbstractInsnNode> calls) throws AnalyzerException {
-  }
+	@Override
+	protected void findSubroutine(int insn, Subroutine sub, List<AbstractInsnNode> calls)
+	{
+	}
 
-  @Override
-  protected void merge(final int insn, final Subroutine subroutine) throws AnalyzerException {
-    if (!wasQueued[insn]) {
-      wasQueued[insn] = true;
-      if (!queued[insn]) {
-        queued[insn] = true;
-        queue[top++] = insn;
-      }
-    }
-  }
+	@Override
+	protected void merge(final int insn, final Subroutine subroutine)
+	{
+		if(!wasQueued[insn])
+		{
+			wasQueued[insn] = true;
+			if(!queued[insn])
+			{
+				queued[insn] = true;
+				queue[top++] = insn;
+			}
+		}
+	}
 
-  @Override
-  protected void merge(final int insn, final Subroutine subroutineBeforeJSR, final boolean[] access) throws AnalyzerException {
-    if (!wasQueued[insn]) {
-      wasQueued[insn] = true;
-      if (!queued[insn]) {
-        queued[insn] = true;
-        queue[top++] = insn;
-      }
-    }
-  }
+	@Override
+	protected void merge(int insn, Subroutine subroutineBeforeJSR, boolean[] access)
+	{
+		if(!wasQueued[insn])
+		{
+			wasQueued[insn] = true;
+			if(!queued[insn])
+			{
+				queued[insn] = true;
+				queue[top++] = insn;
+			}
+		}
+	}
 }

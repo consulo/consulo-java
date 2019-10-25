@@ -15,11 +15,13 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmTypeParameter;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.util.ArrayFactory;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
 
 /**
  * Represents the type parameter of a generic class, interface, method or constructor.
@@ -65,6 +67,12 @@ public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeP
 	default PsiAnnotation[] getAnnotations()
 	{
 		return PsiClass.super.getAnnotations();
+	}
+
+	@Override
+	default boolean hasAnnotation(@Nonnull @NonNls String fqn)
+	{
+		return PsiClass.super.hasAnnotation(fqn);
 	}
 
 	@Nonnull

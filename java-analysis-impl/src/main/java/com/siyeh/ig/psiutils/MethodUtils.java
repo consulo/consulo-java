@@ -15,13 +15,6 @@
  */
 package com.siyeh.ig.psiutils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
@@ -29,11 +22,21 @@ import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.SuperMethodsSearch;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Query;
 import com.siyeh.HardcodedMethodConstants;
 import consulo.java.module.util.JavaClassNames;
+import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MethodUtils
 {
@@ -452,6 +455,59 @@ public class MethodUtils
 		final PsiReturnStatement returnStatement = (PsiReturnStatement) lastStatement;
 		final PsiExpression returnValue = returnStatement.getReturnValue();
 		return returnValue instanceof PsiThisExpression;
+	}
+
+	/**
+	 * Find a specific method by base class method and known specific type of the object
+	 *
+	 * @param method       a base class method
+	 * @param specificType a specific type (class type or intersection type)
+	 * @return more specific method, or base class method if more specific method cannot be found
+	 */
+	@Nonnull
+	public static PsiMethod findSpecificMethod(@Nonnull PsiMethod method, @Nullable PsiType specificType)
+	{
+		PsiClass qualifierClass = method.getContainingClass();
+		if(qualifierClass == null)
+			return method;
+		if(specificType == null || specificType instanceof PsiArrayType)
+			return method;
+		StreamEx<PsiType> types;
+		if(specificType instanceof PsiIntersectionType)
+		{
+			types = StreamEx.of(((PsiIntersectionType) specificType).getConjuncts());
+		}
+		else
+		{
+			types = StreamEx.of(specificType);
+		}
+		List<PsiMethod> methods = types.map(PsiUtil::resolveClassInClassTypeOnly)
+				.nonNull()
+				.without(qualifierClass)
+				.distinct()
+				.filter(specificClass -> InheritanceUtil.isInheritorOrSelf(specificClass, qualifierClass, true))
+				.map(specificClass -> MethodSignatureUtil.findMethodBySuperMethod(specificClass, method, true))
+				.nonNull()
+				.distinct()
+				.toList();
+		if(methods.isEmpty())
+			return method;
+		PsiMethod best = methods.get(0);
+		for(PsiMethod realMethod : methods)
+		{
+			if(best.equals(realMethod))
+				continue;
+			if(MethodSignatureUtil.isSuperMethod(best, realMethod))
+			{
+				best = realMethod;
+			}
+			else if(!MethodSignatureUtil.isSuperMethod(realMethod, best))
+			{
+				// Several real candidates: give up
+				return method;
+			}
+		}
+		return best;
 	}
 
 	@Contract("null -> false")

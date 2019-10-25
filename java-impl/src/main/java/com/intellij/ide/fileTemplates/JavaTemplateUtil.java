@@ -15,17 +15,16 @@
  */
 package com.intellij.ide.fileTemplates;
 
-import static com.intellij.util.ObjectUtil.notNull;
-
-import java.util.Properties;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiMethod;
 import consulo.psi.PsiPackage;
+
+import javax.annotation.Nonnull;
+import java.util.Properties;
+
+import static com.intellij.util.ObjectUtil.notNull;
 
 /**
  * @author yole
@@ -33,6 +32,7 @@ import consulo.psi.PsiPackage;
 public class JavaTemplateUtil
 {
 	public static final String TEMPLATE_CATCH_BODY = "Catch Statement Body.java";
+	public static final String TEMPLATE_SWITCH_DEFAULT_BRANCH = "Switch Default Branch.java";
 	public static final String TEMPLATE_IMPLEMENTED_METHOD_BODY = "Implemented Method Body.java";
 	public static final String TEMPLATE_OVERRIDDEN_METHOD_BODY = "Overridden Method Body.java";
 	public static final String TEMPLATE_FROM_USAGE_METHOD_BODY = "New Method Body.java";

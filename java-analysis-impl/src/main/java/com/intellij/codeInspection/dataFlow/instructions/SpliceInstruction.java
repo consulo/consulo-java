@@ -15,15 +15,15 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import one.util.streamex.IntStreamEx;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Pop several elements from the stack and replace them with some of them (possibly duplicating, swapping, removing some, etc.)

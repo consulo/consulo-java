@@ -16,47 +16,47 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.InstanceOfCheckValue;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.Identity;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.NPE;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.Return;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.join;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.meet;
-import static org.objectweb.asm.Opcodes.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
+import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
+import com.intellij.codeInspection.bytecodeAnalysis.asm.RichControlFlow;
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
-import com.intellij.codeInspection.bytecodeAnalysis.asm.ASMUtils;
-import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
-import com.intellij.codeInspection.bytecodeAnalysis.asm.RichControlFlow;
+import javax.annotation.Nonnull;
 
-class NonNullInAnalysis extends Analysis<PResults.PResult>
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.InstanceOfCheckValue;
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.isInstance;
+import static com.intellij.codeInspection.bytecodeAnalysis.PResults.*;
+import static consulo.internal.org.objectweb.asm.Opcodes.*;
+
+class NonNullInAnalysis extends Analysis<PResult>
 {
 	final private PendingAction[] pendingActions;
-	private final PResults.PResult[] results;
+	private final PResult[] results;
 	private final NotNullInterpreter interpreter = new NotNullInterpreter();
 
 	// Flag saying that at some branch NPE was found. Used later as an evidence that this param is *NOT* @Nullable (optimization).
 	boolean possibleNPE;
 
-	protected NonNullInAnalysis(RichControlFlow richControlFlow, Direction direction, boolean stable, PendingAction[] pendingActions, PResults.PResult[] results)
+	protected NonNullInAnalysis(RichControlFlow richControlFlow,
+								Direction direction,
+								boolean stable,
+								PendingAction[] pendingActions,
+								PResult[] results)
 	{
 		super(richControlFlow, direction, stable);
 		this.pendingActions = pendingActions;
 		this.results = results;
 	}
 
-	PResults.PResult combineResults(PResults.PResult delta, int[] subResults) throws AnalyzerException
+	PResult combineResults(PResult delta, int[] subResults) throws AnalyzerException
 	{
-		PResults.PResult result = Identity;
+		PResult result = Identity;
 		for(int subResult : subResults)
 		{
 			result = join(result, results[subResult]);
@@ -65,32 +65,29 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 	}
 
 	@Nonnull
-	Equation mkEquation(PResults.PResult result)
+	Equation mkEquation(PResult result)
 	{
 		if(Identity == result || Return == result)
 		{
-			return new Equation(aKey, new Final(Value.Top));
+			return new Equation(aKey, Value.Top);
 		}
 		else if(NPE == result)
 		{
-			return new Equation(aKey, new Final(Value.NotNull));
+			return new Equation(aKey, Value.NotNull);
 		}
 		else
 		{
-			PResults.ConditionalNPE condNpe = (PResults.ConditionalNPE) result;
-			Set<Product> components = new HashSet<Product>();
-			for(Set<Key> prod : condNpe.sop)
-			{
-				components.add(new Product(Value.Top, prod));
-			}
+			ConditionalNPE condNpe = (ConditionalNPE) result;
+			Set<Component> components = condNpe.sop.stream().map(prod -> new Component(Value.Top, prod)).collect(Collectors.toSet());
 			return new Equation(aKey, new Pending(components));
 		}
 	}
 
 	private int id;
 	private Frame<BasicValue> nextFrame;
-	private PResults.PResult subResult;
+	private PResult subResult;
 
+	@Override
 	@Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
@@ -99,15 +96,12 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 		while(pendingTop > 0 && earlyResult == null)
 		{
 			steps++;
-			if(steps >= STEPS_LIMIT)
-			{
-				throw new AnalyzerException(null, "limit is reached, steps: " + steps + " in method " + method);
-			}
+			TooComplexException.check(method, steps);
 			PendingAction action = pendingActions[--pendingTop];
 			if(action instanceof MakeResult)
 			{
 				MakeResult makeResult = (MakeResult) action;
-				PResults.PResult result = combineResults(makeResult.subResult, makeResult.indices);
+				PResult result = combineResults(makeResult.subResult, makeResult.indices);
 				State state = makeResult.state;
 				int insnIndex = state.conf.insnIndex;
 				results[state.index] = result;
@@ -126,7 +120,7 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 				{
 					for(Conf prev : history)
 					{
-						if(AbstractValues.isInstance(conf, prev))
+						if(isInstance(conf, prev))
 						{
 							fold = true;
 							break;
@@ -166,14 +160,7 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 				}
 			}
 		}
-		if(earlyResult != null)
-		{
-			return mkEquation(earlyResult);
-		}
-		else
-		{
-			return mkEquation(results[0]);
-		}
+		return earlyResult != null ? mkEquation(earlyResult) : mkEquation(results[0]);
 	}
 
 	private void processState(State state) throws AnalyzerException
@@ -239,7 +226,7 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 		if(opcode == IFNONNULL && popValue(frame) instanceof AbstractValues.ParamValue)
 		{
 			int nextInsnIndex = insnIndex + 1;
-			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult);
+			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult, state.unsure);
 			pendingPush(new MakeResult(state, subResult, new int[]{nextState.index}));
 			pendingPush(new ProceedState(nextState));
 			return;
@@ -248,7 +235,7 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 		if(opcode == IFNULL && popValue(frame) instanceof AbstractValues.ParamValue)
 		{
 			int nextInsnIndex = methodNode.instructions.indexOf(((JumpInsnNode) insnNode).label);
-			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult);
+			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult, state.unsure);
 			pendingPush(new MakeResult(state, subResult, new int[]{nextState.index}));
 			pendingPush(new ProceedState(nextState));
 			return;
@@ -257,7 +244,7 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 		if(opcode == IFEQ && popValue(frame) == InstanceOfCheckValue)
 		{
 			int nextInsnIndex = methodNode.instructions.indexOf(((JumpInsnNode) insnNode).label);
-			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult);
+			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult, state.unsure);
 			pendingPush(new MakeResult(state, subResult, new int[]{nextState.index}));
 			pendingPush(new ProceedState(nextState));
 			return;
@@ -266,7 +253,7 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 		if(opcode == IFNE && popValue(frame) == InstanceOfCheckValue)
 		{
 			int nextInsnIndex = insnIndex + 1;
-			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult);
+			State nextState = new State(++id, new Conf(nextInsnIndex, nextFrame), nextHistory, true, hasCompanions || notEmptySubResult, state.unsure);
 			pendingPush(new MakeResult(state, subResult, new int[]{nextState.index}));
 			pendingPush(new ProceedState(nextState));
 			return;
@@ -284,25 +271,21 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 		{
 			int nextInsnIndex = nextInsnIndices[i];
 			Frame<BasicValue> nextFrame1 = nextFrame;
+			boolean exceptional = state.unsure;
 			if(controlFlow.errors[nextInsnIndex] && controlFlow.errorTransitions.contains(new ControlFlowGraph.Edge(insnIndex, nextInsnIndex)))
 			{
-				nextFrame1 = new Frame<BasicValue>(frame);
-				nextFrame1.clearStack();
-				nextFrame1.push(ASMUtils.THROWABLE_VALUE);
+				nextFrame1 = createCatchFrame(frame);
+				exceptional = true;
 			}
-			pendingPush(new ProceedState(new State(subIndices[i], new Conf(nextInsnIndex, nextFrame1), nextHistory, taken, hasCompanions || notEmptySubResult)));
+			pendingPush(new ProceedState(new State(subIndices[i], new Conf(nextInsnIndex, nextFrame1), nextHistory, taken, hasCompanions || notEmptySubResult, exceptional)));
 		}
-
 	}
 
 	private int pendingTop;
 
-	private void pendingPush(PendingAction action) throws AnalyzerException
+	private void pendingPush(PendingAction action)
 	{
-		if(pendingTop >= STEPS_LIMIT)
-		{
-			throw new AnalyzerException(null, "limit is reached in method " + method);
-		}
+		TooComplexException.check(method, pendingTop);
 		pendingActions[pendingTop++] = action;
 	}
 
@@ -317,7 +300,7 @@ class NonNullInAnalysis extends Analysis<PResults.PResult>
 				subResult = Identity;
 				break;
 			default:
-				nextFrame = new Frame<BasicValue>(frame);
+				nextFrame = new Frame<>(frame);
 				interpreter.reset(false);
 				nextFrame.execute(insnNode, interpreter);
 				subResult = interpreter.getSubResult();

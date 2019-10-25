@@ -15,24 +15,18 @@
  */
 package com.siyeh.ig.psiutils;
 
-import static com.intellij.util.ObjectUtil.tryCast;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiBinaryExpression;
-import com.intellij.psi.PsiDeclarationStatement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiForStatement;
-import com.intellij.psi.PsiLocalVariable;
-import com.intellij.psi.PsiLoopStatement;
-import com.intellij.psi.PsiType;
+import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
+import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import static com.intellij.util.ObjectUtils.tryCast;
 
 /**
- * Represents a loop of form {@code for(int/long counter = initializer; counter </<= bound; counter++)}
+ * Represents a loop of form {@code for(int/long counter = initializer; counter </<= bound; counter++/--)}
  *
  * @author Tagir Valeev
  */
@@ -51,14 +45,21 @@ public class CountingLoop
 	@Nonnull
 	PsiExpression myBound;
 	final boolean myIncluding;
+	final boolean myDescending;
 
-	private CountingLoop(@Nonnull PsiLoopStatement loop, @Nonnull PsiLocalVariable counter, @Nonnull PsiExpression initializer, @Nonnull PsiExpression bound, boolean including)
+	private CountingLoop(@Nonnull PsiLoopStatement loop,
+						 @Nonnull PsiLocalVariable counter,
+						 @Nonnull PsiExpression initializer,
+						 @Nonnull PsiExpression bound,
+						 boolean including,
+						 boolean descending)
 	{
 		myInitializer = initializer;
 		myCounter = counter;
 		myLoop = loop;
 		myBound = bound;
 		myIncluding = including;
+		myDescending = descending;
 	}
 
 	/**
@@ -105,6 +106,14 @@ public class CountingLoop
 		return myIncluding;
 	}
 
+	/**
+	 * @return true if the loop is descending
+	 */
+	public boolean isDescending()
+	{
+		return myDescending;
+	}
+
 	@Nullable
 	public static CountingLoop from(PsiForStatement forStatement)
 	{
@@ -131,48 +140,53 @@ public class CountingLoop
 		}
 
 		// check that increment is like for(...;...;i++)
-		if(!VariableAccessUtils.variableIsIncremented(counter, forStatement.getUpdate()))
+		boolean descending;
+		if(VariableAccessUtils.variableIsIncremented(counter, forStatement.getUpdate()))
+		{
+			descending = false;
+		}
+		else if(VariableAccessUtils.variableIsDecremented(counter, forStatement.getUpdate()))
+		{
+			descending = true;
+		}
+		else
 		{
 			return null;
 		}
 
 		// check that condition is like for(...;i<bound;...) or for(...;i<=bound;...)
-		PsiBinaryExpression condition = tryCast(forStatement.getCondition(), PsiBinaryExpression.class);
+		PsiBinaryExpression condition = tryCast(PsiUtil.skipParenthesizedExprDown(forStatement.getCondition()), PsiBinaryExpression.class);
 		if(condition == null)
 		{
 			return null;
 		}
 		IElementType type = condition.getOperationTokenType();
 		boolean closed = false;
-		PsiExpression bound;
-		PsiExpression ref;
-		if(type.equals(JavaTokenType.LE))
-		{
-			bound = condition.getROperand();
-			ref = condition.getLOperand();
-			closed = true;
-		}
-		else if(type.equals(JavaTokenType.LT))
-		{
-			bound = condition.getROperand();
-			ref = condition.getLOperand();
-		}
-		else if(type.equals(JavaTokenType.GE))
-		{
-			bound = condition.getLOperand();
-			ref = condition.getROperand();
-			closed = true;
-		}
-		else if(type.equals(JavaTokenType.GT))
-		{
-			bound = condition.getLOperand();
-			ref = condition.getROperand();
-		}
-		else
+		RelationType relationType = RelationType.fromElementType(type);
+		if(relationType == null || !relationType.isInequality())
 		{
 			return null;
 		}
-		if(bound == null || !ExpressionUtils.isReferenceTo(ref, counter))
+		if(relationType.isSubRelation(RelationType.EQ))
+		{
+			closed = true;
+		}
+		if(descending)
+		{
+			relationType = relationType.getFlipped();
+			assert relationType != null;
+		}
+		PsiExpression bound = ExpressionUtils.getOtherOperand(condition, counter);
+		if(bound == null)
+		{
+			return null;
+		}
+		if(bound == condition.getLOperand())
+		{
+			relationType = relationType.getFlipped();
+			assert relationType != null;
+		}
+		if(!relationType.isSubRelation(RelationType.LT))
 		{
 			return null;
 		}
@@ -180,6 +194,10 @@ public class CountingLoop
 		{
 			return null;
 		}
-		return new CountingLoop(forStatement, counter, initializer, bound, closed);
+		if(VariableAccessUtils.variableIsAssigned(counter, forStatement.getBody()))
+		{
+			return null;
+		}
+		return new CountingLoop(forStatement, counter, initializer, bound, closed, descending);
 	}
 }

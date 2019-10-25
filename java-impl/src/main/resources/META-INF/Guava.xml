@@ -14,10 +14,10 @@
   - limitations under the License.
   -->
 
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij">
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="consulo.java.guava.GuavaLineMarkerProvider"/>
 
 		<implicitUsageProvider implementation="consulo.java.guava.GuavaImplicitUsageProvider"/>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

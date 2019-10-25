@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,40 +14,41 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Apr 9, 2002
- * Time: 10:27:17 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.instructions;
 
+import com.intellij.codeInspection.dataFlow.*;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeCastExpression;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class TypeCastInstruction extends Instruction
+public class TypeCastInstruction extends Instruction implements ExpressionPushingInstruction
 {
 	private final PsiTypeCastExpression myCastExpression;
 	private final PsiExpression myCasted;
 	private final PsiType myCastTo;
+	private final
+	@Nullable
+	DfaControlTransferValue myTransferValue;
 
-	public TypeCastInstruction(PsiTypeCastExpression castExpression, PsiExpression casted, PsiType castTo)
+	public TypeCastInstruction(PsiTypeCastExpression castExpression,
+							   PsiExpression casted,
+							   PsiType castTo,
+							   @Nullable DfaControlTransferValue value)
 	{
+		assert !(castTo instanceof PsiPrimitiveType);
 		myCastExpression = castExpression;
 		myCasted = casted;
 		myCastTo = castTo;
+		myTransferValue = value;
 	}
 
-	public PsiTypeCastExpression getCastExpression()
+	@Nullable
+	public DfaControlTransferValue getCastExceptionTransfer()
 	{
-		return myCastExpression;
+		return myTransferValue;
 	}
 
 	public PsiExpression getCasted()
@@ -64,5 +65,18 @@ public class TypeCastInstruction extends Instruction
 	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
 	{
 		return visitor.visitTypeCast(this, runner, stateBefore);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "CAST_TO " + myCastTo.getCanonicalText();
+	}
+
+	@Nonnull
+	@Override
+	public PsiTypeCastExpression getExpression()
+	{
+		return myCastExpression;
 	}
 }

@@ -15,23 +15,10 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightClassUtil;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementDecorator;
-import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
-import com.intellij.codeInsight.lookup.TypedLookupItem;
+import com.intellij.codeInsight.lookup.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -46,16 +33,19 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.Processor;
-import com.intellij.util.SmartList;
+import com.intellij.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.completion.CompletionProvider;
 import consulo.java.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
+
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 /**
  * @author peter
@@ -159,7 +149,7 @@ public class JavaInheritorsGetter implements CompletionProvider
 	@Nullable
 	private LookupElement addExpectedType(final PsiType type, final CompletionParameters parameters)
 	{
-		if(!JavaCompletionUtil.hasAccessibleConstructor(type))
+		if(!JavaCompletionUtil.hasAccessibleConstructor(type, parameters.getPosition()))
 		{
 			return null;
 		}

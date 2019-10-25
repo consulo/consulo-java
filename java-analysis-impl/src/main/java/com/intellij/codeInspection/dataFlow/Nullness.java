@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,46 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
+import com.intellij.codeInsight.Nullability;
+import org.jetbrains.annotations.Contract;
+
 /**
-* @author cdr
-*/
-public enum Nullness {
-  NOT_NULL, NULLABLE,UNKNOWN
+ * @deprecated for removal; use {@link Nullability} since 2018.2
+ */
+@Deprecated
+public enum Nullness
+{
+	NOT_NULL,
+	NULLABLE,
+	UNKNOWN;
+
+	@Contract(pure = true)
+	public Nullability toNullability()
+	{
+		switch(this)
+		{
+			case NOT_NULL:
+				return Nullability.NOT_NULL;
+			case NULLABLE:
+				return Nullability.NULLABLE;
+			case UNKNOWN:
+				return Nullability.UNKNOWN;
+		}
+		throw new InternalError("Unexpected enum value");
+	}
+
+	@Contract(pure = true)
+	public static Nullness fromNullability(Nullability nullability)
+	{
+		switch(nullability)
+		{
+			case NOT_NULL:
+				return NOT_NULL;
+			case NULLABLE:
+				return NULLABLE;
+			case UNKNOWN:
+				return UNKNOWN;
+		}
+		throw new InternalError("Unexpected enum value");
+	}
 }

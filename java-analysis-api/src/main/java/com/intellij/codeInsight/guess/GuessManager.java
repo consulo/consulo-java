@@ -16,28 +16,38 @@
  */
 package com.intellij.codeInsight.guess;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
+import com.intellij.util.containers.MultiMap;
+import javax.annotation.Nonnull;
 
-public abstract class GuessManager {
-  public static GuessManager getInstance(Project project) {
-    return ServiceManager.getService(project, GuessManager.class);
-  }
+import java.util.List;
 
-  public abstract PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore);
+public abstract class GuessManager
+{
+	public static GuessManager getInstance(Project project)
+	{
+		return ServiceManager.getService(project, GuessManager.class);
+	}
 
-  public abstract PsiType[] guessTypeToCast(PsiExpression expr);
+	@Nonnull
+	public abstract PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore);
 
-  @Nonnull
-  public abstract Map<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull PsiExpression forPlace);
+	@Nonnull
+	public abstract PsiType[] guessTypeToCast(PsiExpression expr);
 
-  @Nullable
-  public abstract PsiType getControlFlowExpressionType(@Nonnull PsiExpression expr);
+	@Nonnull
+	public abstract MultiMap<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull PsiExpression forPlace, boolean honorAssignments);
+
+	@Nonnull
+	public List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr)
+	{
+		return getControlFlowExpressionTypeConjuncts(expr, true);
+	}
+
+	@Nonnull
+	public abstract List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr, boolean honorAssignments);
 }

@@ -16,7 +16,6 @@
 
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import javax.annotation.Nullable;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
@@ -25,16 +24,27 @@ import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiVariable;
+import com.intellij.util.ObjectUtils;
+import org.jetbrains.annotations.Contract;
 
-public class AssignInstruction extends Instruction
+import javax.annotation.Nullable;
+
+public class AssignInstruction extends Instruction implements ExpressionPushingInstruction
 {
 	private final PsiExpression myRExpression;
-	@javax.annotation.Nullable
+	private final PsiExpression myLExpression;
+	@Nullable
 	private final DfaValue myAssignedValue;
 
-	public AssignInstruction(PsiExpression RExpression, @javax.annotation.Nullable DfaValue assignedValue)
+	public AssignInstruction(PsiExpression rExpression, @Nullable DfaValue assignedValue)
 	{
-		myRExpression = RExpression;
+		this(getLeftHandOfAssignment(rExpression), rExpression, assignedValue);
+	}
+
+	public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @Nullable DfaValue assignedValue)
+	{
+		myLExpression = lExpression;
+		myRExpression = rExpression;
 		myAssignedValue = assignedValue;
 	}
 
@@ -44,7 +54,7 @@ public class AssignInstruction extends Instruction
 		return visitor.visitAssign(this, runner, stateBefore);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiExpression getRExpression()
 	{
 		return myRExpression;
@@ -53,15 +63,7 @@ public class AssignInstruction extends Instruction
 	@Nullable
 	public PsiExpression getLExpression()
 	{
-		if(myRExpression == null)
-		{
-			return null;
-		}
-		if(myRExpression.getParent() instanceof PsiAssignmentExpression)
-		{
-			return ((PsiAssignmentExpression) myRExpression.getParent()).getLExpression();
-		}
-		return null;
+		return myLExpression;
 	}
 
 	public boolean isVariableInitializer()
@@ -78,5 +80,31 @@ public class AssignInstruction extends Instruction
 	public String toString()
 	{
 		return "ASSIGN";
+	}
+
+	@Nullable
+	@Override
+	public PsiAssignmentExpression getExpression()
+	{
+		if(myRExpression == null)
+		{
+			return null;
+		}
+		return ObjectUtils.tryCast(myRExpression.getParent(), PsiAssignmentExpression.class);
+	}
+
+	@Contract("null -> null")
+	@Nullable
+	private static PsiExpression getLeftHandOfAssignment(PsiExpression rExpression)
+	{
+		if(rExpression == null)
+		{
+			return null;
+		}
+		if(rExpression.getParent() instanceof PsiAssignmentExpression)
+		{
+			return ((PsiAssignmentExpression) rExpression.getParent()).getLExpression();
+		}
+		return null;
 	}
 }

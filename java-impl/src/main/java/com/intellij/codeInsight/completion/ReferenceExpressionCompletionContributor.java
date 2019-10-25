@@ -15,17 +15,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
-
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.featureStatistics.FeatureUsageTracker;
@@ -40,11 +29,7 @@ import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.filters.AndFilter;
-import com.intellij.psi.filters.ClassFilter;
-import com.intellij.psi.filters.ElementExtractorFilter;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.filters.TrueFilter;
+import com.intellij.psi.filters.*;
 import com.intellij.psi.filters.element.ModifierFilter;
 import com.intellij.psi.filters.types.AssignableFromFilter;
 import com.intellij.psi.infos.CandidateInfo;
@@ -57,6 +42,16 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
 
 /**
  * @author peter
@@ -182,13 +177,9 @@ public class ReferenceExpressionCompletionContributor
 						}
 						if(!psiElement().afterLeaf(".").accepts(element))
 						{
-							BasicExpressionCompletionContributor.processDataflowExpressionTypes(element, null, TRUE_MATCHER, new Consumer<LookupElement>()
+							BasicExpressionCompletionContributor.processDataflowExpressionTypes(parameters, null, TRUE_MATCHER, it ->
 							{
-								@Override
-								public void consume(LookupElement baseItem)
-								{
-									addSecondCompletionVariants(element, reference, baseItem, parameters, result);
-								}
+								addSecondCompletionVariants(element, reference, it, parameters, result);
 							});
 						}
 					}

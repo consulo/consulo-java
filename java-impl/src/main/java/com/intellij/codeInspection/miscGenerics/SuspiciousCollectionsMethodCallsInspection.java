@@ -1,28 +1,18 @@
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.miscGenerics;
 
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.guess.GuessManager;
+import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
+import com.intellij.codeInspection.dataFlow.CommonDataflow;
+import com.intellij.codeInspection.dataFlow.DfaFactType;
+import com.intellij.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.psi.*;
-import com.intellij.util.containers.IntArrayList;
+import com.intellij.psi.util.MethodSignature;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.ObjectUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -33,74 +23,112 @@ import java.util.List;
 /**
  * @author ven
  */
-public class SuspiciousCollectionsMethodCallsInspection extends BaseLocalInspectionTool {
-  public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
+public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool
+{
+	public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
 
-  @Override
-  @javax.annotation.Nullable
-  public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionsBundle.message("report.suspicious.but.possibly.correct.method.calls"), this, "REPORT_CONVERTIBLE_METHOD_CALLS");
-  }
+	@Override
+	public boolean isEnabledByDefault()
+	{
+		return true;
+	}
 
-  @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
-    final List<PsiMethod> patternMethods = new ArrayList<PsiMethod>();
-    final IntArrayList indices = new IntArrayList();
-    return new JavaElementVisitor() {
-      @Override
-      public void visitReferenceExpression(final PsiReferenceExpression expression) {
-        visitExpression(expression);
-      }
+	@Override
+	@Nullable
+	public JComponent createOptionsPanel()
+	{
+		return new SingleCheckboxOptionsPanel(InspectionsBundle.message("report.suspicious.but.possibly.correct.method.calls"), this, "REPORT_CONVERTIBLE_METHOD_CALLS");
+	}
 
-      @Override
-      public void visitMethodCallExpression(PsiMethodCallExpression methodCall) {
-        super.visitMethodCallExpression(methodCall);
-        final String message = getSuspiciousMethodCallMessage(methodCall, REPORT_CONVERTIBLE_METHOD_CALLS, patternMethods, indices
-        );
-        if (message != null) {
-          holder.registerProblem(methodCall.getArgumentList().getExpressions()[0], message);
-        }
-      }
-    };
-  }
+	@Override
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly)
+	{
+		final List<SuspiciousMethodCallUtil.PatternMethod> patternMethods = new ArrayList<>();
+		return new JavaElementVisitor()
+		{
+			@Override
+			public void visitMethodCallExpression(PsiMethodCallExpression methodCall)
+			{
+				final PsiExpression[] args = methodCall.getArgumentList().getExpressions();
+				if(args.length < 1)
+				{
+					return;
+				}
+				for(int idx = 0; idx < Math.min(2, args.length); idx++)
+				{
+					String message = getSuspiciousMethodCallMessage(methodCall, REPORT_CONVERTIBLE_METHOD_CALLS, patternMethods, args[idx], idx);
+					if(message != null)
+					{
+						holder.registerProblem(methodCall.getArgumentList().getExpressions()[idx], message);
+					}
+				}
+			}
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
-  }
+			@Override
+			public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression)
+			{
+				final PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
+				final PsiClassType.ClassResolveResult functionalInterfaceResolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
+				final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
+				if(interfaceMethod != null && interfaceMethod.getParameterList().getParametersCount() == 1)
+				{
+					final PsiSubstitutor psiSubstitutor = LambdaUtil.getSubstitutor(interfaceMethod, functionalInterfaceResolveResult);
+					final MethodSignature signature = interfaceMethod.getSignature(psiSubstitutor);
+					String message = SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(expression, signature.getParameterTypes()[0], REPORT_CONVERTIBLE_METHOD_CALLS, patternMethods, 0);
+					if(message != null)
+					{
+						holder.registerProblem(ObjectUtils.notNull(expression.getReferenceNameElement(), expression), message);
+					}
+				}
+			}
+		};
+	}
 
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return GroupNames.BUGS_GROUP_NAME;
-  }
+	@Override
+	@Nonnull
+	public String getDisplayName()
+	{
+		return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
+	}
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return "SuspiciousMethodCalls";
-  }
+	@Override
+	@Nonnull
+	public String getGroupDisplayName()
+	{
+		return GroupNames.BUGS_GROUP_NAME;
+	}
 
-  @Nullable
-  private static String getSuspiciousMethodCallMessage(final PsiMethodCallExpression methodCall,
-                                                       final boolean reportConvertibleMethodCalls, final List<PsiMethod> patternMethods,
-                                                       final IntArrayList indices) {
-    final PsiExpression[] args = methodCall.getArgumentList().getExpressions();
-    if (args.length != 1) return null;
+	@Override
+	@Nonnull
+	public String getShortName()
+	{
+		return "SuspiciousMethodCalls";
+	}
 
-    PsiType argType = args[0].getType();
-    final String plainMessage = SuspiciousMethodCallUtil
-      .getSuspiciousMethodCallMessage(methodCall, argType, reportConvertibleMethodCalls, patternMethods, indices);
-    if (plainMessage != null) {
-      final PsiType dfaType = GuessManager.getInstance(methodCall.getProject()).getControlFlowExpressionType(args[0]);
-      if (dfaType != null && SuspiciousMethodCallUtil
-                               .getSuspiciousMethodCallMessage(methodCall, dfaType, reportConvertibleMethodCalls, patternMethods, indices) == null) {
-        return null;
-      }
-    }
+	private static String getSuspiciousMethodCallMessage(PsiMethodCallExpression methodCall,
+														 boolean reportConvertibleMethodCalls,
+														 List<SuspiciousMethodCallUtil.PatternMethod> patternMethods,
+														 PsiExpression arg,
+														 int i)
+	{
+		PsiType argType = arg.getType();
+		boolean exactType = arg instanceof PsiNewExpression;
+		final String plainMessage = SuspiciousMethodCallUtil
+				.getSuspiciousMethodCallMessage(methodCall, arg, argType, exactType || reportConvertibleMethodCalls, patternMethods, i);
+		if(plainMessage != null && !exactType)
+		{
+			TypeConstraint constraint = CommonDataflow.getExpressionFact(arg, DfaFactType.TYPE_CONSTRAINT);
+			if(constraint != null)
+			{
+				PsiType type = constraint.getPsiType();
+				if(type != null && SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(methodCall, arg, type, reportConvertibleMethodCalls, patternMethods, i) == null)
+				{
+					return null;
+				}
+			}
+		}
 
-    return plainMessage;
-  }
+		return plainMessage;
+	}
 }

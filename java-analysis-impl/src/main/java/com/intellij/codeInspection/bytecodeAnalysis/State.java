@@ -18,18 +18,27 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import java.util.List;
 
-final class State {
-  final int index;
-  final Conf conf;
-  final List<Conf> history;
-  final boolean taken;
-  final boolean hasCompanions;
+final class State
+{
+	final int index;
+	final Conf conf;
+	final List<Conf> history;
+	final boolean taken;
+	final boolean hasCompanions;
 
-  State(int index, Conf conf, List<Conf> history, boolean taken, boolean hasCompanions) {
-    this.index = index;
-    this.conf = conf;
-    this.history = history;
-    this.taken = taken;
-    this.hasCompanions = hasCompanions;
-  }
+	/**
+	 * Whether we are unsure that this state can be reached at all (e.g.
+	 * it goes via exceptional path and we don't known whether this exception may actually happen).
+	 */
+	final boolean unsure;
+
+	State(int index, Conf conf, List<Conf> history, boolean taken, boolean hasCompanions, boolean unsure)
+	{
+		this.index = index;
+		this.conf = conf;
+		this.history = history;
+		this.taken = taken;
+		this.hasCompanions = hasCompanions;
+		this.unsure = unsure;
+	}
 }

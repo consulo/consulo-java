@@ -15,16 +15,15 @@
  */
 package com.intellij.psi.impl.search;
 
-import java.util.Arrays;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.*;
 import com.intellij.psi.search.RequestResultProcessor;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Processor;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 /**
  * @author peter
@@ -49,7 +48,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor
 	@Override
 	public final boolean processTextOccurrence(@Nonnull PsiElement element,
 			int offsetInElement,
-			@Nonnull final Processor<PsiReference> consumer)
+			@Nonnull final Processor<? super PsiReference> consumer)
 	{
 		for(PsiReference ref : ourReferenceService.getReferences(element, new PsiReferenceService.Hints(myMethods[0],
 				offsetInElement)))
@@ -62,7 +61,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor
 		return true;
 	}
 
-	private boolean processReference(Processor<PsiReference> consumer, PsiReference ref)
+	private boolean processReference(Processor<? super PsiReference> consumer, PsiReference ref)
 	{
 		for(PsiMethod method : myMethods)
 		{
@@ -92,7 +91,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor
 	protected boolean processInexactReference(PsiReference ref,
 			PsiElement refElement,
 			PsiMethod method,
-			Processor<PsiReference> consumer)
+			Processor<? super PsiReference> consumer)
 	{
 		if(refElement instanceof PsiMethod)
 		{

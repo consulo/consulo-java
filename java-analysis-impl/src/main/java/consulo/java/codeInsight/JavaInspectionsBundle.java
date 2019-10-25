@@ -25,11 +25,13 @@ import com.intellij.AbstractBundle;
  */
 public class JavaInspectionsBundle extends AbstractBundle
 {
+	public static final String BUNDLE = "messages.JavaInspectionsBundle";
+
 	private static final JavaInspectionsBundle ourInstance = new JavaInspectionsBundle();
 
 	private JavaInspectionsBundle()
 	{
-		super("messages.JavaInspectionsBundle");
+		super(BUNDLE);
 	}
 
 	public static String message(@PropertyKey(resourceBundle = "messages.JavaInspectionsBundle") String key)

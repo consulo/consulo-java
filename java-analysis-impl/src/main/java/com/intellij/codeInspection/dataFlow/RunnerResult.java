@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,26 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-public enum RunnerResult {
-  OK,
-  TOO_COMPLEX,
-  NOT_APPLICABLE,
-  ABORTED
+public enum RunnerResult
+{
+	/**
+	 * Successful completion
+	 */
+	OK,
+	/**
+	 * Method is too complex for analysis
+	 */
+	TOO_COMPLEX,
+	/**
+	 * Cannot analyze (probably method in severely incomplete)
+	 */
+	NOT_APPLICABLE,
+	/**
+	 * Analysis is explicitly cancelled via {@link DataFlowRunner#cancel()}
+	 */
+	CANCELLED,
+	/**
+	 * Aborted due to some internal error like corrupted stack
+	 */
+	ABORTED
 }

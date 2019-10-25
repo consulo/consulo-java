@@ -19,27 +19,12 @@
  */
 package com.intellij.psi.impl.search;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.JavaRecursiveElementWalkingVisitor;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiElement;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
@@ -49,11 +34,15 @@ import com.intellij.util.Consumer;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 import com.intellij.util.indexing.IdFilter;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClassesSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@Nonnull final AllClassesSearch.SearchParameters queryParameters, @Nonnull final Processor<PsiClass> consumer)
+	public boolean execute(@Nonnull final AllClassesSearch.SearchParameters queryParameters, @Nonnull final Processor<? super PsiClass> consumer)
 	{
 		SearchScope scope = queryParameters.getScope();
 
@@ -73,7 +62,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 		return true;
 	}
 
-	private static boolean processAllClassesInGlobalScope(@Nonnull final GlobalSearchScope scope, @Nonnull final AllClassesSearch.SearchParameters parameters, @Nonnull Processor<PsiClass> processor)
+	private static boolean processAllClassesInGlobalScope(@Nonnull final GlobalSearchScope scope, @Nonnull final AllClassesSearch.SearchParameters parameters, @Nonnull Processor<? super PsiClass> processor)
 	{
 		final Set<String> names = new THashSet<String>(10000);
 		processClassNames(parameters.getProject(), scope, new Consumer<String>()
@@ -94,7 +83,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 		return processClassesByNames(parameters.getProject(), scope, sorted, processor);
 	}
 
-	public static boolean processClassesByNames(Project project, final GlobalSearchScope scope, Collection<String> names, Processor<PsiClass> processor)
+	public static boolean processClassesByNames(Project project, final GlobalSearchScope scope, Collection<String> names, Processor<? super PsiClass> processor)
 	{
 		final PsiShortNamesCache cache = PsiShortNamesCache.getInstance(project);
 		for(final String name : names)
@@ -155,7 +144,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 		return project;
 	}
 
-	private static boolean processScopeRootForAllClasses(@Nonnull final PsiElement scopeRoot, @Nonnull final Processor<PsiClass> processor)
+	private static boolean processScopeRootForAllClasses(@Nonnull final PsiElement scopeRoot, @Nonnull final Processor<? super PsiClass> processor)
 	{
 		final boolean[] stopped = {false};
 

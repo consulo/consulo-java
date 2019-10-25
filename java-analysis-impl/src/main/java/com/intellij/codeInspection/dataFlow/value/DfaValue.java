@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 package com.intellij.codeInspection.dataFlow.value;
+
+import com.intellij.codeInspection.dataFlow.DfaFactMap;
+import com.intellij.psi.PsiType;
+
+import javax.annotation.Nullable;
 
 public abstract class DfaValue
 {
@@ -36,9 +41,38 @@ public abstract class DfaValue
 		return myID;
 	}
 
+	/**
+	 * @return PSI type of the value if known
+	 */
+	@Nullable
+	public PsiType getType()
+	{
+		return null;
+	}
+
+	/**
+	 * Produces a value which describes a union of this value and other value
+	 *
+	 * @param other other value to unite with
+	 * @return a union value. Any particular runtime value which satisfies this value or other value, satisfies also the returned value.
+	 */
+	public DfaValue unite(DfaValue other)
+	{
+		if(this == other)
+			return this;
+		if(this == DfaUnknownValue.getInstance() || other == DfaUnknownValue.getInstance())
+			return DfaUnknownValue.getInstance();
+		return myFactory.getFactFactory().createValue(DfaFactMap.fromDfaValue(this).unite(DfaFactMap.fromDfaValue(other)));
+	}
+
 	public DfaValue createNegated()
 	{
 		return DfaUnknownValue.getInstance();
+	}
+
+	public boolean dependsOn(DfaVariableValue other)
+	{
+		return false;
 	}
 
 	public boolean equals(Object obj)

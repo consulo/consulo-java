@@ -21,50 +21,68 @@ import javax.annotation.Nullable;
 /**
  * Represents a Java code block, usually surrounded by curly braces.
  */
-public interface PsiCodeBlock extends PsiElement, PsiModifiableCodeBlock {
-  /**
-   * The empty array of PSI code blocks which can be reused to avoid unnecessary allocations.
-   */
-  PsiCodeBlock[] EMPTY_ARRAY = new PsiCodeBlock[0];
+public interface PsiCodeBlock extends PsiElement, PsiModifiableCodeBlock
+{
+	/**
+	 * The empty array of PSI code blocks which can be reused to avoid unnecessary allocations.
+	 */
+	PsiCodeBlock[] EMPTY_ARRAY = new PsiCodeBlock[0];
 
-  /**
-   * Returns the array of statements contained in the block.<br/>
-   * Please note that this method doesn't return comments which are not part of statements.
-   *
-   * @return the array of statements.
-   */
-  @Nonnull
-  PsiStatement[] getStatements();
+	/**
+	 * Returns the array of statements contained in the block.<br/>
+	 * Please note that this method doesn't return comments which are not part of statements.
+	 *
+	 * @return the array of statements.
+	 */
+	@Nonnull
+	PsiStatement[] getStatements();
 
-  /**
-   * Returns the first PSI element contained in the block.
-   *
-   * @return the first PSI element, or null if the block is empty.
-   */
-  @Nullable
-  PsiElement getFirstBodyElement();
+	/**
+	 * Returns the first PSI element contained in the block.
+	 *
+	 * @return the first PSI element, or null if the block is empty.
+	 */
+	@Nullable
+	PsiElement getFirstBodyElement();
 
-  /**
-   * Returns the last PSI element contained in the block.
-   *
-   * @return the last PSI element, or null if the block is empty.
-   */
-  @Nullable
-  PsiElement getLastBodyElement();
+	/**
+	 * Returns the last PSI element contained in the block.
+	 *
+	 * @return the last PSI element, or null if the block is empty.
+	 */
+	@Nullable
+	PsiElement getLastBodyElement();
 
-  /**
-   * Returns the opening curly brace of the block.
-   *
-   * @return the opening curly brace, or null if the block does not have one.
-   */
-  @Nullable
-  PsiJavaToken getLBrace();
+	/**
+	 * Returns the opening curly brace of the block.
+	 *
+	 * @return the opening curly brace, or null if the block does not have one.
+	 */
+	@Nullable
+	PsiJavaToken getLBrace();
 
-  /**
-   * Returns the closing curly brace of the block.
-   *
-   * @return the closing curly brace, or null if the block does not have one.
-   */
-  @Nullable
-  PsiJavaToken getRBrace();
+	/**
+	 * Returns the closing curly brace of the block.
+	 *
+	 * @return the closing curly brace, or null if the block does not have one.
+	 */
+	@Nullable
+	PsiJavaToken getRBrace();
+
+	/**
+	 * @return number of statements this code block contains.
+	 */
+	default int getStatementCount()
+	{
+		return getStatements().length;
+	}
+
+	/**
+	 * @return true if this code block contains no statements. Note that if code block contains
+	 * empty statements or empty code blocks inside, this method will return false.
+	 */
+	default boolean isEmpty()
+	{
+		return getStatementCount() == 0;
+	}
 }

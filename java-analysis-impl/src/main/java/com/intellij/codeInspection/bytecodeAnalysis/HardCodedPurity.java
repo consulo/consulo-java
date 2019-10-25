@@ -1,59 +1,158 @@
-/*
- * Copyright 2000-2014 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.bytecodeAnalysis;
+
+import com.intellij.openapi.util.Couple;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.internal.org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.intellij.openapi.util.Couple;
+class HardCodedPurity
+{
+	static final boolean AGGRESSIVE_HARDCODED_PURITY = true;
 
+	private static final Set<Couple<String>> ownedFields = Collections.singleton(
+			new Couple<>("java/lang/AbstractStringBuilder", "value")
+	);
+	private static final Set<Member> thisChangingMethods = ContainerUtil.set(
+			new Member("java/lang/Throwable", "fillInStackTrace", "()Ljava/lang/Throwable;")
+	);
+	// Assumed that all these methods are not only pure, but return object which could be safely modified
+	private static final Set<Member> pureMethods = ContainerUtil.set(
+			// Maybe overloaded and be not pure, but this would be definitely bad code style
+			// Used in Throwable(Throwable) ctor, so this helps to infer purity of many exception constructors
+			new Member("java/lang/Throwable", "toString", "()Ljava/lang/String;"),
+			// Cycle in AbstractStringBuilder ctor and this method disallows to infer the purity
+			new Member("java/lang/StringUTF16", "newBytesFor", "(I)[B"),
+			// Declared in final class StringBuilder
+			new Member("java/lang/StringBuilder", "toString", "()Ljava/lang/String;"),
+			new Member("java/lang/StringBuffer", "toString", "()Ljava/lang/String;"),
+			// Often used in generated code since Java 9; to avoid too many equations
+			new Member("java/util/Objects", "requireNonNull", "(Ljava/lang/Object;)Ljava/lang/Object;"),
+			// Native
+			new Member("java/lang/Object", "getClass", "()Ljava/lang/Class;"),
+			new Member("java/lang/Class", "getComponentType", "()Ljava/lang/Class;"),
+			new Member("java/lang/reflect/Array", "newInstance", "(Ljava/lang/Class;I)Ljava/lang/Object;"),
+			new Member("java/lang/reflect/Array", "newInstance", "(Ljava/lang/Class;[I)Ljava/lang/Object;"),
+			new Member("java/lang/Float", "floatToRawIntBits", "(F)I"),
+			new Member("java/lang/Float", "intBitsToFloat", "(I)F"),
+			new Member("java/lang/Double", "doubleToRawLongBits", "(D)J"),
+			new Member("java/lang/Double", "longBitsToDouble", "(J)D")
+	);
+	private static final Map<Member, Set<EffectQuantum>> solutions = new HashMap<>();
+	private static final Set<EffectQuantum> thisChange = Collections.singleton(EffectQuantum.ThisChangeQuantum);
 
-final class HardCodedPurity {
-  static Set<Couple<String>> ownedFields = new HashSet<Couple<String>>();
-  static Map<Method, Set<EffectQuantum>> solutions = new HashMap<Method, Set<EffectQuantum>>();
-  static Set<EffectQuantum> thisChange = Collections.singleton(EffectQuantum.ThisChangeQuantum);
-  static {
-    ownedFields.add(new Couple<String>("java/lang/AbstractStringBuilder", "value"));
+	static
+	{
+		// Native
+		solutions.put(new Member("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"),
+				Collections.singleton(new EffectQuantum.ParamChangeQuantum(2)));
+		solutions.put(new Member("java/lang/Object", "hashCode", "()I"), Collections.emptySet());
+	}
 
-    solutions.put(new Method("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"), thisChange);
-    solutions.put(new Method("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"), Collections.<EffectQuantum>singleton(new EffectQuantum.ParamChangeQuantum(2)));
-    solutions.put(new Method("java/lang/AbstractStringBuilder", "expandCapacity", "(I)V"), thisChange);
-    solutions.put(new Method("java/lang/StringBuilder", "expandCapacity", "(I)V"), thisChange);
-    solutions.put(new Method("java/lang/StringBuffer", "expandCapacity", "(I)V"), thisChange);
-    solutions.put(new Method("java/lang/StringIndexOutOfBoundsException", "<init>", "(I)V"), thisChange);
-  }
+	static HardCodedPurity getInstance()
+	{
+		return AGGRESSIVE_HARDCODED_PURITY ? new AggressiveHardCodedPurity() : new HardCodedPurity();
+	}
 
-  static Set<EffectQuantum> getHardCodedSolution(Key key) {
-    Method method = key.method;
-    if (method.methodName.equals("fillInStackTrace") && method.methodDesc.equals("()Ljava/lang/Throwable;")) {
-      return thisChange;
-    }
-    return solutions.get(key.method);
-  }
+	Effects getHardCodedSolution(Member method)
+	{
+		if(isThisChangingMethod(method))
+		{
+			return new Effects(isBuilderChainCall(method) ? DataValue.ThisDataValue : DataValue.UnknownDataValue1, thisChange);
+		}
+		else if(isPureMethod(method))
+		{
+			return new Effects(getReturnValueForPureMethod(method), Collections.emptySet());
+		}
+		else
+		{
+			Set<EffectQuantum> effects = solutions.get(method);
+			return effects == null ? null : new Effects(DataValue.UnknownDataValue1, effects);
+		}
+	}
 
-  static Set<EffectQuantum> getHardCodedSolution(HKey key) {
-    // TODO: implement the logic as in https://github.com/ilya-klyuchnikov/faba/blob/2ffab410416e0a9f8e35d5071df50bcf27b1e149/src/main/scala/asm/purity.scala#L238
-    // The problem with porting logic from Scala version "as is" is that in Scala version original keys (Key) are used.
-    // Here (in IDEA) the hashed keys (HKey) are used. In a general hashed keys may lead to collisions.
-    // So in order to port the logic, hardcoded solutions should be used with stable keys,
-    // that is - during analysis - com.intellij.codeInspection.bytecodeAnalysis.DataInterpreter.naryOperation
-    return null;
-  }
+	boolean isThisChangingMethod(Member method)
+	{
+		return isBuilderChainCall(method) || thisChangingMethods.contains(method);
+	}
+
+	boolean isBuilderChainCall(Member method)
+	{
+		// Those methods are virtual, thus contracts cannot be inferred automatically,
+		// but all possible implementations are controlled
+		// (only final classes j.l.StringBuilder and j.l.StringBuffer extend package-private j.l.AbstractStringBuilder)
+		return (method.internalClassName.equals("java/lang/StringBuilder") || method.internalClassName.equals("java/lang/StringBuffer")) &&
+				method.methodName.startsWith("append");
+	}
+
+	DataValue getReturnValueForPureMethod(Member method)
+	{
+		String type = StringUtil.substringAfter(method.methodDesc, ")");
+		if(type != null && (type.length() == 1 || type.equals("Ljava/lang/String;") || type.equals("Ljava/lang/Class;")))
+		{
+			return DataValue.UnknownDataValue1;
+		}
+		return DataValue.LocalDataValue;
+	}
+
+	boolean isPureMethod(Member method)
+	{
+		if(pureMethods.contains(method))
+		{
+			return true;
+		}
+		// Array clone() method is a special beast: it's qualifier class is array itself
+		if(method.internalClassName.startsWith("[") && method.methodName.equals("clone") && method.methodDesc.equals("()Ljava/lang/Object;"))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	boolean isOwnedField(FieldInsnNode fieldInsn)
+	{
+		return ownedFields.contains(new Couple<>(fieldInsn.owner, fieldInsn.name));
+	}
+
+	static class AggressiveHardCodedPurity extends HardCodedPurity
+	{
+		static final Set<String> ITERABLES = ContainerUtil.set("java/lang/Iterable", "java/util/Collection",
+				"java/util/List", "java/util/Set", "java/util/ArrayList",
+				"java/util/HashSet", "java/util/AbstractList",
+				"java/util/AbstractSet", "java/util/TreeSet");
+
+		@Override
+		boolean isThisChangingMethod(Member method)
+		{
+			if(method.methodName.equals("next") && method.methodDesc.startsWith("()") && method.internalClassName.equals("java/util/Iterator"))
+			{
+				return true;
+			}
+			return super.isThisChangingMethod(method);
+		}
+
+		@Override
+		boolean isPureMethod(Member method)
+		{
+			if(method.methodName.equals("toString") && method.methodDesc.equals("()Ljava/lang/String;"))
+			{
+				return true;
+			}
+			if(method.methodName.equals("iterator") && method.methodDesc.equals("()Ljava/util/Iterator;") &&
+					ITERABLES.contains(method.internalClassName))
+			{
+				return true;
+			}
+			if(method.methodName.equals("hasNext") && method.methodDesc.equals("()Z") && method.internalClassName.equals("java/util/Iterator"))
+			{
+				return true;
+			}
+			return super.isPureMethod(method);
+		}
+	}
 }

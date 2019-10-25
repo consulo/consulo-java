@@ -15,24 +15,22 @@
  */
 package com.intellij.codeInsight;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiModifierListOwner;
+import org.jetbrains.annotations.Contract;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Returns annotations inferred by bytecode or source code, for example contracts and nullity.
  *
  * @see NullableNotNullManager
  * @see Contract
- * @see javax.annotation.Nullable
- * @see javax.annotation.Nonnull
+ * @see Nullable
+ * @see Nonnull
  * @see AnnotationUtil
  */
 public abstract class InferredAnnotationsManager
@@ -50,16 +48,6 @@ public abstract class InferredAnnotationsManager
 	 */
 	@Nullable
 	public abstract PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
-
-	/**
-	 * There is a number of well-known methods where automatic inference fails (for example, {@link java.util.Objects#requireNonNull(Object)}.
-	 * For such methods, contracts are hardcoded, and for their parameters inferred @NotNull are suppressed.<p/>
-	 * <p>
-	 * {@link Contract} and {@link javax.annotation.Nonnull} annotations on methods are not necessarily applicable to the overridden implementations, so they're ignored, too.<p/>
-	 *
-	 * @return whether inference is to be suppressed the given annotation on the given method or parameter
-	 */
-	public abstract boolean ignoreInference(@Nonnull PsiModifierListOwner owner, @javax.annotation.Nullable String annotationFQN);
 
 	/**
 	 * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as

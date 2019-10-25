@@ -15,8 +15,6 @@
  */
 package com.intellij.codeInsight.navigation;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
@@ -28,16 +26,18 @@ import com.intellij.psi.search.searches.FunctionalExpressionSearch;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 
+import javax.annotation.Nonnull;
+
 public class ClassImplementationsSearch implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<PsiElement> consumer)
+	public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiElement> consumer)
 	{
 		final PsiElement sourceElement = queryParameters.getElement();
 		return !(sourceElement instanceof PsiClass) || processImplementations((PsiClass) sourceElement, consumer, queryParameters.getScope());
 	}
 
-	public static boolean processImplementations(final PsiClass psiClass, final Processor<PsiElement> processor, SearchScope scope)
+	public static boolean processImplementations(final PsiClass psiClass, final Processor<? super PsiElement> processor, SearchScope scope)
 	{
 		if(!FunctionalExpressionSearch.search(psiClass, scope).forEach(expression ->
 		{

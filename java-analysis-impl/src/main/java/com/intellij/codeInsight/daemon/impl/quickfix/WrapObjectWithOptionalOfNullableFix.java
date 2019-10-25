@@ -15,17 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.Nls;
+import com.intellij.codeInsight.Nullability;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.codeInspection.dataFlow.DfaPsiUtil;
-import com.intellij.codeInspection.dataFlow.Nullness;
+import com.intellij.codeInspection.dataFlow.NullabilityUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -34,7 +29,11 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.JavaQuickFixBundle;
-import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.Nls;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import java.util.Collection;
 
 /**
  * @author Dmitry Batkovich
@@ -43,7 +42,10 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 {
 	public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
-	protected WrapObjectWithOptionalOfNullableFix(final @Nonnull PsiExpressionList list, final int i, final @Nonnull PsiType toType, final @Nonnull ArgumentFixerActionFactory fixerActionFactory)
+	protected WrapObjectWithOptionalOfNullableFix(final @Nonnull PsiExpressionList list,
+												  final int i,
+												  final @Nonnull PsiType toType,
+												  final @Nonnull ArgumentFixerActionFactory fixerActionFactory)
 	{
 		super(list, i, toType, fixerActionFactory);
 	}
@@ -52,7 +54,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 	@Override
 	public String getText()
 	{
-		if(myArgList.getExpressions().length == 1)
+		if(myArgList.getExpressionCount() == 1)
 		{
 			return JavaQuickFixBundle.message("wrap.with.optional.single.parameter.text");
 		}
@@ -87,19 +89,22 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
 			@Override
 			public void invoke(@Nonnull Project project,
-					@Nonnull PsiFile file,
-					@Nullable Editor editor,
-					@Nonnull PsiElement startElement,
-					@Nonnull PsiElement endElement)
+							   @Nonnull PsiFile file,
+							   @Nullable Editor editor,
+							   @Nonnull PsiElement startElement,
+							   @Nonnull PsiElement endElement)
 			{
 				startElement.replace(getModifiedExpression((PsiExpression) getStartElement()));
 			}
 
 			@Override
-			public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
+			public boolean isAvailable(@Nonnull Project project,
+									   @Nonnull PsiFile file,
+									   @Nonnull PsiElement startElement,
+									   @Nonnull PsiElement endElement)
 			{
-				return startElement.isValid() && startElement.getManager().isInProject(startElement) && PsiUtil.isLanguageLevel8OrHigher(startElement) && areConvertible(((PsiExpression)
-						startElement).getType(), type);
+				return BaseIntentionAction.canModify(startElement) &&
+						PsiUtil.isLanguageLevel8OrHigher(startElement) && areConvertible(((PsiExpression) startElement).getType(), type);
 			}
 
 			@Nonnull
@@ -135,21 +140,24 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 		}
 	}
 
-	private static boolean areConvertible(@javax.annotation.Nullable PsiType exprType, @Nullable PsiType parameterType)
+	private static boolean areConvertible(@Nullable PsiType exprType, @Nullable PsiType parameterType)
 	{
-		if(exprType == null || !exprType.isValid() || !(parameterType instanceof PsiClassType) || !parameterType.isValid())
+		if(exprType == null ||
+				!exprType.isValid() ||
+				!(parameterType instanceof PsiClassType) ||
+				!parameterType.isValid())
 		{
 			return false;
 		}
 		final PsiClassType.ClassResolveResult resolve = ((PsiClassType) parameterType).resolveGenerics();
 		final PsiClass resolvedClass = resolve.getElement();
-		if(resolvedClass == null || !JavaClassNames.JAVA_UTIL_OPTIONAL.equals(resolvedClass.getQualifiedName()))
+		if(resolvedClass == null || !CommonClassNames.JAVA_UTIL_OPTIONAL.equals(resolvedClass.getQualifiedName()))
 		{
 			return false;
 		}
 
 		final Collection<PsiType> values = resolve.getSubstitutor().getSubstitutionMap().values();
-		if(values.size() == 0)
+		if(values.isEmpty())
 		{
 			return true;
 		}
@@ -169,22 +177,9 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 	private static PsiExpression getModifiedExpression(PsiExpression expression)
 	{
 		final Project project = expression.getProject();
-		PsiModifierListOwner toCheckNullability = null;
-		if(expression instanceof PsiMethodCallExpression)
-		{
-			toCheckNullability = ((PsiMethodCallExpression) expression).resolveMethod();
-		}
-		else if(expression instanceof PsiReferenceExpression)
-		{
-			final PsiElement resolved = ((PsiReferenceExpression) expression).resolve();
-			if(resolved instanceof PsiModifierListOwner)
-			{
-				toCheckNullability = (PsiModifierListOwner) resolved;
-			}
-		}
-		final Nullness nullability = toCheckNullability == null ? Nullness.NOT_NULL : DfaPsiUtil.getElementNullability(expression.getType(), toCheckNullability);
-		String methodName = nullability == Nullness.NOT_NULL ? "of" : "ofNullable";
-		final String newExpressionText = JavaClassNames.JAVA_UTIL_OPTIONAL + "." + methodName + "(" + expression.getText() + ")";
+		final Nullability nullability = NullabilityUtil.getExpressionNullability(expression, true);
+		String methodName = nullability == Nullability.NOT_NULL ? "of" : "ofNullable";
+		final String newExpressionText = CommonClassNames.JAVA_UTIL_OPTIONAL + "." + methodName + "(" + expression.getText() + ")";
 		return JavaPsiFacade.getElementFactory(project).createExpressionFromText(newExpressionText, expression);
 	}
 }

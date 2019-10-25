@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,21 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
+import com.intellij.codeInsight.Nullability;
+import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
+import com.intellij.codeInspection.dataFlow.value.*;
+import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
-import com.intellij.codeInspection.dataFlow.value.DfaBoxedValue;
-import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
-import com.intellij.codeInspection.dataFlow.value.DfaOptionalValue;
-import com.intellij.codeInspection.dataFlow.value.DfaRangeValue;
-import com.intellij.codeInspection.dataFlow.value.DfaTypeValue;
-import com.intellij.codeInspection.dataFlow.value.DfaUnboxedValue;
-import com.intellij.codeInspection.dataFlow.value.DfaValue;
-import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.openapi.util.Key;
+import java.util.Objects;
 
 /**
  * A type of the fact which restricts some value.
@@ -44,59 +43,123 @@ public abstract class DfaFactType<T> extends Key<T>
 	/**
 	 * This fact specifies whether the value can be null. The absence of the fact means that the nullability is unknown.
 	 */
-	public static final DfaFactType<Boolean> CAN_BE_NULL = new DfaFactType<Boolean>("Can be null")
+	public static final DfaFactType<DfaNullability> NULLABILITY = new DfaFactType<DfaNullability>("Nullability")
 	{
+		@Nonnull
 		@Override
-		String toString(Boolean fact)
+		public String toString(@Nonnull DfaNullability fact)
 		{
-			return fact ? "Nullable" : "NotNull";
+			return fact.getInternalName();
+		}
+
+		@Override
+		boolean isUnknown(@Nonnull DfaNullability fact)
+		{
+			return fact == DfaNullability.UNKNOWN;
+		}
+
+		@Nonnull
+		@Override
+		public String getPresentationText(@Nonnull DfaNullability fact, @Nullable PsiType type)
+		{
+			if(type instanceof PsiPrimitiveType)
+			{
+				return "";
+			}
+			return fact.getPresentationName();
+		}
+
+		@Override
+		boolean isSuper(@Nullable DfaNullability superFact, @Nullable DfaNullability subFact)
+		{
+			return (superFact == null && (subFact == DfaNullability.NOT_NULL || subFact == DfaNullability.FLUSHED)) ||
+					super.isSuper(superFact, subFact);
+		}
+
+		@Nonnull
+		@Override
+		DfaNullability uniteFacts(@Nonnull DfaNullability left, @Nonnull DfaNullability right)
+		{
+			if(left == right)
+			{
+				return left;
+			}
+			if(left == DfaNullability.NULL || right == DfaNullability.NULL ||
+					left == DfaNullability.NULLABLE || right == DfaNullability.NULLABLE)
+			{
+				return DfaNullability.NULLABLE;
+			}
+			if(left == DfaNullability.FLUSHED || right == DfaNullability.FLUSHED)
+			{
+				return DfaNullability.FLUSHED;
+			}
+			return DfaNullability.UNKNOWN;
 		}
 
 		@Nullable
 		@Override
-		Boolean fromDfaValue(DfaValue value)
+		DfaNullability intersectFacts(@Nonnull DfaNullability left, @Nonnull DfaNullability right)
+		{
+			if(left == DfaNullability.NOT_NULL || right == DfaNullability.NOT_NULL)
+			{
+				return DfaNullability.NOT_NULL;
+			}
+			if(left == DfaNullability.FLUSHED && DfaNullability.toNullability(right) == Nullability.NULLABLE ||
+					right == DfaNullability.FLUSHED && DfaNullability.toNullability(left) == Nullability.NULLABLE)
+			{
+				return DfaNullability.NULLABLE;
+			}
+			return super.intersectFacts(left, right);
+		}
+
+		@Nullable
+		@Override
+		public DfaNullability fromDfaValue(DfaValue value)
 		{
 			if(value instanceof DfaConstValue)
 			{
-				return ((DfaConstValue) value).getValue() == null;
+				return ((DfaConstValue) value).getValue() == null ? DfaNullability.NULL : DfaNullability.NOT_NULL;
 			}
-			if(value instanceof DfaBoxedValue || value instanceof DfaUnboxedValue || value instanceof DfaRangeValue)
+			if(value instanceof DfaBoxedValue)
 			{
-				return false;
+				return DfaNullability.NOT_NULL;
 			}
-			if(value instanceof DfaTypeValue)
+			if(value instanceof DfaFactMapValue && ((DfaFactMapValue) value).get(RANGE) != null)
 			{
-				return NullnessUtil.toBoolean(((DfaTypeValue) value).getNullness());
+				return DfaNullability.NOT_NULL;
 			}
-			return null;
+			return super.fromDfaValue(value);
 		}
 
 		@Nullable
 		@Override
-		Boolean calcFromVariable(@Nonnull DfaVariableValue value)
+		DfaNullability calcFromVariable(@Nonnull DfaVariableValue value)
 		{
-			return NullnessUtil.calcCanBeNull(value);
+			return NullabilityUtil.calcCanBeNull(value);
 		}
 	};
 
-	/**
-	 * This fact is applied to the Optional values (like {@link java.util.Optional} or Guava Optional).
-	 * When its value is true, then optional is known to be present.
-	 * When its value is false, then optional is known to be empty (absent).
-	 */
-	public static final DfaFactType<Boolean> OPTIONAL_PRESENCE = new DfaFactType<Boolean>("Optional presense")
+	public static final DfaFactType<Mutability> MUTABILITY = new DfaFactType<Mutability>("Mutability")
 	{
 		@Override
-		String toString(Boolean fact)
+		boolean isUnknown(@Nonnull Mutability fact)
 		{
-			return fact ? "present Optional" : "absent Optional";
+			return fact == Mutability.UNKNOWN;
 		}
 
-		@Nullable
+		@Nonnull
 		@Override
-		Boolean fromDfaValue(DfaValue value)
+		Mutability uniteFacts(@Nonnull Mutability left, @Nonnull Mutability right)
 		{
-			return value instanceof DfaOptionalValue ? ((DfaOptionalValue) value).isPresent() : null;
+			return left.unite(right);
+		}
+
+		@Nonnull
+		@Override
+		Mutability calcFromVariable(@Nonnull DfaVariableValue value)
+		{
+			PsiModifierListOwner variable = value.getPsiVariable();
+			return variable == null ? Mutability.UNKNOWN : Mutability.getMutability(variable);
 		}
 	};
 
@@ -107,18 +170,34 @@ public abstract class DfaFactType<T> extends Key<T>
 	public static final DfaFactType<LongRangeSet> RANGE = new DfaFactType<LongRangeSet>("Range")
 	{
 		@Override
-		boolean isSuper(@Nonnull LongRangeSet superFact, @Nonnull LongRangeSet subFact)
+		boolean isSuper(@Nullable LongRangeSet superFact, @Nullable LongRangeSet subFact)
 		{
-			return superFact.contains(subFact);
+			return superFact == null || subFact != null && superFact.contains(subFact);
+		}
+
+		@Override
+		boolean isUnknown(@Nonnull LongRangeSet fact)
+		{
+			return LongRangeSet.all().equals(fact);
 		}
 
 		@Nullable
 		@Override
-		LongRangeSet fromDfaValue(DfaValue value)
+		public LongRangeSet fromDfaValue(DfaValue value)
 		{
 			if(value instanceof DfaVariableValue)
 			{
 				return calcFromVariable((DfaVariableValue) value);
+			}
+			if(value instanceof DfaBinOpValue)
+			{
+				DfaBinOpValue binOp = (DfaBinOpValue) value;
+				LongRangeSet left = fromDfaValue(binOp.getLeft());
+				LongRangeSet right = fromDfaValue(binOp.getRight());
+				if(left != null && right != null)
+				{
+					return left.binOpFromToken(binOp.getTokenType(), right, PsiType.LONG.equals(binOp.getType()));
+				}
 			}
 			return LongRangeSet.fromDfaValue(value);
 		}
@@ -127,17 +206,25 @@ public abstract class DfaFactType<T> extends Key<T>
 		@Override
 		LongRangeSet calcFromVariable(@Nonnull DfaVariableValue var)
 		{
-			if(var.getQualifier() != null)
+			VariableDescriptor descriptor = var.getDescriptor();
+			if(descriptor instanceof SpecialField)
 			{
-				for(SpecialField sf : SpecialField.values())
+				DfaValue defaultValue = ((SpecialField) descriptor).getDefaultValue(var.getFactory(), false);
+				LongRangeSet fromSpecialField = LongRangeSet.fromDfaValue(defaultValue);
+				if(fromSpecialField != null)
 				{
-					if(sf.isMyAccessor(var.getPsiVariable()))
-					{
-						return sf.getRange();
-					}
+					return fromSpecialField;
 				}
 			}
-			return LongRangeSet.fromType(var.getVariableType());
+			LongRangeSet fromType = LongRangeSet.fromType(var.getType());
+			return fromType == null ? null : LongRangeSet.fromPsiElement(var.getPsiVariable()).intersect(fromType);
+		}
+
+		@Nullable
+		@Override
+		LongRangeSet uniteFacts(@Nonnull LongRangeSet left, @Nonnull LongRangeSet right)
+		{
+			return left.unite(right);
 		}
 
 		@Nullable
@@ -148,24 +235,128 @@ public abstract class DfaFactType<T> extends Key<T>
 			return intersection.isEmpty() ? null : intersection;
 		}
 
+		@Nonnull
 		@Override
-		String toString(LongRangeSet fact)
+		public String getPresentationText(@Nonnull LongRangeSet fact, @Nullable PsiType type)
 		{
-			return fact.toString();
+			LongRangeSet fromType = LongRangeSet.fromType(type);
+			if(fact.equals(fromType))
+			{
+				return "";
+			}
+			return fact.getPresentationText(type);
+		}
+	};
+	/**
+	 * This fact represents a set of possible types of this value
+	 * {@link TypeConstraint#empty()} value is equivalent to absent fact (not constrained)
+	 */
+	public static final DfaFactType<TypeConstraint> TYPE_CONSTRAINT = new DfaFactType<TypeConstraint>("Constraints")
+	{
+		@Override
+		boolean isSuper(@Nullable TypeConstraint superFact, @Nullable TypeConstraint subFact)
+		{
+			return superFact == null || (subFact != null && superFact.isSuperStateOf(subFact));
+		}
+
+		@Nullable
+		@Override
+		TypeConstraint calcFromVariable(@Nonnull DfaVariableValue value)
+		{
+			PsiType psiType = value.getType();
+			DfaPsiType type = psiType == null ? null : value.getFactory().createDfaType(psiType);
+			return type == null ? null : TypeConstraint.empty().withInstanceofValue(type);
+		}
+
+		@Override
+		boolean isUnknown(@Nonnull TypeConstraint fact)
+		{
+			return fact.isEmpty();
+		}
+
+		@Nullable
+		@Override
+		TypeConstraint intersectFacts(@Nonnull TypeConstraint left, @Nonnull TypeConstraint right)
+		{
+			return left.intersect(right);
+		}
+
+		@Nullable
+		@Override
+		TypeConstraint uniteFacts(@Nonnull TypeConstraint left, @Nonnull TypeConstraint right)
+		{
+			return left.unite(right);
+		}
+
+		@Nonnull
+		@Override
+		public String getPresentationText(@Nonnull TypeConstraint fact, @Nullable PsiType type)
+		{
+			return fact.getPresentationText(type);
 		}
 	};
 
-	private DfaFactType(String name)
+	public static final DfaFactType<Boolean> LOCALITY = new DfaFactType<Boolean>("Locality")
+	{
+		@Override
+		boolean isUnknown(@Nonnull Boolean fact)
+		{
+			return !fact;
+		}
+
+		@Nonnull
+		@Override
+		public String toString(@Nonnull Boolean fact)
+		{
+			return fact ? "local object" : "";
+		}
+	};
+
+	public static final DfaFactType<SpecialFieldValue> SPECIAL_FIELD_VALUE = new DfaFactType<SpecialFieldValue>("Special field value")
+	{
+		@Nonnull
+		@Override
+		public String getName(SpecialFieldValue fact)
+		{
+			return fact == null ? super.getName(null) : StringUtil.wordsToBeginFromUpperCase(fact.getField().toString());
+		}
+
+		@Nullable
+		@Override
+		SpecialFieldValue uniteFacts(@Nonnull SpecialFieldValue left, @Nonnull SpecialFieldValue right)
+		{
+			return left.unite(right);
+		}
+
+		@Nonnull
+		@Override
+		public String getPresentationText(@Nonnull SpecialFieldValue fact, @Nullable PsiType type)
+		{
+			return fact.getPresentationText(type);
+		}
+	};
+
+	@Nonnull
+	private final String myName;
+
+	private DfaFactType(@Nonnull String name)
 	{
 		super("DfaFactType: " + name);
+		myName = name;
 		// Thread-safe as all DfaFactType instances are created only from DfaFactType class static initializer
 		ourFactTypes.add(this);
 	}
 
-	@Nullable
-	T fromDfaValue(DfaValue value)
+	@Nonnull
+	public String getName(T fact)
 	{
-		return null;
+		return myName;
+	}
+
+	@Nullable
+	public T fromDfaValue(DfaValue value)
+	{
+		return value instanceof DfaFactMapValue ? ((DfaFactMapValue) value).get(this) : null;
 	}
 
 	// Could be expensive
@@ -175,7 +366,12 @@ public abstract class DfaFactType<T> extends Key<T>
 		return null;
 	}
 
-	boolean isSuper(@Nonnull T superFact, @Nonnull T subFact)
+	boolean isSuper(@Nullable T superFact, @Nullable T subFact)
+	{
+		return Objects.equals(superFact, subFact);
+	}
+
+	boolean isUnknown(@Nonnull T fact)
 	{
 		return false;
 	}
@@ -187,15 +383,49 @@ public abstract class DfaFactType<T> extends Key<T>
 	 * @param right right fact
 	 * @return intersection fact or null if facts are incompatible
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	T intersectFacts(@Nonnull T left, @Nonnull T right)
 	{
 		return left.equals(right) ? left : null;
 	}
 
-	String toString(T fact)
+	/**
+	 * Unites two facts of this type.
+	 *
+	 * @param left  left fact
+	 * @param right right fact
+	 * @return union fact (null means that the fact can have any value)
+	 */
+	@Nullable
+	T uniteFacts(@Nonnull T left, @Nonnull T right)
+	{
+		return left.equals(right) ? left : null;
+	}
+
+	/**
+	 * Produces a short suitable for debug output fact representation
+	 *
+	 * @param fact a fact to represent
+	 * @return a string representation of the fact
+	 */
+	@Nonnull
+	public String toString(@Nonnull T fact)
 	{
 		return fact.toString();
+	}
+
+	/**
+	 * Produces a user-friendly presentation of the fact based on the fact itself and the type of the expression
+	 *
+	 * @param fact a fact to represent
+	 * @param type an expression type, if known
+	 * @return a user-friendly string representation of the fact; empty string if the fact adds nothing to the expression type
+	 * (e.g. fact is Range {0..65535} and type is 'char').
+	 */
+	@Nonnull
+	public String getPresentationText(@Nonnull T fact, @Nullable PsiType type)
+	{
+		return toString(fact);
 	}
 
 	static List<DfaFactType<?>> getTypes()

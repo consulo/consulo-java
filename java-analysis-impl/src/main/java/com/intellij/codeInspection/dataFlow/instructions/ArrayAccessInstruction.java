@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,15 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.psi.PsiArrayAccessExpression;
+import javax.annotation.Nonnull;
 
-/**
- * @author Tagir Valeev
- */
-public class ArrayAccessInstruction extends Instruction
+public class ArrayAccessInstruction extends Instruction implements ExpressionPushingInstruction
 {
 	private final
 	@Nonnull
@@ -48,6 +44,7 @@ public class ArrayAccessInstruction extends Instruction
 		return myValue;
 	}
 
+	@Override
 	@Nonnull
 	public PsiArrayAccessExpression getExpression()
 	{

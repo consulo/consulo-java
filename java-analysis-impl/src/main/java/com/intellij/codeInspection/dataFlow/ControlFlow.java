@@ -16,12 +16,6 @@
 
 package com.intellij.codeInspection.dataFlow;
 
-import gnu.trove.TObjectIntHashMap;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
 import com.intellij.codeInspection.dataFlow.instructions.FlushVariableInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 import com.intellij.codeInspection.dataFlow.instructions.PushInstruction;
@@ -29,7 +23,13 @@ import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiVariable;
+import gnu.trove.TObjectIntHashMap;
 import one.util.streamex.StreamEx;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class ControlFlow
 {
@@ -45,7 +45,7 @@ public class ControlFlow
 
 	public Instruction[] getInstructions()
 	{
-		return myInstructions.toArray(new Instruction[myInstructions.size()]);
+		return myInstructions.toArray(new Instruction[0]);
 	}
 
 	public int getInstructionCount()
@@ -55,15 +55,7 @@ public class ControlFlow
 
 	public ControlFlowOffset getNextOffset()
 	{
-		final int currentSize = myInstructions.size();
-		return new ControlFlowOffset()
-		{
-			@Override
-			public int getInstructionOffset()
-			{
-				return currentSize;
-			}
-		};
+		return new FixedOffset(myInstructions.size());
 	}
 
 	public void startElement(PsiElement psiElement)
@@ -82,13 +74,11 @@ public class ControlFlow
 		myInstructions.add(instruction);
 	}
 
-	public void removeVariable(@javax.annotation.Nullable PsiVariable variable)
+	public void removeVariable(@Nullable PsiVariable variable)
 	{
 		if(variable == null)
-		{
 			return;
-		}
-		addInstruction(new FlushVariableInstruction(myFactory.getVarFactory().createVariableValue(variable, false)));
+		addInstruction(new FlushVariableInstruction(myFactory.getVarFactory().createVariableValue(variable)));
 	}
 
 	/**
@@ -96,7 +86,10 @@ public class ControlFlow
 	 */
 	public Stream<DfaVariableValue> accessedVariables()
 	{
-		return StreamEx.of(myInstructions).select(PushInstruction.class).remove(PushInstruction::isReferenceWrite).map(PushInstruction::getValue).select(DfaVariableValue.class).distinct();
+		return StreamEx.of(myInstructions).select(PushInstruction.class)
+				.remove(PushInstruction::isReferenceWrite)
+				.map(PushInstruction::getValue)
+				.select(DfaVariableValue.class).distinct();
 	}
 
 	public ControlFlowOffset getStartOffset(final PsiElement element)
@@ -107,12 +100,6 @@ public class ControlFlow
 			public int getInstructionOffset()
 			{
 				return myElementToStartOffsetMap.get(element);
-			}
-
-			@Override
-			public String toString()
-			{
-				return String.valueOf(myElementToStartOffsetMap.get(element));
 			}
 		};
 	}
@@ -126,12 +113,6 @@ public class ControlFlow
 			{
 				return myElementToEndOffsetMap.get(element);
 			}
-
-			@Override
-			public String toString()
-			{
-				return String.valueOf(myElementToEndOffsetMap.get(element));
-			}
 		};
 	}
 
@@ -143,15 +124,21 @@ public class ControlFlow
 		for(int i = 0; i < instructions.size(); i++)
 		{
 			Instruction instruction = instructions.get(i);
-			result.append(Integer.toString(i)).append(": ").append(instruction.toString());
+			result.append(i).append(": ").append(instruction.toString());
 			result.append("\n");
 		}
 		return result.toString();
 	}
 
-	public interface ControlFlowOffset
+	public abstract static class ControlFlowOffset
 	{
-		int getInstructionOffset();
+		public abstract int getInstructionOffset();
+
+		@Override
+		public String toString()
+		{
+			return String.valueOf(getInstructionOffset());
+		}
 	}
 
 	static ControlFlowOffset deltaOffset(final ControlFlowOffset delegate, final int delta)
@@ -164,6 +151,55 @@ public class ControlFlow
 				return delegate.getInstructionOffset() + delta;
 			}
 		};
+	}
+
+	public static class FixedOffset extends ControlFlowOffset
+	{
+		private final int myOffset;
+
+		public FixedOffset(int offset)
+		{
+			myOffset = offset;
+		}
+
+		@Override
+		public int getInstructionOffset()
+		{
+			return myOffset;
+		}
+	}
+
+	public static class DeferredOffset extends ControlFlowOffset
+	{
+		private int myOffset = -1;
+
+		@Override
+		public int getInstructionOffset()
+		{
+			if(myOffset == -1)
+			{
+				throw new IllegalStateException("Not set");
+			}
+			return myOffset;
+		}
+
+		public void setOffset(int offset)
+		{
+			if(myOffset != -1)
+			{
+				throw new IllegalStateException("Already set");
+			}
+			else
+			{
+				myOffset = offset;
+			}
+		}
+
+		@Override
+		public String toString()
+		{
+			return myOffset == -1 ? "<not set>" : super.toString();
+		}
 	}
 
 }

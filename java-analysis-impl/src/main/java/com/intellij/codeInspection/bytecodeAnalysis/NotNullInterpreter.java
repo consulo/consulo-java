@@ -16,20 +16,18 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.meet;
-
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 class NotNullInterpreter extends NullityInterpreter
 {
 	NotNullInterpreter()
 	{
-		super(false, Direction.In.NOT_NULL_MASK);
+		super(false, false);
 	}
 
 	@Override
 	PResults.PResult combine(PResults.PResult res1, PResults.PResult res2) throws AnalyzerException
 	{
-		return meet(res1, res2);
+		return PResults.meet(res1, res2);
 	}
 }

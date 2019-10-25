@@ -16,19 +16,17 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.NullValue;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.join;
-
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.NullValue;
+
 class NullableInterpreter extends NullityInterpreter
 {
-
 	NullableInterpreter()
 	{
-		super(true, Direction.In.NULLABLE_MASK);
+		super(true, true);
 	}
 
 	@Override
@@ -44,6 +42,6 @@ class NullableInterpreter extends NullityInterpreter
 	@Override
 	PResults.PResult combine(PResults.PResult res1, PResults.PResult res2) throws AnalyzerException
 	{
-		return join(res1, res2);
+		return PResults.join(res1, res2);
 	}
 }

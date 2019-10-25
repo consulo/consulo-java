@@ -16,25 +16,23 @@
 
 package com.intellij.codeInspection.dataFlow;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Pair;
-import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
+import one.util.streamex.StreamEx;
+import javax.annotation.Nonnull;
 
-public class StateQueue
+import java.util.*;
+
+class StateQueue
 {
-	private final PriorityQueue<DfaInstructionState> myQueue = new PriorityQueue<DfaInstructionState>();
-	private final Set<Pair<Instruction, DfaMemoryState>> mySet = ContainerUtil.newHashSet();
+	private static final int FORCE_MERGE_THRESHOLD = 100;
+	private boolean myWasForciblyMerged;
+	private final PriorityQueue<DfaInstructionState> myQueue = new PriorityQueue<>();
+	private final Set<Pair<Instruction, DfaMemoryState>> mySet = new HashSet<>();
 
 	void offer(DfaInstructionState state)
 	{
@@ -54,9 +52,7 @@ public class StateQueue
 		for(DfaInstructionState state : myQueue)
 		{
 			if(!processor.process(state))
-			{
 				return false;
-			}
 		}
 		return true;
 	}
@@ -64,17 +60,15 @@ public class StateQueue
 	@Nonnull
 	List<DfaInstructionState> getNextInstructionStates(Set<Instruction> joinInstructions)
 	{
-		DfaInstructionState state = myQueue.poll();
+		DfaInstructionState state = myQueue.remove();
 		final Instruction instruction = state.getInstruction();
 		mySet.remove(Pair.create(instruction, state.getMemoryState()));
 
 		DfaInstructionState next = myQueue.peek();
 		if(next == null || next.compareTo(state) != 0)
-		{
 			return Collections.singletonList(state);
-		}
 
-		List<DfaMemoryStateImpl> memoryStates = ContainerUtil.newArrayList();
+		List<DfaMemoryStateImpl> memoryStates = new ArrayList<>();
 		memoryStates.add((DfaMemoryStateImpl) state.getMemoryState());
 		while(!myQueue.isEmpty() && myQueue.peek().compareTo(state) == 0)
 		{
@@ -85,31 +79,62 @@ public class StateQueue
 
 		if(memoryStates.size() > 1 && joinInstructions.contains(instruction))
 		{
-			MultiMap<Object, DfaMemoryStateImpl> groups = MultiMap.create();
-			for(DfaMemoryStateImpl memoryState : memoryStates)
-			{
-				groups.putValue(memoryState.getSuperficialKey(), memoryState);
-			}
-
-			memoryStates = ContainerUtil.newArrayList();
-			for(Map.Entry<Object, Collection<DfaMemoryStateImpl>> entry : groups.entrySet())
-			{
-				memoryStates.addAll(mergeGroup((List<DfaMemoryStateImpl>) entry.getValue()));
-			}
-
+			memoryStates = squash(memoryStates);
 		}
 
-		return ContainerUtil.map(memoryStates, new Function<DfaMemoryStateImpl, DfaInstructionState>()
+		if(memoryStates.size() > 1 && joinInstructions.contains(instruction))
 		{
-			@Override
-			public DfaInstructionState fun(DfaMemoryStateImpl state)
+			while(true)
 			{
-				return new DfaInstructionState(instruction, state);
+				int beforeSize = memoryStates.size();
+				MultiMap<Object, DfaMemoryStateImpl> groups = MultiMap.create();
+				for(DfaMemoryStateImpl memoryState : memoryStates)
+				{
+					groups.putValue(memoryState.getSuperficialKey(), memoryState);
+				}
+
+				memoryStates = new ArrayList<>();
+				for(Map.Entry<Object, Collection<DfaMemoryStateImpl>> entry : groups.entrySet())
+				{
+					memoryStates.addAll(mergeGroup((List<DfaMemoryStateImpl>) entry.getValue()));
+				}
+				if(memoryStates.size() == beforeSize)
+					break;
+				beforeSize = memoryStates.size();
+				if(beforeSize == 1)
+					break;
+				// If some states were merged it's possible that they could be further squashed
+				memoryStates = squash(memoryStates);
+				if(memoryStates.size() == beforeSize || memoryStates.size() == 1)
+					break;
 			}
-		});
+		}
+
+		memoryStates = forceMerge(memoryStates);
+
+		return ContainerUtil.map(memoryStates, state1 -> new DfaInstructionState(instruction, state1));
 	}
 
-	private static List<DfaMemoryStateImpl> mergeGroup(List<DfaMemoryStateImpl> group)
+	private static List<DfaMemoryStateImpl> squash(List<DfaMemoryStateImpl> states)
+	{
+		List<DfaMemoryStateImpl> result = new ArrayList<>(states);
+		for(Iterator<DfaMemoryStateImpl> iterator = result.iterator(); iterator.hasNext(); )
+		{
+			DfaMemoryStateImpl left = iterator.next();
+			for(DfaMemoryStateImpl right : result)
+			{
+				ProgressManager.checkCanceled();
+				if(right != left && right.isSuperStateOf(left))
+				{
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	static List<DfaMemoryStateImpl> mergeGroup(List<DfaMemoryStateImpl> group)
 	{
 		if(group.size() < 2)
 		{
@@ -117,23 +142,37 @@ public class StateQueue
 		}
 
 		StateMerger merger = new StateMerger();
-		while(true)
+		while(group.size() > 1)
 		{
-			List<DfaMemoryStateImpl> nextStates = merger.mergeByFacts(group);
+			List<DfaMemoryStateImpl> nextStates = merger.mergeByRanges(group);
 			if(nextStates == null)
-			{
-				nextStates = merger.mergeByNullability(group);
-			}
+				nextStates = merger.mergeByFacts(group);
 			if(nextStates == null)
-			{
-				nextStates = merger.mergeByUnknowns(group);
-			}
-			if(nextStates == null)
-			{
 				break;
-			}
 			group = nextStates;
 		}
 		return group;
+	}
+
+	private List<DfaMemoryStateImpl> forceMerge(List<DfaMemoryStateImpl> states)
+	{
+		if(states.size() < FORCE_MERGE_THRESHOLD)
+			return states;
+		myWasForciblyMerged = true;
+		Collection<List<DfaMemoryStateImpl>> groups = StreamEx.of(states).groupingBy(DfaMemoryStateImpl::getMergeabilityKey).values();
+		return StreamEx.of(groups)
+				.flatMap(group -> StreamEx.ofSubLists(group, 2)
+						.map(pair -> {
+							if(pair.size() == 2)
+							{
+								pair.get(0).merge(pair.get(1));
+							}
+							return pair.get(0);
+						})).distinct().toListAndThen(StateQueue::squash);
+	}
+
+	boolean wasForciblyMerged()
+	{
+		return myWasForciblyMerged;
 	}
 }

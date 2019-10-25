@@ -1,7 +1,7 @@
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="consulo.java">
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.ImageObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.IconObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.GraphicsObjectRenderer"/>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

@@ -15,12 +15,20 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import java.util.ArrayList;
-
+import com.intellij.codeInsight.Nullability;
 import com.intellij.codeInspection.dataFlow.instructions.*;
-import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
-import com.intellij.codeInspection.dataFlow.value.DfaValue;
-import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.codeInspection.dataFlow.value.*;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.ObjectUtils;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author peter
@@ -28,16 +36,225 @@ import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 public abstract class InstructionVisitor
 {
 
+	/**
+	 * Called before a PsiExpression result is being pushed to the memory state stack during symbolic interpretation.
+	 * The result of single expression can be pushed many times to the different memory states.
+	 *
+	 * @param value      a value being pushed
+	 * @param expression a physical PsiExpression which evaluates to given value.
+	 * @param range      if not-null, specifies a part of expression which corresponds to the value (like "a ^ b" range in "a ^ b ^ c" expression).
+	 * @param state      a memory state where expression is about to be pushed
+	 */
+	protected void beforeExpressionPush(@Nonnull DfaValue value,
+										@Nonnull PsiExpression expression,
+										@Nullable TextRange range,
+										@Nonnull DfaMemoryState state)
+	{
+
+	}
+
+	/**
+	 * Called before a result of method reference execution is being pushed to the memory state stack during symbolic interpretation.
+	 * It's not guaranteed that this method is called for every reachable non-void method reference. However if it's called for some method
+	 * reference, then all possible values will be passed here.
+	 *
+	 * @param value     result of method reference execution
+	 * @param methodRef a method reference
+	 * @param state     a memory state
+	 */
+	protected void beforeMethodReferenceResultPush(@Nonnull DfaValue value,
+												   @Nonnull PsiMethodReferenceExpression methodRef,
+												   @Nonnull DfaMemoryState state)
+	{
+
+	}
+
+	/**
+	 * Called for every expression which corresponds to the method or lambda result.
+	 *
+	 * @param value      expression value
+	 * @param expression an expression which produces given value. For conditional return like {@code return cond ? ifTrue : ifFalse;}
+	 *                   this method will be called for {@code ifTrue} and {@code ifFalse} separately.
+	 * @param context    a method or lambda which result is being returned
+	 * @param state      a memory state
+	 */
+	protected void checkReturnValue(@Nonnull DfaValue value,
+									@Nonnull PsiExpression expression,
+									@Nonnull PsiParameterListOwner context,
+									@Nonnull DfaMemoryState state)
+	{
+
+	}
+
+	void pushExpressionResult(@Nonnull DfaValue value,
+							  @Nonnull ExpressionPushingInstruction instruction,
+							  @Nonnull DfaMemoryState state)
+	{
+		PsiExpression anchor = instruction.getExpression();
+		if(isExpressionPush(instruction, anchor))
+		{
+			if(anchor instanceof PsiMethodReferenceExpression && !(instruction instanceof MethodReferenceInstruction))
+			{
+				beforeMethodReferenceResultPush(value, (PsiMethodReferenceExpression) anchor, state);
+			}
+			else
+			{
+				callBeforeExpressionPush(value, instruction, state, anchor);
+			}
+		}
+		state.push(value);
+	}
+
+	private static boolean isExpressionPush(@Nonnull ExpressionPushingInstruction instruction, PsiExpression anchor)
+	{
+		if(anchor == null)
+			return false;
+		PsiElement parent = PsiUtil.skipParenthesizedExprUp(anchor.getParent());
+		if(parent instanceof PsiAssignmentExpression)
+		{
+			PsiAssignmentExpression assignment = (PsiAssignmentExpression) parent;
+			if(assignment.getOperationTokenType().equals(JavaTokenType.EQ) &&
+					PsiTreeUtil.isAncestor(assignment.getLExpression(), anchor, false))
+			{
+				return false;
+			}
+		}
+		if(instruction instanceof PushInstruction)
+		{
+			return !((PushInstruction) instruction).isReferenceWrite();
+		}
+		return true;
+	}
+
+	private void callBeforeExpressionPush(@Nonnull DfaValue value,
+										  @Nonnull ExpressionPushingInstruction instruction,
+										  @Nonnull DfaMemoryState state, PsiExpression anchor)
+	{
+		beforeExpressionPush(value, anchor, instruction.getExpressionRange(), state);
+		PsiElement parent = PsiUtil.skipParenthesizedExprUp(anchor.getParent());
+		if(parent instanceof PsiLambdaExpression)
+		{
+			checkReturnValue(value, Objects.requireNonNull(instruction.getExpression()), (PsiLambdaExpression) parent, state);
+		}
+		else if(parent instanceof PsiReturnStatement)
+		{
+			PsiParameterListOwner context = PsiTreeUtil.getParentOfType(parent, PsiMethod.class, PsiLambdaExpression.class);
+			if(context != null)
+			{
+				checkReturnValue(value, Objects.requireNonNull(instruction.getExpression()), context, state);
+			}
+		}
+		else if(anchor instanceof PsiArrayInitializerExpression && parent instanceof PsiNewExpression)
+		{
+			callBeforeExpressionPush(value, instruction, state, (PsiExpression) parent);
+		}
+		else if(parent instanceof PsiConditionalExpression &&
+				!PsiTreeUtil.isAncestor(((PsiConditionalExpression) parent).getCondition(), anchor, false))
+		{
+			callBeforeExpressionPush(value, instruction, state, (PsiConditionalExpression) parent);
+		}
+		else if(parent instanceof PsiPolyadicExpression)
+		{
+			PsiPolyadicExpression polyadic = (PsiPolyadicExpression) parent;
+			if((polyadic.getOperationTokenType().equals(JavaTokenType.ANDAND) || polyadic.getOperationTokenType().equals(JavaTokenType.OROR)) &&
+					PsiTreeUtil.isAncestor(ArrayUtil.getLastElement(polyadic.getOperands()), anchor, false))
+			{
+				callBeforeExpressionPush(value, instruction, state, polyadic);
+			}
+		}
+	}
+
 	public DfaInstructionState[] visitAssign(AssignInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
 		memState.pop();
-		memState.push(memState.pop());
+		DfaValue dest = memState.pop();
+		memState.push(dest);
+		flushArrayOnUnknownAssignment(instruction, runner.getFactory(), dest, memState);
 		return nextInstruction(instruction, runner, memState);
+	}
+
+	public DfaInstructionState[] visitBox(BoxingInstruction instruction, DataFlowRunner runner, DfaMemoryState state)
+	{
+		DfaValue value = state.pop();
+		DfaValueFactory factory = runner.getFactory();
+		if(value instanceof DfaBinOpValue)
+		{
+			value = factory.getFactValue(DfaFactType.RANGE, state.getValueFact(value, DfaFactType.RANGE));
+		}
+		DfaValue boxed = factory.getBoxedFactory().createBoxed(value, instruction.getTargetType());
+		state.push(boxed == null ? factory.createTypeValue(instruction.getTargetType(), Nullability.NOT_NULL) : boxed);
+		return nextInstruction(instruction, runner, state);
+	}
+
+	public DfaInstructionState[] visitUnwrapField(UnwrapSpecialFieldInstruction instruction, DataFlowRunner runner, DfaMemoryState state)
+	{
+		DfaValue value = state.pop();
+		DfaValue field = instruction.getSpecialField().createValue(runner.getFactory(), value);
+		state.push(field);
+		return nextInstruction(instruction, runner, state);
+	}
+
+	public DfaInstructionState[] visitConvertPrimitive(PrimitiveConversionInstruction instruction,
+													   DataFlowRunner runner,
+													   DfaMemoryState state)
+	{
+		state.pop();
+		pushExpressionResult(DfaUnknownValue.getInstance(), instruction, state);
+		return nextInstruction(instruction, runner, state);
+	}
+
+	protected void flushArrayOnUnknownAssignment(AssignInstruction instruction,
+												 DfaValueFactory factory,
+												 DfaValue dest,
+												 DfaMemoryState memState)
+	{
+		if(dest instanceof DfaVariableValue)
+			return;
+		PsiArrayAccessExpression arrayAccess =
+				ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(instruction.getLExpression()), PsiArrayAccessExpression.class);
+		if(arrayAccess != null)
+		{
+			PsiExpression array = arrayAccess.getArrayExpression();
+			DfaValue value = factory.createValue(array);
+			if(value instanceof DfaVariableValue)
+			{
+				for(DfaVariableValue qualified : ((DfaVariableValue) value).getDependentVariables().toArray(new DfaVariableValue[0]))
+				{
+					if(qualified.isFlushableByCalls())
+					{
+						memState.flushVariable(qualified);
+					}
+				}
+			}
+		}
 	}
 
 	public DfaInstructionState[] visitCheckNotNull(CheckNotNullInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
 		return nextInstruction(instruction, runner, memState);
+	}
+
+	@Nonnull
+	public DfaInstructionState[] visitControlTransfer(@Nonnull ControlTransferInstruction controlTransferInstruction,
+													  @Nonnull DataFlowRunner runner, @Nonnull DfaMemoryState state)
+	{
+		return controlTransferInstruction.getTransfer().dispatch(state, runner).toArray(DfaInstructionState.EMPTY_ARRAY);
+	}
+
+	public DfaInstructionState[] visitEndOfInitializer(EndOfInitializerInstruction instruction, DataFlowRunner runner, DfaMemoryState state)
+	{
+		return nextInstruction(instruction, runner, state);
+	}
+
+	public DfaInstructionState[] visitEscapeInstruction(EscapeInstruction instruction, DataFlowRunner runner, DfaMemoryState state)
+	{
+		return nextInstruction(instruction, runner, state);
+	}
+
+	public DfaInstructionState[] visitResultOf(ResultOfInstruction instruction, DataFlowRunner runner, DfaMemoryState state)
+	{
+		pushExpressionResult(state.pop(), instruction, state);
+		return nextInstruction(instruction, runner, state);
 	}
 
 	protected static DfaInstructionState[] nextInstruction(Instruction instruction, DataFlowRunner runner, DfaMemoryState memState)
@@ -54,14 +271,17 @@ public abstract class InstructionVisitor
 	{
 		memState.pop();
 		memState.pop();
-		memState.push(DfaUnknownValue.getInstance());
+		pushExpressionResult(DfaUnknownValue.getInstance(), instruction, memState);
 		return nextInstruction(instruction, runner, memState);
 	}
 
-	public DfaInstructionState[] visitCheckReturnValue(CheckReturnValueInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
+	public DfaInstructionState[] visitObjectOfInstruction(ObjectOfInstruction instruction, DataFlowRunner runner, DfaMemoryState state)
 	{
-		memState.pop();
-		return nextInstruction(instruction, runner, memState);
+		DfaValue value = state.pop();
+		DfaConstValue constant = state.getConstantValue(value);
+		PsiType type = constant == null ? null : ObjectUtils.tryCast(constant.getValue(), PsiType.class);
+		state.push(runner.getFactory().createTypeValue(type, Nullability.NOT_NULL));
+		return nextInstruction(instruction, runner, state);
 	}
 
 	public DfaInstructionState[] visitLambdaExpression(LambdaInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
@@ -99,14 +319,13 @@ public abstract class InstructionVisitor
 			return nextInstruction(instruction, runner, memState);
 		}
 
-		ArrayList<DfaInstructionState> result = new ArrayList<>();
+		ArrayList<DfaInstructionState> result = new ArrayList<>(2);
 
-		DfaMemoryState thenState = memState.createCopy();
 		DfaMemoryState elseState = memState.createCopy();
 
-		if(thenState.applyCondition(condTrue))
+		if(memState.applyCondition(condTrue))
 		{
-			result.add(new DfaInstructionState(runner.getInstruction(instruction.getOffset()), thenState));
+			result.add(new DfaInstructionState(runner.getInstruction(instruction.getOffset()), memState));
 			markBranchReachable(instruction, true);
 		}
 
@@ -116,7 +335,7 @@ public abstract class InstructionVisitor
 			markBranchReachable(instruction, false);
 		}
 
-		return result.toArray(new DfaInstructionState[result.size()]);
+		return result.toArray(DfaInstructionState.EMPTY_ARRAY);
 	}
 
 	private static void markBranchReachable(ConditionalGotoInstruction instruction, boolean isTrueBranch)
@@ -131,40 +350,22 @@ public abstract class InstructionVisitor
 		}
 	}
 
-
-	public DfaInstructionState[] visitEmptyStack(EmptyStackInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
-	{
-		memState.emptyStack();
-		return nextInstruction(instruction, runner, memState);
-	}
-
-	public DfaInstructionState[] visitFieldReference(FieldReferenceInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
+	public DfaInstructionState[] visitMethodReference(MethodReferenceInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
 		memState.pop();
+		pushExpressionResult(DfaUnknownValue.getInstance(), instruction, memState);
 		return nextInstruction(instruction, runner, memState);
 	}
 
 	public DfaInstructionState[] visitFlushVariable(FlushVariableInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
-		final DfaVariableValue variable = instruction.getVariable();
-		if(variable != null)
-		{
-			if(instruction.isDependentsOnly())
-			{
-				for(DfaVariableValue qualified : runner.getFactory().getVarFactory().getAllQualifiedBy(variable))
-				{
-					memState.flushVariable(qualified);
-				}
-			}
-			else
-			{
-				memState.flushVariable(variable);
-			}
-		}
-		else
-		{
-			memState.flushFields();
-		}
+		memState.flushVariable(instruction.getVariable());
+		return nextInstruction(instruction, runner, memState);
+	}
+
+	public DfaInstructionState[] visitFlushFields(FlushFieldsInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
+	{
+		memState.flushFields();
 		return nextInstruction(instruction, runner, memState);
 	}
 
@@ -176,27 +377,20 @@ public abstract class InstructionVisitor
 		}
 
 		memState.pop(); //qualifier
-		memState.push(DfaUnknownValue.getInstance());
+		pushExpressionResult(DfaUnknownValue.getInstance(), instruction, memState);
 		return nextInstruction(instruction, runner, memState);
-	}
-
-	public DfaInstructionState[] visitCast(MethodCallInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
-	{
-		return visitMethodCall(instruction, runner, memState);
 	}
 
 	public DfaInstructionState[] visitNot(NotInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
-		DfaValue dfaValue = memState.pop();
-
-		dfaValue = dfaValue.createNegated();
-		memState.push(dfaValue);
+		memState.pop();
+		pushExpressionResult(DfaUnknownValue.getInstance(), instruction, memState);
 		return nextInstruction(instruction, runner, memState);
 	}
 
 	public DfaInstructionState[] visitPush(PushInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
-		memState.push(instruction.getValue());
+		pushExpressionResult(instruction.getValue(), instruction, memState);
 		return nextInstruction(instruction, runner, memState);
 	}
 
@@ -204,12 +398,13 @@ public abstract class InstructionVisitor
 	{
 		memState.pop(); // index
 		memState.pop(); // array reference
-		memState.push(instruction.getValue());
+		pushExpressionResult(instruction.getValue(), instruction, memState);
 		return nextInstruction(instruction, runner, memState);
 	}
 
 	public DfaInstructionState[] visitTypeCast(TypeCastInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
+		pushExpressionResult(memState.pop(), instruction, memState);
 		return nextInstruction(instruction, runner, memState);
 	}
 

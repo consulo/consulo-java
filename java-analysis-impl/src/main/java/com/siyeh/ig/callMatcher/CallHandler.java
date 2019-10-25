@@ -15,10 +15,11 @@
  */
 package com.siyeh.ig.callMatcher;
 
-import java.util.function.Function;
-
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiMethodReferenceExpression;
+
+import java.util.function.Function;
 
 /**
  * A pair of {@link CallMatcher} and a transformer function which maps a call to some new object.
@@ -28,9 +29,9 @@ import com.intellij.psi.PsiMethodReferenceExpression;
 public class CallHandler<T> implements Function<PsiMethodCallExpression, T>
 {
 	private final CallMatcher myMatcher;
-	private final Function<PsiMethodCallExpression, T> myTransformer;
+	private final Function<? super PsiMethodCallExpression, ? extends T> myTransformer;
 
-	public CallHandler(CallMatcher matcher, Function<PsiMethodCallExpression, T> transformer)
+	public CallHandler(CallMatcher matcher, Function<? super PsiMethodCallExpression, ? extends T> transformer)
 	{
 		myMatcher = matcher;
 		myTransformer = transformer;
@@ -56,6 +57,11 @@ public class CallHandler<T> implements Function<PsiMethodCallExpression, T>
 		return matcher().methodReferenceMatches(ref) ? myTransformer.apply(null) : null;
 	}
 
+	public T applyMethod(PsiMethod method)
+	{
+		return matcher().methodMatches(method) ? myTransformer.apply(null) : null;
+	}
+
 	/**
 	 * Creates a new CallHandler with specific matcher and specific transformer function
 	 *
@@ -64,7 +70,7 @@ public class CallHandler<T> implements Function<PsiMethodCallExpression, T>
 	 * @param <T>         a type of transformer return value
 	 * @return a new CallHandler
 	 */
-	public static <T> CallHandler<T> of(CallMatcher matcher, Function<PsiMethodCallExpression, T> transformer)
+	public static <T> CallHandler<T> of(CallMatcher matcher, Function<? super PsiMethodCallExpression, ? extends T> transformer)
 	{
 		return new CallHandler<>(matcher, transformer);
 	}

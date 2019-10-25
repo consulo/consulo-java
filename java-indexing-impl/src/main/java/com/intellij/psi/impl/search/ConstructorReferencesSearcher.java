@@ -20,7 +20,7 @@ import com.intellij.util.Processor;
 public class ConstructorReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>
 {
 	@Override
-	public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull Processor<PsiReference> consumer)
+	public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull Processor<? super PsiReference> consumer)
 	{
 		final PsiElement element = p.getElementToSearch();
 		if(!(element instanceof PsiMethod))

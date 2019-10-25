@@ -15,18 +15,6 @@
  */
 package com.intellij.psi.impl;
 
-import static com.intellij.psi.PsiAnnotation.TargetType;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.FileASTNode;
@@ -44,12 +32,7 @@ import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.impl.source.tree.SharedImplUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -68,6 +51,16 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PairFunction;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static com.intellij.psi.PsiAnnotation.TargetType;
 
 public class PsiImplUtil
 {
@@ -1002,6 +995,27 @@ public class PsiImplUtil
 	{
 		ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(element, resolver, true, incompleteCode, psiFile);
 		return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
+	}
+
+	/**
+	 * Returns enclosing label statement for given label expression
+	 *
+	 * @param expression switch label expression
+	 * @return enclosing label statement or null if given expression is not a label statement expression
+	 */
+	@Nullable
+	public static PsiSwitchLabelStatementBase getSwitchLabel(@Nonnull PsiExpression expression)
+	{
+		PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
+		if(parent instanceof PsiExpressionList)
+		{
+			PsiElement grand = parent.getParent();
+			if(grand instanceof PsiSwitchLabelStatementBase)
+			{
+				return (PsiSwitchLabelStatementBase) grand;
+			}
+		}
+		return null;
 	}
 
 	public static VirtualFile getModuleVirtualFile(@Nonnull PsiJavaModule module)

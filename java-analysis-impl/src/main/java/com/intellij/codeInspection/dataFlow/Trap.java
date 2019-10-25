@@ -16,100 +16,201 @@
 
 package com.intellij.codeInspection.dataFlow;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.intellij.psi.*;
 
 import javax.annotation.Nonnull;
-import com.intellij.psi.PsiCatchSection;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTryStatement;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * from kotlin
  */
-public class Trap
+public abstract class Trap
 {
-	static class TryCatch extends Trap
+	public static class TryCatch extends Trap
 	{
-		private PsiTryStatement myTryStatement;
-		private Map<PsiCatchSection, ControlFlow.ControlFlowOffset> myClauses;
+		private final LinkedHashMap<PsiCatchSection, ControlFlow.ControlFlowOffset> clauses;
 
-		TryCatch(PsiTryStatement tryStatement, Map<PsiCatchSection, ControlFlow.ControlFlowOffset> clauses)
+		public TryCatch(PsiTryStatement tryStatement, LinkedHashMap<PsiCatchSection, ControlFlow.ControlFlowOffset> clauses)
 		{
 			super(tryStatement);
-			myTryStatement = tryStatement;
-			myClauses = clauses;
+			this.clauses = clauses;
 		}
 
-		public PsiTryStatement getTryStatement()
+		@Override
+		List<DfaInstructionState> dispatch(ControlTransferHandler handler)
 		{
-			return myTryStatement;
+			if(handler.getTarget() instanceof ExceptionTransfer)
+			{
+				return handler.processCatches(((ExceptionTransfer) handler.getTarget()).getThrowable(), clauses);
+			}
+			else
+			{
+				return handler.dispatch();
+			}
 		}
 
-		@Nonnull
-		public Map<PsiCatchSection, ControlFlow.ControlFlowOffset> getClauses()
+		@Override
+		Collection<Integer> getPossibleTargets()
 		{
-			return myClauses;
+			return clauses.values().stream().map(ControlFlow.ControlFlowOffset::getInstructionOffset).collect(Collectors.toList());
 		}
 	}
 
-	static class TryFinally extends Trap
+	public static class TryCatchAll extends Trap
 	{
-		private PsiCodeBlock myFinallyBlock;
-		private ControlFlow.ControlFlowOffset myJumpOffset;
+		private final ControlFlow.ControlFlowOffset target;
 
-		TryFinally(PsiCodeBlock finallyBlock, ControlFlow.ControlFlowOffset jumpOffset)
+		public TryCatchAll(PsiElement anchor, ControlFlow.ControlFlowOffset target)
 		{
-			super(finallyBlock);
-			myFinallyBlock = finallyBlock;
-			myJumpOffset = jumpOffset;
+			super(anchor);
+			this.target = target;
 		}
 
-		public PsiCodeBlock getFinallyBlock()
+		@Override
+		List<DfaInstructionState> dispatch(ControlTransferHandler handler)
 		{
-			return myFinallyBlock;
+			if(handler.getTarget() instanceof ExceptionTransfer)
+			{
+				return Collections.singletonList(new DfaInstructionState(handler.getRunner().getInstruction(target.getInstructionOffset()), handler.getState()));
+			}
+			else
+			{
+				return handler.dispatch();
+			}
+		}
+
+		@Override
+		Collection<Integer> getPossibleTargets()
+		{
+			return Collections.singletonList(target.getInstructionOffset());
+		}
+	}
+
+	public static abstract class EnterFinally extends Trap
+	{
+		private final ControlFlow.ControlFlowOffset jumpOffset;
+
+		protected List<ControlTransferInstruction> backLines = new ArrayList<>();
+
+		public EnterFinally(PsiElement anchor, ControlFlow.ControlFlowOffset jumpOffset)
+		{
+			super(anchor);
+			this.jumpOffset = jumpOffset;
 		}
 
 		public ControlFlow.ControlFlowOffset getJumpOffset()
 		{
-			return myJumpOffset;
+			return jumpOffset;
+		}
+
+		@Override
+		public void link(ControlTransferInstruction instruction)
+		{
+			backLines.add(instruction);
+		}
+
+		@Override
+		List<DfaInstructionState> dispatch(ControlTransferHandler handler)
+		{
+			handler.getState().push(handler.getRunner().getFactory().controlTransfer(handler.getTarget(), handler.getTraps()));
+
+			return Collections.singletonList(new DfaInstructionState(handler.getRunner().getInstruction(jumpOffset.getInstructionOffset()), handler.getState()));
+		}
+
+		@Override
+		Collection<Integer> getPossibleTargets()
+		{
+			return Collections.singletonList(jumpOffset.getInstructionOffset());
 		}
 	}
 
-	static class InsideFinally extends Trap
+	public static class TryFinally extends EnterFinally
 	{
-		InsideFinally(PsiCodeBlock finallyBlock)
+		public TryFinally(PsiCodeBlock finallyBlock, ControlFlow.ControlFlowOffset jumpOffset)
+		{
+			super(finallyBlock, jumpOffset);
+		}
+	}
+
+	public static class TwrFinally extends EnterFinally
+	{
+		public TwrFinally(PsiResourceList resourceList, ControlFlow.ControlFlowOffset jumpOffset)
+		{
+			super(resourceList, jumpOffset);
+		}
+
+		@Override
+		List<DfaInstructionState> dispatch(ControlTransferHandler handler)
+		{
+			if(handler.getTarget() instanceof ExceptionTransfer)
+			{
+				return handler.dispatch();
+			}
+			return super.dispatch(handler);
+		}
+	}
+
+	public static class InsideFinally extends Trap
+	{
+		public InsideFinally(PsiElement finallyBlock)
 		{
 			super(finallyBlock);
 		}
+
+		@Override
+		List<DfaInstructionState> dispatch(ControlTransferHandler handler)
+		{
+			@SuppressWarnings("unused")
+			DfaControlTransferValue pop = (DfaControlTransferValue) handler.getState().pop();
+			return handler.dispatch();
+		}
 	}
 
-	private final PsiElement myAnchor;
-
-	public Trap(PsiElement anchor)
+	public static class InsideInlinedBlock extends Trap
 	{
-		this.myAnchor = anchor;
+		public InsideInlinedBlock(PsiCodeBlock block)
+		{
+			super(block);
+		}
+
+		@Override
+		List<DfaInstructionState> dispatch(ControlTransferHandler handler)
+		{
+			DfaControlTransferValue pop = (DfaControlTransferValue) handler.getState().pop();
+			@SuppressWarnings("unused")
+			ReturnTransfer r = (ReturnTransfer) pop.getTarget();
+			return handler.dispatch();
+		}
+	}
+
+	private final PsiElement anchor;
+
+	public Trap(@Nonnull PsiElement anchor)
+	{
+		this.anchor = anchor;
 	}
 
 	@Nonnull
-	public Collection<Integer> getPossibleTargets()
+	public PsiElement getAnchor()
 	{
-		if(this instanceof TryCatch)
-		{
-			return ((TryCatch)this).getClauses().values().stream().map(ControlFlow.ControlFlowOffset::getInstructionOffset).collect(Collectors.toList());
-		}
-		else if(this instanceof TryFinally)
-		{
-			return Collections.singletonList(((TryFinally) this).getJumpOffset().getInstructionOffset());
-		}
+		return anchor;
+	}
+
+	public void link(ControlTransferInstruction instruction)
+	{
+	}
+
+	abstract List<DfaInstructionState> dispatch(ControlTransferHandler handler);
+
+	Collection<Integer> getPossibleTargets()
+	{
 		return Collections.emptyList();
 	}
 
-	public PsiElement getAnchor()
+	@Override
+	public String toString()
 	{
-		return myAnchor;
+		return getClass().getSimpleName();
 	}
 }

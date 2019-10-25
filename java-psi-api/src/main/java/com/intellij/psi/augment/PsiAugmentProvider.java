@@ -15,13 +15,6 @@
  */
 package com.intellij.psi.augment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.extensions.Extensions;
@@ -31,7 +24,16 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeElement;
 import com.intellij.util.Processor;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 
 public abstract class PsiAugmentProvider
@@ -78,6 +80,41 @@ public abstract class PsiAugmentProvider
 
 		return result.get();
 	}
+
+	@Nullable
+	public static PsiType getInferredType(@Nonnull PsiTypeElement typeElement)
+	{
+//		Ref<PsiType> result = Ref.create();
+//
+//		forEach(typeElement.getProject(), provider -> {
+//			PsiType type = provider.inferType(typeElement);
+//			if(type != null)
+//			{
+//				try
+//				{
+//					PsiUtil.ensureValidType(type);
+//				}
+//				catch(ProcessCanceledException e)
+//				{
+//					throw e;
+//				}
+//				catch(Throwable e)
+//				{
+//					throw PluginException.createByClass(e, provider.getClass());
+//				}
+//				result.set(type);
+//				return false;
+//			}
+//			else
+//			{
+//				return true;
+//			}
+//		});
+//
+//		return result.get();
+		return null;
+	}
+
 
 	private static void forEach(Project project, Processor<PsiAugmentProvider> processor)
 	{

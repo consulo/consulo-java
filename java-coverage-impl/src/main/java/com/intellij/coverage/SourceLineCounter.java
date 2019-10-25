@@ -16,17 +16,16 @@
 
 package com.intellij.coverage;
 
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.HashSet;
-import java.util.Set;
-
+import com.intellij.rt.coverage.data.ClassData;
+import com.intellij.rt.coverage.data.ProjectData;
 import consulo.internal.org.objectweb.asm.ClassVisitor;
 import consulo.internal.org.objectweb.asm.Label;
 import consulo.internal.org.objectweb.asm.MethodVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
-import com.intellij.rt.coverage.data.ClassData;
-import com.intellij.rt.coverage.data.ProjectData;
+import gnu.trove.TIntObjectHashMap;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author anna
@@ -46,7 +45,7 @@ public class SourceLineCounter extends ClassVisitor
 
 	public SourceLineCounter(final ClassData classData, final boolean excludeLines, final ProjectData projectData)
 	{
-		super(Opcodes.ASM5, new ClassVisitor(Opcodes.ASM5)
+		super(Opcodes.API_VERSION, new ClassVisitor(Opcodes.API_VERSION)
 		{
 		});
 		myProjectData = projectData;
@@ -246,7 +245,6 @@ public class SourceLineCounter extends ClassVisitor
 	{
 		return myNSourceLines;
 	}
-
 
 	public Set getMethodsWithSourceCode()
 	{

@@ -1,4 +1,4 @@
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij">
 		<localInspection language="JAVA" groupPath="Java" shortName="ClassHasNoToStringMethod" displayName="Class does not override 'toString()' method"
 						 groupName="toString() issues" enabledByDefault="false" level="WARNING"
@@ -2598,4 +2598,4 @@
 						 level="WARNING" implementationClass="com.siyeh.ig.visibility.ParameterHidingMemberVariableInspection"/>
 	</extensions>
 
-</idea-plugin>
+</consulo-plugin>

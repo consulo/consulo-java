@@ -15,19 +15,18 @@
  */
 package com.intellij.codeInsight.completion;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
+import com.intellij.codeInsight.ExpressionUtil;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
-import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author peter
@@ -72,7 +71,7 @@ class CheckInitialized implements ElementFilter
 		}
 
 		PsiElement parent = element.getParent();
-		if(parent instanceof PsiReferenceExpression && !DfaValueFactory.isEffectivelyUnqualified((PsiReferenceExpression) parent))
+		if(parent instanceof PsiReferenceExpression && !ExpressionUtil.isEffectivelyUnqualified((PsiReferenceExpression) parent))
 		{
 			return Collections.emptySet();
 		}

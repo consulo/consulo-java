@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,50 +15,172 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import static com.intellij.codeInspection.dataFlow.MethodContract.ValueConstraint.FALSE_VALUE;
-import static com.intellij.codeInspection.dataFlow.MethodContract.ValueConstraint.NOT_NULL_VALUE;
-import static com.intellij.codeInspection.dataFlow.MethodContract.ValueConstraint.NULL_VALUE;
-import static com.intellij.codeInspection.dataFlow.MethodContract.ValueConstraint.THROW_EXCEPTION;
-import static com.intellij.codeInspection.dataFlow.MethodContract.ValueConstraint.TRUE_VALUE;
-import static com.intellij.codeInspection.dataFlow.StandardMethodContract.createConstraintArray;
+import com.intellij.codeInspection.dataFlow.StandardMethodContract.ValueConstraint;
+import com.intellij.codeInspection.dataFlow.value.DfaRelationValue;
+import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
+import com.intellij.codeInspection.util.OptionalUtil;
+import com.intellij.lang.injection.InjectedLanguageManager;
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.containers.ContainerUtil;
+import com.siyeh.ig.callMatcher.CallMapper;
+import com.siyeh.ig.callMatcher.CallMatcher;
+import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.ig.psiutils.TypeUtils;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
-import com.intellij.lang.injection.InjectedLanguageManager;
-import com.intellij.psi.*;
-import com.intellij.util.containers.ContainerUtil;
-import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.siyeh.ig.psiutils.MethodUtils;
-import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.java.module.util.JavaClassNames;
+import static com.intellij.codeInspection.dataFlow.ContractReturnValue.*;
+import static com.intellij.codeInspection.dataFlow.MethodContract.singleConditionContract;
+import static com.intellij.codeInspection.dataFlow.MethodContract.trivialContract;
+import static com.intellij.codeInspection.dataFlow.StandardMethodContract.ValueConstraint.*;
+import static com.intellij.codeInspection.dataFlow.StandardMethodContract.createConstraintArray;
+import static com.intellij.psi.CommonClassNames.*;
+import static com.siyeh.ig.callMatcher.CallMatcher.*;
 
 /**
  * @author peter
  */
 public class HardcodedContracts
 {
-	private static final Pattern FIRST_OR_LAST = Pattern.compile("first|last");
-	private static final Pattern CONTAINS_KEY_VALUE = Pattern.compile("containsKey|containsValue");
-	// All these methods take array as 1st parameter, from index as 2nd and to index as 3rd
-	// thus ARRAY_RANGE_CONTRACTS are applicable to them
-	private static final Pattern ARRAY_RANGED_METHODS = Pattern.compile("binarySearch|fill|parallelPrefix|parallelSort|sort|spliterator|stream");
+	private static final List<MethodContract> ARRAY_RANGE_CONTRACTS = ContainerUtil.immutableList(
+			singleConditionContract(ContractValue.argument(1), RelationType.GT, ContractValue.argument(0).specialField(SpecialField.ARRAY_LENGTH),
+					fail()),
+			singleConditionContract(ContractValue.argument(2), RelationType.GT, ContractValue.argument(0).specialField(SpecialField.ARRAY_LENGTH),
+					fail()),
+			singleConditionContract(ContractValue.argument(1), RelationType.GT, ContractValue.argument(2), fail())
+	);
 
-	private static final List<MethodContract> ARRAY_RANGE_CONTRACTS = ContainerUtil.immutableList(nonnegativeArgumentContract(1), nonnegativeArgumentContract(2), MethodContract
-			.singleConditionContract(ContractValue.argument(1), RelationType.GT, ContractValue.argument(0).specialField(SpecialField.ARRAY_LENGTH), THROW_EXCEPTION), MethodContract
-			.singleConditionContract(ContractValue.argument(2), RelationType.GT, ContractValue.argument(0).specialField(SpecialField.ARRAY_LENGTH), THROW_EXCEPTION), MethodContract
-			.singleConditionContract(ContractValue.argument(1), RelationType.GT, ContractValue.argument(2), THROW_EXCEPTION));
+	private static final CallMatcher QUEUE_POLL = anyOf(
+			instanceCall("java.util.Queue", "poll").parameterCount(0),
+			instanceCall("java.util.Deque", "pollFirst", "pollLast").parameterCount(0)
+	);
 
-	public static List<MethodContract> getHardcodedContracts(@Nonnull PsiMethod method, @javax.annotation.Nullable PsiMethodCallExpression call)
+	@FunctionalInterface
+	interface ContractProvider
+	{
+		List<MethodContract> getContracts(PsiMethodCallExpression call, int paramCount);
+
+		static ContractProvider of(MethodContract contract)
+		{
+			return (call, paramCount) -> Collections.singletonList(contract);
+		}
+
+		static ContractProvider of(MethodContract... contracts)
+		{
+			return (call, paramCount) -> Arrays.asList(contracts);
+		}
+	}
+
+	private static final CallMapper<ContractProvider> HARDCODED_CONTRACTS = new CallMapper<ContractProvider>()
+			.register(anyOf(staticCall("com.google.common.base.Preconditions", "checkNotNull"),
+					staticCall(JAVA_UTIL_OBJECTS, "requireNonNull")),
+					(call, cnt) -> cnt > 0 ? failIfNull(0, cnt, true) : null)
+			.register(staticCall("com.google.common.base.Preconditions", "checkArgument", "checkState"),
+					(call, cnt) -> {
+						if(cnt == 0)
+						{
+							return null;
+						}
+						ValueConstraint[] constraints = createConstraintArray(cnt);
+						constraints[0] = FALSE_VALUE;
+						return Collections.singletonList(new StandardMethodContract(constraints, fail()));
+					})
+			.register(instanceCall(JAVA_LANG_STRING, "charAt", "codePointAt").parameterCount(1),
+					ContractProvider.of(specialFieldRangeContract(0, RelationType.LT, SpecialField.STRING_LENGTH)))
+			.register(anyOf(instanceCall(JAVA_LANG_STRING, "substring", "subSequence").parameterCount(2),
+					instanceCall(JAVA_LANG_STRING, "substring").parameterCount(1)),
+					(call, cnt) -> getSubstringContracts(cnt == 2))
+			.register(instanceCall(JAVA_LANG_STRING, "isEmpty").parameterCount(0),
+					ContractProvider.of(SpecialField.STRING_LENGTH.getEmptyContracts()))
+			.register(anyOf(instanceCall(JAVA_UTIL_COLLECTION, "isEmpty").parameterCount(0),
+					instanceCall(JAVA_UTIL_MAP, "isEmpty").parameterCount(0)),
+					ContractProvider.of(SpecialField.COLLECTION_SIZE.getEmptyContracts()))
+			.register(instanceCall(JAVA_LANG_STRING, "equalsIgnoreCase").parameterCount(1),
+					ContractProvider.of(SpecialField.STRING_LENGTH.getEqualsContracts()))
+			.register(anyOf(instanceCall(JAVA_UTIL_SET, "equals").parameterTypes(JAVA_LANG_OBJECT),
+					instanceCall(JAVA_UTIL_LIST, "equals").parameterTypes(JAVA_LANG_OBJECT),
+					instanceCall(JAVA_UTIL_MAP, "equals").parameterTypes(JAVA_LANG_OBJECT)),
+					ContractProvider.of(SpecialField.COLLECTION_SIZE.getEqualsContracts()))
+			.register(instanceCall(JAVA_UTIL_COLLECTION, "contains").parameterCount(1),
+					ContractProvider.of(singleConditionContract(
+							ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ, ContractValue.zero(),
+							returnFalse())))
+			.register(instanceCall(JAVA_UTIL_MAP, "containsKey", "containsValue").parameterCount(1),
+					ContractProvider.of(singleConditionContract(
+							ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ, ContractValue.zero(), returnFalse())))
+			.register(instanceCall(JAVA_UTIL_LIST, "get", "remove").parameterTypes("int"),
+					ContractProvider.of(specialFieldRangeContract(0, RelationType.LT, SpecialField.COLLECTION_SIZE)))
+			.register(anyOf(
+					instanceCall("java.util.SortedSet", "first", "last").parameterCount(0),
+					instanceCall("java.util.Deque", "getFirst", "getLast").parameterCount(0),
+					instanceCall("java.util.Queue", "element").parameterCount(0)),
+					ContractProvider.of(singleConditionContract(
+							ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ,
+							ContractValue.zero(), fail())))
+			// All these methods take array as 1st parameter, from index as 2nd and to index as 3rd
+			// thus ARRAY_RANGE_CONTRACTS are applicable to them
+			.register(staticCall(JAVA_UTIL_ARRAYS, "binarySearch", "fill", "parallelPrefix", "parallelSort", "sort", "spliterator", "stream"),
+					(call, cnt) -> cnt >= 3 ? ARRAY_RANGE_CONTRACTS : null)
+			.register(staticCall("org.mockito.ArgumentMatchers", "argThat").parameterCount(1),
+					ContractProvider.of(StandardMethodContract.fromText("_->_")))
+			.register(anyOf(
+					instanceCall("java.util.Queue", "peek", "poll").parameterCount(0),
+					instanceCall("java.util.Deque", "peekFirst", "peekLast", "pollFirst", "pollLast").parameterCount(0)),
+					(call, paramCount) -> Arrays.asList(singleConditionContract(
+							ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ,
+							ContractValue.zero(), returnNull()), trivialContract(returnAny())))
+			.register(anyOf(staticCall(JAVA_LANG_MATH, "max").parameterTypes("int", "int"),
+					staticCall(JAVA_LANG_MATH, "max").parameterTypes("long", "long"),
+					staticCall(JAVA_LANG_INTEGER, "max").parameterTypes("int", "int"),
+					staticCall(JAVA_LANG_LONG, "max").parameterTypes("long", "long")),
+					(call, paramCount) -> mathMinMax(true))
+			.register(anyOf(staticCall(JAVA_LANG_MATH, "min").parameterTypes("int", "int"),
+					staticCall(JAVA_LANG_MATH, "min").parameterTypes("long", "long"),
+					staticCall(JAVA_LANG_INTEGER, "min").parameterTypes("int", "int"),
+					staticCall(JAVA_LANG_LONG, "min").parameterTypes("long", "long")),
+					(call, paramCount) -> mathMinMax(false))
+			.register(instanceCall(JAVA_LANG_STRING, "startsWith", "endsWith", "contains"),
+					ContractProvider.of(
+							singleConditionContract(
+									ContractValue.argument(0).specialField(SpecialField.STRING_LENGTH), RelationType.EQ,
+									ContractValue.zero(), returnTrue()),
+							singleConditionContract(
+									ContractValue.qualifier().specialField(SpecialField.STRING_LENGTH), RelationType.LT,
+									ContractValue.argument(0).specialField(SpecialField.STRING_LENGTH), returnFalse())))
+			.register(instanceCall(JAVA_LANG_OBJECT, "equals").parameterTypes(JAVA_LANG_OBJECT),
+					(call, paramCount) -> equalsContracts(call))
+			.register(anyOf(
+					staticCall(JAVA_UTIL_OBJECTS, "equals").parameterCount(2),
+					staticCall("com.google.common.base.Objects", "equal").parameterCount(2)),
+					ContractProvider.of(
+							singleConditionContract(ContractValue.argument(0), DfaRelationValue.RelationType.EQ, ContractValue.argument(1),
+									returnTrue()),
+							StandardMethodContract.fromText("null,!null->false"),
+							StandardMethodContract.fromText("!null,null->false")
+					))
+			.register(enumValues(), ContractProvider.of(StandardMethodContract.fromText("->new")))
+			// Convert the following to external annotation once we support Java 9+ external annotations (IDEA-198249)
+			.register(staticCall(JAVA_UTIL_OBJECTS, "requireNonNullElse").parameterCount(2),
+					ContractProvider.of(
+							StandardMethodContract.fromText("!null,_->param1"),
+							StandardMethodContract.fromText("null,!null->param2"),
+							StandardMethodContract.fromText("null,null->fail")))
+			.register(staticCall(JAVA_UTIL_OBJECTS, "requireNonNullElseGet").parameterCount(2),
+					ContractProvider.of(
+							StandardMethodContract.fromText("!null,_->param1"),
+							StandardMethodContract.fromText("null,_->!null")));
+
+	public static List<MethodContract> getHardcodedContracts(@Nonnull PsiMethod method, @Nullable PsiMethodCallExpression call)
 	{
 		PsiClass owner = method.getContainingClass();
-		if(owner == null || InjectedLanguageManager.getInstance(owner.getProject()).isInjectedFragment(owner.getContainingFile()))
+		if(owner == null ||
+				InjectedLanguageManager.getInstance(owner.getProject()).isInjectedFragment(owner.getContainingFile()))
 		{
 			return Collections.emptyList();
 		}
@@ -70,153 +192,133 @@ public class HardcodedContracts
 			return Collections.emptyList();
 		}
 
-		String methodName = method.getName();
-
-		if("java.lang.System".equals(className))
+		ContractProvider provider = HARDCODED_CONTRACTS.mapFirst(method);
+		if(provider != null)
 		{
-			if("exit".equals(methodName))
+			List<MethodContract> contracts = provider.getContracts(call, paramCount);
+			if(contracts != null)
 			{
-				return Collections.singletonList(new StandardMethodContract(createConstraintArray(paramCount), THROW_EXCEPTION));
-			}
-		}
-		else if("com.google.common.base.Preconditions".equals(className))
-		{
-			if("checkNotNull".equals(methodName) && paramCount > 0)
-			{
-				return failIfNull(0, paramCount);
-			}
-			if(("checkArgument".equals(methodName) || "checkState".equals(methodName)) && paramCount > 0)
-			{
-				MethodContract.ValueConstraint[] constraints = createConstraintArray(paramCount);
-				constraints[0] = FALSE_VALUE;
-				return Collections.singletonList(new StandardMethodContract(constraints, THROW_EXCEPTION));
-			}
-		}
-		else if("java.util.Objects".equals(className))
-		{
-			if("requireNonNull".equals(methodName) && paramCount > 0)
-			{
-				return failIfNull(0, paramCount);
-			}
-		}
-		else if(JavaClassNames.JAVA_LANG_STRING.equals(className))
-		{
-			if(("charAt".equals(methodName) || "codePointAt".equals(methodName)) && paramCount == 1)
-			{
-				return Arrays.asList(nonnegativeArgumentContract(0), specialFieldRangeContract(0, RelationType.LT, SpecialField.STRING_LENGTH));
-			}
-			else if(("substring".equals(methodName) || "subSequence".equals(methodName)) && paramCount <= 2)
-			{
-				List<MethodContract> contracts = new ArrayList<>(5);
-				contracts.add(nonnegativeArgumentContract(0));
-				contracts.add(specialFieldRangeContract(0, RelationType.LE, SpecialField.STRING_LENGTH));
-				if(paramCount == 2)
-				{
-					contracts.add(nonnegativeArgumentContract(1));
-					contracts.add(specialFieldRangeContract(1, RelationType.LE, SpecialField.STRING_LENGTH));
-					contracts.add(MethodContract.singleConditionContract(ContractValue.argument(0), RelationType.LE.getNegated(), ContractValue.argument(1), THROW_EXCEPTION));
-				}
 				return contracts;
 			}
-			else if("isEmpty".equals(methodName) && paramCount == 0)
-			{
-				return SpecialField.STRING_LENGTH.getEmptyContracts();
-			}
 		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_COLLECTION, PsiType.BOOLEAN, "isEmpty"))
-		{
-			return SpecialField.COLLECTION_SIZE.getEmptyContracts();
-		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_COLLECTION, PsiType.BOOLEAN, "contains", (PsiType) null))
-		{
-			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ, ContractValue.zero(),
-					FALSE_VALUE));
-		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_SET, PsiType.BOOLEAN, "equals", (PsiType) null) || MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_LIST,
-				PsiType.BOOLEAN, "equals", (PsiType) null))
-		{
-			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.NE, ContractValue.argument(0)
-					.specialField(SpecialField.COLLECTION_SIZE), FALSE_VALUE));
-		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_LIST, null, "get", PsiType.INT))
-		{
-			return Arrays.asList(nonnegativeArgumentContract(0), specialFieldRangeContract(0, RelationType.LT, SpecialField.COLLECTION_SIZE));
-		}
-		else if(MethodUtils.methodMatches(method, "java.util.SortedSet", null, FIRST_OR_LAST))
-		{
-			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.COLLECTION_SIZE), RelationType.EQ, ContractValue.zero(),
-					THROW_EXCEPTION));
-		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, "isEmpty"))
-		{
-			return SpecialField.MAP_SIZE.getEmptyContracts();
-		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, CONTAINS_KEY_VALUE, (PsiType) null))
-		{
-			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.MAP_SIZE), RelationType.EQ, ContractValue.zero(),
-					FALSE_VALUE));
-		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_MAP, PsiType.BOOLEAN, "equals", (PsiType) null))
-		{
-			return Collections.singletonList(MethodContract.singleConditionContract(ContractValue.qualifier().specialField(SpecialField.MAP_SIZE), RelationType.NE, ContractValue.argument(0)
-					.specialField(SpecialField.MAP_SIZE), FALSE_VALUE));
-		}
-		else if(MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_ARRAYS, null, ARRAY_RANGED_METHODS, (PsiType[]) null) && paramCount >= 3)
-		{
-			return ARRAY_RANGE_CONTRACTS;
-		}
-		else if("org.apache.commons.lang.Validate".equals(className) || "org.apache.commons.lang3.Validate".equals(className) || "org.springframework.util.Assert".equals(className))
+		String methodName = method.getName();
+
+		if("org.apache.commons.lang.Validate".equals(className) ||
+				"org.apache.commons.lang3.Validate".equals(className) ||
+				"org.springframework.util.Assert".equals(className))
 		{
 			if(("isTrue".equals(methodName) || "state".equals(methodName)) && paramCount > 0)
 			{
-				MethodContract.ValueConstraint[] constraints = createConstraintArray(paramCount);
+				ValueConstraint[] constraints = createConstraintArray(paramCount);
 				constraints[0] = FALSE_VALUE;
-				return Collections.singletonList(new StandardMethodContract(constraints, THROW_EXCEPTION));
+				return Collections.singletonList(new StandardMethodContract(constraints, fail()));
 			}
 			if("notNull".equals(methodName) && paramCount > 0)
 			{
-				MethodContract.ValueConstraint[] constraints = createConstraintArray(paramCount);
+				ValueConstraint[] constraints = createConstraintArray(paramCount);
 				constraints[0] = NULL_VALUE;
-				return Collections.singletonList(new StandardMethodContract(constraints, THROW_EXCEPTION));
+				StandardMethodContract contract = new StandardMethodContract(constraints, fail());
+				if(PsiType.VOID.equals(method.getReturnType()))
+				{
+					return Collections.singletonList(contract);
+				}
+				else
+				{
+					return Arrays.asList(contract, new StandardMethodContract(createConstraintArray(paramCount), returnParameter(0)));
+				}
 			}
 		}
-		else if(isJunit(className) || isTestng(className) || className.startsWith("com.google.common.truth.") || className.startsWith("org.assertj.core.api."))
+		else if(isJunit(className) || isTestng(className) ||
+				className.startsWith("com.google.common.truth.") ||
+				className.startsWith("org.assertj.core.api.") ||
+				className.equals("org.hamcrest.MatcherAssert"))
 		{
 			return handleTestFrameworks(paramCount, className, methodName, call);
 		}
 		else if(TypeUtils.isOptional(owner))
 		{
-			if(DfaOptionalSupport.isOptionalGetMethodName(methodName) || "orElseThrow".equals(methodName))
+			if(OptionalUtil.OPTIONAL_GET.methodMatches(method) || "orElseThrow".equals(methodName))
 			{
-				return Arrays.asList(optionalAbsentContract(THROW_EXCEPTION), MethodContract.trivialContract(NOT_NULL_VALUE));
+				return Collections.singletonList(optionalAbsentContract(fail()));
 			}
-			else if("isPresent".equals(methodName))
+			else if("isPresent".equals(methodName) && paramCount == 0)
 			{
-				return Arrays.asList(optionalAbsentContract(FALSE_VALUE), MethodContract.trivialContract(TRUE_VALUE));
+				return Arrays.asList(optionalAbsentContract(returnFalse()), trivialContract(returnTrue()));
 			}
+			else if("isEmpty".equals(methodName) && paramCount == 0)
+			{
+				return Arrays.asList(optionalAbsentContract(returnTrue()), trivialContract(returnFalse()));
+			}
+		}
+		else if(MethodUtils.isEquals(method))
+		{
+			return Collections.singletonList(new StandardMethodContract(new ValueConstraint[]{NULL_VALUE}, returnFalse()));
 		}
 
 		return Collections.emptyList();
 	}
 
-	static MethodContract optionalAbsentContract(MethodContract.ValueConstraint returnValue)
+	@Nonnull
+	private static List<MethodContract> getSubstringContracts(boolean endLimited)
 	{
-		return MethodContract.singleConditionContract(ContractValue.qualifier(), RelationType.IS, ContractValue.optionalValue(false), returnValue);
+		List<MethodContract> contracts = new ArrayList<>(3);
+		contracts.add(specialFieldRangeContract(0, RelationType.LE, SpecialField.STRING_LENGTH));
+		if(endLimited)
+		{
+			contracts.add(specialFieldRangeContract(1, RelationType.LE, SpecialField.STRING_LENGTH));
+			contracts.add(singleConditionContract(ContractValue.argument(0), RelationType.LE.getNegated(), ContractValue.argument(1), fail()));
+		}
+		return contracts;
 	}
 
-	static MethodContract nonnegativeArgumentContract(int argNumber)
+	static MethodContract optionalAbsentContract(ContractReturnValue returnValue)
 	{
-		return MethodContract.singleConditionContract(ContractValue.argument(argNumber), RelationType.LT, ContractValue.zero(), THROW_EXCEPTION);
+		return singleConditionContract(ContractValue.qualifier().specialField(SpecialField.OPTIONAL_VALUE), RelationType.EQ,
+				ContractValue.nullValue(), returnValue);
 	}
 
 	static MethodContract specialFieldRangeContract(int index, RelationType type, SpecialField specialField)
 	{
-		return MethodContract.singleConditionContract(ContractValue.argument(index), type.getNegated(), ContractValue.qualifier().specialField(specialField), THROW_EXCEPTION);
+		return singleConditionContract(ContractValue.argument(index), type.getNegated(), ContractValue.qualifier().specialField(specialField),
+				fail());
+	}
+
+	static List<MethodContract> mathMinMax(boolean isMax)
+	{
+		return Arrays.asList(singleConditionContract(
+				ContractValue.argument(0), isMax ? RelationType.GT : RelationType.LT, ContractValue.argument(1), returnParameter(0)),
+				trivialContract(returnParameter(1)));
+	}
+
+	private static List<MethodContract> equalsContracts(PsiMethodCallExpression call)
+	{
+		PsiExpression qualifier = call == null ? null : call.getMethodExpression().getQualifierExpression();
+		if(qualifier != null && (knownAsEqualByReference(qualifier.getType()) || DfaUtil.isComparedByEquals(qualifier.getType())))
+		{
+			return Arrays.asList(
+					singleConditionContract(ContractValue.qualifier(), RelationType.EQ, ContractValue.argument(0), returnTrue()),
+					trivialContract(returnFalse())
+			);
+		}
+		return Arrays.asList(new StandardMethodContract(new StandardMethodContract.ValueConstraint[]{NULL_VALUE}, returnFalse()),
+				singleConditionContract(ContractValue.qualifier(), DfaRelationValue.RelationType.EQ,
+						ContractValue.argument(0), returnTrue()));
+	}
+
+	private static boolean knownAsEqualByReference(PsiType type)
+	{
+		if(type instanceof PsiArrayType)
+		{
+			return true;
+		}
+		PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
+		return psiClass != null && (psiClass.isEnum() || JAVA_LANG_CLASS.equals(psiClass.getQualifiedName()));
 	}
 
 	private static boolean isJunit(String className)
 	{
-		return className.startsWith("junit.framework.") || className.startsWith("org.junit.");
+		return className.startsWith("junit.framework.") || className.startsWith("org.junit.")
+				|| className.equals("org.testng.AssertJUnit");
 	}
 
 	private static boolean isJunit5(String className)
@@ -226,43 +328,11 @@ public class HardcodedContracts
 
 	private static boolean isTestng(String className)
 	{
-		return className.startsWith("org.testng.");
+		return className.startsWith("org.testng.") && !className.equals("org.testng.AssertJUnit");
 	}
 
-	private static boolean isNotNullMatcher(PsiExpression expr)
-	{
-		if(expr instanceof PsiMethodCallExpression)
-		{
-			String calledName = ((PsiMethodCallExpression) expr).getMethodExpression().getReferenceName();
-			if("notNullValue".equals(calledName))
-			{
-				return true;
-			}
-			if("not".equals(calledName))
-			{
-				PsiExpression[] notArgs = ((PsiMethodCallExpression) expr).getArgumentList().getExpressions();
-				if(notArgs.length == 1 && notArgs[0] instanceof PsiMethodCallExpression && "equalTo".equals(((PsiMethodCallExpression) notArgs[0]).getMethodExpression().getReferenceName()))
-				{
-					PsiExpression[] equalArgs = ((PsiMethodCallExpression) notArgs[0]).getArgumentList().getExpressions();
-					if(equalArgs.length == 1 && ExpressionUtils.isNullLiteral(equalArgs[0]))
-					{
-						return true;
-					}
-				}
-			}
-			if("is".equals(calledName))
-			{
-				PsiExpression[] args = ((PsiMethodCallExpression) expr).getArgumentList().getExpressions();
-				if(args.length == 1)
-				{
-					return isNotNullMatcher(args[0]);
-				}
-			}
-		}
-		return false;
-	}
-
-	private static List<MethodContract> handleTestFrameworks(int paramCount, String className, String methodName, @javax.annotation.Nullable PsiMethodCallExpression call)
+	private static List<MethodContract> handleTestFrameworks(int paramCount, String className, String methodName,
+															 @Nullable PsiMethodCallExpression call)
 	{
 		if(("assertThat".equals(methodName) || "assumeThat".equals(methodName) || "that".equals(methodName)) && call != null)
 		{
@@ -277,7 +347,7 @@ public class HardcodedContracts
 		boolean testng = isTestng(className);
 		if("fail".equals(methodName))
 		{
-			return Collections.singletonList(new StandardMethodContract(createConstraintArray(paramCount), THROW_EXCEPTION));
+			return Collections.singletonList(StandardMethodContract.trivialContract(paramCount, fail()));
 		}
 
 		if(paramCount == 0)
@@ -286,27 +356,117 @@ public class HardcodedContracts
 		}
 
 		int checkedParam = testng || isJunit5(className) ? 0 : paramCount - 1;
-		MethodContract.ValueConstraint[] constraints = createConstraintArray(paramCount);
+		ValueConstraint[] constraints = createConstraintArray(paramCount);
 		if("assertTrue".equals(methodName) || "assumeTrue".equals(methodName))
 		{
 			constraints[checkedParam] = FALSE_VALUE;
-			return Collections.singletonList(new StandardMethodContract(constraints, THROW_EXCEPTION));
+			return Collections.singletonList(new StandardMethodContract(constraints, fail()));
 		}
 		if("assertFalse".equals(methodName) || "assumeFalse".equals(methodName))
 		{
 			constraints[checkedParam] = TRUE_VALUE;
-			return Collections.singletonList(new StandardMethodContract(constraints, THROW_EXCEPTION));
+			return Collections.singletonList(new StandardMethodContract(constraints, fail()));
 		}
 		if("assertNull".equals(methodName))
 		{
 			constraints[checkedParam] = NOT_NULL_VALUE;
-			return Collections.singletonList(new StandardMethodContract(constraints, THROW_EXCEPTION));
+			return Collections.singletonList(new StandardMethodContract(constraints, fail()));
 		}
-		if("assertNotNull".equals(methodName) || "assumeNotNull".equals(methodName))
+		if("assertNotNull".equals(methodName))
 		{
-			return failIfNull(checkedParam, paramCount);
+			return failIfNull(checkedParam, paramCount, false);
 		}
 		return Collections.emptyList();
+	}
+
+	@Nullable
+	private static ValueConstraint constraintFromMatcher(PsiExpression expr, boolean negate)
+	{
+		if(expr instanceof PsiMethodCallExpression)
+		{
+			String calledName = ((PsiMethodCallExpression) expr).getMethodExpression().getReferenceName();
+			PsiExpression[] args = ((PsiMethodCallExpression) expr).getArgumentList().getExpressions();
+			if(calledName == null)
+			{
+				return null;
+			}
+			switch(calledName)
+			{
+				case "array":
+				case "arrayWithSize":
+				case "arrayContaining":
+				case "arrayContainingInAnyOrder":
+				case "contains":
+				case "containsInAnyOrder":
+				case "containsString":
+				case "endsWith":
+				case "startsWith":
+				case "stringContainsInOrder":
+				case "empty":
+				case "emptyArray":
+				case "emptyCollectionOf":
+				case "emptyIterable":
+				case "emptyIterableOf":
+				case "hasEntry":
+				case "hasItem":
+				case "hasItems":
+				case "hasKey":
+				case "hasProperty":
+				case "hasSize":
+				case "hasToString":
+				case "hasValue":
+				case "hasXPath":
+					return negate ? null : NULL_VALUE;
+				case "notNullValue":
+					return negate ? NOT_NULL_VALUE : NULL_VALUE;
+				case "nullValue":
+					return negate ? NULL_VALUE : NOT_NULL_VALUE;
+				case "equalTo":
+					if(args.length == 1)
+					{
+						return constraintFromLiteral(args[0], negate);
+					}
+					return null;
+				case "not":
+					if(args.length == 1)
+					{
+						return constraintFromMatcher(args[0], !negate);
+					}
+					return null;
+				case "is":
+					if(args.length == 1)
+					{
+						ValueConstraint fromMatcher = constraintFromMatcher(args[0], negate);
+						return fromMatcher == null ? constraintFromLiteral(args[0], negate) : fromMatcher;
+					}
+					return null;
+			}
+		}
+		return null;
+	}
+
+	@Nullable
+	private static ValueConstraint constraintFromLiteral(PsiExpression arg, boolean negate)
+	{
+		arg = PsiUtil.skipParenthesizedExprDown(arg);
+		if(!(arg instanceof PsiLiteralExpression))
+		{
+			return null;
+		}
+		Object value = ((PsiLiteralExpression) arg).getValue();
+		if(value == null)
+		{
+			return negate ? NULL_VALUE : NOT_NULL_VALUE;
+		}
+		if(Boolean.TRUE.equals(value))
+		{
+			return negate ? TRUE_VALUE : FALSE_VALUE;
+		}
+		if(Boolean.FALSE.equals(value))
+		{
+			return negate ? FALSE_VALUE : TRUE_VALUE;
+		}
+		return null;
 	}
 
 	@Nonnull
@@ -317,37 +477,83 @@ public class HardcodedContracts
 		{
 			for(int i = 1; i < args.length; i++)
 			{
-				if(isNotNullMatcher(args[i]))
+				ValueConstraint constraint = constraintFromMatcher(args[i], false);
+				if(constraint != null)
 				{
-					return failIfNull(i - 1, paramCount);
+					ValueConstraint[] constraints = createConstraintArray(paramCount);
+					constraints[i - 1] = constraint;
+					return Collections.singletonList(new StandardMethodContract(constraints, fail()));
 				}
 			}
-			if(args.length == 1 && hasNotNullChainCall(call))
+			if(args.length == 1)
 			{
-				return failIfNull(0, 1);
+				PsiType type = args[0].getType();
+				return SyntaxTraverser.psiApi().parents(call)
+						.skip(1)
+						.takeWhile(e -> !(e instanceof PsiStatement) && !(e instanceof PsiMember))
+						.filter(PsiMethodCallExpression.class)
+						.filterMap(c -> constraintFromAssertJMatcher(type, c))
+						.toList();
 			}
 		}
 		return Collections.emptyList();
 	}
 
-	private static boolean hasNotNullChainCall(PsiMethodCallExpression call)
+	@Nullable
+	private static MethodContract constraintFromAssertJMatcher(PsiType type, PsiMethodCallExpression call)
 	{
-		Iterable<PsiElement> exprParents = SyntaxTraverser.psiApi().parents(call).
-				takeWhile(e -> !(e instanceof PsiStatement) && !(e instanceof PsiMember));
-		return ContainerUtil.exists(exprParents, HardcodedContracts::isNotNullCall);
+		if(!call.getArgumentList().isEmpty())
+		{
+			return null;
+		}
+		String name = call.getMethodExpression().getReferenceName();
+		if(name == null)
+		{
+			return null;
+		}
+		switch(name)
+		{
+			case "isNotNull":
+				return new StandardMethodContract(new ValueConstraint[]{NULL_VALUE}, fail());
+			case "isNull":
+				return new StandardMethodContract(new ValueConstraint[]{NOT_NULL_VALUE}, fail());
+			case "isPresent":
+			case "isNotEmpty":
+				return emptyCheck(type, false);
+			case "isNotPresent":
+			case "isEmpty":
+				return emptyCheck(type, true);
+			case "isTrue":
+				return new StandardMethodContract(new ValueConstraint[]{FALSE_VALUE}, fail());
+			case "isFalse":
+				return new StandardMethodContract(new ValueConstraint[]{TRUE_VALUE}, fail());
+		}
+		return null;
 	}
 
-	private static boolean isNotNullCall(PsiElement ref)
+	@Nullable
+	private static MethodContract emptyCheck(PsiType type, boolean isEmpty)
 	{
-		return ref instanceof PsiReferenceExpression && "isNotNull".equals(((PsiReferenceExpression) ref).getReferenceName()) && ref.getParent() instanceof PsiMethodCallExpression;
+		SpecialField field = SpecialField.fromQualifierType(type);
+		if(field == null)
+		{
+			return null;
+		}
+		return singleConditionContract(ContractValue.argument(0).specialField(field), isEmpty ? RelationType.NE : RelationType.EQ,
+				field == SpecialField.OPTIONAL_VALUE ? ContractValue.nullValue() : ContractValue.zero(), fail());
 	}
 
 	@Nonnull
-	private static List<MethodContract> failIfNull(int argIndex, int argCount)
+	private static List<MethodContract> failIfNull(int argIndex, int argCount, boolean returnArg)
 	{
-		MethodContract.ValueConstraint[] constraints = createConstraintArray(argCount);
+		ValueConstraint[] constraints = createConstraintArray(argCount);
 		constraints[argIndex] = NULL_VALUE;
-		return Collections.singletonList(new StandardMethodContract(constraints, THROW_EXCEPTION));
+		StandardMethodContract failContract = new StandardMethodContract(constraints, fail());
+		if(returnArg)
+		{
+			return Arrays.asList(failContract, StandardMethodContract.trivialContract(argCount, returnParameter(argIndex)));
+		}
+		return Collections.singletonList(failContract);
 	}
 
 	public static boolean isHardcodedPure(PsiMethod method)
@@ -373,18 +579,27 @@ public class HardcodedContracts
 			}
 		}
 
+		if("remove".equals(name))
+		{
+			return false;
+		}
+
 		if("java.lang.System".equals(className))
 		{
 			return false;
 		}
-		if(JavaClassNames.JAVA_UTIL_ARRAYS.equals(className))
+		if(JAVA_UTIL_ARRAYS.equals(className))
 		{
 			return name.equals("binarySearch") || name.equals("spliterator") || name.equals("stream");
+		}
+		if(QUEUE_POLL.methodMatches(method))
+		{
+			return false;
 		}
 		return true;
 	}
 
-	public static boolean hasHardcodedContracts(@javax.annotation.Nullable PsiElement element)
+	public static boolean hasHardcodedContracts(@Nullable PsiElement element)
 	{
 		if(element instanceof PsiMethod)
 		{

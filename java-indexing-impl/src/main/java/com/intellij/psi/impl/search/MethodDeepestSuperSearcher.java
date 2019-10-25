@@ -15,16 +15,15 @@
  */
 package com.intellij.psi.impl.search;
 
-import gnu.trove.THashSet;
-
-import java.util.Set;
-
-import javax.annotation.Nonnull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
 
 /**
  * @author peter
@@ -32,19 +31,19 @@ import com.intellij.util.QueryExecutor;
 public class MethodDeepestSuperSearcher implements QueryExecutor<PsiMethod, PsiMethod>
 {
 	@Override
-	public boolean execute(@Nonnull PsiMethod method, @Nonnull Processor<PsiMethod> consumer)
+	public boolean execute(@Nonnull PsiMethod method, @Nonnull Processor<? super PsiMethod> consumer)
 	{
 		return processDeepestSuperMethods(method, consumer);
 	}
 
-	public static boolean processDeepestSuperMethods(PsiMethod method, Processor<PsiMethod> consumer)
+	public static boolean processDeepestSuperMethods(PsiMethod method, Processor<? super PsiMethod> consumer)
 	{
 		final Set<PsiMethod> methods = new THashSet<PsiMethod>();
 		methods.add(method);
 		return findDeepestSuperOrSelfSignature(method, methods, null, consumer);
 	}
 
-	private static boolean findDeepestSuperOrSelfSignature(final PsiMethod method, Set<PsiMethod> set, Set<PsiMethod> guard, Processor<PsiMethod> processor)
+	private static boolean findDeepestSuperOrSelfSignature(final PsiMethod method, Set<PsiMethod> set, Set<PsiMethod> guard, Processor<? super PsiMethod> processor)
 	{
 		if(guard != null && !guard.add(method))
 		{

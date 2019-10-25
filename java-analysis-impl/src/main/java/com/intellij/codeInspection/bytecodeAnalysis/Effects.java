@@ -16,14 +16,75 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
+import javax.annotation.Nonnull;
+
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 final class Effects implements Result
 {
+	static final Set<EffectQuantum> TOP_EFFECTS = Collections.singleton(EffectQuantum.TopEffectQuantum);
+	static final Effects VOLATILE_EFFECTS = new Effects(DataValue.UnknownDataValue2, Collections.singleton(EffectQuantum.TopEffectQuantum));
+
+	@Nonnull
+	final DataValue returnValue;
+	@Nonnull
 	final Set<EffectQuantum> effects;
 
-	Effects(Set<EffectQuantum> effects)
+	Effects(@Nonnull DataValue returnValue, @Nonnull Set<EffectQuantum> effects)
 	{
+		this.returnValue = returnValue;
 		this.effects = effects;
+	}
+
+	Effects combine(Effects other)
+	{
+		if(this.equals(other))
+			return this;
+		Set<EffectQuantum> newEffects = new HashSet<>(this.effects);
+		newEffects.addAll(other.effects);
+		if(newEffects.contains(EffectQuantum.TopEffectQuantum))
+		{
+			newEffects = TOP_EFFECTS;
+		}
+		DataValue newReturnValue = this.returnValue.equals(other.returnValue) ? this.returnValue : DataValue.UnknownDataValue1;
+		return new Effects(newReturnValue, newEffects);
+	}
+
+	@Override
+	public Stream<EKey> dependencies()
+	{
+		return Stream.concat(returnValue.dependencies(), effects.stream().flatMap(EffectQuantum::dependencies));
+	}
+
+	public boolean isTop()
+	{
+		return returnValue == DataValue.UnknownDataValue1 && effects.equals(TOP_EFFECTS);
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+			return true;
+		if(o == null || getClass() != o.getClass())
+			return false;
+		Effects that = (Effects) o;
+		return this.returnValue.equals(that.returnValue) && this.effects.equals(that.effects);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return effects.hashCode() * 31 + returnValue.hashCode();
+	}
+
+	@Override
+	public String toString()
+	{
+		Object effectsPresentation = effects.isEmpty() ? "Pure" : effects.size() == 1 ? effects.iterator().next() : effects.size();
+		return "Effects[" + effectsPresentation + "|" + returnValue + "]";
 	}
 }

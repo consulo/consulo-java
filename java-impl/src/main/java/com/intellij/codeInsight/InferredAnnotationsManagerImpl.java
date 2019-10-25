@@ -1,59 +1,23 @@
-/*
- * Copyright 2000-2017 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInsight;
 
-import static com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer.ORG_JETBRAINS_ANNOTATIONS_CONTRACT;
-
-import java.util.List;
-import java.util.Set;
-
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiModifierListOwner;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis;
-import com.intellij.codeInspection.dataFlow.ContractInference;
-import com.intellij.codeInspection.dataFlow.HardcodedContracts;
-import com.intellij.codeInspection.dataFlow.MethodContract;
-import com.intellij.codeInspection.dataFlow.NullityInference;
-import com.intellij.codeInspection.dataFlow.Nullness;
-import com.intellij.codeInspection.dataFlow.PurityInference;
-import com.intellij.codeInspection.dataFlow.StandardMethodContract;
-import com.intellij.openapi.project.Project;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
-import com.intellij.psi.impl.source.PsiMethodImpl;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
-import one.util.streamex.StreamEx;
+import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 {
-	private static final Set<String> INFERRED_ANNOTATIONS = ContainerUtil.set(AnnotationUtil.NOT_NULL, AnnotationUtil.NULLABLE, ORG_JETBRAINS_ANNOTATIONS_CONTRACT);
+	private static final Key<Boolean> INFERRED_ANNOTATION = Key.create("INFERRED_ANNOTATION");
 	private final Project myProject;
 
-	@Inject
 	public InferredAnnotationsManagerImpl(Project project)
 	{
 		myProject = project;
@@ -63,227 +27,44 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager
 	@Override
 	public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN)
 	{
-		if(!INFERRED_ANNOTATIONS.contains(annotationFQN))
+		for(InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject))
 		{
-			return null;
-		}
-
-		listOwner = PsiUtil.preferCompiledElement(listOwner);
-
-		if(ORG_JETBRAINS_ANNOTATIONS_CONTRACT.equals(annotationFQN) && listOwner instanceof PsiMethod)
-		{
-			PsiAnnotation anno = getHardcodedContractAnnotation((PsiMethod) listOwner);
-			if(anno != null)
+			PsiAnnotation annotation = provider.findInferredAnnotation(listOwner, annotationFQN);
+			if(annotation != null)
 			{
-				return anno;
-			}
-		}
-
-		if(ignoreInference(listOwner, annotationFQN))
-		{
-			return null;
-		}
-
-		PsiAnnotation fromBytecode = ProjectBytecodeAnalysis.getInstance(myProject).findInferredAnnotation(listOwner, annotationFQN);
-		if(fromBytecode != null)
-		{
-			return fromBytecode;
-		}
-
-		if((AnnotationUtil.NOT_NULL.equals(annotationFQN) || AnnotationUtil.NULLABLE.equals(annotationFQN)))
-		{
-			PsiAnnotation anno = null;
-			if(listOwner instanceof PsiMethodImpl)
-			{
-				anno = getInferredNullityAnnotation((PsiMethodImpl) listOwner);
-			}
-			if(listOwner instanceof PsiParameter)
-			{
-				anno = getInferredNullityAnnotation((PsiParameter) listOwner);
-			}
-			return anno == null ? null : annotationFQN.equals(anno.getQualifiedName()) ? anno : null;
-		}
-
-		if(listOwner instanceof PsiMethodImpl && ORG_JETBRAINS_ANNOTATIONS_CONTRACT.equals(annotationFQN))
-		{
-			return getInferredContractAnnotation((PsiMethodImpl) listOwner);
-		}
-
-		return null;
-	}
-
-	@Nullable
-	private PsiAnnotation getHardcodedContractAnnotation(PsiMethod method)
-	{
-		List<MethodContract> contracts = HardcodedContracts.getHardcodedContracts(method, null);
-		return contracts.isEmpty() ? null : createContractAnnotation(contracts, HardcodedContracts.isHardcodedPure(method));
-	}
-
-	@Override
-	public boolean ignoreInference(@Nonnull PsiModifierListOwner owner, @javax.annotation.Nullable String annotationFQN)
-	{
-		if(owner instanceof PsiMethod && PsiUtil.canBeOverriden((PsiMethod) owner))
-		{
-			return true;
-		}
-		if(ORG_JETBRAINS_ANNOTATIONS_CONTRACT.equals(annotationFQN) && HardcodedContracts.hasHardcodedContracts(owner))
-		{
-			return true;
-		}
-		if(AnnotationUtil.NOT_NULL.equals(annotationFQN) && owner instanceof PsiParameter && owner.getParent() != null)
-		{
-			if(AnnotationUtil.isAnnotated(owner, NullableNotNullManager.getInstance(owner.getProject()).getNullables(), false, false))
-			{
-				return true;
-			}
-			if(HardcodedContracts.hasHardcodedContracts(owner))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@javax.annotation.Nullable
-	private PsiAnnotation getInferredContractAnnotation(PsiMethodImpl method)
-	{
-		if(method.getModifierList().findAnnotation(ORG_JETBRAINS_ANNOTATIONS_CONTRACT) != null)
-		{
-			return null;
-		}
-
-		return createContractAnnotation(ContractInference.inferContracts(method), PurityInference.inferPurity(method));
-	}
-
-	@javax.annotation.Nullable
-	private PsiAnnotation getInferredNullityAnnotation(PsiMethodImpl method)
-	{
-		NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
-		if(AnnotationUtil.findAnnotation(method, manager.getNotNulls(), true) != null || AnnotationUtil.findAnnotation(method, manager.getNullables(), true) != null)
-		{
-			return null;
-		}
-
-		if(NullableNotNullManager.findNullabilityDefaultInHierarchy(method, true) != null || NullableNotNullManager.findNullabilityDefaultInHierarchy(method, false) != null)
-		{
-			return null;
-		}
-
-		Nullness nullness = NullityInference.inferNullity(method);
-		if(nullness == Nullness.NOT_NULL)
-		{
-			return ProjectBytecodeAnalysis.getInstance(myProject).getNotNullAnnotation();
-		}
-		if(nullness == Nullness.NULLABLE)
-		{
-			return ProjectBytecodeAnalysis.getInstance(myProject).getNullableAnnotation();
-		}
-		return null;
-	}
-
-	private PsiAnnotation getInferredNullityAnnotation(PsiParameter parameter)
-	{
-		PsiElement parent = parameter.getParent();
-		if(!(parent instanceof PsiParameterList))
-		{
-			return null;
-		}
-		PsiElement scope = parent.getParent();
-		if(scope instanceof PsiMethod)
-		{
-			PsiMethod method = (PsiMethod) scope;
-			if(method.getName().equals("of"))
-			{
-				PsiClass containingClass = method.getContainingClass();
-				if(containingClass != null)
-				{
-					String className = containingClass.getQualifiedName();
-					if(JavaClassNames.JAVA_UTIL_LIST.equals(className) || JavaClassNames.JAVA_UTIL_SET.equals(className) || JavaClassNames.JAVA_UTIL_MAP.equals(className) || ("java.util" +
-							".EnumSet").equals(className))
-					{
-						return ProjectBytecodeAnalysis.getInstance(myProject).getNotNullAnnotation();
-					}
-				}
+				markInferred(annotation);
+				return annotation;
 			}
 		}
 		return null;
-	}
-
-	@javax.annotation.Nullable
-	private PsiAnnotation createContractAnnotation(List<? extends MethodContract> contracts, boolean pure)
-	{
-		return createContractAnnotation(myProject, pure, StreamEx.of(contracts).select(StandardMethodContract.class).joining("; "));
-	}
-
-	@javax.annotation.Nullable
-	public static PsiAnnotation createContractAnnotation(Project project, boolean pure, String contracts)
-	{
-		final String attrs;
-		if(!contracts.isEmpty() && pure)
-		{
-			attrs = "value = " + "\"" + contracts + "\", pure = true";
-		}
-		else if(pure)
-		{
-			attrs = "pure = true";
-		}
-		else if(!contracts.isEmpty())
-		{
-			attrs = "\"" + contracts + "\"";
-		}
-		else
-		{
-			return null;
-		}
-		return ProjectBytecodeAnalysis.getInstance(project).createContractAnnotation(attrs);
 	}
 
 	@Nonnull
 	@Override
 	public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner)
 	{
-		listOwner = PsiUtil.preferCompiledElement(listOwner);
-		List<PsiAnnotation> result = ContainerUtil.newArrayList();
-		PsiAnnotation[] fromBytecode = ProjectBytecodeAnalysis.getInstance(myProject).findInferredAnnotations(listOwner);
-		for(PsiAnnotation annotation : fromBytecode)
+		List<PsiAnnotation> result = new ArrayList<>();
+		for(InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject))
 		{
-			if(!ignoreInference(listOwner, annotation.getQualifiedName()))
+			List<PsiAnnotation> annotations = provider.findInferredAnnotations(listOwner);
+			for(PsiAnnotation annotation : annotations)
 			{
+				markInferred(annotation);
 				result.add(annotation);
 			}
 		}
-
-		if(listOwner instanceof PsiMethod)
-		{
-			PsiAnnotation hardcoded = getHardcodedContractAnnotation((PsiMethod) listOwner);
-			if(hardcoded != null)
-			{
-				result.add(hardcoded);
-			}
-			if(listOwner instanceof PsiMethodImpl)
-			{
-				if(hardcoded == null && !ignoreInference(listOwner, ORG_JETBRAINS_ANNOTATIONS_CONTRACT))
-				{
-					ContainerUtil.addIfNotNull(result, getInferredContractAnnotation((PsiMethodImpl) listOwner));
-				}
-
-				if(!ignoreInference(listOwner, AnnotationUtil.NOT_NULL) || !ignoreInference(listOwner, AnnotationUtil.NULLABLE))
-				{
-					PsiAnnotation annotation = getInferredNullityAnnotation((PsiMethodImpl) listOwner);
-					if(annotation != null && !ignoreInference(listOwner, annotation.getQualifiedName()))
-					{
-						result.add(annotation);
-					}
-				}
-			}
-		}
-
 		return result.toArray(PsiAnnotation.EMPTY_ARRAY);
 	}
 
 	@Override
 	public boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation)
 	{
-		return annotation.getUserData(ProjectBytecodeAnalysis.INFERRED_ANNOTATION) != null;
+		return annotation.getUserData(INFERRED_ANNOTATION) != null;
 	}
+
+	private static void markInferred(@Nonnull PsiAnnotation annotation)
+	{
+		annotation.putUserData(INFERRED_ANNOTATION, Boolean.TRUE);
+	}
+
 }

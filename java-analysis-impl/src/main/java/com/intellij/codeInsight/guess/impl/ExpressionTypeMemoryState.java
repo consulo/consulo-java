@@ -15,21 +15,24 @@
  */
 package com.intellij.codeInsight.guess.impl;
 
-import gnu.trove.THashMap;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.util.Map;
-
-import javax.annotation.Nonnull;
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
+import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
+import com.intellij.codeInspection.dataFlow.DfaFactMap;
+import com.intellij.codeInspection.dataFlow.DfaFactType;
 import com.intellij.codeInspection.dataFlow.DfaMemoryStateImpl;
 import com.intellij.codeInspection.dataFlow.value.DfaInstanceofValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
+import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
-import com.intellij.util.containers.HashMap;
+import com.intellij.psi.*;
+import com.intellij.util.containers.MultiMap;
+import gnu.trove.TObjectHashingStrategy;
+import javax.annotation.Nonnull;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author peter
@@ -42,11 +45,19 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 		@Override
 		public int computeHashCode(PsiExpression object)
 		{
+			if(object instanceof PsiReferenceExpression)
+			{
+				return Objects.hashCode(((PsiReferenceExpression) object).getReferenceName()) * 31 + 1;
+			}
+			else if(object instanceof PsiMethodCallExpression)
+			{
+				return Objects.hashCode(((PsiMethodCallExpression) object).getMethodExpression().getReferenceName()) * 31 + 2;
+			}
 			return object.getNode().getElementType().hashCode();
 		}
 
 		@Override
-		public boolean equals(PsiExpression o1, PsiExpression o2)
+		public boolean equals(@Nonnull PsiExpression o1, @Nonnull PsiExpression o2)
 		{
 			if(JavaPsiEquivalenceUtil.areExpressionsEquivalent(o1, o2))
 			{
@@ -60,25 +71,69 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 			return false;
 		}
 	};
-	private final Map<PsiExpression, PsiType> myStates = new THashMap<>(EXPRESSION_HASHING_STRATEGY);
+	private final boolean myHonorAssignments;
+	// may be shared between memory state instances
+	private MultiMap<PsiExpression, PsiType> myStates;
 
-	public ExpressionTypeMemoryState(final DfaValueFactory factory)
+	public ExpressionTypeMemoryState(final DfaValueFactory factory, boolean honorAssignments)
 	{
 		super(factory);
+		myHonorAssignments = honorAssignments;
+		myStates = MultiMap.createSet(EXPRESSION_HASHING_STRATEGY);
 	}
 
-	private ExpressionTypeMemoryState(DfaMemoryStateImpl toCopy)
+	private ExpressionTypeMemoryState(ExpressionTypeMemoryState toCopy)
 	{
 		super(toCopy);
+		myHonorAssignments = toCopy.myHonorAssignments;
+		myStates = toCopy.myStates;
+	}
+
+	@Override
+	protected DfaFactMap filterFactsOnAssignment(DfaVariableValue var, @Nonnull DfaFactMap facts)
+	{
+		if(myHonorAssignments)
+		{
+			return facts;
+		}
+		if(ControlFlowAnalyzer.isTempVariable(var) ||
+				var.getPsiVariable() instanceof PsiParameter && var.getPsiVariable().getParent().getParent() instanceof PsiLambdaExpression)
+		{
+			// Pass type normally for synthetic lambda parameter assignment
+			return facts;
+		}
+		return facts.with(DfaFactType.TYPE_CONSTRAINT, null);
 	}
 
 	@Nonnull
 	@Override
 	public DfaMemoryStateImpl createCopy()
 	{
-		final ExpressionTypeMemoryState copy = new ExpressionTypeMemoryState(this);
-		copy.myStates.putAll(myStates);
-		return copy;
+		return new ExpressionTypeMemoryState(this);
+	}
+
+	@Override
+	public boolean isSuperStateOf(DfaMemoryStateImpl that)
+	{
+		if(!super.isSuperStateOf(that))
+		{
+			return false;
+		}
+		MultiMap<PsiExpression, PsiType> thatStates = ((ExpressionTypeMemoryState) that).myStates;
+		if(thatStates == myStates)
+		{
+			return true;
+		}
+		for(Map.Entry<PsiExpression, Collection<PsiType>> entry : myStates.entrySet())
+		{
+			Collection<PsiType> thisTypes = entry.getValue();
+			Collection<PsiType> thatTypes = thatStates.get(entry.getKey());
+			if(!thatTypes.containsAll(thisTypes))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -91,12 +146,13 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 			{
 				setExpressionType(value.getExpression(), value.getCastType());
 			}
+			return super.applyCondition(((DfaInstanceofValue) dfaCond).getRelation());
 		}
 
 		return super.applyCondition(dfaCond);
 	}
 
-	public Map<PsiExpression, PsiType> getStates()
+	MultiMap<PsiExpression, PsiType> getStates()
 	{
 		return myStates;
 	}
@@ -118,13 +174,7 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 		}
 
 		ExpressionTypeMemoryState that = (ExpressionTypeMemoryState) o;
-
-		if(!myStates.equals(that.myStates))
-		{
-			return false;
-		}
-
-		return true;
+		return myStates.equals(that.myStates);
 	}
 
 	@Override
@@ -138,15 +188,33 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 	@Override
 	public String toString()
 	{
-		return super.toString() + " states=[" + new HashMap<>(myStates) + "]";
+		return super.toString() + " states=[" + myStates + "]";
 	}
 
-	public void setExpressionType(PsiExpression expression, @Nonnull PsiType type)
+	void removeExpressionType(@Nonnull PsiExpression expression)
 	{
-		PsiType prev = myStates.get(expression);
-		if(prev == null || !type.isAssignableFrom(prev))
+		if(myStates.containsKey(expression))
 		{
-			myStates.put(expression, type);
+			MultiMap<PsiExpression, PsiType> oldStates = myStates;
+			myStates = MultiMap.createSet(EXPRESSION_HASHING_STRATEGY);
+			for(Map.Entry<PsiExpression, Collection<PsiType>> entry : oldStates.entrySet())
+			{
+				if(!EXPRESSION_HASHING_STRATEGY.equals(entry.getKey(), expression))
+				{
+					myStates.putValues(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+	}
+
+	void setExpressionType(@Nonnull PsiExpression expression, @Nonnull PsiType type)
+	{
+		if(!myStates.get(expression).contains(type))
+		{
+			MultiMap<PsiExpression, PsiType> oldStates = myStates;
+			myStates = MultiMap.createSet(EXPRESSION_HASHING_STRATEGY);
+			myStates.putAllValues(oldStates);
+			myStates.putValue(expression, type);
 		}
 	}
 }

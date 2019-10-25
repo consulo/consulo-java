@@ -16,6 +16,15 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
+import java.util.stream.Stream;
+
 interface Result
 {
+	/**
+	 * @return a stream of keys which should be solved to make this result final
+	 */
+	default Stream<EKey> dependencies()
+	{
+		return Stream.empty();
+	}
 }

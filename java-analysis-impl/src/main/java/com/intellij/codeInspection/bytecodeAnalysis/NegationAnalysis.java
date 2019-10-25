@@ -16,14 +16,9 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.FalseValue;
-import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.TrueValue;
-import static com.intellij.codeInspection.bytecodeAnalysis.CombinedData.ThisValue;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.objectweb.asm.Opcodes.IFEQ;
-import static org.objectweb.asm.Opcodes.IFNE;
-import static org.objectweb.asm.Opcodes.IRETURN;
-
+import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
+import com.intellij.util.SingletonSet;
+import com.intellij.util.containers.HashSet;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
@@ -31,149 +26,179 @@ import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
-import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
-import com.intellij.util.SingletonSet;
-import com.intellij.util.containers.HashSet;
 
-final class NegationAnalysis {
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.FalseValue;
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.TrueValue;
+import static com.intellij.codeInspection.bytecodeAnalysis.CombinedData.ThisValue;
+import static consulo.internal.org.objectweb.asm.Opcodes.*;
 
-  private final ControlFlowGraph controlFlow;
-  private final Method method;
-  private final NegationInterpreter interpreter;
-  private final MethodNode methodNode;
+final class NegationAnalysis
+{
 
-  private CombinedData.TrackableCallValue conditionValue;
-  private BasicValue trueBranchValue;
-  private BasicValue falseBranchValue;
+	private final ControlFlowGraph controlFlow;
+	private final Member method;
+	private final NegationInterpreter interpreter;
+	private final MethodNode methodNode;
 
-  NegationAnalysis(Method method, ControlFlowGraph controlFlow) {
-    this.method = method;
-    this.controlFlow = controlFlow;
-    methodNode = controlFlow.methodNode;
-    interpreter = new NegationInterpreter(methodNode.instructions);
-  }
+	private CombinedData.TrackableCallValue conditionValue;
+	private BasicValue trueBranchValue;
+	private BasicValue falseBranchValue;
 
-  private static void checkAssertion(boolean assertion) throws NegationAnalysisFailure {
-    if (!assertion) {
-      throw new NegationAnalysisFailure();
-    }
-  }
+	NegationAnalysis(Member method, ControlFlowGraph controlFlow)
+	{
+		this.method = method;
+		this.controlFlow = controlFlow;
+		methodNode = controlFlow.methodNode;
+		interpreter = new NegationInterpreter(methodNode.instructions);
+	}
 
-  final void analyze() throws AnalyzerException, NegationAnalysisFailure {
-    Frame<BasicValue> frame = createStartFrame();
-    int insnIndex = 0;
+	private static void checkAssertion(boolean assertion) throws NegationAnalysisFailedException
+	{
+		if(!assertion)
+		{
+			throw new NegationAnalysisFailedException();
+		}
+	}
 
-    while (true) {
-      AbstractInsnNode insnNode = methodNode.instructions.get(insnIndex);
-      switch (insnNode.getType()) {
-        case AbstractInsnNode.LABEL:
-        case AbstractInsnNode.LINE:
-        case AbstractInsnNode.FRAME:
-          insnIndex = controlFlow.transitions[insnIndex][0];
-          break;
-        default:
-          switch (insnNode.getOpcode()) {
-            case IFEQ:
-            case IFNE:
-              BasicValue conValue = popValue(frame);
-              checkAssertion(conValue instanceof CombinedData.TrackableCallValue);
-              frame.execute(insnNode, interpreter);
-              conditionValue = (CombinedData.TrackableCallValue)conValue;
-              int jumpIndex = methodNode.instructions.indexOf(((JumpInsnNode)insnNode).label);
-              int nextIndex = insnIndex + 1;
-              proceedBranch(frame, jumpIndex, IFNE == insnNode.getOpcode());
-              proceedBranch(frame, nextIndex, IFEQ == insnNode.getOpcode());
-              checkAssertion(FalseValue == trueBranchValue);
-              checkAssertion(TrueValue == falseBranchValue);
-              return;
-            default:
-              frame.execute(insnNode, interpreter);
-              insnIndex = controlFlow.transitions[insnIndex][0];
-          }
-      }
-    }
-  }
+	final void analyze() throws AnalyzerException, NegationAnalysisFailedException
+	{
+		Frame<BasicValue> frame = createStartFrame();
+		int insnIndex = 0;
 
-  private void proceedBranch(Frame<BasicValue> startFrame, int startIndex, boolean branchValue)
-    throws NegationAnalysisFailure, AnalyzerException {
+		while(true)
+		{
+			AbstractInsnNode insnNode = methodNode.instructions.get(insnIndex);
+			switch(insnNode.getType())
+			{
+				case AbstractInsnNode.LABEL:
+				case AbstractInsnNode.LINE:
+				case AbstractInsnNode.FRAME:
+					insnIndex = controlFlow.transitions[insnIndex][0];
+					break;
+				default:
+					switch(insnNode.getOpcode())
+					{
+						case IFEQ:
+						case IFNE:
+							BasicValue conValue = popValue(frame);
+							checkAssertion(conValue instanceof CombinedData.TrackableCallValue);
+							frame.execute(insnNode, interpreter);
+							conditionValue = (CombinedData.TrackableCallValue) conValue;
+							int jumpIndex = methodNode.instructions.indexOf(((JumpInsnNode) insnNode).label);
+							int nextIndex = insnIndex + 1;
+							proceedBranch(frame, jumpIndex, IFNE == insnNode.getOpcode());
+							proceedBranch(frame, nextIndex, IFEQ == insnNode.getOpcode());
+							checkAssertion(FalseValue == trueBranchValue);
+							checkAssertion(TrueValue == falseBranchValue);
+							return;
+						default:
+							frame.execute(insnNode, interpreter);
+							insnIndex = controlFlow.transitions[insnIndex][0];
+					}
+			}
+		}
+	}
 
-    Frame<BasicValue> frame = new Frame<BasicValue>(startFrame);
-    int insnIndex = startIndex;
+	private void proceedBranch(Frame<BasicValue> startFrame, int startIndex, boolean branchValue)
+			throws NegationAnalysisFailedException, AnalyzerException
+	{
 
-    while (true) {
-      AbstractInsnNode insnNode = methodNode.instructions.get(insnIndex);
-      switch (insnNode.getType()) {
-        case AbstractInsnNode.LABEL:
-        case AbstractInsnNode.LINE:
-        case AbstractInsnNode.FRAME:
-          insnIndex = controlFlow.transitions[insnIndex][0];
-          break;
-        default:
-          switch (insnNode.getOpcode()) {
-            case IRETURN:
-              BasicValue returnValue = frame.pop();
-              if (branchValue) {
-                trueBranchValue = returnValue;
-              }
-              else {
-                falseBranchValue = returnValue;
-              }
-              return;
-            default:
-              checkAssertion(controlFlow.transitions[insnIndex].length == 1);
-              frame.execute(insnNode, interpreter);
-              insnIndex = controlFlow.transitions[insnIndex][0];
-          }
-      }
-    }
-  }
+		Frame<BasicValue> frame = new Frame<>(startFrame);
+		int insnIndex = startIndex;
 
-  final Equation contractEquation(int i, Value inValue, boolean stable) {
-    final Key key = new Key(method, new Direction.InOut(i, inValue), stable);
-    final Result result;
-    HashSet<Key> keys = new HashSet<Key>();
-    for (int argI = 0; argI < conditionValue.args.size(); argI++) {
-      BasicValue arg = conditionValue.args.get(argI);
-      if (arg instanceof CombinedData.NthParamValue) {
-        CombinedData.NthParamValue npv = (CombinedData.NthParamValue)arg;
-        if (npv.n == i) {
-          keys.add(new Key(conditionValue.method, new Direction.InOut(argI, inValue), conditionValue.stableCall, true));
-        }
-      }
-    }
-    if (keys.isEmpty()) {
-      result = new Final(Value.Top);
-    } else {
-      result = new Pending(new SingletonSet<Product>(new Product(Value.Top, keys)));
-    }
-    return new Equation(key, result);
-  }
+		while(true)
+		{
+			AbstractInsnNode insnNode = methodNode.instructions.get(insnIndex);
+			switch(insnNode.getType())
+			{
+				case AbstractInsnNode.LABEL:
+				case AbstractInsnNode.LINE:
+				case AbstractInsnNode.FRAME:
+					insnIndex = controlFlow.transitions[insnIndex][0];
+					break;
+				default:
+					if(insnNode.getOpcode() == IRETURN)
+					{
+						BasicValue returnValue = frame.pop();
+						if(branchValue)
+						{
+							trueBranchValue = returnValue;
+						}
+						else
+						{
+							falseBranchValue = returnValue;
+						}
+						return;
+					}
+					else
+					{
+						checkAssertion(controlFlow.transitions[insnIndex].length == 1);
+						frame.execute(insnNode, interpreter);
+						insnIndex = controlFlow.transitions[insnIndex][0];
+					}
+			}
+		}
+	}
 
-  final Frame<BasicValue> createStartFrame() {
-    Frame<BasicValue> frame = new Frame<BasicValue>(methodNode.maxLocals, methodNode.maxStack);
-    Type returnType = Type.getReturnType(methodNode.desc);
-    BasicValue returnValue = Type.VOID_TYPE.equals(returnType) ? null : new BasicValue(returnType);
-    frame.setReturn(returnValue);
+	final Equation contractEquation(int i, Value inValue, boolean stable)
+	{
+		final EKey key = new EKey(method, new Direction.InOut(i, inValue), stable);
+		final Result result;
+		HashSet<EKey> keys = new HashSet<>();
+		for(int argI = 0; argI < conditionValue.args.size(); argI++)
+		{
+			BasicValue arg = conditionValue.args.get(argI);
+			if(arg instanceof AbstractValues.NthParamValue)
+			{
+				AbstractValues.NthParamValue npv = (AbstractValues.NthParamValue) arg;
+				if(npv.n == i)
+				{
+					keys.add(new EKey(conditionValue.method, new Direction.InOut(argI, inValue), conditionValue.stableCall, true));
+				}
+			}
+		}
+		if(keys.isEmpty())
+		{
+			result = Value.Top;
+		}
+		else
+		{
+			result = new Pending(new SingletonSet<>(new Component(Value.Top, keys)));
+		}
+		return new Equation(key, result);
+	}
 
-    Type[] args = Type.getArgumentTypes(methodNode.desc);
-    int local = 0;
-    if ((methodNode.access & ACC_STATIC) == 0) {
-      frame.setLocal(local++, ThisValue);
-    }
-    for (int i = 0; i < args.length; i++) {
-      BasicValue value = new CombinedData.NthParamValue(args[i], i);
-      frame.setLocal(local++, value);
-      if (args[i].getSize() == 2) {
-        frame.setLocal(local++, BasicValue.UNINITIALIZED_VALUE);
-      }
-    }
-    while (local < methodNode.maxLocals) {
-      frame.setLocal(local++, BasicValue.UNINITIALIZED_VALUE);
-    }
-    return frame;
-  }
+	final Frame<BasicValue> createStartFrame()
+	{
+		Frame<BasicValue> frame = new Frame<>(methodNode.maxLocals, methodNode.maxStack);
+		Type returnType = Type.getReturnType(methodNode.desc);
+		BasicValue returnValue = Type.VOID_TYPE.equals(returnType) ? null : new BasicValue(returnType);
+		frame.setReturn(returnValue);
 
-  private static BasicValue popValue(Frame<BasicValue> frame) {
-    return frame.getStack(frame.getStackSize() - 1);
-  }
+		Type[] args = Type.getArgumentTypes(methodNode.desc);
+		int local = 0;
+		if((methodNode.access & ACC_STATIC) == 0)
+		{
+			frame.setLocal(local++, ThisValue);
+		}
+		for(int i = 0; i < args.length; i++)
+		{
+			BasicValue value = new AbstractValues.NthParamValue(args[i], i);
+			frame.setLocal(local++, value);
+			if(args[i].getSize() == 2)
+			{
+				frame.setLocal(local++, BasicValue.UNINITIALIZED_VALUE);
+			}
+		}
+		while(local < methodNode.maxLocals)
+		{
+			frame.setLocal(local++, BasicValue.UNINITIALIZED_VALUE);
+		}
+		return frame;
+	}
+
+	private static BasicValue popValue(Frame<BasicValue> frame)
+	{
+		return frame.getStack(frame.getStackSize() - 1);
+	}
 }

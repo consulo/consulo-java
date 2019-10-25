@@ -19,20 +19,27 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.psi.impl.source.DummyHolder;
+import com.intellij.psi.impl.source.DummyHolderFactory;
+import com.intellij.psi.impl.source.tree.FileElement;
+import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.psi.impl.source.tree.java.PsiExpressionListImpl;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
 
 public class JavaResolveUtil
 {
@@ -343,5 +350,23 @@ public class JavaResolveUtil
 		Project project = containingFile.getProject();
 		ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(ref, resolver, needToPreventRecursion, incompleteCode, containingFile);
 		return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
+	}
+
+	/**
+	 * @return the constructor (or a class if there are none)
+	 * which the "{@code super();}" no-args call resolves to if inserted in the {@code place} (typically it would be inserted in the sub class constructor)
+	 * No code modifications happen in this method; it's used for resolving multiple overloaded constructors.
+	 */
+	public static PsiElement resolveImaginarySuperCallInThisPlace(@Nonnull PsiMember place,
+																  @Nonnull Project project,
+																  @Nonnull PsiClass superClassWhichTheSuperCallMustResolveTo)
+	{
+		PsiExpressionListImpl expressionList = new PsiExpressionListImpl();
+		final DummyHolder result = DummyHolderFactory.createHolder(PsiManager.getInstance(project), place);
+		final FileElement holder = result.getTreeElement();
+		holder.rawAddChildren((TreeElement) expressionList.getNode());
+
+		return PsiResolveHelper.SERVICE.getInstance(project)
+				.resolveConstructor(PsiTypesUtil.getClassType(superClassWhichTheSuperCallMustResolveTo), expressionList, place).getElement();
 	}
 }

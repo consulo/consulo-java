@@ -15,10 +15,10 @@
  */
 package com.intellij.codeInspection.dataFlow.inliner;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInspection.dataFlow.CFGBuilder;
+import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethodCallExpression;
+import javax.annotation.Nonnull;
 
 /**
  * A CallInliner can recognize specific method calls and inline their implementation into current CFG
@@ -35,4 +35,13 @@ public interface CallInliner
 	 * If false is returned, inliner must not emit any instructions via builder.
 	 */
 	boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call);
+
+	/**
+	 * @param expression expression to test
+	 * @return true if this inliner may add constraints on the precise type of given expression
+	 */
+	default boolean mayInferPreciseType(@Nonnull PsiExpression expression)
+	{
+		return false;
+	}
 }

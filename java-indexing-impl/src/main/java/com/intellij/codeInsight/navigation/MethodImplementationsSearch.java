@@ -15,11 +15,6 @@
  */
 package com.intellij.codeInsight.navigation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFunctionalExpression;
 import com.intellij.psi.PsiMethod;
@@ -31,10 +26,14 @@ import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 import com.intellij.util.containers.ContainerUtil;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MethodImplementationsSearch implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull final Processor<PsiElement> consumer)
+	public boolean execute(@Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull final Processor<? super PsiElement> consumer)
 	{
 		final PsiElement sourceElement = queryParameters.getElement();
 		if(sourceElement instanceof PsiMethod)
@@ -44,7 +43,7 @@ public class MethodImplementationsSearch implements QueryExecutor<PsiElement, De
 		return true;
 	}
 
-	public static boolean processImplementations(final PsiMethod psiMethod, final Processor<PsiElement> consumer, final SearchScope searchScope)
+	public static boolean processImplementations(final PsiMethod psiMethod, final Processor<? super PsiElement> consumer, final SearchScope searchScope)
 	{
 		if(!FunctionalExpressionSearch.search(psiMethod, searchScope).forEach(new Processor<PsiFunctionalExpression>()
 		{

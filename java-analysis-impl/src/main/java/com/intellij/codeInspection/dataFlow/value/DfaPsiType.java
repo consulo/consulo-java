@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,54 +15,151 @@
  */
 package com.intellij.codeInspection.dataFlow.value;
 
-import java.util.Map;
-
+import com.intellij.codeInspection.dataFlow.TypeConstraint;
+import com.intellij.openapi.util.Pair;
+import com.intellij.psi.*;
+import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.psi.util.PsiTypesUtil;
+import one.util.streamex.StreamEx;
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiType;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * @author peter
  */
-public class DfaPsiType {
-  private final PsiType myPsiType;
-  private final Map<Pair<DfaPsiType, DfaPsiType>, Boolean> myAssignableCache;
-  private final Map<Pair<DfaPsiType, DfaPsiType>, Boolean> myConvertibleCache;
+public class DfaPsiType
+{
+	private final PsiType myPsiType;
+	private final DfaValueFactory myFactory;
+	private List<DfaPsiType> mySuperTypes;
+	private final int myID;
 
-  DfaPsiType(@Nonnull PsiType psiType, Map<Pair<DfaPsiType, DfaPsiType>, Boolean> assignableCache, Map<Pair<DfaPsiType, DfaPsiType>, Boolean> convertibleCache) {
-    myPsiType = psiType;
-    myAssignableCache = assignableCache;
-    myConvertibleCache = convertibleCache;
-  }
+	DfaPsiType(int id, @Nonnull PsiType psiType, DfaValueFactory factory)
+	{
+		myID = id;
+		myPsiType = psiType;
+		myFactory = factory;
+	}
 
-  @Nonnull
-  public PsiType getPsiType() {
-    return myPsiType;
-  }
+	@Nonnull
+	public PsiType getPsiType()
+	{
+		return myPsiType;
+	}
 
-  public boolean isAssignableFrom(DfaPsiType other) {
-    if (other == this) return true;
-    Pair<DfaPsiType, DfaPsiType> key = Pair.create(this, other);
-    Boolean result = myAssignableCache.get(key);
-    if (result == null) {
-      myAssignableCache.put(key, result = myPsiType.isAssignableFrom(other.myPsiType));
-    }
-    return result;
-  }
+	/**
+	 * @return stream of all supertypes of given type excluding self
+	 */
+	public Stream<DfaPsiType> superTypes()
+	{
+		if(mySuperTypes == null)
+		{
+			List<DfaPsiType> superTypes = new ArrayList<>();
+			InheritanceUtil.processSuperTypes(getPsiType(), false, t -> superTypes.add(myFactory.createDfaType(t)));
+			mySuperTypes = superTypes;
+		}
+		return mySuperTypes.stream();
+	}
 
-  public boolean isConvertibleFrom(DfaPsiType other) {
-    if (other == this) return true;
-    Pair<DfaPsiType, DfaPsiType> key = Pair.create(this, other);
-    Boolean result = myConvertibleCache.get(key);
-    if (result == null) {
-      myConvertibleCache.put(key, result = myPsiType.isConvertibleFrom(other.myPsiType));
-    }
-    return result;
-  }
+	@Nonnull
+	public TypeConstraint asConstraint()
+	{
+		TypeConstraint constraint = TypeConstraint.empty().withInstanceofValue(this);
+		assert constraint != null;
+		return constraint;
+	}
 
-  @Override
-  public String toString() {
-    return myPsiType.getPresentableText();
-  }
+	public boolean isAssignableFrom(DfaPsiType other)
+	{
+		if(other == this)
+			return true;
+		Pair<DfaPsiType, DfaPsiType> key = Pair.create(this, other);
+		return myFactory.myAssignableCache.computeIfAbsent(key, k -> myPsiType.isAssignableFrom(other.myPsiType));
+	}
+
+	public boolean isConvertibleFrom(DfaPsiType other)
+	{
+		if(other == this)
+			return true;
+		Pair<DfaPsiType, DfaPsiType> key = Pair.create(this, other);
+		return myFactory.myConvertibleCache.computeIfAbsent(key, k -> myPsiType.isConvertibleFrom(other.myPsiType));
+	}
+
+	public DfaValueFactory getFactory()
+	{
+		return myFactory;
+	}
+
+	@Override
+	public String toString()
+	{
+		return myPsiType.getPresentableText();
+	}
+
+	public int getID()
+	{
+		return myID;
+	}
+
+	@Nonnull
+	public static PsiType normalizeType(@Nonnull PsiType psiType)
+	{
+		if(psiType instanceof PsiArrayType)
+		{
+			return PsiTypesUtil.createArrayType(normalizeType(psiType.getDeepComponentType()), psiType.getArrayDimensions());
+		}
+		if(psiType instanceof PsiWildcardType)
+		{
+			return normalizeType(((PsiWildcardType) psiType).getExtendsBound());
+		}
+		if(psiType instanceof PsiCapturedWildcardType)
+		{
+			return normalizeType(((PsiCapturedWildcardType) psiType).getUpperBound());
+		}
+		if(psiType instanceof PsiIntersectionType)
+		{
+			PsiType[] types =
+					StreamEx.of(((PsiIntersectionType) psiType).getConjuncts()).map(DfaPsiType::normalizeType).toArray(PsiType.EMPTY_ARRAY);
+			if(types.length > 0)
+			{
+				return PsiIntersectionType.createIntersection(true, types);
+			}
+		}
+		if(psiType instanceof PsiClassType)
+		{
+			return normalizeClassType((PsiClassType) psiType, new HashSet<>());
+		}
+		return psiType;
+	}
+
+	@Nonnull
+	private static PsiType normalizeClassType(@Nonnull PsiClassType psiType, Set<PsiClass> processed)
+	{
+		PsiClass aClass = psiType.resolve();
+		if(aClass instanceof PsiTypeParameter)
+		{
+			PsiClassType[] types = aClass.getExtendsListTypes();
+			List<PsiType> result = new ArrayList<>();
+			for(PsiClassType type : types)
+			{
+				PsiClass resolved = type.resolve();
+				if(resolved != null && processed.add(resolved))
+				{
+					PsiClassType classType = JavaPsiFacade.getElementFactory(aClass.getProject()).createType(resolved);
+					result.add(normalizeClassType(classType, processed));
+				}
+			}
+			if(!result.isEmpty())
+			{
+				return PsiIntersectionType.createIntersection(true, result.toArray(PsiType.EMPTY_ARRAY));
+			}
+			return PsiType.getJavaLangObject(aClass.getManager(), aClass.getResolveScope());
+		}
+		return psiType.rawType();
+	}
 }

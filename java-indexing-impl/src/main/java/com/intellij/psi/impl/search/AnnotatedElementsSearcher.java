@@ -44,7 +44,7 @@ import com.intellij.util.containers.ContainerUtil;
 public class AnnotatedElementsSearcher implements QueryExecutor<PsiModifierListOwner, AnnotatedElementsSearch.Parameters>
 {
 	@Override
-	public boolean execute(@Nonnull final AnnotatedElementsSearch.Parameters p, @Nonnull final Processor<PsiModifierListOwner> consumer)
+	public boolean execute(@Nonnull final AnnotatedElementsSearch.Parameters p, @Nonnull final Processor<? super PsiModifierListOwner> consumer)
 	{
 		final PsiClass annClass = p.getAnnotationClass();
 		assert annClass.isAnnotationType() : "Annotation type should be passed to annotated members search";

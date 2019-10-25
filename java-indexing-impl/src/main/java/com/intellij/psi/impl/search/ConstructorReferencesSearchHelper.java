@@ -15,8 +15,6 @@
  */
 package com.intellij.psi.impl.search;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
@@ -31,6 +29,8 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.Processor;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -50,7 +50,7 @@ public class ConstructorReferencesSearchHelper
 	 * 2. Exception avoidance. Project is needed outside of read action (to run it via DumbService in the first place),
 	 *    and so getProject would fail with an assertion that read action is required but not present.
 	 */
-	public boolean processConstructorReferences(@Nonnull final Processor<PsiReference> processor,
+	public boolean processConstructorReferences(@Nonnull final Processor<? super PsiReference> processor,
 			@Nonnull final PsiMethod constructor,
 			@Nonnull final PsiClass containingClass,
 			@Nonnull final SearchScope searchScope,
@@ -160,7 +160,7 @@ public class ConstructorReferencesSearchHelper
 		return ClassInheritorsSearch.search(containingClass, searchScope, false).forEach(processor2);
 	}
 
-	private static boolean processEnumReferences(@Nonnull final Processor<PsiReference> processor, @Nonnull final PsiMethod constructor, @Nonnull final Project project,
+	private static boolean processEnumReferences(@Nonnull final Processor<? super PsiReference> processor, @Nonnull final PsiMethod constructor, @Nonnull final Project project,
 			@Nonnull final PsiClass aClass)
 	{
 		return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
@@ -187,7 +187,7 @@ public class ConstructorReferencesSearchHelper
 		});
 	}
 
-	private static boolean process18MethodPointers(@Nonnull final Processor<PsiReference> processor,
+	private static boolean process18MethodPointers(@Nonnull final Processor<? super PsiReference> processor,
 			@Nonnull final PsiMethod constructor,
 			@Nonnull final Project project,
 			@Nonnull PsiClass aClass,
@@ -233,7 +233,7 @@ public class ConstructorReferencesSearchHelper
 			@Nonnull Project project,
 			final boolean isStrictSignatureSearch,
 			@Nonnull String superOrThisKeyword,
-			@Nonnull Processor<PsiReference> processor)
+			@Nonnull Processor<? super PsiReference> processor)
 	{
 		PsiMethod[] constructors = inheritor.getConstructors();
 		if(constructors.length == 0 && constructorCanBeCalledImplicitly)
@@ -295,7 +295,7 @@ public class ConstructorReferencesSearchHelper
 	}
 
 	private boolean processImplicitConstructorCall(@Nonnull final PsiMember usage,
-			@Nonnull final Processor<PsiReference> processor,
+			@Nonnull final Processor<? super PsiReference> processor,
 			@Nonnull final PsiMethod constructor,
 			@Nonnull final Project project,
 			@Nonnull final PsiClass containingClass)

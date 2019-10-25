@@ -15,14 +15,6 @@
  */
 package com.intellij.codeInsight.intention;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -34,6 +26,13 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PropertyMemberType;
+import org.jetbrains.annotations.Nls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author cdr
@@ -200,7 +199,7 @@ public abstract class QuickFixFactory
 	public abstract IntentionAction createReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter);
 
 	@Nonnull
-	public abstract IntentionAction createSurroundWithArrayFix(@Nullable PsiCall methodCall, @javax.annotation.Nullable PsiExpression expression);
+	public abstract IntentionAction createSurroundWithArrayFix(@Nullable PsiCall methodCall, @Nullable PsiExpression expression);
 
 	@Nonnull
 	public abstract IntentionAction createImplementAbstractClassMethodsFix(@Nonnull PsiElement elementToHighlight);
@@ -378,10 +377,10 @@ public abstract class QuickFixFactory
 	public abstract IntentionAction addMethodQualifierFix(@Nonnull PsiMethodCallExpression methodCall);
 
 	@Nonnull
-	public abstract IntentionAction createWrapLongWithMathToIntExactFix(@javax.annotation.Nullable PsiType type, @Nonnull PsiExpression expression);
+	public abstract IntentionAction createWrapWithAdapterFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
 
 	@Nonnull
-	public abstract IntentionAction createWrapWithOptionalFix(@javax.annotation.Nullable PsiType type, @Nonnull PsiExpression expression);
+	public abstract IntentionAction createWrapWithOptionalFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
 
 	@Nullable
 	public abstract IntentionAction createNotIterableForEachLoopFix(@Nonnull PsiExpression expression);
@@ -400,4 +399,14 @@ public abstract class QuickFixFactory
 
 	@Nonnull
 	public abstract IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
+
+	@Nonnull
+	public abstract IntentionAction createAddMissingEnumBranchesFix(@Nonnull PsiSwitchBlock switchBlock, @Nonnull Set<String> missingCases);
+
+	@Nonnull
+	public abstract IntentionAction createAddSwitchDefaultFix(@Nonnull PsiSwitchBlock switchBlock, @Nullable String message);
+
+	@Nonnull
+	public abstract IntentionAction createWrapSwitchRuleStatementsIntoBlockFix(PsiSwitchLabeledRuleStatement rule);
+
 }

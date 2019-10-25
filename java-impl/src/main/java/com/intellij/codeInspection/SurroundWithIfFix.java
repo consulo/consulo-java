@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
  */
 package com.intellij.codeInspection;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.surroundWith.JavaWithIfSurrounder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -28,70 +25,111 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
+import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.ipp.trivialif.MergeIfAndIntention;
 import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
 
 /**
  * @author ven
  */
-public class SurroundWithIfFix implements LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.SurroundWithIfFix");
-  private final String myText;
+public class SurroundWithIfFix implements LocalQuickFix
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.SurroundWithIfFix");
+	private final String myText;
+	private final String mySuffix;
 
-  @Override
-  @Nonnull
-  public String getName() {
-    return InspectionsBundle.message("inspection.surround.if.quickfix", myText);
-  }
+	@Override
+	@Nonnull
+	public String getName()
+	{
+		return InspectionsBundle.message("inspection.surround.if.quickfix", myText, mySuffix);
+	}
 
-  public SurroundWithIfFix(@Nonnull PsiExpression expressionToAssert) {
-    myText = expressionToAssert.getText();
-  }
+	public SurroundWithIfFix(@Nonnull PsiExpression expressionToAssert, String suffix)
+	{
+		myText = ParenthesesUtils.getText(expressionToAssert, ParenthesesUtils.BINARY_AND_PRECEDENCE);
+		mySuffix = suffix;
+	}
 
-  @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    PsiElement element = descriptor.getPsiElement();
-    PsiStatement anchorStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
-    LOG.assertTrue(anchorStatement != null);
-    Editor editor = PsiUtilBase.findEditor(element);
-    if (editor == null) return;
-    PsiFile file = element.getContainingFile();
-    PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
-    Document document = documentManager.getDocument(file);
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    PsiElement[] elements = {anchorStatement};
-    PsiElement prev = PsiTreeUtil.skipSiblingsBackward(anchorStatement, PsiWhiteSpace.class);
-    if (prev instanceof PsiComment && SuppressManager.getInstance().getSuppressedInspectionIdsIn(prev) != null) {
-      elements = new PsiElement[]{prev, anchorStatement};
-    }
-    try {
-      TextRange textRange = new JavaWithIfSurrounder().surroundElements(project, editor, elements);
-      if (textRange == null) return;
+	@Override
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	{
+		PsiElement element = descriptor.getPsiElement();
+		PsiElement anchorStatement = RefactoringUtil.getParentStatement(element, false);
+		LOG.assertTrue(anchorStatement != null);
+		if(anchorStatement.getParent() instanceof PsiLambdaExpression)
+		{
+			final PsiCodeBlock body = RefactoringUtil.expandExpressionLambdaToCodeBlock((PsiLambdaExpression) anchorStatement.getParent());
+			anchorStatement = body.getStatements()[0];
+		}
+		Editor editor = PsiUtilBase.findEditor(anchorStatement);
+		if(editor == null)
+		{
+			return;
+		}
+		PsiFile file = anchorStatement.getContainingFile();
+		PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
+		Document document = documentManager.getDocument(file);
+		if(document == null)
+		{
+			return;
+		}
+		PsiElement[] elements = {anchorStatement};
+		PsiElement prev = PsiTreeUtil.skipWhitespacesBackward(anchorStatement);
+		if(prev instanceof PsiComment && JavaSuppressionUtil.getSuppressedInspectionIdsIn(prev) != null)
+		{
+			elements = new PsiElement[]{
+					prev,
+					anchorStatement
+			};
+		}
+		try
+		{
+			TextRange textRange = new JavaWithIfSurrounder().surroundElements(project, editor, elements);
+			if(textRange == null)
+			{
+				return;
+			}
 
-      @NonNls String newText = myText + " != null";
-      document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(),newText);
+			@NonNls String newText = myText + mySuffix;
+			document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), newText);
 
-      editor.getCaretModel().moveToOffset(textRange.getEndOffset() + newText.length());
-      editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-    }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
+			editor.getCaretModel().moveToOffset(textRange.getEndOffset() + newText.length());
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return InspectionsBundle.message("inspection.surround.if.family");
-  }
+			PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-  public static boolean isAvailable(PsiExpression qualifier) {
-    if (!qualifier.isValid() || qualifier.getText() == null) {
-      return false;
-    }
-    PsiStatement statement = PsiTreeUtil.getParentOfType(qualifier, PsiStatement.class);
-    if (statement == null) return false;
-    PsiElement parent = statement.getParent();
-    return !(parent instanceof PsiForStatement);
-  }
+			new MergeIfAndIntention().invoke(project, editor, file);
+
+			editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+		}
+		catch(IncorrectOperationException e)
+		{
+			LOG.error(e);
+		}
+	}
+
+	@Override
+	@Nonnull
+	public String getFamilyName()
+	{
+		return InspectionsBundle.message("inspection.surround.if.family");
+	}
+
+	public static boolean isAvailable(PsiExpression qualifier)
+	{
+		if(!qualifier.isValid() || qualifier.getText() == null)
+		{
+			return false;
+		}
+		PsiStatement statement = PsiTreeUtil.getParentOfType(qualifier, PsiStatement.class);
+		if(statement == null)
+		{
+			return false;
+		}
+		PsiElement parent = statement.getParent();
+		return !(parent instanceof PsiForStatement);
+	}
 }

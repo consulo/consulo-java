@@ -3,37 +3,10 @@
  */
 package com.intellij.codeInsight;
 
-import static com.intellij.util.BitUtil.isSet;
-
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-
-import java.lang.annotation.Annotation;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.Contract;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.psi.util.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.Processor;
@@ -42,6 +15,20 @@ import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.DeprecationInfo;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+import org.intellij.lang.annotations.MagicConstant;
+import org.jetbrains.annotations.Contract;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+import java.lang.reflect.Proxy;
+import java.util.*;
+
+import static com.intellij.util.BitUtil.isSet;
 
 /**
  * @author max
@@ -223,32 +210,30 @@ public class AnnotationUtil
 		});
 	}
 
-	@javax.annotation.Nullable
+
+	@Nullable
+	public static PsiAnnotation findAnnotationInHierarchy(@Nonnull final PsiModifierListOwner listOwner,
+														  @Nonnull Set<String> annotationNames, boolean skipExternal)
+	{
+		PsiAnnotation directAnnotation = findAnnotation(listOwner, annotationNames, skipExternal);
+		if(directAnnotation != null)
+			return directAnnotation;
+
+		for(PsiModifierListOwner superOwner : getSuperAnnotationOwners(listOwner))
+		{
+			PsiAnnotation annotation = findAnnotation(superOwner, annotationNames, skipExternal);
+			if(annotation != null)
+			{
+				return annotation;
+			}
+		}
+		return null;
+	}
+
+	@Nullable
 	public static PsiAnnotation findAnnotationInHierarchy(@Nonnull final PsiModifierListOwner listOwner, @Nonnull Set<String> annotationNames)
 	{
-		PsiAnnotation directAnnotation = findAnnotation(listOwner, annotationNames);
-		if(directAnnotation != null)
-		{
-			return directAnnotation;
-		}
-
-		Map<Set<String>, PsiAnnotation> map = CachedValuesManager.getCachedValue(listOwner, () ->
-		{
-			Map<Set<String>, PsiAnnotation> value = ConcurrentFactoryMap.createMap(annotationNames1 ->
-			{
-				for(PsiModifierListOwner superOwner : getSuperAnnotationOwners(listOwner))
-				{
-					PsiAnnotation annotation = findAnnotation(superOwner, annotationNames1);
-					if(annotation != null)
-					{
-						return annotation;
-					}
-				}
-				return null;
-			});
-			return CachedValueProvider.Result.create(value, PsiModificationTracker.MODIFICATION_COUNT);
-		});
-		return map.get(annotationNames);
+		return findAnnotationInHierarchy(listOwner, annotationNames, false);
 	}
 
 	private static void collectSuperParameters(@Nonnull final Set<PsiModifierListOwner> result, @Nonnull PsiParameter parameter)
@@ -687,6 +672,14 @@ public class AnnotationUtil
 		return constValue instanceof Boolean ? (Boolean) constValue : null;
 	}
 
+	@Nullable
+	public static Long getLongAttributeValue(@Nonnull PsiAnnotation anno, @Nullable final String attributeName)
+	{
+		PsiAnnotationMemberValue attrValue = anno.findAttributeValue(attributeName);
+		Object constValue = JavaPsiFacade.getInstance(anno.getProject()).getConstantEvaluationHelper().computeConstantExpression(attrValue);
+		return constValue instanceof Number ? ((Number) constValue).longValue() : null;
+	}
+
 	@javax.annotation.Nullable
 	public static String getDeclaredStringAttributeValue(@Nonnull PsiAnnotation anno, @javax.annotation.Nullable final String attributeName)
 	{
@@ -946,4 +939,14 @@ public class AnnotationUtil
 		return flags;
 	}
 	//</editor-fold>
+
+	@Nonnull
+	public static List<PsiAnnotationMemberValue> arrayAttributeValues(@Nullable PsiAnnotationMemberValue attributeValue)
+	{
+		if(attributeValue instanceof PsiArrayInitializerMemberValue)
+		{
+			return Arrays.asList(((PsiArrayInitializerMemberValue) attributeValue).getInitializers());
+		}
+		return ContainerUtil.createMaybeSingletonList(attributeValue);
+	}
 }

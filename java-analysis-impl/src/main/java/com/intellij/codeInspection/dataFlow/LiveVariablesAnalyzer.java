@@ -1,21 +1,8 @@
-/*
- * Copyright 2000-2014 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInspection.dataFlow.instructions.*;
+import com.intellij.codeInspection.dataFlow.value.DfaExpressionFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
@@ -27,11 +14,13 @@ import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.util.PairFunction;
 import com.intellij.util.containers.Queue;
 import com.intellij.util.containers.*;
+import gnu.trove.TIntHashSet;
 import one.util.streamex.IntStreamEx;
-import one.util.streamex.StreamEx;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.*;
 
 /**
@@ -43,28 +32,27 @@ public class LiveVariablesAnalyzer
 	private final Instruction[] myInstructions;
 	private final MultiMap<Instruction, Instruction> myForwardMap;
 	private final MultiMap<Instruction, Instruction> myBackwardMap;
-	@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-	private final Map<PsiElement, List<DfaVariableValue>> myClosureReads = FactoryMap.create(closure ->
-	{
-		final Set<DfaVariableValue> result = ContainerUtil.newLinkedHashSet();
-		closure.accept(new PsiRecursiveElementWalkingVisitor()
-		{
-			@Override
-			public void visitElement(PsiElement element)
-			{
-				if(element instanceof PsiReferenceExpression)
+	private final Map<PsiElement, List<DfaVariableValue>> myClosureReads =
+			FactoryMap.create(closure -> {
+				final Set<DfaVariableValue> result = new LinkedHashSet<>();
+				closure.accept(new PsiRecursiveElementWalkingVisitor()
 				{
-					DfaValue value = myFactory.createValue((PsiReferenceExpression) element);
-					if(value instanceof DfaVariableValue)
+					@Override
+					public void visitElement(PsiElement element)
 					{
-						result.add((DfaVariableValue) value);
+						if(element instanceof PsiReferenceExpression)
+						{
+							DfaValue value = myFactory.createValue((PsiReferenceExpression) element);
+							if(value instanceof DfaVariableValue)
+							{
+								result.add((DfaVariableValue) value);
+							}
+						}
+						super.visitElement(element);
 					}
-				}
-				super.visitElement(element);
-			}
-		});
-		return ContainerUtil.newArrayList(result);
-	});
+				});
+				return new ArrayList<>(result);
+			});
 
 	public LiveVariablesAnalyzer(ControlFlow flow, DfaValueFactory factory)
 	{
@@ -76,7 +64,7 @@ public class LiveVariablesAnalyzer
 
 	private List<Instruction> getSuccessors(Instruction ins)
 	{
-		return IntStreamEx.of(LoopAnalyzer.getSuccessorIndices(ins.getIndex(), myInstructions)).mapToObj(i -> myInstructions[i]).toList();
+		return IntStreamEx.of(LoopAnalyzer.getSuccessorIndices(ins.getIndex(), myInstructions)).elements(myInstructions).toList();
 	}
 
 	private MultiMap<Instruction, Instruction> calcBackwardMap()
@@ -120,7 +108,7 @@ public class LiveVariablesAnalyzer
 		return result;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static DfaVariableValue getWrittenVariable(Instruction instruction)
 	{
 		if(instruction instanceof AssignInstruction)
@@ -129,9 +117,7 @@ public class LiveVariablesAnalyzer
 			return value instanceof DfaVariableValue ? (DfaVariableValue) value : null;
 		}
 		if(instruction instanceof FlushVariableInstruction)
-		{
 			return ((FlushVariableInstruction) instruction).getVariable();
-		}
 		return null;
 	}
 
@@ -160,24 +146,21 @@ public class LiveVariablesAnalyzer
 	private boolean isInterestingInstruction(Instruction instruction)
 	{
 		if(instruction == myInstructions[0])
-		{
 			return true;
-		}
 		if(!getReadVariables(instruction).isEmpty() || getWrittenVariable(instruction) != null)
-		{
 			return true;
-		}
-		return instruction instanceof FinishElementInstruction || instruction instanceof GotoInstruction || instruction instanceof ConditionalGotoInstruction || instruction instanceof
-				ControlTransferInstruction;
+		return instruction instanceof FinishElementInstruction ||
+				instruction instanceof GotoInstruction ||
+				instruction instanceof ConditionalGotoInstruction ||
+				instruction instanceof ControlTransferInstruction;
 	}
 
 	@Nullable
 	private Map<FinishElementInstruction, BitSet> findLiveVars()
 	{
-		final Map<FinishElementInstruction, BitSet> result = ContainerUtil.newHashMap();
+		final Map<FinishElementInstruction, BitSet> result = new HashMap<>();
 
-		boolean ok = runDfa(false, (instruction, liveVars) ->
-		{
+		boolean ok = runDfa(false, (instruction, liveVars) -> {
 			if(instruction instanceof FinishElementInstruction)
 			{
 				BitSet set = result.get(instruction);
@@ -197,7 +180,7 @@ public class LiveVariablesAnalyzer
 			{
 				liveVars = (BitSet) liveVars.clone();
 				liveVars.clear(written.getID());
-				for(DfaVariableValue var : myFactory.getVarFactory().getAllQualifiedBy(written))
+				for(DfaVariableValue var : written.getDependentVariables())
 				{
 					liveVars.clear(var.getID());
 				}
@@ -228,29 +211,24 @@ public class LiveVariablesAnalyzer
 	{
 		final Map<FinishElementInstruction, BitSet> liveVars = findLiveVars();
 		if(liveVars == null)
-		{
 			return;
-		}
 
 		final MultiMap<FinishElementInstruction, DfaVariableValue> toFlush = MultiMap.createSet();
 
-		boolean ok = runDfa(true, (instruction, prevLiveVars) ->
-		{
+		boolean ok = runDfa(true, (instruction, prevLiveVars) -> {
 			if(instruction instanceof FinishElementInstruction)
 			{
 				BitSet currentlyLive = liveVars.get(instruction);
 				if(currentlyLive == null)
 				{
-					return new BitSet(); // an instruction unreachable from the end?
+					currentlyLive = new BitSet();
 				}
 				int index = 0;
 				while(true)
 				{
 					int setBit = prevLiveVars.nextSetBit(index);
 					if(setBit < 0)
-					{
 						break;
-					}
 					if(!currentlyLive.get(setBit))
 					{
 						toFlush.putValue((FinishElementInstruction) instruction, (DfaVariableValue) myFactory.getValue(setBit));
@@ -268,8 +246,8 @@ public class LiveVariablesAnalyzer
 			for(FinishElementInstruction instruction : toFlush.keySet())
 			{
 				Collection<DfaVariableValue> values = toFlush.get(instruction);
-				// Do not flush special values as they could be used implicitly
-				values.removeIf(var -> var.getQualifier() != null && StreamEx.of(SpecialField.values()).anyMatch(sf -> sf.isMyAccessor(var.getPsiVariable())));
+				// Do not flush special values and this value as they could be used implicitly
+				values.removeIf(var -> var.getDescriptor() instanceof SpecialField || var.getDescriptor() instanceof DfaExpressionFactory.ThisDescriptor);
 				instruction.getVarsToFlush().addAll(values);
 			}
 		}
@@ -280,7 +258,7 @@ public class LiveVariablesAnalyzer
 	 */
 	private boolean runDfa(boolean forward, PairFunction<Instruction, BitSet, BitSet> handleState)
 	{
-		Set<Instruction> entryPoints = ContainerUtil.newHashSet();
+		Set<Instruction> entryPoints = new HashSet<>();
 		if(forward)
 		{
 			entryPoints.add(myInstructions[0]);
@@ -296,11 +274,11 @@ public class LiveVariablesAnalyzer
 			queue.addLast(new InstructionState(i, new BitSet()));
 		}
 
-		int limit = myForwardMap.size() * 20;
-		Set<InstructionState> processed = ContainerUtil.newHashSet();
+		int limit = myForwardMap.size() * 100;
+		Map<BitSet, TIntHashSet> processed = new HashMap<>();
+		int steps = 0;
 		while(!queue.isEmpty())
 		{
-			int steps = processed.size();
 			if(steps > limit)
 			{
 				return false;
@@ -315,10 +293,13 @@ public class LiveVariablesAnalyzer
 			BitSet nextVars = handleState.fun(instruction, state.second);
 			for(Instruction next : nextInstructions)
 			{
-				InstructionState nextState = new InstructionState(next, nextVars);
-				if(processed.add(nextState))
+				TIntHashSet instructionSet = processed.computeIfAbsent(nextVars, k -> new TIntHashSet());
+				int index = next.getIndex() + 1;
+				if(!instructionSet.contains(index))
 				{
-					queue.addLast(nextState);
+					instructionSet.add(index);
+					queue.addLast(new InstructionState(next, nextVars));
+					steps++;
 				}
 			}
 		}
@@ -327,7 +308,7 @@ public class LiveVariablesAnalyzer
 
 	private static class InstructionState extends Pair<Instruction, BitSet>
 	{
-		public InstructionState(Instruction first, BitSet second)
+		InstructionState(Instruction first, BitSet second)
 		{
 			super(first, second);
 		}

@@ -21,7 +21,7 @@ import static com.intellij.psi.PsiType.getTypeByName;
 import java.util.EnumSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nonnull;import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.jvm.JvmClassKind;
@@ -143,6 +143,20 @@ class PsiJvmConversionHelper
 			return JvmReferenceType.EMPTY_ARRAY;
 		}
 		return referenceList.getReferencedTypes();
+	}
+
+
+	@Nullable
+	static PsiAnnotation getListAnnotation(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String fqn)
+	{
+		PsiModifierList list = modifierListOwner.getModifierList();
+		return list == null ? null : list.findAnnotation(fqn);
+	}
+
+	static boolean hasListAnnotation(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String fqn)
+	{
+		PsiModifierList list = modifierListOwner.getModifierList();
+		return list != null && list.hasAnnotation(fqn);
 	}
 
 	static class PsiJvmSubstitutor implements JvmSubstitutor

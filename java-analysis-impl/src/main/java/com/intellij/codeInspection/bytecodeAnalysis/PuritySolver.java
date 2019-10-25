@@ -16,157 +16,229 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-final class PuritySolver {
-  private HashMap<HKey, Set<HEffectQuantum>> solved = new HashMap<HKey, Set<HEffectQuantum>>();
-  private HashMap<HKey, Set<HKey>> dependencies = new HashMap<HKey, Set<HKey>>();
-  private final Stack<HKey> moving = new Stack<HKey>();
-  private HashMap<HKey, Set<HEffectQuantum>> pending = new HashMap<HKey, Set<HEffectQuantum>>();
+final class PuritySolver
+{
+	private final HashMap<EKey, Effects> solved = new HashMap<>();
+	private final HashMap<EKey, Set<EKey>> dependencies = new HashMap<>();
+	private final ArrayDeque<EKey> moving = new ArrayDeque<>();
+	HashMap<EKey, Effects> pending = new HashMap<>();
 
-  void addEquation(HKey key, Set<HEffectQuantum> effects) {
-    Set<HKey> callKeys = new HashSet<HKey>();
-    for (HEffectQuantum effect : effects) {
-      if (effect instanceof HEffectQuantum.CallQuantum) {
-        callKeys.add(((HEffectQuantum.CallQuantum)effect).key);
-      }
-    }
+	void addEquation(EKey key, Effects effects)
+	{
+		Set<EKey> depKeys = effects.dependencies().collect(Collectors.toSet());
+		if(depKeys.isEmpty())
+		{
+			solved.put(key, effects);
+			moving.add(key);
+		}
+		else
+		{
+			pending.put(key, effects);
+			for(EKey depKey : depKeys)
+			{
+				dependencies.computeIfAbsent(depKey, k -> new HashSet<>()).add(key);
+			}
+		}
+	}
 
-    if (callKeys.isEmpty()) {
-      solved.put(key, effects);
-      moving.add(key);
-    } else {
-      pending.put(key, effects);
-      for (HKey callKey : callKeys) {
-        Set<HKey> deps = dependencies.get(callKey);
-        if (deps == null) {
-          deps = new HashSet<HKey>();
-          dependencies.put(callKey, deps);
-        }
-        deps.add(key);
-      }
-    }
-  }
+	public Map<EKey, Effects> solve()
+	{
+		while(!moving.isEmpty())
+		{
+			EKey key = moving.pop();
+			Effects effects = solved.get(key);
 
-	public Map<HKey, Set<HEffectQuantum>> solve() {
-    while (!moving.isEmpty()) {
-      HKey key = moving.pop();
-      Set<HEffectQuantum> effects = solved.get(key);
+			EKey[] propagateKeys;
+			Effects[] propagateEffects;
 
-      HKey[] propagateKeys;
-      Set[] propagateEffects;
+			if(key.stable)
+			{
+				propagateKeys = new EKey[]{
+						key,
+						key.mkUnstable()
+				};
+				propagateEffects = new Effects[]{
+						effects,
+						effects
+				};
+			}
+			else
+			{
+				propagateKeys = new EKey[]{
+						key.mkStable(),
+						key
+				};
+				propagateEffects = new Effects[]{
+						effects,
+						new Effects(DataValue.UnknownDataValue1, Effects.TOP_EFFECTS)
+				};
+			}
+			for(int i = 0; i < propagateKeys.length; i++)
+			{
+				EKey pKey = propagateKeys[i];
+				Effects pEffects = propagateEffects[i];
+				Set<EKey> dKeys = dependencies.remove(pKey);
+				if(dKeys != null)
+				{
+					for(EKey dKey : dKeys)
+					{
+						Effects dEffects = pending.remove(dKey);
+						if(dEffects == null)
+						{
+							// already solved, for example, solution is top
+							continue;
+						}
+						Set<EffectQuantum> newEffects = new HashSet<>();
+						Set<EffectQuantum> delta = null;
+						DataValue returnValue = substitute(dEffects.returnValue, pKey, pEffects);
 
-      if (key.stable) {
-        propagateKeys = new HKey[]{key, key.mkUnstable()};
-        propagateEffects = new Set[]{effects, effects};
-      }
-      else {
-        propagateKeys = new HKey[]{key.mkStable(), key};
-        propagateEffects = new Set[]{effects, mkUnstableEffects(key)};
-      }
-      for (int i = 0; i < propagateKeys.length; i++) {
-        HKey pKey = propagateKeys[i];
-        Set<HEffectQuantum> pEffects = propagateEffects[i];
-        Set<HKey> dKeys = dependencies.remove(pKey);
-        if (dKeys != null) {
-          for (HKey dKey : dKeys) {
-            Set<HEffectQuantum> dEffects = pending.remove(dKey);
-            if (dEffects == null) {
-              // already solved, for example, solution is top
-              continue;
-            }
-            Set<HKey> callKeys = new HashSet<HKey>();
-            Set<HEffectQuantum> newEffects = new HashSet<HEffectQuantum>();
-            Set<HEffectQuantum> delta = null;
+						for(EffectQuantum dEffect : dEffects.effects)
+						{
+							if(dEffect instanceof EffectQuantum.CallQuantum)
+							{
+								EffectQuantum.CallQuantum call = substitute((EffectQuantum.CallQuantum) dEffect, pKey, pEffects);
+								if(call.key.equals(pKey))
+								{
+									delta = substitute(pEffects, call.data, call.isStatic);
+									if(delta.equals(Effects.TOP_EFFECTS))
+									{
+										newEffects = delta;
+										break;
+									}
+									newEffects.addAll(delta);
+								}
+								else
+								{
+									newEffects.add(call);
+								}
+								continue;
+							}
+							if(dEffect instanceof EffectQuantum.ReturnChangeQuantum)
+							{
+								EffectQuantum.ReturnChangeQuantum retChange = (EffectQuantum.ReturnChangeQuantum) dEffect;
+								if(retChange.key.equals(pKey))
+								{
+									if(pEffects.returnValue != DataValue.LocalDataValue)
+									{
+										newEffects = delta = Effects.TOP_EFFECTS;
+										break;
+									}
+									continue;
+								}
+							}
+							if(dEffect instanceof EffectQuantum.FieldReadQuantum && ((EffectQuantum.FieldReadQuantum) dEffect).key.equals(pKey))
+							{
+								newEffects.addAll(pEffects.effects);
+								continue;
+							}
+							newEffects.add(dEffect);
+						}
 
-            for (HEffectQuantum dEffect : dEffects) {
-              if (dEffect instanceof HEffectQuantum.CallQuantum) {
-                HEffectQuantum.CallQuantum call = ((HEffectQuantum.CallQuantum)dEffect);
-                if (call.key.equals(pKey)) {
-                  delta = substitute(pEffects, call.data, call.isStatic);
-                  newEffects.addAll(delta);
-                }
-                else {
-                  callKeys.add(call.key);
-                  newEffects.add(call);
-                }
-              }
-              else {
-                newEffects.add(dEffect);
-              }
-            }
+						if(Effects.TOP_EFFECTS.equals(delta) && returnValue.equals(DataValue.UnknownDataValue1))
+						{
+							solved.put(dKey, new Effects(returnValue, Effects.TOP_EFFECTS));
+							moving.push(dKey);
+						}
+						else
+						{
+							Effects result = new Effects(returnValue, newEffects);
+							if(result.dependencies().findFirst().isPresent())
+							{
+								pending.put(dKey, result);
+							}
+							else
+							{
+								solved.put(dKey, result);
+								moving.push(dKey);
+							}
+						}
+					}
+				}
+			}
+		}
+		return solved;
+	}
 
-            if (PurityAnalysis.topHEffect.equals(delta)) {
-              solved.put(dKey, PurityAnalysis.topHEffect);
-              moving.push(dKey);
-            }
-            else if (callKeys.isEmpty()) {
-              solved.put(dKey, newEffects);
-              moving.push(dKey);
-            }
-            else {
-              pending.put(dKey, newEffects);
-            }
-          }
+	public void addPlainFieldEquations(Predicate<MemberDescriptor> plainByDefault)
+	{
+		for(EKey key : dependencies.keySet())
+		{
+			if(key.getDirection() == Direction.Volatile && plainByDefault.test(key.member))
+			{
+				// Absent fields are considered non-volatile
+				solved.putIfAbsent(key, new Effects(DataValue.UnknownDataValue1, Collections.emptySet()));
+				moving.add(key);
+			}
+		}
+	}
 
+	private static EffectQuantum.CallQuantum substitute(EffectQuantum.CallQuantum call, EKey pKey, Effects pEffects)
+	{
+		List<DataValue> list = new ArrayList<>();
+		boolean same = true;
+		for(DataValue value : call.data)
+		{
+			DataValue newValue = substitute(value, pKey, pEffects);
+			same &= newValue.equals(value);
+			list.add(newValue);
+		}
+		return same ? call : new EffectQuantum.CallQuantum(call.key, list.toArray(DataValue.EMPTY), call.isStatic);
+	}
 
-        }
-      }
+	private static DataValue substitute(DataValue value, EKey key, Effects effects)
+	{
+		if(value instanceof DataValue.ReturnDataValue && ((DataValue.ReturnDataValue) value).key.equals(key))
+		{
+			return effects.returnValue == DataValue.LocalDataValue ? DataValue.LocalDataValue : DataValue.UnknownDataValue1;
+		}
+		return value;
+	}
 
-    }
-    return solved;
-  }
-
-  private Set<HEffectQuantum> substitute(Set<HEffectQuantum> effects, DataValue[] data, boolean isStatic) {
-    if (effects.isEmpty() || PurityAnalysis.topHEffect.equals(effects)) {
-      return effects;
-    }
-    else {
-      Set<HEffectQuantum> newEffects = new HashSet<HEffectQuantum>();
-      int shift = isStatic ? 0 : 1;
-      for (HEffectQuantum effect : effects) {
-        if (effect == HEffectQuantum.ThisChangeQuantum) {
-          DataValue thisArg = data[0];
-          if (thisArg == DataValue.ThisDataValue || thisArg == DataValue.OwnedDataValue) {
-            newEffects.add(HEffectQuantum.ThisChangeQuantum);
-          }
-          else if (thisArg == DataValue.LocalDataValue) {
-            // nothing
-          }
-          else if (thisArg instanceof DataValue.ParameterDataValue) {
-            newEffects.add(new HEffectQuantum.ParamChangeQuantum(((DataValue.ParameterDataValue)thisArg).n));
-          }
-          else {
-            return PurityAnalysis.topHEffect;
-          }
-        }
-        else if (effect instanceof HEffectQuantum.ParamChangeQuantum) {
-          HEffectQuantum.ParamChangeQuantum paramChange = ((HEffectQuantum.ParamChangeQuantum)effect);
-          DataValue paramArg = data[paramChange.n + shift];
-          if (paramArg == DataValue.ThisDataValue || paramArg == DataValue.OwnedDataValue) {
-            newEffects.add(HEffectQuantum.ThisChangeQuantum);
-          }
-          else if (paramArg == DataValue.LocalDataValue) {
-            // nothing
-          }
-          else if (paramArg instanceof DataValue.ParameterDataValue) {
-            newEffects.add(new HEffectQuantum.ParamChangeQuantum(((DataValue.ParameterDataValue)paramArg).n));
-          }
-          else {
-            return PurityAnalysis.topHEffect;
-          }
-        }
-      }
-      return newEffects;
-    }
-  }
-
-  private static Set mkUnstableEffects(HKey key) {
-    Set<EffectQuantum> hardcodedEffects = HardCodedPurity.getHardCodedSolution(key);
-    return hardcodedEffects == null ? PurityAnalysis.topHEffect : hardcodedEffects;
-  }
+	private static Set<EffectQuantum> substitute(Effects effects, DataValue[] data, boolean isStatic)
+	{
+		if(effects.effects.isEmpty() || Effects.TOP_EFFECTS.equals(effects.effects))
+		{
+			return effects.effects;
+		}
+		Set<EffectQuantum> newEffects = new HashSet<>(effects.effects.size());
+		int shift = isStatic ? 0 : 1;
+		for(EffectQuantum effect : effects.effects)
+		{
+			DataValue arg = null;
+			if(effect == EffectQuantum.ThisChangeQuantum)
+			{
+				arg = data[0];
+			}
+			else if(effect instanceof EffectQuantum.ParamChangeQuantum)
+			{
+				EffectQuantum.ParamChangeQuantum paramChange = ((EffectQuantum.ParamChangeQuantum) effect);
+				arg = data[paramChange.n + shift];
+			}
+			if(arg == null || arg == DataValue.LocalDataValue)
+			{
+				continue;
+			}
+			if(arg == DataValue.ThisDataValue || arg == DataValue.OwnedDataValue)
+			{
+				newEffects.add(EffectQuantum.ThisChangeQuantum);
+				continue;
+			}
+			if(arg instanceof DataValue.ParameterDataValue)
+			{
+				newEffects.add(new EffectQuantum.ParamChangeQuantum(((DataValue.ParameterDataValue) arg).n));
+				continue;
+			}
+			if(arg instanceof DataValue.ReturnDataValue)
+			{
+				newEffects.add(new EffectQuantum.ReturnChangeQuantum(((DataValue.ReturnDataValue) arg).key));
+				continue;
+			}
+			return Effects.TOP_EFFECTS;
+		}
+		return newEffects;
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,34 +15,46 @@
  */
 package com.intellij.codeInspection.dataFlow.value;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class DfaInstanceofValue extends DfaValue
 {
-	private final PsiExpression myExpression;
-	private final PsiType myCastType;
+	private final
+	@Nonnull
+	PsiExpression myExpression;
+	private final
+	@Nonnull
+	PsiType myCastType;
 	private final boolean myNegated;
+	private final
+	@Nonnull
+	DfaValue myRelation;
 
-	public DfaInstanceofValue(DfaValueFactory factory, PsiExpression expression, PsiType castType)
-	{
-		this(factory, expression, castType, false);
-	}
-
-	public DfaInstanceofValue(DfaValueFactory factory, PsiExpression expression, PsiType castType, boolean negated)
+	public DfaInstanceofValue(DfaValueFactory factory,
+							  @Nonnull PsiExpression expression,
+							  @Nonnull PsiType castType,
+							  @Nonnull DfaValue relation,
+							  boolean negated)
 	{
 		super(factory);
 		myExpression = expression;
 		myCastType = castType;
+		myRelation = relation;
 		myNegated = negated;
 	}
 
-	@javax.annotation.Nullable
+	@Nonnull
+	public DfaValue getRelation()
+	{
+		return myRelation;
+	}
+
+	@Nonnull
 	public PsiExpression getExpression()
 	{
 		return myExpression;
@@ -62,6 +74,6 @@ public class DfaInstanceofValue extends DfaValue
 	@Override
 	public DfaValue createNegated()
 	{
-		return new DfaInstanceofValue(myFactory, myExpression, myCastType, !myNegated);
+		return new DfaInstanceofValue(myFactory, myExpression, myCastType, myRelation.createNegated(), !myNegated);
 	}
 }

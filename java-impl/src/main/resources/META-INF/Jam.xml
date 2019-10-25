@@ -14,7 +14,7 @@
   - limitations under the License.
   -->
 
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij">
 		<applicationService serviceInterface="com.intellij.jam.JamClassGenerator" serviceImplementation="consulo.java.jam.JamClassGeneratorImpl"/>
 
@@ -26,4 +26,4 @@
 
 		<semContributor implementation="consulo.java.jam.JamToSemContributor"/>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

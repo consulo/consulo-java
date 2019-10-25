@@ -15,8 +15,6 @@
  */
 package com.intellij.psi.impl.search;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.project.Project;
@@ -32,6 +30,8 @@ import com.intellij.psi.util.ClassUtil;
 import com.intellij.util.Processor;
 import consulo.psi.PsiPackage;
 
+import javax.annotation.Nonnull;
+
 public class SPIReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>
 {
 	public SPIReferencesSearcher()
@@ -40,7 +40,7 @@ public class SPIReferencesSearcher extends QueryExecutorBase<PsiReference, Refer
 	}
 
 	@Override
-	public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<PsiReference> consumer)
+	public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer)
 	{
 		final PsiElement element = p.getElementToSearch();
 		if(!element.isValid())

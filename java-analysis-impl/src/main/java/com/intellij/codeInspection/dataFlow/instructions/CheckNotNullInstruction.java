@@ -15,30 +15,34 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.codeInspection.dataFlow.NullabilityProblem;
-import com.intellij.psi.PsiExpression;
+import com.intellij.codeInspection.dataFlow.*;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CheckNotNullInstruction extends Instruction
 {
-	private final PsiExpression myExpression;
-	private final NullabilityProblem myProblem;
+	private final
+	@Nonnull
+	NullabilityProblemKind.NullabilityProblem<?> myProblem;
+	private final
+	@Nullable
+	DfaControlTransferValue myTransferValue;
 
-	public CheckNotNullInstruction(PsiExpression expression, NullabilityProblem problem)
+	public CheckNotNullInstruction(@Nonnull NullabilityProblemKind.NullabilityProblem<?> problem,
+								   @Nullable DfaControlTransferValue transferValue)
 	{
-		myExpression = expression;
 		myProblem = problem;
+		myTransferValue = transferValue;
 	}
 
-	public PsiExpression getExpression()
+	@Nullable
+	public DfaControlTransferValue getOnNullTransfer()
 	{
-		return myExpression;
+		return myTransferValue;
 	}
 
-	public NullabilityProblem getProblem()
+	@Nonnull
+	public NullabilityProblemKind.NullabilityProblem<?> getProblem()
 	{
 		return myProblem;
 	}
@@ -52,6 +56,6 @@ public class CheckNotNullInstruction extends Instruction
 	@Override
 	public String toString()
 	{
-		return "CHECK_NOT_NULL [" + myProblem + "] " + myExpression.getText();
+		return "CHECK_NOT_NULL " + myProblem;
 	}
 }

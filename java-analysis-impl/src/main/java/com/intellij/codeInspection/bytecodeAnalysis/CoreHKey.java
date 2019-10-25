@@ -16,19 +16,18 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import java.util.Arrays;
-
 import javax.annotation.Nonnull;
 
 final class CoreHKey
 {
+	final
 	@Nonnull
-	final byte[] key;
+	MemberDescriptor myMethod;
 	final int dirKey;
 
-	CoreHKey(@Nonnull byte[] key, int dirKey)
+	CoreHKey(@Nonnull MemberDescriptor method, int dirKey)
 	{
-		this.key = key;
+		this.myMethod = method;
 		this.dirKey = dirKey;
 	}
 
@@ -45,23 +44,18 @@ final class CoreHKey
 		}
 
 		CoreHKey coreHKey = (CoreHKey) o;
-
-		if(dirKey != coreHKey.dirKey)
-		{
-			return false;
-		}
-		if(!Arrays.equals(key, coreHKey.key))
-		{
-			return false;
-		}
-		return true;
+		return dirKey == coreHKey.dirKey && myMethod.equals(coreHKey.myMethod);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		int result = Arrays.hashCode(key);
-		result = 31 * result + dirKey;
-		return result;
+		return 31 * myMethod.hashCode() + dirKey;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "CoreHKey [" + myMethod + "|" + Direction.fromInt(dirKey) + "]";
 	}
 }

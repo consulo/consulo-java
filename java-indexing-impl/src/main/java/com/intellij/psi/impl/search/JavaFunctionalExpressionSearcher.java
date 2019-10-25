@@ -15,30 +15,8 @@
  */
 package com.intellij.psi.impl.search;
 
-import static com.intellij.util.containers.ContainerUtil.addAllNotNull;
-import static com.intellij.util.containers.ContainerUtil.addIfNotNull;
-import static com.intellij.util.containers.ContainerUtil.map;
-import static com.intellij.util.containers.ContainerUtil.mapNotNull;
-import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
-import static com.intellij.util.containers.ContainerUtil.process;
-import static com.intellij.util.containers.ContainerUtilRt.newHashSet;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import consulo.java.module.extension.JavaModuleExtension;
 import com.google.common.annotations.VisibleForTesting;
-import com.intellij.openapi.application.AccessToken;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.QueryExecutorBase;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.ReadActionProcessor;
+import com.intellij.openapi.application.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -51,27 +29,25 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaMethodElementType;
 import com.intellij.psi.impl.java.stubs.index.JavaMethodParameterTypesIndex;
-import com.intellij.psi.search.EverythingGlobalScope;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.UsageSearchContext;
+import com.intellij.psi.search.*;
 import com.intellij.psi.search.searches.FunctionalExpressionSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.psi.util.*;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
 import consulo.annotations.RequiredReadAction;
+import consulo.java.module.extension.JavaModuleExtension;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+
+import static com.intellij.util.containers.ContainerUtil.*;
+import static com.intellij.util.containers.ContainerUtilRt.newHashSet;
 
 public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters>
 {
@@ -85,7 +61,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 	public static final int SMART_SEARCH_THRESHOLD = 5;
 
 	@Override
-	public void processQuery(@Nonnull FunctionalExpressionSearch.SearchParameters queryParameters, @Nonnull Processor<PsiFunctionalExpression> consumer)
+	public void processQuery(@Nonnull FunctionalExpressionSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiFunctionalExpression> consumer)
 	{
 		final GlobalSearchScope useScope;
 		final PsiClass aClass;
@@ -192,7 +168,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 		return highLevelModules;
 	}
 
-	private static void searchInFiles(final PsiClass aClass, final Processor<PsiFunctionalExpression> consumer, Set<VirtualFile> filesToProcess, final int expectedFunExprParamsCount)
+	private static void searchInFiles(final PsiClass aClass, final Processor<? super PsiFunctionalExpression> consumer, Set<VirtualFile> filesToProcess, final int expectedFunExprParamsCount)
 	{
 		LOG.info("#usage files: " + filesToProcess.size());
 		process(filesToProcess, new ReadActionProcessor<VirtualFile>()
@@ -373,7 +349,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 		}
 	}
 
-	private static boolean processFileWithFunctionalInterfaces(final PsiClass aClass, final int expectedParamCount, final Processor<PsiFunctionalExpression> consumer, VirtualFile file)
+	private static boolean processFileWithFunctionalInterfaces(final PsiClass aClass, final int expectedParamCount, final Processor<? super PsiFunctionalExpression> consumer, VirtualFile file)
 	{
 		final PsiFile psiFile = aClass.getManager().findFile(file);
 		if(psiFile != null)

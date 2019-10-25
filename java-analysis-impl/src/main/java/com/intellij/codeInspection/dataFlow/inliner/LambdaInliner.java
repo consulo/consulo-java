@@ -15,20 +15,13 @@
  */
 package com.intellij.codeInspection.dataFlow.inliner;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.codeInsight.Nullability;
 import com.intellij.codeInspection.dataFlow.CFGBuilder;
-import com.intellij.codeInspection.dataFlow.Nullness;
-import com.intellij.psi.LambdaUtil;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiTypeCastExpression;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtil;
+import com.intellij.util.ObjectUtils;
 import one.util.streamex.EntryStream;
+import javax.annotation.Nonnull;
 
 /**
  * An inliner which is capable to inline a call like ((IntSupplier)(() -> 5)).getAsInt() to the lambda body.
@@ -41,31 +34,28 @@ public class LambdaInliner implements CallInliner
 	{
 		PsiMethod method = call.resolveMethod();
 		if(method == null || method != LambdaUtil.getFunctionalInterfaceMethod(method.getContainingClass()))
-		{
 			return false;
-		}
-		PsiTypeCastExpression typeCastExpression = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression()), PsiTypeCastExpression.class);
+		PsiTypeCastExpression typeCastExpression = ObjectUtils
+				.tryCast(PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression()), PsiTypeCastExpression.class);
 		if(typeCastExpression == null)
-		{
 			return false;
-		}
-		PsiLambdaExpression lambda = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(typeCastExpression.getOperand()), PsiLambdaExpression.class);
+		PsiLambdaExpression lambda =
+				ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(typeCastExpression.getOperand()), PsiLambdaExpression.class);
 		if(lambda == null || lambda.getBody() == null)
-		{
 			return false;
-		}
 		if(method.isVarArgs())
-		{
 			return false; // TODO: support varargs
-		}
 		PsiExpression[] args = call.getArgumentList().getExpressions();
 		PsiParameter[] parameters = lambda.getParameterList().getParameters();
 		if(args.length != parameters.length)
-		{
 			return false;
-		}
-		EntryStream.zip(args, parameters).forKeyValue((arg, parameter) -> builder.pushVariable(parameter).pushExpression(arg).boxUnbox(arg, parameter.getType()).assign().pop());
-		builder.inlineLambda(lambda, Nullness.UNKNOWN);
+		EntryStream.zip(args, parameters).forKeyValue(
+				(arg, parameter) -> builder.pushForWrite(builder.getFactory().getVarFactory().createVariableValue(parameter))
+						.pushExpression(arg)
+						.boxUnbox(arg, parameter.getType())
+						.assign()
+						.pop());
+		builder.inlineLambda(lambda, Nullability.UNKNOWN);
 		return true;
 	}
 }

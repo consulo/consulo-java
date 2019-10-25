@@ -1,4 +1,4 @@
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="consulo.java">
 		<manifest.headerParser key="" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser" order="last"/>
 
@@ -55,4 +55,4 @@
 		<fileEditorProvider implementation="consulo.java.manifest.editor.ManifestEditorProvider"/>
 		<lang.versionResolver language="MANIFEST" implementationClass="consulo.java.manifest.lang.ManifestLanguageVersionResolver"/>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

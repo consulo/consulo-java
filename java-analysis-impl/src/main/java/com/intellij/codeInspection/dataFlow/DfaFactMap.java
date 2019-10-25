@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-
+import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.openapi.util.Key;
 import com.intellij.util.keyFMap.KeyFMap;
 import one.util.streamex.StreamEx;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import java.util.List;
 
 /**
  * An immutable collection of facts which are known for some value. Each fact is identified by {@link DfaFactType} and fact value.
@@ -55,7 +55,7 @@ public final class DfaFactMap
 	 * @param <T>  type of the fact value
 	 * @return a fact value or null
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public <T> T get(@Nonnull DfaFactType<T> type)
 	{
 		return myMap.get(type);
@@ -70,9 +70,9 @@ public final class DfaFactMap
 	 * @return a new fact map. May return itself if it's detected that this fact map already contains the supplied value.
 	 */
 	@Nonnull
-	public <T> DfaFactMap with(@Nonnull DfaFactType<T> type, @javax.annotation.Nullable T value)
+	public <T> DfaFactMap with(@Nonnull DfaFactType<T> type, @Nullable T value)
 	{
-		KeyFMap newMap = value == null ? myMap.minus(type) : myMap.plus(type, value);
+		KeyFMap newMap = value == null || type.isUnknown(value) ? myMap.minus(type) : myMap.plus(type, value);
 		return newMap == myMap ? this : new DfaFactMap(newMap);
 	}
 
@@ -85,16 +85,16 @@ public final class DfaFactMap
 	 */
 	public boolean isSuperStateOf(DfaFactMap subMap)
 	{
-		for(Key key : myMap.getKeys())
+		// absent fact is not always a superstate of present fact
+		// e.g. absent NULLABILITY means that nullability is unknown,
+		// but NULLABILITY=NULLABLE means that value is definitely nullable and we should warn about nullability violation if any
+		// so the (NULLABILITY=NULLABLE) state cannot be superseded by (NULLABILITY=null) state
+		for(DfaFactType<?> key : DfaFactType.getTypes())
 		{
-			@SuppressWarnings("unchecked") DfaFactType<Object> type = (DfaFactType<Object>) key;
-			Object other = subMap.get(type);
-			if(other == null)
-			{
-				return false;
-			}
+			@SuppressWarnings("unchecked")
+			DfaFactType<Object> type = (DfaFactType<Object>) key;
 			Object thisValue = myMap.get(type);
-			Objects.requireNonNull(thisValue); // cannot be null as type is known to be my key and we never store null values
+			Object other = subMap.get(type);
 			if(!type.isSuper(thisValue, other))
 			{
 				return false;
@@ -115,10 +115,10 @@ public final class DfaFactMap
 	 * which conforms to the new fact and to this fact map simultaneously). May return itself if
 	 * it's known that new fact does not actually change this map.
 	 */
-	@javax.annotation.Nullable
-	public <T> DfaFactMap intersect(@Nonnull DfaFactType<T> type, @javax.annotation.Nullable T value)
+	@Nullable
+	public <T> DfaFactMap intersect(@Nonnull DfaFactType<T> type, @Nullable T value)
 	{
-		if(value == null)
+		if(value == null || type.isUnknown(value))
 		{
 			return this;
 		}
@@ -129,6 +129,63 @@ public final class DfaFactMap
 		}
 		T newFact = type.intersectFacts(curFact, value);
 		return newFact == null ? null : with(type, newFact);
+	}
+
+	private <TT> DfaFactMap intersect(@Nonnull DfaFactMap otherMap, @Nonnull DfaFactType<TT> type)
+	{
+		return intersect(type, otherMap.get(type));
+	}
+
+	@Nullable
+	public DfaFactMap intersect(@Nonnull DfaFactMap other)
+	{
+		DfaFactMap result = this;
+		List<DfaFactType<?>> types = DfaFactType.getTypes();
+		for(DfaFactType<?> type : types)
+		{
+			result = result.intersect(other, type);
+			if(result == null)
+			{
+				return null;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns a fact map which additionally allows having supplied value for the supplied fact
+	 *
+	 * @param type  a type of a new fact
+	 * @param value an additional fact value which should be allowed. Passing null means that fact may have any value
+	 * @param <T>   a fact value type
+	 * @return a new fact map. May return itself if it's known that new fact does not actually change this map.
+	 */
+	@Nonnull
+	public <T> DfaFactMap unite(@Nonnull DfaFactType<T> type, @Nullable T value)
+	{
+		if(value == null)
+		{
+			return with(type, null);
+		}
+		T curFact = get(type);
+		if(curFact == null)
+		{
+			return this;
+		}
+		T newFact = type.uniteFacts(curFact, value);
+		return with(type, newFact);
+	}
+
+	@Nonnull
+	private <TT> DfaFactMap unite(DfaFactMap otherMap, @Nonnull DfaFactType<TT> type)
+	{
+		return unite(type, otherMap.get(type));
+	}
+
+	@Nonnull
+	public DfaFactMap unite(@Nonnull DfaFactMap other)
+	{
+		return StreamEx.of(DfaFactType.getTypes()).foldLeft(this, (map, type) -> map.unite(other, type));
 	}
 
 	@Override
@@ -147,11 +204,20 @@ public final class DfaFactMap
 		return myMap.hashCode();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String toString()
 	{
-		return StreamEx.of(myMap.getKeys()).map(key -> ((DfaFactType<Object>) key).toString(myMap.get(key))).joining(", ");
+		return facts(DfaFactType::toString).joining(", ");
+	}
+
+	@SuppressWarnings("unchecked")
+	public <R> StreamEx<R> facts(FactMapper<? extends R> mapper)
+	{
+		return StreamEx.of(myMap.getKeys()).map(f -> {
+			DfaFactType<Object> key = (DfaFactType<Object>) f;
+			Object value = myMap.get(f);
+			return mapper.apply(key, value);
+		});
 	}
 
 	/**
@@ -169,5 +235,28 @@ public final class DfaFactMap
 	private static <T> DfaFactMap updateMap(DfaFactMap map, DfaFactType<T> factType, DfaVariableValue value)
 	{
 		return map.with(factType, factType.calcFromVariable(value));
+	}
+
+	/**
+	 * Derives facts which might be known from given DfaValue without knowing the particular memory state
+	 *
+	 * @param value a value to derive facts from
+	 * @return map of facts derived from the value
+	 */
+	@Nonnull
+	public static DfaFactMap fromDfaValue(DfaValue value)
+	{
+		return StreamEx.of(DfaFactType.getTypes()).foldLeft(EMPTY, (map, type) -> updateMap(map, type, value));
+	}
+
+	private static <T> DfaFactMap updateMap(DfaFactMap map, DfaFactType<T> factType, DfaValue value)
+	{
+		return map.with(factType, factType.fromDfaValue(value));
+	}
+
+	@FunctionalInterface
+	public interface FactMapper<R>
+	{
+		<T> R apply(DfaFactType<T> factType, T factValue);
 	}
 }

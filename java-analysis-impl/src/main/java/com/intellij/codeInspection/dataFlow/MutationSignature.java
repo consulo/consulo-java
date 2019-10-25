@@ -79,15 +79,11 @@ public class MutationSignature
 	public boolean mutatesAnything()
 	{
 		if(myThis)
-		{
 			return true;
-		}
 		for(boolean parameter : myParameters)
 		{
 			if(parameter)
-			{
 				return true;
-			}
 		}
 		return false;
 	}
@@ -188,10 +184,8 @@ public class MutationSignature
 	@Nonnull
 	public static MutationSignature fromMethod(@Nullable PsiMethod method)
 	{
-		//if(method == null)
-		//{
+		if(method == null)
 			return UNKNOWN;
-		//}
-		//return JavaMethodContractUtil.getContractInfo(method).getMutationSignature();
+		return JavaMethodContractUtil.getContractInfo(method).getMutationSignature();
 	}
 }

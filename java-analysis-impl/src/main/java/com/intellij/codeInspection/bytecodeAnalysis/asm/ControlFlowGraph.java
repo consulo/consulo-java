@@ -15,57 +15,76 @@
  */
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
-import java.util.Set;
-
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import gnu.trove.TIntIntHashMap;
 
-/**
- * @author lambdamix
- */
-public final class ControlFlowGraph {
-  public static final class Edge {
-    public final int from, to;
+import java.util.Set;
 
-    public Edge(int from, int to) {
-      this.from = from;
-      this.to = to;
-    }
+public final class ControlFlowGraph
+{
+	public static final class Edge
+	{
+		public final int from, to;
 
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (!(o instanceof Edge)) {
-        return false;
-      }
-      Edge edge = (Edge) o;
-      return from == edge.from && to == edge.to;
-    }
+		public Edge(int from, int to)
+		{
+			this.from = from;
+			this.to = to;
+		}
 
-    @Override
-    public int hashCode() {
-      return 31 * from + to;
-    }
-  }
+		@Override
+		public boolean equals(Object o)
+		{
+			if(this == o)
+			{
+				return true;
+			}
+			if(!(o instanceof Edge))
+			{
+				return false;
+			}
+			Edge edge = (Edge) o;
+			return from == edge.from && to == edge.to;
+		}
 
-  public final String className;
-  public final MethodNode methodNode;
-  public final int[][] transitions;
-  public final int edgeCount;
-  public final boolean[] errors;
-  public final Set<Edge> errorTransitions;
+		@Override
+		public int hashCode()
+		{
+			return 31 * from + to;
+		}
+	}
 
-  ControlFlowGraph(String className, MethodNode methodNode, int[][] transitions, int edgeCount, boolean[] errors, Set<Edge> errorTransitions) {
-    this.className = className;
-    this.methodNode = methodNode;
-    this.transitions = transitions;
-    this.edgeCount = edgeCount;
-    this.errors = errors;
-    this.errorTransitions = errorTransitions;
-  }
+	public final String className;
+	public final MethodNode methodNode;
+	public final int[][] transitions;
+	public final int edgeCount;
+	public final boolean[] errors;
+	public final Set<Edge> errorTransitions;
+	/**
+	 * Where execution goes if NPE occurs at given instruction
+	 */
+	public final TIntIntHashMap npeTransitions;
 
-  public static ControlFlowGraph build(String className, MethodNode methodNode, boolean jsr) throws AnalyzerException {
-    return jsr ? new ControlFlowBuilder(className, methodNode).buildCFG() : new LiteControlFlowBuilder(className, methodNode).buildCFG();
-  }
+	ControlFlowGraph(String className,
+					 MethodNode methodNode,
+					 int[][] transitions,
+					 int edgeCount,
+					 boolean[] errors,
+					 Set<Edge> errorTransitions,
+					 TIntIntHashMap npeTransitions)
+	{
+		this.className = className;
+		this.methodNode = methodNode;
+		this.transitions = transitions;
+		this.edgeCount = edgeCount;
+		this.errors = errors;
+		this.errorTransitions = errorTransitions;
+		this.npeTransitions = npeTransitions;
+	}
+
+	public static ControlFlowGraph build(String className, MethodNode methodNode, boolean jsr) throws AnalyzerException
+	{
+		return new ControlFlowBuilder(className, methodNode, jsr).buildCFG();
+	}
 }
-

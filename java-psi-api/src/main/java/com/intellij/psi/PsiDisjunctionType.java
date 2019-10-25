@@ -15,12 +15,6 @@
  */
 package com.intellij.psi;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -28,7 +22,10 @@ import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.util.Function;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import java.util.*;
 
 /**
  * Composite type resulting from Project Coin's multi-catch statements, i.e. {@code FileNotFoundException | EOFException}.
@@ -47,23 +44,18 @@ public class PsiDisjunctionType extends PsiType.Stub
 		myManager = psiManager;
 		myTypes = Collections.unmodifiableList(types);
 
-		myLubCache = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new CachedValueProvider<PsiType>()
-		{
-			@Override
-			public Result<PsiType> compute()
+		myLubCache = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(() -> {
+			PsiType lub = myTypes.get(0);
+			for(int i = 1; i < myTypes.size(); i++)
 			{
-				PsiType lub = myTypes.get(0);
-				for(int i = 1; i < myTypes.size(); i++)
+				lub = GenericsUtil.getLeastUpperBound(lub, myTypes.get(i), myManager);
+				if(lub == null)
 				{
-					lub = GenericsUtil.getLeastUpperBound(lub, myTypes.get(i), myManager);
-					if(lub == null)
-					{
-						lub = PsiType.getJavaLangObject(myManager, GlobalSearchScope.allScope(myManager.getProject()));
-						break;
-					}
+					lub = PsiType.getJavaLangObject(myManager, GlobalSearchScope.allScope(myManager.getProject()));
+					break;
 				}
-				return Result.create(lub, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
 			}
+			return CachedValueProvider.Result.create(lub, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
 		}, false);
 	}
 
@@ -96,42 +88,21 @@ public class PsiDisjunctionType extends PsiType.Stub
 	@Override
 	public String getPresentableText(final boolean annotated)
 	{
-		return StringUtil.join(myTypes, new Function<PsiType, String>()
-		{
-			@Override
-			public String fun(PsiType psiType)
-			{
-				return psiType.getPresentableText(annotated);
-			}
-		}, " | ");
+		return StringUtil.join(myTypes, psiType -> psiType.getPresentableText(annotated), " | ");
 	}
 
 	@Nonnull
 	@Override
 	public String getCanonicalText(final boolean annotated)
 	{
-		return StringUtil.join(myTypes, new Function<PsiType, String>()
-		{
-			@Override
-			public String fun(PsiType psiType)
-			{
-				return psiType.getCanonicalText(annotated);
-			}
-		}, " | ");
+		return StringUtil.join(myTypes, psiType -> psiType.getCanonicalText(annotated), " | ");
 	}
 
 	@Nonnull
 	@Override
 	public String getInternalCanonicalText()
 	{
-		return StringUtil.join(myTypes, new Function<PsiType, String>()
-		{
-			@Override
-			public String fun(PsiType psiType)
-			{
-				return psiType.getInternalCanonicalText();
-			}
-		}, " | ");
+		return StringUtil.join(myTypes, psiType -> psiType.getInternalCanonicalText(), " | ");
 	}
 
 	@Override
@@ -213,5 +184,44 @@ public class PsiDisjunctionType extends PsiType.Stub
 		}
 
 		return true;
+	}
+
+	public static List<PsiType> flattenAndRemoveDuplicates(@Nonnull List<? extends PsiType> types)
+	{
+		Set<PsiType> disjunctionSet = new LinkedHashSet<>();
+		for(PsiType type : types)
+		{
+			flatten(disjunctionSet, type);
+		}
+		ArrayList<PsiType> disjunctions = new ArrayList<>(disjunctionSet);
+		for(Iterator<PsiType> iterator = disjunctions.iterator(); iterator.hasNext(); )
+		{
+			PsiType d1 = iterator.next();
+			for(PsiType d2 : disjunctions)
+			{
+				if(d1 != d2 && d2.isAssignableFrom(d1))
+				{
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		return disjunctions;
+	}
+
+	private static void flatten(Set<? super PsiType> disjunctions, PsiType type)
+	{
+		if(type instanceof PsiDisjunctionType)
+		{
+			for(PsiType child : ((PsiDisjunctionType) type).getDisjunctions())
+			{
+				flatten(disjunctions, child);
+			}
+		}
+		else
+		{
+			disjunctions.add(type);
+		}
+
 	}
 }

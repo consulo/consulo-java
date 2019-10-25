@@ -15,57 +15,68 @@
  */
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Produces equations for inference of @Contract(pure=true) annotations.
  * Scala source at https://github.com/ilya-klyuchnikov/faba
  * Algorithm: https://github.com/ilya-klyuchnikov/faba/blob/ef1c15b4758517652e939f67099bbec0260e9e68/notes/purity.md
  */
-public class PurityAnalysis {
-  static final Set<EffectQuantum> topEffect = Collections.singleton(EffectQuantum.TopEffectQuantum);
-  static final Set<HEffectQuantum> topHEffect = Collections.singleton(HEffectQuantum.TopEffectQuantum);
+public class PurityAnalysis
+{
+	static final int UN_ANALYZABLE_FLAG = Opcodes.ACC_ABSTRACT | Opcodes.ACC_NATIVE | Opcodes.ACC_INTERFACE;
 
-  static final int UN_ANALYZABLE_FLAG = Opcodes.ACC_ABSTRACT | Opcodes.ACC_NATIVE | Opcodes.ACC_INTERFACE;
+	/**
+	 * @param method     a method descriptor
+	 * @param methodNode an ASM MethodNode
+	 * @param stable     whether a method is stable (e.g. final or declared in final class)
+	 * @return a purity equation or null for top result (either impure or unknown, impurity assumed)
+	 */
+	@Nullable
+	public static Equation analyze(Member method, MethodNode methodNode, boolean stable)
+	{
+		EKey key = new EKey(method, Direction.Pure, stable);
+		Effects hardCodedSolution = HardCodedPurity.getInstance().getHardCodedSolution(method);
+		if(hardCodedSolution != null)
+		{
+			return new Equation(key, hardCodedSolution);
+		}
 
-  @Nonnull
-  public static Equation analyze(Method method, MethodNode methodNode, boolean stable) {
-    Key key = new Key(method, Direction.Pure, stable);
-    Set<EffectQuantum> hardCodedSolution = HardCodedPurity.getHardCodedSolution(key);
-    if (hardCodedSolution != null) {
-      return new Equation(key, new Effects(hardCodedSolution));
-    }
+		if((methodNode.access & UN_ANALYZABLE_FLAG) != 0)
+			return null;
 
-    if ((methodNode.access & UN_ANALYZABLE_FLAG) != 0) {
-      return new Equation(key, new Effects(topEffect));
-    }
-
-    DataInterpreter dataInterpreter = new DataInterpreter(methodNode);
-    try {
-      new Analyzer<DataValue>(dataInterpreter).analyze("this", methodNode);
-    }
-    catch (AnalyzerException e) {
-      return new Equation(key, new Effects(topEffect));
-    }
-    EffectQuantum[] quanta = dataInterpreter.effects;
-    Set<EffectQuantum> effects = new HashSet<EffectQuantum>();
-    for (EffectQuantum effectQuantum : quanta) {
-      if (effectQuantum != null) {
-        if (effectQuantum == EffectQuantum.TopEffectQuantum) {
-          return new Equation(key, new Effects(topEffect));
-        }
-        effects.add(effectQuantum);
-      }
-    }
-    return new Equation(key, new Effects(effects));
-  }
+		DataInterpreter dataInterpreter = new DataInterpreter(methodNode);
+		try
+		{
+			new Analyzer<>(dataInterpreter).analyze("this", methodNode);
+		}
+		catch(AnalyzerException e)
+		{
+			return null;
+		}
+		EffectQuantum[] quanta = dataInterpreter.effects;
+		DataValue returnValue = dataInterpreter.returnValue == null ? DataValue.UnknownDataValue1 : dataInterpreter.returnValue;
+		Set<EffectQuantum> effects = new HashSet<>();
+		for(EffectQuantum effectQuantum : quanta)
+		{
+			if(effectQuantum != null)
+			{
+				if(effectQuantum == EffectQuantum.TopEffectQuantum)
+				{
+					return returnValue == DataValue.UnknownDataValue1 ? null : new Equation(key, new Effects(returnValue, Effects.TOP_EFFECTS));
+				}
+				effects.add(effectQuantum);
+			}
+		}
+		return new Equation(key, new Effects(returnValue, effects));
+	}
 }
+
 

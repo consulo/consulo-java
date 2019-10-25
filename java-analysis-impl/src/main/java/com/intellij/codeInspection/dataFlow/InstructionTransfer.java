@@ -16,31 +16,65 @@
 
 package com.intellij.codeInspection.dataFlow;
 
-import java.util.List;
-
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * from kotlin
  */
 public class InstructionTransfer implements TransferTarget
 {
-	private ControlFlow.ControlFlowOffset myControlFlowOffset;
-	private List<DfaVariableValue> myToFlush;
+	private ControlFlow.ControlFlowOffset offset;
+	private List<DfaVariableValue> toFlush;
 
-	public InstructionTransfer(ControlFlow.ControlFlowOffset controlFlowOffset, List<DfaVariableValue> toFlush)
+	public InstructionTransfer(ControlFlow.ControlFlowOffset offset, List<DfaVariableValue> toFlush)
 	{
-		myControlFlowOffset = controlFlowOffset;
-		myToFlush = toFlush;
+		this.offset = offset;
+		this.toFlush = toFlush;
+	}
+
+	@Override
+	public List<DfaInstructionState> dispatch(DfaMemoryState state, DataFlowRunner runner)
+	{
+		for(DfaVariableValue toFlush : this.toFlush)
+		{
+			state.flushVariable(toFlush);
+		}
+		return Collections.singletonList(new DfaInstructionState(runner.getInstruction(offset.getInstructionOffset()), state));
 	}
 
 	public ControlFlow.ControlFlowOffset getControlFlowOffset()
 	{
-		return myControlFlowOffset;
+		return offset;
 	}
 
 	public List<DfaVariableValue> getToFlush()
 	{
-		return myToFlush;
+		return toFlush;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+		InstructionTransfer that = (InstructionTransfer) o;
+		return Objects.equals(offset, that.offset) &&
+				Objects.equals(toFlush, that.toFlush);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(offset, toFlush);
 	}
 }

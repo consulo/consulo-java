@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,24 @@
 
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInspection.dataFlow.ControlTransferInstruction;
 import com.intellij.codeInspection.dataFlow.DfaControlTransferValue;
 import com.intellij.codeInspection.dataFlow.ExceptionTransfer;
 import com.intellij.psi.PsiElement;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ReturnInstruction extends ControlTransferInstruction
 {
 	private final PsiElement myAnchor;
 
-	public ReturnInstruction(@Nonnull DfaControlTransferValue transfer, @javax.annotation.Nullable PsiElement anchor)
+	public ReturnInstruction(@Nonnull DfaControlTransferValue transfer, @Nullable PsiElement anchor)
 	{
 		super(transfer);
 		myAnchor = anchor;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiElement getAnchor()
 	{
 		return myAnchor;
@@ -42,6 +42,7 @@ public class ReturnInstruction extends ControlTransferInstruction
 	public boolean isViaException()
 	{
 		DfaControlTransferValue transfer = getTransfer();
-		return transfer != null && transfer.getTarget() instanceof ExceptionTransfer;
+		return transfer.getTarget() instanceof ExceptionTransfer;
 	}
+
 }

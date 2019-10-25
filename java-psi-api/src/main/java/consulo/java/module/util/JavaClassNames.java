@@ -25,6 +25,8 @@ public interface JavaClassNames
 	@NonNls
 	String DEFAULT_PACKAGE = "java.lang";
 
+	String JAVA_UTIL_OBJECTS = "java.util.Objects";
+
 	@NonNls
 	String JAVA_LANG_OBJECT = "java.lang.Object";
 	@NonNls
@@ -144,6 +146,8 @@ public interface JavaClassNames
 	@NonNls
 	String JAVA_LANG_CHARACTER = "java.lang.Character";
 
+	String JAVA_LANG_CHAR_SEQUENCE = "java.lang.CharSequence";
+
 	@NonNls
 	String JAVA_LANG_STRING_BUFFER = "java.lang.StringBuffer";
 	@NonNls
@@ -164,6 +168,8 @@ public interface JavaClassNames
 	@NonNls
 	String JAVA_LANG_NULL_POINTER_EXCEPTION = "java.lang.NullPointerException";
 
+	String JAVA_UTIL_CONCURRENT_HASH_MAP = "java.util.concurrent.ConcurrentHashMap";
+
 	@NonNls
 	String JAVA_UTIL_CONCURRENT_FUTURE = "java.util.concurrent.Future";
 	@NonNls
@@ -180,6 +186,7 @@ public interface JavaClassNames
 	@NonNls
 	String JAVAX_ANNOTATION_GENERATED = "javax.annotation.Generated";
 
+	String JAVA_UTIL_FUNCTION_BI_FUNCTION = "java.util.function.BiFunction";
 	@NonNls
 	String JAVA_UTIL_STREAM_BASE_STREAM = "java.util.stream.BaseStream";
 	@NonNls

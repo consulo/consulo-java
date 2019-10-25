@@ -15,23 +15,6 @@
  */
 package com.intellij.psi.util;
 
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
-
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -62,6 +45,14 @@ import consulo.annotations.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.util.JavaClassNames;
 import consulo.vfs.ArchiveFileSystem;
+import gnu.trove.THashSet;
+import org.intellij.lang.annotations.MagicConstant;
+import org.jetbrains.annotations.NonNls;import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 public final class PsiUtil extends PsiUtilCore
 {
@@ -657,9 +648,9 @@ public final class PsiUtil extends PsiUtilCore
 
 	@MethodCandidateInfo.ApplicabilityLevelConstant
 	public static int getApplicabilityLevel(@Nonnull final PsiMethod method,
-			@Nonnull final PsiSubstitutor substitutorForMethod,
-			@Nonnull final PsiType[] args,
-			@Nonnull final LanguageLevel languageLevel)
+											@Nonnull final PsiSubstitutor substitutorForMethod,
+											@Nonnull final PsiType[] args,
+											@Nonnull final LanguageLevel languageLevel)
 	{
 		return getApplicabilityLevel(method, substitutorForMethod, args, languageLevel, true, true);
 	}
@@ -681,23 +672,23 @@ public final class PsiUtil extends PsiUtilCore
 
 	@MethodCandidateInfo.ApplicabilityLevelConstant
 	public static int getApplicabilityLevel(@Nonnull final PsiMethod method,
-			@Nonnull final PsiSubstitutor substitutorForMethod,
-			@Nonnull final PsiType[] args,
-			@Nonnull final LanguageLevel languageLevel,
-			final boolean allowUncheckedConversion,
-			final boolean checkVarargs)
+											@Nonnull final PsiSubstitutor substitutorForMethod,
+											@Nonnull final PsiType[] args,
+											@Nonnull final LanguageLevel languageLevel,
+											final boolean allowUncheckedConversion,
+											final boolean checkVarargs)
 	{
 		return getApplicabilityLevel(method, substitutorForMethod, args, languageLevel, allowUncheckedConversion, checkVarargs, ApplicabilityChecker.ASSIGNABILITY_CHECKER);
 	}
 
 	@MethodCandidateInfo.ApplicabilityLevelConstant
 	public static int getApplicabilityLevel(@Nonnull final PsiMethod method,
-			@Nonnull final PsiSubstitutor substitutorForMethod,
-			@Nonnull final PsiType[] args,
-			@Nonnull final LanguageLevel languageLevel,
-			final boolean allowUncheckedConversion,
-			final boolean checkVarargs,
-			@Nonnull final ApplicabilityChecker function)
+											@Nonnull final PsiSubstitutor substitutorForMethod,
+											@Nonnull final PsiType[] args,
+											@Nonnull final LanguageLevel languageLevel,
+											final boolean allowUncheckedConversion,
+											final boolean checkVarargs,
+											@Nonnull final ApplicabilityChecker function)
 	{
 		final PsiParameter[] parms = method.getParameterList().getParameters();
 		if(args.length < parms.length - 1)
@@ -774,12 +765,12 @@ public final class PsiUtil extends PsiUtilCore
 	}
 
 	private static boolean areFirstArgumentsApplicable(@Nonnull PsiType[] args,
-			@Nonnull final PsiParameter[] parms,
-			@Nonnull LanguageLevel languageLevel,
-			@Nonnull final PsiSubstitutor substitutorForMethod,
-			boolean isRaw,
-			boolean allowUncheckedConversion,
-			ApplicabilityChecker function)
+													   @Nonnull final PsiParameter[] parms,
+													   @Nonnull LanguageLevel languageLevel,
+													   @Nonnull final PsiSubstitutor substitutorForMethod,
+													   boolean isRaw,
+													   boolean allowUncheckedConversion,
+													   ApplicabilityChecker function)
 	{
 		for(int i = 0; i < parms.length - 1; i++)
 		{
@@ -1795,5 +1786,23 @@ public final class PsiUtil extends PsiUtilCore
 	public static boolean isModuleFile(@Nonnull PsiFile file)
 	{
 		return file instanceof PsiJavaFile && ((PsiJavaFile) file).getModuleDeclaration() != null;
+	}
+
+	public static boolean canBeOverridden(@Nonnull PsiMethod method)
+	{
+		PsiClass parentClass = method.getContainingClass();
+		return parentClass != null &&
+				!method.isConstructor() &&
+				!method.hasModifierProperty(PsiModifier.STATIC) &&
+				!method.hasModifierProperty(PsiModifier.FINAL) &&
+				!method.hasModifierProperty(PsiModifier.PRIVATE) &&
+				!(parentClass instanceof PsiAnonymousClass) &&
+				!parentClass.hasModifierProperty(PsiModifier.FINAL);
+	}
+
+	public static boolean isArrayClass(@Nullable PsiElement psiClass)
+	{
+		return psiClass != null && psiClass.getManager().areElementsEquivalent(
+				psiClass, JavaPsiFacade.getElementFactory(psiClass.getProject()).getArrayClass(getLanguageLevel(psiClass)));
 	}
 }

@@ -1,50 +1,59 @@
-/*
- * Copyright 2000-2014 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.intellij.codeInspection.bytecodeAnalysis;
 
 import javax.annotation.Nonnull;
 
-class DirectionResultPair {
-  final int directionKey;
-  @Nonnull
-  final HResult hResult;
+import javax.annotation.Nullable;
 
-  DirectionResultPair(int directionKey, @Nonnull HResult hResult) {
-    this.directionKey = directionKey;
-    this.hResult = hResult;
-  }
+class DirectionResultPair
+{
+	final int directionKey;
+	@Nonnull
+	final Result result;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+	DirectionResultPair(int directionKey, @Nonnull Result result)
+	{
+		this.directionKey = directionKey;
+		this.result = result;
+	}
 
-    DirectionResultPair that = (DirectionResultPair)o;
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
 
-    if (directionKey != that.directionKey) return false;
-    if (!hResult.equals(that.hResult)) return false;
+		DirectionResultPair that = (DirectionResultPair) o;
+		return directionKey == that.directionKey && result.equals(that.result);
+	}
 
-    return true;
-  }
+	@Override
+	public int hashCode()
+	{
+		return 31 * directionKey + result.hashCode();
+	}
 
-  @Override
-  public int hashCode() {
-    int result = directionKey;
-    result = 31 * result + hResult.hashCode();
-    return result;
-  }
+	@Override
+	public String toString()
+	{
+		return Direction.fromInt(directionKey) + "->" + result;
+	}
+
+	@Nullable
+	DirectionResultPair updateForDirection(Direction direction, Result newResult)
+	{
+		if(this.directionKey == direction.asInt())
+		{
+			return newResult == null ? null : new DirectionResultPair(direction.asInt(), newResult);
+		}
+		else
+		{
+			return this;
+		}
+	}
 }

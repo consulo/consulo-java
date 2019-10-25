@@ -15,85 +15,90 @@
  */
 package com.intellij.codeInspection.bytecodeAnalysis;
 
+import javax.annotation.Nonnull;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.annotation.Nonnull;
-
 final class Solver
 {
 	private final ELattice<Value> lattice;
-	private final HashMap<HKey, HashSet<HKey>> dependencies = new HashMap<HKey, HashSet<HKey>>();
-	private final HashMap<HKey, HPending> pending = new HashMap<HKey, HPending>();
-	private final HashMap<HKey, Value> solved = new HashMap<HKey, Value>();
-	private final Stack<HKey> moving = new Stack<HKey>();
+	private final HashMap<EKey, HashSet<EKey>> dependencies = new HashMap<>();
+	private final HashMap<EKey, Pending> pending = new HashMap<>();
+	private final HashMap<EKey, Value> solved = new HashMap<>();
+	private final Stack<EKey> moving = new Stack<>();
 
-	private final HResultUtil resultUtil;
-	private final HashMap<CoreHKey, HEquation> equations = new HashMap<CoreHKey, HEquation>();
+	private final ResultUtil resultUtil;
+	private final HashMap<CoreHKey, Equation> equations = new HashMap<>();
 	private final Value unstableValue;
 
 	Solver(ELattice<Value> lattice, Value unstableValue)
 	{
 		this.lattice = lattice;
 		this.unstableValue = unstableValue;
-		resultUtil = new HResultUtil(lattice);
+		resultUtil = new ResultUtil(lattice);
 	}
 
-	void addEquation(HEquation equation)
+	Result getUnknownResult()
 	{
-		HKey key = equation.key;
-		CoreHKey coreKey = new CoreHKey(key.key, key.dirKey);
+		return unstableValue;
+	}
 
-		HEquation previousEquation = equations.get(coreKey);
+	void addEquation(Equation equation)
+	{
+		EKey key = equation.key;
+		CoreHKey coreKey = new CoreHKey(key.member, key.dirKey);
+
+		Equation previousEquation = equations.get(coreKey);
 		if(previousEquation == null)
 		{
 			equations.put(coreKey, equation);
 		}
 		else
 		{
-			HKey joinKey = new HKey(coreKey.key, coreKey.dirKey, equation.key.stable && previousEquation.key.stable, true);
-			HResult joinResult = resultUtil.join(equation.result, previousEquation.result);
-			HEquation joinEquation = new HEquation(joinKey, joinResult);
+			EKey joinKey = new EKey(coreKey.myMethod, coreKey.dirKey, equation.key.stable && previousEquation.key.stable, false);
+			Result joinResult = resultUtil.join(equation.result, previousEquation.result);
+			Equation joinEquation = new Equation(joinKey, joinResult);
 			equations.put(coreKey, joinEquation);
 		}
 	}
 
-	void queueEquation(HEquation equation)
+	void queueEquation(Equation equation)
 	{
-		HResult rhs = equation.result;
-		if(rhs instanceof HFinal)
+		Result rhs = equation.result;
+		if(rhs instanceof Value)
 		{
-			solved.put(equation.key, ((HFinal) rhs).value);
+			solved.put(equation.key, (Value) rhs);
 			moving.push(equation.key);
 		}
-		else if(rhs instanceof HPending)
+		else if(rhs instanceof Pending)
 		{
-			HPending pendResult = ((HPending) rhs).copy();
-			HResult norm = normalize(pendResult.delta);
-			if(norm instanceof HFinal)
+			Pending pendResult = ((Pending) rhs).copy();
+			Result norm = normalize(pendResult.delta);
+			if(norm instanceof Value)
 			{
-				solved.put(equation.key, ((HFinal) norm).value);
+				solved.put(equation.key, (Value) norm);
 				moving.push(equation.key);
 			}
 			else
 			{
-				HPending pendResult1 = ((HPending) rhs).copy();
-				for(HComponent component : pendResult1.delta)
+				Pending pendResult1 = ((Pending) rhs).copy();
+				for(Component component : pendResult1.delta)
 				{
-					for(HKey trigger : component.ids)
+					for(EKey trigger : component.ids)
 					{
-						HashSet<HKey> set = dependencies.get(trigger);
+						HashSet<EKey> set = dependencies.get(trigger);
 						if(set == null)
 						{
-							set = new HashSet<HKey>();
+							set = new HashSet<>();
 							dependencies.put(trigger, set);
 						}
 						set.add(equation.key);
 					}
-					pending.put(equation.key, pendResult1);
 				}
+				pending.put(equation.key, pendResult1);
 			}
 		}
 	}
@@ -111,21 +116,21 @@ final class Solver
 		}
 	}
 
-	Map<HKey, Value> solve()
+	Map<EKey, Value> solve()
 	{
-		for(HEquation hEquation : equations.values())
+		for(Equation equation : equations.values())
 		{
-			queueEquation(hEquation);
+			queueEquation(equation);
 		}
 		while(!moving.empty())
 		{
-			HKey id = moving.pop();
+			EKey id = moving.pop();
 			Value value = solved.get(id);
 
-			HKey[] initialPIds = id.stable ? new HKey[]{
+			EKey[] initialPIds = id.stable ? new EKey[]{
 					id,
 					id.invertStability()
-			} : new HKey[]{
+			} : new EKey[]{
 					id.invertStability(),
 					id
 			};
@@ -137,7 +142,7 @@ final class Solver
 					unstableValue
 			};
 
-			HKey[] pIds = new HKey[]{
+			EKey[] pIds = new EKey[]{
 					initialPIds[0],
 					initialPIds[1],
 					initialPIds[0].negate(),
@@ -152,28 +157,27 @@ final class Solver
 
 			for(int i = 0; i < pIds.length; i++)
 			{
-				HKey pId = pIds[i];
+				EKey pId = pIds[i];
 				Value pVal = pVals[i];
-				HashSet<HKey> dIds = dependencies.get(pId);
+				HashSet<EKey> dIds = dependencies.get(pId);
 				if(dIds == null)
 				{
 					continue;
 				}
-				for(HKey dId : dIds)
+				for(EKey dId : dIds)
 				{
-					HPending pend = pending.remove(dId);
+					Pending pend = pending.remove(dId);
 					if(pend != null)
 					{
-						HResult pend1 = substitute(pend, pId, pVal);
-						if(pend1 instanceof HFinal)
+						Result pend1 = substitute(pend, pId, pVal);
+						if(pend1 instanceof Value)
 						{
-							HFinal fi = (HFinal) pend1;
-							solved.put(dId, fi.value);
+							solved.put(dId, (Value) pend1);
 							moving.push(dId);
 						}
 						else
 						{
-							pending.put(dId, (HPending) pend1);
+							pending.put(dId, (Pending) pend1);
 						}
 					}
 				}
@@ -184,10 +188,10 @@ final class Solver
 	}
 
 	// substitute id -> value into pending
-	HResult substitute(@Nonnull HPending pending, @Nonnull HKey id, @Nonnull Value value)
+	Result substitute(@Nonnull Pending pending, @Nonnull EKey id, @Nonnull Value value)
 	{
-		HComponent[] sum = pending.delta;
-		for(HComponent intIdComponent : sum)
+		Component[] sum = pending.delta;
+		for(Component intIdComponent : sum)
 		{
 			if(intIdComponent.remove(id))
 			{
@@ -198,11 +202,11 @@ final class Solver
 	}
 
 	@Nonnull
-	HResult normalize(@Nonnull HComponent[] sum)
+	Result normalize(@Nonnull Component[] sum)
 	{
 		Value acc = lattice.bot;
 		boolean computableNow = true;
-		for(HComponent prod : sum)
+		for(Component prod : sum)
 		{
 			if(prod.isEmpty() || prod.value == lattice.bot)
 			{
@@ -213,6 +217,6 @@ final class Solver
 				computableNow = false;
 			}
 		}
-		return (acc == lattice.top || computableNow) ? new HFinal(acc) : new HPending(sum);
+		return (acc == lattice.top || computableNow) ? acc : new Pending(sum);
 	}
 }

@@ -40,7 +40,7 @@ public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiRefere
   }
 
   @Override
-  public void processQuery(@Nonnull ReferencesSearch.SearchParameters queryParameters, @Nonnull Processor<PsiReference> consumer) {
+  public void processQuery(@Nonnull ReferencesSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiReference> consumer) {
     PsiElement refElement = queryParameters.getElementToSearch();
     if (!(refElement instanceof PsiMethod)) return;
 

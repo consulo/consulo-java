@@ -21,19 +21,28 @@ import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.util.containers.FList;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+
 /**
  * from kotlin
  */
 public class DfaControlTransferValue extends DfaValue
 {
 	private TransferTarget myTarget;
+	@Nonnull
 	private FList<Trap> myTraps;
 
-	public DfaControlTransferValue(DfaValueFactory factory, TransferTarget target, FList<Trap> traps)
+	public DfaControlTransferValue(DfaValueFactory factory, TransferTarget target, @Nonnull FList<Trap> traps)
 	{
 		super(factory);
 		myTarget = target;
 		myTraps = traps;
+	}
+
+	public List<DfaInstructionState> dispatch(DfaMemoryState state, DataFlowRunner runner)
+	{
+		return new ControlTransferHandler(state, runner, this).dispatch();
 	}
 
 	public TransferTarget getTarget()
@@ -41,6 +50,7 @@ public class DfaControlTransferValue extends DfaValue
 		return myTarget;
 	}
 
+	@Nonnull
 	public FList<Trap> getTraps()
 	{
 		return myTraps;

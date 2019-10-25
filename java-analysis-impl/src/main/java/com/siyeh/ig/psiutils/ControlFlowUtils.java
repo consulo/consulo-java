@@ -15,14 +15,13 @@
  */
 package com.siyeh.ig.psiutils;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
 
 public class ControlFlowUtils
 {
@@ -455,7 +454,7 @@ public class ControlFlowUtils
 	}
 
 	@Nullable
-	public static PsiStatement stripBraces(@javax.annotation.Nullable PsiStatement statement)
+	public static PsiStatement stripBraces(@Nullable PsiStatement statement)
 	{
 		if(statement instanceof PsiBlockStatement)
 		{
@@ -569,7 +568,7 @@ public class ControlFlowUtils
 	}
 
 	@Nullable
-	public static PsiStatement getLastStatementInBlock(@javax.annotation.Nullable PsiCodeBlock codeBlock)
+	public static PsiStatement getLastStatementInBlock(@Nullable PsiCodeBlock codeBlock)
 	{
 		return getLastChildOfType(codeBlock, PsiStatement.class);
 	}
@@ -594,13 +593,13 @@ public class ControlFlowUtils
 	/**
 	 * @return null, if zero or more than one statements in the specified code block.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiStatement getOnlyStatementInBlock(@Nullable PsiCodeBlock codeBlock)
 	{
 		return getOnlyChildOfType(codeBlock, PsiStatement.class);
 	}
 
-	static <T extends PsiElement> T getOnlyChildOfType(@javax.annotation.Nullable PsiElement element, @Nonnull Class<T> aClass)
+	static <T extends PsiElement> T getOnlyChildOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass)
 	{
 		if(element == null)
 		{
@@ -809,7 +808,57 @@ public class ControlFlowUtils
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	/**
+	 * Returns true if given element is an empty statement
+	 *
+	 * @param element          element to check
+	 * @param commentIsContent if true, empty statement containing comments is not considered empty
+	 * @param emptyBlocks      if true, empty block (or nested empty block like {@code {{}}}) is considered an empty statement
+	 * @return true if given element is an empty statement
+	 */
+	public static boolean isEmpty(PsiElement element, boolean commentIsContent, boolean emptyBlocks)
+	{
+		if(!commentIsContent && element instanceof PsiComment)
+		{
+			return true;
+		}
+		else if(element instanceof PsiEmptyStatement)
+		{
+			return !commentIsContent ||
+					PsiTreeUtil.getChildOfType(element, PsiComment.class) == null &&
+							!(PsiTreeUtil.skipWhitespacesBackward(element) instanceof PsiComment);
+		}
+		else if(element instanceof PsiWhiteSpace)
+		{
+			return true;
+		}
+		else if(element instanceof PsiBlockStatement)
+		{
+			final PsiBlockStatement block = (PsiBlockStatement) element;
+			return isEmpty(block.getCodeBlock(), commentIsContent, emptyBlocks);
+		}
+		else if(emptyBlocks && element instanceof PsiCodeBlock)
+		{
+			final PsiCodeBlock codeBlock = (PsiCodeBlock) element;
+			final PsiElement[] children = codeBlock.getChildren();
+			if(children.length == 2)
+			{
+				return true;
+			}
+			for(int i = 1; i < children.length - 1; i++)
+			{
+				final PsiElement child = children[i];
+				if(!isEmpty(child, commentIsContent, true))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Nullable
 	private static PsiStatement nextExecutedStatement(PsiStatement statement)
 	{
 		PsiStatement next = PsiTreeUtil.getNextSiblingOfType(statement, PsiStatement.class);

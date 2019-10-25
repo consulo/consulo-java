@@ -1,4 +1,4 @@
-<idea-plugin>
+<consulo-plugin>
   <extensions defaultExtensionNs="com.intellij">
     <projectService serviceInterface="com.intellij.byteCodeViewer.ByteCodeViewerManager"
                     serviceImplementation="com.intellij.byteCodeViewer.ByteCodeViewerManager"/>
@@ -9,5 +9,4 @@
       <add-to-group group-id="QuickActions" anchor="after" relative-to-action="QuickJavaDoc"/>
     </group>
   </actions>
-
-</idea-plugin>
+</consulo-plugin>

@@ -15,17 +15,12 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
+import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
+import javax.annotation.Nonnull;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
-import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
-import com.intellij.codeInspection.dataFlow.value.DfaTypeValue;
-import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
-import com.intellij.codeInspection.dataFlow.value.DfaValue;
-import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 
 /**
  * A method contract which states that method will have a concrete return value
@@ -35,42 +30,20 @@ import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
  */
 public abstract class MethodContract
 {
-	// package private to avoid uncontrolled implementations
-	MethodContract()
-	{
+	private final ContractReturnValue myReturnValue;
 
+	// package private to avoid uncontrolled implementations
+	MethodContract(ContractReturnValue returnValue)
+	{
+		myReturnValue = returnValue;
 	}
 
 	/**
 	 * @return a value the method will return if the contract conditions fulfill
 	 */
-	public abstract ValueConstraint getReturnValue();
-
-	/**
-	 * Returns DfaValue describing the return value of this contract
-	 *
-	 * @param factory       factory to create values
-	 * @param defaultResult default result value for the called method
-	 * @return a DfaValue describing the return value of this contract
-	 */
-	@Nonnull
-	DfaValue getDfaReturnValue(DfaValueFactory factory, DfaValue defaultResult)
+	public ContractReturnValue getReturnValue()
 	{
-		switch(getReturnValue())
-		{
-			case NULL_VALUE:
-				return factory.getConstFactory().getNull();
-			case NOT_NULL_VALUE:
-				return defaultResult instanceof DfaTypeValue ? ((DfaTypeValue) defaultResult).withNullness(Nullness.NOT_NULL) : DfaUnknownValue.getInstance();
-			case TRUE_VALUE:
-				return factory.getConstFactory().getTrue();
-			case FALSE_VALUE:
-				return factory.getConstFactory().getFalse();
-			case THROW_EXCEPTION:
-				return factory.getConstFactory().getContractFail();
-			default:
-				return defaultResult;
-		}
+		return myReturnValue;
 	}
 
 	/**
@@ -83,7 +56,7 @@ public abstract class MethodContract
 
 	abstract String getArgumentsPresentation();
 
-	abstract List<ContractValue> getConditions();
+	public abstract List<ContractValue> getConditions();
 
 	@Override
 	public String toString()
@@ -91,148 +64,77 @@ public abstract class MethodContract
 		return getArgumentsPresentation() + " -> " + getReturnValue();
 	}
 
-	public static MethodContract trivialContract(ValueConstraint value)
+	public static MethodContract trivialContract(ContractReturnValue value)
 	{
-		return new MethodContract()
+		return new MethodContract(value)
 		{
-			@Override
-			public ValueConstraint getReturnValue()
-			{
-				return value;
-			}
-
 			@Override
 			String getArgumentsPresentation()
 			{
-				return "(any)";
+				return "()";
 			}
 
 			@Override
-			List<ContractValue> getConditions()
+			public List<ContractValue> getConditions()
 			{
 				return Collections.emptyList();
 			}
 		};
 	}
 
-	public static MethodContract singleConditionContract(ContractValue left, RelationType relationType, ContractValue right, ValueConstraint returnValue)
+	@Nonnull
+	public static MethodContract singleConditionContract(ContractValue left,
+														 RelationType relationType,
+														 ContractValue right,
+														 ContractReturnValue returnValue)
 	{
-		ContractValue condition = ContractValue.condition(left, relationType, right);
-		return new MethodContract()
-		{
-			@Override
-			public ValueConstraint getReturnValue()
-			{
-				return returnValue;
-			}
+		return singleConditionContract(ContractValue.condition(left, relationType, right), returnValue);
+	}
 
+	@Nonnull
+	private static MethodContract singleConditionContract(ContractValue condition, ContractReturnValue returnValue)
+	{
+		return new MethodContract(returnValue)
+		{
 			@Override
 			String getArgumentsPresentation()
 			{
-				return condition.toString();
+				return "(" + condition.toString() + ")";
 			}
 
 			@Override
-			List<ContractValue> getConditions()
+			public List<ContractValue> getConditions()
 			{
 				return Collections.singletonList(condition);
 			}
 		};
 	}
 
-	public enum ValueConstraint
+	public static List<? extends MethodContract> toNonIntersectingContracts(List<? extends MethodContract> contracts)
 	{
-		ANY_VALUE("_"),
-		NULL_VALUE("null"),
-		NOT_NULL_VALUE("!null"),
-		TRUE_VALUE("true"),
-		FALSE_VALUE("false"),
-		THROW_EXCEPTION("fail");
-		private final String myPresentableName;
-
-		ValueConstraint(String presentableName)
+		if(contracts.size() == 1)
+			return contracts;
+		if(contracts.stream().allMatch(StandardMethodContract.class::isInstance))
 		{
-			myPresentableName = presentableName;
+			@SuppressWarnings("unchecked") List<StandardMethodContract> standardContracts = (List<StandardMethodContract>) contracts;
+			return StandardMethodContract.toNonIntersectingStandardContracts(standardContracts);
 		}
-
-		@Nullable
-		DfaConstValue getComparisonValue(DfaValueFactory factory)
+		if(contracts.size() == 2 && contracts.get(1).isTrivial())
 		{
-			if(this == NULL_VALUE || this == NOT_NULL_VALUE)
+			List<MethodContract> result = new ArrayList<>();
+			result.add(contracts.get(0));
+			List<ContractValue> conditions = contracts.get(0).getConditions();
+			for(ContractValue condition : conditions)
 			{
-				return factory.getConstFactory().getNull();
+				ContractValue inverted = condition.invert();
+				if(inverted == null)
+				{
+					return null;
+				}
+				result.add(singleConditionContract(inverted, contracts.get(1).getReturnValue()));
 			}
-			if(this == TRUE_VALUE || this == FALSE_VALUE)
-			{
-				return factory.getConstFactory().getTrue();
-			}
-			return null;
+			return result;
 		}
-
-		boolean shouldUseNonEqComparison()
-		{
-			return this == NOT_NULL_VALUE || this == FALSE_VALUE;
-		}
-
-		/**
-		 * Returns a condition value which should be applied to memory state to satisfy this constraint
-		 *
-		 * @param argumentIndex argument number to test
-		 * @return a condition
-		 */
-		public ContractValue getCondition(int argumentIndex)
-		{
-			ContractValue left;
-			if(this == NULL_VALUE || this == NOT_NULL_VALUE)
-			{
-				left = ContractValue.nullValue();
-			}
-			else if(this == TRUE_VALUE || this == FALSE_VALUE)
-			{
-				left = ContractValue.booleanValue(true);
-			}
-			else
-			{
-				return ContractValue.booleanValue(true);
-			}
-			return ContractValue.condition(left, RelationType.equivalence(!shouldUseNonEqComparison()), ContractValue.argument(argumentIndex));
-		}
-
-		/**
-		 * @return true if constraint can be negated
-		 * @see #negate()
-		 */
-		public boolean canBeNegated()
-		{
-			return this != ANY_VALUE && this != THROW_EXCEPTION;
-		}
-
-		/**
-		 * @return negated constraint
-		 * @throws IllegalStateException if constraint cannot be negated
-		 * @see #canBeNegated()
-		 */
-		public ValueConstraint negate()
-		{
-			switch(this)
-			{
-				case NULL_VALUE:
-					return NOT_NULL_VALUE;
-				case NOT_NULL_VALUE:
-					return NULL_VALUE;
-				case TRUE_VALUE:
-					return FALSE_VALUE;
-				case FALSE_VALUE:
-					return TRUE_VALUE;
-				default:
-					throw new IllegalStateException("ValueConstraint = " + this);
-			}
-		}
-
-		@Override
-		public String toString()
-		{
-			return myPresentableName;
-		}
+		return null;
 	}
 }

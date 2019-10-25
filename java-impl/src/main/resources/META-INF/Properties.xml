@@ -1,4 +1,4 @@
-<idea-plugin>
+<consulo-plugin>
   <extensions defaultExtensionNs="com.intellij">
     <referenceProviderType key="Properties File Key Provider"
                            implementationClass="com.intellij.lang.properties.PropertiesReferenceProvider"/>
@@ -32,4 +32,4 @@
       <add-to-group group-id="RefactoringMenu" anchor="last" />
     </action>
   </actions>
-</idea-plugin>
+</consulo-plugin>

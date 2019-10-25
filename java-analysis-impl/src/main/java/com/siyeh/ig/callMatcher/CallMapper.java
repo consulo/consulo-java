@@ -15,17 +15,18 @@
  */
 package com.siyeh.ig.callMatcher;
 
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiMethodReferenceExpression;
+import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import org.jetbrains.annotations.Contract;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiMethodReferenceExpression;
-import one.util.streamex.StreamEx;
 
 /**
  * A mutable bunch of CallHandlers which allows to dispatch a transformer call based on CallMatcher
@@ -34,12 +35,13 @@ import one.util.streamex.StreamEx;
  */
 public class CallMapper<T>
 {
-	private Map<String, List<CallHandler<T>>> myMap = new HashMap<>();
+	private final Map<String, List<CallHandler<T>>> myMap = new LinkedHashMap<>();
 
 	public CallMapper()
 	{
 	}
 
+	@SafeVarargs
 	public CallMapper(CallHandler<T>... handlers)
 	{
 		for(CallHandler<T> handler : handlers)
@@ -54,7 +56,7 @@ public class CallMapper<T>
 		return this;
 	}
 
-	public CallMapper<T> register(CallMatcher matcher, Function<PsiMethodCallExpression, T> handler)
+	public CallMapper<T> register(CallMatcher matcher, Function<? super PsiMethodCallExpression, ? extends T> handler)
 	{
 		return register(CallHandler.of(matcher, handler));
 	}
@@ -64,7 +66,7 @@ public class CallMapper<T>
 		return register(CallHandler.of(matcher, call -> value));
 	}
 
-	public CallMapper<T> registerAll(List<CallHandler<T>> handlers)
+	public CallMapper<T> registerAll(List<? extends CallHandler<T>> handlers)
 	{
 		handlers.forEach(this::register);
 		return this;
@@ -93,6 +95,7 @@ public class CallMapper<T>
 		return null;
 	}
 
+	@Contract("null -> null")
 	public T mapFirst(PsiMethodReferenceExpression methodRef)
 	{
 		if(methodRef == null)
@@ -107,6 +110,29 @@ public class CallMapper<T>
 		for(CallHandler<T> function : functions)
 		{
 			T t = function.applyMethodReference(methodRef);
+			if(t != null)
+			{
+				return t;
+			}
+		}
+		return null;
+	}
+
+	@Contract("null -> null")
+	public T mapFirst(PsiMethod method)
+	{
+		if(method == null)
+		{
+			return null;
+		}
+		List<CallHandler<T>> functions = myMap.get(method.getName());
+		if(functions == null)
+		{
+			return null;
+		}
+		for(CallHandler<T> function : functions)
+		{
+			T t = function.applyMethod(method);
 			if(t != null)
 			{
 				return t;

@@ -16,20 +16,45 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
+import javax.annotation.Nonnull;
+
 final class Equation
 {
-	final Key id;
-	final Result rhs;
+	@Nonnull
+	final EKey key;
+	@Nonnull
+	final Result result;
 
-	Equation(Key id, Result rhs)
+	Equation(@Nonnull EKey key, @Nonnull Result result)
 	{
-		this.id = id;
-		this.rhs = rhs;
+		this.key = key;
+		this.result = result;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+		Equation equation = (Equation) o;
+		return key.equals(equation.key) && result.equals(equation.result);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return 31 * key.hashCode() + result.hashCode();
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Equation{" + "id=" + id + ", rhs=" + rhs + '}';
+		return "Equation{" + "key=" + key + ", result=" + result + '}';
 	}
 }

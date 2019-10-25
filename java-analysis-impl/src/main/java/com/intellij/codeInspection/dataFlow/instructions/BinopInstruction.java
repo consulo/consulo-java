@@ -16,45 +16,136 @@
 
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import static com.intellij.psi.JavaTokenType.AND;
-import static com.intellij.psi.JavaTokenType.EQEQ;
-import static com.intellij.psi.JavaTokenType.GE;
-import static com.intellij.psi.JavaTokenType.GT;
-import static com.intellij.psi.JavaTokenType.INSTANCEOF_KEYWORD;
-import static com.intellij.psi.JavaTokenType.LE;
-import static com.intellij.psi.JavaTokenType.LT;
-import static com.intellij.psi.JavaTokenType.NE;
-import static com.intellij.psi.JavaTokenType.PLUS;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.codeInspection.dataFlow.Nullness;
-import com.intellij.codeInspection.dataFlow.value.DfaValue;
-import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.codeInspection.dataFlow.value.DfaRelationValue;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.util.PsiUtil;
+import javax.annotation.Nullable;
 
-public class BinopInstruction extends BranchingInstruction
+import static com.intellij.psi.JavaTokenType.*;
+
+public class BinopInstruction extends BranchingInstruction implements ExpressionPushingInstruction
 {
-	private static final TokenSet ourSignificantOperations = TokenSet.create(EQEQ, NE, LT, GT, LE, GE, INSTANCEOF_KEYWORD, PLUS, AND);
-	private final IElementType myOperationSign;
-	private final Project myProject;
+	private static final TokenSet ourSignificantOperations =
+			TokenSet.create(EQ, EQEQ, NE, LT, GT, LE, GE, INSTANCEOF_KEYWORD, PLUS, MINUS, AND, OR, XOR, PERC, DIV, ASTERISK, GTGT, GTGTGT, LTLT);
 
-	public BinopInstruction(IElementType opSign, @javax.annotation.Nullable PsiElement psiAnchor, @Nonnull Project project)
+	/**
+	 * A placeholder operation to model string concatenation inside loop:
+	 * currently we cannot properly widen states and precise handling of concatenation
+	 * inside loop (including length tracking) may lead to state divergence,
+	 * so we use special operation for this case.
+	 */
+	public static final IElementType STRING_CONCAT_IN_LOOP = ASTERISK;
+	/**
+	 * A special operation to express string comparison by content (like equals() method does).
+	 * Used to desugar switch statements
+	 */
+	public static final IElementType STRING_EQUALITY_BY_CONTENT = EQ;
+
+	private final IElementType myOperationSign;
+	private final
+	@Nullable
+	PsiType myResultType;
+	private final int myLastOperand;
+	private final boolean myUnrolledLoop;
+	private boolean myWidened;
+
+	public BinopInstruction(IElementType opSign, @Nullable PsiExpression psiAnchor, @Nullable PsiType resultType)
+	{
+		this(opSign, psiAnchor, resultType, -1);
+	}
+
+	public BinopInstruction(IElementType opSign, @Nullable PsiExpression psiAnchor, @Nullable PsiType resultType, int lastOperand)
+	{
+		this(opSign, psiAnchor, resultType, lastOperand, false);
+	}
+
+	/**
+	 * @param opSign       sign of the operation
+	 * @param psiAnchor    PSI element to bind the instruction to
+	 * @param resultType   result of the operation
+	 * @param lastOperand  number of last operand if anchor is a {@link PsiPolyadicExpression} and this instruction is the result of
+	 *                     part of that expression; -1 if not applicable
+	 * @param unrolledLoop true means that this instruction is executed inside an unrolled loop; in this case it will never be widened
+	 */
+	public BinopInstruction(IElementType opSign,
+							@Nullable PsiExpression psiAnchor,
+							@Nullable PsiType resultType,
+							int lastOperand,
+							boolean unrolledLoop)
 	{
 		super(psiAnchor);
-		myProject = project;
+		myResultType = resultType;
 		myOperationSign = ourSignificantOperations.contains(opSign) ? opSign : null;
+		myLastOperand = lastOperand;
+		myUnrolledLoop = unrolledLoop;
+	}
+
+	/**
+	 * Make operation wide (less precise) if necessary (called for the operations inside loops only)
+	 */
+	public void widenOperationInLoop()
+	{
+		// these operations usually produce non-converging states
+		if(!myUnrolledLoop && !myWidened && (myOperationSign == PLUS || myOperationSign == MINUS || myOperationSign == ASTERISK) &&
+				mayProduceDivergedState())
+		{
+			myWidened = true;
+		}
+	}
+
+	private boolean mayProduceDivergedState()
+	{
+		PsiElement anchor = getExpression();
+		if(anchor instanceof PsiUnaryExpression)
+		{
+			return PsiUtil.isIncrementDecrementOperation(anchor);
+		}
+		while(anchor != null && !(anchor instanceof PsiAssignmentExpression) && !(anchor instanceof PsiVariable))
+		{
+			if(anchor instanceof PsiStatement ||
+					anchor instanceof PsiExpressionList && anchor.getParent() instanceof PsiCallExpression ||
+					anchor instanceof PsiArrayInitializerExpression || anchor instanceof PsiArrayAccessExpression ||
+					anchor instanceof PsiBinaryExpression &&
+							DfaRelationValue.RelationType.fromElementType(((PsiBinaryExpression) anchor).getOperationTokenType()) != null)
+			{
+				return false;
+			}
+			anchor = anchor.getParent();
+		}
+		return true;
+	}
+
+	/**
+	 * @return range inside the anchor which evaluates this instruction, or null if the whole anchor evaluates this instruction
+	 */
+	@Override
+	@Nullable
+	public TextRange getExpressionRange()
+	{
+		if(myLastOperand != -1 && getPsiAnchor() instanceof PsiPolyadicExpression)
+		{
+			PsiPolyadicExpression anchor = (PsiPolyadicExpression) getPsiAnchor();
+			PsiExpression[] operands = anchor.getOperands();
+			if(operands.length > myLastOperand + 1)
+			{
+				return new TextRange(0, operands[myLastOperand].getStartOffsetInParent() + operands[myLastOperand].getTextLength());
+			}
+		}
+		return null;
+	}
+
+	@Nullable
+	@Override
+	public PsiExpression getExpression()
+	{
+		return (PsiExpression) getPsiAnchor();
 	}
 
 	@Override
@@ -63,12 +154,10 @@ public class BinopInstruction extends BranchingInstruction
 		return visitor.visitBinop(this, runner, stateBefore);
 	}
 
-	public DfaValue getNonNullStringValue(final DfaValueFactory factory)
+	@Nullable
+	public PsiType getResultType()
 	{
-		PsiElement anchor = getPsiAnchor();
-		Project project = myProject;
-		PsiClassType string = PsiType.getJavaLangString(PsiManager.getInstance(project), anchor == null ? GlobalSearchScope.allScope(project) : anchor.getResolveScope());
-		return factory.createTypeValue(string, Nullness.NOT_NULL);
+		return myResultType;
 	}
 
 	public String toString()
@@ -79,5 +168,13 @@ public class BinopInstruction extends BranchingInstruction
 	public IElementType getOperationSign()
 	{
 		return myOperationSign;
+	}
+
+	/**
+	 * @return true if the operation must be executed with widening, otherwise it may produce a diverged state.
+	 */
+	public boolean isWidened()
+	{
+		return myWidened;
 	}
 }

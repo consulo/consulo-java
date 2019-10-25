@@ -16,22 +16,28 @@
 
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.codeInspection.dataFlow.value.DfaPsiType;
 
 /**
  * from kotlin
  */
 public class ExceptionTransfer implements TransferTarget
 {
-	private DfaValue throwable;
+	private final DfaPsiType throwable;
 
-	public ExceptionTransfer(DfaValue throwable)
+	public ExceptionTransfer(DfaPsiType throwable)
 	{
 		this.throwable = throwable;
 	}
 
-	public DfaValue getThrowable()
+	public DfaPsiType getThrowable()
 	{
 		return throwable;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Exception(" + throwable + ")";
 	}
 }

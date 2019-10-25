@@ -15,10 +15,6 @@
  */
 package com.intellij.psi.impl.search;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.application.ReadActionProcessor;
@@ -29,12 +25,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Ref;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiAnchor;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiBundle;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifier;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchScopeUtil;
 import com.intellij.psi.search.SearchScope;
@@ -45,13 +36,17 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Stack;
+import consulo.java.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
 
 public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, ClassInheritorsSearch.SearchParameters>
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.JavaClassInheritorsSearcher");
 
 	@Override
-	public void processQuery(@Nonnull ClassInheritorsSearch.SearchParameters parameters, @Nonnull Processor<PsiClass> consumer)
+	public void processQuery(@Nonnull ClassInheritorsSearch.SearchParameters parameters, @Nonnull Processor<? super PsiClass> consumer)
 	{
 		final PsiClass baseClass = parameters.getClassToProcess();
 		final SearchScope searchScope = parameters.getScope();
@@ -81,7 +76,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 		}
 	}
 
-	private static void processInheritors(@Nonnull final Processor<PsiClass> consumer,
+	private static void processInheritors(@Nonnull final Processor<? super PsiClass> consumer,
 			@Nonnull final PsiClass baseClass,
 			@Nonnull final SearchScope searchScope,
 			@Nonnull final ClassInheritorsSearch.SearchParameters parameters)

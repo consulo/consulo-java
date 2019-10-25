@@ -15,17 +15,12 @@
  */
 package com.intellij.psi.search.searches;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.InstanceofQuery;
 import com.intellij.util.Query;
+
+import javax.annotation.Nonnull;
 
 public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierListOwner, AnnotatedElementsSearch.Parameters> {
   public static final AnnotatedElementsSearch INSTANCE = new AnnotatedElementsSearch();
@@ -67,7 +62,7 @@ public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierL
   public static <T extends PsiModifierListOwner> Query<T> searchElements(@Nonnull PsiClass annotationClass,
                                                                          @Nonnull SearchScope scope,
                                                                          Class<? extends T>... types) {
-    return new InstanceofQuery<T>(createDelegateQuery(annotationClass, scope, types), types);
+    return new InstanceofQuery<>(createDelegateQuery(annotationClass, scope, types), types);
   }
 
   public static Query<PsiClass> searchPsiClasses(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {

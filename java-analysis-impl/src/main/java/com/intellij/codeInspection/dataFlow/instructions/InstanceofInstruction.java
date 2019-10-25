@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,44 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import javax.annotation.Nonnull;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiType;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
  */
 public class InstanceofInstruction extends BinopInstruction
 {
-	@Nonnull
+	@Nullable
 	private final PsiExpression myLeft;
-	@Nonnull
+	@Nullable
 	private final PsiType myCastType;
 
-	public InstanceofInstruction(PsiElement psiAnchor, @Nonnull Project project, PsiExpression left, PsiType castType)
+	public InstanceofInstruction(PsiExpression psiAnchor, @Nullable PsiExpression left, @Nonnull PsiType castType)
 	{
-		super(JavaTokenType.INSTANCEOF_KEYWORD, psiAnchor, project);
+		super(JavaTokenType.INSTANCEOF_KEYWORD, psiAnchor, PsiType.BOOLEAN);
 		myLeft = left;
 		myCastType = castType;
+	}
+
+	/**
+	 * Construct a class object instanceof check (e.g. from Class.isInstance call); castType is not known
+	 *
+	 * @param psiAnchor anchor call
+	 */
+	public InstanceofInstruction(PsiMethodCallExpression psiAnchor)
+	{
+		super(JavaTokenType.INSTANCEOF_KEYWORD, psiAnchor, PsiType.BOOLEAN);
+		myLeft = null;
+		myCastType = null;
 	}
 
 	@Override
@@ -49,15 +61,28 @@ public class InstanceofInstruction extends BinopInstruction
 		return visitor.visitInstanceof(this, runner, stateBefore);
 	}
 
-	@Nonnull
+	/**
+	 * @return instanceof operand or null if it's not applicable
+	 * (e.g. instruction is emitted when inlining Xyz.class::isInstance method reference)
+	 */
+	@Nullable
 	public PsiExpression getLeft()
 	{
 		return myLeft;
 	}
 
-	@Nonnull
+	@Nullable
 	public PsiType getCastType()
 	{
 		return myCastType;
+	}
+
+	/**
+	 * @return true if this instanceof instruction checks against Class object (e.g. Class.isInstance() call). In this case
+	 * class object is located on the stack and cast type is not known
+	 */
+	public boolean isClassObjectCheck()
+	{
+		return myCastType == null;
 	}
 }

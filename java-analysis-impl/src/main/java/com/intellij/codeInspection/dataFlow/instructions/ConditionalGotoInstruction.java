@@ -17,11 +17,7 @@
 package com.intellij.codeInspection.dataFlow.instructions;
 
 
-import com.intellij.codeInspection.dataFlow.ControlFlow;
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
+import com.intellij.codeInspection.dataFlow.*;
 import com.intellij.psi.PsiElement;
 
 public class ConditionalGotoInstruction extends BranchingInstruction implements JumpInstruction
@@ -49,7 +45,12 @@ public class ConditionalGotoInstruction extends BranchingInstruction implements 
 
 	public String toString()
 	{
-		return (isNegated() ? "!" : "") + "cond?_goto " + getOffset();
+		return "IF_" + (isNegated() ? "NE" : "EQ") + " " + getOffset();
+	}
+
+	public boolean isTarget(boolean whenTrueOnStack, Instruction target)
+	{
+		return target.getIndex() == (whenTrueOnStack == myIsNegated ? getIndex() + 1 : getOffset());
 	}
 
 	@Override
@@ -61,13 +62,6 @@ public class ConditionalGotoInstruction extends BranchingInstruction implements 
 	@Override
 	public void setOffset(final int offset)
 	{
-		myOffset = new ControlFlow.ControlFlowOffset()
-		{
-			@Override
-			public int getInstructionOffset()
-			{
-				return offset;
-			}
-		};
+		myOffset = new ControlFlow.FixedOffset(offset);
 	}
 }

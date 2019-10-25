@@ -1,5 +1,4 @@
-<idea-plugin>
-
+<consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij">
 		<!-- Annotations -->
 		<intentionAction>
@@ -502,4 +501,4 @@
 			<descriptionDirectoryName>EditContractIntention</descriptionDirectoryName>
 		</intentionAction>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

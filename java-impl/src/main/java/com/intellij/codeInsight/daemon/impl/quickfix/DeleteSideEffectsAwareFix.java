@@ -15,67 +15,64 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.codeInsight.BlockUtils;
 import com.intellij.codeInsight.intention.LowPriorityAction;
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionStatement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiIfStatement;
-import com.intellij.psi.PsiStatement;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.siyeh.ig.psiutils.BlockUtils;
+import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.StatementExtractor;
 import consulo.java.JavaQuickFixBundle;
+import org.jetbrains.annotations.Nls;
+import javax.annotation.Nonnull;
 
-public class DeleteSideEffectsAwareFix implements IntentionAction, LowPriorityAction
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Objects;
+
+public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOnPsiElement implements LowPriorityAction
 {
-	private final SmartPsiElementPointer<PsiExpressionStatement> myPointer;
+	private final SmartPsiElementPointer<PsiStatement> myStatementPtr;
+	private final SmartPsiElementPointer<PsiExpression> myExpressionPtr;
 	private final String myMessage;
+	private final boolean myIsAvailable;
 
-	public DeleteSideEffectsAwareFix(PsiExpressionStatement statement)
+	public DeleteSideEffectsAwareFix(@Nonnull PsiStatement statement, PsiExpression expression)
 	{
-		myPointer = SmartPointerManager.getInstance(statement.getProject()).createSmartPsiElementPointer(statement);
-		PsiExpression expression = statement.getExpression();
+		this(statement, expression, false);
+	}
+
+	public DeleteSideEffectsAwareFix(@Nonnull PsiStatement statement, PsiExpression expression, boolean alwaysAvailable)
+	{
+		super(statement);
+		SmartPointerManager manager = SmartPointerManager.getInstance(statement.getProject());
+		myStatementPtr = manager.createSmartPsiElementPointer(statement);
+		myExpressionPtr = manager.createSmartPsiElementPointer(expression);
 		List<PsiExpression> sideEffects = SideEffectChecker.extractSideEffectExpressions(expression);
 		if(sideEffects.isEmpty())
 		{
 			myMessage = JavaQuickFixBundle.message("delete.element.fix.text");
 		}
-		else if(sideEffects.size() == 1 && sideEffects.get(0) == PsiUtil.skipParenthesizedExprDown(expression))
-		{
-			// "Remove unnecessary parentheses" action is already present which will do the same
-			myMessage = "";
-		}
 		else
 		{
 			PsiStatement[] statements = StatementExtractor.generateStatements(sideEffects, expression);
-			if(statements.length == 1)
+			if(statements.length == 1 && statements[0] instanceof PsiIfStatement)
 			{
-				if(statements[0] instanceof PsiIfStatement)
-				{
-					myMessage = JavaQuickFixBundle.message("extract.side.effects.convert.to.if");
-				}
-				else
-				{
-					myMessage = JavaQuickFixBundle.message("extract.side.effects.single");
-				}
+				myMessage = JavaQuickFixBundle.message("extract.side.effects.convert.to.if");
 			}
 			else
 			{
-				myMessage = JavaQuickFixBundle.message("extract.side.effects.multiple");
+				myMessage = JavaQuickFixBundle.message("extract.side.effects", statements.length);
 			}
 		}
+		myIsAvailable = alwaysAvailable ||
+				// "Remove unnecessary parentheses" action is already present which will do the same
+				sideEffects.size() != 1 || !(statement instanceof PsiExpressionStatement) ||
+				sideEffects.get(0) != PsiUtil.skipParenthesizedExprDown(expression);
 	}
 
 	@Nls
@@ -95,32 +92,50 @@ public class DeleteSideEffectsAwareFix implements IntentionAction, LowPriorityAc
 	}
 
 	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project,
+							   @Nonnull PsiFile file,
+							   @Nonnull PsiElement startElement,
+							   @Nonnull PsiElement endElement)
 	{
-		return !myMessage.isEmpty();
+		return myIsAvailable;
 	}
 
 	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@Nonnull Project project,
+					   @Nonnull PsiFile file,
+					   @Nullable Editor editor,
+					   @Nonnull PsiElement startElement,
+					   @Nonnull PsiElement endElement)
 	{
-		PsiExpressionStatement statement = myPointer.getElement();
+		PsiStatement statement = myStatementPtr.getElement();
 		if(statement == null)
 		{
 			return;
 		}
-		PsiExpression expression = statement.getExpression();
+		PsiExpression expression = myExpressionPtr.getElement();
+		if(expression == null)
+		{
+			return;
+		}
 		List<PsiExpression> sideEffects = SideEffectChecker.extractSideEffectExpressions(expression);
+		CommentTracker ct = new CommentTracker();
+		sideEffects.forEach(ct::markUnchanged);
 		PsiStatement[] statements = StatementExtractor.generateStatements(sideEffects, expression);
 		if(statements.length > 0)
 		{
-			BlockUtils.addBefore(statement, statements);
+			PsiStatement lastAdded = BlockUtils.addBefore(statement, statements);
+			statement = Objects.requireNonNull(PsiTreeUtil.getNextSiblingOfType(lastAdded, PsiStatement.class));
 		}
-		statement.delete();
-	}
-
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
+		PsiElement parent = statement.getParent();
+		if(parent instanceof PsiStatement &&
+				!(parent instanceof PsiIfStatement && ((PsiIfStatement) parent).getElseBranch() == statement) &&
+				!(parent instanceof PsiForStatement && ((PsiForStatement) parent).getUpdate() == statement))
+		{
+			ct.replaceAndRestoreComments(statement, "{}");
+		}
+		else
+		{
+			ct.deleteAndRestoreComments(statement);
+		}
 	}
 }

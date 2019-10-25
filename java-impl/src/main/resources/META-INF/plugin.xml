@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+<consulo-plugin>
 	<id>consulo.java</id>
 	<name>Java</name>
 	<version>SNAPHOT</version>
@@ -28,13 +28,13 @@
 	<depends>com.intellij.xml</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 
-	<xi:include href="/META-INF/JvmByteCodeViewer.xml" xpointer="xpointer(/idea-plugin/*)"/>
-	<xi:include href="/META-INF/Coverage.xml" xpointer="xpointer(/idea-plugin/*)"/>
-	<xi:include href="/META-INF/InspectionGadgets.xml" xpointer="xpointer(/idea-plugin/*)"/>
-	<xi:include href="/META-INF/IntentionPowerPack.xml" xpointer="xpointer(/idea-plugin/*)"/>
-	<xi:include href="/META-INF/Manifest.xml" xpointer="xpointer(/idea-plugin/*)"/>
-	<xi:include href="/META-INF/Guava.xml" xpointer="xpointer(/idea-plugin/*)"/>
-	<xi:include href="/META-INF/Jam.xml" xpointer="xpointer(/idea-plugin/*)"/>
+	<import path="/META-INF/JvmByteCodeViewer.xml"/>
+	<import path="/META-INF/Coverage.xml" />
+	<import path="/META-INF/InspectionGadgets.xml"/>
+	<import path="/META-INF/IntentionPowerPack.xml"/>
+	<import path="/META-INF/Manifest.xml"/>
+	<import path="/META-INF/Guava.xml"/>
+	<import path="/META-INF/Jam.xml"/>
 
 	<actions>
 		<group id="NewJavaSpecialFile">
@@ -630,12 +630,16 @@
 		<extensionPoint name="i18nizeHandlerProvider" interface="com.intellij.codeInspection.i18n.I18nizeHandlerProvider"/>
 
 		<extensionPoint name="documentationDelegateProvider" interface="com.intellij.codeInsight.javadoc.DocumentationDelegateProvider"/>
+
+		<extensionPoint name="inferredAnnotationProvider" interface="com.intellij.codeInsight.InferredAnnotationProvider" area="PROJECT" />
 	</extensionPoints>
 
 	<extensions defaultExtensionNs="consulo.java">
 		<allClassesSearch implementation="com.intellij.psi.impl.search.AllClassesSearchExecutor"/>
 
 		<expressionSurrounder implementation="com.intellij.debugger.codeinsight.JavaWithRuntimeCastSurrounder"/>
+
+		<inferredAnnotationProvider implementation="com.intellij.codeInsight.DefaultInferredAnnotationProvider" />
 
 		<superMethodsSearch implementation="com.intellij.psi.impl.search.MethodSuperSearcher"/>
 		<annotatedElementsSearch implementation="com.intellij.psi.impl.search.AnnotatedElementsSearcher"/>
@@ -2038,7 +2042,6 @@
 							serviceImplementation="com.intellij.codeInsight.generation.MemberImplementorExplorersProviderImpl"/>
 
 		<applicationService serviceImplementation="com.intellij.util.xml.impl.JavaDomApplicationComponent" lazy="false"/>
-		<applicationService serviceImplementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter" lazy="false"/>
 		<applicationService serviceImplementation="consulo.java.JavaDummyHolderComponent" lazy="false" />
 		<applicationService serviceImplementation="consulo.java.unscramble.UnscrambleManager" lazy="false" />
 
@@ -2048,6 +2051,8 @@
 		<projectService serviceInterface="com.intellij.pom.java.PomJavaAspect" serviceImplementation="com.intellij.pom.java.impl.PomJavaAspectImpl" lazy="false" />
 
 		<codeStyleIndentHelperExtension implementation="com.intellij.psi.impl.source.codeStyle.JavaIndentHelper" />
+
+		<projectService serviceImplementation="com.intellij.codeInsight.ConcurrencyAnnotationsManager" />
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">
@@ -2061,4 +2066,4 @@
 
 		<customAnnotationChecker implementation="com.intellij.util.xml.impl.ExtendsClassChecker"/>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

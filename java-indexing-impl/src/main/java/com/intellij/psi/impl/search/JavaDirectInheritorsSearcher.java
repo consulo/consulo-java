@@ -15,13 +15,6 @@
  */
 package com.intellij.psi.impl.search;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
@@ -29,14 +22,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiEnumConstant;
-import com.intellij.psi.PsiEnumConstantInitializer;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaAnonymousClassBaseRefOccurenceIndex;
 import com.intellij.psi.impl.java.stubs.index.JavaSuperClassNameOccurenceIndex;
 import com.intellij.psi.search.EverythingGlobalScope;
@@ -50,6 +36,13 @@ import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.java.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author max
@@ -57,7 +50,7 @@ import com.intellij.util.containers.HashMap;
 public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, DirectClassInheritorsSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@Nonnull final DirectClassInheritorsSearch.SearchParameters p, @Nonnull final Processor<PsiClass> consumer)
+	public boolean execute(@Nonnull final DirectClassInheritorsSearch.SearchParameters p, @Nonnull final Processor<? super PsiClass> consumer)
 	{
 		final PsiClass aClass = p.getClassToProcess();
 
@@ -267,7 +260,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, Dir
 		});
 	}
 
-	private static boolean processSameNamedClasses(Processor<PsiClass> consumer, List<PsiClass> sameNamedClasses, final VirtualFile jarFile)
+	private static boolean processSameNamedClasses(Processor<? super PsiClass> consumer, List<PsiClass> sameNamedClasses, final VirtualFile jarFile)
 	{
 		// if there is a class from the same jar, prefer it
 		boolean sameJarClassFound = false;

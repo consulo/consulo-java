@@ -15,14 +15,15 @@
  */
 package com.intellij.psi;
 
-import static com.intellij.psi.PsiJvmConversionHelper.getListAnnotations;
-import static com.intellij.psi.PsiJvmConversionHelper.getListModifiers;
-
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.JvmModifiersOwner;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+
+import static com.intellij.psi.PsiJvmConversionHelper.getListAnnotations;
+import static com.intellij.psi.PsiJvmConversionHelper.getListModifiers;
 
 /**
  * Represents a PSI element which has a list of modifiers (public/private/protected/etc.)
@@ -60,6 +61,17 @@ public interface PsiModifierListOwner extends PsiElement, JvmModifiersOwner
 	default JvmModifier[] getModifiers()
 	{
 		return getListModifiers(this);
+	}
+
+	@Nullable
+	default PsiAnnotation getAnnotation(@Nonnull String fqn)
+	{
+		return PsiJvmConversionHelper.getListAnnotation(this, fqn);
+	}
+
+	default boolean hasAnnotation(@Nonnull String fqn)
+	{
+		return PsiJvmConversionHelper.hasListAnnotation(this, fqn);
 	}
 
 	@Nonnull

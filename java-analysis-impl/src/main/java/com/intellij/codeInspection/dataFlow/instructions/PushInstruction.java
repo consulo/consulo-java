@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Feb 7, 2002
- * Time: 1:25:41 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.instructions;
-
-import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
@@ -33,19 +23,21 @@ import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.psi.PsiExpression;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class PushInstruction extends Instruction
+public class PushInstruction extends Instruction implements ExpressionPushingInstruction
 {
 	private final DfaValue myValue;
 	private final PsiExpression myPlace;
 	private final boolean myReferenceWrite;
 
-	public PushInstruction(@javax.annotation.Nullable DfaValue value, PsiExpression place)
+	public PushInstruction(@Nullable DfaValue value, PsiExpression place)
 	{
 		this(value, place, false);
 	}
 
-	public PushInstruction(@javax.annotation.Nullable DfaValue value, PsiExpression place, final boolean isReferenceWrite)
+	public PushInstruction(@Nullable DfaValue value, PsiExpression place, final boolean isReferenceWrite)
 	{
 		myValue = value != null ? value : DfaUnknownValue.getInstance();
 		myPlace = place;
@@ -63,7 +55,8 @@ public class PushInstruction extends Instruction
 		return myValue;
 	}
 
-	public PsiExpression getPlace()
+	@Override
+	public PsiExpression getExpression()
 	{
 		return myPlace;
 	}

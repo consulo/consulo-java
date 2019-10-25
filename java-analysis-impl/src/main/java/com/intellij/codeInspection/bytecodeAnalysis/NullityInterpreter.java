@@ -16,38 +16,43 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.InstanceOfCheckValue;
-import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.NullValue;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.Identity;
-import static com.intellij.codeInspection.bytecodeAnalysis.PResults.NPE;
-
-import java.util.List;
-
+import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import consulo.internal.org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import consulo.internal.org.objectweb.asm.tree.MethodInsnNode;
 import consulo.internal.org.objectweb.asm.tree.TypeInsnNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicInterpreter;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 
+import java.util.List;
+
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.InstanceOfCheckValue;
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.NullValue;
+import static com.intellij.codeInspection.bytecodeAnalysis.PResults.Identity;
+import static com.intellij.codeInspection.bytecodeAnalysis.PResults.NPE;
+import static com.intellij.codeInspection.bytecodeAnalysis.PResults.*;
+import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.*;
+
 abstract class NullityInterpreter extends BasicInterpreter
 {
 	boolean top;
 	final boolean nullableAnalysis;
-	final int nullityMask;
-	private PResults.PResult subResult = Identity;
+	final boolean nullable;
+	private PResult subResult = Identity;
 	protected boolean taken;
 
-	NullityInterpreter(boolean nullableAnalysis, int nullityMask)
+	NullityInterpreter(boolean nullableAnalysis, boolean nullable)
 	{
+		super(Opcodes.API_VERSION);
 		this.nullableAnalysis = nullableAnalysis;
-		this.nullityMask = nullityMask;
+		this.nullable = nullable;
 	}
 
-	abstract PResults.PResult combine(PResults.PResult res1, PResults.PResult res2) throws AnalyzerException;
+	abstract PResult combine(PResult res1, PResult res2) throws AnalyzerException;
 
-	public PResults.PResult getSubResult()
+	public PResult getSubResult()
 	{
 		return subResult;
 	}
@@ -67,19 +72,19 @@ abstract class NullityInterpreter extends BasicInterpreter
 			case GETFIELD:
 			case ARRAYLENGTH:
 			case MONITORENTER:
-				if(value instanceof AbstractValues.ParamValue)
+				if(value instanceof ParamValue)
 				{
 					subResult = NPE;
 				}
 				break;
 			case CHECKCAST:
-				if(value instanceof AbstractValues.ParamValue)
+				if(value instanceof ParamValue)
 				{
-					return new AbstractValues.ParamValue(Type.getObjectType(((TypeInsnNode) insn).desc));
+					return new ParamValue(Type.getObjectType(((TypeInsnNode) insn).desc));
 				}
 				break;
 			case INSTANCEOF:
-				if(value instanceof AbstractValues.ParamValue)
+				if(value instanceof ParamValue)
 				{
 					return InstanceOfCheckValue;
 				}
@@ -103,17 +108,17 @@ abstract class NullityInterpreter extends BasicInterpreter
 			case BALOAD:
 			case CALOAD:
 			case SALOAD:
-				if(value1 instanceof AbstractValues.ParamValue)
+				if(value1 instanceof ParamValue)
 				{
 					subResult = NPE;
 				}
 				break;
 			case PUTFIELD:
-				if(value1 instanceof AbstractValues.ParamValue)
+				if(value1 instanceof ParamValue)
 				{
 					subResult = NPE;
 				}
-				if(nullableAnalysis && value2 instanceof AbstractValues.ParamValue)
+				if(nullableAnalysis && value2 instanceof ParamValue)
 				{
 					subResult = NPE;
 				}
@@ -124,7 +129,7 @@ abstract class NullityInterpreter extends BasicInterpreter
 	}
 
 	@Override
-	public BasicValue ternaryOperation(AbstractInsnNode insn, BasicValue value1, BasicValue value2, BasicValue value3) throws AnalyzerException
+	public BasicValue ternaryOperation(AbstractInsnNode insn, BasicValue value1, BasicValue value2, BasicValue value3)
 	{
 		switch(insn.getOpcode())
 		{
@@ -135,17 +140,17 @@ abstract class NullityInterpreter extends BasicInterpreter
 			case BASTORE:
 			case CASTORE:
 			case SASTORE:
-				if(value1 instanceof AbstractValues.ParamValue)
+				if(value1 instanceof ParamValue)
 				{
 					subResult = NPE;
 				}
 				break;
 			case AASTORE:
-				if(value1 instanceof AbstractValues.ParamValue)
+				if(value1 instanceof ParamValue)
 				{
 					subResult = NPE;
 				}
-				if(nullableAnalysis && value3 instanceof AbstractValues.ParamValue)
+				if(nullableAnalysis && value3 instanceof ParamValue)
 				{
 					subResult = NPE;
 				}
@@ -159,44 +164,63 @@ abstract class NullityInterpreter extends BasicInterpreter
 	public BasicValue naryOperation(AbstractInsnNode insn, List<? extends BasicValue> values) throws AnalyzerException
 	{
 		int opcode = insn.getOpcode();
-		boolean isStaticInvoke = opcode == INVOKESTATIC;
-		int shift = isStaticInvoke ? 0 : 1;
-		if((opcode == INVOKESPECIAL || opcode == INVOKEINTERFACE || opcode == INVOKEVIRTUAL) && values.get(0) instanceof AbstractValues.ParamValue)
-		{
-			subResult = NPE;
-		}
 		switch(opcode)
 		{
 			case INVOKEINTERFACE:
-				if(nullableAnalysis)
-				{
-					for(int i = shift; i < values.size(); i++)
-					{
-						if(values.get(i) instanceof AbstractValues.ParamValue)
-						{
-							top = true;
-							return super.naryOperation(insn, values);
-						}
-					}
-				}
-				break;
-			case INVOKESTATIC:
 			case INVOKESPECIAL:
+			case INVOKESTATIC:
 			case INVOKEVIRTUAL:
-				boolean stable = opcode == INVOKESTATIC || opcode == INVOKESPECIAL;
 				MethodInsnNode methodNode = (MethodInsnNode) insn;
-				Method method = new Method(methodNode.owner, methodNode.name, methodNode.desc);
-				for(int i = shift; i < values.size(); i++)
+				methodCall(opcode, new Member(methodNode.owner, methodNode.name, methodNode.desc), values);
+				break;
+			case INVOKEDYNAMIC:
+				LambdaIndy lambda = LambdaIndy.from((InvokeDynamicInsnNode) insn);
+				if(lambda != null)
 				{
-					BasicValue value = values.get(i);
-					if(value instanceof AbstractValues.ParamValue || (NullValue == value && nullityMask == Direction.In.NULLABLE_MASK && "<init>".equals(methodNode.name)))
+					int targetOpcode = lambda.getAssociatedOpcode();
+					if(targetOpcode != -1)
 					{
-						subResult = combine(subResult, new PResults.ConditionalNPE(new Key(method, new Direction.In(i - shift, nullityMask), stable)));
+						methodCall(targetOpcode, lambda.getMethod(), lambda.getLambdaMethodArguments(values, this::newValue));
 					}
 				}
-				break;
 			default:
 		}
 		return super.naryOperation(insn, values);
 	}
+
+	private void methodCall(int opcode, Member method, List<? extends BasicValue> values) throws AnalyzerException
+	{
+		if(opcode != INVOKESTATIC && values.remove(0) instanceof ParamValue)
+		{
+			subResult = NPE;
+		}
+
+		if(opcode == INVOKEINTERFACE)
+		{
+			if(nullableAnalysis)
+			{
+				for(BasicValue value : values)
+				{
+					if(value instanceof ParamValue)
+					{
+						top = true;
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			boolean stable = opcode == INVOKESTATIC || opcode == INVOKESPECIAL;
+			for(int i = 0; i < values.size(); i++)
+			{
+				BasicValue value = values.get(i);
+				if(value instanceof ParamValue || (NullValue == value && nullable && "<init>".equals(method.methodName)))
+				{
+					subResult = combine(subResult, new ConditionalNPE(new EKey(method, new Direction.In(i, nullable), stable)));
+				}
+			}
+		}
+	}
 }
+

@@ -1,4 +1,4 @@
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="consulo.java">
 		<runConfigurationExtension implementation="com.intellij.execution.coverage.CoverageJavaRunConfigurationExtension"/>
 	</extensions>
@@ -25,4 +25,4 @@
 			<add-to-group group-id="AnalyzeMenu" anchor="before" relative-to-action="AnalyzeActions"/>
 		</group>
 	</actions>
-</idea-plugin>
+</consulo-plugin>

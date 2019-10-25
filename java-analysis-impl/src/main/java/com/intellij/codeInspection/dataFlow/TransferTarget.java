@@ -16,9 +16,28 @@
 
 package com.intellij.codeInspection.dataFlow;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * from kotlin
  */
 public interface TransferTarget
 {
+	/**
+	 * @return list of possible instruction offsets for given target
+	 */
+	default Collection<Integer> getPossibleTargets()
+	{
+		return Collections.emptyList();
+	}
+
+	/**
+	 * @return next instruction states assuming no traps
+	 */
+	default List<DfaInstructionState> dispatch(DfaMemoryState state, DataFlowRunner runner)
+	{
+		return Collections.emptyList();
+	}
 }
