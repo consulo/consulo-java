@@ -11,8 +11,8 @@ import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ class MethodReturnInferenceVisitor
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	private ReturnValue getExpressionValue(@Nullable LighterASTNode expr)
 	{
 		expr = skipParenthesesCastsDown(tree, expr);
@@ -119,7 +119,7 @@ class MethodReturnInferenceVisitor
 		return ReturnValue.UNKNOWN;
 	}
 
-	@NotNull
+	@Nonnull
 	private ReturnValue findVariableValue(LighterASTNode expr, LighterASTNode target)
 	{
 		LighterASTNode parent;
@@ -165,7 +165,7 @@ class MethodReturnInferenceVisitor
 		return ReturnValue.UNKNOWN;
 	}
 
-	@NotNull
+	@Nonnull
 	private ReturnValue findValueBeforeStatement(LighterASTNode statement, LighterASTNode target)
 	{
 		LighterASTNode parent = tree.getParent(statement);
@@ -504,7 +504,7 @@ class MethodReturnInferenceVisitor
 		return !negated && type == INSTANCE_OF_EXPRESSION && isReferenceToLocal(findExpressionChild(tree, expr), var);
 	}
 
-	private boolean isReferenceToLocal(@Nullable LighterASTNode operand, @NotNull LighterASTNode var)
+	private boolean isReferenceToLocal(@Nullable LighterASTNode operand, @Nonnull LighterASTNode var)
 	{
 		// We do not actually resolve here as this method is guaranteed to be called within the scope of var,
 		// thus simply comparing names is enough
@@ -515,7 +515,7 @@ class MethodReturnInferenceVisitor
 				Objects.equals(getNameIdentifierText(tree, operand), getNameIdentifierText(tree, var));
 	}
 
-	private boolean isNullLiteral(@NotNull LighterASTNode value)
+	private boolean isNullLiteral(@Nonnull LighterASTNode value)
 	{
 		return value.getTokenType() == LITERAL_EXPRESSION && tree.getChildren(value).get(0).getTokenType() == JavaTokenType.NULL_KEYWORD;
 	}
@@ -561,18 +561,18 @@ class MethodReturnInferenceVisitor
 		static final ReturnValue NOT_NULL = new ReturnValue(EnumSet.of(Nullability.NOT_NULL), null, Collections.emptyList());
 
 		final
-		@NotNull
+		@Nonnull
 		EnumSet<Nullability> myNullability; // empty = top
 		final
 		@Nullable
 		String myCalledMethod; // null = top; empty = bottom
 		final
-		@NotNull
+		@Nonnull
 		List<ExpressionRange> myRanges;
 
-		private ReturnValue(@NotNull EnumSet<Nullability> nullability,
+		private ReturnValue(@Nonnull EnumSet<Nullability> nullability,
 							@Nullable String method,
-							@NotNull List<ExpressionRange> ranges)
+							@Nonnull List<ExpressionRange> ranges)
 		{
 			myNullability = nullability;
 			myCalledMethod = method;
@@ -591,12 +591,12 @@ class MethodReturnInferenceVisitor
 			return new ReturnValue(copy, myCalledMethod, myRanges);
 		}
 
-		static ReturnValue delegate(@NotNull String method, @NotNull ExpressionRange range)
+		static ReturnValue delegate(@Nonnull String method, @Nonnull ExpressionRange range)
 		{
 			return new ReturnValue(EnumSet.noneOf(Nullability.class), method, Collections.singletonList(range));
 		}
 
-		static ReturnValue merge(@NotNull ReturnValue left, @NotNull ReturnValue right)
+		static ReturnValue merge(@Nonnull ReturnValue left, @Nonnull ReturnValue right)
 		{
 			EnumSet<Nullability> nullability = EnumSet.copyOf(left.myNullability);
 			nullability.addAll(right.myNullability);
