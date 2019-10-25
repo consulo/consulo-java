@@ -453,7 +453,7 @@ class MethodReturnInferenceVisitor
 				}
 			}
 			IElementType tokenType = node.getTokenType();
-			if(tokenType == CONDITIONAL_EXPRESSION /*|| tokenType == SWITCH_EXPRESSION */||
+			if(tokenType == CONDITIONAL_EXPRESSION /*|| tokenType == SWITCH_EXPRESSION */ ||
 					(tokenType == POLYADIC_EXPRESSION || tokenType == BINARY_EXPRESSION) && firstChildOfType(tree, node, SHORT_CIRCUIT) != null)
 			{
 				ContainerUtil.addIfNotNull(workList, findExpressionChild(tree, node));

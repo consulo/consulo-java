@@ -80,6 +80,7 @@ class PurityInferenceResult
 			return true;
 		}
 		PsiCall psiCall = (PsiCall) singleCall.restoreExpression(body.get());
+		assert psiCall != null;
 		PsiMethod method = psiCall.resolveMethod();
 		if(method != null)
 		{

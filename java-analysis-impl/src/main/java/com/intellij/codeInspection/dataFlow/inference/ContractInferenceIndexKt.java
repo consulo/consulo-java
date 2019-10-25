@@ -38,7 +38,7 @@ import java.util.Map;
  */
 class ContractInferenceIndexKt
 {
-	private static PsiFileGist<Map<Integer, MethodData>> gist = GistManager.getInstance().newPsiFileGist("javaContractInference", 12, MethodDataExternalizer.INSTANCE, file -> indexFile(file.getNode
+	private static PsiFileGist<Map<Integer, MethodData>> gist = GistManager.getInstance().newPsiFileGist("javaContractInference", 19, MethodDataExternalizer.INSTANCE, file -> indexFile(file.getNode
 			().getLighterAST()));
 
 	@Nonnull
@@ -73,6 +73,7 @@ class ContractInferenceIndexKt
 						{
 							result.put((PsiMethod) spine.getStubPsi(i), methodData);
 						}
+						methodIndex ++;
 					}
 				}
 			}

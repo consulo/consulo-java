@@ -65,7 +65,7 @@ class MethodDataExternalizer implements DataExternalizer<Map<Integer, MethodData
 	private static MethodData readMethod(DataInput in) throws IOException
 	{
 		MethodReturnInferenceResult nullity = DataInputOutputUtil.readNullable(in, () -> readNullity(in));
-		PurityInferenceResult purify = DataInputOutputUtil.readNullable(in, () -> readPurify(in));
+		PurityInferenceResult purify = DataInputOutputUtil.readNullable(in, () -> readPurity(in));
 		List<PreContract> contracts = DataInputOutputUtil.readSeq(in, () -> readContract(in));
 		BitSet notNullParameters = readBitSet(in);
 		return new MethodData(nullity, purify, contracts, notNullParameters, DataInputOutputUtil.readINT(in), DataInputOutputUtil.readINT(in));
@@ -122,9 +122,19 @@ class MethodDataExternalizer implements DataExternalizer<Map<Integer, MethodData
 		}
 	}
 
-	private static PurityInferenceResult readPurify(DataInput in) throws IOException
+	private static PurityInferenceResult readPurity(DataInput in) throws IOException
 	{
-		return new PurityInferenceResult(readRanges(in), DataInputOutputUtil.readNullable(in, () -> readRange(in)));
+		List<ExpressionRange> mutableRefs = readRanges(in);
+		ExpressionRange range = DataInputOutputUtil.readNullable(in, () -> readRange(in));
+
+		return new PurityInferenceResult(mutableRefs, range);
+	}
+
+	private static void writePurity(DataOutput out, PurityInferenceResult purity) throws IOException
+	{
+		writeRanges(out, purity.getMutableRefs());
+
+		DataInputOutputUtil.writeNullable(out, purity.getSingleCall(), it -> writeRange(out, it));
 	}
 
 	private static List<ExpressionRange> readRanges(DataInput in) throws IOException
@@ -142,8 +152,18 @@ class MethodDataExternalizer implements DataExternalizer<Map<Integer, MethodData
 		DataInputOutputUtil.writeNullable(out, data.getMethodReturn(), it -> writeNullity(out, it));
 		DataInputOutputUtil.writeNullable(out, data.getPurity(), it -> writePurity(out, it));
 		DataInputOutputUtil.writeSeq(out, data.getContracts(), it -> writeContract(out, it));
+		writeBitSet(out, data.getNotNullParameters());
 		DataInputOutputUtil.writeINT(out, data.getBodyStart());
 		DataInputOutputUtil.writeINT(out, data.getBodyEnd());
+	}
+
+	private static void writeBitSet(DataOutput output, BitSet bitSet) throws IOException
+	{
+		byte[] bytes = bitSet.toByteArray();
+		int size = bytes.length;
+		assert size <= 255;
+		output.writeByte(size);
+		output.write(bytes);
 	}
 
 	private static void writeContract(DataOutput out, PreContract contract) throws IOException
@@ -186,13 +206,6 @@ class MethodDataExternalizer implements DataExternalizer<Map<Integer, MethodData
 	private static void writeContractArguments(DataOutput out, List<StandardMethodContract.ValueConstraint> arguments) throws IOException
 	{
 		DataInputOutputUtil.writeSeq(out, arguments, it -> out.writeByte(it.ordinal()));
-	}
-
-	private static void writePurity(DataOutput out, PurityInferenceResult purity) throws IOException
-	{
-		writeRanges(out, purity.getMutableRefs());
-
-		DataInputOutputUtil.writeNullable(out, purity.getSingleCall(), it -> writeRange(out, it));
 	}
 
 	private static void writeNullity(DataOutput out, MethodReturnInferenceResult methodReturn) throws IOException

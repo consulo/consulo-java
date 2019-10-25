@@ -48,8 +48,8 @@ class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor
 			if(data != null)
 			{
 				result.put(methodIndex, data);
-				methodIndex++;
 			}
+			methodIndex++;
 		}
 
 		if(JavaLightStubBuilder.isCodeBlockWithoutStubs(element))

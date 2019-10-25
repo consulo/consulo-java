@@ -15,8 +15,6 @@
  */
 package com.intellij.psi.impl.source;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -25,17 +23,13 @@ import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.impl.java.stubs.impl.PsiJavaFileStubImpl;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.JavaSourceUtil;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
-import com.intellij.psi.impl.source.tree.RecursiveTreeElementWalkingVisitor;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.stubs.LightStubBuilder;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+
+import javax.annotation.Nonnull;
 
 public class JavaLightStubBuilder extends LightStubBuilder
 {
@@ -128,8 +122,9 @@ public class JavaLightStubBuilder extends LightStubBuilder
 
 	private static class CodeBlockVisitor extends RecursiveTreeElementWalkingVisitor implements LighterLazyParseableNode.Visitor
 	{
-		private static final TokenSet BLOCK_ELEMENTS = TokenSet.create(JavaElementType.ANNOTATION, JavaElementType.CLASS, JavaElementType.ANONYMOUS_CLASS, JavaElementType.LAMBDA_EXPRESSION,
-				JavaElementType.METHOD_REF_EXPRESSION);
+		private static final TokenSet BLOCK_ELEMENTS = TokenSet.create(
+				JavaElementType.CLASS, JavaElementType.ANONYMOUS_CLASS,
+				JavaTokenType.ARROW, JavaTokenType.DOUBLE_COLON, JavaTokenType.AT);
 
 		private boolean result = true;
 
@@ -145,11 +140,13 @@ public class JavaLightStubBuilder extends LightStubBuilder
 			super.visitNode(element);
 		}
 
+		private IElementType preLast;
 		private IElementType last;
 		private boolean seenNew;
+		private boolean seenLParen;
+		private boolean seenModifier;
 
 		@Override
-		@SuppressWarnings("IfStatementWithIdenticalBranches")
 		public boolean visit(IElementType type)
 		{
 			if(ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(type))
@@ -170,17 +167,29 @@ public class JavaLightStubBuilder extends LightStubBuilder
 			else if(seenNew && type == JavaTokenType.SEMICOLON)
 			{
 				seenNew = false;
+				seenLParen = false;
 			}
-			else if(seenNew && type == JavaTokenType.LBRACE && last != JavaTokenType.RBRACKET)
+			else if(seenNew && type == JavaTokenType.LBRACE && seenLParen)
 			{
 				return (result = false);
 			}
+			else if(seenNew && type == JavaTokenType.LPARENTH)
+			{
+				seenLParen = true;
+			}
+			else if(ElementType.MODIFIER_BIT_SET.contains(type))
+			{
+				seenModifier = true;
+			}
 			// local classes
-			else if(type == JavaTokenType.CLASS_KEYWORD && last != JavaTokenType.DOT)
+			else if(type == JavaTokenType.CLASS_KEYWORD && (last != JavaTokenType.DOT || preLast != JavaTokenType.IDENTIFIER || seenModifier)
+					|| type == JavaTokenType.ENUM_KEYWORD
+					|| type == JavaTokenType.INTERFACE_KEYWORD)
 			{
 				return (result = false);
 			}
 
+			preLast = last;
 			last = type;
 			return true;
 		}
