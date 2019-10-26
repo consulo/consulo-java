@@ -1,6 +1,19 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.java.stubs.index;
 
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiJavaModule;
+import com.intellij.psi.impl.search.JavaSourceFilterScope;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.stubs.StringStubIndexExtension;
+import com.intellij.psi.stubs.StubIndex;
+import com.intellij.psi.stubs.StubIndexKey;
+import com.intellij.util.containers.ContainerUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -12,21 +25,6 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.impl.search.JavaSourceFilterScope;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StringStubIndexExtension;
-import com.intellij.psi.stubs.StubIndex;
-import com.intellij.psi.stubs.StubIndexKey;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.indexing.FileBasedIndex;
 
 public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
 {
@@ -40,7 +38,7 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
 	@Override
 	public int getVersion()
 	{
-		return super.getVersion() + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 2 : 0);
+		return 3;
 	}
 
 	@Nonnull
@@ -95,7 +93,7 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
 	@Override
 	public boolean traceKeyHashToVirtualFileMapping()
 	{
-		return FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping;
+		return true;
 	}
 
 	@Nullable

@@ -1,23 +1,18 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.java.stubs.index;
 
-import static java.util.Collections.singletonMap;
-
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.DataIndexer;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.intellij.util.indexing.FileContent;
-import com.intellij.util.indexing.ID;
-import com.intellij.util.indexing.ScalarIndexExtension;
+import com.intellij.util.indexing.*;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+
+import static java.util.Collections.singletonMap;
 
 public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String>
 {
@@ -36,9 +31,15 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String>
 	}
 
 	@Override
+	public boolean indexDirectories()
+	{
+		return true;
+	}
+
+	@Override
 	public int getVersion()
 	{
-		return 2 + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 2 : 0);
+		return 6;
 	}
 
 	@Nonnull
