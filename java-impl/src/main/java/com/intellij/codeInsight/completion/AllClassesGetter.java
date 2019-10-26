@@ -1,18 +1,4 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.CodeInsightUtilCore;
@@ -30,18 +16,11 @@ import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import gnu.trove.THashSet;
-
 import javax.annotation.Nonnull;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * Created by IntelliJ IDEA.
- * User: ik
- * Date: 02.12.2003
- * Time: 16:49:25
- * To change this template use Options | File Templates.
- */
 public class AllClassesGetter
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.AllClassesGetter");
@@ -131,7 +110,7 @@ public class AllClassesGetter
 					}
 				}
 			}
-			if(toDelete.isValid())
+			if(toDelete != null && toDelete.isValid())
 			{
 				document.deleteString(toDelete.getStartOffset(), toDelete.getEndOffset());
 				context.setTailOffset(toDelete.getStartOffset());
@@ -144,7 +123,7 @@ public class AllClassesGetter
 		}
 
 		@Override
-		public void handleInsert(final InsertionContext context, final JavaPsiClassReferenceElement item)
+		public void handleInsert(@Nonnull final InsertionContext context, @Nonnull final JavaPsiClassReferenceElement item)
 		{
 			_handleInsert(context, item);
 			item.getTailType().processTail(context.getEditor(), context.getEditor().getCaretModel().getOffset());
@@ -152,8 +131,7 @@ public class AllClassesGetter
 
 	};
 
-	public static final InsertHandler<JavaPsiClassReferenceElement> INSERT_FQN = (context, item) ->
-	{
+	public static final InsertHandler<JavaPsiClassReferenceElement> INSERT_FQN = (context, item) -> {
 		final String qName = item.getQualifiedName();
 		if(qName != null)
 		{
@@ -164,32 +142,40 @@ public class AllClassesGetter
 	};
 
 	public static void processJavaClasses(@Nonnull final CompletionParameters parameters,
-			@Nonnull final PrefixMatcher prefixMatcher,
-			final boolean filterByScope,
-			@Nonnull final Consumer<PsiClass> consumer)
+										  @Nonnull final PrefixMatcher prefixMatcher,
+										  final boolean filterByScope,
+										  @Nonnull final Consumer<? super PsiClass> consumer)
 	{
 		final PsiElement context = parameters.getPosition();
 		final Project project = context.getProject();
 		final GlobalSearchScope scope = filterByScope ? context.getContainingFile().getResolveScope() : GlobalSearchScope.allScope(project);
 
-		processJavaClasses(prefixMatcher, project, scope, new LimitedAccessibleClassPreprocessor(parameters, filterByScope, consumer));
+		processJavaClasses(prefixMatcher, project, scope, new LimitedAccessibleClassPreprocessor(parameters, filterByScope, c -> {
+			consumer.consume(c);
+			return true;
+		}));
 	}
 
-	public static void processJavaClasses(@Nonnull final PrefixMatcher prefixMatcher, @Nonnull Project project, @Nonnull GlobalSearchScope scope, @Nonnull Processor<PsiClass> processor)
+	public static void processJavaClasses(@Nonnull final PrefixMatcher prefixMatcher,
+										  @Nonnull Project project,
+										  @Nonnull GlobalSearchScope scope,
+										  @Nonnull Processor<? super PsiClass> processor)
 	{
 		final Set<String> names = new THashSet<>(10000);
-		AllClassesSearchExecutor.processClassNames(project, scope, s ->
-		{
+		AllClassesSearchExecutor.processClassNames(project, scope, s -> {
 			if(prefixMatcher.prefixMatches(s))
 			{
 				names.add(s);
 			}
+			return true;
 		});
 		LinkedHashSet<String> sorted = prefixMatcher.sortMatching(names);
 		AllClassesSearchExecutor.processClassesByNames(project, scope, sorted, processor);
 	}
 
-	public static boolean isAcceptableInContext(@Nonnull final PsiElement context, @Nonnull final PsiClass psiClass, final boolean filterByScope, final boolean pkgContext)
+	public static boolean isAcceptableInContext(@Nonnull final PsiElement context,
+												@Nonnull final PsiClass psiClass,
+												final boolean filterByScope, final boolean pkgContext)
 	{
 		ProgressManager.checkCanceled();
 
@@ -212,7 +198,8 @@ public class AllClassesGetter
 		return JavaCompletionUtil.isSourceLevelAccessible(context, psiClass, pkgContext);
 	}
 
-	public static JavaPsiClassReferenceElement createLookupItem(@Nonnull final PsiClass psiClass, final InsertHandler<JavaPsiClassReferenceElement> insertHandler)
+	public static JavaPsiClassReferenceElement createLookupItem(@Nonnull final PsiClass psiClass,
+																final InsertHandler<JavaPsiClassReferenceElement> insertHandler)
 	{
 		final JavaPsiClassReferenceElement item = new JavaPsiClassReferenceElement(psiClass);
 		item.setInsertHandler(insertHandler);

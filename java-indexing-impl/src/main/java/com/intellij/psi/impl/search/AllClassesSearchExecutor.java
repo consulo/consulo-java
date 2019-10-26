@@ -30,7 +30,6 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.AllClassesSearch;
-import com.intellij.util.Consumer;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 import com.intellij.util.indexing.IdFilter;
@@ -65,16 +64,12 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 	private static boolean processAllClassesInGlobalScope(@Nonnull final GlobalSearchScope scope, @Nonnull final AllClassesSearch.SearchParameters parameters, @Nonnull Processor<? super PsiClass> processor)
 	{
 		final Set<String> names = new THashSet<String>(10000);
-		processClassNames(parameters.getProject(), scope, new Consumer<String>()
-		{
-			@Override
-			public void consume(String s)
+		processClassNames(parameters.getProject(), scope, s -> {
+			if(parameters.nameMatches(s))
 			{
-				if(parameters.nameMatches(s))
-				{
-					names.add(s);
-				}
+				names.add(s);
 			}
+			return true;
 		});
 
 		List<String> sorted = new ArrayList<String>(names);
@@ -109,7 +104,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 		return true;
 	}
 
-	public static Project processClassNames(final Project project, final GlobalSearchScope scope, final Consumer<String> consumer)
+	public static Project processClassNames(final Project project, final GlobalSearchScope scope, final Processor<String> consumer)
 	{
 		final ProgressIndicator indicator = ProgressIndicatorProvider.getGlobalProgressIndicator();
 
@@ -129,8 +124,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 						{
 							indicator.checkCanceled();
 						}
-						consumer.consume(s);
-						return true;
+						return consumer.process(s);
 					}
 				}, scope, IdFilter.getProjectIdFilter(project, true));
 				return null;
