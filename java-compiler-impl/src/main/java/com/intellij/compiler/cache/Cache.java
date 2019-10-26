@@ -19,16 +19,12 @@ import com.intellij.compiler.classParsing.*;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.make.CacheUtils;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.cls.ClsFormatException;
-import com.intellij.util.indexing.*;
-import com.intellij.util.indexing.impl.IndexStorage;
+import com.intellij.util.indexing.ValueContainer;
+import com.intellij.util.indexing.impl.ChangeTrackingValueContainer;
 import com.intellij.util.indexing.impl.MapIndexStorage;
-import com.intellij.util.indexing.impl.MapReduceIndex;
-import com.intellij.util.indexing.impl.forward.KeyCollectionForwardIndexAccessor;
-import com.intellij.util.indexing.impl.forward.PersistentMapBasedForwardIndex;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorIntegerDescriptor;
 import com.intellij.util.io.KeyDescriptor;
@@ -51,25 +47,6 @@ import java.util.*;
  */
 public class Cache
 {
-	private static class MyMapReduceIndex extends MapReduceIndex<Integer, ClassInfo, Pair<Boolean, ClassInfo>>
-	{
-		MyMapReduceIndex(File fowardFile, @Nonnull IndexExtension<Integer, ClassInfo, Pair<Boolean, ClassInfo>> extension, @Nonnull IndexStorage<Integer, ClassInfo> storage) throws IOException
-		{
-			super(extension, storage, new PersistentMapBasedForwardIndex(fowardFile), new KeyCollectionForwardIndexAccessor<>(extension), null);
-		}
-
-		@Override
-		public void checkCanceled()
-		{
-			ProgressManager.checkCanceled();
-		}
-
-		@Override
-		protected void requestRebuild(@Nonnull Throwable e)
-		{
-		}
-	}
-
 	private static class MyMapIndexStorage extends MapIndexStorage<Integer, ClassInfo>
 	{
 		protected MyMapIndexStorage(@Nonnull File storageFile, @Nonnull KeyDescriptor<Integer> keyDescriptor, int cacheSize) throws IOException
@@ -101,12 +78,10 @@ public class Cache
 		}
 	}
 
-	private static final IndexId<Integer, ClassInfo> ourCacheId = IndexId.create("java.compiler.cache");
-
 	private static final Logger LOG = Logger.getInstance(Cache.class);
 	public static final int UNKNOWN = -1;
 
-	private final MyMapReduceIndex myQNameToClassInfoMap;
+	private final MyMapIndexStorage myQNameToClassInfoMap;
 
 	private final BackwardDependenciesStorage myDependencies;
 	private final CompilerDependencyStorage<Integer> myQNameToReferencedClassesMap;
@@ -119,60 +94,7 @@ public class Cache
 		myStorePath = storePath;
 		new File(storePath).mkdirs();
 
-		MyMapIndexStorage storage = new MyMapIndexStorage(getOrCreateFile("classes"), EnumeratorIntegerDescriptor.INSTANCE, cacheSize * 2);
-
-		File classesInput = getOrCreateFile("classes_input");
-		myQNameToClassInfoMap = new MyMapReduceIndex(classesInput, new IndexExtension<Integer, ClassInfo, Pair<Boolean, ClassInfo>>()
-		{
-			@Nonnull
-			@Override
-			public IndexId<Integer, ClassInfo> getName()
-			{
-				return ourCacheId;
-			}
-
-			@Nonnull
-			@Override
-			public DataIndexer<Integer, ClassInfo, Pair<Boolean, ClassInfo>> getIndexer()
-			{
-				return new DataIndexer<Integer, ClassInfo, Pair<Boolean, ClassInfo>>()
-				{
-					@Nonnull
-					@Override
-					public Map<Integer, ClassInfo> map(Pair<Boolean, ClassInfo> inputData)
-					{
-						if(inputData.getFirst())
-						{
-							// drop data
-							return Collections.emptyMap();
-						}
-						Map<Integer, ClassInfo> map = Collections.singletonMap(inputData.getSecond().getQualifiedName(), inputData.getSecond());
-						System.out.println(map);
-						return map;
-					}
-				};
-			}
-
-			@Nonnull
-			@Override
-			public KeyDescriptor<Integer> getKeyDescriptor()
-			{
-				return EnumeratorIntegerDescriptor.INSTANCE;
-			}
-
-			@Nonnull
-			@Override
-			public DataExternalizer<ClassInfo> getValueExternalizer()
-			{
-				return MyDataExternalizer.INSTANCE;
-			}
-
-			@Override
-			public int getVersion()
-			{
-				return 2;
-			}
-		}, storage);
+		myQNameToClassInfoMap = new MyMapIndexStorage(getOrCreateFile("classes_cache"), EnumeratorIntegerDescriptor.INSTANCE, cacheSize * 2);
 
 		myDependencies = new BackwardDependenciesStorage(getOrCreateFile("bdeps"), cacheSize);
 		myQNameToReferencedClassesMap = new CompilerDependencyStorage<>(getOrCreateFile("fdeps"), EnumeratorIntegerDescriptor.INSTANCE, cacheSize);
@@ -206,7 +128,7 @@ public class Cache
 		CacheCorruptedException ex = null;
 		try
 		{
-			myQNameToClassInfoMap.dispose();
+			myQNameToClassInfoMap.close();
 		}
 		catch(Throwable e)
 		{
@@ -241,7 +163,7 @@ public class Cache
 		try
 		{
 			final ClassInfo classInfo = new ClassInfo(reader, symbolTable);
-			myQNameToClassInfoMap.update(0, Pair.create(Boolean.FALSE, classInfo)).compute();
+			myQNameToClassInfoMap.addValue(classInfo.getQualifiedName(), 0, classInfo);
 			return classInfo.getQualifiedName();
 		}
 		catch(Throwable e)
@@ -259,7 +181,7 @@ public class Cache
 			{
 				final ClassInfo clone = classInfo.clone();
 				clone.clearReferences();
-				myQNameToClassInfoMap.update(0, Pair.create(Boolean.FALSE, classInfo)).compute();
+				myQNameToClassInfoMap.addValue(classInfo.getQualifiedName(), 0, classInfo);
 			}
 		}
 		catch(Throwable e)
@@ -416,7 +338,16 @@ public class Cache
 		{
 			classInfo.setPath(path);
 
-			myQNameToClassInfoMap.update(0, Pair.create(Boolean.FALSE, classInfo)).compute();
+			removeClassInfo(classInfo);
+
+			try
+			{
+				myQNameToClassInfoMap.addValue(classId, 0, classInfo);
+			}
+			catch(Throwable e)
+			{
+				throw new CacheCorruptedException(e);
+			}
 		}
 	}
 
@@ -657,7 +588,7 @@ public class Cache
 	{
 		try
 		{
-			ValueContainer<ClassInfo> data = myQNameToClassInfoMap.getData(qName);
+			ValueContainer<ClassInfo> data = myQNameToClassInfoMap.read(qName);
 
 			ValueContainer.ValueIterator<ClassInfo> valueIterator = data.getValueIterator();
 
@@ -685,11 +616,28 @@ public class Cache
 
 			myDependencies.remove(qName);
 
-			myQNameToClassInfoMap.update(0, Pair.create(Boolean.TRUE, classInfo));
+			removeClassInfo(classInfo);
 
 			myQNameToReferencedClassesMap.remove(qName);
 			myQNameToSubclassesMap.remove(qName);
 			myRemoteQNames.remove(qName);
+		}
+		catch(Throwable e)
+		{
+			throw new CacheCorruptedException(e);
+		}
+	}
+
+	private void removeClassInfo(ClassInfo classInfo) throws CacheCorruptedException
+	{
+		try
+		{
+			ChangeTrackingValueContainer<ClassInfo> container = myQNameToClassInfoMap.read(classInfo.getQualifiedName());
+
+			if(container.size() != 0)
+			{
+				container.removeAssociatedValue(0);
+			}
 		}
 		catch(Throwable e)
 		{
