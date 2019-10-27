@@ -16,11 +16,6 @@
 
 package com.intellij.psi.scope.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.util.Comparing;
@@ -38,7 +33,11 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.module.util.JavaClassNames;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PsiScopesUtil
 {
@@ -48,12 +47,17 @@ public class PsiScopesUtil
 	{
 	}
 
-	public static boolean treeWalkUp(@Nonnull PsiScopeProcessor processor, @Nonnull PsiElement entrance, @Nullable PsiElement maxScope)
+	public static boolean treeWalkUp(@Nonnull PsiScopeProcessor processor,
+									 @Nonnull PsiElement entrance,
+									 @Nullable PsiElement maxScope)
 	{
 		return treeWalkUp(processor, entrance, maxScope, ResolveState.initial());
 	}
 
-	public static boolean treeWalkUp(@Nonnull final PsiScopeProcessor processor, @Nonnull final PsiElement entrance, @Nullable final PsiElement maxScope, @Nonnull final ResolveState state)
+	public static boolean treeWalkUp(@Nonnull final PsiScopeProcessor processor,
+									 @Nonnull final PsiElement entrance,
+									 @Nullable final PsiElement maxScope,
+									 @Nonnull final ResolveState state)
 	{
 		if(!entrance.isValid())
 		{
@@ -94,7 +98,11 @@ public class PsiScopesUtil
 		return true;
 	}
 
-	public static boolean walkChildrenScopes(@Nonnull PsiElement thisElement, @Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, PsiElement place)
+	public static boolean walkChildrenScopes(@Nonnull PsiElement thisElement,
+											 @Nonnull PsiScopeProcessor processor,
+											 @Nonnull ResolveState state,
+											 PsiElement lastParent,
+											 PsiElement place)
 	{
 		PsiElement child = null;
 		if(lastParent != null && lastParent.getParent() == thisElement)
@@ -128,7 +136,7 @@ public class PsiScopesUtil
 		if(type instanceof PsiArrayType)
 		{
 			LanguageLevel languageLevel = PsiUtil.getLanguageLevel(place);
-			final PsiClass arrayClass = JavaPsiFacade.getInstance(place.getProject()).getElementFactory().getArrayClass(languageLevel);
+			final PsiClass arrayClass = JavaPsiFacade.getElementFactory(place.getProject()).getArrayClass(languageLevel);
 			final PsiTypeParameter[] arrayTypeParameters = arrayClass.getTypeParameters();
 			PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;
 			if(arrayTypeParameters.length > 0)
@@ -168,12 +176,17 @@ public class PsiScopesUtil
 		}
 	}
 
-	public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor, @Nonnull PsiJavaCodeReferenceElement ref, @Nullable PsiElement maxScope)
+	public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor,
+										 @Nonnull PsiJavaCodeReferenceElement ref,
+										 @Nullable PsiElement maxScope)
 	{
 		return resolveAndWalk(processor, ref, maxScope, false);
 	}
 
-	public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor, @Nonnull PsiJavaCodeReferenceElement ref, @Nullable PsiElement maxScope, boolean incompleteCode)
+	public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor,
+										 @Nonnull PsiJavaCodeReferenceElement ref,
+										 @Nullable PsiElement maxScope,
+										 boolean incompleteCode)
 	{
 		final PsiElement qualifier = ref.getQualifier();
 		final PsiElement classNameElement = ref.getReferenceNameElement();
@@ -261,7 +274,10 @@ public class PsiScopesUtil
 		return true;
 	}
 
-	public static void setupAndRunProcessor(@Nonnull MethodsProcessor processor, @Nonnull PsiCallExpression call, boolean dummyImplicitConstructor) throws MethodProcessorSetupFailedException
+	public static void setupAndRunProcessor(@Nonnull MethodsProcessor processor,
+											@Nonnull PsiCallExpression call,
+											boolean dummyImplicitConstructor)
+			throws MethodProcessorSetupFailedException
 	{
 		if(call instanceof PsiMethodCallExpression)
 		{
@@ -312,7 +328,7 @@ public class PsiScopesUtil
 						{
 							PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;
 							PsiClass runSuper = superClass;
-							List<PsiSubstitutor> contextSubstitutors = new ArrayList<PsiSubstitutor>();
+							List<PsiSubstitutor> contextSubstitutors = new ArrayList<>();
 							do
 							{
 								if(runSuper != null)
@@ -550,9 +566,9 @@ public class PsiScopesUtil
 	}
 
 	private static boolean processQualifierType(@Nonnull final PsiType type,
-			final MethodsProcessor processor,
-			PsiManager manager,
-			PsiMethodCallExpression call) throws MethodProcessorSetupFailedException
+												final MethodsProcessor processor,
+												PsiManager manager,
+												PsiMethodCallExpression call) throws MethodProcessorSetupFailedException
 	{
 		LOG.assertTrue(type.isValid());
 		if(type instanceof PsiClassType)
@@ -563,8 +579,9 @@ public class PsiScopesUtil
 		if(type instanceof PsiArrayType)
 		{
 			LanguageLevel languageLevel = PsiUtil.getLanguageLevel(call);
-			PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-			JavaResolveResult qualifierResult = factory.getArrayClassType(((PsiArrayType) type).getComponentType(), languageLevel).resolveGenerics();
+			PsiElementFactory factory = JavaPsiFacade.getElementFactory(manager.getProject());
+			JavaResolveResult qualifierResult =
+					factory.getArrayClassType(((PsiArrayType) type).getComponentType(), languageLevel).resolveGenerics();
 			return processQualifierResult(qualifierResult, processor, call);
 		}
 		if(type instanceof PsiIntersectionType)
@@ -582,8 +599,8 @@ public class PsiScopesUtil
 	}
 
 	private static boolean processQualifierResult(@Nonnull JavaResolveResult qualifierResult,
-			@Nonnull MethodsProcessor processor,
-			@Nonnull PsiMethodCallExpression methodCall) throws MethodProcessorSetupFailedException
+												  @Nonnull MethodsProcessor processor,
+												  @Nonnull PsiMethodCallExpression methodCall) throws MethodProcessorSetupFailedException
 	{
 		PsiElement resolve = qualifierResult.getElement();
 
@@ -604,7 +621,7 @@ public class PsiScopesUtil
 				processor.setAccessClass((PsiClass) PsiUtil.getAccessObjectClass(qualifier).getElement());
 			}
 			else if(((PsiSuperExpression) qualifier).getQualifier() != null && PsiUtil.isLanguageLevel8OrHigher(qualifier) &&
-					JavaClassNames.JAVA_LANG_CLONEABLE.equals(((PsiClass) resolve).getQualifiedName()) && ((PsiClass) resolve).isInterface())
+					CommonClassNames.JAVA_LANG_CLONEABLE.equals(((PsiClass) resolve).getQualifiedName()) && ((PsiClass) resolve).isInterface())
 			{
 				processor.setAccessClass((PsiClass) resolve);
 			}
@@ -629,7 +646,7 @@ public class PsiScopesUtil
 			{
 				return;
 			}
-			final PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
+			final PsiElementFactory factory = JavaPsiFacade.getElementFactory(aClass.getProject());
 			final PsiMethod dummyConstructor = factory.createConstructor();
 			PsiIdentifier nameIdentifier = aClass.getNameIdentifier();
 			if(nameIdentifier != null)

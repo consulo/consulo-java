@@ -15,16 +15,8 @@
  */
 package com.intellij.psi.scope.processor;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.util.Key;
-import com.intellij.psi.JavaResolveResult;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.ResolveState;
+import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.scope.JavaScopeProcessorEvent;
@@ -32,10 +24,12 @@ import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiConflictResolver;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiUtil;
+import javax.annotation.Nonnull;
+
+import java.util.List;
 
 /**
  * @author ik
- *         Date: 31.03.2003
  */
 public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo> implements NameHint
 {
@@ -46,11 +40,11 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	protected final PsiFile myPlaceFile;
 
 	public ConflictFilterProcessor(String name,
-			@Nonnull ElementFilter filter,
-			@Nonnull PsiConflictResolver[] resolvers,
-			@Nonnull List<CandidateInfo> container,
-			@Nonnull PsiElement place,
-			PsiFile placeFile)
+								   @Nonnull ElementFilter filter,
+								   @Nonnull PsiConflictResolver[] resolvers,
+								   @Nonnull List<CandidateInfo> container,
+								   @Nonnull PsiElement place,
+								   PsiFile placeFile)
 	{
 		super(filter, container);
 		myResolvers = resolvers;
@@ -63,7 +57,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		JavaResolveResult[] cachedResult = myCachedResult;
-		if(cachedResult != null && cachedResult.length == 1 && cachedResult[0].isAccessible())
+		if(cachedResult != null && cachedResult.length == 1 && stopAtFoundResult(cachedResult[0]))
 		{
 			return false;
 		}
@@ -72,6 +66,11 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 			return super.execute(element, state);
 		}
 		return true;
+	}
+
+	protected boolean stopAtFoundResult(JavaResolveResult cachedResult)
+	{
+		return cachedResult.isAccessible();
 	}
 
 	@Override
@@ -115,7 +114,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 					}
 				}
 			}
-			myCachedResult = cachedResult = conflicts.toArray(new JavaResolveResult[conflicts.size()]);
+			myCachedResult = cachedResult = conflicts.toArray(JavaResolveResult.EMPTY_ARRAY);
 		}
 
 		return cachedResult;

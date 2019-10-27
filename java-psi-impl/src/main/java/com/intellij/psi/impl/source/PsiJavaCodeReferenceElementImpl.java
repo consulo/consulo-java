@@ -1,15 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.source;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -20,28 +11,13 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
-import com.intellij.psi.filters.AndFilter;
-import com.intellij.psi.filters.ConstructorFilter;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.filters.NotFilter;
-import com.intellij.psi.filters.OrFilter;
+import com.intellij.psi.filters.*;
 import com.intellij.psi.filters.element.ModifierFilter;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.source.resolve.ClassResolverProcessor;
-import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.impl.source.resolve.VariableResolverProcessor;
-import com.intellij.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.ICodeFragmentElementType;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.JavaSourceUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.impl.source.resolve.*;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.javadoc.PsiDocComment;
@@ -57,6 +33,14 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ProcessingContext;
 import consulo.psi.PsiPackage;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement implements PsiAnnotatedJavaCodeReferenceElement, SourceJavaCodeReference
 {
@@ -482,7 +466,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				String qualifiedName = referenceElement.getClassNameText();
 				if(qualifiedName != null)
 				{
-					result = tryClassResult(qualifiedName, referenceElement, result);
+					result = tryClassResult(qualifiedName, referenceElement);
 				}
 			}
 
@@ -492,25 +476,25 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		}
 	}
 
-	public static JavaResolveResult[] tryClassResult(String qualifiedName, PsiElement referenceElement, JavaResolveResult[] result)
+	public static JavaResolveResult[] tryClassResult(String qualifiedName, PsiJavaCodeReferenceElement referenceElement)
 	{
-		String packageName = StringUtil.getPackageName(qualifiedName);
+		PsiElement qualifier = referenceElement.getQualifier();
 		Project project = referenceElement.getProject();
-		if(!StringUtil.isEmptyOrSpaces(packageName))
+		if(qualifier instanceof PsiJavaCodeReferenceElement)
 		{
-			PsiClass referencedClass = PsiResolveHelper.SERVICE.getInstance(project).resolveReferencedClass(packageName, referenceElement);
+			PsiClass referencedClass = ResolveClassUtil.resolveClass((PsiJavaCodeReferenceElement) qualifier, referenceElement.getContainingFile());
 			//class is always preferred to package => when such a class exists, the qualified name can point to inner class only and that check must already have been failed
 			if(referencedClass != null)
 			{
-				return result;
+				return JavaResolveResult.EMPTY_ARRAY;
 			}
 			PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, referenceElement.getResolveScope());
 			if(aClass != null)
 			{
-				result = new JavaResolveResult[]{new CandidateInfo(aClass, PsiSubstitutor.EMPTY, referenceElement, false)};
+				return new JavaResolveResult[]{new CandidateInfo(aClass, PsiSubstitutor.EMPTY, referenceElement, false)};
 			}
 		}
-		return result;
+		return JavaResolveResult.EMPTY_ARRAY;
 	}
 
 	@Override
@@ -646,7 +630,8 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				// A single-type-import declaration D in a compilation unit C of package P
 				// that imports a type named N shadows, throughout C, the declarations of
 				// ... any top level type named N declared in another compilation unit of P.
-				if(PsiTreeUtil.getParentOfType(this, PsiImportStatement.class) != null)
+				PsiImportStatement importStatement = PsiTreeUtil.getParentOfType(this, PsiImportStatement.class);
+				if(importStatement != null && (!importStatement.isOnDemand() || !isQualified()))
 				{
 					result = resolve(Kind.PACKAGE_NAME_KIND, containingFile);
 					if(result.length == 0)
@@ -686,7 +671,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		{
 			throw new IncorrectOperationException();
 		}
-		final PsiElement identifier = JavaPsiFacade.getInstance(getProject()).getElementFactory().createIdentifier(newElementName);
+		final PsiElement identifier = JavaPsiFacade.getElementFactory(getProject()).createIdentifier(newElementName);
 		oldIdentifier.replace(identifier);
 		return this;
 	}
@@ -1115,7 +1100,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			case CLASS_FQ_NAME_KIND:
 			case CLASS_FQ_OR_PACKAGE_NAME_KIND:
 				filters.add(ElementClassFilter.PACKAGE);
-				if(isQualified())
+				if(isQualified() || isCodeFragmentType(getTreeParent().getElementType()))
 				{
 					filters.add(ElementClassFilter.CLASS);
 				}
@@ -1139,7 +1124,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				throw new RuntimeException("Unknown reference type");
 		}
 
-		OrFilter filter = new OrFilter(filters.toArray(new ElementFilter[filters.size()]));
+		OrFilter filter = new OrFilter(filters.toArray(new ElementFilter[0]));
 		FilterScopeProcessor proc = new FilterScopeProcessor(filter, processor);
 
 		for(PsiTypeParameter typeParameter : getUnfinishedMethodTypeParameters())

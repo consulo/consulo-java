@@ -1,29 +1,25 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lang.java.parser;
 
-import static com.intellij.codeInsight.daemon.JavaErrorMessages.BUNDLE;
-import static com.intellij.lang.PsiBuilderUtil.advance;
-import static com.intellij.lang.PsiBuilderUtil.drop;
-import static com.intellij.lang.PsiBuilderUtil.expect;
-import static com.intellij.lang.PsiBuilderUtil.rollbackTo;
-import static com.intellij.lang.java.parser.JavaParserUtil.emptyElement;
-import static com.intellij.lang.java.parser.JavaParserUtil.error;
-import static com.intellij.lang.java.parser.JavaParserUtil.expectOrError;
-import static com.intellij.lang.java.parser.JavaParserUtil.exprType;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.WhitespacesBinders;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.Function;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.jetbrains.annotations.PropertyKey;
+
+import java.util.function.Function;
+
+import static com.intellij.codeInsight.daemon.JavaErrorMessages.BUNDLE;
+import static com.intellij.lang.PsiBuilderUtil.*;
+import static com.intellij.lang.java.parser.JavaParserUtil.*;
 
 public class ExpressionParser
 {
@@ -43,14 +39,17 @@ public class ExpressionParser
 		TYPE
 	}
 
-	private static final TokenSet ASSIGNMENT_OPS = TokenSet.create(JavaTokenType.EQ, JavaTokenType.ASTERISKEQ, JavaTokenType.DIVEQ, JavaTokenType.PERCEQ, JavaTokenType.PLUSEQ, JavaTokenType.MINUSEQ,
+	private static final TokenSet ASSIGNMENT_OPS = TokenSet.create(
+			JavaTokenType.EQ, JavaTokenType.ASTERISKEQ, JavaTokenType.DIVEQ, JavaTokenType.PERCEQ, JavaTokenType.PLUSEQ, JavaTokenType.MINUSEQ,
 			JavaTokenType.LTLTEQ, JavaTokenType.GTGTEQ, JavaTokenType.GTGTGTEQ, JavaTokenType.ANDEQ, JavaTokenType.OREQ, JavaTokenType.XOREQ);
 	private static final TokenSet RELATIONAL_OPS = TokenSet.create(JavaTokenType.LT, JavaTokenType.GT, JavaTokenType.LE, JavaTokenType.GE);
 	private static final TokenSet POSTFIX_OPS = TokenSet.create(JavaTokenType.PLUSPLUS, JavaTokenType.MINUSMINUS);
 	private static final TokenSet PREF_ARITHMETIC_OPS = TokenSet.orSet(POSTFIX_OPS, TokenSet.create(JavaTokenType.PLUS, JavaTokenType.MINUS));
 	private static final TokenSet PREFIX_OPS = TokenSet.orSet(PREF_ARITHMETIC_OPS, TokenSet.create(JavaTokenType.TILDE, JavaTokenType.EXCL));
-	private static final TokenSet LITERALS = TokenSet.create(JavaTokenType.TRUE_KEYWORD, JavaTokenType.FALSE_KEYWORD, JavaTokenType.NULL_KEYWORD, JavaTokenType.INTEGER_LITERAL, JavaTokenType
-			.LONG_LITERAL, JavaTokenType.FLOAT_LITERAL, JavaTokenType.DOUBLE_LITERAL, JavaTokenType.CHARACTER_LITERAL, JavaTokenType.STRING_LITERAL, JavaTokenType.RAW_STRING_LITERAL);
+	private static final TokenSet LITERALS = TokenSet.create(
+			JavaTokenType.TRUE_KEYWORD, JavaTokenType.FALSE_KEYWORD, JavaTokenType.NULL_KEYWORD, JavaTokenType.INTEGER_LITERAL,
+			JavaTokenType.LONG_LITERAL, JavaTokenType.FLOAT_LITERAL, JavaTokenType.DOUBLE_LITERAL, JavaTokenType.CHARACTER_LITERAL,
+			JavaTokenType.STRING_LITERAL/*, JavaTokenType.TEXT_BLOCK_LITERAL*/);
 	private static final TokenSet CONDITIONAL_OR_OPS = TokenSet.create(JavaTokenType.OROR);
 	private static final TokenSet CONDITIONAL_AND_OPS = TokenSet.create(JavaTokenType.ANDAND);
 	private static final TokenSet OR_OPS = TokenSet.create(JavaTokenType.OR);
@@ -61,23 +60,40 @@ public class ExpressionParser
 	private static final TokenSet ADDITIVE_OPS = TokenSet.create(JavaTokenType.PLUS, JavaTokenType.MINUS);
 	private static final TokenSet MULTIPLICATIVE_OPS = TokenSet.create(JavaTokenType.ASTERISK, JavaTokenType.DIV, JavaTokenType.PERC);
 	private static final TokenSet ARGS_LIST_END = TokenSet.create(JavaTokenType.RPARENTH, JavaTokenType.RBRACE, JavaTokenType.RBRACKET);
-	private static final TokenSet ARGS_LIST_CONTINUE = TokenSet.create(JavaTokenType.IDENTIFIER, TokenType.BAD_CHARACTER, JavaTokenType.COMMA, JavaTokenType.INTEGER_LITERAL, JavaTokenType
-			.STRING_LITERAL);
+	private static final TokenSet ARGS_LIST_CONTINUE = TokenSet.create(
+			JavaTokenType.IDENTIFIER, TokenType.BAD_CHARACTER, JavaTokenType.COMMA, JavaTokenType.INTEGER_LITERAL, JavaTokenType.STRING_LITERAL);
 	private static final TokenSet THIS_OR_SUPER = TokenSet.create(JavaTokenType.THIS_KEYWORD, JavaTokenType.SUPER_KEYWORD);
 	private static final TokenSet ID_OR_SUPER = TokenSet.create(JavaTokenType.IDENTIFIER, JavaTokenType.SUPER_KEYWORD);
-	private static final TokenSet TYPE_START = TokenSet.orSet(ElementType.PRIMITIVE_TYPE_BIT_SET, TokenSet.create(JavaTokenType.IDENTIFIER, JavaTokenType.AT));
+	private static final TokenSet TYPE_START = TokenSet.orSet(
+			ElementType.PRIMITIVE_TYPE_BIT_SET, TokenSet.create(JavaTokenType.IDENTIFIER, JavaTokenType.AT));
+
+	private static final Key<Boolean> CASE_LABEL = Key.create("java.parser.case.label.expr");
 
 	private final JavaParser myParser;
 
-	public ExpressionParser(@Nonnull final JavaParser javaParser)
+	public ExpressionParser(@Nonnull JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
 	@Nullable
-	public PsiBuilder.Marker parse(final PsiBuilder builder)
+	public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder)
 	{
 		return parseAssignment(builder);
+	}
+
+	@Nullable
+	public PsiBuilder.Marker parseCaseLabel(@Nonnull PsiBuilder builder)
+	{
+		CASE_LABEL.set(builder, Boolean.TRUE);
+		try
+		{
+			return parseAssignment(builder);
+		}
+		finally
+		{
+			CASE_LABEL.set(builder, null);
+		}
 	}
 
 	@Nullable
@@ -90,7 +106,7 @@ public class ExpressionParser
 		}
 
 		final IElementType tokenType = getGtTokenType(builder);
-		if(ASSIGNMENT_OPS.contains(tokenType) && tokenType != null)
+		if(tokenType != null && ASSIGNMENT_OPS.contains(tokenType))
 		{
 			final PsiBuilder.Marker assignment = left.precede();
 			advanceGtToken(builder, tokenType);
@@ -315,8 +331,8 @@ public class ExpressionParser
 			final PsiBuilder.Marker typeCast = builder.mark();
 			builder.advanceLexer();
 
-			ReferenceParser.TypeInfo typeInfo = myParser.getReferenceParser().parseTypeInfo(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.WILDCARD | ReferenceParser.CONJUNCTIONS |
-					ReferenceParser.INCOMPLETE_ANNO);
+			ReferenceParser.TypeInfo typeInfo = myParser.getReferenceParser().parseTypeInfo(
+					builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.WILDCARD | ReferenceParser.CONJUNCTIONS | ReferenceParser.INCOMPLETE_ANNO);
 			if(typeInfo == null || !expect(builder, JavaTokenType.RPARENTH))
 			{
 				typeCast.rollbackTo();
@@ -346,6 +362,10 @@ public class ExpressionParser
 			typeCast.done(JavaElementType.TYPE_CAST_EXPRESSION);
 			return typeCast;
 		}
+//		else if(tokenType == JavaTokenType.SWITCH_KEYWORD)
+//		{
+//			return myParser.getStatementParser().parseExprInParenthWithBlock(builder, JavaElementType.SWITCH_EXPRESSION, true);
+//		}
 		else
 		{
 			return parsePostfix(builder);
@@ -600,10 +620,13 @@ public class ExpressionParser
 
 		if(tokenType == JavaTokenType.LPARENTH)
 		{
-			final PsiBuilder.Marker lambda = parseLambdaAfterParenth(builder);
-			if(lambda != null)
+			if(CASE_LABEL.get(builder) != Boolean.TRUE)
 			{
-				return lambda;
+				final PsiBuilder.Marker lambda = parseLambdaAfterParenth(builder);
+				if(lambda != null)
+				{
+					return lambda;
+				}
 			}
 
 			final PsiBuilder.Marker parenth = builder.mark();
@@ -661,7 +684,7 @@ public class ExpressionParser
 		}
 		if(tokenType == JavaTokenType.IDENTIFIER)
 		{
-			if(builder.lookAhead(1) == JavaTokenType.ARROW)
+			if(CASE_LABEL.get(builder) != Boolean.TRUE && builder.lookAhead(1) == JavaTokenType.ARROW)
 			{
 				return parseLambdaExpression(builder, false);
 			}
@@ -717,8 +740,11 @@ public class ExpressionParser
 				builder.mark().done(JavaElementType.REFERENCE_PARAMETER_LIST);
 			}
 			builder.advanceLexer();
-			expr.done(builder.getTokenType() == JavaTokenType.LPARENTH ? JavaElementType.REFERENCE_EXPRESSION : tokenType == JavaTokenType.THIS_KEYWORD ? JavaElementType.THIS_EXPRESSION :
-					JavaElementType.SUPER_EXPRESSION);
+			expr.done(builder.getTokenType() == JavaTokenType.LPARENTH
+					? JavaElementType.REFERENCE_EXPRESSION
+					: tokenType == JavaTokenType.THIS_KEYWORD
+					? JavaElementType.THIS_EXPRESSION
+					: JavaElementType.SUPER_EXPRESSION);
 			return expr;
 		}
 
@@ -728,16 +754,16 @@ public class ExpressionParser
 	@Nonnull
 	private PsiBuilder.Marker parseArrayInitializer(PsiBuilder builder)
 	{
-		return parseArrayInitializer(builder, JavaElementType.ARRAY_INITIALIZER_EXPRESSION, builder1 -> parse(builder1) != null, "expected.expression");
+		return parseArrayInitializer(builder, JavaElementType.ARRAY_INITIALIZER_EXPRESSION, this::parse, "expected.expression");
 	}
 
 	@Nonnull
 	public PsiBuilder.Marker parseArrayInitializer(@Nonnull PsiBuilder builder,
-			@Nonnull IElementType type,
-			@Nonnull Function<PsiBuilder, Boolean> elementParser,
-			@Nonnull @PropertyKey(resourceBundle = BUNDLE) String missingElementKey)
+												   @Nonnull IElementType type,
+												   @Nonnull Function<? super PsiBuilder, PsiBuilder.Marker> elementParser,
+												   @Nonnull @PropertyKey(resourceBundle = BUNDLE) String missingElementKey)
 	{
-		final PsiBuilder.Marker arrayInit = builder.mark();
+		PsiBuilder.Marker arrayInit = builder.mark();
 		builder.advanceLexer();
 
 		boolean first = true;
@@ -755,7 +781,7 @@ public class ExpressionParser
 				break;
 			}
 
-			if(!elementParser.fun(builder))
+			if(elementParser.apply(builder) == null)
 			{
 				if(builder.getTokenType() == JavaTokenType.COMMA)
 				{
@@ -979,7 +1005,8 @@ public class ExpressionParser
 			isLambda = true;
 			isTyped = false;
 		}
-		else if(nextToken1 == JavaTokenType.AT || ElementType.MODIFIER_BIT_SET.contains(nextToken1) || ElementType.PRIMITIVE_TYPE_BIT_SET.contains(nextToken1))
+		else if(nextToken1 == JavaTokenType.AT ||
+				ElementType.MODIFIER_BIT_SET.contains(nextToken1) || ElementType.PRIMITIVE_TYPE_BIT_SET.contains(nextToken1))
 		{
 			isLambda = true;
 			isTyped = true;
@@ -1002,11 +1029,14 @@ public class ExpressionParser
 
 				PsiBuilder.Marker marker = builder.mark();
 				builder.advanceLexer();
-				ReferenceParser.TypeInfo typeInfo = myParser.getReferenceParser().parseTypeInfo(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD);
+				ReferenceParser.TypeInfo typeInfo = myParser.getReferenceParser().parseTypeInfo(
+						builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD);
 				if(typeInfo != null)
 				{
 					IElementType t = builder.getTokenType();
-					if(t == JavaTokenType.IDENTIFIER || t == JavaTokenType.THIS_KEYWORD || t == JavaTokenType.RPARENTH && builder.lookAhead(1) == JavaTokenType.ARROW)
+					if(t == JavaTokenType.IDENTIFIER ||
+							t == JavaTokenType.THIS_KEYWORD ||
+							t == JavaTokenType.RPARENTH && builder.lookAhead(1) == JavaTokenType.ARROW)
 					{
 						lambda = true;
 					}
