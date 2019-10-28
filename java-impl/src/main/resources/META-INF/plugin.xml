@@ -995,8 +995,6 @@
 		<projectService serviceInterface="com.intellij.psi.search.PsiShortNamesCache"
 						serviceImplementation="com.intellij.psi.impl.CompositeShortNamesCache"/>
 
-		<psi.treeChangePreprocessor implementation="com.intellij.psi.impl.JavaCodeBlockModificationListener"/>
-
 		<projectService serviceImplementation="com.intellij.javadoc.JavadocGenerationManager"/>
 
 		<highlightVisitor implementation="com.intellij.codeInsight.daemon.impl.analysis.HighlightVisitorImpl"/>
