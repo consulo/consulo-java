@@ -15,15 +15,6 @@
  */
 package com.intellij.debugger.engine;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.debugger.MultiRequestPositionManager;
 import com.intellij.debugger.NoDataException;
 import com.intellij.debugger.PositionManager;
@@ -45,6 +36,10 @@ import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class CompoundPositionManager extends PositionManagerEx implements MultiRequestPositionManager
 {
@@ -115,7 +110,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		return defaultValue;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public SourcePosition getSourcePosition(final Location location)
 	{
@@ -123,25 +118,33 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		{
 			return null;
 		}
-		SourcePosition res = null;
-		try
-		{
-			res = mySourcePositionCache.get(location);
-		}
-		catch(IllegalArgumentException ignored)
-		{ // Invalid method id
-		}
-		if(checkCacheEntry(res, location))
-		{
-			return res;
-		}
 
-		return DebuggerUtilsImpl.runInReadActionWithWriteActionPriorityWithRetries(() -> iterate(positionManager ->
-		{
-			SourcePosition res1 = positionManager.getSourcePosition(location);
-			mySourcePositionCache.put(location, res1);
-			return res1;
-		}, null, null, false));
+		return DebuggerUtilsImpl.runInReadActionWithWriteActionPriorityWithRetries(() -> {
+			SourcePosition res = null;
+			try
+			{
+				res = mySourcePositionCache.get(location);
+			}
+			catch(IllegalArgumentException ignored)
+			{ // Invalid method id
+			}
+			if(checkCacheEntry(res, location))
+			{
+				return res;
+			}
+
+			return iterate(positionManager -> {
+				SourcePosition res1 = positionManager.getSourcePosition(location);
+				try
+				{
+					mySourcePositionCache.put(location, res1);
+				}
+				catch(IllegalArgumentException ignored)
+				{ // Invalid method id
+				}
+				return res1;
+			}, null, null, false);
+		});
 	}
 
 	private static boolean checkCacheEntry(@Nullable SourcePosition position, @Nonnull Location location)
@@ -221,7 +224,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		}, Collections.emptyList(), position);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @Nonnull DebugProcessImpl debugProcess, @Nonnull Location location)
 	{
