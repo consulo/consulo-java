@@ -20,26 +20,9 @@
  */
 package com.intellij.debugger.impl;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.PatternSyntaxException;
-
-import javax.annotation.Nonnull;
-
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
-import com.intellij.debugger.engine.DebugProcessImpl;
-import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
-import com.intellij.debugger.engine.DebuggerUtils;
-import com.intellij.debugger.engine.JVMNameUtil;
-import com.intellij.debugger.engine.JavaDebugProcess;
-import com.intellij.debugger.engine.SourcePositionHighlighter;
-import com.intellij.debugger.engine.SuspendContextImpl;
+import com.intellij.debugger.engine.*;
 import com.intellij.debugger.engine.evaluation.*;
 import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
@@ -70,15 +53,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
@@ -102,6 +77,15 @@ import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.EventSet;
 import consulo.java.module.util.JavaClassNames;
+import org.jdom.Attribute;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.PatternSyntaxException;
 
 public abstract class DebuggerUtilsEx extends DebuggerUtils
 {
@@ -158,6 +142,19 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return null;
 	}
 
+	@Nullable
+	public static TextRange intersectWithLine(@Nullable TextRange range, @Nullable PsiFile file, int line)
+	{
+		if(range != null && file != null)
+		{
+			Document document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);
+			if(document != null)
+			{
+				range = range.intersection(DocumentUtil.getLineTextRange(document, line));
+			}
+		}
+		return range;
+	}
 
 	public static boolean isAssignableFrom(@Nonnull final String baseQualifiedName, @Nonnull ReferenceType checkedType)
 	{
@@ -1037,7 +1034,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		@Override
 		public TextRange getHighlightRange()
 		{
-			return SourcePositionHighlighter.getHighlightRangeFor(mySourcePosition);
+			return intersectWithLine(SourcePositionHighlighter.getHighlightRangeFor(mySourcePosition), mySourcePosition.getFile(), getLine());
 		}
 	}
 

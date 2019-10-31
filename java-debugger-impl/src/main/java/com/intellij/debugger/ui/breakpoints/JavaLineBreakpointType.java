@@ -15,16 +15,6 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
-import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.HelpID;
 import com.intellij.debugger.SourcePosition;
@@ -36,11 +26,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
 import com.intellij.util.SmartList;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
@@ -52,6 +38,15 @@ import com.intellij.xdebugger.impl.breakpoints.XLineBreakpointImpl;
 import consulo.annotations.RequiredReadAction;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Base class for java line-connected exceptions (line, method, field)
@@ -317,7 +312,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 				PsiElement method = getContainingMethod((LineBreakpoint) javaBreakpoint);
 				if(method != null)
 				{
-					return method.getTextRange();
+					return DebuggerUtilsEx.intersectWithLine(method.getTextRange(), method.getContainingFile(), breakpoint.getLine());
 				}
 			}
 		}

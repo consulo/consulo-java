@@ -20,6 +20,8 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.util.TextRange;
 
+import javax.annotation.Nullable;
+
 /**
  * During indexing, only extensions that implement {@link com.intellij.openapi.project.DumbAware} are called.
  * See also {@link DumbService}.
@@ -32,7 +34,7 @@ public abstract class SourcePositionHighlighter
 
 	public abstract TextRange getHighlightRange(SourcePosition sourcePosition);
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static TextRange getHighlightRangeFor(SourcePosition sourcePosition)
 	{
 		DumbService dumbService = DumbService.getInstance(sourcePosition.getFile().getProject());
