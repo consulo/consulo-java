@@ -23,46 +23,64 @@ import com.intellij.ui.RawCommandLineEditor;
 import javax.swing.*;
 import java.awt.*;
 
-public class CommonJavaParametersPanel extends CommonProgramParametersPanel {
-  private LabeledComponent<RawCommandLineEditor> myVMParametersComponent;
+public class CommonJavaParametersPanel extends CommonProgramParametersPanel
+{
+	private LabeledComponent<RawCommandLineEditor> myVMParametersComponent;
 
-  public CommonJavaParametersPanel() {
-    super();
-  }
+	public CommonJavaParametersPanel()
+	{
+		super(true);
+	}
 
-  @Override
-  protected void addComponents() {
-    myVMParametersComponent = LabeledComponent.create(new RawCommandLineEditor(),
-                                             ExecutionBundle.message("run.configuration.java.vm.parameters.label"));
-    copyDialogCaption(myVMParametersComponent);
+	public CommonJavaParametersPanel(boolean init)
+	{
+		super(init);
+	}
 
-    myVMParametersComponent.setLabelLocation(BorderLayout.WEST);
+	@Override
+	public void init()
+	{
+		super.init();
+	}
 
-    add(myVMParametersComponent);
-    super.addComponents();
-  }
+	@Override
+	protected void addComponents()
+	{
+		myVMParametersComponent = LabeledComponent.create(new RawCommandLineEditor(), ExecutionBundle.message("run.configuration.java.vm.parameters.label"));
+		copyDialogCaption(myVMParametersComponent);
 
-  public void setVMParameters(String text) {
-    myVMParametersComponent.getComponent().setText(text);
-  }
+		myVMParametersComponent.setLabelLocation(BorderLayout.WEST);
 
-  public String getVMParameters() {
-    return myVMParametersComponent.getComponent().getText();
-  }
+		add(myVMParametersComponent);
+		super.addComponents();
+	}
 
-  @Override
-  public void setAnchor(JComponent labelAnchor) {
-    super.setAnchor(labelAnchor);
-    myVMParametersComponent.setAnchor(labelAnchor);
-  }
+	public void setVMParameters(String text)
+	{
+		myVMParametersComponent.getComponent().setText(text);
+	}
 
-  public void applyTo(CommonJavaRunConfigurationParameters configuration) {
-    super.applyTo(configuration);
-    configuration.setVMParameters(getVMParameters());
-  }
+	public String getVMParameters()
+	{
+		return myVMParametersComponent.getComponent().getText();
+	}
 
-  public void reset(CommonJavaRunConfigurationParameters configuration) {
-    super.reset(configuration);
-    setVMParameters(configuration.getVMParameters());
-  }
+	@Override
+	public void setAnchor(JComponent labelAnchor)
+	{
+		super.setAnchor(labelAnchor);
+		myVMParametersComponent.setAnchor(labelAnchor);
+	}
+
+	public void applyTo(CommonJavaRunConfigurationParameters configuration)
+	{
+		super.applyTo(configuration);
+		configuration.setVMParameters(getVMParameters());
+	}
+
+	public void reset(CommonJavaRunConfigurationParameters configuration)
+	{
+		super.reset(configuration);
+		setVMParameters(configuration.getVMParameters());
+	}
 }

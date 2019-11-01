@@ -15,39 +15,29 @@
  */
 package com.intellij.execution.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
 import com.intellij.application.options.ModuleDescriptionsComboBox;
+import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.execution.ShortenCommandLine;
 import com.intellij.execution.configurations.ConfigurationUtil;
-import com.intellij.execution.ui.ClassBrowser;
-import com.intellij.execution.ui.CommonJavaParametersPanel;
-import com.intellij.execution.ui.ConfigurationModuleSelector;
-import com.intellij.execution.ui.DefaultJreSelector;
-import com.intellij.execution.ui.JrePathEditor;
-import com.intellij.execution.ui.ShortenCommandLineModeCombo;
+import com.intellij.execution.ui.*;
 import com.intellij.execution.util.JreVersionDetector;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.psi.JavaCodeFragment;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
-import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.util.ui.UIUtil;
 import consulo.java.execution.JavaExecutionBundle;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
 
 public class ApplicationConfigurable extends SettingsEditor<ApplicationConfiguration>
 {
@@ -62,7 +52,6 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
 	private JBCheckBox myIncludeProviderDepsBox;
 	private JBCheckBox myShowSwingInspectorBox;
 	private JrePathEditor myJrePathEditor;
-	private JPanel myRootPanel;
 
 	public ApplicationConfigurable(final Project project)
 	{
@@ -87,83 +76,112 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
 			}
 		});
 
-		List<PanelWithAnchor> list = new ArrayList<>();
-
 		myModuleDescriptionsComboBox = new ModuleDescriptionsComboBox();
 		myJrePathEditor = new JrePathEditor();
-		myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromSourceRootsDependencies(myModuleDescriptionsComboBox, getMainClassField()));
-		list.add(myJrePathEditor);
+		myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromSourceRootsDependencies(myModuleDescriptionsComboBox, myMainClassField));
 
 		myShortenCommandLineModeCombo = new ShortenCommandLineModeCombo(myProject, myJrePathEditor, myModuleDescriptionsComboBox);
 		myIncludeProviderDepsBox = new JBCheckBox(JavaExecutionBundle.message("application.configuration.include.provided.scope"));
 
-		myRootPanel = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, false));
-		myRootPanel.add(labeled(myMainClassField, JavaExecutionBundle.message("application.configuration.main.class.label"), list));
-
-		myCommonJavaParametersPanel = new CommonJavaParametersPanel();
-		myCommonJavaParametersPanel.setPreferredSize(null);
-		list.add(myCommonJavaParametersPanel);
-
-		myRootPanel.add(myCommonJavaParametersPanel);
-
 		myModuleSelector = new ConfigurationModuleSelector(project, myModuleDescriptionsComboBox);
 		myModuleDescriptionsComboBox.addActionListener(e -> myCommonJavaParametersPanel.setModuleContext(myModuleSelector.getModule()));
 
-		myRootPanel.add(labeled(myModuleDescriptionsComboBox, JavaExecutionBundle.message("application.configuration.use.classpath.and.jdk.of.module.label"), list));
+		myShowSwingInspectorBox = new JBCheckBox(JavaExecutionBundle.message("show.swing.inspector"));
 
-		myRootPanel.add(myIncludeProviderDepsBox);
+		myCommonJavaParametersPanel = new CommonJavaParametersPanel(false)
+		{
+			private LabeledComponent myClassFieldLabel;
+			private LabeledComponent myModuleBoxLabel;
+			private LabeledComponent myShortenLabel;
 
-		myRootPanel.add(myJrePathEditor);
+			@Override
+			protected void addComponents()
+			{
+				add(myClassFieldLabel = LabeledComponent.create(myMainClassField, JavaExecutionBundle.message("application.configuration.main.class.label")));
 
-		myRootPanel.add(labeled(myShortenCommandLineModeCombo, JavaExecutionBundle.message("application.configuration.shorten.command.line.label"), list));
+				super.addComponents();
+
+				add(myModuleBoxLabel = LabeledComponent.create(myModuleDescriptionsComboBox, JavaExecutionBundle.message("application.configuration.use.classpath.and.jdk.of.module.label")));
+
+				add(myIncludeProviderDepsBox);
+
+				add(myJrePathEditor);
+
+				add(myShortenLabel = LabeledComponent.create(myShortenCommandLineModeCombo, JavaExecutionBundle.message("application.configuration.shorten.command.line.label")));
+
+				add(myShowSwingInspectorBox);
+			}
+
+			@Override
+			public void setAnchor(JComponent labelAnchor)
+			{
+				myClassFieldLabel.setAnchor(labelAnchor);
+				super.setAnchor(labelAnchor);
+				myModuleBoxLabel.setAnchor(labelAnchor);
+				myShortenLabel.setAnchor(labelAnchor);
+			}
+
+			@Override
+			public void applyTo(CommonJavaRunConfigurationParameters configuration)
+			{
+				super.applyTo(configuration);
+
+				ApplicationConfiguration app = (ApplicationConfiguration) configuration;
+
+				final String className = myMainClassField.getText();
+				final PsiClass aClass = myModuleSelector.findClass(className);
+				app.MAIN_CLASS_NAME = aClass != null ? JavaExecutionUtil.getRuntimeQualifiedName(aClass) : className;
+
+				myModuleSelector.applyTo(app);
+
+				app.ALTERNATIVE_JRE_PATH = myJrePathEditor.getJrePathOrName();
+				app.ALTERNATIVE_JRE_PATH_ENABLED = myJrePathEditor.isAlternativeJreSelected();
+				app.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(app)) && myShowSwingInspectorBox
+						.isSelected();
+				app.setShortenCommandLine((ShortenCommandLine) myShortenCommandLineModeCombo.getSelectedItem());
+				app.setIncludeProvidedScope(myIncludeProviderDepsBox.isSelected());
+
+				updateShowSwingInspector(app);
+			}
+
+			@Override
+			public void reset(CommonJavaRunConfigurationParameters configuration)
+			{
+				super.reset(configuration);
+
+				ApplicationConfiguration app = (ApplicationConfiguration) configuration;
+
+				myMainClassField.setText(app.MAIN_CLASS_NAME != null ? app.MAIN_CLASS_NAME.replaceAll("\\$", "\\.") : "");
+
+				myModuleSelector.reset(app);
+				myJrePathEditor.setPathOrName(app.ALTERNATIVE_JRE_PATH, app.ALTERNATIVE_JRE_PATH_ENABLED);
+				myShortenCommandLineModeCombo.setSelectedItem(app.getShortenCommandLine());
+				myIncludeProviderDepsBox.setSelected(app.isProvidedScopeIncluded());
+
+				updateShowSwingInspector(app);
+			}
+		};
+
+		myCommonJavaParametersPanel.init();
+		myCommonJavaParametersPanel.setPreferredSize(null);
 
 		myCommonJavaParametersPanel.setModuleContext(myModuleSelector.getModule());
 
-		myShowSwingInspectorBox = new JBCheckBox(JavaExecutionBundle.message("show.swing.inspector"));
+		UIUtil.mergeComponentsWithAnchor(myCommonJavaParametersPanel);
 
-		myRootPanel.add(myShowSwingInspectorBox);
-
-		ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
-
-		UIUtil.mergeComponentsWithAnchor(list);
-	}
-
-	private JComponent labeled(JComponent component, String label, List<PanelWithAnchor> list)
-	{
-		LabeledComponent labeledComponent = LabeledComponent.create(component, label);
-		list.add(labeledComponent);
-		return labeledComponent;
+		ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(myMainClassField);
 	}
 
 	@Override
 	public void applyEditorTo(@Nonnull final ApplicationConfiguration configuration) throws ConfigurationException
 	{
 		myCommonJavaParametersPanel.applyTo(configuration);
-		myModuleSelector.applyTo(configuration);
-		final String className = getMainClassField().getText();
-		final PsiClass aClass = myModuleSelector.findClass(className);
-		configuration.MAIN_CLASS_NAME = aClass != null ? JavaExecutionUtil.getRuntimeQualifiedName(aClass) : className;
-		configuration.ALTERNATIVE_JRE_PATH = myJrePathEditor.getJrePathOrName();
-		configuration.ALTERNATIVE_JRE_PATH_ENABLED = myJrePathEditor.isAlternativeJreSelected();
-		configuration.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) && myShowSwingInspectorBox
-				.isSelected();
-		configuration.setShortenCommandLine((ShortenCommandLine) myShortenCommandLineModeCombo.getSelectedItem());
-		configuration.setIncludeProvidedScope(myIncludeProviderDepsBox.isSelected());
-
-		updateShowSwingInspector(configuration);
 	}
 
 	@Override
 	public void resetEditorFrom(@Nonnull final ApplicationConfiguration configuration)
 	{
 		myCommonJavaParametersPanel.reset(configuration);
-		myModuleSelector.reset(configuration);
-		getMainClassField().setText(configuration.MAIN_CLASS_NAME != null ? configuration.MAIN_CLASS_NAME.replaceAll("\\$", "\\.") : "");
-		myJrePathEditor.setPathOrName(configuration.ALTERNATIVE_JRE_PATH, configuration.ALTERNATIVE_JRE_PATH_ENABLED);
-		myShortenCommandLineModeCombo.setSelectedItem(configuration.getShortenCommandLine());
-		myIncludeProviderDepsBox.setSelected(configuration.isProvidedScopeIncluded());
-
-		updateShowSwingInspector(configuration);
 	}
 
 	private void updateShowSwingInspector(final ApplicationConfiguration configuration)
@@ -196,6 +214,6 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
 	@Nonnull
 	public JComponent createEditor()
 	{
-		return myRootPanel;
+		return myCommonJavaParametersPanel;
 	}
 }
