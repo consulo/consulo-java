@@ -199,7 +199,6 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 		daemonCodeAnalyzer.prepareForTest();
 		final StartupManagerImpl startupManager = (StartupManagerImpl) StartupManagerEx.getInstanceEx(getProject());
 		startupManager.runStartupActivities(UIAccess.get());
-		startupManager.startCacheUpdate();
 		startupManager.runPostStartupActivities(UIAccess.get());
 		DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(false);
 
