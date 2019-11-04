@@ -15,18 +15,6 @@
  */
 package com.intellij.psi.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.components.ServiceManager;
@@ -42,6 +30,17 @@ import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.ui.JBUI;
 import consulo.ui.image.Image;
 import consulo.ui.migration.SwingImageRef;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Resolve small icons located in project for use in UI (e.g. gutter preview icon, lookups).
@@ -66,7 +65,7 @@ public class ProjectIconsAccessor implements Disposable
 
 	private static final int ICON_MAX_SIZE = 2 * 1024 * 1024; // 2Kb
 
-	private static final List<String> ICON_EXTENSIONS = ContainerUtil.immutableList("png", "ico", "bmp", "gif", "jpg");
+	private static final List<String> ICON_EXTENSIONS = ContainerUtil.immutableList("png", "ico", "bmp", "gif", "jpg", "svg");
 
 	private final SLRUMap<String, Pair<Long, Image>> myIconsCache = new SLRUMap<>(500, 1000);
 
@@ -188,7 +187,7 @@ public class ProjectIconsAccessor implements Disposable
 		{
 			return IconLoader.findIcon(new File(file.getPath()).toURI().toURL());
 		}
-		return Image.create(VfsUtilCore.virtualToIoFile(file).toURL());
+		return Image.fromUrl(VfsUtilCore.virtualToIoFile(file).toURI().toURL());
 	}
 
 	@Override
