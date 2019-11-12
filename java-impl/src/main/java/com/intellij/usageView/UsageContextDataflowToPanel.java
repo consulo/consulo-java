@@ -16,15 +16,6 @@
 
 package com.intellij.usageView;
 
-import java.awt.BorderLayout;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
-import javax.annotation.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
@@ -36,18 +27,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiVariable;
-import com.intellij.slicer.DuplicateMap;
-import com.intellij.slicer.SliceAnalysisParams;
-import com.intellij.slicer.SlicePanel;
-import com.intellij.slicer.SliceRootNode;
-import com.intellij.slicer.SliceUsage;
-import com.intellij.usages.PsiElementUsageTarget;
-import com.intellij.usages.UsageContextPanel;
-import com.intellij.usages.UsageTarget;
-import com.intellij.usages.UsageView;
-import com.intellij.usages.UsageViewPresentation;
+import com.intellij.slicer.*;
+import com.intellij.usages.*;
 import com.intellij.usages.impl.UsageContextPanelBase;
 import com.intellij.usages.impl.UsageViewImpl;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 public class UsageContextDataflowToPanel extends UsageContextPanelBase
 {
@@ -112,7 +101,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase
 	}
 
 	@Override
-	public void updateLayoutLater(@Nullable final List<UsageInfo> infos)
+	public void updateLayoutLater(@Nullable final List<? extends UsageInfo> infos)
 	{
 		if(infos == null)
 		{
@@ -210,7 +199,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase
 		};
 	}
 
-	private static PsiElement getElementToSliceOn(@Nonnull List<UsageInfo> infos)
+	private static PsiElement getElementToSliceOn(@Nonnull List<? extends UsageInfo> infos)
 	{
 		UsageInfo info = infos.get(0);
 		return info.getElement();

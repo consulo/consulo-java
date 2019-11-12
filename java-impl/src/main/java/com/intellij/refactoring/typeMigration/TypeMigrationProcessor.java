@@ -15,17 +15,6 @@
  */
 package com.intellij.refactoring.typeMigration;
 
-import static com.intellij.util.ObjectUtil.assertNotNull;
-
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -43,13 +32,22 @@ import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.ui.content.Content;
 import com.intellij.usageView.UsageInfo;
+import com.intellij.usageView.UsageViewContentManager;
 import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.usageView.UsageViewManager;
 import com.intellij.util.Function;
 import com.intellij.util.Functions;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import static com.intellij.util.ObjectUtil.assertNotNull;
 
 public class TypeMigrationProcessor extends BaseRefactoringProcessor
 {
@@ -226,7 +224,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 				name += "...";
 			}
 		}
-		Content content = UsageViewManager.getInstance(myProject).addContent(name, false, panel, true, true);
+		Content content = UsageViewContentManager.getInstance(myProject).addContent(name, false, panel, true, true);
 		panel.setContent(content);
 		ToolWindowManager.getInstance(myProject).getToolWindow(ToolWindowId.FIND).activate(null);
 	}
