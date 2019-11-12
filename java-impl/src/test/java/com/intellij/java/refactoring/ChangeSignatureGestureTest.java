@@ -15,8 +15,6 @@
  */
 package com.intellij.java.refactoring;
 
-import static org.junit.Assert.assertTrue;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
@@ -35,6 +33,8 @@ import com.intellij.refactoring.changeSignature.ChangeSignatureHandler;
 import com.intellij.refactoring.changeSignature.inplace.InplaceChangeSignature;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+
+import static org.junit.Assert.assertTrue;
 
 @PlatformTestCase.WrapInCommand
 public abstract class ChangeSignatureGestureTest extends LightCodeInsightFixtureTestCase
@@ -133,15 +133,7 @@ public abstract class ChangeSignatureGestureTest extends LightCodeInsightFixture
 
 	public void testDeleteParamInSuperUsed()
 	{
-		try
-		{
-			BaseRefactoringProcessor.ConflictsInTestsException.setTestIgnore(true);
-			doDeleteTest();
-		}
-		finally
-		{
-			BaseRefactoringProcessor.ConflictsInTestsException.setTestIgnore(false);
-		}
+		BaseRefactoringProcessor.ConflictsInTestsException.withIgnoredConflicts(() -> doDeleteTest());
 	}
 
 	private void doDeleteTest()
