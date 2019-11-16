@@ -1,48 +1,17 @@
-/*
- * Copyright 2000-2015 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 /*
  * @author max
  */
 package com.intellij.psi.impl.source.resolve;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.psi.LambdaUtil;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiDiamondType;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiVariable;
+import com.intellij.openapi.util.RecursionManager;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.AnyPsiChangeListener;
 import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
@@ -50,14 +19,25 @@ import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.util.ConcurrencyUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
+import consulo.logging.attachment.AttachmentFactory;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Singleton
 public class JavaResolveCache
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.JavaResolveCache");
-
+	private static final Logger LOG = Logger.getInstance(JavaResolveCache.class);
 	private static final NotNullLazyKey<JavaResolveCache, Project> INSTANCE_KEY = ServiceManager.createLazyKey(JavaResolveCache.class);
 
 	public static JavaResolveCache getInstance(Project project)
@@ -65,17 +45,16 @@ public class JavaResolveCache
 		return INSTANCE_KEY.getValue(project);
 	}
 
-	private final ConcurrentMap<PsiExpression, PsiType> myCalculatedTypes = ContainerUtil.createConcurrentWeakKeySoftValueMap();
-
-	private final Map<PsiVariable, Object> myVarToConstValueMapPhysical = ContainerUtil.createConcurrentWeakMap();
-	private final Map<PsiVariable, Object> myVarToConstValueMapNonPhysical = ContainerUtil.createConcurrentWeakMap();
+	private final AtomicReference<ConcurrentMap<PsiExpression, PsiType>> myCalculatedTypes = new AtomicReference<>();
+	private final AtomicReference<Map<PsiVariable, Object>> myVarToConstValueMapPhysical = new AtomicReference<>();
+	private final AtomicReference<Map<PsiVariable, Object>> myVarToConstValueMapNonPhysical = new AtomicReference<>();
 
 	private static final Object NULL = Key.create("NULL");
 
 	@Inject
-	public JavaResolveCache(Project project)
+	public JavaResolveCache(@Nonnull Project project)
 	{
-		project.getMessageBus().connect().subscribe(PsiManagerImpl.ANY_PSI_CHANGE_TOPIC, new AnyPsiChangeListener.Adapter()
+		project.getMessageBus().connect().subscribe(PsiManagerImpl.ANY_PSI_CHANGE_TOPIC, new AnyPsiChangeListener()
 		{
 			@Override
 			public void beforePsiChanged(boolean isPhysical)
@@ -87,31 +66,30 @@ public class JavaResolveCache
 
 	private void clearCaches(boolean isPhysical)
 	{
-		myCalculatedTypes.clear();
+		myCalculatedTypes.set(null);
 		if(isPhysical)
 		{
-			myVarToConstValueMapPhysical.clear();
+			myVarToConstValueMapPhysical.set(null);
 		}
-		myVarToConstValueMapNonPhysical.clear();
+		myVarToConstValueMapNonPhysical.set(null);
 	}
 
 	@Nullable
-	public <T extends PsiExpression> PsiType getType(@Nonnull T expr, @Nonnull Function<T, PsiType> f)
+	public <T extends PsiExpression> PsiType getType(@Nonnull T expr, @Nonnull Function<? super T, ? extends PsiType> f)
 	{
-		final boolean isOverloadCheck = MethodCandidateInfo.isOverloadCheck() || LambdaUtil.isLambdaParameterCheck();
-		final boolean polyExpression = PsiPolyExpressionUtil.isPolyExpression(expr);
-		PsiType type = isOverloadCheck && polyExpression ? null : myCalculatedTypes.get(expr);
+		ConcurrentMap<PsiExpression, PsiType> map = myCalculatedTypes.get();
+		if(map == null)
+		{
+			map = ConcurrencyUtil.cacheOrGet(myCalculatedTypes, ContainerUtil.createConcurrentWeakKeySoftValueMap());
+		}
+
+		final boolean prohibitCaching = MethodCandidateInfo.isOverloadCheck() && PsiPolyExpressionUtil.isPolyExpression(expr);
+		PsiType type = prohibitCaching ? null : map.get(expr);
 		if(type == null)
 		{
-			final RecursionGuard.StackStamp dStackStamp = PsiDiamondType.ourDiamondGuard.markStack();
+			RecursionGuard.StackStamp dStackStamp = RecursionManager.markStack();
 			type = f.fun(expr);
-			if(!dStackStamp.mayCacheNow())
-			{
-				return type;
-			}
-
-			//cache standalone expression types as they do not depend on the context
-			if(isOverloadCheck && polyExpression)
+			if(prohibitCaching || !dStackStamp.mayCacheNow())
 			{
 				return type;
 			}
@@ -120,43 +98,47 @@ public class JavaResolveCache
 			{
 				type = TypeConversionUtil.NULL_TYPE;
 			}
-			myCalculatedTypes.put(expr, type);
+			PsiType alreadyCached = map.put(expr, type);
+			if(alreadyCached != null && !type.equals(alreadyCached))
+			{
+				reportUnstableType(expr, type, alreadyCached);
+			}
 
 			if(type instanceof PsiClassReferenceType)
 			{
 				// convert reference-based class type to the PsiImmediateClassType, since the reference may become invalid
 				PsiClassType.ClassResolveResult result = ((PsiClassReferenceType) type).resolveGenerics();
 				PsiClass psiClass = result.getElement();
-				type = psiClass == null ? type // for type with unresolved reference, leave it in the cache
+				type = psiClass == null
+						? type // for type with unresolved reference, leave it in the cache
 						// for clients still might be able to retrieve its getCanonicalText() from the reference text
 						: new PsiImmediateClassType(psiClass, result.getSubstitutor(), ((PsiClassReferenceType) type).getLanguageLevel(), type.getAnnotationProvider());
-			}
-		}
-
-		if(!type.isValid())
-		{
-			if(expr.isValid())
-			{
-				PsiJavaCodeReferenceElement refInside = type instanceof PsiClassReferenceType ? ((PsiClassReferenceType) type).getReference() : null;
-				@NonNls String typeinfo = type + " (" + type.getClass() + ")" + (refInside == null ? "" : "; ref inside: " + refInside + " (" + refInside.getClass() + ") valid:" + refInside.isValid
-						());
-				LOG.error("Type is invalid: " + typeinfo + "; expr: '" + expr + "' (" + expr.getClass() + ") is valid");
-			}
-			else
-			{
-				LOG.error("Expression: '" + expr + "' is invalid, must not be used for getType()");
 			}
 		}
 
 		return type == TypeConversionUtil.NULL_TYPE ? null : type;
 	}
 
-	@javax.annotation.Nullable
+	private static <T extends PsiExpression> void reportUnstableType(@Nonnull PsiExpression expr, @Nonnull PsiType type, @Nonnull PsiType alreadyCached)
+	{
+		PsiFile file = expr.getContainingFile();
+		LOG.error("Different types returned for the same PSI " + expr.getTextRange() + " on different threads: "
+						+ type + " != " + alreadyCached,
+				AttachmentFactory.get().create(file.getName(), file.getText()));
+	}
+
+	@Nullable
 	public Object computeConstantValueWithCaching(@Nonnull PsiVariable variable, @Nonnull ConstValueComputer computer, Set<PsiVariable> visitedVars)
 	{
 		boolean physical = variable.isPhysical();
 
-		Map<PsiVariable, Object> map = physical ? myVarToConstValueMapPhysical : myVarToConstValueMapNonPhysical;
+		AtomicReference<Map<PsiVariable, Object>> ref = physical ? myVarToConstValueMapPhysical : myVarToConstValueMapNonPhysical;
+		Map<PsiVariable, Object> map = ref.get();
+		if(map == null)
+		{
+			map = ConcurrencyUtil.cacheOrGet(ref, ContainerUtil.createConcurrentWeakMap());
+		}
+
 		Object cached = map.get(variable);
 		if(cached == NULL)
 		{
@@ -172,6 +154,7 @@ public class JavaResolveCache
 		return result;
 	}
 
+	@FunctionalInterface
 	public interface ConstValueComputer
 	{
 		Object execute(@Nonnull PsiVariable variable, Set<PsiVariable> visitedVars);

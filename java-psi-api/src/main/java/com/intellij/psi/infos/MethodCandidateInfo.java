@@ -365,7 +365,7 @@ public class MethodCandidateInfo extends CandidateInfo
 			PsiMethod method = getElement();
 			if(myTypeArguments == null)
 			{
-				final RecursionGuard.StackStamp stackStamp = PsiDiamondType.ourDiamondGuard.markStack();
+				RecursionGuard.StackStamp stackStamp = RecursionManager.markStack();
 
 				final PsiSubstitutor inferredSubstitutor = inferTypeArguments(DefaultParameterTypeInferencePolicy.INSTANCE, includeReturnConstraint);
 
