@@ -1,16 +1,13 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.diagnostic.PluginException;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DefaultProjectFactory;
@@ -57,6 +54,9 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.cls.ClsFormatException;
 import consulo.annotations.RequiredReadAction;
 import consulo.annotations.RequiredWriteAction;
+import consulo.container.PluginException;
+import consulo.container.plugin.PluginId;
+import consulo.container.plugin.PluginManager;
 import consulo.internal.org.objectweb.asm.Attribute;
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.Opcodes;
@@ -463,7 +463,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
 		ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
 		if(decompiler instanceof ClassFileDecompilers.Light)
 		{
-			PluginId pluginId = PluginManagerCore.getPluginByClassName(decompiler.getClass().getName());
+			PluginId pluginId = PluginManager.getPluginId(decompiler.getClass());
 			if(pluginId != null)
 			{
 				return new PluginException(e, pluginId);
