@@ -16,16 +16,6 @@
 
 package consulo.java.execution.configurations;
 
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.MagicConstant;
-
-import javax.annotation.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.ParametersList;
@@ -34,19 +24,24 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
-import com.intellij.openapi.roots.NativeLibraryOrderRootType;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.OrderRootsEnumerator;
+import com.intellij.openapi.roots.*;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
+import com.intellij.openapi.vfs.jrt.JrtFileSystem;
 import com.intellij.util.PathsList;
 import com.intellij.util.text.VersionComparatorUtil;
 import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
+import org.intellij.lang.annotations.MagicConstant;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Replacement of {@link com.intellij.execution.configurations.JavaParameters} without dependecy to platform
@@ -241,6 +236,6 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters
 
 	private static VirtualFile[] jdkRoots(Sdk jdk)
 	{
-		return Arrays.stream(jdk.getRootProvider().getFiles(OrderRootType.CLASSES)).filter(f -> !JModFileType.isModuleRoot(f)).toArray(VirtualFile[]::new);
+		return Arrays.stream(jdk.getRootProvider().getFiles(OrderRootType.CLASSES)).filter(f -> !JModFileType.isModuleRoot(f) && !JrtFileSystem.isModuleRoot(f)).toArray(VirtualFile[]::new);
 	}
 }

@@ -15,52 +15,46 @@
  */
 package com.intellij.openapi.projectRoots.impl;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.util.SystemProperties;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.OwnJdkVersionDetector;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.projectRoots.SdkTable;
+import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.jrt.JrtFileSystem;
 import com.intellij.util.SmartList;
+import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.fileTypes.ZipArchiveFileType;
 import consulo.java.JavaIcons;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.projectRoots.OwnJdkUtil;
+import consulo.logging.Logger;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.DocumentationOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
 import consulo.ui.image.Image;
 import consulo.vfs.util.ArchiveVfsUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eugene Zhuravlev
@@ -68,7 +62,7 @@ import consulo.vfs.util.ArchiveVfsUtil;
  */
 public class JavaSdkImpl extends JavaSdk
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.projectRoots.impl.JavaSdkImpl");
+	private static final Logger LOG = Logger.getInstance(JavaSdkImpl.class);
 	// do not use javaw.exe for Windows because of issues with encoding
 	@NonNls
 	private static final String VM_EXE_NAME = "java";
@@ -393,6 +387,29 @@ public class JavaSdkImpl extends JavaSdk
 				}
 			}
 		}
+		else if(OwnJdkUtil.isModularRuntime(jdkHome))
+		{
+			String jrtBaseUrl = JrtFileSystem.PROTOCOL_PREFIX + getPath(jdkHome) + JrtFileSystem.SEPARATOR;
+			List<String> modules = readModulesFromReleaseFile(jdkHome);
+			if(modules != null)
+			{
+				for(String module : modules)
+				{
+					sdkModificator.addRoot(jrtBaseUrl + module, BinariesOrderRootType.getInstance());
+				}
+			}
+			else
+			{
+				VirtualFile jrt = VirtualFileManager.getInstance().findFileByUrl(jrtBaseUrl);
+				if(jrt != null)
+				{
+					for(VirtualFile virtualFile : jrt.getChildren())
+					{
+						sdkModificator.addRoot(virtualFile.getUrl(), BinariesOrderRootType.getInstance());
+					}
+				}
+			}
+		}
 		else
 		{
 			addJavaFxSources(jdkHome, sdkModificator);
@@ -473,6 +490,39 @@ public class JavaSdkImpl extends JavaSdk
 		}
 		attachJdkAnnotations(sdkModificator);
 		sdkModificator.commitChanges();
+	}
+
+	private static String getPath(File jarFile)
+	{
+		return FileUtil.toSystemIndependentName(jarFile.getAbsolutePath());
+	}
+
+	/**
+	 * Tries to load the list of modules in the JDK from the 'release' file. Returns null if the 'release' file is not there
+	 * or doesn't contain the expected information.
+	 */
+	@Nullable
+	private static List<String> readModulesFromReleaseFile(File jrtBaseDir)
+	{
+		File releaseFile = new File(jrtBaseDir, "release");
+		if(releaseFile.isFile())
+		{
+			try (FileInputStream stream = new FileInputStream(releaseFile))
+			{
+				Properties p = new Properties();
+				p.load(stream);
+				String modules = p.getProperty("MODULES");
+				if(modules != null)
+				{
+					return StringUtil.split(StringUtil.unquoteString(modules), " ");
+				}
+			}
+			catch(IOException | IllegalArgumentException e)
+			{
+				LOG.info(e);
+			}
+		}
+		return null;
 	}
 
 	public static boolean attachJdkAnnotations(@Nonnull SdkModificator modificator)

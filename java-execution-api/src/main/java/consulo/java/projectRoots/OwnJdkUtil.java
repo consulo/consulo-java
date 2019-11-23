@@ -16,25 +16,6 @@
 
 package consulo.java.projectRoots;
 
-import gnu.trove.THashMap;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.jar.Manifest;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.CommandLineWrapperUtil;
 import com.intellij.execution.ExecutionBundle;
@@ -57,9 +38,21 @@ import com.intellij.util.PathUtil;
 import com.intellij.util.PathsList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.execution.ParametersListUtil;
-import com.intellij.util.lang.UrlClassLoader;
 import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.platform.Platform;
+import consulo.util.nodep.classloader.UrlClassLoader;
+import gnu.trove.THashMap;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
+import java.util.*;
+import java.util.jar.Manifest;
 
 /**
  * Replacement of {@link com.intellij.openapi.projectRoots.JdkUtil} withput dependency to platform code

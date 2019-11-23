@@ -4,15 +4,15 @@ package com.intellij.codeInsight.daemon.impl;
 import com.intellij.codeInsight.hint.HintUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.ui.JBColor;
 import consulo.ide.actions.QualifiedNameProviders;
-import hack.KeymapUtilHack;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -193,7 +193,7 @@ public final class GutterTooltipHelper
 		{
 			return; // action is not exist
 		}
-		String text = KeymapUtilHack.getPreferredShortcutText(action.getShortcutSet().getShortcuts());
+		String text = KeymapUtil.getPreferredShortcutText(action.getShortcutSet().getShortcuts());
 		if(StringUtil.isEmpty(text))
 		{
 			return; // action have no shortcuts
