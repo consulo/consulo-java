@@ -42,8 +42,8 @@ import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.TitledSeparator;
 import com.intellij.util.ObjectUtil;
-import consulo.annotations.RequiredDispatchThread;
-import consulo.annotations.RequiredReadAction;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.extension.ui.ModuleExtensionSdkBoxBuilder;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.extension.JavaMutableModuleExtension;
@@ -64,7 +64,7 @@ public class JavaModuleExtensionPanel extends JPanel
 	private JRadioButton myModuleDirRadioButton;
 	private JRadioButton mySourceDirRadioButton;
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public JavaModuleExtensionPanel(final JavaMutableModuleExtension<?> extension, Runnable classpathStateUpdater)
 	{
 		super(new VerticalFlowLayout());

@@ -15,10 +15,6 @@
  */
 package com.intellij.debugger.actions;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -28,11 +24,7 @@ import com.intellij.debugger.settings.ArrayRendererConfigurable;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.debugger.ui.tree.render.ArrayRenderer;
-import com.intellij.debugger.ui.tree.render.ChildrenRenderer;
-import com.intellij.debugger.ui.tree.render.CompoundNodeRenderer;
-import com.intellij.debugger.ui.tree.render.ExpressionChildrenRenderer;
-import com.intellij.debugger.ui.tree.render.Renderer;
+import com.intellij.debugger.ui.tree.render.*;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -40,12 +32,15 @@ import com.intellij.openapi.util.AsyncResult;
 import com.intellij.xdebugger.frame.XValue;
 import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
-import consulo.annotations.RequiredDispatchThread;
-import consulo.ui.RequiredUIAccess;
+import consulo.ui.annotation.RequiredUIAccess;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class ArrayAction extends DebuggerAction
 {
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
@@ -81,7 +76,7 @@ public abstract class ArrayAction extends DebuggerAction
 	@Nonnull
 	protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(@Nonnull AnActionEvent e)
 	{

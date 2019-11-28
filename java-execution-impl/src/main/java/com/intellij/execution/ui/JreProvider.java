@@ -15,10 +15,10 @@
  */
 package com.intellij.execution.ui;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.extensions.ExtensionPointName;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
+
+import javax.annotation.Nonnull;
 
 /**
  * Extension point for providing custom jre to be shown at run configuration control.

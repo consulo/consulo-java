@@ -31,7 +31,7 @@ import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiKeyword;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 
 /**
  * @author VISTALL

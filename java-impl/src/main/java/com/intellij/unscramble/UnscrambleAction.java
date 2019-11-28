@@ -23,14 +23,14 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * @author Konstantin Bulenkov
  */
 public final class UnscrambleAction extends AnAction implements DumbAware
 {
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
@@ -38,7 +38,7 @@ public final class UnscrambleAction extends AnAction implements DumbAware
 		new UnscrambleDialog(project).show();
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(@Nonnull AnActionEvent event)
 	{

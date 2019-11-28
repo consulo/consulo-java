@@ -33,7 +33,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiSyntheticClass;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
@@ -43,7 +43,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 public class JavaTypeHierarchyProvider implements HierarchyProvider
 {
 	@Override
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public PsiElement getTarget(@Nonnull final DataContext dataContext)
 	{
 		final Project project = dataContext.getData(CommonDataKeys.PROJECT);

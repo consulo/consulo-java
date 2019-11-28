@@ -42,7 +42,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.util.JavaClassNames;
 import consulo.java.psi.augment.JavaEnumAugmentProvider;
 

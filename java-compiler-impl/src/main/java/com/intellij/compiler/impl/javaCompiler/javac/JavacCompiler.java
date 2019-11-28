@@ -67,7 +67,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.PathsList;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.roots.CompilerPathsImpl;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;

@@ -24,7 +24,7 @@ import consulo.java.module.extension.ui.JavaModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.pom.java.LanguageLevel;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
 import consulo.roots.ModuleRootLayer;
 
@@ -41,7 +41,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 
 	@Nullable
 	@Override
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public JComponent createConfigurablePanel(@Nullable Runnable updateOnCheck)
 	{
 		return new JavaModuleExtensionPanel(this, updateOnCheck);

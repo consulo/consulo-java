@@ -53,7 +53,7 @@ import com.intellij.ui.GuiUtils;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.editor.notifications.EditorNotificationProvider;
 import consulo.java.JavaBundle;
 import consulo.roots.types.BinariesOrderRootType;
@@ -96,7 +96,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return KEY;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public EditorNotificationPanel createNotificationPanel(@Nonnull final VirtualFile file, @Nonnull FileEditor fileEditor)
 	{
@@ -368,7 +368,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		}
 
 		@Override
-		@RequiredDispatchThread
+		@RequiredUIAccess
 		public ActionCallback perform(final List<LibraryOrderEntry> libraries)
 		{
 			FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createMultipleJavaPathDescriptor();
@@ -413,7 +413,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 					}
 
 					@Override
-					@RequiredDispatchThread
+					@RequiredUIAccess
 					public PopupStep onChosen(LibraryOrderEntry libraryOrderEntry, boolean finalChoice)
 					{
 						if(libraryOrderEntry != null)
@@ -438,7 +438,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			return ActionCallback.DONE;
 		}
 
-		@RequiredDispatchThread
+		@RequiredUIAccess
 		private static void appendSources(final Library library, final VirtualFile[] files)
 		{
 			ApplicationManager.getApplication().runWriteAction(new Runnable()

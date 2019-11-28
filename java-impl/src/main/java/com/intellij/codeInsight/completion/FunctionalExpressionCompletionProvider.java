@@ -46,7 +46,7 @@ import com.intellij.util.Consumer;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.JBIterable;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
 
 /**

@@ -44,7 +44,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.FilteredQuery;
 import com.intellij.util.Functions;
 import com.intellij.util.Query;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.JavaIcons;
 
 /**

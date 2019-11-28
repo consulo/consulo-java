@@ -46,13 +46,13 @@ import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiSyntheticClass;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.util.IncorrectOperationException;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 abstract class OverrideImplementMethodAction extends AnAction
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.ide.hierarchy.method.OverrideImplementMethodAction");
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public final void actionPerformed(@Nonnull final AnActionEvent event)
 	{
@@ -77,7 +77,7 @@ abstract class OverrideImplementMethodAction extends AnAction
 				CommandProcessor.getInstance().executeCommand(project, new Runnable()
 				{
 					@Override
-					@RequiredDispatchThread
+					@RequiredUIAccess
 					public void run()
 					{
 
@@ -135,7 +135,7 @@ abstract class OverrideImplementMethodAction extends AnAction
 		});
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public final void update(@Nonnull final AnActionEvent e)
 	{

@@ -84,7 +84,7 @@ import com.intellij.xdebugger.frame.XValueMarkerProvider;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.XDebuggerUtilImpl;
 import com.intellij.xdebugger.ui.XDebugTabLayouter;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.internal.com.sun.jdi.event.Event;
 
 /**
@@ -524,7 +524,7 @@ public class JavaDebugProcess extends XDebugProcess
 			myTextUnavailable = DebuggerBundle.message("action.watches.method.return.value.unavailable.reason");
 		}
 
-		@RequiredDispatchThread
+		@RequiredUIAccess
 		@Override
 		public void update(@Nonnull final AnActionEvent e)
 		{

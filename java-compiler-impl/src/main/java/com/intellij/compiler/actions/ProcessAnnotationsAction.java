@@ -53,11 +53,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 public class ProcessAnnotationsAction extends CompileActionBase
 {
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	protected void doAction(DataContext dataContext, Project project)
 	{
@@ -85,7 +85,7 @@ public class ProcessAnnotationsAction extends CompileActionBase
 		}
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(@Nonnull AnActionEvent event)
 	{

@@ -31,7 +31,7 @@ import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 
 /*
@@ -68,7 +68,7 @@ public class JavaAutoImportConfigurable implements Configurable
 		myExcludePackagesTable.addExcludePackage(packageName);
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void reset()
 	{
@@ -99,14 +99,14 @@ public class JavaAutoImportConfigurable implements Configurable
 		myExcludePackagesTable.reset();
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void disposeUIResources()
 	{
 
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void apply()
 	{
@@ -127,14 +127,14 @@ public class JavaAutoImportConfigurable implements Configurable
 		}
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public JComponent createComponent()
 	{
 		return myWholePanel;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public boolean isModified()
 	{

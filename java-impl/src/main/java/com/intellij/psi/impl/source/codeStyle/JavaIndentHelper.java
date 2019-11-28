@@ -28,7 +28,7 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.consulo.psi.impl.source.codeStyle.IndentHelperExtension;
 
 public class JavaIndentHelper implements IndentHelperExtension

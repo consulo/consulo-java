@@ -16,12 +16,6 @@
 
 package com.intellij.execution.ui;
 
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.BundleBase;
 import com.intellij.application.options.ModuleDescriptionsComboBox;
 import com.intellij.application.options.ModulesComboBox;
@@ -35,9 +29,14 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Pair;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.util.ObjectUtil;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.module.extension.JavaModuleExtension;
+
+import javax.annotation.Nonnull;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * from kotlin

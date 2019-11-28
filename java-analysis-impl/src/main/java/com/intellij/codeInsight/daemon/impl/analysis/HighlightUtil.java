@@ -67,7 +67,7 @@ import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.hash.HashSet;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.xml.util.XmlStringUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 import gnu.trove.THashMap;

@@ -18,7 +18,7 @@ package com.intellij.ui;
 import java.awt.event.ActionListener;
 
 import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaCodeFragment;

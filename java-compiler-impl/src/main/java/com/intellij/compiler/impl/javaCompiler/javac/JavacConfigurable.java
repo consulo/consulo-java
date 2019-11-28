@@ -25,7 +25,7 @@ import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.RawCommandLineEditor;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * @author Eugene Zhuravlev
@@ -53,14 +53,14 @@ public class JavacConfigurable implements Configurable
 		return "Javac";
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public JComponent createComponent()
 	{
 		return myPanel;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public boolean isModified()
 	{
@@ -86,7 +86,7 @@ public class JavacConfigurable implements Configurable
 		}
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void apply() throws ConfigurationException
 	{
@@ -109,7 +109,7 @@ public class JavacConfigurable implements Configurable
 		myJavacSettings.ADDITIONAL_OPTIONS_STRING = myAdditionalOptionsField.getText();
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void reset()
 	{

@@ -20,7 +20,7 @@ import com.intellij.lang.LighterASTNode;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.util.PsiTreeUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 
 import javax.annotation.Nullable;
 

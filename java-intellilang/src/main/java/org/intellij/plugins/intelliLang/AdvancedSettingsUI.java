@@ -43,8 +43,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;
 import com.intellij.util.Function;
-import consulo.annotations.RequiredDispatchThread;
-import consulo.annotations.RequiredReadAction;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.annotation.access.RequiredReadAction;
 
 /**
  * @author Gregory.Shrago
@@ -62,7 +62,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable
 	}
 
 	@Override
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public JComponent createComponent()
 	{
 		myPanel = new AdvancedSettingsPanel();

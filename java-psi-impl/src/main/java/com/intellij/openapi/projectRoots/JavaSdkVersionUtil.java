@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 
 /**

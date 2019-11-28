@@ -15,8 +15,6 @@
  */
 package com.intellij.execution.junit2.info;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.execution.Location;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -24,9 +22,11 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
-import consulo.annotations.Exported;
+import consulo.annotation.UsedInPlugin;
 
-@Exported
+import javax.annotation.Nonnull;
+
+@UsedInPlugin
 public class LocationUtil
 {
 	public static boolean isJarAttached(@Nonnull Location location, @Nonnull final PsiJavaPackage aPackage, final String... fqn)

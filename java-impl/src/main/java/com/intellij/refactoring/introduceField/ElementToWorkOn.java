@@ -42,7 +42,7 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
@@ -80,7 +80,7 @@ public class ElementToWorkOn
 		return myExpression == null;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public static void processElementToWorkOn(final Editor editor,
 			final PsiFile file,
 			final String refactoringName,

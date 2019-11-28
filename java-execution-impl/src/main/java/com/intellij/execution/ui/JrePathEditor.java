@@ -15,21 +15,20 @@
  */
 package com.intellij.execution.ui;
 
-import java.awt.event.ActionListener;
-import java.util.Objects;
-
-import javax.swing.JComponent;
-
-import javax.annotation.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.components.panels.Wrapper;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.roots.ui.configuration.SdkComboBox;
+
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.util.Objects;
 
 /**
  * @author nik
@@ -79,7 +78,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor
 
 	@Deprecated
 	@DeprecationInfo("Use #setByName()")
-	public void setPathOrName(@javax.annotation.Nullable String pathOrName, boolean useAlternativeJre)
+	public void setPathOrName(@Nullable String pathOrName, boolean useAlternativeJre)
 	{
 		setByName(pathOrName);
 	}

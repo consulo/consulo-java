@@ -18,7 +18,7 @@ package com.intellij.psi;
 import javax.annotation.Nonnull;
 
 import com.intellij.pom.java.LanguageLevel;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 
 /**
  * Represents a Java, JSP or class file.

@@ -30,7 +30,7 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiStatement;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
@@ -39,7 +39,7 @@ import consulo.codeInsight.TargetElementUtilEx;
  */
 public class JavaVcsSelectionProvider implements VcsSelectionProvider {
   @javax.annotation.Nullable
-  @RequiredDispatchThread
+  @RequiredUIAccess
   public VcsSelection getSelection(final VcsContext context) {
     final Editor editor = context.getEditor();
     if (editor == null) return null;

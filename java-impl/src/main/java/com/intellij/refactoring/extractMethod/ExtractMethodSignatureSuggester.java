@@ -60,7 +60,7 @@ import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.text.UniqueNameGenerator;
 import com.intellij.util.ui.JBUI;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 public class ExtractMethodSignatureSuggester
 {
@@ -478,7 +478,7 @@ public class ExtractMethodSignatureSuggester
 
 		@javax.annotation.Nullable
 		@Override
-		@RequiredDispatchThread
+		@RequiredUIAccess
 		protected JComponent createCenterPanel()
 		{
 			final Project project = myOldMethod.getProject();

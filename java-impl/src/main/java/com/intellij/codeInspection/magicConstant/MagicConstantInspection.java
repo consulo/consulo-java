@@ -68,7 +68,7 @@ import com.intellij.slicer.SliceUsage;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 {
@@ -301,7 +301,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 			}
 
 			@Override
-			@RequiredDispatchThread
+			@RequiredUIAccess
 			public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 			{
 				ApplicationManager.getApplication().runWriteAction(new Runnable()

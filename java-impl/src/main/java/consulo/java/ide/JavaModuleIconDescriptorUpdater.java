@@ -3,7 +3,7 @@ package consulo.java.ide;
 import com.intellij.openapi.vfs.jrt.JrtFileSystem;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.IconDescriptor;
 import consulo.ide.IconDescriptorUpdater;
 import consulo.java.JavaIcons;

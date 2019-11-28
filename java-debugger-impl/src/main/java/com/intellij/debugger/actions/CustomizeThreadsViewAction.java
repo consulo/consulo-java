@@ -23,7 +23,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.java.debugger.settings.ThreadsViewConfigurable;
 
 /**
@@ -33,7 +33,7 @@ import consulo.java.debugger.settings.ThreadsViewConfigurable;
  */
 public class CustomizeThreadsViewAction extends DebuggerAction
 {
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
@@ -42,7 +42,7 @@ public class CustomizeThreadsViewAction extends DebuggerAction
 		ShowSettingsUtil.getInstance().editConfigurable(DebuggerBundle.message("threads.view.configurable.display.name"), project, new ThreadsViewConfigurable());
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(@Nonnull AnActionEvent e)
 	{

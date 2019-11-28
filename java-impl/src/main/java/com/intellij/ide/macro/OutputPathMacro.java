@@ -28,7 +28,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.compiler.roots.CompilerPathsImpl;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;

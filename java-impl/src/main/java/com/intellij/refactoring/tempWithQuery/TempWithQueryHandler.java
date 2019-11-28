@@ -53,7 +53,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.duplicates.DuplicatesImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
@@ -63,7 +63,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler
 
 	private static final String REFACTORING_NAME = RefactoringBundle.message("replace.temp.with.query.title");
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = TargetElementUtil.findTargetElement(editor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED,

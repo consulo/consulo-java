@@ -2,7 +2,7 @@ package consulo.java;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.lang.Language;
 import com.intellij.openapi.module.Module;

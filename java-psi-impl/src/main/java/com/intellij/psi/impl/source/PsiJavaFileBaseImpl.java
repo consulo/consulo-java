@@ -50,7 +50,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.indexing.IndexingDataKeys;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;

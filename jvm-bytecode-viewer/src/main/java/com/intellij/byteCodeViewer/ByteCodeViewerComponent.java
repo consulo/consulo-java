@@ -1,9 +1,5 @@
 package com.intellij.byteCodeViewer;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JPanel;
-
 import com.intellij.codeInsight.hint.EditorFragmentComponent;
 import com.intellij.execution.filters.LineNumbersMapping;
 import com.intellij.openapi.Disposable;
@@ -13,11 +9,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.EditorSettings;
-import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.colors.EditorColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.ex.EditorEx;
@@ -31,7 +23,10 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.LightColors;
-import consulo.annotations.RequiredWriteAction;
+import consulo.annotation.access.RequiredWriteAction;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * User: anna

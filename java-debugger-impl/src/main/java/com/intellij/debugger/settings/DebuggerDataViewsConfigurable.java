@@ -44,7 +44,7 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.ui.classFilter.ClassFilterEditor;
 import com.intellij.util.ui.JBUI;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * @author Eugene Belyaev
@@ -75,7 +75,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		myProject = project;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void disposeUIResources()
 	{
@@ -89,7 +89,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		return OptionsBundle.message("options.java.display.name");
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public JComponent createComponent()
 	{
@@ -191,7 +191,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		return panel;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void apply()
 	{
@@ -221,7 +221,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		rendererSettings.fireRenderersChanged();
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void reset()
 	{
@@ -260,7 +260,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		myCbHexValue.setSelected(primitiveRenderer.isShowHexValue());
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public boolean isModified()
 	{

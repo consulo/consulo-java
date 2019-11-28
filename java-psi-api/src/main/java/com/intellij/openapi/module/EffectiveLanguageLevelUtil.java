@@ -15,12 +15,12 @@
  */
 package com.intellij.openapi.module;
 
-import javax.annotation.Nonnull;
-
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.pom.java.LanguageLevel;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.module.extension.JavaModuleExtension;
+
+import javax.annotation.Nonnull;
 
 public class EffectiveLanguageLevelUtil
 {

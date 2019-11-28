@@ -15,18 +15,6 @@
  */
 package com.intellij.debugger.settings;
 
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.ui.tree.render.ArrayRenderer;
 import com.intellij.openapi.application.ApplicationNamesInfo;
@@ -35,7 +23,12 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.util.ui.JBUI;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 
 public class ArrayRendererConfigurable implements UnnamedConfigurable, Configurable.NoScroll
 {
@@ -58,7 +51,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 		return myRenderer;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void reset()
 	{
@@ -67,7 +60,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 		myEntriesLimit.setText(String.valueOf(myRenderer.myEntriesLimit));
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void apply() throws ConfigurationException
 	{
@@ -120,7 +113,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 		renderer.myEntriesLimit = newLimit;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public JComponent createComponent()
 	{
@@ -253,7 +246,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 		return newEndIndex;
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public boolean isModified()
 	{

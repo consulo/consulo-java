@@ -27,7 +27,7 @@ import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.ui.XDebugSessionData;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * from kotlin
@@ -72,7 +72,7 @@ public class ForceOnDemandRenderersAction extends ToggleAction implements DumbAw
 		NodeRendererSettings.getInstance().fireRenderersChanged();
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(AnActionEvent e)
 	{

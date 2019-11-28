@@ -15,8 +15,6 @@
  */
 package com.intellij.execution.configurations;
 
-import java.nio.charset.Charset;
-
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.openapi.module.Module;
@@ -32,11 +30,13 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.vfs.util.ArchiveVfsUtil;
+
+import java.nio.charset.Charset;
 
 @Deprecated
 @DeprecationInfo("Use OwnJavaParameters")

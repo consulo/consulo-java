@@ -33,7 +33,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 
 public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfiguration<JavaRunConfigurationModule>> extends AnAction
@@ -44,7 +44,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
 
 	protected abstract boolean isPatternBasedConfiguration(RunConfiguration configuration);
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
@@ -59,7 +59,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
 		getPattern(configuration).remove(qualifiedName);
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(@Nonnull AnActionEvent e)
 	{

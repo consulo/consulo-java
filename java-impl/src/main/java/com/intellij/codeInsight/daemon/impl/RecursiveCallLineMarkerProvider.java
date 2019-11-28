@@ -41,7 +41,7 @@ import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiThisExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.FunctionUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.ui.image.Image;
 
 /**

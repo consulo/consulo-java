@@ -38,7 +38,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.awt.TargetAWT;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtension;
@@ -88,14 +88,14 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 				return null;
 			}
 
-			@RequiredDispatchThread
+			@RequiredUIAccess
 			@Override
 			public boolean checkInput(String inputString)
 			{
 				return true;
 			}
 
-			@RequiredDispatchThread
+			@RequiredUIAccess
 			@Override
 			public boolean canClose(String inputString)
 			{

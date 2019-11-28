@@ -19,7 +19,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.impl.compiled.ClsClassImpl;
 import com.intellij.psi.util.PsiTreeUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.fileEditor.impl.EditorWithProviderComposite;
 
 public class JavaEditorFileSwapper extends EditorFileSwapper

@@ -32,8 +32,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
-import consulo.annotations.RequiredReadAction;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.util.JavaClassNames;
 import consulo.json.validation.NativeArray;
@@ -95,7 +95,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		return JavaPsiFacade.getInstance(project).findClass(s, GlobalSearchScope.allScope(project));
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@javax.annotation.Nullable
 	@Override
 	public PsiClass chooseElement(@Nonnull Project project)

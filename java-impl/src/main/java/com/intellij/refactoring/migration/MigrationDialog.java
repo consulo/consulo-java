@@ -35,7 +35,7 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 public class MigrationDialog extends DialogWrapper
 {
@@ -83,7 +83,7 @@ public class MigrationDialog extends DialogWrapper
 		};
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public JComponent getPreferredFocusedComponent()
 	{

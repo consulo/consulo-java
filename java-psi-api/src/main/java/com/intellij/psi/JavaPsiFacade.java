@@ -15,14 +15,14 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.search.GlobalSearchScope;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max

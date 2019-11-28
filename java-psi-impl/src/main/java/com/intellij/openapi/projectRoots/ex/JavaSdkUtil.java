@@ -15,46 +15,26 @@
  */
 package com.intellij.openapi.projectRoots.ex;
 
-import java.io.File;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.JavaSdkVersionUtil;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTypeId;
+import com.intellij.openapi.projectRoots.*;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.util.PathUtil;
 import com.intellij.util.PathsList;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
 import consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.Contract;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
 
 public class JavaSdkUtil
 {
-	@NonNls
-	public static final String IDEA_PREPEND_RTJAR = "idea.prepend.rtjar";
-
 	public static void addRtJar(PathsList pathsList)
 	{
-		final String javaRtJarPath = getJavaRtJarPath();
-		if(Boolean.getBoolean(IDEA_PREPEND_RTJAR))
-		{
-			pathsList.addFirst(javaRtJarPath);
-		}
-		else
-		{
-			pathsList.addTail(javaRtJarPath);
-		}
+		pathsList.addFirst(getJavaRtJarPath());
 	}
 
 	@Nonnull

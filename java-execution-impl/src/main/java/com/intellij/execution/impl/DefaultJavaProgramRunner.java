@@ -63,7 +63,7 @@ import com.intellij.unscramble.ThreadDumpConsoleFactory;
 import com.intellij.unscramble.ThreadDumpParser;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.util.text.DateFormatUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
@@ -182,7 +182,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 			myProcessHandler = processHandler;
 		}
 
-		@RequiredDispatchThread
+		@RequiredUIAccess
 		@Override
 		public final void update(@Nonnull AnActionEvent event)
 		{
@@ -200,7 +200,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 			}
 		}
 
-		@RequiredDispatchThread
+		@RequiredUIAccess
 		@Override
 		public final void actionPerformed(@Nonnull AnActionEvent e)
 		{

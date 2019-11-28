@@ -16,6 +16,7 @@
 package com.intellij.slicer;
 
 import com.intellij.codeInsight.PsiEquivalenceUtil;
+import com.intellij.concurrency.ConcurrentCollectionFactory;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.AbstractTreeStructure;
 import com.intellij.openapi.application.ApplicationManager;
@@ -180,7 +181,7 @@ public class SliceLeafAnalyzer {
   }
 
   public static Map<SliceNode, Collection<PsiElement>> createMap() {
-    return FactoryMap.createMap(sliceNode -> ContainerUtil.newConcurrentSet(SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY), () -> ContainerUtil.newConcurrentMap(ContainerUtil.<SliceNode>identityStrategy()));
+    return FactoryMap.createMap(sliceNode -> ConcurrentCollectionFactory.createConcurrentSet(SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY), () -> ConcurrentCollectionFactory.createMap(ContainerUtil.<SliceNode>identityStrategy()));
   }
 
   static class SliceNodeGuide implements WalkingState.TreeGuide<SliceNode> {

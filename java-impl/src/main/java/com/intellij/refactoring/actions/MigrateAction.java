@@ -20,11 +20,11 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
 import com.intellij.refactoring.RefactoringManager;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 
 public class MigrateAction extends AnAction
 {
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void actionPerformed(AnActionEvent e)
 	{
@@ -32,7 +32,7 @@ public class MigrateAction extends AnAction
 		RefactoringManager.getInstance(project).getMigrateManager().showMigrationDialog();
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(AnActionEvent event)
 	{

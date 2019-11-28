@@ -32,7 +32,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.PsiLabelReference;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
 
 /**

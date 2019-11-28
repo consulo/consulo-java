@@ -41,7 +41,7 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.awt.TargetAWT;
 
 public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction
@@ -56,7 +56,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
 
 	protected abstract Set<String> getPatterns(T configuration);
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void actionPerformed(AnActionEvent e)
 	{
@@ -105,7 +105,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
 		}
 	}
 
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	@Override
 	public void update(AnActionEvent e)
 	{

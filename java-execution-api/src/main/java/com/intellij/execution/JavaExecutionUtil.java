@@ -15,12 +15,6 @@
  */
 package com.intellij.execution;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RunProfile;
@@ -38,18 +32,20 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassOwner;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.String;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author spleaner
@@ -162,14 +158,14 @@ public class JavaExecutionUtil
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getRuntimeQualifiedName(@Nonnull final PsiClass aClass)
 	{
 		return ClassUtil.getJVMClassName(aClass);
 	}
 
-	@javax.annotation.Nullable
-	public static String getPresentableClassName(@javax.annotation.Nullable String rtClassName)
+	@Nullable
+	public static String getPresentableClassName(@Nullable String rtClassName)
 	{
 		if(StringUtil.isEmpty(rtClassName))
 		{
@@ -181,11 +177,11 @@ public class JavaExecutionUtil
 	}
 
 	/**
-	 * {@link JavaExecutionUtil#getPresentableClassName(java.lang.String)}
+	 * {@link JavaExecutionUtil#getPresentableClassName(String)}
 	 */
 	@DeprecationInfo("Use JavaExecutionUtil#getPresentableClassName(java.lang.String)")
 	@Deprecated
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getPresentableClassName(final String rtClassName, final JavaRunConfigurationModule configurationModule)
 	{
 		return getPresentableClassName(rtClassName);
@@ -196,7 +192,7 @@ public class JavaExecutionUtil
 		return ModuleUtilCore.findModuleForPsiElement(psiClass);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass findMainClass(final Module module, final String mainClassName)
 	{
 		return findMainClass(module.getProject(), mainClassName, module.getModuleRuntimeScope(true));

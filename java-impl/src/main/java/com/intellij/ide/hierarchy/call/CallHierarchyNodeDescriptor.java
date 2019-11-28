@@ -52,7 +52,7 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
@@ -104,7 +104,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
 	}
 
 	@Override
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public final boolean update()
 	{
 		final CompositeAppearance oldText = myHighlightedText;

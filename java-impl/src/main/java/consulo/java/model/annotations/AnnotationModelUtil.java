@@ -14,7 +14,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiLiteral;
 import com.intellij.psi.PsiReferenceExpression;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 
 public class AnnotationModelUtil
 {

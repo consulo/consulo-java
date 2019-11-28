@@ -18,7 +18,7 @@ package consulo.java.jam.util;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 
 /**
  * @author VISTALL

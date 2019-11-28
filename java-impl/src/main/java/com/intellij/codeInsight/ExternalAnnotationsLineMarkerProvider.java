@@ -55,8 +55,8 @@ import com.intellij.ui.awt.RelativePoint;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
-import consulo.annotations.RequiredDispatchThread;
-import consulo.annotations.RequiredReadAction;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.awt.TargetAWT;
 import consulo.java.JavaIcons;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
@@ -140,7 +140,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 	{
 		static final MyIconGutterHandler INSTANCE = new MyIconGutterHandler();
 
-		@RequiredDispatchThread
+		@RequiredUIAccess
 		@Override
 		public void navigate(MouseEvent e, PsiElement nameIdentifier)
 		{

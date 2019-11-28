@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.impl;
 
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
 
 /**
  * @author Eugene Zhuravlev

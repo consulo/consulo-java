@@ -15,9 +15,6 @@
  */
 package com.intellij.compiler;
 
-import org.jetbrains.annotations.NonNls;
-import consulo.internal.org.objectweb.asm.ClassWriter;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -29,7 +26,10 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.ClassUtil;
-import consulo.annotations.DeprecationInfo;
+import consulo.annotation.DeprecationInfo;
+import consulo.internal.org.objectweb.asm.ClassWriter;
+import consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author yole

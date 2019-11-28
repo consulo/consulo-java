@@ -41,7 +41,7 @@ import com.intellij.util.TimeoutUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.EmptyIterable;
 import com.intellij.util.containers.HashMap;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.util.JavaClassNames;
 import consulo.vfs.ArchiveFileSystem;

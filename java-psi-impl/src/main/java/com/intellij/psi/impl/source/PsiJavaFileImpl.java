@@ -25,7 +25,7 @@ import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.psi.util.PsiTreeUtil;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 
 public class PsiJavaFileImpl extends PsiJavaFileBaseImpl
 {

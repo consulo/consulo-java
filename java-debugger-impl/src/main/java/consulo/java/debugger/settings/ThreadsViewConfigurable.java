@@ -16,17 +16,17 @@
 
 package consulo.java.debugger.settings;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.settings.ThreadsViewSettings;
 import com.intellij.openapi.options.Configurable;
 import consulo.options.SimpleConfigurableByProperties;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
-import consulo.ui.RequiredUIAccess;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.LabeledLayout;
 import consulo.ui.layout.VerticalLayout;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
