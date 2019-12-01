@@ -39,6 +39,7 @@ import consulo.java.JavaIcons;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.projectRoots.OwnJdkUtil;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.DocumentationOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
@@ -241,7 +242,7 @@ public class JavaSdkImpl extends JavaSdk
 
 	private static void collectJavaPathsAtWindows(List<String> list, String env)
 	{
-		String programFiles = System.getenv(env);
+		String programFiles = Platform.current().os().getEnvironmentVariable(env);
 		if(programFiles != null)
 		{
 			File temp = new File(programFiles, "Java");
