@@ -15,29 +15,10 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
-import com.intellij.debugger.engine.ContextUtil;
-import com.intellij.debugger.engine.DebugProcess;
-import com.intellij.debugger.engine.DebugProcessImpl;
-import com.intellij.debugger.engine.DebugProcessListener;
-import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
-import com.intellij.debugger.engine.SuspendContextImpl;
-import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
-import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.intellij.debugger.engine.evaluation.EvaluationContext;
-import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
+import com.intellij.debugger.engine.*;
+import com.intellij.debugger.engine.evaluation.*;
 import com.intellij.debugger.engine.evaluation.expression.Evaluator;
 import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
@@ -58,14 +39,20 @@ import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.WeakHashMap;
-import consulo.internal.com.sun.jdi.Location;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.StringReference;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.java.JavaRegistry;
+import consulo.util.collection.Maps;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * @author egor
@@ -338,7 +325,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint
 	{
 		private final String myExpression;
 		private ExpressionEvaluator myEvaluator;
-		private final WeakHashMap<Location, ExpressionEvaluator> myEvaluatorCache = new WeakHashMap<>();
+		private final Map<Location, ExpressionEvaluator> myEvaluatorCache = Maps.newWeakHashMap();
 
 		public MyEvaluator(String expression)
 		{
