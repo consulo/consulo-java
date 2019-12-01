@@ -32,26 +32,27 @@ import javax.annotation.Nullable;
  */
 public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 {
-	JDK_1_3("1.3", JavaCoreBundle.message("jdk.1.3.language.level.description"), "1.3"),
-	JDK_1_4("1.4", JavaCoreBundle.message("jdk.1.4.language.level.description"), "1.4"),
-	JDK_1_5("1.5", JavaCoreBundle.message("jdk.1.5.language.level.description"), "1.5", "5"),
-	JDK_1_6("1.6", JavaCoreBundle.message("jdk.1.6.language.level.description"), "1.6", "6"),
-	JDK_1_7("1.7", JavaCoreBundle.message("jdk.1.7.language.level.description"), "1.7", "7"),
-	JDK_1_8("1.8", JavaCoreBundle.message("jdk.1.8.language.level.description"), "1.8", "8", "8"),
-	JDK_1_9("1.9", JavaCoreBundle.message("jdk.1.9.language.level.description"), "9", "1.9", "9"),
-	JDK_10("10", JavaCoreBundle.message("jdk.10.language.level.description"), "1.10", "10"),
-	JDK_11("11", JavaCoreBundle.message("jdk.11.language.level.description"), "1.11", "11"),
-	JDK_12("12", JavaCoreBundle.message("jdk.12.language.level.description"), "1.12", "12"),
-	JDK_13("13", JavaCoreBundle.message("jdk.13.language.level.description"), "13"),
-	JDK_13_PREVIEW("13", JavaCoreBundle.message("jdk.13.preview.language.level.description"), "13"),
-	JDK_14("14", JavaCoreBundle.message("jdk.14.language.level.description"), "14"),
-	JDK_X("X", JavaCoreBundle.message("jdk.X.language.level.description"), "");
+	JDK_1_3("1.3", JavaCoreBundle.message("jdk.1.3.language.level.description"), 3, "1.3"),
+	JDK_1_4("1.4", JavaCoreBundle.message("jdk.1.4.language.level.description"), 4, "1.4"),
+	JDK_1_5("1.5", JavaCoreBundle.message("jdk.1.5.language.level.description"), 5, "1.5", "5"),
+	JDK_1_6("1.6", JavaCoreBundle.message("jdk.1.6.language.level.description"), 6, "1.6", "6"),
+	JDK_1_7("1.7", JavaCoreBundle.message("jdk.1.7.language.level.description"), 7, "1.7", "7"),
+	JDK_1_8("1.8", JavaCoreBundle.message("jdk.1.8.language.level.description"), 8, "1.8", "8"),
+	JDK_1_9("1.9", JavaCoreBundle.message("jdk.1.9.language.level.description"), 9, "9"),
+	JDK_10("10", JavaCoreBundle.message("jdk.10.language.level.description"), 10, "10"),
+	JDK_11("11", JavaCoreBundle.message("jdk.11.language.level.description"), 11, "1.11", "11"),
+	JDK_12("12", JavaCoreBundle.message("jdk.12.language.level.description"), 12, "12"),
+	JDK_13("13", JavaCoreBundle.message("jdk.13.language.level.description"), 13, "13"),
+	JDK_13_PREVIEW("13", JavaCoreBundle.message("jdk.13.preview.language.level.description"), 13, "13"),
+	JDK_14("14", JavaCoreBundle.message("jdk.14.language.level.description"), 14, "14"),
+	JDK_X("X", JavaCoreBundle.message("jdk.X.language.level.description"), 14, "");
 
 	public static final LanguageLevel HIGHEST = JDK_13;
 	public static final Key<LanguageLevel> KEY = Key.create("LANGUAGE_LEVEL");
 
 	private final String myShortText;
 	private final String myPresentableText;
+	private final int myMajor;
 	private final String[] myCompilerComplianceOptions;
 	private final boolean myPreview;
 
@@ -61,21 +62,28 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	 * @param compilerComplianceOptions versions supported by Javac '-source' parameter
 	 * @see <a href="http://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html">Javac Reference</a>
 	 */
-	LanguageLevel(String shortText, String presentableText, String... compilerComplianceOptions)
+	LanguageLevel(String shortText, String presentableText, int major, String... compilerComplianceOptions)
 	{
 		myShortText = shortText;
 		myPresentableText = presentableText;
+		myMajor = major;
 		myCompilerComplianceOptions = compilerComplianceOptions;
 		myLangVersion = new JavaLanguageVersion(name(), shortText, this);
 		myPreview = name().endsWith("_PREVIEW");
 	}
 
+	public int getMajor()
+	{
+		return myMajor;
+	}
+
 	/**
 	 * String representation of the level, suitable to pass as a value of compiler's "-source" and "-target" options
 	 */
+	@Nonnull
 	public String getCompilerComplianceDefaultOption()
 	{
-		return myCompilerComplianceOptions[0];
+		return myMajor <= 8 ? "1." + myMajor : String.valueOf(myMajor);
 	}
 
 	public boolean isPreview()

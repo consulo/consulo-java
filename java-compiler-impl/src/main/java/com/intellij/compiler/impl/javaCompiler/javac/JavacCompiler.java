@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.intellij.openapi.vfs.jrt.JrtFileSystem;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.OutputParser;
@@ -138,18 +139,12 @@ public class JavacCompiler extends ExternalCompiler
 
 			checkedJdks.add(javaSdk);
 			final SdkTypeId sdkType = javaSdk.getSdkType();
-			assert sdkType instanceof JavaSdkType;
+			assert sdkType instanceof JavaSdk;
 
 			final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
 			if(homeDirectory == null)
 			{
 				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()), JavaCompilerBundle.message("compiler" + ".javac" + ".name"), Messages.getErrorIcon());
-				return false;
-			}
-			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(javaSdk);
-			if(toolsJarPath == null)
-			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 			final String versionString = javaSdk.getVersionString();
@@ -165,6 +160,17 @@ public class JavacCompiler extends ExternalCompiler
 				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
 						.getErrorIcon());
 				return false;
+			}
+
+			if(!javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_9))
+			{
+				final String toolsJarPath = ((JavaSdk) sdkType).getToolsPath(javaSdk);
+				if(toolsJarPath == null)
+				{
+					Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
+							.getErrorIcon());
+					return false;
+				}
 			}
 
 			if(!javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_5))
@@ -210,17 +216,20 @@ public class JavacCompiler extends ExternalCompiler
 		final Sdk jdk = getJdkForStartupCommand(chunk);
 		final String versionString = jdk.getVersionString();
 		JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
-		if(versionString == null || version == null || !(jdk.getSdkType() instanceof JavaSdkType))
+		if(versionString == null || version == null || !(jdk.getSdkType() instanceof JavaSdk))
 		{
 			throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
 		}
 
-		JavaSdkType sdkType = (JavaSdkType) jdk.getSdkType();
+		JavaSdk sdkType = (JavaSdk) jdk.getSdkType();
 
-		final String toolsJarPath = sdkType.getToolsPath(jdk);
-		if(toolsJarPath == null)
+		if(!version.isAtLeast(JavaSdkVersion.JDK_1_9))
 		{
-			throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.tools.jar.missing", jdk.getName()));
+			final String toolsJarPath = sdkType.getToolsPath(jdk);
+			if(toolsJarPath == null)
+			{
+				throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.tools.jar.missing", jdk.getName()));
+			}
 		}
 
 		GeneralCommandLine commandLine = new GeneralCommandLine();
@@ -246,6 +255,12 @@ public class JavacCompiler extends ExternalCompiler
 		if(version == JavaSdkVersion.JDK_1_0)
 		{
 			parametersList.add(sdkType.getToolsPath(jdk)); //  do not use JavacRunner for jdk 1.0
+		}
+		else if(version.isAtLeast(JavaSdkVersion.JDK_1_9))
+		{
+			parametersList.add(JavaSdkUtil.getJavaRtJarPath());
+			parametersList.add(JavaRtClassNames.JAVAC_RUNNER);
+			parametersList.add("\"" + versionString + "\"");
 		}
 		else
 		{
@@ -515,8 +530,7 @@ public class JavacCompiler extends ExternalCompiler
 		Set<VirtualFile> newFiles = new LinkedHashSet<>(files.size());
 		for(VirtualFile file : files)
 		{
-			VirtualFile archive = ArchiveVfsUtil.getVirtualFileForArchive(file);
-			if(archive != null && archive.getFileType() == JModFileType.INSTANCE)
+			if(JrtFileSystem.isModuleRoot(file) || JModFileType.isModuleRoot(file))
 			{
 				continue;
 			}
@@ -544,7 +558,7 @@ public class JavacCompiler extends ExternalCompiler
 		// must include output path to classpath, otherwise javac will compile all dependent files no matter were they compiled before or not
 		if(version == JavaSdkVersion.JDK_1_0)
 		{
-			parametersList.add(((JavaSdkType) jdk.getSdkType()).getToolsPath(jdk) + File.pathSeparator + cpString);
+			parametersList.add(((JavaSdk) jdk.getSdkType()).getToolsPath(jdk) + File.pathSeparator + cpString);
 		}
 		else
 		{

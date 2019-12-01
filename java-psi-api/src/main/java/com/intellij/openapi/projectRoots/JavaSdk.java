@@ -15,36 +15,49 @@
  */
 package com.intellij.openapi.projectRoots;
 
+import com.intellij.execution.configurations.GeneralCommandLine;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class JavaSdk extends SdkType implements JavaSdkType {
-  public JavaSdk(@NonNls String name) {
-    super(name);
-  }
+public abstract class JavaSdk extends SdkType implements JavaSdkType
+{
+	public JavaSdk(@NonNls String name)
+	{
+		super(name);
+	}
 
-  public static JavaSdk getInstance() {
-    return EP_NAME.findExtension(JavaSdk.class);
-  }
+	public static JavaSdk getInstance()
+	{
+		return EP_NAME.findExtension(JavaSdk.class);
+	}
 
-  public final Sdk createJdk(@Nonnull String jdkName, @Nonnull String jreHome) {
-    return createJdk(jdkName, jreHome, true);
-  }
+	public final Sdk createJdk(@Nonnull String jdkName, @Nonnull String jreHome)
+	{
+		return createJdk(jdkName, jreHome, true);
+	}
 
-  /**
-   * @deprecated use {@link #isOfVersionOrHigher(Sdk, JavaSdkVersion)} instead
-   */
-  public abstract int compareTo(@Nonnull String versionString, @Nonnull String versionNumber);
+	/**
+	 * @deprecated use {@link #isOfVersionOrHigher(Sdk, JavaSdkVersion)} instead
+	 */
+	public abstract int compareTo(@Nonnull String versionString, @Nonnull String versionNumber);
 
-  public abstract Sdk createJdk(@NonNls String jdkName, @Nonnull String home, boolean isJre);
+	public abstract Sdk createJdk(@NonNls String jdkName, @Nonnull String home, boolean isJre);
 
-  @Nullable
-  public abstract JavaSdkVersion getVersion(@Nonnull Sdk sdk);
+	@Nullable
+	public abstract JavaSdkVersion getVersion(@Nonnull Sdk sdk);
 
-  @Nullable
-  public abstract JavaSdkVersion getVersion(@Nonnull String versionString);
+	@Nullable
+	public abstract JavaSdkVersion getVersion(@Nonnull String versionString);
 
-  public abstract boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version);
+	public abstract boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version);
+
+	@NonNls
+	public abstract String getBinPath(Sdk sdk);
+
+	@NonNls
+	public abstract String getToolsPath(Sdk sdk);
+
+	public abstract void setupCommandLine(@Nonnull GeneralCommandLine generalCommandLine, @Nonnull Sdk sdk);
 }

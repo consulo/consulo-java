@@ -223,7 +223,6 @@ public class JavaSdkImpl extends JavaSdk
 		}
 	}
 
-
 	private static void collectJavaPathsAtMac(List<String> list, String path)
 	{
 		File dir = new File(path);

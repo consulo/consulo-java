@@ -15,15 +15,6 @@
  */
 package consulo.java.compiler;
 
-import java.util.Collections;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.execution.configurations.ParametersList;
@@ -32,12 +23,21 @@ import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
+import com.intellij.util.lang.JavaVersion;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author VISTALL
@@ -159,51 +159,22 @@ public class JavaCompilerUtil
 		}
 	}
 
-
-	//todo[nik] rewrite using JavaSdkVersion#getMaxLanguageLevel
 	@Nonnull
 	public static LanguageLevel getApplicableLanguageLevel(String versionString, @Nonnull LanguageLevel languageLevel)
 	{
-		final boolean is9OrNewer = isOfVersion(versionString, "1.9") || isOfVersion(versionString, "9.0");
-		final boolean is8OrNewer = isOfVersion(versionString, "1.8") || isOfVersion(versionString, "8.0");
-		final boolean is7OrNewer = is8OrNewer || isOfVersion(versionString, "1.7") || isOfVersion(versionString, "7.0");
-		final boolean is6OrNewer = is7OrNewer || isOfVersion(versionString, "1.6") || isOfVersion(versionString, "6.0");
-		final boolean is5OrNewer = is6OrNewer || isOfVersion(versionString, "1.5") || isOfVersion(versionString, "5.0");
-		final boolean is4OrNewer = is5OrNewer || isOfVersion(versionString, "1.4");
-		final boolean is3OrNewer = is4OrNewer || isOfVersion(versionString, "1.3");
-		final boolean is2OrNewer = is3OrNewer || isOfVersion(versionString, "1.2");
-		final boolean is1OrNewer = is2OrNewer || isOfVersion(versionString, "1.0") || isOfVersion(versionString, "1.1");
-
-		if(!is1OrNewer)
+		JavaSdkVersion runtimeVersion = JavaSdkVersion.fromVersionString(versionString);
+		if(runtimeVersion == null)
 		{
-			// unknown jdk version, cannot say anything about the corresponding language level, so leave it unchanged
 			return languageLevel;
 		}
-		// now correct the language level to be not higher than jdk used to compile
-		if(LanguageLevel.JDK_1_9.equals(languageLevel) && !is9OrNewer)
+
+		LanguageLevel runtimeMaxLevel = runtimeVersion.getMaxLanguageLevel();
+
+		if(runtimeMaxLevel.getMajor() < languageLevel.getMajor())
 		{
-			languageLevel = LanguageLevel.JDK_1_8;
+			return LanguageLevel.parse(String.valueOf(runtimeMaxLevel.getMajor() - 1));
 		}
-		if(LanguageLevel.JDK_1_8.equals(languageLevel) && !is8OrNewer)
-		{
-			languageLevel = LanguageLevel.JDK_1_7;
-		}
-		if(LanguageLevel.JDK_1_7.equals(languageLevel) && !is7OrNewer)
-		{
-			languageLevel = LanguageLevel.JDK_1_6;
-		}
-		if(LanguageLevel.JDK_1_6.equals(languageLevel) && !is6OrNewer)
-		{
-			languageLevel = LanguageLevel.JDK_1_5;
-		}
-		if(LanguageLevel.JDK_1_5.equals(languageLevel) && !is5OrNewer)
-		{
-			languageLevel = LanguageLevel.JDK_1_4;
-		}
-		if(LanguageLevel.JDK_1_4.equals(languageLevel) && !is4OrNewer)
-		{
-			languageLevel = LanguageLevel.JDK_1_3;
-		}
+
 		return languageLevel;
 	}
 
