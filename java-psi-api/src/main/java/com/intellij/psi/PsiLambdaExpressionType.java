@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,8 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.psi.search.GlobalSearchScope;
+import javax.annotation.Nonnull;
 
 /**
  * A type which represents a function denoted by a lambda expression.
@@ -27,9 +25,9 @@ public class PsiLambdaExpressionType extends PsiType
 {
 	private final PsiLambdaExpression myExpression;
 
-	public PsiLambdaExpressionType(PsiLambdaExpression expression)
+	public PsiLambdaExpressionType(@Nonnull PsiLambdaExpression expression)
 	{
-		super(PsiAnnotation.EMPTY_ARRAY);
+		super(TypeAnnotationProvider.EMPTY);
 		myExpression = expression;
 	}
 
@@ -37,21 +35,14 @@ public class PsiLambdaExpressionType extends PsiType
 	@Override
 	public String getPresentableText()
 	{
-		return "<lambda expression>";
+		return getCanonicalText();
 	}
 
 	@Nonnull
 	@Override
 	public String getCanonicalText()
 	{
-		return getPresentableText();
-	}
-
-	@Nonnull
-	@Override
-	public String getInternalCanonicalText()
-	{
-		return getCanonicalText();
+		return "<lambda expression>";
 	}
 
 	@Override
@@ -61,13 +52,13 @@ public class PsiLambdaExpressionType extends PsiType
 	}
 
 	@Override
-	public boolean equalsToText(@Nonnull @NonNls final String text)
+	public boolean equalsToText(@Nonnull String text)
 	{
 		return false;
 	}
 
 	@Override
-	public <A> A accept(@Nonnull final PsiTypeVisitor<A> visitor)
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
 	{
 		return visitor.visitLambdaExpressionType(this);
 	}
@@ -88,5 +79,17 @@ public class PsiLambdaExpressionType extends PsiType
 	public PsiLambdaExpression getExpression()
 	{
 		return myExpression;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj == this || obj instanceof PsiLambdaExpressionType && myExpression.equals(((PsiLambdaExpressionType) obj).myExpression);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return myExpression.hashCode();
 	}
 }

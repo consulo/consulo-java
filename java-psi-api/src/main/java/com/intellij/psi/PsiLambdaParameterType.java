@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,64 +15,81 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
 
 /**
  * A type which represents an omitted type for parameter of lambda expression.
  */
-public class PsiLambdaParameterType extends PsiType {
-  private final PsiParameter myParameter;
+public class PsiLambdaParameterType extends PsiType
+{
+	private final PsiParameter myParameter;
 
-  public PsiLambdaParameterType(PsiParameter parameter) {
-    super(PsiAnnotation.EMPTY_ARRAY);
-    myParameter = parameter;
-  }
+	public PsiLambdaParameterType(@Nonnull PsiParameter parameter)
+	{
+		super(TypeAnnotationProvider.EMPTY);
+		myParameter = parameter;
+	}
 
-  @Override
-  public String getPresentableText() {
-    return "<lambda parameter>";
-  }
+	@Nonnull
+	@Override
+	public String getPresentableText()
+	{
+		return getCanonicalText();
+	}
 
-  @Override
-  public String getCanonicalText() {
-    return getPresentableText();
-  }
+	@Nonnull
+	@Override
+	public String getCanonicalText()
+	{
+		return "<lambda parameter>";
+	}
 
-  @Override
-  public String getInternalCanonicalText() {
-    return getCanonicalText();
-  }
+	@Override
+	public boolean isValid()
+	{
+		return myParameter.isValid();
+	}
 
-  @Override
-  public boolean isValid() {
-    return myParameter.isValid();
-  }
+	@Override
+	public boolean equalsToText(@Nonnull String text)
+	{
+		return false;
+	}
 
-  @Override
-  public boolean equalsToText(@NonNls final String text) {
-    return false;
-  }
+	@Override
+	public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor)
+	{
+		return visitor.visitType(this);
+	}
 
-  @Override
-  public <A> A accept(@Nonnull final PsiTypeVisitor<A> visitor) {
-    return visitor.visitType(this);
-  }
+	@Override
+	public GlobalSearchScope getResolveScope()
+	{
+		return null;
+	}
 
-  @Override
-  public GlobalSearchScope getResolveScope() {
-    return null;
-  }
+	@Nonnull
+	@Override
+	public PsiType[] getSuperTypes()
+	{
+		return PsiType.EMPTY_ARRAY;
+	}
 
-  @Nonnull
-  @Override
-  public PsiType[] getSuperTypes() {
-    return PsiType.EMPTY_ARRAY;
-  }
+	public PsiParameter getParameter()
+	{
+		return myParameter;
+	}
 
-  public PsiParameter getParameter() {
-    return myParameter;
-  }
+	@Override
+	public boolean equals(Object o)
+	{
+		return this == o || o instanceof PsiLambdaParameterType && myParameter.equals(((PsiLambdaParameterType) o).myParameter);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return myParameter.hashCode();
+	}
 }
