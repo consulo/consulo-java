@@ -1,23 +1,5 @@
 package consulo.java.manifest.editor;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.EventObject;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import org.osmorc.manifest.lang.psi.Clause;
-import org.osmorc.manifest.lang.psi.Header;
-import org.osmorc.manifest.lang.psi.HeaderValuePart;
-import org.osmorc.manifest.lang.psi.ManifestFile;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.openapi.application.ApplicationManager;
@@ -25,24 +7,14 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorLocation;
-import com.intellij.openapi.fileEditor.FileEditorState;
-import com.intellij.openapi.fileEditor.FileEditorStateLevel;
+import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.JBSplitter;
-import com.intellij.ui.TextFieldWithAutoCompletion;
-import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.*;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.AbstractTableCellEditor;
@@ -53,7 +25,21 @@ import consulo.java.manifest.editor.models.ClauseTableModel;
 import consulo.java.manifest.editor.models.FileTableModel;
 import consulo.java.manifest.editor.models.HeaderTableModel;
 import consulo.java.manifest.lang.headerparser.HeaderUtil;
+import consulo.util.dataholder.UserDataHolderBase;
 import kava.beans.PropertyChangeListener;
+import org.osmorc.manifest.lang.headerparser.HeaderParser;
+import org.osmorc.manifest.lang.psi.Clause;
+import org.osmorc.manifest.lang.psi.Header;
+import org.osmorc.manifest.lang.psi.HeaderValuePart;
+import org.osmorc.manifest.lang.psi.ManifestFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.util.EventObject;
 
 /**
  * @author VISTALL

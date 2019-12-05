@@ -77,6 +77,7 @@ import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.EventSet;
 import consulo.java.module.util.JavaClassNames;
+import consulo.util.dataholder.Key;
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;

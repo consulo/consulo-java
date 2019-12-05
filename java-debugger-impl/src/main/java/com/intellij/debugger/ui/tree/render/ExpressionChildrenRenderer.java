@@ -37,7 +37,7 @@ import com.intellij.debugger.ui.tree.NodeManager;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiExpression;

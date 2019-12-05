@@ -23,7 +23,7 @@ import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.InconsistentDebugInfoException;

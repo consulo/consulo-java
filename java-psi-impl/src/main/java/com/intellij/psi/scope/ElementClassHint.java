@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.scope;
 
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 
 public interface ElementClassHint {
   Key<ElementClassHint> KEY = Key.create("ElementClassHint");

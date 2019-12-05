@@ -2,7 +2,7 @@
 package com.intellij.codeInsight;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiModifierListOwner;
 import javax.annotation.Nonnull;

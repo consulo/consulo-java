@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.completion.scope;
 
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 
 /**
  * @author yole

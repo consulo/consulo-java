@@ -18,7 +18,7 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.UnixProcessManager;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.ThrowableRunnable;
 import consulo.execution.process.OSProcessUtil;

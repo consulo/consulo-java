@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.tree;
 
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
 

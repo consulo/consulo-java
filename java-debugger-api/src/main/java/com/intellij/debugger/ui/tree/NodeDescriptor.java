@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.tree;
 
-import com.intellij.openapi.util.UserDataHolder;
+import consulo.util.dataholder.UserDataHolder;
 
 public interface NodeDescriptor extends UserDataHolder
 {

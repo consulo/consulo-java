@@ -16,7 +16,7 @@
 package com.intellij.lang.java.parser;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaDocTokenType;
 import com.intellij.psi.TokenType;

@@ -17,7 +17,7 @@ package com.intellij.jam.reflect;
 
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.jam.JamElement;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;

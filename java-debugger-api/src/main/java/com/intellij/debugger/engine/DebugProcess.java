@@ -15,10 +15,6 @@
  */
 package com.intellij.debugger.engine;
 
-import java.util.List;
-
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 import com.intellij.debugger.PositionManager;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
@@ -28,16 +24,13 @@ import com.intellij.debugger.requests.RequestManager;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.psi.search.GlobalSearchScope;
-import consulo.internal.com.sun.jdi.ArrayReference;
-import consulo.internal.com.sun.jdi.ArrayType;
-import consulo.internal.com.sun.jdi.ClassLoaderReference;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.*;
+import consulo.util.dataholder.UserDataHolder;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author lex

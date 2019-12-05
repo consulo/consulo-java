@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.debugger.memory.utils.StackFrameItem;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 

@@ -30,7 +30,7 @@ import com.intellij.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.lang.RefManagerExtension;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;

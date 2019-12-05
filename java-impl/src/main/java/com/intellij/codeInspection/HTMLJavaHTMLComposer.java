@@ -25,7 +25,7 @@ import com.intellij.codeInspection.reference.RefClass;
 import com.intellij.codeInspection.reference.RefMethod;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 
 public abstract class HTMLJavaHTMLComposer implements HTMLComposerExtension<HTMLJavaHTMLComposer> {
   public static final Key<HTMLJavaHTMLComposer> COMPOSER = Key.create("HTMLJavaComposer");

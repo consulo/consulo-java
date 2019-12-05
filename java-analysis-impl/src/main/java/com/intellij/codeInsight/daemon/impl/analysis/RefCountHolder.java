@@ -15,20 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import gnu.trove.THashMap;
-
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator;
 import com.intellij.codeInsight.daemon.impl.FileStatusMap;
 import com.intellij.codeInsight.daemon.impl.GlobalUsageHelper;
@@ -37,10 +23,8 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.UserDataHolderEx;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -51,6 +35,17 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.Predicate;
+import consulo.util.dataholder.Key;
+import consulo.util.dataholder.UserDataHolderEx;
+import gnu.trove.THashMap;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 class RefCountHolder
 {
@@ -107,7 +102,7 @@ class RefCountHolder
 					break;
 				}
 				ref = file.getUserData(REF_COUNT_HOLDER_IN_FILE_KEY);
-				RefCountHolder newHolder = com.intellij.reference.SoftReference.dereference(ref);
+				RefCountHolder newHolder = consulo.util.lang.ref.SoftReference.dereference(ref);
 				if(newHolder != null)
 				{
 					holder = newHolder;
@@ -125,7 +120,7 @@ class RefCountHolder
 	}
 
 	@Nonnull
-	GlobalUsageHelper getGlobalUsageHelper(@Nonnull PsiFile file, @javax.annotation.Nullable final UnusedDeclarationInspectionBase deadCodeInspection, boolean isUnusedToolEnabled)
+	GlobalUsageHelper getGlobalUsageHelper(@Nonnull PsiFile file, @Nullable final UnusedDeclarationInspectionBase deadCodeInspection, boolean isUnusedToolEnabled)
 	{
 		final FileViewProvider viewProvider = file.getViewProvider();
 		Project project = file.getProject();
@@ -138,7 +133,7 @@ class RefCountHolder
 		@Nonnull final Predicate<PsiElement> myIsEntryPointPredicate = new Predicate<PsiElement>()
 		{
 			@Override
-			public boolean apply(@javax.annotation.Nullable PsiElement member)
+			public boolean apply(@Nullable PsiElement member)
 			{
 				return !myDeadCodeEnabled || deadCodeInspection.isEntryPoint(member);
 			}

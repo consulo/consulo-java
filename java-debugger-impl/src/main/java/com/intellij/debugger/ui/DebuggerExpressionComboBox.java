@@ -16,7 +16,7 @@
 package com.intellij.debugger.ui;
 
 import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 
 @Deprecated
 public class DebuggerExpressionComboBox {

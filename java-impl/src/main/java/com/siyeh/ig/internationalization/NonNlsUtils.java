@@ -16,7 +16,7 @@
 package com.siyeh.ig.internationalization;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import javax.annotation.Nullable;

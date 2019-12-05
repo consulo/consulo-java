@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiCallExpression;
 import com.intellij.psi.PsiClass;

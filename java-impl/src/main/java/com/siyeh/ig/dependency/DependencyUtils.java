@@ -16,7 +16,7 @@
 package com.siyeh.ig.dependency;
 
 import com.intellij.codeInspection.reference.*;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 
 import java.util.*;
 

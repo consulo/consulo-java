@@ -22,7 +22,7 @@ import com.intellij.lang.folding.CompositeFoldingBuilder;
 import com.intellij.lang.folding.FoldingBuilder;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.FoldRegion;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import javax.annotation.Nullable;
 

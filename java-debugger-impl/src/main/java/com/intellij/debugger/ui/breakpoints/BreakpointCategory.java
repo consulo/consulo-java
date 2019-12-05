@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import javax.annotation.Nonnull;
 
 import java.util.HashMap;

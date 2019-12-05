@@ -19,8 +19,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.KeyWithDefaultValue;
+import consulo.util.dataholder.Key;
+import consulo.util.dataholder.KeyWithDefaultValue;
 
 /**
  * Represents a mapping between type parameters and their values.

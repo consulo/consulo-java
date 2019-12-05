@@ -40,7 +40,7 @@ import com.intellij.debugger.ui.breakpoints.FilteredRequestor;
 import com.intellij.diagnostic.ThreadDumper;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.ui.classFilter.ClassFilter;

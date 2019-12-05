@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.debugger.ui.impl.watch.StaticDescriptorImpl;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
 public final class StaticData extends DescriptorData<StaticDescriptorImpl>{

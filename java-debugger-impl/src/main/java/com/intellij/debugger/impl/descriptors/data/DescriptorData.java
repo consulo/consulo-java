@@ -17,7 +17,7 @@ package com.intellij.debugger.impl.descriptors.data;
 
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 
 public abstract class DescriptorData <T extends NodeDescriptor> implements DescriptorKey<T>{
   private static final Key DESCRIPTOR_DATA = new Key("DESCRIPTOR_DATA");

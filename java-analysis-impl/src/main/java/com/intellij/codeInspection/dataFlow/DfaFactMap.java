@@ -17,11 +17,11 @@ package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.util.keyFMap.KeyFMap;
+import consulo.util.dataholder.keyFMap.KeyFMap;
 import one.util.streamex.StreamEx;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 /**

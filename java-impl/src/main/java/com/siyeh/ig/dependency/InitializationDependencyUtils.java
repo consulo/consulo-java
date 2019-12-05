@@ -19,7 +19,7 @@ import com.intellij.codeInspection.reference.RefClass;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.reference.RefEntity;
 import com.intellij.codeInspection.reference.RefJavaUtil;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 
 import java.util.*;
 

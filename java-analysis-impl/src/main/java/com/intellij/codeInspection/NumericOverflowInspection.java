@@ -18,7 +18,7 @@ package com.intellij.codeInspection;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.psi.util.TypeConversionUtil;

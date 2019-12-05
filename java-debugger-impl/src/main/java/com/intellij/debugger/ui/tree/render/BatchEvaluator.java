@@ -30,7 +30,7 @@ import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.Key;
+import consulo.util.dataholder.Key;
 import com.intellij.util.containers.HashMap;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.rt.JavaRtClassNames;
