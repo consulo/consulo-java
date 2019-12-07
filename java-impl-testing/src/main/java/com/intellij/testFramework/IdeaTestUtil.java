@@ -15,13 +15,7 @@
  */
 package com.intellij.testFramework;
 
-import java.io.File;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -34,9 +28,14 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.container.boot.ContainerPathManager;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.extension.JavaMutableModuleExtension;
 import consulo.vfs.util.ArchiveVfsUtil;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nonnull;
+import java.io.File;
 
 public class IdeaTestUtil extends PlatformTestUtil {
   public static void main(String[] args) {
@@ -86,8 +85,8 @@ public class IdeaTestUtil extends PlatformTestUtil {
   }
 
   private static File getPathForJdkNamed(String name) {
-    File mockJdkCEPath = new File(PathManager.getHomePath(), "java/" + name);
-    return mockJdkCEPath.exists() ? mockJdkCEPath : new File(PathManager.getHomePath(), "community/java/" + name);
+    File mockJdkCEPath = new File(ContainerPathManager.get().getHomePath(), "java/" + name);
+    return mockJdkCEPath.exists() ? mockJdkCEPath : new File(ContainerPathManager.get().getHomePath(), "community/java/" + name);
   }
 
   public static Sdk getWebMockJdk17() {
@@ -104,7 +103,7 @@ public class IdeaTestUtil extends PlatformTestUtil {
   }
 
   private static VirtualFile findJar(String name) {
-    String path = PathManager.getHomePath() + '/' + name;
+    String path = ContainerPathManager.get().getHomePath() + '/' + name;
     VirtualFile file = LocalFileSystem.getInstance().findFileByPath(path);
     assert file != null : "not found: " + path;
     VirtualFile jar = ArchiveVfsUtil.getJarRootForLocalFile(file);

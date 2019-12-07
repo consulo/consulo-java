@@ -15,10 +15,6 @@
  */
 package com.intellij.testFramework.fixtures;
 
-import java.io.File;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -26,6 +22,10 @@ import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
+import consulo.container.boot.ContainerPathManager;
+import org.jetbrains.annotations.NonNls;
+
+import java.io.File;
 
 /**
  * @author peter
@@ -59,7 +59,7 @@ public abstract class JavaCodeInsightFixtureTestCase extends UsefulTestCase {
 
   /**
    * Return relative path to the test data. Path is relative to the
-   * {@link com.intellij.openapi.application.PathManager#getHomePath()}
+   * {@link ContainerPathManager#getHomePath()}
    *
    * @return relative path to the test data.
    */
@@ -75,7 +75,7 @@ public abstract class JavaCodeInsightFixtureTestCase extends UsefulTestCase {
    */
   @NonNls
   protected String getTestDataPath() {
-    return PathManager.getHomePath().replace(File.separatorChar, '/') + getBasePath();
+    return ContainerPathManager.get().getHomePath().replace(File.separatorChar, '/') + getBasePath();
   }
 
   protected void tuneFixture(final JavaModuleFixtureBuilder moduleBuilder) throws Exception {}

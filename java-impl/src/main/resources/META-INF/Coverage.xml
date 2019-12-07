@@ -4,7 +4,6 @@
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
-		<!--<coverageRunner implementation="com.intellij.coverage.CoberturaCoverageRunner"/>-->
 		<coverageRunner implementation="com.intellij.coverage.IDEACoverageRunner"/>
 		<coverageRunner implementation="com.intellij.coverage.JaCoCoCoverageRunner"/>
 		<coverageEngine implementation="com.intellij.coverage.JavaCoverageEngine" order="last"/>

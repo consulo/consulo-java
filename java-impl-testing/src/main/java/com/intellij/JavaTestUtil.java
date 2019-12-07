@@ -15,16 +15,17 @@
  */
 package com.intellij;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.util.text.StringUtil;
+import consulo.container.boot.ContainerPathManager;
 import consulo.java.module.extension.JavaModuleExtension;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author yole
@@ -38,7 +39,7 @@ public class JavaTestUtil {
 
   public static String getRelativeJavaTestDataPath() {
     final String absolute = getJavaTestDataPath();
-    return StringUtil.trimStart(absolute, PathManager.getHomePath());
+    return StringUtil.trimStart(absolute, ContainerPathManager.get().getHomePath());
   }
 
   public static void setupTestJDK() {

@@ -9,6 +9,7 @@ import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
+import consulo.container.boot.ContainerPathManager;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
@@ -51,7 +52,7 @@ public abstract class JavaCoverageRunner extends CoverageRunner
 		}
 		if(!SystemInfo.isWindows && agentPath.contains(" "))
 		{
-			File dir = new File(PathManager.getSystemPath(), "coverageJars");
+			File dir = new File(ContainerPathManager.get().getSystemPath(), "coverageJars");
 			if(dir.getAbsolutePath().contains(" "))
 			{
 				try
@@ -96,7 +97,7 @@ public abstract class JavaCoverageRunner extends CoverageRunner
 		File tempFile = FileUtil.createTempFile("coverage", "args");
 		if(!SystemInfo.isWindows && tempFile.getAbsolutePath().contains(" "))
 		{
-			tempFile = FileUtil.createTempFile(new File(PathManager.getSystemPath(), "coverage"), "coverage", "args", true);
+			tempFile = FileUtil.createTempFile(new File(ContainerPathManager.get().getSystemPath(), "coverage"), "coverage", "args", true);
 			if(tempFile.getAbsolutePath().contains(" "))
 			{
 				final String userDefined = System.getProperty(COVERAGE_AGENT_PATH);
