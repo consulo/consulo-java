@@ -16,7 +16,7 @@
 package com.intellij.ide.util.projectWizard.importSources;
 
 import javax.annotation.Nullable;
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;

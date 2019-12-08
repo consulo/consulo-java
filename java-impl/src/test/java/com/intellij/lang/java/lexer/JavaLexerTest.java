@@ -15,7 +15,6 @@
  */
 package com.intellij.lang.java.lexer;
 
-import com.intellij.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.LexerTestCase;

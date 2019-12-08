@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.pom.java.LanguageLevel;

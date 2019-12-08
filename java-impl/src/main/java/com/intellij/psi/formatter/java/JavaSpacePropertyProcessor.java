@@ -20,7 +20,7 @@ import com.intellij.formatting.blocks.CStyleCommentBlock;
 import com.intellij.formatting.blocks.TextLineBlock;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;

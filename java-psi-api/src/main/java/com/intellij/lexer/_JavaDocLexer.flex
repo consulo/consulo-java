@@ -23,18 +23,16 @@ import com.intellij.psi.*;
 
   public void goTo(int offset) {
     zzCurrentPos = zzMarkedPos = zzStartRead = offset;
-    zzPushbackPos = 0;
-    zzAtEOF = offset < zzEndRead;
+    zzAtEOF = false;
   }
 %}
 
+%public
 %class _JavaDocLexer
 %implements FlexLexer
 %unicode
 %function advance
 %type IElementType
-%eof{ return;
-%eof}
 
 %state COMMENT_DATA_START
 %state COMMENT_DATA

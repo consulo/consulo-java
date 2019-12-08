@@ -17,7 +17,7 @@ package com.intellij.psi.impl.java.stubs.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl;

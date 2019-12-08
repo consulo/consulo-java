@@ -18,7 +18,7 @@ import com.intellij.lang.WhitespacesAndCommentsBinder;
 import com.intellij.lang.impl.PsiBuilderAdapter;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.lang.java.lexer.JavaDocLexer;
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;

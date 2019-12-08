@@ -18,7 +18,7 @@ package com.intellij.psi.impl.compiled;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.util.text.StringUtil;

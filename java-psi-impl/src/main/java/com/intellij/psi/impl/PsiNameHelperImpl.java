@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiNameHelper;

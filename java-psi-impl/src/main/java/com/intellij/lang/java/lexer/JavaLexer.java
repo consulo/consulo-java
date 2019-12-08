@@ -1,14 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-package com.intellij.lexer;
+package com.intellij.lang.java.lexer;
 
-import static com.intellij.psi.PsiKeyword.*;
-
-import java.io.IOException;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.lexer.LexerBase;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
@@ -17,6 +10,13 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Set;
+
+import static com.intellij.psi.PsiKeyword.*;
 
 public class JavaLexer extends LexerBase
 {

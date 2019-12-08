@@ -21,7 +21,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.lang.java.parser.JavadocParser;
-import com.intellij.lexer.JavaLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;

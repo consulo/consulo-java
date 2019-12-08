@@ -16,6 +16,7 @@
 package com.intellij.lexer;
 
 import com.intellij.lang.java.lexer.JavaDocLexer;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaDocTokenType;
 import com.intellij.psi.JavaTokenType;
