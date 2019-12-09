@@ -70,6 +70,7 @@ import consulo.java.rt.JavaRtClassNames;
 import consulo.roots.ContentFolderScopes;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.roots.impl.TestContentFolderTypeProvider;
+import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -535,14 +536,23 @@ public class JavacCompiler extends ExternalCompiler
 
 				String joinedModuleNames = String.join(",", moduleNames);
 
-				commandLine.add("--add-modules");
-				commandLine.add(joinedModuleNames);
 
-				commandLine.add("--add-reads");
-				commandLine.add(moduleName + "=" + joinedModuleNames);
+				if(!moduleNames.isEmpty())
+				{
+					commandLine.add("--add-modules");
+					commandLine.add(joinedModuleNames + "," + moduleName);
 
-				commandLine.add("--add-opens");
-				commandLine.add(moduleName + "=" + joinedModuleNames);
+					commandLine.add("--add-reads");
+					commandLine.add(moduleName + "=" + joinedModuleNames);
+
+					commandLine.add("--add-opens");
+					commandLine.add(moduleName + "=" + joinedModuleNames);
+				}
+				else
+				{
+					commandLine.add("--add-modules");
+					commandLine.add(joinedModuleNames + "," + moduleName);
+				}
 			}
 		}
 
