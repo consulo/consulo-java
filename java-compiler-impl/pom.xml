@@ -51,6 +51,12 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.indexing.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-java.rt.common</artifactId>
 			<version>${project.version}</version>
 		</dependency>

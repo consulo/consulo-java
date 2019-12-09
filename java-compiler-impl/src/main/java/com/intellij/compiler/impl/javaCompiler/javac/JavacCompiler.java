@@ -15,27 +15,7 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.openapi.vfs.jrt.JrtFileSystem;
-import org.jetbrains.annotations.NonNls;
+import com.google.common.base.Strings;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompilerUtil;
@@ -54,29 +34,48 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkType;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.OwnJdkVersionDetector;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.projectRoots.impl.MockSdkWrapper;
+import com.intellij.openapi.roots.DependencyScope;
+import com.intellij.openapi.roots.ExportableOrderEntry;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.OrderEnumerator;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.jrt.JrtFileSystem;
 import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaModule;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex;
+import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.util.PathsList;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.AccessRule;
+import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.compiler.roots.CompilerPathsImpl;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.roots.ContentFolderScopes;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.vfs.util.ArchiveVfsUtil;
+import consulo.roots.impl.TestContentFolderTypeProvider;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.*;
+import java.util.*;
 
 public class JavacCompiler extends ExternalCompiler
 {
@@ -128,7 +127,8 @@ public class JavacCompiler extends ExternalCompiler
 			final Sdk javaSdk = JavaCompilerUtil.getSdkForCompilation(module);
 			if(javaSdk == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()), JavaCompilerBundle.message("compiler.javac.name"),
+						Messages.getErrorIcon());
 				return false;
 			}
 
@@ -144,13 +144,16 @@ public class JavacCompiler extends ExternalCompiler
 			final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
 			if(homeDirectory == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()), JavaCompilerBundle.message("compiler" + ".javac" + ".name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()), JavaCompilerBundle.message("compiler" +
+						"" +
+						".javac" + ".name"), Messages.getErrorIcon());
 				return false;
 			}
 			final String versionString = javaSdk.getVersionString();
 			if(versionString == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
+						.getErrorIcon());
 				return false;
 			}
 
@@ -206,12 +209,17 @@ public class JavacCompiler extends ExternalCompiler
 	@Nonnull
 	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
 	{
-		return ReadAction.compute(() -> createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject).isAnnotationProcessorsEnabled()));
+		return ReadAction.compute(() -> createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
+				.isAnnotationProcessorsEnabled()));
 	}
 
 	@Nonnull
 	@RequiredReadAction
-	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final String outputPath, final CompileContext compileContext, JpsJavaCompilerOptions javacOptions, final boolean annotationProcessorsEnabled) throws IOException
+	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
+													final String outputPath,
+													final CompileContext compileContext,
+													JpsJavaCompilerOptions javacOptions,
+													final boolean annotationProcessorsEnabled) throws IOException
 	{
 		final Sdk jdk = getJdkForStartupCommand(chunk);
 		final String versionString = jdk.getVersionString();
@@ -320,7 +328,12 @@ public class JavacCompiler extends ExternalCompiler
 		return commandLine;
 	}
 
-	public static List<String> addAdditionalSettings(ParametersList parametersList, JpsJavaCompilerOptions javacOptions, boolean isAnnotationProcessing, JavaSdkVersion version, ModuleChunk chunk, boolean annotationProcessorsEnabled)
+	public static List<String> addAdditionalSettings(ParametersList parametersList,
+													 JpsJavaCompilerOptions javacOptions,
+													 boolean isAnnotationProcessing,
+													 JavaSdkVersion version,
+													 ModuleChunk chunk,
+													 boolean annotationProcessorsEnabled)
 	{
 		final List<String> additionalOptions = new ArrayList<>();
 		StringTokenizer tokenizer = new StringTokenizer(new JavacSettingsBuilder(javacOptions).getOptionsString(chunk), " ");
@@ -409,11 +422,21 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@RequiredReadAction
-	public static void addCommandLineOptions(CompileContext compileContext, ModuleChunk chunk, @NonNls ParametersList commandLine, String outputPath, Sdk jdk, JavaSdkVersion version, List<File> tempFiles, boolean addSourcePath, boolean useTempFile, boolean isAnnotationProcessingMode) throws IOException
+	public static void addCommandLineOptions(CompileContext compileContext,
+											 ModuleChunk chunk,
+											 @NonNls ParametersList commandLine,
+											 String outputPath,
+											 Sdk jdk,
+											 JavaSdkVersion version,
+											 List<File> tempFiles,
+											 boolean addSourcePath,
+											 boolean useTempFile,
+											 boolean isAnnotationProcessingMode) throws IOException
 	{
 		LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
 		boolean isJava9Version = isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9);
 
+		Module module = chunk.getModule();
 		if(!isJava9Version)
 		{
 			JavaCompilerUtil.addSourceCommandLineSwitch(jdk, languageLevel, commandLine);
@@ -421,7 +444,7 @@ public class JavacCompiler extends ExternalCompiler
 		}
 		else
 		{
-			JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(chunk.getModule(), JavaModuleExtension.class);
+			JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
 			if(extension != null)
 			{
 				String bytecodeVersion = extension.getBytecodeVersion();
@@ -473,6 +496,56 @@ public class JavacCompiler extends ExternalCompiler
 			addClassPathValue(jdk, version, commandLine, classPath, "javac_cp", tempFiles, useTempFile);
 		}
 
+		if(isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9) && chunk.getSourcesFilter() == ModuleChunk.TEST_SOURCES)
+		{
+			String moduleName = findModuleName(module);
+			if(moduleName != null)
+			{
+				String url = ModuleCompilerPathsManager.getInstance(module).getCompilerOutputUrl(TestContentFolderTypeProvider.getInstance());
+
+				List<VirtualFile> testLibs = OrderEnumerator.orderEntries(module).satisfying(orderEntry -> {
+					if(orderEntry instanceof ExportableOrderEntry)
+					{
+						DependencyScope scope = ((ExportableOrderEntry) orderEntry).getScope();
+						return scope == DependencyScope.TEST;
+					}
+					return false;
+				}).compileOnly().getPathsList().getRootDirs();
+
+				Set<String> moduleNames = new HashSet<>();
+
+				for(VirtualFile testLib : testLibs)
+				{
+					VirtualFile virtualFile = JavaModuleNameIndex.descriptorFile(testLib);
+
+					String psiJavaModule = virtualFile == null ? null : findModuleName(module.getProject(), virtualFile);
+
+					if(psiJavaModule == null)
+					{
+						psiJavaModule = LightJavaModule.moduleName(testLib);
+					}
+
+					moduleNames.add(psiJavaModule);
+				}
+				if(url != null)
+				{
+					commandLine.add("--patch-module");
+					commandLine.add(moduleName + "=" + VfsUtil.urlToPath(url));
+				}
+
+				String joinedModuleNames = String.join(",", moduleNames);
+
+				commandLine.add("--add-modules");
+				commandLine.add(joinedModuleNames);
+
+				commandLine.add("--add-reads");
+				commandLine.add(moduleName + "=" + joinedModuleNames);
+
+				commandLine.add("--add-opens");
+				commandLine.add(moduleName + "=" + joinedModuleNames);
+			}
+		}
+
 		if(isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9))
 		{
 			//commandLine.add("--module-source-path");
@@ -519,6 +592,44 @@ public class JavacCompiler extends ExternalCompiler
 		}
 	}
 
+	@Nullable
+	public static String findModuleName(@Nonnull Module module)
+	{
+		VirtualFile[] folders = AccessRule.read(() -> ModuleRootManager.getInstance(module).getContentFolderFiles(ContentFolderScopes.onlyProduction()));
+		assert folders != null;
+		for(VirtualFile folder : folders)
+		{
+			VirtualFile moduleInfo = folder.findChild(PsiJavaModule.MODULE_INFO_FILE);
+			if(moduleInfo == null)
+			{
+				continue;
+			}
+
+			String javaModule = findModuleName(module.getProject(), moduleInfo);
+			if(javaModule != null)
+			{
+				return javaModule;
+			}
+		}
+
+		return null;
+	}
+
+	@Nullable
+	private static String findModuleName(@Nonnull Project project, @Nonnull VirtualFile moduleInfo)
+	{
+		PsiFile file = AccessRule.read(() -> PsiManager.getInstance(project).findFile(moduleInfo));
+		if(file instanceof PsiJavaFile)
+		{
+			PsiJavaModule moduleDeclaration = AccessRule.read(((PsiJavaFile) file)::getModuleDeclaration);
+			if(moduleDeclaration != null)
+			{
+				return AccessRule.read(moduleDeclaration::getName);
+			}
+		}
+		return null;
+	}
+
 	private static boolean isAtLeast(@Nonnull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @Nonnull JavaSdkVersion target)
 	{
 		return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(target.getMaxLanguageLevel()));
@@ -548,7 +659,13 @@ public class JavacCompiler extends ExternalCompiler
 		return pathsList.getPathsString();
 	}
 
-	private static void addClassPathValue(final Sdk jdk, final JavaSdkVersion version, final ParametersList parametersList, final String cpString, @NonNls final String tempFileName, List<File> tempFiles, boolean useTempFile) throws IOException
+	private static void addClassPathValue(final Sdk jdk,
+										  final JavaSdkVersion version,
+										  final ParametersList parametersList,
+										  final String cpString,
+										  @NonNls final String tempFileName,
+										  List<File> tempFiles,
+										  boolean useTempFile) throws IOException
 	{
 		if(!useTempFile)
 		{
