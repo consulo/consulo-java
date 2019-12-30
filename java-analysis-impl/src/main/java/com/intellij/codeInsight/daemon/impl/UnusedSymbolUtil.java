@@ -43,9 +43,6 @@ import javax.annotation.Nullable;
 
 public class UnusedSymbolUtil
 {
-	private static final ImplicitUsageProvider[] ourImplicitUsageProviders = Extensions.getExtensions
-			(ImplicitUsageProvider.EP_NAME);
-
 	public static boolean isInjected(@Nonnull Project project, @Nonnull PsiModifierListOwner modifierListOwner)
 	{
 		return EntryPointsManagerBase.getInstance(project).isEntryPoint(modifierListOwner);
@@ -59,7 +56,7 @@ public class UnusedSymbolUtil
 		{
 			return true;
 		}
-		for(ImplicitUsageProvider provider : ourImplicitUsageProviders)
+		for(ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensionList())
 		{
 			progress.checkCanceled();
 			if(provider.isImplicitUsage(element))
@@ -80,7 +77,7 @@ public class UnusedSymbolUtil
 										 @Nonnull PsiVariable element,
 										 @Nullable ProgressIndicator progress)
 	{
-		for(ImplicitUsageProvider provider : ourImplicitUsageProviders)
+		for(ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensionList())
 		{
 			ProgressManager.checkCanceled();
 			if(provider.isImplicitRead(element))
@@ -101,7 +98,7 @@ public class UnusedSymbolUtil
 										  @Nonnull PsiVariable element,
 										  @Nullable ProgressIndicator progress)
 	{
-		for(ImplicitUsageProvider provider : ourImplicitUsageProviders)
+		for(ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensionList())
 		{
 			ProgressManager.checkCanceled();
 			if(provider.isImplicitWrite(element))
@@ -124,8 +121,7 @@ public class UnusedSymbolUtil
 			return null; //filtered out
 		}
 
-		UnusedDeclarationFixProvider[] fixProviders = Extensions.getExtensions(UnusedDeclarationFixProvider.EP_NAME);
-		for(UnusedDeclarationFixProvider provider : fixProviders)
+		for(UnusedDeclarationFixProvider provider : UnusedDeclarationFixProvider.EP_NAME.getExtensionList())
 		{
 			IntentionAction[] fixes = provider.getQuickFixes(element);
 			for(IntentionAction fix : fixes)
