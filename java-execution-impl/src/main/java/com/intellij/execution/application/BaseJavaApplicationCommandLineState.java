@@ -15,22 +15,20 @@
  */
 package com.intellij.execution.application;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.JavaRunConfigurationExtensionManager;
 import com.intellij.execution.RunConfigurationExtension;
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
-import com.intellij.openapi.util.SystemInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author nik
@@ -49,7 +47,7 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
 	{
 		JavaParametersUtil.configureConfiguration(params, myConfiguration);
 
-		for(RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensions())
+		for(RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensionList())
 		{
 			ext.updateJavaParameters(getConfiguration(), params, getRunnerSettings());
 		}
@@ -59,19 +57,9 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
 	@Override
 	protected OSProcessHandler startProcess() throws ExecutionException
 	{
-		OSProcessHandler handler;
-		if(SystemInfo.isWindows)
-		{
-			handler = super.startProcess();
-		}
-		else
-		{
-			handler = KillableColoredProcessHandler.create(createCommandLine());
-			ProcessTerminatedListener.attach(handler);
-		}
-
-		RunnerSettings runnerSettings = getRunnerSettings();
-		JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, runnerSettings);
+		OSProcessHandler handler = new KillableColoredProcessHandler.Silent(createCommandLine());
+		ProcessTerminatedListener.attach(handler);
+		JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, getRunnerSettings());
 		return handler;
 	}
 
