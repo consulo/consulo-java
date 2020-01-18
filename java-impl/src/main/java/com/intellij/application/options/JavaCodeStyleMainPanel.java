@@ -16,7 +16,6 @@
 package com.intellij.application.options;
 
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
 
@@ -37,7 +36,7 @@ public class JavaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel
 		addTab(new JavaDocFormattingPanel(settings));
 		addTab(new CodeStyleImportsPanelWrapper(settings));
 		addTab(new JavaArrangementPanel(settings));
-		for(CodeStyleSettingsProvider provider : Extensions.getExtensions(CodeStyleSettingsProvider.EXTENSION_POINT_NAME))
+		for(CodeStyleSettingsProvider provider : CodeStyleSettingsProvider.EXTENSION_POINT_NAME.getExtensionList())
 		{
 			if(provider.getLanguage() == JavaLanguage.INSTANCE && !provider.hasSettingsPage())
 			{

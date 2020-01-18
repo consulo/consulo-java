@@ -34,7 +34,7 @@ public class CodeStyleImportsPanelWrapper extends CodeStyleAbstractPanel {
 
   protected CodeStyleImportsPanelWrapper(CodeStyleSettings settings) {
     super(settings);
-    myImporsPanel = new CodeStyleImportsPanel(settings);
+    myImporsPanel = new CodeStyleImportsPanel();
   }
 
 

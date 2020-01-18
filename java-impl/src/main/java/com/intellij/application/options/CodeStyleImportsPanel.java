@@ -18,10 +18,14 @@ package com.intellij.application.options;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.ui.ex.MultiLineLabel;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.codeStyle.PackageEntry;
 import com.intellij.psi.codeStyle.PackageEntryTable;
-import com.intellij.ui.*;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.OptionGroup;
+import com.intellij.ui.TableUtil;
 import com.intellij.ui.table.JBTable;
+import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -39,7 +43,6 @@ public class CodeStyleImportsPanel extends JPanel {
   private final PackageEntryTable myPackageList = new PackageEntryTable();
 
   private JBTable myPackageTable;
-  private final CodeStyleSettings mySettings;
   private JRadioButton myJspImportCommaSeparated;
   private JRadioButton myJspOneImportPerDirective;
 
@@ -50,10 +53,9 @@ public class CodeStyleImportsPanel extends JPanel {
   private JPanel myWholePanel;
   private ImportLayoutPanel myImportLayoutPanel;
 
-  public CodeStyleImportsPanel(CodeStyleSettings settings) {
-    mySettings = settings;
+  public CodeStyleImportsPanel() {
     setLayout(new BorderLayout());
-    setBorder(IdeBorderFactory.createEmptyBorder(2, 2, 2, 2));
+    setBorder(JBUI.Borders.empty(2, 2, 2, 2));
     add(myWholePanel, BorderLayout.CENTER);
 
     myGeneralPanel.add(createGeneralOptionsPanel(), BorderLayout.CENTER);
@@ -160,7 +162,7 @@ public class CodeStyleImportsPanel extends JPanel {
     ImportLayoutPanel.resizeColumns(packageTable, table, myImportLayoutPanel.areStaticImportsEnabled());
   }
 
-  public void reset(CodeStyleSettings settings) {
+  public void reset(JavaCodeStyleSettings settings) {
     myCbUseFQClassNames.setSelected(settings.USE_FQ_CLASS_NAMES);
     myCbUseFQClassNamesInJavaDoc.setSelected(settings.USE_FQ_CLASS_NAMES_IN_JAVADOC);
     myCbUseSingleClassImports.setSelected(settings.USE_SINGLE_CLASS_IMPORTS);
@@ -195,11 +197,12 @@ public class CodeStyleImportsPanel extends JPanel {
     }
   }
 
-  public void reset() {
-    reset(mySettings);
+  public void reset(CodeStyleSettings settings) {
+    JavaCodeStyleSettings javaCodeStyleSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
+    reset(javaCodeStyleSettings);
   }
 
-  public void apply(CodeStyleSettings settings) {
+  public void apply(JavaCodeStyleSettings settings) {
     stopTableEditing();
 
     settings.LAYOUT_STATIC_IMPORTS_SEPARATELY = myImportLayoutPanel.areStaticImportsEnabled();
@@ -230,8 +233,9 @@ public class CodeStyleImportsPanel extends JPanel {
     settings.JSP_PREFER_COMMA_SEPARATED_IMPORT_LIST = myJspImportCommaSeparated.isSelected();
   }
 
-  public void apply() {
-    apply(mySettings);
+  public void apply(CodeStyleSettings settings) {
+    JavaCodeStyleSettings javaCodeStyleSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
+    apply(javaCodeStyleSettings);
   }
 
   private void stopTableEditing() {
@@ -239,7 +243,7 @@ public class CodeStyleImportsPanel extends JPanel {
     TableUtil.stopEditing(myPackageTable);
   }
 
-  public boolean isModified(CodeStyleSettings settings) {
+  public boolean isModified(JavaCodeStyleSettings settings) {
     boolean isModified = isModified(myImportLayoutPanel.getCbLayoutStaticImportsSeparately(), settings.LAYOUT_STATIC_IMPORTS_SEPARATELY);
     isModified |= isModified(myCbUseFQClassNames, settings.USE_FQ_CLASS_NAMES);
     isModified |= isModified(myCbUseFQClassNamesInJavaDoc, settings.USE_FQ_CLASS_NAMES_IN_JAVADOC);
@@ -255,8 +259,9 @@ public class CodeStyleImportsPanel extends JPanel {
     return isModified;
   }
 
-  public boolean isModified() {
-    return isModified(mySettings);
+  public boolean isModified(CodeStyleSettings settings) {
+    JavaCodeStyleSettings javaCodeStyleSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
+    return isModified(javaCodeStyleSettings);
   }
 
   private static boolean isModified(JTextField textField, int value) {

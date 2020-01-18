@@ -15,21 +15,20 @@
  */
 package com.intellij.psi.codeStyle;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.TestOnly;
 import com.intellij.application.options.CodeStyle;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.PsiFile;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements ImportsLayoutSettings
 {
@@ -138,6 +137,9 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
 	// Imports
 	public boolean LAYOUT_STATIC_IMPORTS_SEPARATELY = true;
 	public boolean USE_FQ_CLASS_NAMES;
+	public boolean USE_FQ_CLASS_NAMES_IN_JAVADOC;
+	// FIXME [VISTALL] JSP plugin?
+	public boolean JSP_PREFER_COMMA_SEPARATED_IMPORT_LIST;
 	public boolean USE_SINGLE_CLASS_IMPORTS = true;
 	public boolean INSERT_INNER_CLASS_IMPORTS;
 	public int CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND = 5;
