@@ -15,18 +15,14 @@
  */
 package com.intellij.codeInspection.unusedSymbol;
 
-import java.awt.Color;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JSlider;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -36,7 +32,6 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiModifier;
 import com.intellij.ui.ClickListener;
-import com.intellij.ui.UI;
 import com.intellij.ui.UserActivityProviderComponent;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.util.ArrayUtil;
@@ -138,7 +133,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
 	@Override
 	public void setForeground(Color fg)
 	{
-		super.setForeground(isEnabled() ? UI.getColor("link.foreground") : fg);
+		super.setForeground(isEnabled() ? JBUI.CurrentTheme.Link.linkColor() : fg);
 	}
 
 	@Override
