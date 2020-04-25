@@ -20,42 +20,64 @@
  */
 package com.intellij.profile.codeInspection.ui;
 
+import javax.annotation.Nullable;
+import javax.swing.*;
+
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.openapi.application.ApplicationBundle;
+import consulo.awt.TargetAWT;
+import consulo.ui.CheckBox;
+import consulo.ui.Component;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.layout.HorizontalLayout;
 
-import javax.swing.*;
-import java.awt.*;
+public class JavaErrorOptionsProvider implements ErrorOptionsProvider
+{
+	private CheckBox mySuppressWay;
 
-public class JavaErrorOptionsProvider implements ErrorOptionsProvider {
-  private JCheckBox mySuppressWay;
+	@RequiredUIAccess
+	@Nullable
+	@Override
+	public Component createUIComponent()
+	{
+		mySuppressWay = CheckBox.create(ApplicationBundle.message("checkbox.suppress.with.suppresswarnings"));
+		return HorizontalLayout.create().add(mySuppressWay);
+	}
 
-  @Override
-  public JComponent createComponent() {
-    mySuppressWay = new JCheckBox(ApplicationBundle.message("checkbox.suppress.with.suppresswarnings"));
-    final JPanel panel = new JPanel(new BorderLayout());
-    panel.add(mySuppressWay, BorderLayout.EAST);
-    return panel;
-  }
+	@RequiredUIAccess
+	@Override
+	public JComponent createComponent()
+	{
+		return (JComponent) TargetAWT.to(createUIComponent());
+	}
 
-  @Override
-  public void reset() {
-    mySuppressWay.setSelected(DaemonCodeAnalyzerSettings.getInstance().isSuppressWarnings());
-  }
+	@RequiredUIAccess
+	@Override
+	public void reset()
+	{
+		mySuppressWay.setValue(DaemonCodeAnalyzerSettings.getInstance().isSuppressWarnings());
+	}
 
-  @Override
-  public void disposeUIResources() {
-    mySuppressWay = null;
-  }
+	@RequiredUIAccess
+	@Override
+	public void disposeUIResources()
+	{
+		mySuppressWay = null;
+	}
 
-  @Override
-  public void apply() {
-    DaemonCodeAnalyzerSettings.getInstance().setSuppressWarnings(mySuppressWay.isSelected());
-  }
+	@RequiredUIAccess
+	@Override
+	public void apply()
+	{
+		DaemonCodeAnalyzerSettings.getInstance().setSuppressWarnings(mySuppressWay.getValueOrError());
+	}
 
-  @Override
-  public boolean isModified() {
-    DaemonCodeAnalyzerSettings settings = DaemonCodeAnalyzerSettings.getInstance();
-    return mySuppressWay.isSelected() != settings.isSuppressWarnings();
-  }
+	@RequiredUIAccess
+	@Override
+	public boolean isModified()
+	{
+		DaemonCodeAnalyzerSettings settings = DaemonCodeAnalyzerSettings.getInstance();
+		return mySuppressWay.getValueOrError() != settings.isSuppressWarnings();
+	}
 
 }
