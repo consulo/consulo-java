@@ -20,64 +20,29 @@
  */
 package com.intellij.profile.codeInspection.ui;
 
-import javax.annotation.Nullable;
-import javax.swing.*;
+import java.util.function.Consumer;
+
+import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.openapi.application.ApplicationBundle;
-import consulo.awt.TargetAWT;
+import consulo.codeInspection.ui.ErrorPropertiesProvider;
+import consulo.options.SimpleConfigurableByProperties;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.layout.HorizontalLayout;
 
-public class JavaErrorOptionsProvider implements ErrorOptionsProvider
+public class JavaErrorOptionsProvider implements ErrorPropertiesProvider
 {
-	private CheckBox mySuppressWay;
-
-	@RequiredUIAccess
-	@Nullable
 	@Override
-	public Component createUIComponent()
-	{
-		mySuppressWay = CheckBox.create(ApplicationBundle.message("checkbox.suppress.with.suppresswarnings"));
-		return HorizontalLayout.create().add(mySuppressWay);
-	}
-
 	@RequiredUIAccess
-	@Override
-	public JComponent createComponent()
+	public void fillProperties(@Nonnull Consumer<Component> consumer, @Nonnull SimpleConfigurableByProperties.PropertyBuilder propertyBuilder)
 	{
-		return (JComponent) TargetAWT.to(createUIComponent());
-	}
-
-	@RequiredUIAccess
-	@Override
-	public void reset()
-	{
-		mySuppressWay.setValue(DaemonCodeAnalyzerSettings.getInstance().isSuppressWarnings());
-	}
-
-	@RequiredUIAccess
-	@Override
-	public void disposeUIResources()
-	{
-		mySuppressWay = null;
-	}
-
-	@RequiredUIAccess
-	@Override
-	public void apply()
-	{
-		DaemonCodeAnalyzerSettings.getInstance().setSuppressWarnings(mySuppressWay.getValueOrError());
-	}
-
-	@RequiredUIAccess
-	@Override
-	public boolean isModified()
-	{
+		CheckBox suppressWay = CheckBox.create(ApplicationBundle.message("checkbox.suppress.with.suppresswarnings"));
+		consumer.accept(suppressWay);
+		
 		DaemonCodeAnalyzerSettings settings = DaemonCodeAnalyzerSettings.getInstance();
-		return mySuppressWay.getValueOrError() != settings.isSuppressWarnings();
-	}
 
+		propertyBuilder.add(suppressWay, settings::isSuppressWarnings, settings::setSuppressWarnings);
+	}
 }

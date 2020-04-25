@@ -777,7 +777,7 @@
 				implementation="com.intellij.codeInsight.daemon.impl.quickfix.DefaultQuickFixProvider"/>
 
 
-		<errorOptionsProvider instance="com.intellij.profile.codeInspection.ui.JavaErrorOptionsProvider"/>
+		<errorPropertiesProvider implementation="com.intellij.profile.codeInspection.ui.JavaErrorOptionsProvider"/>
 		<projectConfigurable
 				id="editor.preferences.import.java"
 				parentId="editor.preferences.import"
