@@ -502,14 +502,15 @@ public class BackendCompilerWrapper
 				{
 					System.out.println("Compiler exit code is " + exitValue);
 				}
+
 				if(errorParsingThread != null)
 				{
-					errorParsingThread.setProcessTerminated(true);
+					errorParsingThread.stopParsing();
 				}
 
 				if(outputParsingHandler != null)
 				{
-					outputParsingHandler.setProcessTerminated(true);
+					outputParsingHandler.stopParsing();
 				}
 				classParsingThread.stopParsing();
 

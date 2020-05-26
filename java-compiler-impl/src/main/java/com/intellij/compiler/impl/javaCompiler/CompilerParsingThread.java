@@ -15,8 +15,8 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import java.util.Deque;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import javax.annotation.Nullable;
 
@@ -29,7 +29,6 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.util.TimeoutUtil;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 
@@ -53,7 +52,7 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 	private volatile boolean myProcessExited = false;
 	private final CompileContext myContext;
 
-	private final Deque<String> myLines = new ConcurrentLinkedDeque<>();
+	private final BlockingQueue<String> myLines = new ArrayBlockingQueue<>(50);
 
 	public CompilerParsingThread(ProcessHandler processHandler, OutputParser outputParser, final boolean readErrorStream, boolean trimLines, CompileContext context)
 	{
@@ -74,7 +73,7 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 					return;
 				}
 
-				myLines.add(event.getText().trim());
+				myLines.offer(event.getText().trim());
 			}
 		});
 	}
@@ -87,13 +86,8 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		processing = true;
 		try
 		{
-			while(true)
+			while(!isProcessTerminated())
 			{
-				if(isProcessTerminated())
-				{
-					break;
-				}
-
 				if(!myIsUnitTestMode && myProcessHandler == null)
 				{
 					break;
@@ -246,31 +240,24 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 			return null;
 		}
 
-		String line = myLines.pollFirst();
-		if(line == null)
+		try
 		{
-			while(!isProcessTerminated())
-			{
-				line = myLines.pollFirst();
-				if(line != null)
-				{
-					return line;
-				}
-
-				TimeoutUtil.sleep(100);
-			}
+			return myLines.take();
 		}
+		catch(InterruptedException e)
+		{
+			return null;
+		}
+	}
 
-		return line;
+	public void stopParsing()
+	{
+		myLines.offer(TERMINATION_STRING);
+		myProcessExited = true;
 	}
 
 	private boolean isProcessTerminated()
 	{
 		return myProcessExited;
-	}
-
-	public void setProcessTerminated(final boolean procesExited)
-	{
-		myProcessExited = procesExited;
 	}
 }
