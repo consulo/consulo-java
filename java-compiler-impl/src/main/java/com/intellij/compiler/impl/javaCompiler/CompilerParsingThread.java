@@ -15,35 +15,36 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
-import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nullable;
+
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.execution.process.ProcessAdapter;
+import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.util.TimeoutUtil;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: Mar 30, 2004
+ * Date: Mar 30, 2004
  */
 public class CompilerParsingThread implements Runnable, OutputParser.Callback
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.JavaCompilerParsingThread");
-	@NonNls
+	private static final Logger LOG = Logger.getInstance(CompilerParsingThread.class);
 	public static final String TERMINATION_STRING = "__terminate_read__";
-	private final Reader myCompilerOutStreamReader;
-	private Process myProcess;
+
+	private ProcessHandler myProcessHandler;
 	private final OutputParser myOutputParser;
 	private final boolean myTrimLines;
-	private boolean mySkipLF = false;
 	private Throwable myError = null;
 	private final boolean myIsUnitTestMode;
 	private FileObject myClassFileToProcess = null;
@@ -52,19 +53,35 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 	private volatile boolean myProcessExited = false;
 	private final CompileContext myContext;
 
-	public CompilerParsingThread(Process process, OutputParser outputParser, final boolean readErrorStream, boolean trimLines, CompileContext context)
+	private final Deque<String> myLines = new ConcurrentLinkedDeque<>();
+
+	public CompilerParsingThread(ProcessHandler processHandler, OutputParser outputParser, final boolean readErrorStream, boolean trimLines, CompileContext context)
 	{
-		myProcess = process;
+		myProcessHandler = processHandler;
 		myOutputParser = outputParser;
 		myTrimLines = trimLines;
-		InputStream stream = readErrorStream ? process.getErrorStream() : process.getInputStream();
-		myCompilerOutStreamReader = stream == null ? null : new BufferedReader(new InputStreamReader(stream), 16384);
-		myIsUnitTestMode = ApplicationManager.getApplication().isUnitTestMode();
 		myContext = context;
+
+		myIsUnitTestMode = false;
+
+		processHandler.addProcessListener(new ProcessAdapter()
+		{
+			@Override
+			public void onTextAvailable(ProcessEvent event, Key outputType)
+			{
+				if(!readErrorStream && outputType == ProcessOutputTypes.STDERR)
+				{
+					return;
+				}
+
+				myLines.add(event.getText().trim());
+			}
+		});
 	}
 
 	volatile boolean processing;
 
+	@Override
 	public void run()
 	{
 		processing = true;
@@ -72,19 +89,27 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		{
 			while(true)
 			{
-				if(!myIsUnitTestMode && myProcess == null)
+				if(isProcessTerminated())
 				{
 					break;
 				}
+
+				if(!myIsUnitTestMode && myProcessHandler == null)
+				{
+					break;
+				}
+
 				if(isCanceled())
 				{
 					break;
 				}
+
 				if(!myOutputParser.processMessageLine(this))
 				{
 					break;
 				}
 			}
+
 			if(myClassFileToProcess != null)
 			{
 				processCompiledClass(myClassFileToProcess);
@@ -93,9 +118,8 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		}
 		catch(Throwable e)
 		{
-			e.printStackTrace();
 			myError = e;
-			LOG.info(e);
+			LOG.warn(e);
 		}
 		finally
 		{
@@ -106,10 +130,10 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 
 	private void killProcess()
 	{
-		if(myProcess != null)
+		if(myProcessHandler != null)
 		{
-			myProcess.destroy();
-			myProcess = null;
+			myProcessHandler.destroyProcess();
+			myProcessHandler = null;
 		}
 	}
 
@@ -118,11 +142,13 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		return myError;
 	}
 
+	@Override
 	public String getCurrentLine()
 	{
 		return myLastReadLine;
 	}
 
+	@Override
 	public final String getNextLine()
 	{
 		final String pushBack = myPushBackLine;
@@ -132,7 +158,7 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 			myLastReadLine = pushBack;
 			return pushBack;
 		}
-		final String line = readLine(myCompilerOutStreamReader);
+		final String line = readLine();
 		if(LOG.isDebugEnabled())
 		{
 			LOG.debug("LIne read: #" + line + "#");
@@ -159,6 +185,7 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		myPushBackLine = line;
 	}
 
+	@Override
 	public final void fileGenerated(FileObject path)
 	{
 		// javac first logs file generated, then starts to write the file to disk,
@@ -190,15 +217,18 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		return myContext.getProgressIndicator().isCanceled();
 	}
 
+	@Override
 	public void setProgressText(String text)
 	{
 		myContext.getProgressIndicator().setText(text);
 	}
 
+	@Override
 	public void fileProcessed(String path)
 	{
 	}
 
+	@Override
 	public void message(CompilerMessageCategory category, String message, String url, int lineNum, int columnNum)
 	{
 		myContext.addMessage(category, message, url, lineNum, columnNum);
@@ -208,86 +238,30 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 	{
 	}
 
-
-	private String readLine(final Reader reader)
+	@Nullable
+	private String readLine()
 	{
-		StringBuilder buffer = new StringBuilder();
-		boolean first = true;
-		while(true)
-		{
-			int c = readNextByte(reader);
-			if(c == -1)
-			{
-				break;
-			}
-			first = false;
-			if(c == '\n')
-			{
-				if(mySkipLF)
-				{
-					mySkipLF = false;
-					continue;
-				}
-				break;
-			}
-			else if(c == '\r')
-			{
-				mySkipLF = true;
-				break;
-			}
-			else
-			{
-				mySkipLF = false;
-				buffer.append((char) c);
-			}
-		}
-		if(first)
+		if(isProcessTerminated())
 		{
 			return null;
 		}
-		return buffer.toString();
-	}
 
-	private int readNextByte(final Reader reader)
-	{
-		try
+		String line = myLines.pollFirst();
+		if(line == null)
 		{
-			while(!reader.ready())
+			while(!isProcessTerminated())
 			{
-				if(isProcessTerminated())
+				line = myLines.pollFirst();
+				if(line != null)
 				{
-					if(reader.ready())
-					{
-						break;
-					}
-					return -1;
+					return line;
 				}
-				try
-				{
-					Thread.sleep(1L);
-				}
-				catch(InterruptedException ignore)
-				{
-				}
+
+				TimeoutUtil.sleep(100);
 			}
-			return reader.read();
 		}
-		catch(IOException e)
-		{
-			if(CompileDriver.ourDebugMode)
-			{
-				e.printStackTrace();
-			}
-			return -1; // When process terminated Process.getInputStream()'s underlying stream becomes closed on Linux.
-		}
-		catch(Throwable t)
-		{
-			if(CompileDriver.ourDebugMode)
-			{
-				t.printStackTrace();
-			}
-			return -1;
-		}
+
+		return line;
 	}
 
 	private boolean isProcessTerminated()

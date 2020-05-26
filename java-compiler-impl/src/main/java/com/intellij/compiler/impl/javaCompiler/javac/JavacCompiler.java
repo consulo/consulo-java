@@ -15,7 +15,26 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import com.google.common.base.Strings;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompilerUtil;
@@ -25,11 +44,11 @@ import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -67,28 +86,19 @@ import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.logging.Logger;
 import consulo.roots.ContentFolderScopes;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.roots.impl.TestContentFolderTypeProvider;
-import consulo.util.collection.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.*;
-import java.util.*;
 
 public class JavacCompiler extends ExternalCompiler
 {
-	@NonNls
 	public static final String TESTS_EXTERNAL_COMPILER_HOME_PROPERTY_NAME = "tests.external.compiler.home";
 
 	private static final Logger LOG = Logger.getInstance(JavacCompiler.class);
 	private final Project myProject;
 	private final List<File> myTempFiles = new ArrayList<>();
-	@NonNls
 	private static final String JAVAC_MAIN_CLASS_OLD = "sun.tools.javac.Main";
-	@NonNls
 	public static final String JAVAC_MAIN_CLASS = "com.sun.tools.javac.Main";
 	private boolean myAnnotationProcessorMode = false;
 
@@ -195,7 +205,7 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@Override
-	public OutputParser createErrorParser(@Nonnull final String outputDir, Process process)
+	public OutputParser createErrorParser(@Nonnull final String outputDir, ProcessHandler process)
 	{
 		return new JavacOutputParser(myProject);
 	}

@@ -18,9 +18,12 @@ package com.intellij.compiler.impl.javaCompiler;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.ModuleChunk;
+import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -33,16 +36,16 @@ public interface BackendCompiler
 	@Nonnull
 	String getPresentableName();
 
-	@javax.annotation.Nullable
-	OutputParser createErrorParser(@Nonnull String outputDir, Process process);
+	@Nullable
+	OutputParser createErrorParser(@Nonnull String outputDir, ProcessHandler process);
 
-	@javax.annotation.Nullable
+	@Nullable
 	OutputParser createOutputParser(@Nonnull String outputDir);
 
 	boolean checkCompiler(final CompileScope scope);
 
 	@Nonnull
-	Process launchProcess( @Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
+	GeneralCommandLine launchProcess(@Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
 
 	void compileFinished();
 }
