@@ -32,7 +32,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -469,21 +471,23 @@ public class BackendCompilerWrapper
 
 			ClassParsingHandler classParsingThread = new ClassParsingHandler(parsingInfo);
 			ExecutorService executorService = AppExecutorUtil.getAppExecutorService();
-			executorService.execute(classParsingThread);
+			Future<?> classParsingFuture = executorService.submit(classParsingThread);
 
 			OutputParser errorParser = myCompiler.createErrorParser(outputDir, process);
 			CompilerParsingThread errorParsingThread = errorParser == null ? null : new CompilerParsingHandler(process, myCompileContext, errorParser, classParsingThread, true, errorParser.isTrimLines());
 
+			Future<?> errorParsingFuture = CompletableFuture.completedFuture(null);
 			if(errorParsingThread != null)
 			{
-				executorService.execute(errorParsingThread);
+				errorParsingFuture = executorService.submit(errorParsingThread);
 			}
 
+			Future<?> outputParsingFuture = CompletableFuture.completedFuture(null);
 			OutputParser outputParser = myCompiler.createOutputParser(outputDir);
 			CompilerParsingThread outputParsingHandler = outputParser == null ? null : new CompilerParsingHandler(process, myCompileContext, outputParser, classParsingThread, false, outputParser.isTrimLines());
 			if(outputParsingHandler != null)
 			{
-				executorService.submit(outputParsingHandler);
+				outputParsingFuture = executorService.submit(outputParsingHandler);
 			}
 
 			try
@@ -514,6 +518,10 @@ public class BackendCompilerWrapper
 				}
 				classParsingThread.stopParsing();
 
+				waitABit(classParsingFuture);
+				waitABit(errorParsingFuture);
+				waitABit(outputParsingFuture);
+
 				registerParsingException(outputParsingHandler);
 				registerParsingException(errorParsingThread);
 
@@ -526,6 +534,21 @@ public class BackendCompilerWrapper
 		{
 			compileFinished(exitValue, chunk, outputDir);
 			myModuleName = null;
+		}
+	}
+
+	private static void waitABit(final Future<?> threadFuture)
+	{
+		if(threadFuture != null)
+		{
+			try
+			{
+				threadFuture.get();
+			}
+			catch(InterruptedException | java.util.concurrent.ExecutionException ignored)
+			{
+				LOG.info("Thread interrupted", ignored);
+			}
 		}
 	}
 

@@ -117,7 +117,6 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		}
 		finally
 		{
-			killProcess();
 			processing = false;
 		}
 	}
@@ -126,7 +125,6 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 	{
 		if(myProcessHandler != null)
 		{
-			myProcessHandler.destroyProcess();
 			myProcessHandler = null;
 		}
 	}
@@ -159,7 +157,7 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		}
 		if(CompileDriver.ourDebugMode)
 		{
-			System.out.println("LIne read: #" + line + "#");
+			System.out.println("Line read: #" + line + "#");
 		}
 		if(TERMINATION_STRING.equals(line))
 		{
