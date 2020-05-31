@@ -19,7 +19,6 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.internal.statistic.AbstractApplicationUsagesCollector;
 import com.intellij.internal.statistic.beans.GroupDescriptor;
 import com.intellij.internal.statistic.beans.UsageDescriptor;
@@ -27,26 +26,22 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
+import consulo.java.module.extension.JavaModuleExtension;
 
 public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesCollector
 {
-	public static final String GROUP_ID = "language-level";
-
 	@Nonnull
 	@Override
-	public GroupDescriptor getGroupId()
+	public String getGroupId()
 	{
-		return GroupDescriptor.create(GROUP_ID, GroupDescriptor.HIGHER_PRIORITY);
+		return "java-language-level";
 	}
-
 
 	@Nonnull
 	public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project)
 	{
-
 		final Set<String> languageLevels = new HashSet<String>();
 		for(Module module : ModuleManager.getInstance(project).getModules())
 		{
@@ -56,13 +51,6 @@ public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesColle
 				languageLevels.add(extension.getLanguageLevel().toString());
 			}
 		}
-		return ContainerUtil.map2Set(languageLevels, new Function<String, UsageDescriptor>()
-		{
-			@Override
-			public UsageDescriptor fun(String languageLevel)
-			{
-				return new UsageDescriptor(languageLevel, 1);
-			}
-		});
+		return ContainerUtil.map2Set(languageLevels, languageLevel -> new UsageDescriptor(languageLevel, 1));
 	}
 }
