@@ -19,7 +19,6 @@ import java.io.File;
 
 import javax.annotation.Nonnull;
 import com.intellij.mock.MockFileIndexFacade;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
@@ -34,6 +33,7 @@ import com.intellij.psi.impl.PsiElementFactoryImpl;
 import com.intellij.psi.impl.file.impl.JavaFileManager;
 import com.intellij.psi.impl.source.resolve.JavaResolveCache;
 import com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl;
+import consulo.disposer.Disposable;
 import consulo.psi.PsiPackageManager;
 import consulo.psi.impl.PsiPackageManagerImpl;
 

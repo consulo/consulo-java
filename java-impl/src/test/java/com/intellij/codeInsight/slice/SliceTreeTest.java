@@ -17,7 +17,6 @@ import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.ToolWindowHeadlessManagerImpl;
 import com.intellij.psi.PsiDocumentManager;
@@ -30,6 +29,7 @@ import com.intellij.slicer.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.disposer.Disposer;
 
 /**
  * @author cdr

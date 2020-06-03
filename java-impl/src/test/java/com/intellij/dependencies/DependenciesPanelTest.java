@@ -35,7 +35,6 @@ import javax.swing.JTree;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.analysis.AnalysisScope;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.packageDependencies.DependenciesBuilder;
 import com.intellij.packageDependencies.DependencyUISettings;
 import com.intellij.packageDependencies.ForwardDependenciesBuilder;
@@ -48,6 +47,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.TestSourceBasedTestCase;
+import consulo.disposer.Disposer;
 import junit.framework.Assert;
 
 public abstract class DependenciesPanelTest extends TestSourceBasedTestCase{

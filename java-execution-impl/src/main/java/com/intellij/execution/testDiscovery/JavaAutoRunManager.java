@@ -21,7 +21,7 @@ import javax.inject.Singleton;
 
 import com.intellij.execution.testframework.autotest.AbstractAutoTestManager;
 import com.intellij.execution.testframework.autotest.AutoTestWatcher;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.compiler.CompilationStatusListener;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerTopics;
@@ -30,7 +30,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
+import consulo.disposer.Disposer;
 
 @Singleton
 @State(name = "JavaAutoRunManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
@@ -65,7 +65,7 @@ public class JavaAutoRunManager extends AbstractAutoTestManager
 					return;
 				}
 
-				myEventDisposable = Disposer.newDisposable();
+				myEventDisposable = Disposable.newDisposable();
 				Disposer.register(project, myEventDisposable);
 				project.getMessageBus().connect(myEventDisposable).subscribe(CompilerTopics.COMPILATION_STATUS, new CompilationStatusListener()
 				{

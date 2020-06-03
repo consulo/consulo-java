@@ -29,7 +29,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -47,6 +46,7 @@ import com.intellij.util.Function;
 import com.intellij.util.Functions;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.ui.JBUI;
+import consulo.disposer.Disposer;
 
 /**
  * @author anna

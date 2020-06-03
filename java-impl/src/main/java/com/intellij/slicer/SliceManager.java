@@ -24,7 +24,6 @@ import javax.inject.Singleton;
 
 import com.intellij.analysis.AnalysisUIOptions;
 import com.intellij.ide.impl.ContentManagerWatcher;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -34,7 +33,8 @@ import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
@@ -81,7 +81,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
 	@Nonnull
 	private Disposable addPsiListener(@Nonnull final ProgressIndicator indicator)
 	{
-		Disposable disposable = Disposer.newDisposable();
+		Disposable disposable = Disposable.newDisposable();
 		PsiManager.getInstance(myProject).addPsiTreeChangeListener(new PsiTreeChangeAdapter()
 		{
 			@Override

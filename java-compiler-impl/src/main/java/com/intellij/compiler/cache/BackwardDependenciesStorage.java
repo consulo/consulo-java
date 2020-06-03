@@ -16,13 +16,14 @@
 package com.intellij.compiler.cache;
 
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Ref;
 import com.intellij.util.containers.SLRUCache;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorIntegerDescriptor;
 import com.intellij.util.io.PersistentHashMap;
+import consulo.disposer.Disposable;
+
 import gnu.trove.*;
 import javax.annotation.Nonnull;
 
@@ -33,7 +34,8 @@ import java.util.*;
  * @author Eugene Zhuravlev
  *         Date: Dec 1, 2008
  */
-public class BackwardDependenciesStorage implements Flushable, Disposable {
+public class BackwardDependenciesStorage implements Flushable, Disposable
+{
   private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.make.CompilerDependencyStorage");
   protected final PersistentHashMap<Integer, DependenciesSet> myMap;
   protected final SLRUCache<Integer, ReferencerSetHolder> myCache;

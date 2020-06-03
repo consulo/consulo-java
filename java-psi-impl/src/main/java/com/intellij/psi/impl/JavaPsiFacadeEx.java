@@ -22,12 +22,12 @@ package com.intellij.psi.impl;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.TestOnly;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFileFilter;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
+import consulo.disposer.Disposable;
 
 public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 {

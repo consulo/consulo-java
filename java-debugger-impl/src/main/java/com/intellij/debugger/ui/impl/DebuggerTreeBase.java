@@ -45,9 +45,7 @@ import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.ide.dnd.aware.DnDAwareTree;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
@@ -57,9 +55,12 @@ import com.intellij.util.text.StringTokenizer;
 import com.intellij.util.ui.GeometryUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 
 
-public class DebuggerTreeBase extends DnDAwareTree implements Disposable {
+public class DebuggerTreeBase extends DnDAwareTree implements Disposable
+{
   private final Project myProject;
   private DebuggerTreeNodeImpl myCurrentTooltipNode;
 

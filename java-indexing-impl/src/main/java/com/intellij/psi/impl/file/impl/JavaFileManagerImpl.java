@@ -30,7 +30,6 @@ import javax.inject.Singleton;
 
 import com.intellij.ProjectTopics;
 import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
@@ -53,6 +52,7 @@ import com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.disposer.Disposable;
 
 /**
  * @author dmitry lomov

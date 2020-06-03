@@ -26,7 +26,7 @@ import com.intellij.debugger.engine.JavaDebugProcess;
 import com.intellij.debugger.settings.JavaDebuggerSettings;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.idea.ActionsBundle;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.options.Configurable;
@@ -34,11 +34,11 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.TabbedConfigurable;
 import com.intellij.openapi.options.ex.SingleConfigurableEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.disposer.Disposer;
 
 public class CustomizeContextViewAction extends XDebuggerTreeActionBase
 {
@@ -52,7 +52,7 @@ public class CustomizeContextViewAction extends XDebuggerTreeActionBase
 	protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e)
 	{
 		final Project project = e.getData(CommonDataKeys.PROJECT);
-		Disposable disposable = Disposer.newDisposable();
+		Disposable disposable = Disposable.newDisposable();
 		SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable)
 		{
 			@Override

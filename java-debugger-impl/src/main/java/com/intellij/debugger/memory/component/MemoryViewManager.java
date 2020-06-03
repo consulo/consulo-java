@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Singleton;
 
 import com.intellij.debugger.memory.event.MemoryViewManagerListener;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;

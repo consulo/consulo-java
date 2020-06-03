@@ -6,12 +6,12 @@ package com.intellij.mock;
 import javax.annotation.Nonnull;
 
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.lang.Language;
+import consulo.disposer.Disposable;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;

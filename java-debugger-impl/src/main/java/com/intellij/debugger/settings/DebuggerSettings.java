@@ -28,7 +28,7 @@ import javax.inject.Singleton;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;

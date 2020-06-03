@@ -22,9 +22,10 @@ import com.intellij.ide.dnd.DnDDragStartBean;
 import com.intellij.ide.dnd.DnDManager;
 import com.intellij.ide.dnd.DnDSource;
 import com.intellij.ide.dnd.aware.DnDAwareTree;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.ui.treeStructure.Tree;
+import consulo.disposer.Disposable;
+
 import javax.annotation.Nullable;
 
 import javax.swing.tree.TreePath;

@@ -15,7 +15,6 @@
  */
 package com.intellij.testFramework;
 
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -29,6 +28,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.container.boot.ContainerPathManager;
+import consulo.disposer.Disposable;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.extension.JavaMutableModuleExtension;
 import consulo.vfs.util.ArchiveVfsUtil;

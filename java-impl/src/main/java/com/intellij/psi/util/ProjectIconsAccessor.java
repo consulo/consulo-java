@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.util;
 
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -28,6 +27,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.ui.JBUI;
+import consulo.disposer.Disposable;
 import consulo.ui.image.Image;
 import consulo.ui.migration.SwingImageRef;
 import org.jetbrains.annotations.NonNls;

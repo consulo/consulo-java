@@ -2,7 +2,7 @@ package com.intellij.byteCodeViewer;
 
 import com.intellij.codeInsight.hint.EditorFragmentComponent;
 import com.intellij.execution.filters.LineNumbersMapping;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;

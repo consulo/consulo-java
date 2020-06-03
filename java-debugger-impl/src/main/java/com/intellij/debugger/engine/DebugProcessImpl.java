@@ -48,7 +48,7 @@ import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.process.*;
 import com.intellij.execution.runners.ExecutionUtil;
 import com.intellij.idea.ActionsBundle;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ApplicationNamesInfo;
 import com.intellij.openapi.diagnostic.Logger;
@@ -59,7 +59,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Disposer;
+import consulo.disposer.Disposer;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
@@ -153,7 +153,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	protected DebuggerSession mySession;
 	@javax.annotation.Nullable
 	protected MethodReturnValueWatcher myReturnValueWatcher;
-	protected final Disposable myDisposable = Disposer.newDisposable();
+	protected final Disposable myDisposable = Disposable.newDisposable();
 	private final Alarm myStatusUpdateAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myDisposable);
 
 	private final ThreadBlockedMonitor myThreadBlockedMonitor = new ThreadBlockedMonitor(this, myDisposable);

@@ -59,7 +59,6 @@ import com.intellij.debugger.ui.tree.render.ExpressionChildrenRenderer;
 import com.intellij.debugger.ui.tree.render.LabelRenderer;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
 import com.intellij.debugger.ui.tree.render.ValueLabelRenderer;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -80,6 +79,7 @@ import com.intellij.util.ui.AbstractTableCellEditor;
 import com.intellij.util.ui.JBUI;
 import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
 import com.intellij.xdebugger.impl.ui.XDebuggerExpressionEditor;
+import consulo.disposer.Disposable;
 
 class CompoundRendererConfigurable extends JPanel
 {

@@ -33,11 +33,11 @@ import com.intellij.execution.testframework.JavaTestLocator;
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter;
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener;
 import com.intellij.execution.testframework.sm.runner.SMTestProxy;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
-import com.intellij.openapi.util.Disposer;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.io.FileUtil;
@@ -70,7 +70,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 			final String frameworkPrefix = ((JavaTestConfigurationBase) configuration).getFrameworkPrefix();
 			final String moduleName = ((JavaTestConfigurationBase) configuration).getConfigurationModule().getModuleName();
 
-			Disposable disposable = Disposer.newDisposable();
+			Disposable disposable = Disposable.newDisposable();
 			final Alarm processTracesAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, disposable);
 			final MessageBusConnection connection = configuration.getProject().getMessageBus().connect();
 			connection.subscribe(SMTRunnerEventsListener.TEST_STATUS, new SMTRunnerEventsAdapter()

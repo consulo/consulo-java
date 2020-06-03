@@ -18,7 +18,7 @@ package com.intellij.util.descriptors;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;

@@ -46,7 +46,7 @@ import com.intellij.debugger.memory.utils.AbstractTableColumnDescriptor;
 import com.intellij.debugger.memory.utils.AbstractTableModelWithColumns;
 import com.intellij.debugger.memory.utils.InstancesProvider;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.util.dataholder.Key;

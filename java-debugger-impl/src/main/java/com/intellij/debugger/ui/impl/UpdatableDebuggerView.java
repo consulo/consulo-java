@@ -26,20 +26,20 @@ import com.intellij.debugger.impl.DebuggerContextListener;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.ui.DebuggerView;
-import com.intellij.openapi.CompositeDisposable;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.ShortcutSet;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
+import consulo.disposer.CompositeDisposable;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 
 public abstract class UpdatableDebuggerView extends JPanel implements DebuggerView
 {
 	private final Project myProject;
 	private final DebuggerStateManager myStateManager;
 	private volatile boolean myRefreshNeeded = true;
-	private final CompositeDisposable myDisposables = new CompositeDisposable();
+	private final consulo.disposer.CompositeDisposable myDisposables = new CompositeDisposable();
 	private volatile boolean myUpdateEnabled;
 
 	protected UpdatableDebuggerView(final Project project, final DebuggerStateManager stateManager)

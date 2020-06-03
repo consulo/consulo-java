@@ -40,10 +40,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.JBRadioButton;
+import consulo.disposer.Disposer;
 import consulo.java.JavaQuickFixBundle;
 
 public class LocateLibraryDialog extends DialogWrapper

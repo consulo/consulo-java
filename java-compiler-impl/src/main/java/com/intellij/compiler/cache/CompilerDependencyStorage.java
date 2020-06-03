@@ -15,7 +15,7 @@
  */
 package com.intellij.compiler.cache;
 
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Ref;
 import com.intellij.util.containers.SLRUCache;

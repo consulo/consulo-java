@@ -18,8 +18,8 @@ package com.intellij.debugger.memory.utils;
 import javax.annotation.Nonnull;
 
 import com.intellij.debugger.engine.SuspendContextImpl;
-import com.intellij.openapi.Disposable;
 import com.intellij.util.Alarm;
+import consulo.disposer.Disposable;
 
 public class SingleAlarmWithMutableDelay
 {

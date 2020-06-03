@@ -14,38 +14,9 @@
  * limitations under the License.
  */
 package com.intellij.codeInsight.completion
-import com.intellij.codeInsight.CodeInsightSettings
+
 import com.intellij.codeInsight.TargetElementUtilOld
-import com.intellij.codeInsight.completion.impl.CompletionServiceImpl
-import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler
-import com.intellij.codeInsight.lookup.Lookup
-import com.intellij.codeInsight.lookup.LookupElementPresentation
-import com.intellij.codeInsight.lookup.LookupManager
-import com.intellij.codeInsight.lookup.impl.LookupImpl
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl
-import com.intellij.ide.DataManager
-import com.intellij.ide.ui.UISettings
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.actionSystem.IdeActions
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.command.CommandProcessor
-import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.command.impl.CurrentEditorProvider
-import com.intellij.openapi.command.impl.UndoManagerImpl
-import com.intellij.openapi.command.undo.UndoManager
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.EditorFactory
-import com.intellij.openapi.editor.LogicalPosition
-import com.intellij.openapi.editor.actionSystem.EditorActionManager
-import com.intellij.openapi.extensions.Extensions
-import com.intellij.openapi.extensions.LoadingOrder
-import com.intellij.openapi.fileEditor.FileEditor
-import com.intellij.openapi.fileEditor.FileEditorManager
-import com.intellij.openapi.progress.ProgressManager
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiJavaFile
-import com.intellij.psi.statistics.StatisticsManager
-import com.intellij.psi.statistics.impl.StatisticsManagerImpl
+
 /**
  * @author peter
  */

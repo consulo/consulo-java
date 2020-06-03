@@ -31,7 +31,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.Disposer;
+import consulo.disposer.Disposer;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;

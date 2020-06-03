@@ -25,7 +25,6 @@ import javax.swing.SwingWorker;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.debugger.engine.DebuggerUtils;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CustomShortcutSet;
@@ -43,6 +42,7 @@ import com.intellij.xdebugger.XExpression;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
 import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
 import com.intellij.xdebugger.impl.ui.XDebuggerExpressionEditor;
+import consulo.disposer.Disposable;
 
 class ExpressionEditorWithHistory extends XDebuggerExpressionEditor
 {

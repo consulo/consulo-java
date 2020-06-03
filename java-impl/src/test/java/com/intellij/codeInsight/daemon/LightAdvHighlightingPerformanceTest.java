@@ -15,27 +15,27 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.concurrency.JobSchedulerImpl;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.injection.MultiHostInjector;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ThrowableRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.fail;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 
 public abstract class LightAdvHighlightingPerformanceTest extends LightDaemonAnalyzerTestCase {
-  private final Disposable my = Disposer.newDisposable();
+  private final Disposable my = Disposable.newDisposable();
   @Override
   protected void setUp() throws Exception {
     super.setUp();

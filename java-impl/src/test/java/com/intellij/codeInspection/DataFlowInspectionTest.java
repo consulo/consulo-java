@@ -18,9 +18,9 @@ package com.intellij.codeInspection;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.dataFlow.DataFlowInspection;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.util.Disposer;
+import consulo.disposer.Disposable;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import consulo.disposer.Disposer;
 
 /**
  * @author peter

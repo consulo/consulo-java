@@ -17,7 +17,7 @@
 package com.intellij.util.descriptors;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.Disposable;
+import consulo.disposer.Disposable;
 import com.intellij.openapi.util.ModificationTracker;
 
 /**
