@@ -15,7 +15,6 @@ import com.intellij.codeInsight.navigation.ClassImplementationsSearch;
 import com.intellij.codeInsight.navigation.MethodImplementationsSearch;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.impl.ModuleManagerImpl;
 import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -56,13 +55,6 @@ public abstract class GotoImplementationTest extends CodeInsightTestCase
 
 		simulateProjectOpen();
 		ProjectManagerEx.getInstanceEx().openTestProject(myProject);
-	}
-
-	@Override
-	protected void tearDown() throws Exception
-	{
-		((ModuleManagerImpl) ModuleManager.getInstance(myProject)).projectClosed();
-		super.tearDown();
 	}
 
 	public void test() throws Exception
