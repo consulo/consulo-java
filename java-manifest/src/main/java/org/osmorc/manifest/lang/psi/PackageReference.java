@@ -51,7 +51,7 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     myIndex = index;
     Module module = ModuleUtil.findModuleForPsiElement(set.getElement());
     if (module != null) {
-      _moduleWithLibrariesScope = module.getModuleWithLibrariesScope();
+      _moduleWithLibrariesScope = GlobalSearchScope.moduleWithLibrariesScope(module);
     }
     else {
       _moduleWithLibrariesScope = GlobalSearchScope.allScope(set.getElement().getProject());

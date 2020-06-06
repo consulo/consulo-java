@@ -17,10 +17,9 @@
 package com.intellij.util.xml.converters.values;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -69,6 +68,6 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
      }
      final boolean inTests = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(file);
 
-     return module.getModuleRuntimeScope(inTests);
+     return GlobalSearchScope.moduleRuntimeScope(module, inTests);
   }
 }

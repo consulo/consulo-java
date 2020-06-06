@@ -226,11 +226,11 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 			List<LocalQuickFix> result)
 	{
 		String fullReferenceText = reference.getCanonicalText();
-		for(ExternalLibraryResolver resolver : ExternalLibraryResolver.EP_NAME.getExtensions())
+		for(ExternalLibraryResolver resolver : ExternalLibraryResolver.EP_NAME.getExtensionList())
 		{
 			ExternalClassResolveResult resolveResult = resolver.resolveClass(shortReferenceName, isReferenceToAnnotation(psiElement), currentModule);
 			OrderEntryFix fix = null;
-			if(resolveResult != null && facade.findClass(resolveResult.getQualifiedClassName(), currentModule.getModuleWithDependenciesAndLibrariesScope(true)) == null)
+			if(resolveResult != null && facade.findClass(resolveResult.getQualifiedClassName(), GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(currentModule, true)) == null)
 			{
 				fix = new AddExternalLibraryToDependenciesQuickFix(currentModule, resolveResult.getLibrary(), reference, resolveResult.getQualifiedClassName());
 			}

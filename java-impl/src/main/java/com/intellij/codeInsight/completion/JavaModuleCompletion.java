@@ -193,7 +193,7 @@ class JavaModuleCompletion
 			PsiPackage topPackage = JavaPsiFacade.getInstance(context.getProject()).findPackage("");
 			if(module != null && topPackage != null)
 			{
-				processPackage(topPackage, module.getModuleScope(false), result);
+				processPackage(topPackage, GlobalSearchScope.moduleScope(module, false), result);
 			}
 		}
 		else if(refOwner instanceof PsiUsesStatement)
@@ -217,7 +217,7 @@ class JavaModuleCompletion
 					if(service instanceof PsiClass && module != null)
 					{
 						Predicate<PsiClass> filter = psiClass -> !psiClass.hasModifierProperty(PsiModifier.ABSTRACT) && InheritanceUtil.isInheritorOrSelf(psiClass, (PsiClass) service, true);
-						processClasses(context.getProject(), module.getModuleScope(false), resultSet, filter, TailType.SEMICOLON);
+						processClasses(context.getProject(), GlobalSearchScope.moduleScope(module, false), resultSet, filter, TailType.SEMICOLON);
 					}
 				}
 			}

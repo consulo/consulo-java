@@ -3776,7 +3776,7 @@ public class HighlightUtil extends HighlightUtilBase
 				Module module = ProjectFileIndex.SERVICE.getInstance(ref.getProject()).getModuleForFile(file);
 				if(module != null)
 				{
-					GlobalSearchScope scope = module.getModuleWithDependenciesAndLibrariesScope(false);
+					GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false);
 					PsiClass aClass = JavaPsiFacade.getInstance(ref.getProject()).findClass(ref.getCanonicalText(), scope);
 					if(aClass != null)
 					{

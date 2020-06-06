@@ -44,6 +44,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import consulo.java.JavaBundle;
 import consulo.roots.ContentFolderScopes;
@@ -64,7 +65,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 		}
 		DataContext ctx = e.getDataContext();
 		boolean available = Optional.ofNullable(ctx.getData(LangDataKeys.IDE_VIEW)).map(view -> getTargetDirectory(ctx, view)).filter(PsiUtil::isLanguageLevel9OrHigher).map
-				(ModuleUtilCore::findModuleForPsiElement).map(module -> FilenameIndex.getVirtualFilesByName(module.getProject(), MODULE_INFO_FILE, module.getModuleScope()).isEmpty()).orElse(false);
+				(ModuleUtilCore::findModuleForPsiElement).map(module -> FilenameIndex.getVirtualFilesByName(module.getProject(), MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module)).isEmpty()).orElse(false);
 		e.getPresentation().setEnabledAndVisible(available);
 	}
 

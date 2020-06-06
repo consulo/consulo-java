@@ -15,15 +15,41 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
+import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
+import static com.intellij.psi.util.PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT;
+
+import gnu.trove.THashSet;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFileSystemItem;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaModule;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiPackageAccessibilityStatement;
+import com.intellij.psi.PsiRequiresStatement;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.impl.source.PsiJavaModuleReference;
 import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider.Result;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.containers.ContainerUtil;
@@ -31,16 +57,6 @@ import com.intellij.util.containers.MultiMap;
 import com.intellij.util.graph.DFSTBuilder;
 import com.intellij.util.graph.Graph;
 import com.intellij.util.graph.GraphGenerator;
-import gnu.trove.THashSet;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
-
-import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
-import static com.intellij.psi.util.PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT;
 
 public class JavaModuleGraphUtil
 {
@@ -103,7 +119,7 @@ public class JavaModuleGraphUtil
 		Set<PsiJavaModule> projectModules = ContainerUtil.newHashSet();
 		for(Module module : ModuleManager.getInstance(project).getModules())
 		{
-			Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, module.getModuleScope());
+			Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module));
 			if(files.size() > 1)
 			{
 				return Collections.emptyList();  // aborts the process when there are incorrect modules in the project
@@ -168,7 +184,7 @@ public class JavaModuleGraphUtil
 		Set<String> transitiveEdges = ContainerUtil.newTroveSet();
 		for(Module module : ModuleManager.getInstance(project).getModules())
 		{
-			Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, module.getModuleScope());
+			Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module));
 			Optional.ofNullable(ContainerUtil.getFirstItem(files)).map(PsiManager.getInstance(project)::findFile).map(f -> f instanceof PsiJavaFile ? ((PsiJavaFile) f).getModuleDeclaration() : null)
 					.ifPresent(m -> visit(m, relations, transitiveEdges));
 		}

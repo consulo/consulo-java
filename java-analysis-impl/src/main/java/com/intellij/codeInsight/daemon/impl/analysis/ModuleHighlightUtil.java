@@ -15,10 +15,31 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
+import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.quickfix.*;
+import com.intellij.codeInsight.daemon.impl.quickfix.AddRequiredModuleFix;
+import com.intellij.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
+import com.intellij.codeInsight.daemon.impl.quickfix.MergeModuleStatementsFix;
+import com.intellij.codeInsight.daemon.impl.quickfix.MoveFileFix;
+import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
+import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixActionRegistrarImpl;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -34,6 +55,7 @@ import com.intellij.psi.PsiPackageAccessibilityStatement.Role;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -44,16 +66,6 @@ import com.intellij.util.containers.JBIterable;
 import consulo.java.JavaQuickFixBundle;
 import consulo.psi.PsiPackage;
 import consulo.vfs.ArchiveFileSystem;
-import org.jetbrains.annotations.PropertyKey;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 public class ModuleHighlightUtil
 {
@@ -98,7 +110,7 @@ public class ModuleHighlightUtil
 			if(module != null)
 			{
 				boolean isTest = index.isInTestSourceContent(file);
-				List<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, module.getModuleScope()).stream().filter(f -> index.isInTestSourceContent(f) == isTest)
+				List<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module)).stream().filter(f -> index.isInTestSourceContent(f) == isTest)
 						.collect(Collectors.toList());
 				if(files.size() == 1)
 				{
@@ -162,7 +174,7 @@ public class ModuleHighlightUtil
 		if(module != null)
 		{
 			Project project = file.getProject();
-			Collection<VirtualFile> others = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, module.getModuleScope());
+			Collection<VirtualFile> others = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module));
 			if(others.size() > 1)
 			{
 				String message = JavaErrorMessages.message("module.file.duplicate");
@@ -328,7 +340,7 @@ public class ModuleHighlightUtil
 		{
 			PsiElement target = refElement.resolve();
 			Module module = findModule(refElement);
-			PsiDirectory[] directories = target instanceof PsiPackage && module != null ? ((PsiPackage) target).getDirectories(module.getModuleScope(false)) : null;
+			PsiDirectory[] directories = target instanceof PsiPackage && module != null ? ((PsiPackage) target).getDirectories(GlobalSearchScope.moduleScope(module, false)) : null;
 			String packageName = refText(refElement);
 			HighlightInfoType type = statement.getRole() == Role.OPENS ? HighlightInfoType.WARNING : HighlightInfoType.ERROR;
 			if(directories == null || directories.length == 0)
@@ -502,7 +514,7 @@ public class ModuleHighlightUtil
 					PsiElement refImport = ref.getParent();
 					if(refImport instanceof PsiImportStatementBase && ((PsiImportStatementBase) refImport).isOnDemand())
 					{
-						PsiDirectory[] dirs = ((PsiPackage) target).getDirectories(module.getModuleWithDependenciesAndLibrariesScope(false));
+						PsiDirectory[] dirs = ((PsiPackage) target).getDirectories(GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false));
 						if(dirs.length == 1)
 						{
 							PsiJavaModule targetModule = getModuleDescriptor(dirs[0]);

@@ -31,6 +31,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.MethodSignatureUtil;
@@ -107,7 +108,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
                                                               Collection<PsiElement> allElementsToDelete) {
     Project project = element.getProject();
     if (element instanceof PsiPackage && module != null) {
-      final PsiDirectory[] directories = ((PsiPackage)element).getDirectories(module.getModuleScope());
+      final PsiDirectory[] directories = ((PsiPackage)element).getDirectories(GlobalSearchScope.moduleScope(module));
       if (directories.length == 0) return null;
       return Arrays.asList(directories);
     } else if (element instanceof PsiMethod) {

@@ -567,7 +567,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 		if(scope == null)
 		{
 			Module module = ModuleUtilCore.findModuleForPsiElement(containingFile);
-			return module == null ? GlobalSearchScope.allScope(project) : module.getModuleWithDependenciesAndLibrariesScope(true);
+			return module == null ? GlobalSearchScope.allScope(project) : GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, true);
 		}
 		return scope;
 	}

@@ -15,6 +15,12 @@
  */
 package com.intellij.execution;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RunProfile;
@@ -32,7 +38,11 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiClassUtil;
@@ -40,12 +50,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.ui.image.Image;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.lang.String;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author spleaner
@@ -195,7 +199,7 @@ public class JavaExecutionUtil
 	@Nullable
 	public static PsiClass findMainClass(final Module module, final String mainClassName)
 	{
-		return findMainClass(module.getProject(), mainClassName, module.getModuleRuntimeScope(true));
+		return findMainClass(module.getProject(), mainClassName, GlobalSearchScope.moduleRuntimeScope(module, true));
 	}
 
 	@Nullable

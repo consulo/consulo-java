@@ -15,6 +15,16 @@
  */
 package com.intellij.execution.configurations;
 
+import gnu.trove.THashSet;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.openapi.module.Module;
@@ -25,14 +35,6 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.search.GlobalSearchScope;
-import gnu.trove.THashSet;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author spleaner
@@ -56,7 +58,7 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
   public GlobalSearchScope getSearchScope() {
     final Module module = getModule();
     if (module != null) {
-      return myClassesInLibraries ? module.getModuleRuntimeScope(true) : GlobalSearchScope.moduleWithDependenciesScope(module);
+      return myClassesInLibraries ? GlobalSearchScope.moduleRuntimeScope(module, true) : GlobalSearchScope.moduleWithDependenciesScope(module);
     }
     return myClassesInLibraries ? GlobalSearchScope.allScope(getProject()) : GlobalSearchScope.projectScope(getProject());
   }
