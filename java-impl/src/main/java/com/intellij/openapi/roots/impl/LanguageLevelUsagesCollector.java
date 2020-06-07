@@ -15,10 +15,6 @@
  */
 package com.intellij.openapi.roots.impl;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.internal.statistic.AbstractApplicationUsagesCollector;
 import com.intellij.internal.statistic.beans.UsageDescriptor;
 import com.intellij.openapi.module.Module;
@@ -29,15 +25,19 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import consulo.java.module.extension.JavaModuleExtension;
 
+import javax.annotation.Nonnull;
+import java.util.Set;
+
 public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesCollector
 {
 	@Nonnull
 	@Override
 	public String getGroupId()
 	{
-		return "java-language-level";
+		return "consulo.java:language.level";
 	}
 
+	@Override
 	@Nonnull
 	public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project)
 	{
