@@ -103,20 +103,8 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	@TestOnly
 	public UnusedDeclarationInspectionBase(boolean enabledInEditor)
 	{
-		ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME);
-		EntryPoint[] extensions = point.getExtensions();
-		List<EntryPoint> deadCodeAddins = new ArrayList<EntryPoint>(extensions.length);
-		for(EntryPoint entryPoint : extensions)
-		{
-			try
-			{
-				deadCodeAddins.add(entryPoint);
-			}
-			catch(Exception e)
-			{
-				LOG.error(e);
-			}
-		}
+		List<EntryPoint> deadCodeAddins = new ArrayList<>(JavaExtensionPoints.DEAD_CODE_EP_NAME.getExtensionList());
+
 		Collections.sort(deadCodeAddins, new Comparator<EntryPoint>()
 		{
 			@Override
