@@ -15,18 +15,10 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.concurrency.JobSchedulerImpl;
-import com.intellij.lang.LanguageAnnotators;
-import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
@@ -34,15 +26,20 @@ import com.intellij.util.ThrowableRunnable;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.fail;
+
 public abstract class LightAdvHighlightingPerformanceTest extends LightDaemonAnalyzerTestCase {
   private final Disposable my = Disposable.newDisposable();
   @Override
   protected void setUp() throws Exception {
     super.setUp();
 
-    Disposer.register(my, BlockExtensions.create(Extensions.getRootArea().getExtensionPoint(LanguageAnnotators.EP_NAME)));
-    Disposer.register(my, BlockExtensions.create(Extensions.getRootArea().getExtensionPoint(LineMarkerProviders.EP_NAME)));
-    Disposer.register(my, BlockExtensions.create(Extensions.getArea(getProject()).getExtensionPoint(MultiHostInjector.EP_NAME)));
+    //Disposer.register(my, BlockExtensions.create(Extensions.getRootArea().getExtensionPoint(LanguageAnnotators.EP_NAME)));
+    //Disposer.register(my, BlockExtensions.create(Extensions.getRootArea().getExtensionPoint(LineMarkerProviders.EP_NAME)));
+    //Disposer.register(my, BlockExtensions.create(Extensions.getArea(getProject()).getExtensionPoint(MultiHostInjector.EP_NAME)));
 
     IntentionManager.getInstance().getAvailableIntentionActions();  // hack to avoid slowdowns in PyExtensionFactory
   }

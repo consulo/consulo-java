@@ -15,14 +15,6 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.compiler.JavacQuirksInspection;
@@ -34,13 +26,20 @@ import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import com.intellij.lang.annotation.HighlightSeverity;
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.IdeaTestUtil;
 import consulo.java.codeInspection.JavaExtensionPoints;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * This class is for "lightweight" tests only, i.e. those which can run inside default light project set up
@@ -109,7 +108,7 @@ public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTe
   }
 
   public void testDynamicallyAddIgnoredAnnotations() throws Exception {
-    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
+    ExtensionPoint<EntryPoint> point = Application.get().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME);
     EntryPoint extension = new EntryPoint() {
       @Nonnull
 	  @Override public String getDisplayName() { return "duh"; }

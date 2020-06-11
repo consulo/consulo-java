@@ -36,6 +36,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.extensions.ExtensionPointName;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
@@ -107,7 +109,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   private static final String IGNORE_ACCESSORS_ATTR_NAME = "IGNORE_ACCESSORS";
-  private static final String JAVADOC_NOT_NESSARY_EP_NAME = "consulo.java.javaDocNotNecessary";
+  private static final ExtensionPointName<Condition<PsiMember>> JAVADOC_NOT_NESSARY_EP_NAME = ExtensionPointName.create("consulo.java.javaDocNotNecessary");
 
   public static class Options implements JDOMExternalizable {
     @NonNls public String ACCESS_JAVADOC_REQUIRED_FOR = NONE;
@@ -602,9 +604,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     if (docComment == null) {
       if (required) {
         if (superMethods.length > 0) return null;
-        ExtensionPoint<Condition<PsiMember>> point = Extensions.getRootArea().getExtensionPoint(JAVADOC_NOT_NESSARY_EP_NAME);
-        final Condition<PsiMember>[] addins = point.getExtensions();
-        for (Condition<PsiMember> addin : addins) {
+        for (Condition<PsiMember> addin : JAVADOC_NOT_NESSARY_EP_NAME.getExtensionList()) {
           if (addin.value(psiMethod)) return null;
         }
         if (superMethods.length == 0) {
