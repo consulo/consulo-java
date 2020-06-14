@@ -15,27 +15,11 @@
  */
 package com.intellij.debugger.settings;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-import javax.inject.Singleton;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
-import consulo.disposer.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.EventDispatcher;
@@ -45,35 +29,51 @@ import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.annotations.AbstractCollection;
 import com.intellij.util.xmlb.annotations.Tag;
 import com.intellij.util.xmlb.annotations.Transient;
+import consulo.disposer.Disposable;
+import consulo.logging.Logger;
+import org.jdom.Element;
+
+import javax.annotation.Nullable;
+import javax.inject.Singleton;
+import java.util.*;
 
 @Singleton
-@State(name = "JavaDebuggerSettings", storages = @Storage("debugger.xml"))
+@State(name = "JavaDebuggerSettings", storages = @Storage("java.debugger.xml"))
 public class DebuggerSettings implements Cloneable, PersistentStateComponent<Element>
 {
 	private static final Logger LOG = Logger.getInstance(DebuggerSettings.class);
 	public static final int SOCKET_TRANSPORT = 0;
 	public static final int SHMEM_TRANSPORT = 1;
 
-	@NonNls
 	public static final String SUSPEND_ALL = "SuspendAll";
-	@NonNls
 	public static final String SUSPEND_THREAD = "SuspendThread";
-	@NonNls
 	public static final String SUSPEND_NONE = "SuspendNone";
 
-	@NonNls
 	public static final String RUN_HOTSWAP_ALWAYS = "RunHotswapAlways";
-	@NonNls
 	public static final String RUN_HOTSWAP_NEVER = "RunHotswapNever";
-	@NonNls
 	public static final String RUN_HOTSWAP_ASK = "RunHotswapAsk";
 
-	@NonNls
 	public static final String EVALUATE_FINALLY_ALWAYS = "EvaluateFinallyAlways";
-	@NonNls
 	public static final String EVALUATE_FINALLY_NEVER = "EvaluateFinallyNever";
-	@NonNls
 	public static final String EVALUATE_FINALLY_ASK = "EvaluateFinallyAsk";
+
+	private static final ClassFilter[] DEFAULT_STEPPING_FILTERS = new ClassFilter[]{
+			new ClassFilter("com.sun.*"),
+			new ClassFilter("java.*"),
+			new ClassFilter("javax.*"),
+			new ClassFilter("org.omg.*"),
+			new ClassFilter("sun.*"),
+			new ClassFilter("jdk.internal.*"),
+			new ClassFilter("junit.*"),
+			new ClassFilter("org.junit.*"),
+			new ClassFilter("com.intellij.rt.*"),
+			new ClassFilter("com.yourkit.runtime.*"),
+			new ClassFilter("com.springsource.loaded.*"),
+			new ClassFilter("org.springsource.loaded.*"),
+			new ClassFilter("javassist.*"),
+			new ClassFilter("org.apache.webbeans.*"),
+			new ClassFilter("com.ibm.ws.*"),
+	};
 
 	public boolean TRACING_FILTERS_ENABLED = true;
 	public int DEBUGGER_TRANSPORT;
@@ -99,7 +99,7 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
 
 	public boolean RESUME_ONLY_CURRENT_THREAD = false;
 
-	private ClassFilter[] mySteppingFilters = ClassFilter.EMPTY_ARRAY;
+	private ClassFilter[] mySteppingFilters = DEFAULT_STEPPING_FILTERS;
 
 	private List<CapturePoint> myCapturePoints = new ArrayList<>();
 	public boolean CAPTURE_VARIABLES;
@@ -134,14 +134,10 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
 	public Element getState()
 	{
 		Element state = XmlSerializer.serialize(this, new SkipDefaultsSerializationFilter());
-		try
+
+		if(!Arrays.equals(DEFAULT_STEPPING_FILTERS, mySteppingFilters))
 		{
 			DebuggerUtilsEx.writeFilters(state, "filter", mySteppingFilters);
-		}
-		catch(WriteExternalException e)
-		{
-			LOG.error(e);
-			return null;
 		}
 
 		for(ContentState eachState : myContentStates.values())
@@ -160,13 +156,14 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
 	{
 		XmlSerializer.deserializeInto(this, state);
 
-		try
+		List<Element> steppingFiltersElement = state.getChildren("filter");
+		if(steppingFiltersElement.isEmpty())
 		{
-			setSteppingFilters(DebuggerUtilsEx.readFilters(state.getChildren("filter")));
+			setSteppingFilters(DEFAULT_STEPPING_FILTERS);
 		}
-		catch(InvalidDataException e)
+		else
 		{
-			LOG.error(e);
+			setSteppingFilters(DebuggerUtilsEx.readFilters(steppingFiltersElement));
 		}
 
 		myContentStates.clear();
