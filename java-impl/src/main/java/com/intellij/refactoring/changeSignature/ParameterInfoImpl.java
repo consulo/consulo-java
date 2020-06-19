@@ -1,23 +1,5 @@
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
-/**
- * created at Sep 17, 2001
- * @author Jeka
- */
 package com.intellij.refactoring.changeSignature;
 
 import com.intellij.openapi.diagnostic.Logger;
@@ -26,150 +8,314 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParameterInfoImpl implements JavaParameterInfo {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.ParameterInfoImpl");
-  public int oldParameterIndex;
-  boolean useAnySingleVariable;
-  private String name = "";
-  public static final ParameterInfoImpl[] EMPTY_ARRAY = new ParameterInfoImpl[0];
+public class ParameterInfoImpl implements JavaParameterInfo
+{
+	private static final Logger LOG = Logger.getInstance(ParameterInfoImpl.class);
 
-  private CanonicalTypes.Type myType;
-  String defaultValue = "";
+	public int oldParameterIndex;
+	private boolean useAnySingleVariable;
+	private String name = "";
 
-  public ParameterInfoImpl(int oldParameterIndex) {
-    this.oldParameterIndex = oldParameterIndex;
-  }
+	private CanonicalTypes.Type myType;
+	String defaultValue = "";
 
-  public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType) {
-    setName(name);
-    this.oldParameterIndex = oldParameterIndex;
-    setType(aType);
-  }
+	/**
+	 * @see #create(int)
+	 * @see #createNew()
+	 */
+	public ParameterInfoImpl(int oldParameterIndex)
+	{
+		this.oldParameterIndex = oldParameterIndex;
+	}
 
-  public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType, @NonNls String defaultValue) {
-    this(oldParameterIndex, name, aType, defaultValue, false);
-  }
+	/**
+	 * @see #create(int)
+	 * @see #createNew()
+	 * @see #withName(String)
+	 * @see #withType(PsiType)
+	 */
+	public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType)
+	{
+		setName(name);
+		this.oldParameterIndex = oldParameterIndex;
+		setType(aType);
+	}
 
-  public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType, @NonNls String defaultValue, boolean useAnyVariable) {
-    this(oldParameterIndex, name, aType);
-    this.defaultValue = defaultValue;
-    useAnySingleVariable = useAnyVariable;
-  }
+	/**
+	 * @see #create(int)
+	 * @see #createNew()
+	 * @see #withName(String)
+	 * @see #withType(PsiType)
+	 * @see #withDefaultValue(String)
+	 */
+	public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType, @NonNls String defaultValue)
+	{
+		this(oldParameterIndex, name, aType, defaultValue, false);
+	}
 
-  public ParameterInfoImpl(int oldParameterIndex, String name, CanonicalTypes.Type typeWrapper, String defaultValue) {
-    setName(name);
-    this.oldParameterIndex = oldParameterIndex;
-    myType = typeWrapper;
-    this.defaultValue = defaultValue;
-  }
+	/**
+	 * @see #create(int)
+	 * @see #createNew()
+	 * @see #withName(String)
+	 * @see #withType(PsiType)
+	 * @see #withDefaultValue(String)
+	 * @see #useAnySingleVariable()
+	 */
+	public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType, @NonNls String defaultValue, boolean useAnyVariable)
+	{
+		this(oldParameterIndex, name, aType);
+		this.defaultValue = defaultValue;
+		useAnySingleVariable = useAnyVariable;
+	}
 
-  public int getOldIndex() {
-    return oldParameterIndex;
-  }
+	/**
+	 * @see #create(int)
+	 * @see #createNew()
+	 * @see #withName(String)
+	 * @see #withType(CanonicalTypes.Type)
+	 * @see #withDefaultValue(String)
+	 */
+	public ParameterInfoImpl(int oldParameterIndex, String name, CanonicalTypes.Type typeWrapper, String defaultValue)
+	{
+		setName(name);
+		this.oldParameterIndex = oldParameterIndex;
+		myType = typeWrapper;
+		this.defaultValue = defaultValue;
+	}
 
-  public void setUseAnySingleVariable(boolean useAnySingleVariable) {
-    this.useAnySingleVariable = useAnySingleVariable;
-  }
+	@Override
+	public int getOldIndex()
+	{
+		return oldParameterIndex;
+	}
 
-  public void updateFromMethod(PsiMethod method) {
-    if (getTypeWrapper() != null) return;
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
-    LOG.assertTrue(oldParameterIndex >= 0 && oldParameterIndex < parameters.length);
-    final PsiParameter parameter = parameters[oldParameterIndex];
-    setName(parameter.getName());
-    setType(parameter.getType());
-  }
+	@Override
+	public void setUseAnySingleVariable(boolean useAnySingleVariable)
+	{
+		this.useAnySingleVariable = useAnySingleVariable;
+	}
 
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof ParameterInfoImpl)) return false;
+	public void updateFromMethod(PsiMethod method)
+	{
+		if(getTypeWrapper() != null)
+		{
+			return;
+		}
+		final PsiParameter[] parameters = method.getParameterList().getParameters();
+		LOG.assertTrue(oldParameterIndex >= 0 && oldParameterIndex < parameters.length);
+		final PsiParameter parameter = parameters[oldParameterIndex];
+		setName(parameter.getName());
+		setType(parameter.getType());
+	}
 
-    ParameterInfoImpl parameterInfo = (ParameterInfoImpl) o;
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(!(o instanceof ParameterInfoImpl))
+		{
+			return false;
+		}
 
-    if (oldParameterIndex != parameterInfo.oldParameterIndex) return false;
-    if (defaultValue != null ? !defaultValue.equals(parameterInfo.defaultValue) : parameterInfo.defaultValue != null) return false;
-    if (!getName().equals(parameterInfo.getName())) return false;
-    if (!getTypeText().equals(parameterInfo.getTypeText())) return false;
+		ParameterInfoImpl parameterInfo = (ParameterInfoImpl) o;
 
-    return true;
-  }
+		if(oldParameterIndex != parameterInfo.oldParameterIndex)
+		{
+			return false;
+		}
+		if(defaultValue != null ? !defaultValue.equals(parameterInfo.defaultValue) : parameterInfo.defaultValue != null)
+		{
+			return false;
+		}
+		if(!getName().equals(parameterInfo.getName()))
+		{
+			return false;
+		}
+		return getTypeText().equals(parameterInfo.getTypeText());
+	}
 
-  public int hashCode() {
-    final String name = getName();
-    int result = name != null ? name.hashCode() : 0;
-    result = 29 * result + getTypeText().hashCode();
-    return result;
-  }
+	public int hashCode()
+	{
+		final String name = getName();
+		int result = name != null ? name.hashCode() : 0;
+		result = 29 * result + getTypeText().hashCode();
+		return result;
+	}
 
-  public String getTypeText() {
-    if (getTypeWrapper() != null) {
-      return getTypeWrapper().getTypeText();
-    }
-    else {
-      return "";
-    }
-  }
+	@Override
+	public String getTypeText()
+	{
+		return getTypeWrapper() == null ? "" : getTypeWrapper().getTypeText();
+	}
 
-  public PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException {
-    if (getTypeWrapper() != null) {
-      return getTypeWrapper().getType(context, manager);
-    } else {
-      return null;
-    }
-  }
+	@Override
+	public PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException
+	{
+		return getTypeWrapper() == null ? null : getTypeWrapper().getType(context, manager);
+	}
 
-  public void setType(PsiType type) {
-    myType = CanonicalTypes.createTypeWrapper(type);
-  }
+	@Override
+	public void setType(PsiType type)
+	{
+		myType = CanonicalTypes.createTypeWrapper(type);
+	}
 
-  public String getName() {
-    return name;
-  }
+	@Override
+	public String getName()
+	{
+		return name;
+	}
 
-  public CanonicalTypes.Type getTypeWrapper() {
-    return myType;
-  }
+	@Override
+	public CanonicalTypes.Type getTypeWrapper()
+	{
+		return myType;
+	}
 
-  public void setName(String name) {
-    this.name = name != null ? name : "";
-  }
+	@Override
+	public void setName(String name)
+	{
+		this.name = name != null ? name : "";
+	}
 
-  public boolean isVarargType() {
-    return getTypeText().endsWith("...");
-  }
+	@Override
+	public boolean isVarargType()
+	{
+		return getTypeText().endsWith("...");
+	}
 
-  public static ParameterInfoImpl[] fromMethod(PsiMethod method) {
-    List<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
-    for (int i = 0; i < parameters.length; i++) {
-      PsiParameter parameter = parameters[i];
-      result.add(new ParameterInfoImpl(i, parameter.getName(), parameter.getType()));
-    }
-    return result.toArray(new ParameterInfoImpl[result.size()]);
-  }
+	@Override
+	@Nullable
+	public PsiExpression getValue(final PsiCallExpression expr) throws IncorrectOperationException
+	{
+		if(StringUtil.isEmpty(defaultValue))
+		{
+			return null;
+		}
+		final PsiExpression expression =
+				JavaPsiFacade.getElementFactory(expr.getProject()).createExpressionFromText(defaultValue, expr);
+		return (PsiExpression) JavaCodeStyleManager.getInstance(expr.getProject()).shortenClassReferences(expression);
+	}
 
-  @javax.annotation.Nullable
-  public PsiExpression getValue(final PsiCallExpression expr) throws IncorrectOperationException {
-    if (StringUtil.isEmpty(defaultValue)) return null;
-    final PsiExpression expression =
-      JavaPsiFacade.getInstance(expr.getProject()).getElementFactory().createExpressionFromText(defaultValue, expr);
-    return (PsiExpression)JavaCodeStyleManager.getInstance(expr.getProject()).shortenClassReferences(expression);
-  }
+	@Override
+	public boolean isUseAnySingleVariable()
+	{
+		return useAnySingleVariable;
+	}
 
-  public boolean isUseAnySingleVariable() {
-    return useAnySingleVariable;
-  }
+	@Override
+	public String getDefaultValue()
+	{
+		return defaultValue;
+	}
 
-  public String getDefaultValue() {
-    return defaultValue;
-  }
+	public void setDefaultValue(final String defaultValue)
+	{
+		this.defaultValue = defaultValue;
+	}
 
-  public void setDefaultValue(final String defaultValue) {
-    this.defaultValue = defaultValue;
-  }
+	/**
+	 * Returns an array of {@code ParameterInfoImpl} entries which correspond to given method signature.
+	 *
+	 * @param method method to create an array from
+	 * @return an array of ParameterInfoImpl entries
+	 */
+	@Nonnull
+	public static ParameterInfoImpl[] fromMethod(@Nonnull PsiMethod method)
+	{
+		List<ParameterInfoImpl> result = new ArrayList<>();
+		final PsiParameter[] parameters = method.getParameterList().getParameters();
+		for(int i = 0; i < parameters.length; i++)
+		{
+			PsiParameter parameter = parameters[i];
+			result.add(create(i).withName(parameter.getName()).withType(parameter.getType()));
+		}
+		return result.toArray(new ParameterInfoImpl[0]);
+	}
+
+	/**
+	 * Returns an array of {@code ParameterInfoImpl} entries which correspond to given method signature with given parameter removed.
+	 *
+	 * @param method            method to create an array from
+	 * @param parameterToRemove parameter to remove from method signature
+	 * @return an array of ParameterInfoImpl entries
+	 */
+	public static ParameterInfoImpl[] fromMethodExceptParameter(@Nonnull PsiMethod method, @Nonnull PsiParameter parameterToRemove)
+	{
+		List<ParameterInfoImpl> result = new ArrayList<>();
+		PsiParameter[] parameters = method.getParameterList().getParameters();
+		for(int i = 0; i < parameters.length; i++)
+		{
+			PsiParameter parameter = parameters[i];
+			if(!parameterToRemove.equals(parameter))
+			{
+				result.add(create(i).withName(parameter.getName()).withType(parameter.getType()));
+			}
+		}
+		return result.toArray(new ParameterInfoImpl[0]);
+	}
+
+	@Nonnull
+	@Contract(value = "-> new", pure = true)
+	public static ParameterInfoImpl createNew()
+	{
+		return create(-1);
+	}
+
+	@Nonnull
+	@Contract(value = "_ -> new", pure = true)
+	public static ParameterInfoImpl create(int oldParameterIndex)
+	{
+		return new ParameterInfoImpl(oldParameterIndex);
+	}
+
+	@Nonnull
+	@Contract(value = "_ -> this")
+	public ParameterInfoImpl withName(@NonNls String name)
+	{
+		setName(name);
+		return this;
+	}
+
+	@Nonnull
+	@Contract(value = "_ -> this")
+	public ParameterInfoImpl withType(PsiType aType)
+	{
+		setType(aType);
+		return this;
+	}
+
+	@Nonnull
+	@Contract(value = "_ -> this")
+	public ParameterInfoImpl withType(CanonicalTypes.Type typeWrapper)
+	{
+		myType = typeWrapper;
+		return this;
+	}
+
+	@Nonnull
+	@Contract(value = "_ -> this")
+	public ParameterInfoImpl withDefaultValue(@NonNls String defaultValue)
+	{
+		this.defaultValue = defaultValue;
+		return this;
+	}
+
+	@Nonnull
+	@Contract(value = "-> this")
+	public ParameterInfoImpl useAnySingleVariable()
+	{
+		useAnySingleVariable = true;
+		return this;
+	}
 }

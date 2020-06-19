@@ -16,6 +16,7 @@
 package com.intellij.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents the list of parameters of a Java method.
@@ -46,6 +47,23 @@ public interface PsiParameterList extends PsiElement
 	 * @return the parameters count
 	 */
 	int getParametersCount();
+
+	/**
+	 * Returns the parameter by index
+	 *
+	 * @param index parameter index, non-negative
+	 * @return parameter, or null if there are less parameters than the index supplied
+	 */
+	@Nullable
+	default PsiParameter getParameter(int index)
+	{
+		if(index < 0)
+		{
+			throw new IllegalArgumentException("index is negative: " + index);
+		}
+		PsiParameter[] parameters = getParameters();
+		return index < parameters.length ? parameters[index] : null;
+	}
 
 	/**
 	 * @return true if this parameter list has no parameters (excluding type annotation receiver).

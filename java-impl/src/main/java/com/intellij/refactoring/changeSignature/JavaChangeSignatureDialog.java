@@ -15,30 +15,6 @@
  */
 package com.intellij.refactoring.changeSignature;
 
-import static com.intellij.refactoring.changeSignature.ChangeSignatureHandler.REFACTORING_NAME;
-
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
@@ -74,15 +50,11 @@ import com.intellij.refactoring.ui.VisibilityPanelBase;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.refactoring.util.RefactoringMessageUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.LayeredIcon;
-import com.intellij.ui.TableColumnAnimator;
-import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.*;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.table.TableView;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.TextFieldCompletionProvider;
@@ -92,6 +64,23 @@ import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.table.JBListTable;
 import com.intellij.util.ui.table.JBTableRow;
 import com.intellij.util.ui.table.JBTableRowEditor;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static com.intellij.refactoring.changeSignature.ChangeSignatureHandler.REFACTORING_NAME;
 
 /**
  * @author Konstantin Bulenkov
@@ -114,8 +103,23 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 		super(project, descriptor, allowDelegation, context);
 	}
 
-	public static JavaChangeSignatureDialog createAndPreselectNew(final Project project, final PsiMethod method,
-			final List<ParameterInfoImpl> parameterInfos, final boolean allowDelegation, final PsiReferenceExpression refExpr)
+	@Nonnull
+	public static JavaChangeSignatureDialog createAndPreselectNew(@NotNull Project project,
+																  @NotNull PsiMethod method,
+																  @NotNull List<? extends ParameterInfoImpl> parameterInfos,
+																  final boolean allowDelegation,
+																  final PsiReferenceExpression refExpr)
+	{
+		return createAndPreselectNew(project, method, parameterInfos, allowDelegation, refExpr, null);
+	}
+
+	@Nonnull
+	public static JavaChangeSignatureDialog createAndPreselectNew(final Project project,
+																  final PsiMethod method,
+																  final List<? extends ParameterInfoImpl> parameterInfos,
+																  final boolean allowDelegation,
+																  final PsiReferenceExpression refExpr,
+																  @Nullable Consumer<? super List<ParameterInfoImpl>> callback)
 	{
 		return new JavaChangeSignatureDialog(project, method, allowDelegation, refExpr)
 		{
@@ -131,6 +135,34 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 					}
 				}
 				return super.getSelectedIdx();
+			}
+
+
+			@Override
+			protected BaseRefactoringProcessor createRefactoringProcessor()
+			{
+				final List<ParameterInfoImpl> parameters = getParameters();
+				return new ChangeSignatureProcessor(myProject,
+						myMethod.getMethod(),
+						isGenerateDelegate(),
+						getVisibility(),
+						getMethodName(),
+						getReturnType(),
+						parameters.toArray(new ParameterInfoImpl[0]),
+						getExceptions(),
+						myMethodsToPropagateParameters,
+						myMethodsToPropagateExceptions)
+				{
+					@Override
+					protected void performRefactoring(UsageInfo[] usages)
+					{
+						super.performRefactoring(usages);
+						if(callback != null)
+						{
+							callback.consume(getParameters());
+						}
+					}
+				};
 			}
 		};
 	}
@@ -380,7 +412,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 
 					@Override
 					protected void addCompletionVariants(@Nonnull String text, int offset, @Nonnull String prefix,
-							@Nonnull CompletionResultSet result)
+														 @Nonnull CompletionResultSet result)
 					{
 						final PsiCodeFragment fragment = item.typeCodeFragment;
 						if(fragment instanceof PsiTypeCodeFragment)

@@ -18,21 +18,39 @@ package com.intellij.refactoring.changeSignature;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
  */
-public interface JavaParameterInfo extends ParameterInfo {
-  @Nullable
-  PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException;
+public interface JavaParameterInfo extends ParameterInfo
+{
+	@Nullable
+	PsiType createType(@Nullable PsiElement context, final PsiManager manager) throws IncorrectOperationException;
 
-  String getTypeText();
+	@Nullable
+	default PsiType createType(@Nonnull PsiElement context)
+	{
+		return createType(context, context.getManager());
+	}
 
-  CanonicalTypes.Type getTypeWrapper();
+	@Override
+	String getTypeText();
 
-  PsiExpression getValue(PsiCallExpression callExpression);
+	CanonicalTypes.Type getTypeWrapper();
 
-  boolean isVarargType();
+	PsiExpression getValue(PsiCallExpression callExpression);
 
+	@Nullable
+	default PsiElement getActualValue(PsiElement callExpression, Object substitutor)
+	{
+		return callExpression instanceof PsiCallExpression ? getValue((PsiCallExpression) callExpression) : null;
+	}
+
+	boolean isVarargType();
+
+	default void setType(@Nullable PsiType type)
+	{
+	}
 }

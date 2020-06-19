@@ -30,8 +30,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
@@ -47,6 +45,7 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.JavaQuickFixBundle;
+import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -336,19 +335,13 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction
 			return false;
 		}
 		final int minUsagesNumber = containingClass.findMethodsBySignature(fromText, false).length > 0 ? 0 : 1;
-		final List<ParameterInfoImpl> parameterInfos =
-				ChangeMethodSignatureFromUsageFix.performChange(project, editor, file, constructor, minUsagesNumber, newParamInfos, true, true);
+		final List<ParameterInfoImpl> parameterInfos = ChangeMethodSignatureFromUsageFix.performChange(project, editor, file, constructor, minUsagesNumber, newParamInfos, true, true, p -> {
+			final ParameterInfoImpl[] resultParams = p.toArray(new ParameterInfoImpl[0]);
 
-		final ParameterInfoImpl[] resultParams = parameterInfos != null ? parameterInfos.toArray(new ParameterInfoImpl[parameterInfos.size()]) :
-				newParamInfos;
-		return ApplicationManager.getApplication().runWriteAction(new Computable<Boolean>()
-		{
-			@Override
-			public Boolean compute()
-			{
-				return doCreate(project, editor, parameters, constructorPointer, resultParams, usedFields);
-			}
+			doCreate(project, editor, parameters, constructorPointer, resultParams, usedFields);
 		});
+
+		return parameterInfos != null;
 	}
 
 	private static String createDummyMethod(PsiMethod constructor, ParameterInfoImpl[] newParamInfos)
