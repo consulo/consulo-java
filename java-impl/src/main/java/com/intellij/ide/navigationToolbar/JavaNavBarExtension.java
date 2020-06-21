@@ -109,12 +109,12 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension
 						}
 					}
 				}
-				if(!UISettings.getInstance().SNOW_MEMBERS_IN_NAVIGATION_BAR && psiElement instanceof PsiClass)
+				if(!UISettings.getInstance().getShowMembersInNavigationBar() && psiElement instanceof PsiClass)
 				{
 					return psiElement;
 				}
 			}
-			if(!UISettings.getInstance().SNOW_MEMBERS_IN_NAVIGATION_BAR)
+			if(!UISettings.getInstance().getShowMembersInNavigationBar())
 			{
 				return containingFile;
 			}
