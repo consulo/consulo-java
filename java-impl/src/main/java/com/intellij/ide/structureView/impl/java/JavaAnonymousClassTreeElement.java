@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
-import java.util.Set;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.JavaAnonymousClassesHelper;
 import com.intellij.psi.PsiAnonymousClass;
@@ -26,58 +24,73 @@ import consulo.ui.image.Image;
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaAnonymousClassTreeElement extends JavaClassTreeElement {
-  public final static JavaAnonymousClassTreeElement[] EMPTY_ARRAY = {};
+public class JavaAnonymousClassTreeElement extends JavaClassTreeElement
+{
+	public static final JavaAnonymousClassTreeElement[] EMPTY_ARRAY = {};
 
-  private String myName;
-  private String myBaseName;
-  
-  public JavaAnonymousClassTreeElement(PsiAnonymousClass aClass, Set<PsiClass> parents) {
-    super(aClass, false, parents);
-    //parents.add(aClass.getSuperClass());
-  }
+	private String myName;
+	private String myBaseName;
 
-  @Override
-  public boolean isPublic() {
-    return false;
-  }
+	public JavaAnonymousClassTreeElement(PsiAnonymousClass aClass)
+	{
+		super(aClass, false);
+	}
 
-  @Override
-  public String getPresentableText() {
-    if (myName != null) return myName;
-    final PsiClass element = getElement();
+	@Override
+	public boolean isPublic()
+	{
+		return false;
+	}
 
-    if (element != null) {
-      myName = JavaAnonymousClassesHelper.getName((PsiAnonymousClass)element);
-      if (myName != null) return myName;
-    }
-    return "Anonymous";
-  }
+	@Override
+	public String getPresentableText()
+	{
+		if(myName != null)
+		{
+			return myName;
+		}
+		final PsiClass element = getElement();
 
+		if(element != null)
+		{
+			myName = JavaAnonymousClassesHelper.getName((PsiAnonymousClass) element);
+			if(myName != null)
+			{
+				return myName;
+			}
+		}
+		return "Anonymous";
+	}
 
-  @Override
-  public boolean isSearchInLocationString() {
-    return true;
-  }
+	@Override
+	public boolean isSearchInLocationString()
+	{
+		return true;
+	}
 
-  @Override
-  public String getLocationString() {
-    if (myBaseName == null) {
-      PsiAnonymousClass anonymousClass = (PsiAnonymousClass)getElement();
-      if (anonymousClass != null) {
-        myBaseName = anonymousClass.getBaseClassType().getClassName();
-      }
-    }
-    return myBaseName;
-  }
+	@Override
+	public String getLocationString()
+	{
+		if(myBaseName == null)
+		{
+			PsiAnonymousClass anonymousClass = (PsiAnonymousClass) getElement();
+			if(anonymousClass != null)
+			{
+				myBaseName = anonymousClass.getBaseClassType().getClassName();
+			}
+		}
+		return myBaseName;
+	}
 
-  @Override
-  public String toString() {
-    return super.toString() + (myBaseName == null ? "" : " (" + getLocationString() + ")");
-  }
+	@Override
+	public String toString()
+	{
+		return super.toString() + (myBaseName == null ? "" : " (" + getLocationString() + ")");
+	}
 
-  @Override
-  public Image getIcon() {
-    return AllIcons.Nodes.AnonymousClass;
-  }
+	@Override
+	public Image getIcon()
+	{
+		return AllIcons.Nodes.AnonymousClass;
+	}
 }

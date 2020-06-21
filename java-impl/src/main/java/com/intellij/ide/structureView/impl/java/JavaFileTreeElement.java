@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,25 +24,37 @@ import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 
-public class JavaFileTreeElement extends PsiTreeElementBase<PsiClassOwner> implements ItemPresentation {
-  public JavaFileTreeElement(PsiClassOwner file) {
-    super(file);
-  }
+public class JavaFileTreeElement extends PsiTreeElementBase<PsiClassOwner> implements ItemPresentation
+{
+	public JavaFileTreeElement(PsiClassOwner file)
+	{
+		super(file);
+	}
 
-  public String getPresentableText() {
-    return getElement().getName();
-  }
+	@Override
+	public String getPresentableText()
+	{
+		PsiClassOwner element = getElement();
+		return element == null ? "" : element.getName();
+	}
 
-  @Nonnull
-  public Collection<StructureViewTreeElement> getChildrenBase() {
-    PsiClass[] classes = getElement().getClasses();
-    ArrayList<StructureViewTreeElement> result = new ArrayList<StructureViewTreeElement>();
-    for (PsiClass aClass : classes) {
-      result.add(new JavaClassTreeElement(aClass, false, new HashSet<PsiClass>()));
-    }
-    return result;
-
-  }
+	@Override
+	@Nonnull
+	public Collection<StructureViewTreeElement> getChildrenBase()
+	{
+		PsiClassOwner element = getElement();
+		if(element == null)
+		{
+			return Collections.emptyList();
+		}
+		PsiClass[] classes = element.getClasses();
+		ArrayList<StructureViewTreeElement> result = new ArrayList<>();
+		for(PsiClass aClass : classes)
+		{
+			result.add(new JavaClassTreeElement(aClass, false));
+		}
+		return result;
+	}
 }

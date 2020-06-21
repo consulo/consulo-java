@@ -19,8 +19,6 @@
  */
 package com.intellij.lang.java;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
@@ -30,21 +28,25 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory
 {
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public StructureViewBuilder getStructureViewBuilder(final PsiFile psiFile)
 	{
 		if(!(psiFile instanceof PsiJavaFile))
 		{
 			return null;
 		}
+
 		return new TreeBasedStructureViewBuilder()
 		{
 			@Override
 			@Nonnull
-			public StructureViewModel createStructureViewModel(@javax.annotation.Nullable Editor editor)
+			public StructureViewModel createStructureViewModel(@Nullable Editor editor)
 			{
 				return new JavaFileTreeModel((PsiJavaFile) psiFile, editor);
 			}

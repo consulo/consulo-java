@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,52 +15,71 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
-import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import consulo.java.codeInsight.JavaCodeInsightBundle;
 import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class ClassInitializerTreeElement extends PsiTreeElementBase<PsiClassInitializer> implements AccessLevelProvider{
-  public ClassInitializerTreeElement(PsiClassInitializer initializer) {
-    super(initializer);
-  }
+public class ClassInitializerTreeElement extends PsiTreeElementBase<PsiClassInitializer> implements AccessLevelProvider
+{
+	public ClassInitializerTreeElement(PsiClassInitializer initializer)
+	{
+		super(initializer);
+	}
 
-  public String getPresentableText() {
-    PsiClassInitializer initializer = getElement();
-    assert initializer != null;
-    String isStatic = initializer.hasModifierProperty(PsiModifier.STATIC) ? PsiModifier.STATIC + " " : "";
-    return CodeInsightBundle.message("static.class.initializer", isStatic);
-  }
+	@Override
+	public String getPresentableText()
+	{
+		PsiClassInitializer initializer = getElement();
+		assert initializer != null;
+		String isStatic = initializer.hasModifierProperty(PsiModifier.STATIC) ? PsiModifier.STATIC + " " : "";
+		return JavaCodeInsightBundle.message("static.class.initializer", isStatic);
+	}
 
-  public String getLocationString() {
-    PsiClassInitializer initializer = getElement();
-    assert initializer != null;
-    PsiCodeBlock body = initializer.getBody();
-    PsiElement first = body.getFirstBodyElement();
-    if (first instanceof PsiWhiteSpace) first = first.getNextSibling();
-    if (first == body.getRBrace()) first = null;
-    if (first != null) {
-      return StringUtil.first(first.getText(), 20, true);
-    }
-    return null;
-  }
+	@Override
+	public String getLocationString()
+	{
+		PsiClassInitializer initializer = getElement();
+		assert initializer != null;
+		PsiCodeBlock body = initializer.getBody();
+		PsiElement first = body.getFirstBodyElement();
+		if(first instanceof PsiWhiteSpace)
+		{
+			first = first.getNextSibling();
+		}
+		if(first == body.getRBrace())
+		{
+			first = null;
+		}
+		if(first != null)
+		{
+			return StringUtil.first(first.getText(), 20, true);
+		}
+		return null;
+	}
 
-  @Nonnull
-  public Collection<StructureViewTreeElement> getChildrenBase() {
-    return Collections.emptyList();
-  }
+	@Override
+	@Nonnull
+	public Collection<StructureViewTreeElement> getChildrenBase()
+	{
+		return Collections.emptyList();
+	}
 
-  public int getAccessLevel() {
-    return PsiUtil.ACCESS_LEVEL_PRIVATE;
-  }
+	@Override
+	public int getAccessLevel()
+	{
+		return PsiUtil.ACCESS_LEVEL_PRIVATE;
+	}
 
-  public int getSubLevel() {
-    return 0;
-  }
+	@Override
+	public int getSubLevel()
+	{
+		return 0;
+	}
 }

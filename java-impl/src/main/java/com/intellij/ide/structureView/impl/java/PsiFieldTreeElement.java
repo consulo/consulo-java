@@ -1,61 +1,75 @@
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.ide.structureView.impl.java;
 
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiEnumConstant;
+import com.intellij.psi.PsiEnumConstantInitializer;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.util.PsiFormatUtil;
 import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class PsiFieldTreeElement extends JavaClassTreeElementBase<PsiField> implements SortableTreeElement {
-  public PsiFieldTreeElement(PsiField field, boolean isInherited) {
-    super(isInherited,field);
- }
+import static com.intellij.psi.util.PsiFormatUtil.*;
 
-  @Nonnull
-  public Collection<StructureViewTreeElement> getChildrenBase() {
-    return Collections.emptyList();
-  }
+public class PsiFieldTreeElement extends JavaClassTreeElementBase<PsiField> implements SortableTreeElement
+{
+	public PsiFieldTreeElement(PsiField field, boolean isInherited)
+	{
+		super(isInherited, field);
+	}
 
-  public String getPresentableText() {
-    return StringUtil.replace(PsiFormatUtil.formatVariable(
-      getElement(),
-      PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.TYPE_AFTER | PsiFormatUtil.SHOW_INITIALIZER,
-      PsiSubstitutor.EMPTY
-    ), ":", ": ");
-  }
+	@Override
+	@Nonnull
+	public Collection<StructureViewTreeElement> getChildrenBase()
+	{
+		PsiField field = getField();
+		if(field instanceof PsiEnumConstant)
+		{
+			PsiEnumConstantInitializer initializingClass = ((PsiEnumConstant) field).getInitializingClass();
+			if(initializingClass != null)
+			{
+				return JavaClassTreeElement.getClassChildren(initializingClass);
+			}
+		}
+		return Collections.emptyList();
+	}
 
-  public PsiField getField() {
-    return getElement();
-  }
+	@Override
+	public String getPresentableText()
+	{
+		final PsiField field = getElement();
+		if(field == null)
+		{
+			return "";
+		}
 
-  public String getAlphaSortKey() {
-    final PsiField field = getElement();
-    if (field != null) {
-      String name = field.getName();
-      if (name != null) {
-        return name;
-      }
-    }
-    return "";
-  }
+		final boolean dumb = DumbService.isDumb(field.getProject());
+		return StringUtil.replace(formatVariable(
+				field,
+				SHOW_NAME | (dumb ? 0 : SHOW_TYPE) | TYPE_AFTER | (dumb ? 0 : SHOW_INITIALIZER),
+				PsiSubstitutor.EMPTY
+		), ":", ": ");
+	}
+
+	public PsiField getField()
+	{
+		return getElement();
+	}
+
+	@Override
+	@Nonnull
+	public String getAlphaSortKey()
+	{
+		final PsiField field = getElement();
+		if(field != null)
+		{
+			return field.getName();
+		}
+		return "";
+	}
 }

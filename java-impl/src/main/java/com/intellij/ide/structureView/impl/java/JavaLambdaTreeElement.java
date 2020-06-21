@@ -15,17 +15,17 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.PsiLambdaNameHelper;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiType;
 import consulo.ui.image.Image;
+import javax.annotation.Nonnull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExpression>
 {
@@ -75,7 +75,7 @@ public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExp
 		if(myFunctionalName == null)
 		{
 			PsiLambdaExpression lambdaExpression = getElement();
-			if(lambdaExpression != null)
+			if(lambdaExpression != null && !DumbService.isDumb(lambdaExpression.getProject()))
 			{
 				final PsiType interfaceType = lambdaExpression.getFunctionalInterfaceType();
 				if(interfaceType != null)
@@ -103,6 +103,6 @@ public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExp
 	@Override
 	public Image getIcon()
 	{
-		return AllIcons.Nodes.Function;
+		return AllIcons.Nodes.Lambda;
 	}
 }

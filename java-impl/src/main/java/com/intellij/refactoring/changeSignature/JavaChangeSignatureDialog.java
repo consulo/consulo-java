@@ -64,9 +64,8 @@ import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.table.JBListTable;
 import com.intellij.util.ui.table.JBTableRow;
 import com.intellij.util.ui.table.JBTableRowEditor;
-import org.jetbrains.annotations.NotNull;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -104,9 +103,9 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 	}
 
 	@Nonnull
-	public static JavaChangeSignatureDialog createAndPreselectNew(@NotNull Project project,
-																  @NotNull PsiMethod method,
-																  @NotNull List<? extends ParameterInfoImpl> parameterInfos,
+	public static JavaChangeSignatureDialog createAndPreselectNew(@Nonnull Project project,
+																  @Nonnull PsiMethod method,
+																  @Nonnull List<? extends ParameterInfoImpl> parameterInfos,
 																  final boolean allowDelegation,
 																  final PsiReferenceExpression refExpr)
 	{

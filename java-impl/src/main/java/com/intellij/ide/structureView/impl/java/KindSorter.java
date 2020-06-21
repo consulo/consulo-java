@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,63 +23,89 @@ import javax.annotation.Nonnull;
 
 import java.util.Comparator;
 
-public class KindSorter implements Sorter {
-  public static final Sorter INSTANCE = new KindSorter();
-  public static final Sorter POPUP_INSTANCE = new KindSorter(){{isPopup = true;}};
+public class KindSorter implements Sorter
+{
+	public static final Sorter INSTANCE = new KindSorter(false);
+	public static final Sorter POPUP_INSTANCE = new KindSorter(true);
 
+	public KindSorter(boolean isPopup)
+	{
+		this.isPopup = isPopup;
+	}
 
-  @NonNls public static final String ID = "KIND";
-  boolean isPopup = false;
+	@NonNls
+	public static final String ID = "KIND";
+	private final boolean isPopup;
 
-  private final Comparator COMPARATOR = new Comparator() {
-    public int compare(final Object o1, final Object o2) {
-      return getWeight(o1) - getWeight(o2);
-    }
+	private final Comparator COMPARATOR = new Comparator()
+	{
+		@Override
+		public int compare(final Object o1, final Object o2)
+		{
+			return getWeight(o1) - getWeight(o2);
+		}
 
-    private int getWeight(final Object value) {
-      if (value instanceof JavaAnonymousClassTreeElement) {
-        return 55;
-      }
-      if (value instanceof JavaClassTreeElement) {
-        return isPopup ? 53 : 10;
-      }
-      if (value instanceof ClassInitializerTreeElement) {
-        return 15;
-      }
-      if (value instanceof SuperTypeGroup) {
-        return 20;
-      }
-      if (value instanceof PsiMethodTreeElement) {
-        final PsiMethodTreeElement methodTreeElement = (PsiMethodTreeElement)value;
-        final PsiMethod method = methodTreeElement.getMethod();
+		private int getWeight(final Object value)
+		{
+			if(value instanceof JavaAnonymousClassTreeElement)
+			{
+				return 55;
+			}
+			if(value instanceof JavaClassTreeElement)
+			{
+				return isPopup ? 53 : 10;
+			}
+			if(value instanceof ClassInitializerTreeElement)
+			{
+				return 15;
+			}
+			if(value instanceof SuperTypeGroup)
+			{
+				return 20;
+			}
+			if(value instanceof PsiMethodTreeElement)
+			{
+				final PsiMethodTreeElement methodTreeElement = (PsiMethodTreeElement) value;
+				final PsiMethod method = methodTreeElement.getMethod();
 
-        return method.isConstructor() ? 30 : 35;
-      }
-      if (value instanceof PropertyGroup) {
-        return 40;
-      }
-      if (value instanceof PsiFieldTreeElement) {
-        return 50;
-      }
-      return 60;
-    }
-  };
+				return method != null && method.isConstructor() ? 30 : 35;
+			}
+			if(value instanceof PropertyGroup)
+			{
+				return 40;
+			}
+			if(value instanceof PsiFieldTreeElement)
+			{
+				return 50;
+			}
+			return 60;
+		}
+	};
 
-  public Comparator getComparator() {
-    return COMPARATOR;
-  }
+	@Override
+	@Nonnull
+	public Comparator getComparator()
+	{
+		return COMPARATOR;
+	}
 
-  public boolean isVisible() {
-    return false;
-  }
+	@Override
+	public boolean isVisible()
+	{
+		return false;
+	}
 
-  @Nonnull
-  public ActionPresentation getPresentation() {
-    throw new IllegalStateException();
-  }
+	@Override
+	@Nonnull
+	public ActionPresentation getPresentation()
+	{
+		throw new IllegalStateException();
+	}
 
-  @Nonnull
-  public String getName() {
-    return ID;
-  }
+	@Override
+	@Nonnull
+	public String getName()
+	{
+		return ID;
+	}
 }
