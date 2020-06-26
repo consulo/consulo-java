@@ -53,7 +53,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 {
 	private static final Set<Class<?>> ourArgumentListAllowedParentClassesSet = ContainerUtil.<Class<?>>newHashSet(PsiMethodCallExpression.class, PsiNewExpression.class, PsiAnonymousClass.class, PsiEnumConstant.class);
 
-	private static final Set<? extends Class> ourStopSearch = Collections.singleton(PsiMethod.class);
+	private static final Set<? extends Class<?>> ourStopSearch = Collections.singleton(PsiMethod.class);
 
 	@Override
 	public Object[] getParametersForLookup(LookupElement item, ParameterInfoContext context)
@@ -303,7 +303,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
 	@Nonnull
 	@Override
-	public Set<? extends Class> getArgListStopSearchClasses()
+	public Set<? extends Class<?>> getArgListStopSearchClasses()
 	{
 		return ourStopSearch;
 	}
