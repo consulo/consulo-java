@@ -37,7 +37,6 @@ import com.intellij.psi.scope.processor.MethodResolverProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.MethodSignatureUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 import javax.annotation.Nonnull;
@@ -52,8 +51,7 @@ import java.util.Set;
  */
 public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabActionSupport<PsiExpressionList, Object, PsiExpression>, DumbAware
 {
-	private static final Set<Class> ourArgumentListAllowedParentClassesSet = ContainerUtil.<Class>newHashSet(PsiMethodCallExpression.class, PsiNewExpression.class, PsiAnonymousClass.class,
-			PsiEnumConstant.class);
+	private static final Set<Class<?>> ourArgumentListAllowedParentClassesSet = ContainerUtil.<Class<?>>newHashSet(PsiMethodCallExpression.class, PsiNewExpression.class, PsiAnonymousClass.class, PsiEnumConstant.class);
 
 	private static final Set<? extends Class> ourStopSearch = Collections.singleton(PsiMethod.class);
 
@@ -62,20 +60,6 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 	{
 		final List<? extends PsiElement> elements = JavaCompletionUtil.getAllPsiElements(item);
 		return elements != null && !elements.isEmpty() && elements.get(0) instanceof PsiMethod ? elements.toArray() : null;
-	}
-
-	@Override
-	public Object[] getParametersForDocumentation(final Object p, final ParameterInfoContext context)
-	{
-		if(p instanceof MethodCandidateInfo)
-		{
-			return ((MethodCandidateInfo) p).getElement().getParameterList().getParameters();
-		}
-		if(p instanceof PsiMethod)
-		{
-			return ((PsiMethod) p).getParameterList().getParameters();
-		}
-		return ArrayUtil.EMPTY_OBJECT_ARRAY;
 	}
 
 	@Override
@@ -297,18 +281,6 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 	}
 
 	@Override
-	public String getParameterCloseChars()
-	{
-		return ParameterInfoUtils.DEFAULT_PARAMETER_CLOSE_CHARS;
-	}
-
-	@Override
-	public boolean tracksParameterIndex()
-	{
-		return true;
-	}
-
-	@Override
 	@Nonnull
 	public Class<PsiExpressionList> getArgumentListClass()
 	{
@@ -324,7 +296,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
 	@Override
 	@Nonnull
-	public Set<Class> getArgumentListAllowedParentClasses()
+	public Set<Class<?>> getArgumentListAllowedParentClasses()
 	{
 		return ourArgumentListAllowedParentClassesSet;
 	}
