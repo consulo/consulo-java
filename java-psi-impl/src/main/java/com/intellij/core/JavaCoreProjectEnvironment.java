@@ -15,27 +15,22 @@
  */
 package com.intellij.core;
 
-import java.io.File;
-
-import javax.annotation.Nonnull;
 import com.intellij.mock.MockFileIndexFacade;
-import com.intellij.openapi.roots.impl.DirectoryIndex;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiElementFinder;
 import com.intellij.psi.PsiResolveHelper;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
-import com.intellij.psi.impl.JavaPsiFacadeImpl;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import com.intellij.psi.impl.PsiElementFactoryImpl;
 import com.intellij.psi.impl.file.impl.JavaFileManager;
 import com.intellij.psi.impl.source.resolve.JavaResolveCache;
 import com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl;
 import consulo.disposer.Disposable;
-import consulo.psi.PsiPackageManager;
-import consulo.psi.impl.PsiPackageManagerImpl;
+
+import javax.annotation.Nonnull;
+import java.io.File;
 
 /**
  * TODO [VISTALL]
@@ -60,14 +55,14 @@ public class JavaCoreProjectEnvironment  extends CoreProjectEnvironment {
 
     myFileManager = createCoreFileManager();
     myProject.registerService(JavaFileManager.class, myFileManager);
-
-    PsiPackageManager manager = new PsiPackageManagerImpl(getProject(), DirectoryIndex.getInstance(getProject()));
-
-    myProject.registerService(PsiPackageManager.class, manager);
-
-    JavaPsiFacadeImpl javaPsiFacade = new JavaPsiFacadeImpl(myProject, manager);
-    registerProjectComponent(JavaPsiFacade.class, javaPsiFacade);
-    myProject.registerService(JavaPsiFacade.class, javaPsiFacade);
+//
+//    PsiPackageManager manager = new PsiPackageManagerImpl(getProject(), DirectoryIndex.getInstance(getProject()));
+//
+//    myProject.registerService(PsiPackageManager.class, manager);
+//
+//    JavaPsiFacadeImpl javaPsiFacade = new JavaPsiFacadeImpl(myProject, manager);
+//    registerProjectComponent(JavaPsiFacade.class, javaPsiFacade);
+//    myProject.registerService(JavaPsiFacade.class, javaPsiFacade);
   }
 
   protected CoreJavaPsiImplementationHelper createJavaPsiImplementationHelper() {
