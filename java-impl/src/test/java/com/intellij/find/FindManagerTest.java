@@ -15,16 +15,6 @@
  */
 package com.intellij.find;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.find.impl.FindInProjectUtil;
@@ -35,12 +25,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
@@ -56,6 +41,14 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.WaitFor;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /*
  * @author: MYakovlev
@@ -376,7 +369,7 @@ public abstract class FindManagerTest extends DaemonAnalyzerTestCase {
     String text = StringUtil.repeat(toFind + "\n",6);
     configureByText(PlainTextFileType.INSTANCE, text);
 
-    List<Usage> usages = FindUtil.findAll(getProject(), myEditor, findModel);
+    List<Usage> usages = FindUtil.findAll(getProject(), getFile(), findModel);
     for (Usage usage : usages) {
       ReplaceInProjectManager.getInstance(getProject()).replaceUsage(usage, findModel, Collections.<Usage>emptySet(), false);
     }
