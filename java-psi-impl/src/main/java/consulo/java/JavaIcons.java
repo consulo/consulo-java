@@ -26,5 +26,5 @@ public interface JavaIcons
 		Image NativeLibrariesFolder = IconLoader.getIcon("/icons/nodes/nativeLibrariesFolder.png");  // 16x16
 	}
 
-	Image Java = IconLoader.getIcon("/icons/java.png");  // 16x16
+	Image Java = IconLoader.getIcon("/icons/java.svg");  // 16x16
 }
