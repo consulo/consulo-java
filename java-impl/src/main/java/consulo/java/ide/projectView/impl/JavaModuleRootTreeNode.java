@@ -26,7 +26,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiJavaModule;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.JavaIcons;
 
 /**
  * @author VISTALL
@@ -62,11 +61,5 @@ public class JavaModuleRootTreeNode extends PsiDirectoryNode
 			}
 			data.setPresentableText(name);
 		}
-	}
-
-	@Override
-	protected void setupIcon(PresentationData data, PsiDirectory psiDirectory)
-	{
-		data.setIcon(JavaIcons.Nodes.JavaModuleRoot);
 	}
 }
