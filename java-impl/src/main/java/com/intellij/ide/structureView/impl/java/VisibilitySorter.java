@@ -19,10 +19,10 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
+import consulo.ui.image.Image;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
-import javax.swing.*;
+import javax.annotation.Nonnull;
 import java.util.Comparator;
 
 public class VisibilitySorter implements Sorter{
@@ -38,7 +38,7 @@ public class VisibilitySorter implements Sorter{
       return null;
     }
 
-    public Icon getIcon() {
+    public Image getIcon() {
       return AllIcons.ObjectBrowser.VisibilitySort;
     }
   };
