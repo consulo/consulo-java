@@ -11,10 +11,9 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodReferenceExpression;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
 class JavaMethodReferenceElement extends LookupElement
@@ -45,7 +44,7 @@ class JavaMethodReferenceElement extends LookupElement
 	@Override
 	public void renderElement(LookupElementPresentation presentation)
 	{
-		presentation.setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(myMethod, Iconable.ICON_FLAG_VISIBILITY)));
+		presentation.setIcon(IconDescriptorUpdaters.getIcon(myMethod, Iconable.ICON_FLAG_VISIBILITY));
 		super.renderElement(presentation);
 	}
 

@@ -1,18 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInsight.daemon.impl.actions;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
-
-import javax.annotation.Nullable;
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
@@ -40,10 +28,18 @@ import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.list.PopupListElementRenderer;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.image.Image;
+import consulo.util.lang.ObjectUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddImportAction implements QuestionAction
 {
@@ -142,13 +138,14 @@ public class AddImportAction implements QuestionAction
 					@Override
 					public String getTextFor(PsiClass value)
 					{
-						return ObjectUtils.assertNotNull(value.getQualifiedName());
+						return ObjectUtil.assertNotNull(value.getQualifiedName());
 					}
 
 					@Override
-					public Icon getIconFor(PsiClass aValue)
+					@RequiredUIAccess
+					public Image getIconFor(PsiClass aValue)
 					{
-						return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
+						return IconDescriptorUpdaters.getIcon(aValue, 0);
 					}
 				};
 		ListPopupImpl popup = new ListPopupImpl(step)

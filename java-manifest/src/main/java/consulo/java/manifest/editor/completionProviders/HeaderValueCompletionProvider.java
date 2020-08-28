@@ -1,30 +1,27 @@
 package consulo.java.manifest.editor.completionProviders;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
-import javax.annotation.Nullable;
-import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import org.osmorc.manifest.lang.psi.Clause;
-import org.osmorc.manifest.lang.psi.Header;
-import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.ide.actions.QualifiedNameProvider;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
-import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
+import org.osmorc.manifest.lang.headerparser.HeaderParser;
+import org.osmorc.manifest.lang.psi.Clause;
+import org.osmorc.manifest.lang.psi.Header;
+import org.osmorc.manifest.lang.psi.HeaderValuePart;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
 * @author VISTALL
@@ -72,11 +69,11 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
 
   @Nullable
   @Override
-  protected Icon getIcon(@Nonnull Object item) {
+  protected Image getIcon(@Nonnull Object item) {
     if (item instanceof NavigationItem) {
       ItemPresentation itemPresentation = ItemPresentationProviders.getItemPresentation((NavigationItem)item);
       if (itemPresentation != null) {
-        return TargetAWT.to(itemPresentation.getIcon());
+        return itemPresentation.getIcon();
       }
     }
     return null;
@@ -86,7 +83,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
   @Override
   protected String getLookupString(@Nonnull Object item) {
     if (item instanceof PsiElement) {
-      for (QualifiedNameProvider provider : Extensions.getExtensions(QualifiedNameProvider.EP_NAME)) {
+      for (QualifiedNameProvider provider : QualifiedNameProvider.EP_NAME.getExtensionList()) {
         String result = provider.getQualifiedName((PsiElement)item);
         if (result != null) {
           return result;

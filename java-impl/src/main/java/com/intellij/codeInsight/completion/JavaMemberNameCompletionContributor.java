@@ -15,30 +15,13 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiClass;
-import static com.intellij.patterns.PsiJavaPatterns.psiField;
-import static com.intellij.patterns.StandardPatterns.or;
-
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.lookup.LookupElementDecorator;
-import com.intellij.codeInsight.lookup.LookupItem;
+import com.intellij.codeInsight.lookup.*;
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.featureStatistics.FeatureUsageTracker;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.ElementPattern;
@@ -55,9 +38,21 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.refactoring.introduceField.InplaceIntroduceFieldPopup;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.PsiJavaPatterns.psiClass;
+import static com.intellij.patterns.PsiJavaPatterns.psiField;
+import static com.intellij.patterns.StandardPatterns.or;
 
 /**
  * @author peter
@@ -445,7 +440,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 
 		if(ourClassParent.isAnnotationType() && matcher.prefixMatches(PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME))
 		{
-			set.add(LookupElementBuilder.create(PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME).withIcon(PlatformIcons.METHOD_ICON).withTailText("()").withInsertHandler(ParenthesesInsertHandler
+			set.add(LookupElementBuilder.create(PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME).withIcon(AllIcons.Nodes.Method).withTailText("()").withInsertHandler(ParenthesesInsertHandler
 					.NO_PARAMETERS));
 		}
 

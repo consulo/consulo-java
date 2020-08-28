@@ -4,12 +4,13 @@ package com.intellij.codeInsight.lookup;
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.InsertionContext;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaCodeReferenceCodeFragment;
-import com.intellij.util.PlatformIcons;
 import consulo.psi.PsiPackage;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -58,7 +59,7 @@ public class PackageLookupItem extends LookupElement
 		{
 			presentation.setItemText(myString + ".");
 		}
-		presentation.setIcon(PlatformIcons.PACKAGE_ICON);
+		presentation.setIcon(AllIcons.Nodes.Package);
 	}
 
 	@Override

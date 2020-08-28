@@ -15,22 +15,16 @@
  */
 package com.intellij.codeInsight.lookup;
 
-import java.util.Collections;
-import java.util.Set;
+import com.intellij.icons.AllIcons;
+import com.intellij.psi.*;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.icons.AllIcons;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiType;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.awt.TargetAWT;
-import consulo.ide.IconDescriptorUpdaters;
-import consulo.ui.image.Image;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author peter
@@ -85,7 +79,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
 	@Override
 	public void renderElement(LookupElementPresentation presentation)
 	{
-		presentation.setIcon(TargetAWT.to(myIcon));
+		presentation.setIcon(myIcon);
 		presentation.setItemText(myPresentableText);
 		PsiType type = getType();
 		presentation.setTypeText(type == null ? null : type.getPresentableText());

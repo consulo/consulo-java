@@ -15,25 +15,12 @@
  */
 package com.intellij.execution.actions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import com.intellij.execution.JavaTestConfigurationBase;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.testframework.AbstractPatternBasedConfigurationProducer;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.PopupStep;
@@ -42,7 +29,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction
 {
@@ -90,9 +80,9 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
 				}
 
 				@Override
-				public Icon getIconFor(T configuration)
+				public Image getIconFor(T configuration)
 				{
-					return TargetAWT.to(configuration.getIcon());
+					return configuration.getIcon();
 				}
 
 				@Nonnull

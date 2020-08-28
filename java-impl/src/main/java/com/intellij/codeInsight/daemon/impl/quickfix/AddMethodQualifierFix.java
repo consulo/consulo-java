@@ -27,13 +27,12 @@ import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.util.IncorrectOperationException;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
+import consulo.ui.image.Image;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.annotation.Nonnull;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,9 +185,9 @@ public class AddMethodQualifierFix implements IntentionAction
 			}
 
 			@Override
-			public Icon getIconFor(final PsiVariable aValue)
+			public Image getIconFor(final PsiVariable aValue)
 			{
-				return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
+				return IconDescriptorUpdaters.getIcon(aValue, 0);
 			}
 		};
 

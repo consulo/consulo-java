@@ -15,28 +15,26 @@
  */
 package com.intellij.codeInsight.completion.util;
 
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.PlatformIcons;
-import com.intellij.util.ui.EmptyIcon;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class PsiTypeCanonicalLookupElement extends LookupElement {
-  private static final Icon EMPTY_ICON = new EmptyIcon(PlatformIcons.CLASS_ICON.getIconWidth() * 2, PlatformIcons.CLASS_ICON.getIconHeight());
+  private static final Image EMPTY_ICON = Image.empty(AllIcons.Nodes.Class.getIconWidth() * 2, AllIcons.Nodes.Class.getIconHeight());
 
   private final PsiType myType;
   private final String myPresentableText;
@@ -102,7 +100,7 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   public void renderElement(LookupElementPresentation presentation) {
     final PsiClass psiClass = getPsiClass();
     if (psiClass != null) {
-      presentation.setIcon(presentation.isReal() ? TargetAWT.to(IconDescriptorUpdaters.getIcon(psiClass, Iconable.ICON_FLAG_VISIBILITY)) : EMPTY_ICON);
+      presentation.setIcon(presentation.isReal() ? IconDescriptorUpdaters.getIcon(psiClass, Iconable.ICON_FLAG_VISIBILITY) : EMPTY_ICON);
       presentation.setTailText(" (" + PsiFormatUtil.getPackageDisplayName(psiClass) + ")", true);
     }
     final PsiType type = getPsiType();

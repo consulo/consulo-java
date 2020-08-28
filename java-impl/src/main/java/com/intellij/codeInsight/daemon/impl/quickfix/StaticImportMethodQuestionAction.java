@@ -15,17 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
-
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.codeInsight.intention.impl.AddSingleMemberStaticImportAction;
@@ -39,19 +28,20 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.*;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.list.PopupListElementRenderer;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 public class StaticImportMethodQuestionAction<T extends PsiMember> implements QuestionAction
 {
@@ -174,9 +164,10 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
 			}
 
 			@Override
-			public Icon getIconFor(T aValue)
+			@RequiredUIAccess
+			public Image getIconFor(T aValue)
 			{
-				return TargetAWT.to(IconDescriptorUpdaters.getIcon(aValue, 0));
+				return IconDescriptorUpdaters.getIcon(aValue, 0);
 			}
 		};
 

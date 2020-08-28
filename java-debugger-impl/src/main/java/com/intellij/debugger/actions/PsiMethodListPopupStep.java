@@ -15,26 +15,21 @@
  */
 package com.intellij.debugger.actions;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import com.intellij.codeInsight.unwrap.ScopeHighlighter;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.icons.AllIcons;
-import consulo.awt.TargetAWT;
-import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.ui.popup.ListPopupStep;
-import com.intellij.openapi.ui.popup.ListSeparator;
-import com.intellij.openapi.ui.popup.MnemonicNavigationFilter;
-import com.intellij.openapi.ui.popup.PopupStep;
-import com.intellij.openapi.ui.popup.SpeedSearchFilter;
+import com.intellij.openapi.ui.popup.*;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.PsiFormatUtil;
+import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author Eugene Zhuravlev
@@ -78,11 +73,12 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget>
 	}
 
 	@Override
-	public Icon getIconFor(SmartStepTarget aValue)
+	@RequiredUIAccess
+	public Image getIconFor(SmartStepTarget aValue)
 	{
 		if(aValue instanceof MethodSmartStepTarget)
 		{
-			return TargetAWT.to(IconDescriptorUpdaters.getIcon(((MethodSmartStepTarget) aValue).getMethod(), 0));
+			return IconDescriptorUpdaters.getIcon(((MethodSmartStepTarget) aValue).getMethod(), 0);
 		}
 		if(aValue instanceof LambdaSmartStepTarget)
 		{

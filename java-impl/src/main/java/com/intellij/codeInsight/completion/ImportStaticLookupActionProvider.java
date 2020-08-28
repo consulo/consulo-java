@@ -4,9 +4,10 @@ import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupActionProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementAction;
+import com.intellij.icons.AllIcons;
 import com.intellij.util.Consumer;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.EmptyIcon;
+import consulo.ui.image.Image;
 
 import javax.swing.*;
 
@@ -21,8 +22,8 @@ public class ImportStaticLookupActionProvider implements LookupActionProvider {
       return;
     }
 
-    final Icon checkIcon = PlatformIcons.CHECK_ICON;
-    final Icon icon = item.willBeImported() ? checkIcon : new EmptyIcon(checkIcon.getIconWidth(), checkIcon.getIconHeight());
+    final Image checkIcon = AllIcons.Actions.Checked;
+    final Image icon = item.willBeImported() ? checkIcon : Image.empty(checkIcon.getWidth(), checkIcon.getHeight());
     consumer.consume(new LookupElementAction(icon, "Import statically") {
       @Override
       public Result performLookupAction() {

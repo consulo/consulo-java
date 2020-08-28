@@ -1,17 +1,16 @@
 package consulo.java.manifest.editor.completionProviders;
 
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
+import consulo.java.manifest.lang.headerparser.HeaderParserEP;
+import consulo.ui.image.Image;
+import org.osmorc.manifest.lang.ManifestFileType;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
-import org.osmorc.manifest.lang.ManifestFileType;
-import consulo.awt.TargetAWT;
-import consulo.java.manifest.lang.headerparser.HeaderParserEP;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
 
 /**
  * @author VISTALL
@@ -25,8 +24,8 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
   @Nonnull
   @Override
   public Collection<String> getItems(String prefix, boolean cached, CompletionParameters parameters) {
-    HeaderParserEP[] extensions = HeaderParserEP.EP_NAME.getExtensions();
-    List<String> list = new ArrayList<String>(extensions.length - 1);
+    List<HeaderParserEP> extensions = HeaderParserEP.EP_NAME.getExtensionList();
+    List<String> list = new ArrayList<>(extensions.size() - 1);
     for (HeaderParserEP ep : extensions) {
       if (ep.key.isEmpty()) {
         continue;
@@ -36,10 +35,10 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
     return list;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
-  protected Icon getIcon(@Nonnull String item) {
-    return TargetAWT.to(ManifestFileType.INSTANCE.getIcon());
+  protected Image getIcon(@Nonnull String item) {
+    return ManifestFileType.INSTANCE.getIcon();
   }
 
   @Nonnull
@@ -48,13 +47,13 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
     return item;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected String getTailText(@Nonnull String item) {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected String getTypeText(@Nonnull String item) {
     return null;

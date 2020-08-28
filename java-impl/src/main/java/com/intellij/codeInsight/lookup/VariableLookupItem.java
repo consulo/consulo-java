@@ -15,17 +15,9 @@
  */
 package com.intellij.codeInsight.lookup;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.completion.CodeCompletionFeatures;
-import com.intellij.codeInsight.completion.CompletionUtil;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.codeInsight.completion.MemberLookupHelper;
-import com.intellij.codeInsight.completion.StaticallyImportable;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.daemon.impl.JavaColorProvider;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.lookup.impl.JavaElementLookupRenderer;
@@ -41,10 +33,11 @@ import com.intellij.psi.impl.source.PsiFieldImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.HashMap;
-import com.intellij.util.ui.ColorIcon;
-import com.intellij.util.ui.JBUI;
-import consulo.awt.TargetAWT;
+import consulo.ui.image.ImageEffects;
 import consulo.ui.shared.ColorValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -191,7 +184,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 		}
 		if(myColor != null)
 		{
-			presentation.setTypeText("", JBUI.scale(new ColorIcon(12, TargetAWT.to(myColor))));
+			presentation.setTypeText("", ImageEffects.colorFilled(12, 12, myColor));
 		}
 		else
 		{

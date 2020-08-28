@@ -15,8 +15,6 @@
  */
 package com.intellij.codeInsight.completion.util;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -25,8 +23,9 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiFormatUtil;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
@@ -55,7 +54,7 @@ public class SimpleMethodCallLookupElement extends LookupElement {
 
   @Override
   public void renderElement(LookupElementPresentation presentation) {
-    presentation.setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(myMethod, Iconable.ICON_FLAG_VISIBILITY)));
+    presentation.setIcon(IconDescriptorUpdaters.getIcon(myMethod, Iconable.ICON_FLAG_VISIBILITY));
     presentation.setItemText(myMethod.getName());
     presentation.setTailText(PsiFormatUtil.formatMethod(myMethod,
                                                         PsiSubstitutor.EMPTY,

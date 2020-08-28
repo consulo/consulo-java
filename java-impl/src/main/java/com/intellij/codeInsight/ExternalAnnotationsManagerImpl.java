@@ -74,6 +74,7 @@ import com.intellij.util.messages.MessageBus;
 import com.intellij.util.messages.MessageBusConnection;
 import com.intellij.util.ui.OptionsMessageDialog;
 import consulo.logging.Logger;
+import consulo.ui.image.Image;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.NonNls;
 
@@ -324,7 +325,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 				}
 
 				@Override
-				public Icon getIconFor(final VirtualFile aValue)
+				public Image getIconFor(final VirtualFile aValue)
 				{
 					return AllIcons.Modules.Annotation;
 				}

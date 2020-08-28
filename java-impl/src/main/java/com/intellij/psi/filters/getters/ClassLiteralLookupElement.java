@@ -59,7 +59,7 @@ public class ClassLiteralLookupElement extends LookupElement implements TypedLoo
   @Override
   public void renderElement(LookupElementPresentation presentation) {
     presentation.setItemText(getLookupString());
-    presentation.setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(myExpr, 0)));
+    presentation.setIcon(IconDescriptorUpdaters.getIcon(myExpr, 0));
     String pkg = StringUtil.getPackageName(myCanonicalText);
     if (StringUtil.isNotEmpty(pkg)) {
       presentation.setTailText(" (" + pkg + ")", true);

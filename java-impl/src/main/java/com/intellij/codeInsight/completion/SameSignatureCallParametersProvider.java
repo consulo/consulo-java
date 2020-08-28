@@ -15,18 +15,12 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.TailTypeDecorator;
 import com.intellij.codeInsight.lookup.VariableLookupItem;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
@@ -34,13 +28,20 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiSuperMethodUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.LayeredIcon;
 import com.intellij.util.Consumer;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.codeInsight.completion.CompletionProvider;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Set;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
  * @author peter
@@ -85,14 +86,11 @@ class SameSignatureCallParametersProvider implements CompletionProvider
 	private static LookupElement createParametersLookupElement(final PsiMethod takeParametersFrom, PsiElement call, PsiMethod invoked)
 	{
 		final PsiParameter[] parameters = takeParametersFrom.getParameterList().getParameters();
-		final String lookupString = StringUtil.join(parameters, psiParameter -> psiParameter.getName(), ", ");
+		final String lookupString = StringUtil.join(parameters, PsiNamedElement::getName, ", ");
 
-		final int w = PlatformIcons.PARAMETER_ICON.getIconWidth();
-		LayeredIcon icon = new LayeredIcon(2);
-		icon.setIcon(PlatformIcons.PARAMETER_ICON, 0, 2 * w / 5, 0);
-		icon.setIcon(PlatformIcons.PARAMETER_ICON, 1);
-
-		LookupElementBuilder element = LookupElementBuilder.create(lookupString).withIcon(icon);
+		// TODO [VISTALL] new icon
+		Image ppIcon = ImageEffects.transparent(AllIcons.Nodes.Parameter);
+		LookupElementBuilder element = LookupElementBuilder.create(lookupString).withIcon(ppIcon);
 		if(PsiTreeUtil.isAncestor(takeParametersFrom, call, true))
 		{
 			element = element.withInsertHandler(new InsertHandler<LookupElement>()
