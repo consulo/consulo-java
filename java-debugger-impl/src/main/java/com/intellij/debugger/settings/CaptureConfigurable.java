@@ -15,22 +15,6 @@
  */
 package com.intellij.debugger.settings;
 
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumnModel;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jetbrains.annotations.Debugger;
-import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.jdi.DecompiledLocalVariable;
@@ -53,30 +37,31 @@ import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileWrapper;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.AnnotatedElementsSearch;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.DumbAwareActionButton;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.*;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.ItemRemovable;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.intellij.util.xmlb.XmlSerializer;
 import consulo.fileTypes.ArchiveFileType;
 import consulo.java.JavaRegistry;
+import consulo.localize.LocalizeValue;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jetbrains.annotations.Debugger;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author egor
@@ -141,7 +126,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		});
 
-		decorator.addExtraAction(new DumbAwareActionButton("Duplicate", "Duplicate", PlatformIcons.COPY_ICON)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Duplicate"), LocalizeValue.of("Duplicate"), AllIcons.Actions.Copy)
 		{
 			@Override
 			public boolean isEnabled()
@@ -167,7 +152,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		});
 
-		decorator.addExtraAction(new DumbAwareActionButton("Enable Selected", "Enable Selected", PlatformIcons.SELECT_ALL_ICON)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Enable Selected"), LocalizeValue.of("Enable Selected"), AllIcons.Actions.Selectall)
 		{
 			@Override
 			public boolean isEnabled()
@@ -182,7 +167,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 				table.repaint();
 			}
 		});
-		decorator.addExtraAction(new DumbAwareActionButton("Disable Selected", "Disable Selected", PlatformIcons.UNSELECT_ALL_ICON)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Disable Selected"), LocalizeValue.of("Disable Selected"), AllIcons.Actions.Unselectall)
 		{
 			@Override
 			public boolean isEnabled()
@@ -214,7 +199,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		}.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0)), table);
 
-		decorator.addExtraAction(new DumbAwareActionButton("Import", "Import", AllIcons.Actions.Install)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Import"), LocalizeValue.of("Import"), AllIcons.Actions.Install)
 		{
 			@Override
 			public void actionPerformed(@Nonnull final AnActionEvent e)
@@ -264,7 +249,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 				}
 			}
 		});
-		decorator.addExtraAction(new DumbAwareActionButton("Export", "Export", AllIcons.Actions.Export)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Export"), LocalizeValue.of("Export"), AllIcons.Actions.Export)
 		{
 			@Override
 			public void actionPerformed(@Nonnull final AnActionEvent e)

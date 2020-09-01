@@ -15,38 +15,17 @@
  */
 package com.intellij.execution.impl;
 
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.RunnerRegistry;
-import com.intellij.execution.configurations.JavaCommandLine;
-import com.intellij.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.ModuleRunProfile;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.RunnerSettings;
+import com.intellij.execution.configurations.*;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.process.CapturingProcessAdapter;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.JavaPatchableProgramRunner;
-import com.intellij.execution.runners.ProcessProxy;
-import com.intellij.execution.runners.ProcessProxyFactory;
-import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
-import com.intellij.execution.runners.RunContentBuilder;
+import com.intellij.execution.runners.*;
 import com.intellij.execution.ui.ExecutionConsole;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.icons.AllIcons;
@@ -63,8 +42,16 @@ import com.intellij.unscramble.ThreadDumpConsoleFactory;
 import com.intellij.unscramble.ThreadDumpParser;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.util.text.DateFormatUtil;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.image.Image;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.List;
 
 /**
  * @author spleaner
@@ -176,7 +163,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 	{
 		protected final ProcessHandler myProcessHandler;
 
-		protected ProxyBasedAction(String text, String description, Icon icon, ProcessHandler processHandler)
+		protected ProxyBasedAction(String text, String description, Image icon, ProcessHandler processHandler)
 		{
 			super(text, description, icon);
 			myProcessHandler = processHandler;

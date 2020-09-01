@@ -20,29 +20,6 @@
  */
 package com.intellij.ui.classFilter;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.Icon;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -51,11 +28,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.UIBundle;
+import com.intellij.ui.*;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.IconUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -63,6 +36,16 @@ import com.intellij.util.ui.ComponentWithEmptyText;
 import com.intellij.util.ui.ItemRemovable;
 import com.intellij.util.ui.StatusText;
 import com.intellij.util.ui.UIUtil;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.table.*;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText {
   protected JBTable myTable = null;
@@ -157,11 +140,11 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     return UIBundle.message("button.add.pattern");
   }
 
-  protected Icon getAddButtonIcon() {
+  protected Image getAddButtonIcon() {
     return IconUtil.getAddClassIcon();
   }
 
-  protected Icon getAddPatternButtonIcon() {
+  protected Image getAddPatternButtonIcon() {
     return IconUtil.getAddPatternIcon();
   }
 

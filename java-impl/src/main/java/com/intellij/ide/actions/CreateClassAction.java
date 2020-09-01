@@ -72,7 +72,7 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 			final JavaCreateFromTemplateHandler handler = new JavaCreateFromTemplateHandler();
 			if(handler.handlesTemplate(template) && JavaCreateFromTemplateHandler.canCreate(directory))
 			{
-				builder.addKind(template.getName(), TargetAWT.to(JavaFileType.INSTANCE.getIcon()), template.getName());
+				builder.addKind(template.getName(), JavaFileType.INSTANCE.getIcon(), template.getName());
 			}
 		}
 

@@ -16,17 +16,6 @@
 
 package com.intellij.execution.configurations.coverage;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.*;
-
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.coverage.CoverageRunner;
 import com.intellij.coverage.JavaCoverageEngine;
@@ -52,6 +41,14 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.classFilter.ClassFilterEditor;
 import com.intellij.util.IconUtil;
 import com.intellij.util.ui.UIUtil;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * Base {@link com.intellij.openapi.options.Configurable} for configuring code coverage
@@ -113,7 +110,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
     }
 
     @Override
-    protected Icon getAddPatternButtonIcon() {
+    protected Image getAddPatternButtonIcon() {
       return IconUtil.getAddPackageIcon();
     }
   }

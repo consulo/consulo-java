@@ -466,7 +466,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
 
   private final class ShowFilesAction extends ToggleAction {
     ShowFilesAction() {
-      super(AnalysisScopeBundle.message("action.show.files"), AnalysisScopeBundle.message("action.show.files.description"), TargetAWT.to(JavaIcons.FileTypes.Java));
+      super(AnalysisScopeBundle.message("action.show.files"), AnalysisScopeBundle.message("action.show.files.description"), JavaIcons.FileTypes.Java);
     }
 
     public boolean isSelected(AnActionEvent event) {

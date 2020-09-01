@@ -15,18 +15,13 @@
  */
 package com.intellij.ide.actions;
 
-import javax.swing.Icon;
-
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.*;
+import consulo.ui.image.Image;
 
 public abstract class JavaCreateTemplateInPackageAction<T extends PsiElement> extends CreateTemplateInPackageAction<T> {
 
-  protected JavaCreateTemplateInPackageAction(String text, String description, Icon icon, boolean inSourceOnly) {
+  protected JavaCreateTemplateInPackageAction(String text, String description, Image icon, boolean inSourceOnly) {
     super(text, description, icon, inSourceOnly);
   }
 

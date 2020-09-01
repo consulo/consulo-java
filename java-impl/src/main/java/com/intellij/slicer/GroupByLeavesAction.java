@@ -15,9 +15,9 @@
  */
 package com.intellij.slicer;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.util.PlatformIcons;
 
 /**
  * @author cdr
@@ -27,7 +27,7 @@ class GroupByLeavesAction extends AnAction {
   private static final String TEXT = "Group by leaf expression";
 
   public GroupByLeavesAction(SliceTreeBuilder treeBuilder) {
-    super(TEXT, "Show original expression values that might appear in this place", PlatformIcons.XML_TAG_ICON);
+    super(TEXT, "Show original expression values that might appear in this place", AllIcons.Nodes.Tag);
     myTreeBuilder = treeBuilder;
   }
 

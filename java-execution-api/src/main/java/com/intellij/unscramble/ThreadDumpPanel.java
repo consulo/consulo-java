@@ -15,31 +15,6 @@
  */
 package com.intellij.unscramble;
 
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Daemon_sign;
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.EdtBusy;
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.IO;
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Idle;
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Locked;
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Paused;
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Running;
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Socket;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.swing.DefaultListModel;
-import javax.swing.Icon;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.icons.AllIcons;
 import com.intellij.notification.NotificationGroup;
@@ -53,18 +28,21 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.wm.ToolWindowId;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.LayeredIcon;
-import com.intellij.ui.LightColors;
-import com.intellij.ui.ListSpeedSearch;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.SideBorder;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.SpeedSearchComparator;
+import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.UIUtil;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import static com.intellij.icons.AllIcons.Debugger.ThreadStates.*;
 
 /**
  * @author Jeka
@@ -262,7 +240,7 @@ public class ThreadDumpPanel extends JPanel {
     private final Project myProject;
 
     public CopyToClipboardAction(List<ThreadState> threadDump, Project project) {
-      super("Copy to Clipboard", "Copy whole thread dump to clipboard", PlatformIcons.COPY_ICON);
+      super("Copy to Clipboard", "Copy whole thread dump to clipboard", AllIcons.Actions.Copy);
       myThreadDump = threadDump;
       myProject = project;
     }

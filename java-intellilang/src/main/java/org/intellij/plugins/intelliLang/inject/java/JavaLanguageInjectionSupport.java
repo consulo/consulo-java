@@ -16,43 +16,8 @@
 
 package org.intellij.plugins.intelliLang.inject.java;
 
-import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.MethodInfo;
-import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.createMethodInfo;
-import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.getParameterTypesString;
-import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.isInjectable;
-
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.plugins.intelliLang.AdvancedSettingsUI;
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.inject.AbstractLanguageInjectionSupport;
-import org.intellij.plugins.intelliLang.inject.EditInjectionSettingsAction;
-import org.intellij.plugins.intelliLang.inject.InjectLanguageAction;
-import org.intellij.plugins.intelliLang.inject.InjectorUtils;
-import org.intellij.plugins.intelliLang.inject.config.BaseInjection;
-import org.intellij.plugins.intelliLang.inject.config.InjectionPlace;
-import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
-import org.intellij.plugins.intelliLang.inject.config.ui.AbstractInjectionPanel;
-import org.intellij.plugins.intelliLang.inject.config.ui.MethodParameterPanel;
-import org.intellij.plugins.intelliLang.inject.config.ui.configurables.MethodParameterInjectionConfigurable;
-import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
-import org.intellij.plugins.intelliLang.util.PsiUtilEx;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.Language;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -78,9 +43,33 @@ import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.Consumer;
 import com.intellij.util.NullableFunction;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import gnu.trove.THashSet;
+import org.intellij.plugins.intelliLang.AdvancedSettingsUI;
+import org.intellij.plugins.intelliLang.Configuration;
+import org.intellij.plugins.intelliLang.inject.AbstractLanguageInjectionSupport;
+import org.intellij.plugins.intelliLang.inject.EditInjectionSettingsAction;
+import org.intellij.plugins.intelliLang.inject.InjectLanguageAction;
+import org.intellij.plugins.intelliLang.inject.InjectorUtils;
+import org.intellij.plugins.intelliLang.inject.config.BaseInjection;
+import org.intellij.plugins.intelliLang.inject.config.InjectionPlace;
+import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
+import org.intellij.plugins.intelliLang.inject.config.ui.AbstractInjectionPanel;
+import org.intellij.plugins.intelliLang.inject.config.ui.MethodParameterPanel;
+import org.intellij.plugins.intelliLang.inject.config.ui.configurables.MethodParameterInjectionConfigurable;
+import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
+import org.intellij.plugins.intelliLang.util.PsiUtilEx;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.*;
 
 /**
  * @author Gregory.Shrago
@@ -510,7 +499,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
   @Override
   public AnAction[] createAddActions(final Project project, final Consumer<BaseInjection> consumer) {
     return new AnAction[] {
-      new AnAction("Java Parameter", null, PlatformIcons.PARAMETER_ICON) {
+      new AnAction("Java Parameter", null, AllIcons.Nodes.Parameter) {
         @Override
         public void actionPerformed(final AnActionEvent e) {
           final BaseInjection injection = showInjectionUI(project, new MethodParameterInjection());

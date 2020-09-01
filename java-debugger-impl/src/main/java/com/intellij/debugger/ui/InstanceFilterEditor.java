@@ -21,8 +21,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.ui.classFilter.ClassFilterEditor;
 import com.intellij.util.IconUtil;
-
-import javax.swing.*;
+import consulo.ui.image.Image;
 
 /**
  * User: lex
@@ -54,7 +53,7 @@ public class InstanceFilterEditor extends ClassFilterEditor {
   }
 
   @Override
-  protected Icon getAddButtonIcon() {
+  protected Image getAddButtonIcon() {
     return IconUtil.getAddIcon();
   }
 

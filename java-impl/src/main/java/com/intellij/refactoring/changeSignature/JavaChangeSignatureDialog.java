@@ -64,6 +64,8 @@ import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.table.JBListTable;
 import com.intellij.util.ui.table.JBTableRow;
 import com.intellij.util.ui.table.JBTableRowEditor;
+import consulo.ui.image.ImageEffects;
+
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
@@ -240,7 +242,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 		table.setSurrendersFocusOnKeystroke(true);
 
 		myPropExceptionsButton = new AnActionButton(RefactoringBundle.message("changeSignature.propagate.exceptions.title"), null,
-				new LayeredIcon(AllIcons.Nodes.ExceptionClass, AllIcons.Actions.New))
+				ImageEffects.layered(AllIcons.Nodes.ExceptionClass, AllIcons.Actions.New))
 		{
 			@Override
 			public void actionPerformed(AnActionEvent e)
