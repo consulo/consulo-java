@@ -19,8 +19,6 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiFile;
@@ -29,7 +27,9 @@ import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.consulo.psi.impl.source.codeStyle.IndentHelperExtension;
+import consulo.psi.impl.source.codeStyle.IndentHelperExtension;
+
+import javax.annotation.Nonnull;
 
 public class JavaIndentHelper implements IndentHelperExtension
 {
