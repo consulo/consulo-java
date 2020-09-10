@@ -1,16 +1,14 @@
 package consulo.java.jam;
 
-import java.lang.reflect.Method;
-
-import javax.inject.Singleton;
-
-import net.sf.cglib.proxy.AdvancedProxy;
-import net.sf.cglib.proxy.InvocationHandler;
-
 import com.intellij.jam.JamClassGenerator;
 import com.intellij.jam.annotations.JamPsiConnector;
 import com.intellij.psi.PsiElementRef;
 import com.intellij.util.NotNullFunction;
+import consulo.util.advandedProxy.AdvancedProxyBuilder;
+
+import javax.inject.Singleton;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 /**
  * @author VISTALL
@@ -47,6 +45,6 @@ public class JamClassGeneratorImpl extends JamClassGenerator {
 
   @Override
   public <T> NotNullFunction<PsiElementRef, T> generateJamElementFactory(Class<T> aClass) {
-    return psiElementRef -> AdvancedProxy.createProxy(new InvocationHandlerImpl<>(aClass, psiElementRef), aClass);
+    return psiElementRef -> AdvancedProxyBuilder.create(aClass).withInvocationHandler(new InvocationHandlerImpl<>(aClass, psiElementRef)).build();
   }
 }

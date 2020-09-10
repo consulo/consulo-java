@@ -61,11 +61,5 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 </project>
