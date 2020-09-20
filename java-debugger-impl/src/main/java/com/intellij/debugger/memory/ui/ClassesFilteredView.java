@@ -15,36 +15,8 @@
  */
 package com.intellij.debugger.memory.ui;
 
-import static com.intellij.debugger.memory.ui.ClassesTable.DiffViewTableModel.CLASSNAME_COLUMN_INDEX;
-import static com.intellij.debugger.memory.ui.ClassesTable.DiffViewTableModel.DIFF_COLUMN_INDEX;
-
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.annotation.Nonnull;
-import javax.swing.JScrollPane;
-import javax.swing.event.DocumentEvent;
-
-import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerManager;
-import com.intellij.debugger.engine.DebugProcess;
-import com.intellij.debugger.engine.DebugProcessImpl;
-import com.intellij.debugger.engine.DebugProcessListener;
-import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
-import com.intellij.debugger.engine.SuspendContextImpl;
+import com.intellij.debugger.engine.*;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.debugger.memory.component.InstancesTracker;
@@ -62,34 +34,42 @@ import com.intellij.debugger.memory.utils.LowestPriorityCommand;
 import com.intellij.debugger.memory.utils.SingleAlarmWithMutableDelay;
 import com.intellij.debugger.requests.ClassPrepareRequestor;
 import com.intellij.icons.AllIcons;
-import consulo.disposer.Disposable;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.ActionPopupMenu;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import consulo.disposer.Disposer;
 import com.intellij.openapi.wm.IdeFocusManager;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.DoubleClickListener;
-import com.intellij.ui.PopupHandler;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.SearchTextField;
-import com.intellij.ui.SideBorder;
+import com.intellij.ui.*;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebugSessionListener;
 import com.intellij.xdebugger.XDebuggerManager;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VirtualMachine;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.intellij.debugger.memory.ui.ClassesTable.DiffViewTableModel.CLASSNAME_COLUMN_INDEX;
+import static com.intellij.debugger.memory.ui.ClassesTable.DiffViewTableModel.DIFF_COLUMN_INDEX;
 
 public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 {
@@ -334,7 +314,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 		final DefaultActionGroup group = (DefaultActionGroup) ActionManager.getInstance().getAction("MemoryView.SettingsPopupActionGroup");
 		group.setPopup(true);
 		final Presentation actionsPresentation = new Presentation("Memory View Settings");
-		actionsPresentation.setIcon(AllIcons.General.SecondaryGroup);
+		actionsPresentation.setIcon(AllIcons.General.GearPlain);
 
 		final ActionButton button = new ActionButton(group, actionsPresentation, ActionPlaces.UNKNOWN, new JBDimension(25, 25));
 		final BorderLayoutPanel topPanel = new BorderLayoutPanel();
