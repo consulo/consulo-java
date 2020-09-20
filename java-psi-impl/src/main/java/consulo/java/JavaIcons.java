@@ -15,15 +15,14 @@ public interface JavaIcons
 
 	interface Gutter
 	{
-		Image EventMethod = IconLoader.getIcon("/icons/gutter/eventMethod.png");  // 12x12
-		Image ExtAnnotation = IconLoader.getIcon("/icons/gutter/extAnnotation.png");  // 12x12
+		Image EventMethod = IconLoader.getIcon("/icons/gutter/eventMethod.svg");  // 12x12
+		Image ExtAnnotation = IconLoader.getIcon("/icons/gutter/extAnnotation.svg");  // 12x12
 	}
 
 	interface Nodes
 	{
-		Image JavaModule = IconLoader.getIcon("/icons/nodes/javaModule.png");  // 16x16
-		Image JavaModuleRoot = IconLoader.getIcon("/icons/nodes/javaModuleRoot.png");  // 16x16
-		Image NativeLibrariesFolder = IconLoader.getIcon("/icons/nodes/nativeLibrariesFolder.png");  // 16x16
+		Image JavaModule = IconLoader.getIcon("/icons/nodes/javaModule.svg");  // 16x16
+		Image NativeLibrariesFolder = IconLoader.getIcon("/icons/nodes/nativeLibrariesFolder.svg");  // 16x16
 	}
 
 	Image Java = IconLoader.getIcon("/icons/java.svg");  // 16x16

@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.IconDescriptor;
 import consulo.ide.IconDescriptorUpdater;
-import consulo.java.JavaIcons;
 import consulo.java.fileTypes.JModFileType;
 
 import javax.annotation.Nonnull;
@@ -21,10 +20,10 @@ public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater
 	@Override
 	public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement psiElement, int i)
 	{
-		if(psiElement instanceof PsiDirectory && isModuleDirectory((PsiDirectory) psiElement))
-		{
-			iconDescriptor.setMainIcon(JavaIcons.Nodes.JavaModuleRoot);
-		}
+//		if(psiElement instanceof PsiDirectory && isModuleDirectory((PsiDirectory) psiElement))
+		//		{
+		//			iconDescriptor.setMainIcon(AllIcons.Nodes.Module);
+		//		}
 	}
 
 	@RequiredReadAction
