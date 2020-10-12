@@ -15,13 +15,13 @@
  */
 package com.intellij.jam.view;
 
+import com.intellij.jam.model.common.CommonModelElement;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.jam.model.common.CommonModelElement;
+import consulo.ui.image.Image;
 
-import javax.swing.*;
 import java.util.Collection;
 
 public interface JamUserResponse {
@@ -38,7 +38,7 @@ public interface JamUserResponse {
       throw new RuntimeException(e);
     }
 
-    public int showYesNoDialog(String message, String title, Icon icon) {
+    public int showYesNoDialog(String message, String title, Image icon) {
       return DialogWrapper.OK_EXIT_CODE;
     }
 
@@ -59,7 +59,7 @@ public interface JamUserResponse {
       throw new RuntimeException(e);
     }
 
-    public int showYesNoDialog(String message, String title, Icon icon) {
+    public int showYesNoDialog(String message, String title, Image icon) {
       return DialogWrapper.OK_EXIT_CODE;
     }
 
@@ -74,7 +74,7 @@ public interface JamUserResponse {
   void logErrorWhileDeletingPsiElement(IncorrectOperationException e, String xmlObjectDisplayString, PsiElement element);
 
   @Messages.YesNoResult
-  int showYesNoDialog(String message, String title, Icon icon);
+  int showYesNoDialog(String message, String title, Image icon);
 
   void onDeletingHasBeenFinished();
 }

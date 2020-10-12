@@ -20,10 +20,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.psi.PsiFile;
-import consulo.awt.TargetAWT;
-import consulo.java.JavaIcons;
+import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
+import consulo.ui.image.Image;
 
-import javax.swing.*;
 import java.util.Set;
 
 public class LibraryNode extends PackageDependenciesNode {
@@ -70,7 +69,7 @@ public class LibraryNode extends PackageDependenciesNode {
     return myLibraryOrJdk.hashCode();
   }
 
-  public Icon getIcon() {
-    return myLibraryOrJdk instanceof ModuleExtensionWithSdkOrderEntry ? TargetAWT.to(JavaIcons.Java) : AllIcons.Nodes.PpLibFolder;
+  public Image getIcon() {
+    return myLibraryOrJdk instanceof ModuleExtensionWithSdkOrderEntry ? JavaPsiImplIconGroup.java() : AllIcons.Nodes.PpLibFolder;
   }
 }

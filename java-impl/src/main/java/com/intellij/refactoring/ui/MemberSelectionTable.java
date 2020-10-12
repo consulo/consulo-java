@@ -28,15 +28,11 @@ import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiModifierList;
 import com.intellij.refactoring.classMembers.MemberInfoModel;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
-import com.intellij.ui.RowIcon;
-import com.intellij.util.IconUtil;
-import com.intellij.util.VisibilityIcons;
-import javax.annotation.Nullable;
+import consulo.ui.image.Image;
 
-import javax.swing.*;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class MemberSelectionTable extends AbstractMemberSelectionTable<PsiMember, MemberInfo> {
@@ -86,22 +82,22 @@ public class MemberSelectionTable extends AbstractMemberSelectionTable<PsiMember
   }
 
 
-  @Override
-  protected void setVisibilityIcon(MemberInfo memberInfo, RowIcon icon) {
-    PsiMember member = memberInfo.getMember();
-    PsiModifierList modifiers = member != null ? member.getModifierList() : null;
-    if (modifiers != null) {
-      VisibilityIcons.setVisibilityIcon(modifiers, icon);
-    }
-    else {
-      icon.setIcon(IconUtil.getEmptyIcon(true), VISIBILITY_ICON_POSITION);
-    }
-  }
+//  @Override
+//  protected void setVisibilityIcon(MemberInfo memberInfo, RowIcon icon) {
+//    PsiMember member = memberInfo.getMember();
+//    PsiModifierList modifiers = member != null ? member.getModifierList() : null;
+//    if (modifiers != null) {
+//      VisibilityIcons.setVisibilityIcon(modifiers, icon);
+//    }
+//    else {
+//      icon.setIcon(IconUtil.getEmptyIcon(true), VISIBILITY_ICON_POSITION);
+//    }
+//  }
 
   @Override
-  protected Icon getOverrideIcon(MemberInfo memberInfo) {
+  protected Image getOverrideIcon(MemberInfo memberInfo) {
     PsiMember member = memberInfo.getMember();
-    Icon overrideIcon = MemberSelectionTable.EMPTY_OVERRIDE_ICON;
+    Image overrideIcon = MemberSelectionTable.EMPTY_OVERRIDE_ICON;
     if (member instanceof PsiMethod) {
       if (Boolean.TRUE.equals(memberInfo.getOverrides())) {
         overrideIcon = AllIcons.General.OverridingMethod;

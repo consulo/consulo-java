@@ -57,6 +57,7 @@ import com.intellij.ui.EditorTextField;
 import com.intellij.ui.RecentsManager;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.util.IncorrectOperationException;
 import consulo.roots.ContentFolderScopes;
 import consulo.roots.impl.TestContentFolderTypeProvider;
@@ -348,8 +349,7 @@ public class CreateTestDialog extends DialogWrapper
 		panel.add(librariesPanel, constr);
 
 		myFixLibraryPanel = new JPanel(new BorderLayout());
-		myFixLibraryLabel = new JLabel();
-		myFixLibraryLabel.setIcon(AllIcons.Actions.IntentionBulb);
+		myFixLibraryLabel = new JBLabel(AllIcons.Actions.IntentionBulb);
 		myFixLibraryPanel.add(myFixLibraryLabel, BorderLayout.CENTER);
 		myFixLibraryPanel.add(myFixLibraryButton, BorderLayout.EAST);
 

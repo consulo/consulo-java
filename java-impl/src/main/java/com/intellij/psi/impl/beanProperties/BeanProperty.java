@@ -23,10 +23,10 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.ui.image.Image;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import javax.swing.*;
 
 /**
  * Provide {@link com.intellij.refactoring.rename.BeanPropertyRenameHandler} if necessary.
@@ -67,7 +67,7 @@ public class BeanProperty {
     return myMethod;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiMethod getGetter() {
     if (PropertyUtil.isSimplePropertyGetter(myMethod)) {
       return myMethod;
@@ -75,7 +75,7 @@ public class BeanProperty {
     return PropertyUtil.findPropertyGetter(myMethod.getContainingClass(), getName(), false, true);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiMethod getSetter() {
     if (PropertyUtil.isSimplePropertySetter(myMethod)) {
       return myMethod;
@@ -96,8 +96,8 @@ public class BeanProperty {
     }
   }
 
-  @javax.annotation.Nullable
-  public Icon getIcon(int flags) {
+  @Nullable
+  public Image getIcon(int flags) {
     return AllIcons.Nodes.Property;
   }
 

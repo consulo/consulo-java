@@ -15,30 +15,11 @@
  */
 package com.intellij.debugger.memory.utils;
 
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.debugger.DebuggerBundle;
-import com.intellij.debugger.engine.DebugProcessImpl;
-import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
-import com.intellij.debugger.engine.DebuggerUtils;
-import com.intellij.debugger.engine.DefaultSyntheticProvider;
-import com.intellij.debugger.engine.JVMStackFrameInfoProvider;
-import com.intellij.debugger.engine.JavaStackFrame;
-import com.intellij.debugger.engine.SuspendContextImpl;
+import com.intellij.debugger.engine.*;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
-import com.intellij.debugger.jdi.DecompiledLocalVariable;
-import com.intellij.debugger.jdi.LocalVariableProxyImpl;
-import com.intellij.debugger.jdi.LocalVariablesUtil;
-import com.intellij.debugger.jdi.StackFrameProxyImpl;
-import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
+import com.intellij.debugger.jdi.*;
 import com.intellij.debugger.settings.CaptureConfigurable;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.settings.NodeRendererSettings;
@@ -51,27 +32,22 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.EmptyIcon;
-import com.intellij.util.ui.JBUI;
 import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.frame.XCompositeNode;
-import com.intellij.xdebugger.frame.XDebuggerTreeNodeHyperlink;
-import com.intellij.xdebugger.frame.XNamedValue;
-import com.intellij.xdebugger.frame.XStackFrame;
-import com.intellij.xdebugger.frame.XValueChildrenList;
-import com.intellij.xdebugger.frame.XValueNode;
-import com.intellij.xdebugger.frame.XValuePlace;
+import com.intellij.xdebugger.frame.*;
 import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
 import com.intellij.xdebugger.impl.frame.XDebuggerFramesList;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
-import consulo.internal.com.sun.jdi.AbsentInformationException;
-import consulo.internal.com.sun.jdi.Location;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.StringReference;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.*;
 import consulo.java.module.util.JavaClassNames;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class StackFrameItem
 {
@@ -331,7 +307,7 @@ public class StackFrameItem
 		@Override
 		public void customizePresentation(@Nonnull ColoredTextContainer component)
 		{
-			component.setIcon(JBUI.scale(EmptyIcon.create(6)));
+			component.setIcon(Image.empty(6));
 			component.append(String.format("%s:%d, %s", myMethodName, myLineNumber, StringUtil.getShortName(myPath)), getAttributes());
 			String packageName = StringUtil.getPackageName(myPath);
 			if(!packageName.trim().isEmpty())

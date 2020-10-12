@@ -16,14 +16,14 @@
 package com.intellij.packageDependencies.ui;
 
 import com.intellij.cyclicDependencies.ui.CyclicDependenciesPanel;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiJavaPackage;
-import com.intellij.util.PlatformIcons;
+import consulo.ui.image.Image;
 
-import javax.swing.*;
 import java.util.Map;
 import java.util.Set;
 
@@ -101,8 +101,8 @@ public class PackageNode extends PackageDependenciesNode {
     return result;
   }
 
-  public Icon getIcon() {
-    return PlatformIcons.PACKAGE_ICON;
+  public Image getIcon() {
+    return AllIcons.Nodes.Parameter;
   }
 
 

@@ -15,36 +15,6 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.AbstractListModel;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -55,6 +25,16 @@ import com.intellij.ui.TableUtil;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ItemRemovable;
+import consulo.awt.TargetAWT;
+
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * @author Eugene Zhuravlev
@@ -234,7 +214,7 @@ public class TargetOptionsComponent extends JPanel
 			{
 				final Module module = (Module) value;
 				setText(module.getName());
-				setIcon(AllIcons.Nodes.Module);
+				setIcon(TargetAWT.to(AllIcons.Nodes.Module));
 			}
 		}
 	}

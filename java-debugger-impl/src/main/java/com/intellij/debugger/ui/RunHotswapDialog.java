@@ -25,6 +25,9 @@ import com.intellij.openapi.ui.MultiLineLabelUI;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.ui.OptionsDialog;
 import com.intellij.util.ui.UIUtil;
+import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -110,9 +113,9 @@ public class RunHotswapDialog extends OptionsDialog {
     JLabel label = new JLabel(DebuggerBundle.message("hotswap.dialog.run.prompt"));
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(label, BorderLayout.CENTER);
-    Icon icon = UIUtil.getQuestionIcon();
+    Image icon = UIUtil.getQuestionIcon();
     if (icon != null) {
-      label.setIcon(icon);
+      label.setIcon(TargetAWT.to(icon));
       label.setIconTextGap(7);
     }
     if (myDisplayHangWarning) {

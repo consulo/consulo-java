@@ -15,17 +15,17 @@
  */
 package com.intellij.codeInsight.generation;
 
-import javax.swing.Icon;
-import javax.swing.JTree;
-
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.ui.SimpleTextAttributes;
+import consulo.ui.image.Image;
+
+import javax.swing.*;
 
 /**
  * @author peter
 */
 public class PsiDocCommentOwnerMemberChooserObject extends PsiElementMemberChooserObject {
-  public PsiDocCommentOwnerMemberChooserObject(final PsiDocCommentOwner owner, final String text, Icon icon) {
+  public PsiDocCommentOwnerMemberChooserObject(final PsiDocCommentOwner owner, final String text, Image icon) {
     super(owner, text, icon);
   }
 

@@ -18,7 +18,6 @@ package com.intellij.psi.util;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -29,14 +28,12 @@ import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.ui.JBUI;
 import consulo.disposer.Disposable;
 import consulo.ui.image.Image;
-import consulo.ui.migration.SwingImageRef;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +57,6 @@ public class ProjectIconsAccessor implements Disposable
 
 	private static final int ICON_MAX_HEIGHT = 16;
 
-	@NonNls
 	private static final String JAVAX_SWING_ICON = "javax.swing.Icon";
 
 	private static final int ICON_MAX_SIZE = 2 * 1024 * 1024; // 2Kb
@@ -159,7 +155,7 @@ public class ProjectIconsAccessor implements Disposable
 
 	public static boolean isIconClassType(PsiType type)
 	{
-		return InheritanceUtil.isInheritor(type, JAVAX_SWING_ICON) || InheritanceUtil.isInheritor(type, Image.class.getName()) || InheritanceUtil.isInheritor(type, SwingImageRef.class.getName());
+		return InheritanceUtil.isInheritor(type, JAVAX_SWING_ICON) || InheritanceUtil.isInheritor(type, Image.class.getName());
 	}
 
 	private static boolean isIconFileExtension(String extension)
@@ -183,10 +179,10 @@ public class ProjectIconsAccessor implements Disposable
 
 	private static Image createOrFindBetterIcon(VirtualFile file, boolean useIconLoader) throws IOException
 	{
-		if(useIconLoader)
-		{
-			return IconLoader.findIcon(new File(file.getPath()).toURI().toURL());
-		}
+//		if(useIconLoader)
+//		{
+//			return IconLoader.findIcon(new File(file.getPath()).toURI().toURL());
+//		}
 		return Image.fromUrl(VfsUtilCore.virtualToIoFile(file).toURI().toURL());
 	}
 

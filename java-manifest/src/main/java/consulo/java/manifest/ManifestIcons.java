@@ -1,14 +1,17 @@
 package consulo.java.manifest;
 
-import com.intellij.openapi.util.IconLoader;
+import consulo.annotation.DeprecationInfo;
+import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
 import consulo.ui.image.Image;
 
 /**
  * @author VISTALL
  * @since 12:44/27.04.13
  */
+@Deprecated
+@DeprecationInfo("Use JavaPsiImplIconGroup")
 public interface ManifestIcons
 {
-	Image ManifestFileType = IconLoader.findIcon("/icons/manifest.png");
+	Image ManifestFileType = JavaPsiImplIconGroup.fileTypesManifest();
 	Image BndFileType = ManifestFileType; //TODO [VISTALL] unique icon
 }

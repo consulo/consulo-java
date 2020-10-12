@@ -18,7 +18,6 @@ package com.intellij.codeInsight.completion.util;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiPrimitiveType;
@@ -34,7 +33,7 @@ import javax.annotation.Nonnull;
  * @author peter
  */
 public class PsiTypeCanonicalLookupElement extends LookupElement {
-  private static final Image EMPTY_ICON = Image.empty(AllIcons.Nodes.Class.getIconWidth() * 2, AllIcons.Nodes.Class.getIconHeight());
+  private static final Image EMPTY_ICON = Image.empty(Image.DEFAULT_ICON_SIZE * 2, Image.DEFAULT_ICON_SIZE);
 
   private final PsiType myType;
   private final String myPresentableText;

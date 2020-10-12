@@ -41,6 +41,7 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.classFilter.ClassFilterEditor;
 import com.intellij.util.IconUtil;
 import com.intellij.util.ui.UIUtil;
+import consulo.awt.TargetAWT;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
@@ -261,7 +262,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
     result.add(panel, gc);
 
     myCoverageNotSupportedLabel = new JLabel(CodeInsightBundle.message("code.coverage.is.not.supported"));
-    myCoverageNotSupportedLabel.setIcon(AllIcons.General.WarningDialog);
+    myCoverageNotSupportedLabel.setIcon(TargetAWT.to(AllIcons.General.WarningDialog));
     result.add(myCoverageNotSupportedLabel, gc);
     return result;
   }

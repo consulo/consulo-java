@@ -11,11 +11,11 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.*;
 import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.EmptyIcon;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
-import javax.annotation.Nonnull;
+import consulo.ui.image.Image;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
@@ -84,7 +84,7 @@ public class AnnotationsPanel
 				}
 				else
 				{
-					setIcon(EmptyIcon.ICON_16);
+					setIcon(Image.empty(Image.DEFAULT_ICON_SIZE));
 				}
 			}
 		}, null));

@@ -31,6 +31,8 @@ import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.UIUtil;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -49,13 +51,13 @@ import static com.intellij.icons.AllIcons.Debugger.ThreadStates.*;
  * @author Konstantin Bulenkov
  */
 public class ThreadDumpPanel extends JPanel {
-  private static final Icon PAUSE_ICON_DAEMON = new LayeredIcon(Paused, Daemon_sign);
-  private static final Icon LOCKED_ICON_DAEMON = new LayeredIcon(Locked, Daemon_sign);
-  private static final Icon RUNNING_ICON_DAEMON = new LayeredIcon(Running, Daemon_sign);
-  private static final Icon SOCKET_ICON_DAEMON = new LayeredIcon(Socket, Daemon_sign);
-  private static final Icon IDLE_ICON_DAEMON = new LayeredIcon(Idle, Daemon_sign);
-  private static final Icon EDT_BUSY_ICON_DAEMON = new LayeredIcon(EdtBusy, Daemon_sign);
-  private static final Icon IO_ICON_DAEMON = new LayeredIcon(IO, Daemon_sign);
+  private static final Image PAUSE_ICON_DAEMON = ImageEffects.layered(Paused, Daemon_sign);
+  private static final Image LOCKED_ICON_DAEMON = ImageEffects.layered(Locked, Daemon_sign);
+  private static final Image RUNNING_ICON_DAEMON = ImageEffects.layered(Running, Daemon_sign);
+  private static final Image SOCKET_ICON_DAEMON = ImageEffects.layered(Socket, Daemon_sign);
+  private static final Image IDLE_ICON_DAEMON = ImageEffects.layered(Idle, Daemon_sign);
+  private static final Image EDT_BUSY_ICON_DAEMON = ImageEffects.layered(EdtBusy, Daemon_sign);
+  private static final Image IO_ICON_DAEMON = ImageEffects.layered(IO, Daemon_sign);
   private final JBList myThreadList;
 
   public ThreadDumpPanel(Project project, final ConsoleView consoleView, final DefaultActionGroup toolbarActions, final List<ThreadState> threadDump) {
@@ -95,7 +97,7 @@ public class ThreadDumpPanel extends JPanel {
     new ListSpeedSearch(myThreadList).setComparator(new SpeedSearchComparator(false, true));
   }
 
-  private static Icon getThreadStateIcon(final ThreadState threadState) {
+  private static Image getThreadStateIcon(final ThreadState threadState) {
     final boolean daemon = threadState.isDaemon();
     if (threadState.isSleeping()) {
       return daemon ? PAUSE_ICON_DAEMON : Paused;

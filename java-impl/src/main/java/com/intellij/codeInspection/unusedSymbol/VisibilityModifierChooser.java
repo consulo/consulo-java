@@ -15,17 +15,6 @@
  */
 package com.intellij.codeInspection.unusedSymbol;
 
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -40,6 +29,17 @@ import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import consulo.awt.TargetAWT;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.Hashtable;
+import java.util.Set;
+import java.util.function.Supplier;
 
 public class VisibilityModifierChooser extends JLabel implements UserActivityProviderComponent
 {
@@ -70,8 +70,8 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
 	public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @Nonnull String modifier, @Nonnull Consumer<String> modifierChangedConsumer, @Nonnull String[] modifiers)
 	{
 		myCanBeEnabled = canBeEnabled;
-		setIcon(AllIcons.General.Combo2);
-		setDisabledIcon(AllIcons.General.Combo2);
+		setIcon(TargetAWT.to(AllIcons.General.Combo2));
+		setDisabledIcon(TargetAWT.to(AllIcons.General.Combo2));
 		setIconTextGap(0);
 		setHorizontalTextPosition(SwingConstants.LEFT);
 		myCurrentModifier = modifier;

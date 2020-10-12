@@ -20,21 +20,18 @@
  */
 package com.intellij.codeInspection.reference;
 
-import gnu.trove.THashSet;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.*;
 import com.intellij.util.containers.Stack;
-import consulo.awt.TargetAWT;
 import consulo.fileTypes.impl.VfsIconUtil;
+import consulo.ui.image.Image;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 public abstract class RefJavaElementImpl extends RefElementImpl implements RefJavaElement
 {
@@ -348,14 +345,14 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
 	}
 
 	@Override
-	public Icon getIcon(final boolean expanded)
+	public Image getIcon(final boolean expanded)
 	{
 		if(isSyntheticJSP())
 		{
-			final PsiElement element = getElement();
+			final PsiElement element = getPsiElement();
 			if(element != null && element.isValid())
 			{
-				return TargetAWT.to(VfsIconUtil.getIcon(element.getContainingFile().getVirtualFile(), Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS, element.getProject()));
+				return VfsIconUtil.getIcon(element.getContainingFile().getVirtualFile(), Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS, element.getProject());
 			}
 		}
 		return super.getIcon(expanded);

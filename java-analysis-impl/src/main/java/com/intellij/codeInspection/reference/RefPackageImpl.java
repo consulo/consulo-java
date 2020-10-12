@@ -24,10 +24,9 @@
  */
 package com.intellij.codeInspection.reference;
 
-import javax.swing.Icon;
-
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.util.PlatformIcons;
+import consulo.ui.image.Image;
 
 
 public class RefPackageImpl extends RefEntityImpl implements RefPackage {
@@ -78,7 +77,7 @@ public class RefPackageImpl extends RefEntityImpl implements RefPackage {
   }
 
   @Override
-  public Icon getIcon(final boolean expanded) {
-    return PlatformIcons.PACKAGE_ICON;
+  public Image getIcon(final boolean expanded) {
+    return AllIcons.Nodes.Package;
   }
 }

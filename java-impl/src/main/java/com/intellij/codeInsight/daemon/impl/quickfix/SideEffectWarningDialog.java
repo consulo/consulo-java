@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import consulo.awt.TargetAWT;
 import consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -121,7 +122,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
     final JPanel panel = new JPanel(new BorderLayout());
     final String text = sideEffectsDescription();
     final JLabel label = new JLabel(text);
-    label.setIcon(Messages.getWarningIcon());
+    label.setIcon(TargetAWT.to(Messages.getWarningIcon()));
     panel.add(label, BorderLayout.NORTH);
     return panel;
   }

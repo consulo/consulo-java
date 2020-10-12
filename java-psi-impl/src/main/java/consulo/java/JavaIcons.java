@@ -1,29 +1,31 @@
 package consulo.java;
 
-import com.intellij.openapi.util.IconLoader;
+import consulo.annotation.DeprecationInfo;
+import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
 import consulo.ui.image.Image;
 
-// Generated Consulo DevKit plugin 
+@Deprecated
+@DeprecationInfo("Use JavaPsiImplIconGroup")
 public interface JavaIcons
 {
 	interface FileTypes
 	{
-		Image Java = IconLoader.getIcon("/icons/fileTypes/java.png");  // 16x16
-		Image JavaClass = IconLoader.getIcon("/icons/fileTypes/javaClass.png");  // 16x16
-		Image JavaOutsideSource = IconLoader.getIcon("/icons/fileTypes/javaOutsideSource.png");  // 16x16
+		Image Java = JavaPsiImplIconGroup.fileTypesJava();
+		Image JavaClass = JavaPsiImplIconGroup.fileTypesJavaClass();
+		Image JavaOutsideSource = JavaPsiImplIconGroup.fileTypesJavaOutsideSource();
 	}
 
 	interface Gutter
 	{
-		Image EventMethod = IconLoader.getIcon("/icons/gutter/eventMethod.svg");  // 12x12
-		Image ExtAnnotation = IconLoader.getIcon("/icons/gutter/extAnnotation.svg");  // 12x12
+		Image EventMethod = JavaPsiImplIconGroup.gutterEventMethod();
+		Image ExtAnnotation = JavaPsiImplIconGroup.gutterExtAnnotation();
 	}
 
 	interface Nodes
 	{
-		Image JavaModule = IconLoader.getIcon("/icons/nodes/javaModule.svg");  // 16x16
-		Image NativeLibrariesFolder = IconLoader.getIcon("/icons/nodes/nativeLibrariesFolder.svg");  // 16x16
+		Image JavaModule = JavaPsiImplIconGroup.nodesJavaModule();
+		Image NativeLibrariesFolder = JavaPsiImplIconGroup.nodesNativeLibrariesFolder();
 	}
 
-	Image Java = IconLoader.getIcon("/icons/java.svg");  // 16x16
+	Image Java = JavaPsiImplIconGroup.java();
 }

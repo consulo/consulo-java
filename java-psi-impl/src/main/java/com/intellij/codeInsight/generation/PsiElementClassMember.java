@@ -21,7 +21,6 @@ import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 /**
@@ -36,7 +35,7 @@ public abstract class PsiElementClassMember<T extends PsiDocCommentOwner> extend
   }
 
   protected PsiElementClassMember(final T psiMember, final PsiSubstitutor substitutor, String text) {
-    super(psiMember, text, TargetAWT.to(IconDescriptorUpdaters.getIcon(psiMember, Iconable.ICON_FLAG_VISIBILITY)));
+    super(psiMember, text, IconDescriptorUpdaters.getIcon(psiMember, Iconable.ICON_FLAG_VISIBILITY));
     myPsiMember = psiMember;
     mySubstitutor = substitutor;
   }
@@ -58,7 +57,7 @@ public abstract class PsiElementClassMember<T extends PsiDocCommentOwner> extend
   public MemberChooserObject getParentNodeDelegate() {
     final PsiClass psiClass = getContainingClass();
     final String text = PsiFormatUtil.formatClass(psiClass, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_FQ_NAME);
-    return new PsiDocCommentOwnerMemberChooserObject(psiClass, text, TargetAWT.to(IconDescriptorUpdaters.getIcon(psiClass, 0)));
+    return new PsiDocCommentOwnerMemberChooserObject(psiClass, text, IconDescriptorUpdaters.getIcon(psiClass, 0));
   }
 
   protected PsiClass getContainingClass() {

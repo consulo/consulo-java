@@ -17,13 +17,13 @@ package com.intellij.jam.view;
 
 import com.intellij.jam.JamMessages;
 import com.intellij.jam.model.common.CommonModelElement;
+import com.intellij.jam.view.ui.SelectElementsToDeleteDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.jam.view.ui.SelectElementsToDeleteDialog;
+import consulo.ui.image.Image;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -61,7 +61,7 @@ public class DefaultUserResponse implements JamUserResponse {
     myErrors.add(new DeleteError(e, source));
   }
 
-  public int showYesNoDialog(String message, String title, Icon icon) {
+  public int showYesNoDialog(String message, String title, Image icon) {
     return Messages.showYesNoDialog(message, title, icon);
   }
 

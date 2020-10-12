@@ -26,6 +26,9 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.MultiLineLabelUI;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.refactoring.RefactoringBundle;
+import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -55,9 +58,9 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
     label.setUI(new MultiLineLabelUI());
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(label, BorderLayout.CENTER);
-    Icon icon = Messages.getQuestionIcon();
+    Image icon = Messages.getQuestionIcon();
     if (icon != null) {
-      label.setIcon(icon);
+      label.setIcon(TargetAWT.to(icon));
       label.setIconTextGap(7);
     }
     return panel;

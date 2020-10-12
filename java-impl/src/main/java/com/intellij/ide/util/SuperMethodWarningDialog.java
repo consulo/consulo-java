@@ -20,8 +20,10 @@ import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
-import javax.annotation.Nonnull;
+import com.intellij.ui.components.JBLabel;
+import consulo.ui.image.Image;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -64,9 +66,9 @@ class SuperMethodWarningDialog extends DialogWrapper {
   public JComponent createNorthPanel() {
     JPanel panel = new JPanel(new BorderLayout());
     panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-    Icon icon = Messages.getWarningIcon();
+    Image icon = Messages.getWarningIcon();
     if (icon != null){
-      JLabel iconLabel = new JLabel(Messages.getQuestionIcon());
+      JLabel iconLabel = new JBLabel(Messages.getQuestionIcon());
       panel.add(iconLabel, BorderLayout.WEST);
     }
     JPanel labelsPanel = new JPanel(new GridLayout(0, 1, 0, 0));

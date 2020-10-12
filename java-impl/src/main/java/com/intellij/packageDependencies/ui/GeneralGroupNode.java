@@ -17,15 +17,15 @@ package com.intellij.packageDependencies.ui;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import consulo.ui.image.Image;
 
-import javax.swing.*;
 import java.util.Set;
 
 public class GeneralGroupNode extends PackageDependenciesNode {
   private final String myName;
-  private final Icon myIcon;
+  private final Image myIcon;
 
-  public GeneralGroupNode(String name, Icon icon, Project project) {
+  public GeneralGroupNode(String name, Image icon, Project project) {
     super(project);
     myName = name;
     myIcon = icon;
@@ -60,7 +60,7 @@ public class GeneralGroupNode extends PackageDependenciesNode {
     return myName.hashCode();
   }
 
-  public Icon getIcon() {
+  public Image getIcon() {
     return myIcon;
   }
 }

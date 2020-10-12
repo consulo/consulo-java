@@ -15,20 +15,6 @@
  */
 package com.intellij.packaging.impl.artifacts;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-
-import javax.annotation.Nonnull;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.event.DocumentEvent;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -39,9 +25,16 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.packaging.elements.PackagingElementResolvingContext;
 import com.intellij.packaging.impl.ManifestFileUtil;
+import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.ComboboxSpeedSearch;
 import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.ListCellRendererWrapper;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 /**
  * @author nik
@@ -107,7 +100,7 @@ public class JarArtifactFromModulesDialog extends DialogWrapper
 		{
 			myModuleComboBox.addItem(module);
 		}
-		myModuleComboBox.setRenderer(new ModuleListRenderer(myModuleComboBox));
+		myModuleComboBox.setRenderer(new ModuleListRenderer());
 		new ComboboxSpeedSearch(myModuleComboBox)
 		{
 			@Override
@@ -188,24 +181,19 @@ public class JarArtifactFromModulesDialog extends DialogWrapper
 		return "reference.project.structure.artifacts.jar.from.module";
 	}
 
-	private static class ModuleListRenderer extends ListCellRendererWrapper<Module>
+	private static class ModuleListRenderer extends ColoredListCellRenderer<Module>
 	{
-		public ModuleListRenderer(JComboBox comboBox)
-		{
-			super();
-		}
-
 		@Override
-		public void customize(JList list, Module value, int index, boolean selected, boolean hasFocus)
+		protected void customizeCellRenderer(@Nonnull JList<? extends Module> jList, Module module, int i, boolean b, boolean b1)
 		{
-			if(value != null)
+			if(module != null)
 			{
 				setIcon(AllIcons.Nodes.Module);
-				setText(value.getName());
+				append(module.getName());
 			}
 			else
 			{
-				setText("<All Modules>");
+				append("<All Modules>");
 				setIcon(AllIcons.Nodes.ModuleGroup);
 			}
 		}

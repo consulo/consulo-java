@@ -24,6 +24,7 @@ import com.intellij.codeInspection.ex.GlobalInspectionToolWrapper;
 import com.intellij.codeInspection.ex.InspectionToolWrapper;
 import com.intellij.icons.AllIcons;
 import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
 
 /**
  * @author max
@@ -40,7 +41,7 @@ public class EntryPointsNode extends InspectionNode {
   }
 
   @Override
-  public Icon getIcon() {
-    return TargetAWT.to(AllIcons.Nodes.EntryPoints);
+  public Image getIcon() {
+    return AllIcons.Nodes.EntryPoints;
   }
 }

@@ -21,31 +21,22 @@
  */
 package com.intellij.ui.classFilter;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import javax.annotation.Nullable;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.UIBundle;
+import com.intellij.ui.components.JBLabel;
+
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 class ClassFilterEditorAddDialog extends DialogWrapper {
   private final Project myProject;
@@ -65,7 +56,7 @@ class ClassFilterEditorAddDialog extends DialogWrapper {
     final JPanel panel = new JPanel(new GridBagLayout());
     final JLabel header = new JLabel(UIBundle.message("label.class.filter.editor.add.dialog.filter.pattern"));
     myClassName = new TextFieldWithBrowseButton(new JTextField(35));
-    final JLabel iconLabel = new JLabel(Messages.getQuestionIcon());
+    final JLabel iconLabel = new JBLabel(Messages.getQuestionIcon());
     
     panel.add(header, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 10, 0, 0), 0, 0));
     panel.add(myClassName, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 10, 0, 0), 0, 0));

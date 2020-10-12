@@ -47,7 +47,7 @@ public class ParameterClassMember implements ClassMember {
   @Override
   public void renderTreeNode(SimpleColoredComponent component, JTree tree) {
     SpeedSearchUtil.appendFragmentsForSpeedSearch(tree, getText(), SimpleTextAttributes.REGULAR_ATTRIBUTES, false, component);
-    component.setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(myParameter, 0)));
+    component.setIcon(IconDescriptorUpdaters.getIcon(myParameter, 0));
   }
 
   @Override

@@ -201,7 +201,7 @@ public class SelectElementsDialog extends DialogWrapper {
             if (!psiElement.isPhysical()) {
               append("  [" + JamMessages.message("postfix.not.physical.element") + "]", SimpleTextAttributes.GRAY_ATTRIBUTES);
             }
-            setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(psiElement, 0)));
+            setIcon(IconDescriptorUpdaters.getIcon(psiElement, 0));
             setOpaque(false);
             setIconOpaque(false);
           }

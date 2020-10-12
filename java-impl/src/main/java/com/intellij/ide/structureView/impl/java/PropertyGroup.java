@@ -15,37 +15,23 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.treeView.WeighedItem;
 import com.intellij.ide.util.treeView.smartTree.Group;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
-import com.intellij.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiUtil;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class PropertyGroup implements Group, ColoredItemPresentation, AccessLevelProvider, WeighedItem {
   private final String myPropertyName;
@@ -235,15 +221,6 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
     if (group.getSetter() != null) setSetter(group.getSetter());
     if (group.getField() != null) setField(group.getField());
     myChildren.addAll(group.myChildren);
-  }
-
-  private static Icon loadIcon(@NonNls String resourceName) {
-    Icon icon = IconLoader.findIcon(resourceName);
-    Application application = ApplicationManager.getApplication();
-    if (icon == null && application != null && application.isUnitTestMode()) {
-      return new ImageIcon();
-    }
-    return icon;
   }
 
   public TextAttributesKey getTextAttributesKey() {
