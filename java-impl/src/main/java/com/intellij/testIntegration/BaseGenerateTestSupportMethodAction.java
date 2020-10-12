@@ -30,165 +30,206 @@ import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
+import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
-public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
-  protected static final Logger LOG = Logger.getInstance("#" + BaseGenerateTestSupportMethodAction.class.getName());
+public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction
+{
+	protected static final Logger LOG = Logger.getInstance("#" + BaseGenerateTestSupportMethodAction.class.getName());
 
-  public BaseGenerateTestSupportMethodAction(TestIntegrationUtils.MethodKind methodKind) {
-    super(new MyHandler(methodKind));
-  }
+	public BaseGenerateTestSupportMethodAction(TestIntegrationUtils.MethodKind methodKind)
+	{
+		super(new MyHandler(methodKind));
+	}
 
-  @Override
-  protected PsiClass getTargetClass(Editor editor, PsiFile file) {
-    return findTargetClass(editor, file);
-  }
+	@Override
+	protected PsiClass getTargetClass(Editor editor, PsiFile file)
+	{
+		return findTargetClass(editor, file);
+	}
 
-  @javax.annotation.Nullable
-  private static PsiClass findTargetClass(Editor editor, PsiFile file) {
-    int offset = editor.getCaretModel().getOffset();
-    PsiElement element = file.findElementAt(offset);
-    return element == null ? null : TestIntegrationUtils.findOuterClass(element);
-  }
+	@javax.annotation.Nullable
+	private static PsiClass findTargetClass(Editor editor, PsiFile file)
+	{
+		int offset = editor.getCaretModel().getOffset();
+		PsiElement element = file.findElementAt(offset);
+		return element == null ? null : TestIntegrationUtils.findOuterClass(element);
+	}
 
-  @Override
-  protected boolean isValidForClass(PsiClass targetClass) {
-    List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
-    if (frameworks.isEmpty()) return false;
+	@Override
+	protected boolean isValidForClass(PsiClass targetClass)
+	{
+		List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
+		if(frameworks.isEmpty())
+		{
+			return false;
+		}
 
-    for (TestFramework each : frameworks) {
-      if (isValidFor(targetClass, each)) return true;
-    }
-    return false;
-  }
+		for(TestFramework each : frameworks)
+		{
+			if(isValidFor(targetClass, each))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-  @Override
-  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
-    if (file instanceof PsiCompiledElement) return false;
+	@Override
+	protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file)
+	{
+		if(file instanceof PsiCompiledElement)
+		{
+			return false;
+		}
 
-    PsiDocumentManager.getInstance(project).commitAllDocuments();
+		PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-    PsiClass targetClass = getTargetClass(editor, file);
-    return targetClass != null && isValidForClass(targetClass);
-  }
-
-
-  protected boolean isValidFor(PsiClass targetClass, TestFramework framework) {
-    return true;
-  }
+		PsiClass targetClass = getTargetClass(editor, file);
+		return targetClass != null && isValidForClass(targetClass);
+	}
 
 
-  private static class MyHandler implements CodeInsightActionHandler {
-    private TestIntegrationUtils.MethodKind myMethodKind;
+	protected boolean isValidFor(PsiClass targetClass, TestFramework framework)
+	{
+		return true;
+	}
 
-    private MyHandler(TestIntegrationUtils.MethodKind methodKind) {
-      myMethodKind = methodKind;
-    }
+	private static class MyHandler implements CodeInsightActionHandler
+	{
+		private TestIntegrationUtils.MethodKind myMethodKind;
 
-    public void invoke(@Nonnull Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
-      final PsiClass targetClass = findTargetClass(editor, file);
-      final List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
-      if (frameworks.isEmpty()) return;
+		private MyHandler(TestIntegrationUtils.MethodKind methodKind)
+		{
+			myMethodKind = methodKind;
+		}
 
-      if (frameworks.size() == 1) {
-        doGenerate(editor, file, targetClass, frameworks.get(0));
-        return;
-      }
+		public void invoke(@Nonnull Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file)
+		{
+			final PsiClass targetClass = findTargetClass(editor, file);
+			final List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
+			if(frameworks.isEmpty())
+			{
+				return;
+			}
 
-      final JList list = new JBList(frameworks.toArray(new TestFramework[frameworks.size()]));
-      list.setCellRenderer(new DefaultListCellRenderer() {
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-          Component result = super.getListCellRendererComponent(list, "", index, isSelected, cellHasFocus);
-          if (value == null) return result;
-          TestFramework framework = (TestFramework)value;
+			if(frameworks.size() == 1)
+			{
+				doGenerate(editor, file, targetClass, frameworks.get(0));
+				return;
+			}
 
-          setIcon(framework.getIcon());
-          setText(framework.getName());
+			final JList<TestFramework> list = new JBList<TestFramework>(frameworks.toArray(new TestFramework[frameworks.size()]));
+			list.setCellRenderer(new ColoredListCellRenderer<TestFramework>()
+			{
+				@Override
+				protected void customizeCellRenderer(@Nonnull JList jList, TestFramework framework, int i, boolean b, boolean b1)
+				{
+					setIcon(framework.getIcon());
+					append(framework.getName());
+				}
+			});
 
-          return result;
-        }
-      });
+			final Runnable runnable = new Runnable()
+			{
+				public void run()
+				{
+					TestFramework selected = (TestFramework) list.getSelectedValue();
+					if(selected == null)
+					{
+						return;
+					}
+					doGenerate(editor, file, targetClass, selected);
+				}
+			};
 
-      final Runnable runnable = new Runnable() {
-        public void run() {
-          TestFramework selected = (TestFramework)list.getSelectedValue();
-          if (selected == null) return;
-          doGenerate(editor, file, targetClass, selected);
-        }
-      };
+			PopupChooserBuilder builder = new PopupChooserBuilder(list);
+			builder.setFilteringEnabled(new Function<Object, String>()
+			{
+				@Override
+				public String fun(Object o)
+				{
+					return ((TestFramework) o).getName();
+				}
+			});
 
-      PopupChooserBuilder builder = new PopupChooserBuilder(list);
-      builder.setFilteringEnabled(new Function<Object, String>() {
-        @Override
-        public String fun(Object o) {
-          return ((TestFramework)o).getName();
-        }
-      });
+			builder
+					.setTitle("Choose Framework")
+					.setItemChoosenCallback(runnable)
+					.setMovable(true)
+					.createPopup().showInBestPositionFor(editor);
+		}
 
-      builder
-        .setTitle("Choose Framework")
-        .setItemChoosenCallback(runnable)
-        .setMovable(true)
-        .createPopup().showInBestPositionFor(editor);
-    }
+		private void doGenerate(final Editor editor, final PsiFile file, final PsiClass targetClass, final TestFramework framework)
+		{
+			if(!CommonRefactoringUtil.checkReadOnlyStatus(file))
+			{
+				return;
+			}
 
-    private void doGenerate(final Editor editor, final PsiFile file, final PsiClass targetClass, final TestFramework framework) {
-      if (!CommonRefactoringUtil.checkReadOnlyStatus(file)) return;
+			ApplicationManager.getApplication().runWriteAction(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						PsiDocumentManager.getInstance(file.getProject()).commitAllDocuments();
+						PsiMethod method = generateDummyMethod(editor, file);
+						if(method == null)
+						{
+							return;
+						}
 
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          try {
-            PsiDocumentManager.getInstance(file.getProject()).commitAllDocuments();
-            PsiMethod method = generateDummyMethod(editor, file);
-            if (method == null) return;
+						TestIntegrationUtils.runTestMethodTemplate(myMethodKind, framework, editor, targetClass, method, "name", false);
+					}
+					catch(IncorrectOperationException e)
+					{
+						HintManager.getInstance().showErrorHint(editor, "Cannot generate method: " + e.getMessage());
+						LOG.warn(e);
+					}
+				}
+			});
+		}
 
-            TestIntegrationUtils.runTestMethodTemplate(myMethodKind, framework, editor, targetClass, method, "name", false);
-          }
-          catch (IncorrectOperationException e) {
-            HintManager.getInstance().showErrorHint(editor, "Cannot generate method: " + e.getMessage());
-            LOG.warn(e);
-          }
-        }
-      });
-    }
+		@javax.annotation.Nullable
+		private static PsiMethod generateDummyMethod(Editor editor, PsiFile file) throws IncorrectOperationException
+		{
+			final PsiMethod method = TestIntegrationUtils.createDummyMethod(file);
+			final PsiGenerationInfo<PsiMethod> info = OverrideImplementUtil.createGenerationInfo(method);
 
-    @javax.annotation.Nullable
-    private static PsiMethod generateDummyMethod(Editor editor, PsiFile file) throws IncorrectOperationException {
-      final PsiMethod method = TestIntegrationUtils.createDummyMethod(file);
-      final PsiGenerationInfo<PsiMethod> info = OverrideImplementUtil.createGenerationInfo(method);
+			int offset = findOffsetToInsertMethodTo(editor, file);
+			GenerateMembersUtil.insertMembersAtOffset(file, offset, Collections.singletonList(info));
 
-      int offset = findOffsetToInsertMethodTo(editor, file);
-      GenerateMembersUtil.insertMembersAtOffset(file, offset, Collections.singletonList(info));
+			final PsiMethod member = info.getPsiMember();
+			return member != null ? CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(member) : null;
+		}
 
-      final PsiMethod member = info.getPsiMember();
-      return member != null ? CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(member) : null;
-    }
+		private static int findOffsetToInsertMethodTo(Editor editor, PsiFile file)
+		{
+			int result = editor.getCaretModel().getOffset();
 
-    private static int findOffsetToInsertMethodTo(Editor editor, PsiFile file) {
-      int result = editor.getCaretModel().getOffset();
+			PsiClass classAtCursor = PsiTreeUtil.getParentOfType(file.findElementAt(result), PsiClass.class, false);
 
-      PsiClass classAtCursor = PsiTreeUtil.getParentOfType(file.findElementAt(result), PsiClass.class, false);
+			while(classAtCursor != null && !(classAtCursor.getParent() instanceof PsiFile))
+			{
+				result = classAtCursor.getTextRange().getEndOffset();
+				classAtCursor = PsiTreeUtil.getParentOfType(classAtCursor, PsiClass.class);
+			}
 
-      while (classAtCursor != null && !(classAtCursor.getParent() instanceof PsiFile)) {
-        result = classAtCursor.getTextRange().getEndOffset();
-        classAtCursor = PsiTreeUtil.getParentOfType(classAtCursor, PsiClass.class);
-      }
+			return result;
+		}
 
-      return result;
-    }
-
-    public boolean startInWriteAction() {
-      return false;
-    }
-  }
+		public boolean startInWriteAction()
+		{
+			return false;
+		}
+	}
 }

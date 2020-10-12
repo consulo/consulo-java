@@ -16,16 +16,16 @@
 
 package com.intellij.testIntegration;
 
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
-import javax.annotation.Nullable;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.lang.Language;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface TestFramework
 {
@@ -35,14 +35,14 @@ public interface TestFramework
 	String getName();
 
 	@Nonnull
-	Icon getIcon();
+	Image getIcon();
 
 	boolean isLibraryAttached(@Nonnull Module module);
 
 	@Nullable
 	String getLibraryPath();
 
-	@javax.annotation.Nullable
+	@Nullable
 	String getDefaultSuperClass();
 
 	boolean isTestClass(@Nonnull PsiElement clazz);
