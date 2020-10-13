@@ -1990,7 +1990,7 @@
 		<packaging.artifactType implementation="com.intellij.packaging.impl.artifacts.JarArtifactType" order="after zip-artifact"/>
 		<packaging.elementType implementation="consulo.java.packaging.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
 		<moduleExtensionProvider key="java"
-								 icon="/icons/java.svg"
+								 icon="consulo.java.psi.impl.JavaPsiImplIconGroup@java"
 								 name="Java"
 								 immutableClass="consulo.java.module.extension.JavaModuleExtensionImpl"
 								 mutableClass="consulo.java.module.extension.JavaMutableModuleExtensionImpl"/>

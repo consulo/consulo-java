@@ -15,16 +15,16 @@
  */
 package consulo.java.module.extension;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.module.extension.ModuleExtensionWithSdk;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
  * @author VISTALL
@@ -41,7 +41,7 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 	/**
 	 * @return user set language version. If version is not set return null
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	default LanguageLevel getLanguageLevelNoDefault()
 	{
 		return getLanguageLevel();
@@ -50,7 +50,7 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 	@Nonnull
 	SpecialDirLocation getSpecialDirLocation();
 
-	@javax.annotation.Nullable
+	@Nullable
 	Sdk getSdkForCompilation();
 
 	@Nonnull
@@ -59,6 +59,6 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 	@Nonnull
 	Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
 
-	@javax.annotation.Nullable
+	@Nullable
 	String getBytecodeVersion();
 }
