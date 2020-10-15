@@ -139,7 +139,7 @@
 			<add-to-group group-id="DebugMainMenu" anchor="before" relative-to-action="StepOver"/>
 		</action>
 
-		<action id="Debugger.PopFrame" class="com.intellij.debugger.actions.PopFrameAction" icon="AllIcons.Actions.PopFrame">
+		<action id="Debugger.PopFrame" class="com.intellij.debugger.actions.PopFrameAction" icon="consulo.platform.base.PlatformIconGroup@actions.popframe">
 			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ForceRunToCursor"/>
 		</action>
 
@@ -150,10 +150,10 @@
 			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ToggleLineBreakpoint"/>
 		</group>
 
-		<action id="ExportThreads" class="com.intellij.debugger.actions.ExportThreadsAction" icon="AllIcons.Actions.Export">
+		<action id="ExportThreads" class="com.intellij.debugger.actions.ExportThreadsAction" icon="consulo.platform.base.PlatformIconGroup@actions.export">
 			<add-to-group group-id="RunMenu" anchor="last"/>
 		</action>
-		<action id="DumpThreads" class="com.intellij.debugger.actions.ThreadDumpAction" text="Take a thread dump" icon="AllIcons.Actions.Dump">
+		<action id="DumpThreads" class="com.intellij.debugger.actions.ThreadDumpAction" text="Take a thread dump" icon="consulo.platform.base.PlatformIconGroup@actions.dump">
 			<add-to-group group-id="RunMenu" anchor="last"/>
 		</action>
 
@@ -237,7 +237,7 @@
 			<add-to-group group-id="TypeHierarchyPopupMenu" anchor="first"/>
 		</action>
 
-		<group id="JavaMethodHierarchyPopupMenu" name="JavaMethodHierarchyPopupMenu">
+		<group id="JavaMethodHierarchyPopupMenu">
 			<action id="MethodHierarchy.ImplementMethodAction" class="com.intellij.ide.hierarchy.method.ImplementMethodAction"
 					use-shortcut-of="ImplementMethods"/>
 			<action id="MethodHierarchy.OverrideMethodAction" class="com.intellij.ide.hierarchy.method.OverrideMethodAction"
