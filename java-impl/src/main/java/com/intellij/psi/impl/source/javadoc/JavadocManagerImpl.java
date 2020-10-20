@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.openapi.extensions.Extensions;

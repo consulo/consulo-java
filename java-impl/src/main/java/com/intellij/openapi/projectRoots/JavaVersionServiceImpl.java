@@ -16,7 +16,7 @@
 package com.intellij.openapi.projectRoots;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.PsiElement;
 

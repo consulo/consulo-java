@@ -16,7 +16,7 @@
 package com.intellij.debugger.memory.component;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.debugger.memory.event.MemoryViewManagerListener;
 import consulo.disposer.Disposable;

@@ -21,8 +21,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;

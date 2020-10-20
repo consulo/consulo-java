@@ -16,7 +16,7 @@
 package com.intellij.util.xml.converters;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;

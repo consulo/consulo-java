@@ -18,7 +18,7 @@ package com.intellij.psi.impl.migration;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;

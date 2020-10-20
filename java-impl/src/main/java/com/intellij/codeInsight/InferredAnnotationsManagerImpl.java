@@ -5,10 +5,11 @@ import com.intellij.openapi.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiModifierListOwner;
+import jakarta.inject.Singleton;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 

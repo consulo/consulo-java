@@ -28,12 +28,11 @@ import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.ui.JBUI;
 import consulo.disposer.Disposable;
 import consulo.ui.image.Image;
-import org.jetbrains.annotations.NonNls;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

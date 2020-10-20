@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.DebuggerManagerEx;

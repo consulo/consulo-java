@@ -17,7 +17,7 @@ package com.intellij.refactoring.listeners.impl;
 
 import java.util.List;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;

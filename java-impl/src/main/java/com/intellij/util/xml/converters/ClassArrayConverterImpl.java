@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;

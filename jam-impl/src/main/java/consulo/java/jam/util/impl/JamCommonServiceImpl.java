@@ -16,7 +16,7 @@
 
 package consulo.java.jam.util.impl;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.jam.model.util.JamCommonUtil;

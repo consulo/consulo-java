@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source.resolve;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;

@@ -18,7 +18,7 @@ package consulo.java.unscramble;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationActivationListener;

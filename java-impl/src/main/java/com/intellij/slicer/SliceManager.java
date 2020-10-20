@@ -19,8 +19,8 @@ import java.awt.Font;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.analysis.AnalysisUIOptions;
 import com.intellij.ide.impl.ContentManagerWatcher;

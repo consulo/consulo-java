@@ -18,7 +18,7 @@ package com.intellij.codeInsight.generation;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;

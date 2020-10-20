@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElementRef;
 import com.intellij.util.NotNullFunction;
 import consulo.util.advandedProxy.AdvancedProxyBuilder;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 

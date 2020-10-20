@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;

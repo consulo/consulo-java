@@ -23,8 +23,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.jam.reflect.JamAnnotationMeta;

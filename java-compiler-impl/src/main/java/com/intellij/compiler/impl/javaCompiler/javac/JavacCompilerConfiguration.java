@@ -16,8 +16,8 @@
 package com.intellij.compiler.impl.javaCompiler.javac;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.components.PersistentStateComponent;

@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.debugger.memory.event.InstancesTrackerListener;
 import com.intellij.debugger.memory.tracking.TrackingType;

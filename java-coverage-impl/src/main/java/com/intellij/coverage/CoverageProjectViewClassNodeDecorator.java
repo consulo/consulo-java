@@ -1,6 +1,6 @@
 package com.intellij.coverage;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;

@@ -16,8 +16,8 @@
 package com.intellij.javadoc;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.jdom.Element;
 import com.intellij.CommonBundle;

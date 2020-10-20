@@ -15,7 +15,7 @@
  */
 package com.intellij.execution;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.execution.configuration.RunConfigurationExtensionsManager;
 import com.intellij.execution.configurations.RunConfigurationBase;

@@ -61,11 +61,11 @@ import com.siyeh.ig.fixes.CreateDefaultBranchFix;
 import com.siyeh.ig.fixes.CreateMissingSwitchBranchesFix;
 import consulo.java.JavaQuickFixBundle;
 import consulo.java.module.util.JavaClassNames;
+import jakarta.inject.Singleton;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
 import java.util.*;
 
 /**

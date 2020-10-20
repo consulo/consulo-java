@@ -15,8 +15,8 @@
  */
 package com.intellij.util.xml.impl;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;

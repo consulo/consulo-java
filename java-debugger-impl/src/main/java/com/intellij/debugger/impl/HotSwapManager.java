@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;

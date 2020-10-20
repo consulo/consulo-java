@@ -7,8 +7,8 @@ import java.io.StringWriter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.util.Textifier;

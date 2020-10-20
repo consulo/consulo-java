@@ -20,7 +20,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;

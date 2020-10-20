@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.fileTemplates.FileTemplate;

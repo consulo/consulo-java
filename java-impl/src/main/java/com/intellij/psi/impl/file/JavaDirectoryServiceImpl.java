@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.core.CoreJavaDirectoryService;
 import com.intellij.ide.fileTemplates.FileTemplate;

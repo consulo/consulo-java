@@ -29,7 +29,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;

@@ -20,7 +20,7 @@
  */
 package com.intellij.codeInspection.reference;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.psi.*;

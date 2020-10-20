@@ -25,12 +25,12 @@ import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Stack;
 import consulo.psi.PsiPackage;
+import jakarta.inject.Singleton;
 import one.util.streamex.EntryStream;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
 
 import consulo.internal.org.objectweb.asm.ClassReader;
 

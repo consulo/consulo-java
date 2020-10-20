@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.CommonReferenceProviderTypes;
 import com.intellij.psi.PsiReferenceProvider;

@@ -14,7 +14,7 @@ import java.util.jar.Manifest;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.diagnostic.Logger;

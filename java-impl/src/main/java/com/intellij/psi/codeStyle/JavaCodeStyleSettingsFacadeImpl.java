@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.codeStyle;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.ide.highlighter.JavaFileType;
 

@@ -28,7 +28,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;

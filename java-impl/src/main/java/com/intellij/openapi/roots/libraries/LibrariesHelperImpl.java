@@ -18,7 +18,7 @@ package com.intellij.openapi.roots.libraries;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.highlighter.JavaClassFileType;

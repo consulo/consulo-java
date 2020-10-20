@@ -1,7 +1,7 @@
 package com.intellij.codeInsight.javadoc;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;

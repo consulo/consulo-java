@@ -16,7 +16,7 @@
 
 package consulo.java;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.psi.impl.source.DummyHolderFactory;
 import com.intellij.psi.impl.source.JavaDummyHolderFactory;

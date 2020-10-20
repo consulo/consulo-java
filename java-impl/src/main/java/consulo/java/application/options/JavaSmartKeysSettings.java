@@ -1,7 +1,7 @@
 package consulo.java.application.options;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jdom.Element;
 import com.intellij.openapi.components.PersistentStateComponent;

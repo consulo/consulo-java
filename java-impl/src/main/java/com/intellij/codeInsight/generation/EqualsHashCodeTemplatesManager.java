@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.generate.exception.TemplateResourceException;

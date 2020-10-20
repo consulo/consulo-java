@@ -17,7 +17,7 @@ package com.intellij.execution.runners;
 
 import java.io.File;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLine;

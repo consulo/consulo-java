@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.file;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.editor.Document;

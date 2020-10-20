@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.impl.CompileDriver;

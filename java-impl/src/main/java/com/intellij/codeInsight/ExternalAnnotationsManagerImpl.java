@@ -76,11 +76,11 @@ import com.intellij.util.ui.OptionsMessageDialog;
 import consulo.logging.Logger;
 import consulo.ui.image.Image;
 import gnu.trove.THashSet;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

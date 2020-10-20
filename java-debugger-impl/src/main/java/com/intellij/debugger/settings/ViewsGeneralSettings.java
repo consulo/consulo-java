@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.settings;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jdom.Element;
 import com.intellij.openapi.components.PersistentStateComponent;

@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.problems;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.project.Project;

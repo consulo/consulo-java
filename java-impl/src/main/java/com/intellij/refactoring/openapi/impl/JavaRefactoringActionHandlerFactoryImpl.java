@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.openapi.impl;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.refactoring.RefactoringActionHandler;

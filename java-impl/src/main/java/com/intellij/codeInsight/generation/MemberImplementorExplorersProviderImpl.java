@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.generation;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.codeInsight.MemberImplementorExplorer;
 

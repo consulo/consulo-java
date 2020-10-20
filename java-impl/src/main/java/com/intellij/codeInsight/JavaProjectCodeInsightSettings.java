@@ -25,11 +25,11 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.AbstractCollection;
 import com.intellij.util.xmlb.annotations.Tag;
+import jakarta.inject.Singleton;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;

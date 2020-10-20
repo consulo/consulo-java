@@ -16,7 +16,7 @@
 package org.jetbrains.java.generate;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jetbrains.java.generate.config.Config;
 import com.intellij.openapi.components.PersistentStateComponent;
