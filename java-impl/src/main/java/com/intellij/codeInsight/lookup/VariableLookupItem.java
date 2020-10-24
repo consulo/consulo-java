@@ -33,8 +33,8 @@ import com.intellij.psi.impl.source.PsiFieldImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.ui.color.ColorValue;
 import consulo.ui.image.ImageEffects;
-import consulo.ui.shared.ColorValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
