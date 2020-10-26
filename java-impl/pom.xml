@@ -51,9 +51,9 @@
 					<repositoryChannel>nightly</repositoryChannel>
 					<dependencies>
 						<dependency>com.intellij.spellchecker</dependency>
-						<dependency>org.intellij.intelliLang</dependency>
 						<dependency>com.intellij.regexp</dependency>
 						<dependency>com.intellij.xml</dependency>
+						<dependency>consulo.library.batik</dependency>
 						<dependency>com.intellij.images</dependency>
 						<dependency>com.intellij.properties</dependency>
 						<dependency>consulo.javascript</dependency>

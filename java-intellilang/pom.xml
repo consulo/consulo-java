@@ -67,7 +67,7 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>org.intellij.intelliLang</artifactId>
+			<artifactId>com.intellij.regexp</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

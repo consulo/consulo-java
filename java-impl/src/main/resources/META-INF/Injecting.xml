@@ -28,10 +28,9 @@
     <daemon.highlightInfoFilter implementation="org.intellij.plugins.intelliLang.inject.CustomErrorElementFilter"/>
   </extensions>
 
-  <extensions defaultExtensionNs="org.intellij.intelliLang">
-    <languageSupport implementation="org.intellij.plugins.intelliLang.inject.java.JavaLanguageInjectionSupport"/>
+  <extensions defaultExtensionNs="com.intellij">
+    <injectionLanguageSupport implementation="org.intellij.plugins.intelliLang.inject.java.JavaLanguageInjectionSupport"/>
     <injectionConfig config="resources/javaInjections.xml"/>
     <injectionConfig config="resources/xmlInjections-java.xml"/>
   </extensions>
-
 </consulo-plugin>

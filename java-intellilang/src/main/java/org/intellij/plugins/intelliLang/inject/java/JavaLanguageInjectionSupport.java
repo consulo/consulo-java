@@ -19,7 +19,6 @@ package org.intellij.plugins.intelliLang.inject.java;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.Language;
-import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.Result;
@@ -45,10 +44,10 @@ import com.intellij.util.Consumer;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.psi.injection.AbstractLanguageInjectionSupport;
 import gnu.trove.THashSet;
 import org.intellij.plugins.intelliLang.AdvancedSettingsUI;
 import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.inject.AbstractLanguageInjectionSupport;
 import org.intellij.plugins.intelliLang.inject.EditInjectionSettingsAction;
 import org.intellij.plugins.intelliLang.inject.InjectLanguageAction;
 import org.intellij.plugins.intelliLang.inject.InjectorUtils;
@@ -75,7 +74,6 @@ import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInje
  * @author Gregory.Shrago
  */
 public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSupport {
-
   @NonNls public static final String JAVA_SUPPORT_ID = "java";
 
   private static boolean isMine(final PsiLanguageInjectionHost psiElement) {
@@ -543,11 +541,6 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     else {
       super.setupPresentation(injection, presentation, isSelected);
     }
-  }
-
-  @Override
-  public void getLanguagesToInject(@Nonnull MultiHostRegistrar registrar, @Nonnull PsiElement context) {
-
   }
 
   @Override

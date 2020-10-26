@@ -15,12 +15,6 @@
  */
 package com.intellij.externalSystem;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import consulo.java.module.extension.JavaMutableModuleExtension;
 import com.intellij.openapi.externalSystem.model.DataNode;
 import com.intellij.openapi.externalSystem.model.Key;
 import com.intellij.openapi.externalSystem.service.project.manage.ProjectDataService;
@@ -36,6 +30,12 @@ import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.java.module.extension.JavaMutableModuleExtension;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Denis Zhdanov
@@ -96,7 +96,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 		});
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static Sdk findJdk(@Nonnull JavaSdkVersion version)
 	{
 		JavaSdk javaSdk = JavaSdk.getInstance();

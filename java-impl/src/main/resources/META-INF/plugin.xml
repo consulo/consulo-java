@@ -21,7 +21,6 @@
 	<vendor>Jetbrains and others</vendor>
 	<depends optional="true" config-file="com.intellij.regexp.xml">com.intellij.regexp</depends>
 	<depends optional="true" config-file="com.intellij.images.xml">com.intellij.images</depends>
-	<depends optional="true" config-file="org.intellij.intellilang.xml">org.intellij.intelliLang</depends>
 	<depends optional="true" config-file="Spellchecker.xml">com.intellij.spellchecker</depends>
 	<depends optional="true" config-file="Properties.xml">com.intellij.properties</depends>
 	<depends optional="true" config-file="consulo.javascript.xml">consulo.javascript</depends>
@@ -35,6 +34,7 @@
 	<import path="/META-INF/Manifest.xml"/>
 	<import path="/META-INF/Guava.xml"/>
 	<import path="/META-INF/Jam.xml"/>
+	<import path="/META-INF/Injecting.xml"/>
 
 	<actions>
 		<group id="NewJavaSpecialFile">
