@@ -15,13 +15,14 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
 
 /**
  * @author max
@@ -245,8 +246,29 @@ public interface PsiJavaParserFacade
 	PsiType createPrimitiveType(@Nonnull String text, @Nonnull PsiAnnotation[] annotations) throws IncorrectOperationException;
 
 	/**
+	 * @deprecated use {@link #createModuleFromText(String, PsiElement)}
+	 */
+	@Deprecated
+	default PsiJavaModule createModuleFromText(@Nonnull @NonNls String text) throws IncorrectOperationException
+	{
+		return createModuleFromText(text, null);
+	}
+
+	/**
 	 * Creates a Java module declaration from the specified text.
 	 */
 	@Nonnull
-	PsiJavaModule createModuleFromText(@Nonnull String text);
+	PsiJavaModule createModuleFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
+
+	/**
+	 * Creates a Java module statement from the specified text.
+	 */
+	@Nonnull
+	PsiStatement createModuleStatementFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
+
+	/**
+	 * Creates a Java module reference element from the specified text.
+	 */
+	@Nonnull
+	PsiJavaModuleReferenceElement createModuleReferenceFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
 }

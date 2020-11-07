@@ -15,13 +15,6 @@
  */
 package com.intellij.psi;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
@@ -29,6 +22,11 @@ import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Service for creating instances of Java, JavaDoc, JSP and XML PSI elements which don't have
@@ -38,6 +36,10 @@ import com.intellij.util.IncorrectOperationException;
  */
 public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactory
 {
+	/**
+	 * @deprecated please use {@link #getInstance(Project)}
+	 */
+	@Deprecated
 	class SERVICE
 	{
 		private SERVICE()
@@ -46,8 +48,13 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
 
 		public static PsiElementFactory getInstance(Project project)
 		{
-			return ServiceManager.getService(project, PsiElementFactory.class);
+			return PsiElementFactory.getInstance(project);
 		}
+	}
+
+	static PsiElementFactory getInstance(Project project)
+	{
+		return ServiceManager.getService(project, PsiElementFactory.class);
 	}
 
 	/**

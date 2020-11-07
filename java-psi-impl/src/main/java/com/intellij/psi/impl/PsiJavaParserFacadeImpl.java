@@ -15,12 +15,6 @@
  */
 package com.intellij.psi.impl;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.java.parser.DeclarationParser;
 import com.intellij.lang.java.parser.JavaParser;
@@ -38,9 +32,15 @@ import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * @author max
@@ -63,7 +63,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 	private static final JavaParserUtil.ParserWrapper RESOURCE = builder -> JavaParser.INSTANCE.getDeclarationParser().parseResource(builder);
 
 	private static final JavaParserUtil.ParserWrapper TYPE = builder -> JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS |
-			ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS  | ReferenceParser.VAR_TYPE);
+			ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS | ReferenceParser.VAR_TYPE);
 
 	public static final JavaParserUtil.ParserWrapper REFERENCE = builder -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
 
@@ -373,15 +373,36 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 
 	@Nonnull
 	@Override
-	public PsiJavaModule createModuleFromText(@Nonnull String text) throws IncorrectOperationException
+	public PsiJavaModule createModuleFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException
 	{
-		DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, MODULE, LanguageLevel.JDK_1_9), null);
+		DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, MODULE, LanguageLevel.JDK_1_9), context);
 		PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiJavaModule))
 		{
-			throw new IncorrectOperationException("Incorrect module declaration '" + text + "'");
+			throw newException("Incorrect module declaration '" + text + "'", holder);
 		}
 		return (PsiJavaModule) element;
+	}
+
+	@Nonnull
+	@Override
+	public PsiStatement createModuleStatementFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException
+	{
+		String template = "module M { " + text + "; }";
+		PsiJavaModule module = createModuleFromText(template, context);
+		PsiStatement statement = PsiTreeUtil.getChildOfType(module, PsiStatement.class);
+		if(statement == null)
+		{
+			throw new IncorrectOperationException("Incorrect module statement '" + text + "'");
+		}
+		return statement;
+	}
+
+	@Nonnull
+	@Override
+	public PsiJavaModuleReferenceElement createModuleReferenceFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException
+	{
+		return createModuleFromText("module " + text + " {}", context).getNameIdentifier();
 	}
 
 	@Nonnull

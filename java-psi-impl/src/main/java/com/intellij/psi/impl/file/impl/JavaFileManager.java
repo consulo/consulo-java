@@ -19,15 +19,15 @@
  */
 package com.intellij.psi.impl.file.impl;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 public interface JavaFileManager
 {
@@ -36,7 +36,7 @@ public interface JavaFileManager
 		return ServiceManager.getService(project, JavaFileManager.class);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
 
 	PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope);

@@ -15,17 +15,14 @@
  */
 package com.intellij.psi.impl.source;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiProvidesStatement;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiProvidesStatementStub;
 import com.intellij.psi.util.PsiTreeUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement
 {
@@ -39,11 +36,21 @@ public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStat
 		super(node);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public PsiJavaCodeReferenceElement getInterfaceReference()
 	{
 		return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
+	}
+
+	@Nullable
+	@Override
+	public PsiClassType getInterfaceType()
+	{
+		PsiProvidesStatementStub stub = getStub();
+		PsiJavaCodeReferenceElement ref =
+				stub != null ? JavaPsiFacade.getElementFactory(getProject()).createReferenceFromText(stub.getInterface(), this) : getInterfaceReference();
+		return ref != null ? new PsiClassReferenceType(ref, null, PsiAnnotation.EMPTY_ARRAY) : null;
 	}
 
 	@Nullable

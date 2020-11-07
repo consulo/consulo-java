@@ -15,16 +15,6 @@
  */
 package com.intellij.psi.impl;
 
-import gnu.trove.THashSet;
-
-import java.util.*;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.application.ReadActionProcessor;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.DumbAware;
@@ -43,6 +33,7 @@ import com.intellij.psi.impl.source.resolve.FileContextUtil;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubTreeLoader;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
@@ -51,6 +42,14 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.disposer.Disposable;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.psi.PsiPackageManager;
+import gnu.trove.THashSet;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author max
@@ -64,12 +63,20 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	private final Project myProject;
 	private final PsiPackageManager myPackageManager;
 
+	private final Map<GlobalSearchScope, Map<String, Collection<PsiJavaModule>>> myModuleCache = ContainerUtil.createConcurrentSoftKeySoftValueMap();
+
 	@Inject
 	public JavaPsiFacadeImpl(Project project, PsiPackageManager psiManager)
 	{
 		myProject = project;
 		myPackageManager = psiManager;
 		myConstantEvaluationHelper = new PsiConstantEvaluationHelperImpl();
+
+		project.getMessageBus().connect().subscribe(PsiModificationTracker.TOPIC, () -> {
+			// todo myClassCache.clear();
+			// todo myPackageCache.clear();
+			myModuleCache.clear();
+		});
 
 		JavaElementType.ANNOTATION.getIndex(); // Initialize stubs.
 	}
@@ -551,7 +558,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@Nonnull
 	public PsiElementFactory getElementFactory()
 	{
-		return PsiElementFactory.SERVICE.getInstance(myProject);
+		return PsiElementFactory.getInstance(myProject);
 	}
 
 	@TestOnly
@@ -559,5 +566,21 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	public void setAssertOnFileLoadingFilter(@Nonnull final VirtualFileFilter filter, @Nonnull Disposable parentDisposable)
 	{
 		((PsiManagerImpl) PsiManager.getInstance(myProject)).setAssertOnFileLoadingFilter(filter, parentDisposable);
+	}
+
+	@Override
+	public PsiJavaModule findModule(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope)
+	{
+		Collection<PsiJavaModule> modules = findModules(moduleName, scope);
+		return modules.size() == 1 ? modules.iterator().next() : null;
+	}
+
+	@Nonnull
+	@Override
+	public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope)
+	{
+		return myModuleCache
+				.computeIfAbsent(scope, k -> ContainerUtil.createConcurrentWeakValueMap())
+				.computeIfAbsent(moduleName, k -> JavaFileManager.getInstance(myProject).findModules(k, scope));
 	}
 }

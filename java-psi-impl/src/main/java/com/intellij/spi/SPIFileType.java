@@ -15,53 +15,80 @@
  */
 package com.intellij.spi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.spi.SPILanguage;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import com.intellij.openapi.fileTypes.UnknownFileType;
+import com.intellij.openapi.fileTypes.ex.FileTypeIdentifiableByVirtualFile;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
 import consulo.ui.image.Image;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+
 /**
  * User: anna
  */
-public class SPIFileType extends LanguageFileType {
-  public static final SPIFileType INSTANCE = new SPIFileType();
+public class SPIFileType extends LanguageFileType implements FileTypeIdentifiableByVirtualFile
+{
+	public static final SPIFileType INSTANCE = new SPIFileType();
 
-  private SPIFileType() {
-    super(SPILanguage.INSTANCE);
-  }
+	private SPIFileType()
+	{
+		super(SPILanguage.INSTANCE);
+	}
 
-  @Nonnull
-  @Override
-  public String getName() {
-    return "JAVA-SPI";
-  }
+	@Override
+	public boolean isMyFileType(@Nonnull VirtualFile file)
+	{
+		VirtualFile parent = file.getParent();
+		if(parent != null && Objects.equals("services", parent.getNameSequence()))
+		{
+			final VirtualFile gParent = parent.getParent();
+			if(gParent != null && Objects.equals("META-INF", gParent.getNameSequence()))
+			{
+				final String fileName = file.getName();
+				return FileTypeRegistry.getInstance().getFileTypeByFileName(fileName) == UnknownFileType.INSTANCE;
+			}
+		}
+		return false;
+	}
 
-  @Nonnull
-  @Override
-  public String getDescription() {
-    return "Service Provider Interface";
-  }
+	@Nonnull
+	@Override
+	public String getId()
+	{
+		return "JAVA-SPI";
+	}
 
-  @Nonnull
-  @Override
-  public String getDefaultExtension() {
-    return "";
-  }
+	@Nonnull
+	@Override
+	public String getDescription()
+	{
+		return "Service Provider Interface";
+	}
 
-  @Nullable
-  @Override
-  public Image getIcon() {
-    return AllIcons.FileTypes.Text;
-  }
+	@Nonnull
+	@Override
+	public String getDefaultExtension()
+	{
+		return "";
+	}
 
-  @Nullable
-  @Override
-  public String getCharset(@Nonnull VirtualFile file, byte[] content) {
-    return CharsetToolkit.UTF8;
-  }
+	@Nonnull
+	@Override
+	public Image getIcon()
+	{
+		return AllIcons.FileTypes.Text;
+	}
+
+	@Nullable
+	@Override
+	public String getCharset(@Nonnull VirtualFile file, byte[] content)
+	{
+		return CharsetToolkit.UTF8;
+	}
 }

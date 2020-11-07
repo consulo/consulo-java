@@ -1,15 +1,18 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiUsesStatement;
 import com.intellij.psi.impl.java.stubs.PsiUsesStatementStub;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
+
+import javax.annotation.Nonnull;
 
 public class ClsUsesStatementImpl extends ClsRepositoryPsiElement<PsiUsesStatementStub> implements PsiUsesStatement
 {
@@ -25,6 +28,12 @@ public class ClsUsesStatementImpl extends ClsRepositoryPsiElement<PsiUsesStateme
 	public PsiJavaCodeReferenceElement getClassReference()
 	{
 		return myClassReference;
+	}
+
+	@Override
+	public PsiClassType getClassType()
+	{
+		return new PsiClassReferenceType(myClassReference, null, PsiAnnotation.EMPTY_ARRAY);
 	}
 
 	@Override

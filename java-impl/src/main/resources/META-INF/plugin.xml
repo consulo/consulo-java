@@ -799,6 +799,7 @@
 		<definitionsScopedSearch implementation="com.intellij.codeInsight.navigation.ClassImplementationsSearch"/>
 
 		<fileTypeFactory implementation="com.intellij.openapi.fileTypes.impl.JavaFileTypeFactory"/>
+		<fileTypeFactory implementation="consulo.java.spi.SPIFileTypeFactory"/>
 
 		<lookup.actionProvider implementation="com.intellij.codeInsight.completion.ImportStaticLookupActionProvider" id="importStatic"/>
 		<lookup.actionProvider implementation="com.intellij.codeInsight.completion.ExcludeFromCompletionLookupActionProvider"
@@ -2021,6 +2022,7 @@
 
 		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
 		<fileBasedIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaAutoModuleNameIndex"/>
+		<fileBasedIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaSourceModuleNameIndex"/>
 
 		<xdebugger.lineBreakpointTypeResolver filetype="CLASS" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>
 		<xdebugger.lineBreakpointTypeResolver filetype="JAVA" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>

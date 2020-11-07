@@ -15,22 +15,21 @@
  */
 package com.intellij.psi.impl.source;
 
-import static com.intellij.openapi.util.text.StringUtil.nullize;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiJavaModuleReferenceElement;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiRequiresStatement;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiRequiresStatementStub;
 import com.intellij.psi.util.PsiTreeUtil;
+import consulo.util.lang.ref.SoftReference;
+
+import javax.annotation.Nonnull;
+
+import static com.intellij.openapi.util.text.StringUtil.nullize;
 
 public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStatementStub> implements PsiRequiresStatement
 {
+	private SoftReference<PsiJavaModuleReference> myReference;
+
 	public PsiRequiresStatementImpl(@Nonnull PsiRequiresStatementStub stub)
 	{
 		super(stub, JavaStubElementTypes.REQUIRES_STATEMENT);
@@ -73,6 +72,33 @@ public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStat
 	{
 		PsiModifierList modifierList = getModifierList();
 		return modifierList != null && modifierList.hasModifierProperty(name);
+	}
+
+	@Override
+	public PsiJavaModuleReference getModuleReference()
+	{
+		PsiRequiresStatementStub stub = getStub();
+		if(stub != null)
+		{
+			String refText = nullize(stub.getModuleName());
+			if(refText == null)
+			{
+				return null;
+			}
+			PsiJavaModuleReference ref = SoftReference.dereference(myReference);
+			if(ref == null)
+			{
+				ref = JavaPsiFacade.getInstance(getProject()).getParserFacade().createModuleReferenceFromText(refText, this).getReference();
+				myReference = new SoftReference<>(ref);
+			}
+			return ref;
+		}
+		else
+		{
+			myReference = null;
+			PsiJavaModuleReferenceElement refElement = getReferenceElement();
+			return refElement != null ? refElement.getReference() : null;
+		}
 	}
 
 	@Override

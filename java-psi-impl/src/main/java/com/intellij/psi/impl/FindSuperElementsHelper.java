@@ -15,29 +15,8 @@
  */
 package com.intellij.psi.impl;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.progress.ProgressManager;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiAnchor;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiSuperMethodUtil;
@@ -46,6 +25,12 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.hash.HashMap;
+import consulo.java.module.util.JavaClassNames;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class FindSuperElementsHelper
 {
@@ -110,7 +95,7 @@ public class FindSuperElementsHelper
 	}
 
 	@Nonnull
-	public static Map<PsiMethod, SiblingInfo> getSiblingInheritanceInfos(@Nonnull final Collection<PsiMethod> methods)
+	public static Map<PsiMethod, SiblingInfo> getSiblingInheritanceInfos(@Nonnull final Collection<? extends PsiMethod> methods)
 	{
 		MultiMap<PsiClass, PsiMethod> byClass = MultiMap.create();
 		for(PsiMethod method : methods)
@@ -132,7 +117,7 @@ public class FindSuperElementsHelper
 		return result;
 	}
 
-	private static boolean canHaveSiblingSuper(PsiMethod method, PsiClass containingClass)
+	public static boolean canHaveSiblingSuper(PsiMethod method, PsiClass containingClass)
 	{
 		return containingClass != null &&
 				PsiUtil.canBeOverriden(method) &&

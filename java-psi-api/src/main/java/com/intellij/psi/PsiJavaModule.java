@@ -15,7 +15,10 @@
  */
 package com.intellij.psi;
 
+import com.intellij.util.containers.ContainerUtil;
+
 import javax.annotation.Nonnull;
+import java.util.Set;
 
 /**
  * Represents a Java module declaration.
@@ -28,6 +31,12 @@ public interface PsiJavaModule extends NavigatablePsiElement, PsiNameIdentifierO
 	String MODULE_INFO_FILE = MODULE_INFO_CLASS + ".java";
 	String MODULE_INFO_CLS_FILE = MODULE_INFO_CLASS + ".class";
 	String JAVA_BASE = "java.base";
+	String AUTO_MODULE_NAME = "Automatic-Module-Name";
+
+	/* See http://openjdk.java.net/jeps/261#Class-loaders, "Class loaders" */
+	Set<String> UPGRADEABLE = ContainerUtil.immutableSet(
+			"java.activation", "java.compiler", "java.corba", "java.transaction", "java.xml.bind", "java.xml.ws", "java.xml.ws.annotation",
+			"jdk.internal.vm.compiler", "jdk.xml.bind", "jdk.xml.ws");
 
 	@Override
 	@Nonnull

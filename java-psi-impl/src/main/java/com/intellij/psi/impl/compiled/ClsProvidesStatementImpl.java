@@ -15,17 +15,17 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiProvidesStatement;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiProvidesStatementStub;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.stubs.StubElement;
+
+import javax.annotation.Nonnull;
 
 public class ClsProvidesStatementImpl extends ClsRepositoryPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement
 {
@@ -41,6 +41,12 @@ public class ClsProvidesStatementImpl extends ClsRepositoryPsiElement<PsiProvide
 	public PsiJavaCodeReferenceElement getInterfaceReference()
 	{
 		return myClassReference;
+	}
+
+	@Override
+	public PsiClassType getInterfaceType()
+	{
+		return new PsiClassReferenceType(myClassReference, null, PsiAnnotation.EMPTY_ARRAY);
 	}
 
 	@Override

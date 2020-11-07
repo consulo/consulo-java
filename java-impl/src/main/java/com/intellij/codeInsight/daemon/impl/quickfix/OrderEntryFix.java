@@ -55,7 +55,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
-import com.intellij.psi.impl.source.PsiJavaModuleReference;
+import com.intellij.psi.impl.source.PsiJavaModuleReferenceImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -116,10 +116,10 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 			return null;
 		}
 
-		if(reference instanceof PsiJavaModuleReference)
+		if(reference instanceof PsiJavaModuleReferenceImpl)
 		{
 			List<LocalQuickFix> result = ContainerUtil.newSmartList();
-			createModuleFixes((PsiJavaModuleReference) reference, currentModule, refVFile, result);
+			createModuleFixes((PsiJavaModuleReferenceImpl) reference, currentModule, refVFile, result);
 			result.forEach(fix -> registrar.register((IntentionAction) fix));
 			return result;
 		}
@@ -200,7 +200,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 		return result;
 	}
 
-	private static void createModuleFixes(PsiJavaModuleReference reference, Module currentModule, VirtualFile refVFile, List<LocalQuickFix> result)
+	private static void createModuleFixes(PsiJavaModuleReferenceImpl reference, Module currentModule, VirtualFile refVFile, List<LocalQuickFix> result)
 	{
 		ProjectFileIndex index = ProjectRootManager.getInstance(currentModule.getProject()).getFileIndex();
 		List<PsiElement> targets = Stream.of(reference.multiResolve(true)).map(ResolveResult::getElement).filter(Objects::nonNull).collect(Collectors.toList());

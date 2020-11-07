@@ -21,8 +21,10 @@ import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.search.GlobalSearchScope;
 import consulo.annotation.DeprecationInfo;
 import org.jetbrains.annotations.NonNls;
-
 import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * @author max
@@ -49,7 +51,7 @@ public abstract class JavaPsiFacade
 	 * @param scope         the scope to search.
 	 * @return the PSI class, or null if no class with such name is found.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract PsiClass findClass(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
 	/**
@@ -70,7 +72,7 @@ public abstract class JavaPsiFacade
 	 * @param qualifiedName the full-qualified name of the package to find.
 	 * @return the PSI package, or null if no package with such name is found.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract PsiJavaPackage findPackage(@NonNls @Nonnull String qualifiedName);
 
 	@Nonnull
@@ -153,4 +155,17 @@ public abstract class JavaPsiFacade
 
 	@Nonnull
 	public abstract Project getProject();
+
+
+	/**
+	 * Searches the scope for a unique Java module with the given name.
+	 */
+	@Nullable
+	public abstract PsiJavaModule findModule(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
+
+	/**
+	 * Searches the scope for Java modules with the given name.
+	 */
+	@Nonnull
+	public abstract Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
 }

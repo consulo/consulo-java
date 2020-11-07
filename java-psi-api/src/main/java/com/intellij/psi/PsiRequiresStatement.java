@@ -15,18 +15,29 @@
  */
 package com.intellij.psi;
 
+import javax.annotation.Nullable;
+
 /**
- * Represents a {@code requires} statement of a Java module declaration.
- *
- * @since 2016.3
+ * Represents a {@code requires} directive of a Java module declaration.
  */
 public interface PsiRequiresStatement extends PsiModifierListOwner, PsiStatement
 {
 	PsiRequiresStatement[] EMPTY_ARRAY = new PsiRequiresStatement[0];
 
-	@javax.annotation.Nullable
+	@Nullable
 	PsiJavaModuleReferenceElement getReferenceElement();
 
-	@javax.annotation.Nullable
+	@Nullable
 	String getModuleName();
+
+	@Nullable
+	PsiJavaModuleReference getModuleReference();
+
+	default
+	@Nullable
+	PsiJavaModule resolve()
+	{
+		PsiJavaModuleReference ref = getModuleReference();
+		return ref != null ? ref.resolve() : null;
+	}
 }

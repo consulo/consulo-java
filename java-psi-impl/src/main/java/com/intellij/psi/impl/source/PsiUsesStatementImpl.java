@@ -15,16 +15,14 @@
  */
 package com.intellij.psi.impl.source;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiUsesStatement;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiUsesStatementStub;
 import com.intellij.psi.util.PsiTreeUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStub> implements PsiUsesStatement
 {
@@ -38,11 +36,21 @@ public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStu
 		super(node);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public PsiJavaCodeReferenceElement getClassReference()
 	{
 		return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
+	}
+
+	@Nullable
+	@Override
+	public PsiClassType getClassType()
+	{
+		PsiUsesStatementStub stub = getStub();
+		PsiJavaCodeReferenceElement ref =
+				stub != null ? JavaPsiFacade.getElementFactory(getProject()).createReferenceFromText(stub.getClassName(), this) : getClassReference();
+		return ref != null ? new PsiClassReferenceType(ref, null, PsiAnnotation.EMPTY_ARRAY) : null;
 	}
 
 	@Override
