@@ -1,27 +1,17 @@
 package com.intellij.navigation;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.codeInsight.navigation.ClassImplementationsSearch;
 import com.intellij.codeInsight.navigation.MethodImplementationsSearch;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.project.ex.ProjectManagerEx;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author cdr
@@ -44,18 +34,18 @@ public abstract class GotoImplementationTest extends CodeInsightTestCase
 		return list;
 	}
 
-	@Override
-	protected void setUpProject() throws Exception
-	{
-		final String root = JavaTestUtil.getJavaTestDataPath() + "/codeInsight/navigation/alexProject";
-		VirtualFile vfsRoot = LocalFileSystem.getInstance().findFileByPath(FileUtil.toSystemIndependentName(root));
-
-		VirtualFile projectFile = vfsRoot.findChild("test.ipr");
-		myProject = ProjectManagerEx.getInstanceEx().loadProject(projectFile.getPath());
-
-		simulateProjectOpen();
-		ProjectManagerEx.getInstanceEx().openTestProject(myProject);
-	}
+//	@Override
+//	protected void setUpProject() throws Exception
+//	{
+//		final String root = JavaTestUtil.getJavaTestDataPath() + "/codeInsight/navigation/alexProject";
+//		VirtualFile vfsRoot = LocalFileSystem.getInstance().findFileByPath(FileUtil.toSystemIndependentName(root));
+//
+//		VirtualFile projectFile = vfsRoot.findChild("test.ipr");
+//		myProject = ProjectManagerEx.getInstanceEx().loadProject(projectFile.getPath());
+//
+//		simulateProjectOpen();
+//		ProjectManagerEx.getInstanceEx().openTestProject(myProject);
+//	}
 
 	public void test() throws Exception
 	{

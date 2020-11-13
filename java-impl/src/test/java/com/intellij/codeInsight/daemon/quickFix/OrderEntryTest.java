@@ -1,12 +1,5 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -14,16 +7,19 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.impl.ModuleManagerImpl;
-import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.testFramework.PsiTestUtil;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author cdr
@@ -31,22 +27,22 @@ import com.intellij.testFramework.PsiTestUtil;
 public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/quickFix/orderEntry/";
 
-  @Override
-  protected void setUpProject() throws Exception {
-    final String root = BASE_PATH;
-
-    VirtualFile tempProjectRootDir =
-      PsiTestUtil.createTestProjectStructure(getTestName(true), null, FileUtil.toSystemIndependentName(root), myFilesToDelete, false);
-
-    VirtualFile projectFile = tempProjectRootDir.findChild("orderEntry.ipr");
-
-    myProject = ProjectManagerEx.getInstanceEx().loadProject(projectFile.getPath());
-    ProjectManagerEx.getInstanceEx().openTestProject(myProject);
-    ModuleManagerImpl mm = (ModuleManagerImpl)ModuleManager.getInstance(myProject);
-    mm.projectOpened();
-    setUpJdk();
-    myModule = ModuleManager.getInstance(getProject()).getModules()[0];
-  }
+//  @Override
+//  protected void setUpProject() throws Exception {
+//    final String root = BASE_PATH;
+//
+//    VirtualFile tempProjectRootDir =
+//      PsiTestUtil.createTestProjectStructure(getTestName(true), null, FileUtil.toSystemIndependentName(root), myFilesToDelete, false);
+//
+//    VirtualFile projectFile = tempProjectRootDir.findChild("orderEntry.ipr");
+//
+//    myProject = ProjectManagerEx.getInstanceEx().loadProject(projectFile.getPath());
+//    ProjectManagerEx.getInstanceEx().openTestProject(myProject);
+//    ModuleManagerImpl mm = (ModuleManagerImpl)ModuleManager.getInstance(myProject);
+//    mm.projectOpened();
+//    setUpJdk();
+//    myModule = ModuleManager.getInstance(getProject()).getModules()[0];
+//  }
 
   @Override
   protected void tearDown() throws Exception {
