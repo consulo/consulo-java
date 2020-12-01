@@ -15,16 +15,6 @@
  */
 package com.intellij.debugger.actions;
 
-import java.awt.Color;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.SwingUtilities;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -49,15 +39,16 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.impl.actions.MarkObjectActionHandler;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import consulo.internal.com.sun.jdi.ArrayReference;
-import consulo.internal.com.sun.jdi.ClassLoaderReference;
-import consulo.internal.com.sun.jdi.ClassObjectReference;
-import consulo.internal.com.sun.jdi.Field;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.ThreadGroupReference;
-import consulo.internal.com.sun.jdi.ThreadReference;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.awt.TargetAWT;
+import consulo.internal.com.sun.jdi.*;
+import consulo.ui.color.ColorValue;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /*
  * Class SetValueAction
@@ -213,16 +204,16 @@ public class JavaMarkObjectActionHandler extends MarkObjectActionHandler {
         final ValueMarkup markup = result.get((ObjectReference)fieldValue);
 
         final String fieldName = field.name();
-        final Color autoMarkupColor = getAutoMarkupColor();
+        final ColorValue autoMarkupColor = getAutoMarkupColor();
         if (markup == null) {
-          result.put((ObjectReference)fieldValue, new ValueMarkup(fieldName, autoMarkupColor, createMarkupTooltipText(null, refType, fieldName)));
+          result.put((ObjectReference)fieldValue, new ValueMarkup(fieldName, TargetAWT.to(autoMarkupColor), createMarkupTooltipText(null, refType, fieldName)));
         }
         else {
           final String currentText = markup.getText();
           if (!currentText.contains(fieldName)) {
             final String currentTooltip = markup.getToolTipText();
             final String tooltip = createMarkupTooltipText(currentTooltip, refType, fieldName);
-            result.put((ObjectReference)fieldValue, new ValueMarkup(currentText + ", " + fieldName, autoMarkupColor, tooltip));
+            result.put((ObjectReference)fieldValue, new ValueMarkup(currentText + ", " + fieldName, TargetAWT.to(autoMarkupColor), tooltip));
           }
         }
       }
@@ -274,7 +265,7 @@ public class JavaMarkObjectActionHandler extends MarkObjectActionHandler {
     return ((ValueDescriptor)descriptor).getMarkup(debugProcess) != null;
   }
 
-  public static Color getAutoMarkupColor() {
+  public static ColorValue getAutoMarkupColor() {
     final EditorColorsManager manager = EditorColorsManager.getInstance();
     final TextAttributes textAttributes = manager.getGlobalScheme().getAttributes(JavaHighlightingColors.STATIC_FIELD_ATTRIBUTES);
     return textAttributes.getForegroundColor();

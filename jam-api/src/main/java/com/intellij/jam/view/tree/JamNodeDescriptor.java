@@ -24,6 +24,7 @@ import com.intellij.jam.JamMessages;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
+import consulo.ui.color.ColorValue;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.treeStructure.SimpleNode;
@@ -76,7 +77,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return getIcon();
   }
 
-  protected Color getNewColor() {
+  protected ColorValue getNewColor() {
     return myColor;
   }
 

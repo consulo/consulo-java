@@ -2,6 +2,7 @@ package com.intellij.byteCodeViewer;
 
 import com.intellij.codeInsight.hint.EditorFragmentComponent;
 import com.intellij.execution.filters.LineNumbersMapping;
+import consulo.awt.TargetAWT;
 import consulo.disposer.Disposable;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
@@ -49,7 +50,7 @@ public class ByteCodeViewerComponent extends JPanel implements Disposable
 		((EditorEx) myEditor).setHighlighter(editorHighlighterFactory.createEditorHighlighter(syntaxHighlighter,
 				EditorColorsManager.getInstance().getGlobalScheme()));
 		((EditorEx) myEditor).setBackgroundColor(EditorFragmentComponent.getBackgroundColor(myEditor));
-		myEditor.getColorsScheme().setColor(EditorColors.CARET_ROW_COLOR, LightColors.SLIGHTLY_GRAY);
+		myEditor.getColorsScheme().setColor(EditorColors.CARET_ROW_COLOR, TargetAWT.from(LightColors.SLIGHTLY_GRAY));
 		((EditorEx) myEditor).setCaretVisible(true);
 
 		final EditorSettings settings = myEditor.getSettings();

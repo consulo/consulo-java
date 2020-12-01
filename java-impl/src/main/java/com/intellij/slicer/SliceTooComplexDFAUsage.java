@@ -15,19 +15,18 @@
  */
 package com.intellij.slicer;
 
-import java.awt.Font;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiSubstitutor;
-import com.intellij.ui.JBColor;
 import com.intellij.usages.TextChunk;
 import com.intellij.usages.UsagePresentation;
 import com.intellij.util.Processor;
 import consulo.ui.image.Image;
+import consulo.ui.style.StandardColors;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
 
 /**
  * User: cdr
@@ -57,7 +56,7 @@ public class SliceTooComplexDFAUsage extends SliceUsage
 			public TextChunk[] getText()
 			{
 				return new TextChunk[]{
-						new TextChunk(new TextAttributes(JBColor.RED, null, null, EffectType.WAVE_UNDERSCORE, Font.PLAIN), getTooltipText())
+						new TextChunk(new TextAttributes(StandardColors.RED, null, null, EffectType.WAVE_UNDERSCORE, Font.PLAIN), getTooltipText())
 				};
 			}
 

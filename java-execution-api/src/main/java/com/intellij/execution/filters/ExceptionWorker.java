@@ -15,13 +15,6 @@
  */
 package com.intellij.execution.filters;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.markup.TextAttributes;
@@ -37,6 +30,13 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ui.UIUtil;
+import consulo.awt.TargetAWT;
+import consulo.ui.color.ColorValue;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Irina.Chernushina
@@ -138,7 +138,7 @@ public class ExceptionWorker
 		TextAttributes attributes = EditorColorsManager.getInstance().getGlobalScheme().getAttributes(CodeInsightColors.HYPERLINK_ATTRIBUTES);
 		if(virtualFilesInContent.isEmpty())
 		{
-			Color libTextColor = UIUtil.getInactiveTextColor();
+			ColorValue libTextColor = TargetAWT.from(UIUtil.getInactiveTextColor());
 			attributes = attributes.clone();
 			attributes.setForegroundColor(libTextColor);
 			attributes.setEffectColor(libTextColor);

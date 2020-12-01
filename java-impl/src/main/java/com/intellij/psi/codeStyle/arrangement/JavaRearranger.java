@@ -15,35 +15,6 @@
  */
 package com.intellij.psi.codeStyle.arrangement;
 
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.CLASS;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.CONSTRUCTOR;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.ENUM;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.FIELD;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.INTERFACE;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.METHOD;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.General.MODIFIER;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.General.ORDER;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.General.TYPE;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Grouping.DEPENDENT_METHODS;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Grouping.GETTERS_AND_SETTERS;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Grouping.OVERRIDDEN_METHODS;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Modifier.*;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Order.BREADTH_FIRST;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Order.BY_NAME;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Order.DEPTH_FIRST;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Order.KEEP;
-
-import java.awt.Color;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
@@ -63,14 +34,21 @@ import com.intellij.psi.codeStyle.arrangement.match.StdArrangementMatchRule;
 import com.intellij.psi.codeStyle.arrangement.model.ArrangementAtomMatchCondition;
 import com.intellij.psi.codeStyle.arrangement.model.ArrangementCompositeMatchCondition;
 import com.intellij.psi.codeStyle.arrangement.model.ArrangementMatchCondition;
-import com.intellij.psi.codeStyle.arrangement.std.ArrangementColorsAware;
-import com.intellij.psi.codeStyle.arrangement.std.ArrangementSectionRuleAwareSettings;
-import com.intellij.psi.codeStyle.arrangement.std.ArrangementSettingsToken;
-import com.intellij.psi.codeStyle.arrangement.std.ArrangementStandardSettingsAware;
-import com.intellij.psi.codeStyle.arrangement.std.CompositeArrangementSettingsToken;
-import com.intellij.psi.codeStyle.arrangement.std.StdArrangementSettings;
-import com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens;
+import com.intellij.psi.codeStyle.arrangement.std.*;
 import com.intellij.util.containers.ContainerUtilRt;
+import consulo.ui.color.ColorValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
+
+import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.*;
+import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.General.*;
+import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Grouping.*;
+import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Modifier.*;
+import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Order.*;
 
 /**
  * @author Denis Zhdanov
@@ -491,13 +469,13 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
 				result = attributes;
 			}
 
-			Color currentForegroundColor = result.getForegroundColor();
+			ColorValue currentForegroundColor = result.getForegroundColor();
 			if(currentForegroundColor == null)
 			{
 				result.setForegroundColor(attributes.getForegroundColor());
 			}
 
-			Color currentBackgroundColor = result.getBackgroundColor();
+			ColorValue currentBackgroundColor = result.getBackgroundColor();
 			if(currentBackgroundColor == null)
 			{
 				result.setBackgroundColor(attributes.getBackgroundColor());

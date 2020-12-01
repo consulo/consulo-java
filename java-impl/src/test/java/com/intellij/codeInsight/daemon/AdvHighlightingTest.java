@@ -15,14 +15,6 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import static org.junit.Assert.assertEquals;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.io.File;
-import java.util.Collection;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.analysis.PackagesScopesProvider;
 import com.intellij.application.options.colors.ScopeAttributesUtil;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -47,6 +39,14 @@ import com.intellij.psi.search.scope.packageSet.NamedScopeManager;
 import com.intellij.psi.search.scope.packageSet.NamedScopesHolder;
 import com.intellij.psi.search.scope.packageSet.PatternPackageSet;
 import com.intellij.testFramework.IdeaTestUtil;
+import consulo.ui.style.StandardColors;
+import org.jetbrains.annotations.NonNls;
+
+import java.awt.*;
+import java.io.File;
+import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * This class intended for "heavily-loaded" tests only, e.g. those need to setup separate project directory structure to run.
@@ -189,11 +189,11 @@ public abstract class AdvHighlightingTest extends DaemonAnalyzerTestCase {
     manager.addColorsScheme(scheme);
     EditorColorsManager.getInstance().setGlobalScheme(scheme);
     TextAttributesKey xKey = ScopeAttributesUtil.getScopeTextAttributeKey(xScope.getName());
-    TextAttributes xAttributes = new TextAttributes(Color.cyan, Color.darkGray, Color.blue, EffectType.BOXED, Font.ITALIC);
+    TextAttributes xAttributes = new TextAttributes(StandardColors.CYAN, StandardColors.GRAY, StandardColors.BLUE, EffectType.BOXED, Font.ITALIC);
     scheme.setAttributes(xKey, xAttributes);
 
     TextAttributesKey utilKey = ScopeAttributesUtil.getScopeTextAttributeKey(utilScope.getName());
-    TextAttributes utilAttributes = new TextAttributes(Color.gray, Color.magenta, Color.orange, EffectType.STRIKEOUT, Font.BOLD);
+    TextAttributes utilAttributes = new TextAttributes(StandardColors.GRAY, StandardColors.MAGENTA, StandardColors.ORANGE, EffectType.STRIKEOUT, Font.BOLD);
     scheme.setAttributes(utilKey, utilAttributes);
 
     try {
@@ -216,16 +216,16 @@ public abstract class AdvHighlightingTest extends DaemonAnalyzerTestCase {
     manager.addColorsScheme(scheme);
     EditorColorsManager.getInstance().setGlobalScheme(scheme);
     TextAttributesKey xKey = ScopeAttributesUtil.getScopeTextAttributeKey(xScope.getName());
-    TextAttributes xAttributes = new TextAttributes(Color.cyan, Color.darkGray, Color.blue, null, Font.ITALIC);
+    TextAttributes xAttributes = new TextAttributes(StandardColors.CYAN, StandardColors.GRAY, StandardColors.BLUE, null, Font.ITALIC);
     scheme.setAttributes(xKey, xAttributes);
 
     TextAttributesKey utilKey = ScopeAttributesUtil.getScopeTextAttributeKey(utilScope.getName());
-    TextAttributes utilAttributes = new TextAttributes(Color.gray, Color.magenta, Color.orange, EffectType.STRIKEOUT, Font.BOLD);
+    TextAttributes utilAttributes = new TextAttributes(StandardColors.GRAY, StandardColors.MAGENTA, StandardColors.ORANGE, EffectType.STRIKEOUT, Font.BOLD);
     scheme.setAttributes(utilKey, utilAttributes);
 
     NamedScope projectScope = PackagesScopesProvider.getInstance(myProject).getProjectProductionScope();
     TextAttributesKey projectKey = ScopeAttributesUtil.getScopeTextAttributeKey(projectScope.getName());
-    TextAttributes projectAttributes = new TextAttributes(null, null, Color.blue, EffectType.BOXED, Font.ITALIC);
+    TextAttributes projectAttributes = new TextAttributes(null, null, StandardColors.BLUE, EffectType.BOXED, Font.ITALIC);
     scheme.setAttributes(projectKey, projectAttributes);
 
     try {

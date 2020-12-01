@@ -28,9 +28,12 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ui.UIUtil;
+import consulo.awt.TargetAWT;
+import consulo.ui.color.ColorValue;
 import gnu.trove.THashMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Map;
 
@@ -141,12 +144,12 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory
 					}
 				}
 				int off = startOffset + lineStartOffset;
-				final Color color = UIUtil.getInactiveTextColor();
+				final ColorValue color = TargetAWT.from(UIUtil.getInactiveTextColor());
 				consumer.consume(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset())
 				{
 					@Nonnull
 					@Override
-					public TextAttributes getTextAttributes(@javax.annotation.Nullable TextAttributes source)
+					public TextAttributes getTextAttributes(@Nullable TextAttributes source)
 					{
 						return new TextAttributes(null, null, color, EffectType.BOLD_DOTTED_LINE, Font.PLAIN);
 					}
