@@ -49,6 +49,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.psi.PsiPackage;
+import consulo.ui.style.StandardColors;
 import consulo.util.dataholder.Key;
 import gnu.trove.THashSet;
 import one.util.streamex.StreamEx;
@@ -580,7 +581,7 @@ public class JavaCompletionUtil
 				public void renderElement(LookupElementDecorator<LookupElement> element, LookupElementPresentation presentation)
 				{
 					element.getDelegate().renderElement(presentation);
-					presentation.setItemTextForeground(JBColor.RED);
+					presentation.setItemTextForeground(StandardColors.RED);
 				}
 			}), -1);
 		}
