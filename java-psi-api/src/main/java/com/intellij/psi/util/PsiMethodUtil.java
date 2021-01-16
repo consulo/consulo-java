@@ -16,19 +16,16 @@
 
 package com.intellij.psi.util;
 
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.psi.*;
 import com.intellij.codeInsight.runner.JavaMainMethodProvider;
+import com.intellij.openapi.util.Condition;
+import com.intellij.psi.*;
+
 import javax.annotation.Nullable;
 
 /**
  * @author mike
  */
 public class PsiMethodUtil {
-
-  private static final JavaMainMethodProvider[] myProviders = Extensions.getExtensions(JavaMainMethodProvider.EP_NAME);
-
   public static final Condition<PsiClass> MAIN_CLASS = new Condition<PsiClass>() {
     @Override
     public boolean value(final PsiClass psiClass) {
@@ -43,7 +40,7 @@ public class PsiMethodUtil {
 
   @Nullable
   public static PsiMethod findMainMethod(final PsiClass aClass) {
-    for (JavaMainMethodProvider provider : myProviders) {
+    for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {
       if (provider.isApplicable(aClass)) {
         return provider.findMainInClass(aClass);
       }
@@ -74,7 +71,7 @@ public class PsiMethodUtil {
   }
 
   public static boolean hasMainMethod(final PsiClass psiClass) {
-    for (JavaMainMethodProvider provider : myProviders) {
+    for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {
       if (provider.isApplicable(psiClass)) {
         return provider.hasMainMethod(psiClass);
       }
@@ -85,7 +82,7 @@ public class PsiMethodUtil {
   @Nullable
   public static PsiMethod findMainInClass(final PsiClass aClass) {
     if (!MAIN_CLASS.value(aClass)) return null;
-    for (JavaMainMethodProvider provider : myProviders) {
+    for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {
       if (provider.isApplicable(aClass)) {
         return provider.findMainInClass(aClass);
       }
