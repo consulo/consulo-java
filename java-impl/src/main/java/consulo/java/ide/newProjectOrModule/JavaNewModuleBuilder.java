@@ -25,7 +25,9 @@ import consulo.ide.impl.UnzipNewModuleBuilderProcessor;
 import consulo.ide.newProject.NewModuleBuilder;
 import consulo.ide.newProject.NewModuleBuilderProcessor;
 import consulo.ide.newProject.NewModuleContext;
+import consulo.ide.newProject.node.NewModuleContextGroup;
 import consulo.java.module.extension.JavaMutableModuleExtension;
+import consulo.localize.LocalizeValue;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.ui.wizard.WizardStep;
 
@@ -41,9 +43,9 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 	@Override
 	public void setupContext(@Nonnull NewModuleContext context)
 	{
-		NewModuleContext.Group group = context.createGroup("java", "Java");
+		NewModuleContextGroup group = context.addGroup("java", LocalizeValue.localizeTODO("Java"));
 
-		group.add("Empty", AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>()
+		group.add(LocalizeValue.localizeTODO("Empty"), AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>()
 		{
 			@Nonnull
 			@Override
@@ -58,6 +60,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 				consumer.accept(new JavaSdkSelectStep(context));
 			}
 
+			@RequiredReadAction
 			@Override
 			public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
 			{
@@ -65,7 +68,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 			}
 		});
 
-		group.add("Console Application", AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip")
+		group.add(LocalizeValue.localizeTODO("Console Application"), AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip")
 		{
 			@Nonnull
 			@Override
@@ -80,6 +83,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 				consumer.accept(new JavaSdkSelectStep(context));
 			}
 
+			@RequiredReadAction
 			@Override
 			public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
 			{

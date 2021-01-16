@@ -17,32 +17,50 @@
 package consulo.java.ide.newProjectOrModule;
 
 import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.openapi.util.Conditions;
-import consulo.ide.newProject.ui.ProjectOrModuleNameStep;
-import consulo.roots.ui.configuration.SdkComboBox;
+import consulo.bundle.ui.BundleBox;
+import consulo.bundle.ui.BundleBoxBuilder;
+import consulo.disposer.Disposable;
+import consulo.ide.newProject.ui.UnifiedProjectOrModuleNameStep;
+import consulo.localize.LocalizeValue;
+import consulo.ui.ComboBox;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.util.FormBuilder;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.awt.*;
 
 /**
  * @author VISTALL
  * @since 05.06.14
  */
-public class JavaSdkSelectStep extends ProjectOrModuleNameStep<JavaNewModuleWizardContext>
+public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewModuleWizardContext>
 {
-	private SdkComboBox myComboBox;
+	private BundleBox myBundleBox;
+	private Disposable myUiDisposable;
 
-	public JavaSdkSelectStep(JavaNewModuleWizardContext context)
+	public JavaSdkSelectStep(@Nonnull JavaNewModuleWizardContext context)
 	{
 		super(context);
+	}
 
-		myComboBox = new SdkComboBox(SdkTable.getInstance(), Conditions.instanceOf(JavaSdk.class), false);
+	@RequiredUIAccess
+	@Override
+	protected void extend(@Nonnull FormBuilder builder)
+	{
+		super.extend(builder);
 
-		myAdditionalContentPanel.add(LabeledComponent.create(myComboBox, "JDK"), BorderLayout.NORTH);
+		myUiDisposable = Disposable.newDisposable();
+
+		BundleBoxBuilder boxBuilder = BundleBoxBuilder.create(myUiDisposable);
+		boxBuilder.withSdkTypeFilter(sdkTypeId -> sdkTypeId instanceof JavaSdk);
+
+		builder.addLabeled(LocalizeValue.localizeTODO("JDK:"), (myBundleBox = boxBuilder.build()).getComponent());
+
+		ComboBox<BundleBox.BundleBoxItem> component = myBundleBox.getComponent();
+		if(component.getListModel().getSize() > 0)
+		{
+			component.setValueByIndex(0);
+		}
 	}
 
 	@Override
@@ -50,12 +68,22 @@ public class JavaSdkSelectStep extends ProjectOrModuleNameStep<JavaNewModuleWiza
 	{
 		super.onStepLeave(context);
 
-		context.setSdk(myComboBox.getSelectedSdk());
+		String selectedBundleName = myBundleBox.getSelectedBundleName();
+		if(selectedBundleName != null)
+		{
+			context.setSdk(SdkTable.getInstance().findSdk(selectedBundleName));
+		}
 	}
 
-	@Nullable
-	public Sdk getSdk()
+	@Override
+	public void disposeUIResources()
 	{
-		return myComboBox.getSelectedSdk();
+		super.disposeUIResources();
+
+		if(myUiDisposable != null)
+		{
+			myUiDisposable.disposeWithTree();
+			myUiDisposable = null;
+		}
 	}
 }
