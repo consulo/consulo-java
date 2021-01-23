@@ -1007,7 +1007,6 @@
 
 		<daemon.highlightInfoFilter implementation="com.intellij.debugger.engine.evaluation.DebuggerHighlightFilter"/>
 
-
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.AttachSourcesNotificationProvider"/>
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.SetupJDKNotificationProvider"/>
 		<editorNotificationProvider implementation="com.intellij.debugger.ui.AlternativeSourceNotificationProvider"/>

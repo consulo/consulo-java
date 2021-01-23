@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import com.intellij.ProjectTopics;
 import com.intellij.codeEditor.JavaEditorFileSwapper;
 import com.intellij.codeInsight.AttachSourcesProvider;
 import com.intellij.ide.highlighter.JavaClassFileType;
@@ -31,7 +30,9 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.LibraryOrderEntry;
+import com.intellij.openapi.roots.OrderEntry;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.ui.configuration.PathUIUtils;
 import com.intellij.openapi.ui.Messages;
@@ -41,23 +42,22 @@ import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.ActionCallback;
 import com.intellij.openapi.util.Comparing;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.compiled.ClsParsingUtil;
 import com.intellij.ui.EditorNotificationPanel;
-import com.intellij.ui.EditorNotifications;
 import com.intellij.ui.GuiUtils;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.editor.notifications.EditorNotificationProvider;
 import consulo.java.JavaBundle;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,28 +72,12 @@ import java.util.*;
  */
 public class AttachSourcesNotificationProvider implements EditorNotificationProvider<EditorNotificationPanel>
 {
-	private static final Key<EditorNotificationPanel> KEY = Key.create("add sources to class");
-
 	private final Project myProject;
 
-	public AttachSourcesNotificationProvider(Project project, final EditorNotifications notifications)
+	@Inject
+	public AttachSourcesNotificationProvider(Project project)
 	{
 		myProject = project;
-		myProject.getMessageBus().connect(project).subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter()
-		{
-			@Override
-			public void rootsChanged(ModuleRootEvent event)
-			{
-				notifications.updateAllNotifications();
-			}
-		});
-	}
-
-	@Nonnull
-	@Override
-	public Key<EditorNotificationPanel> getKey()
-	{
-		return KEY;
 	}
 
 	@RequiredUIAccess
@@ -121,11 +105,11 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			final List<LibraryOrderEntry> libraries = findLibraryEntriesForFile(file);
 			if(libraries != null)
 			{
-				List<AttachSourcesProvider.AttachSourcesAction> actions = new ArrayList<AttachSourcesProvider.AttachSourcesAction>();
+				List<AttachSourcesProvider.AttachSourcesAction> actions = new ArrayList<>();
 
 				PsiFile clsFile = PsiManager.getInstance(myProject).findFile(file);
 				boolean hasNonLightAction = false;
-				for(AttachSourcesProvider each : AttachSourcesProvider.EP_NAME.getExtensions())
+				for(AttachSourcesProvider each : AttachSourcesProvider.EP_NAME.getExtensionList())
 				{
 					for(AttachSourcesProvider.AttachSourcesAction action : each.getActions(libraries, clsFile))
 					{
@@ -148,14 +132,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 					}
 				}
 
-				Collections.sort(actions, new Comparator<AttachSourcesProvider.AttachSourcesAction>()
-				{
-					@Override
-					public int compare(AttachSourcesProvider.AttachSourcesAction o1, AttachSourcesProvider.AttachSourcesAction o2)
-					{
-						return o1.getName().compareToIgnoreCase(o2.getName());
-					}
-				});
+				Collections.sort(actions, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
 
 				AttachSourcesProvider.AttachSourcesAction defaultAction;
 				if(findSourceFileInSameJar(file) != null)
@@ -168,38 +145,30 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 				}
 				actions.add(defaultAction);
 
+				String originalText = text;
+
 				for(final AttachSourcesProvider.AttachSourcesAction action : actions)
 				{
-					panel.createActionLabel(GuiUtils.getTextWithoutMnemonicEscaping(action.getName()), new Runnable()
-					{
-						@Override
-						public void run()
+					panel.createActionLabel(GuiUtils.getTextWithoutMnemonicEscaping(action.getName()), () -> {
+						List<LibraryOrderEntry> entries = findLibraryEntriesForFile(file);
+						if(!Comparing.equal(libraries, entries))
 						{
-							List<LibraryOrderEntry> entries = findLibraryEntriesForFile(file);
-							if(!Comparing.equal(libraries, entries))
-							{
-								Messages.showErrorDialog(myProject, "Can't find library for " + file.getName(), "Error");
-								return;
-							}
-
-							panel.setText(action.getBusyText());
-
-							action.perform(entries);
+							Messages.showErrorDialog(myProject, "Can't find library for " + file.getName(), "Error");
+							return;
 						}
+
+						panel.setText(action.getBusyText());
+
+						action.perform(entries).doWhenProcessed(() -> panel.setText(originalText));
 					});
 				}
 			}
 		}
 		else
 		{
-			panel.createActionLabel(JavaBundle.message("class.file.open.source.action"), new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					OpenFileDescriptor descriptor = new OpenFileDescriptor(myProject, sourceFile);
-					FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
-				}
+			panel.createActionLabel(JavaBundle.message("class.file.open.source.action"), () -> {
+				OpenFileDescriptor descriptor = new OpenFileDescriptor(myProject, sourceFile);
+				FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
 			});
 		}
 
@@ -249,7 +218,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			{
 				if(entries == null)
 				{
-					entries = ContainerUtil.newSmartList();
+					entries = new ArrayList<>();
 				}
 				entries.add((LibraryOrderEntry) entry);
 			}
@@ -258,7 +227,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return entries;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static VirtualFile findSourceFileInSameJar(VirtualFile classFile)
 	{
 		String name = classFile.getName();
@@ -299,7 +268,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		@Override
 		public ActionCallback perform(List<LibraryOrderEntry> orderEntriesContainingFile)
 		{
-			final List<Library.ModifiableModel> modelsToCommit = new ArrayList<Library.ModifiableModel>();
+			final List<Library.ModifiableModel> modelsToCommit = new ArrayList<>();
 			for(LibraryOrderEntry orderEntry : orderEntriesContainingFile)
 			{
 				final Library library = orderEntry.getLibrary();
@@ -330,7 +299,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			return ActionCallback.DONE;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		private VirtualFile findRoot(Library library)
 		{
 			for(VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance()))
@@ -383,7 +352,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 				return ActionCallback.REJECTED;
 			}
 
-			final Map<Library, LibraryOrderEntry> librariesToAppendSourcesTo = new HashMap<Library, LibraryOrderEntry>();
+			final Map<Library, LibraryOrderEntry> librariesToAppendSourcesTo = new HashMap<>();
 			for(LibraryOrderEntry library : libraries)
 			{
 				librariesToAppendSourcesTo.put(library.getLibrary(), library);
