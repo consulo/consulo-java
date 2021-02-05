@@ -129,7 +129,7 @@ public class OwnJdkUtil
 
 	public static boolean useDynamicClasspath(@Nullable Project project)
 	{
-		boolean hasDynamicProperty = Boolean.parseBoolean(Platform.current().getRuntimeProperty("idea.dynamic.classpath", "false"));
+		boolean hasDynamicProperty = Boolean.parseBoolean(Platform.current().jvm().getRuntimeProperty("idea.dynamic.classpath", "false"));
 		return project != null ? PropertiesComponent.getInstance(project).getBoolean("dynamic.classpath", hasDynamicProperty) : hasDynamicProperty;
 	}
 

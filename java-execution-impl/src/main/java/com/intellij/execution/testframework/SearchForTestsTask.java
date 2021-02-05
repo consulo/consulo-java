@@ -43,7 +43,7 @@ import consulo.platform.Platform;
 
 public abstract class SearchForTestsTask extends Task.Backgroundable
 {
-	public static final boolean JUNIT4_SEARCH_4_TESTS_IN_CLASSPATH = Boolean.parseBoolean(Platform.current().getRuntimeProperty("junit4.search.4.tests.in.classpath", "false"));
+	public static final boolean JUNIT4_SEARCH_4_TESTS_IN_CLASSPATH = Boolean.parseBoolean(Platform.current().jvm().getRuntimeProperty("junit4.search.4.tests.in.classpath", "false"));
 
 	private static final Logger LOG = Logger.getInstance(SearchForTestsTask.class);
 	protected Socket mySocket;

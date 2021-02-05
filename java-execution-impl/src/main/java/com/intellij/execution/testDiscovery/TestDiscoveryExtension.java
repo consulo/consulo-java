@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import consulo.platform.Platform;
 import org.jdom.Element;
 import com.intellij.execution.JavaTestConfigurationBase;
 import com.intellij.execution.RunConfigurationExtension;
@@ -51,7 +52,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 
 public class TestDiscoveryExtension extends RunConfigurationExtension
 {
-	public static final boolean TESTDISCOVERY_ENABLED = Boolean.valueOf(consulo.platform.Platform.current().getRuntimeProperty("testDiscovery.enabled"));
+	public static final boolean TESTDISCOVERY_ENABLED = Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("testDiscovery.enabled"));
 
 	private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
 

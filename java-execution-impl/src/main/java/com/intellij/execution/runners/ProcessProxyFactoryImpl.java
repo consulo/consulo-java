@@ -17,14 +17,14 @@ package com.intellij.execution.runners;
 
 import java.io.File;
 
+import consulo.container.plugin.PluginManager;
+import consulo.logging.Logger;
 import jakarta.inject.Singleton;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.ProcessHandler;
-import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -37,7 +37,7 @@ import consulo.platform.Platform;
 @Singleton
 public class ProcessProxyFactoryImpl extends ProcessProxyFactory
 {
-	private static final boolean ourMayUseLauncher = !Boolean.valueOf(Platform.current().getRuntimeProperty("idea.no.launcher"));
+	private static final boolean ourMayUseLauncher = !Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("idea.no.launcher"));
 
 	@Override
 	public ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException
