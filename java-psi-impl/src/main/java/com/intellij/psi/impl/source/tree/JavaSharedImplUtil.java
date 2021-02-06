@@ -26,6 +26,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.GeneratedMarkerVisitor;
 import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.CharTable;
@@ -248,6 +249,16 @@ public class JavaSharedImplUtil
 			assert eq != null : variable;
 		}
 		variable.addAfter(initializer, eq.getPsi());
+	}
+
+	@Nonnull
+	public static PsiType createTypeFromStub(@Nonnull PsiModifierListOwner owner, @Nonnull TypeInfo typeInfo)
+	{
+		String typeText = TypeInfo.createTypeText(typeInfo);
+		assert typeText != null : owner;
+		PsiType type = JavaPsiFacade.getInstance(owner.getProject()).getParserFacade().createTypeFromText(typeText, owner);
+		type = applyAnnotations(type, owner.getModifierList());
+		return typeInfo.getTypeAnnotations().applyTo(type, owner);
 	}
 
 	private static class FilteringTypeAnnotationProvider implements TypeAnnotationProvider

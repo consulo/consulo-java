@@ -19,29 +19,41 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 
-public interface PsiClassStub<T extends PsiClass> extends PsiMemberStub<T> {
-  @NonNls
-  @Nullable
-  String getQualifiedName();
+import javax.annotation.Nullable;
 
-  @NonNls 
-  @javax.annotation.Nullable
-  String getBaseClassReferenceText();
+public interface PsiClassStub<T extends PsiClass> extends PsiMemberStub<T>
+{
+	@Nullable
+	String getQualifiedName();
 
-  boolean isDeprecated();
-  boolean hasDeprecatedAnnotation();
-  boolean isInterface();
-  boolean isEnum();
-  boolean isEnumConstantInitializer();
-  boolean isAnonymous();
-  boolean isAnonymousInQualifiedNew();
-  boolean isAnnotationType();
+	@Nullable
+	String getBaseClassReferenceText();
 
-  LanguageLevel getLanguageLevel();
-  String getSourceFileName();
+	boolean isDeprecated();
+
+	boolean hasDeprecatedAnnotation();
+
+	boolean isInterface();
+
+	boolean isEnum();
+
+	boolean isEnumConstantInitializer();
+
+	boolean isAnonymous();
+
+	boolean isAnonymousInQualifiedNew();
+
+	boolean isAnnotationType();
+
+	LanguageLevel getLanguageLevel();
+
+	String getSourceFileName();
+
+	default boolean isRecord()
+	{
+		return false;
+	}
 }

@@ -16,7 +16,9 @@
 package com.intellij.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.intellij.psi.meta.PsiMetaData;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.jvm.JvmAnnotation;
 import com.intellij.psi.meta.PsiMetaOwner;
@@ -75,7 +77,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 	 *
 	 * @return the class name, or null if the annotation is unresolved.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	@NonNls
 	String getQualifiedName();
 
@@ -84,7 +86,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 	 *
 	 * @return the annotation name element.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiJavaCodeReferenceElement getNameReferenceElement();
 
 	/**
@@ -95,8 +97,8 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 	 * @return the element value, or null if the annotation does not contain a value for
 	 * the element and the element has no default value.
 	 */
-	@javax.annotation.Nullable
-	PsiAnnotationMemberValue findAttributeValue(@javax.annotation.Nullable @NonNls String attributeName);
+	@Nullable
+	PsiAnnotationMemberValue findAttributeValue(@Nullable @NonNls String attributeName);
 
 	/**
 	 * Returns the value of the annotation element with the specified name.
@@ -105,8 +107,8 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 	 * @return the element value, or null if the annotation does not contain a value for
 	 * the element.
 	 */
-	@javax.annotation.Nullable
-	PsiAnnotationMemberValue findDeclaredAttributeValue(@javax.annotation.Nullable @NonNls String attributeName);
+	@Nullable
+	PsiAnnotationMemberValue findDeclaredAttributeValue(@Nullable @NonNls String attributeName);
 
 	/**
 	 * Set annotation attribute value. Adds new name-value pair or uses an existing one, expands unnamed 'value' attribute name if needed.
@@ -115,14 +117,14 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 	 * @param value         new value template element
 	 * @return new declared attribute value
 	 */
-	<T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@javax.annotation.Nullable @NonNls String attributeName, @javax.annotation.Nullable T value);
+	<T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@Nullable @NonNls String attributeName, @Nullable T value);
 
 	/**
 	 * Returns an owner of the annotation - usually a parent, but for type annotations the owner might be a type element.
 	 *
 	 * @return annotation owner
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiAnnotationOwner getOwner();
 
 	@Nonnull
@@ -147,5 +149,15 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 	default boolean canNavigateToSource()
 	{
 		return false;
+	}
+
+	/**
+	 * @deprecated don't use or override; it's temporarily left for compatibility with older plugins
+	 */
+	@Nullable
+	@Deprecated
+	default PsiMetaData getMetaData()
+	{
+		return null;
 	}
 }

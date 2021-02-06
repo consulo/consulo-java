@@ -1,46 +1,33 @@
-/*
- * Copyright 2000-2013 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import consulo.util.dataholder.Key;
 import consulo.util.dataholder.KeyWithDefaultValue;
+import org.jetbrains.annotations.Contract;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Represents a mapping between type parameters and their values.
  *
  * @author ik, dsl
- * @see com.intellij.psi.JavaResolveResult#getSubstitutor()
+ * @see JavaResolveResult#getSubstitutor()
  */
 public interface PsiSubstitutor
 {
-	Key<PsiSubstitutor> KEY = KeyWithDefaultValue.<PsiSubstitutor>create("SUBSTITUTOR",
-			EmptySubstitutor.getInstance());
-
 	/**
-	 * Empty, or natural, substitutor. For any type parameter <code>T</code>,
-	 * substitutes type <code>T</code>.
-	 * <b>Example:</b> consider class <code>List&lt;E&gt;</code>. <code>this</code>
-	 * inside class <code>List</code> has type List with EMPTY substitutor.
+	 * Empty, or natural, substitutor. For any type parameter {@code T},
+	 * substitutes type {@code T}.
+	 * <b>Example:</b> consider class {@code List<E>}. {@code this}
+	 * inside class {@code List} has type List with EMPTY substitutor.
 	 */
 	@Nonnull
 	PsiSubstitutor EMPTY = EmptySubstitutor.getInstance();
+
+	Key<PsiSubstitutor> KEY = KeyWithDefaultValue.create("SUBSTITUTOR", EMPTY);
+
 	@Nonnull
 	PsiSubstitutor UNKNOWN = EMPTY;
 
@@ -49,22 +36,25 @@ public interface PsiSubstitutor
 	 * Does not perform bounds promotion
 	 *
 	 * @param typeParameter the parameter to return the mapping for.
-	 * @return the mapping for the type parameter, or <code>null</code> for a raw type.
+	 * @return the mapping for the type parameter, or {@code null} for a raw type.
 	 */
 	@Nullable
+	@Contract(pure = true)
 	PsiType substitute(@Nonnull PsiTypeParameter typeParameter);
 
 	/**
-	 * Substitutes type parameters occurring in <code>type</code> with their values.
-	 * If value for type parameter is <code>null<code>, appropriate erasure is returned.
+	 * Substitutes type parameters occurring in {@code type} with their values.
+	 * If value for type parameter is {@code null}, appropriate erasure is returned.
 	 *
 	 * @param type the type to substitute the type parameters for.
 	 * @return the result of the substitution.
 	 */
-	PsiType substitute(@javax.annotation.Nullable PsiType type);
+	@Contract(pure = true)
+	PsiType substitute(@Nullable PsiType type);
 
 	//Should be used with great care, be sure to prevent infinite recursion that could arise
 	// from the use of recursively bounded type parameters
+	@Contract(pure = true)
 	PsiType substituteWithBoundsPromotion(@Nonnull PsiTypeParameter typeParameter);
 
 	/**
@@ -76,6 +66,7 @@ public interface PsiSubstitutor
 	 * @return the new substitutor instance.
 	 */
 	@Nonnull
+	@Contract(pure = true)
 	PsiSubstitutor put(@Nonnull PsiTypeParameter classParameter, PsiType mapping);
 
 	/**
@@ -87,6 +78,7 @@ public interface PsiSubstitutor
 	 * @return the new substitutor instance.
 	 */
 	@Nonnull
+	@Contract(pure = true)
 	PsiSubstitutor putAll(@Nonnull PsiClass parentClass, PsiType[] mappings);
 
 	/**
@@ -97,7 +89,22 @@ public interface PsiSubstitutor
 	 * @return the new substitutor instance.
 	 */
 	@Nonnull
+	@Contract(pure = true)
 	PsiSubstitutor putAll(@Nonnull PsiSubstitutor another);
+
+	/**
+	 * Creates a substitutor instance containing all mappings from this substitutor and the
+	 * specified map.
+	 *
+	 * @param map a map which contains additional mappings
+	 * @return the new substitutor instance.
+	 */
+	@Nonnull
+	@Contract(pure = true)
+	default PsiSubstitutor putAll(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map)
+	{
+		return putAll(createSubstitutor(map));
+	}
 
 	/**
 	 * Returns the map from type parameters to types used for substitution by this substitutor.
@@ -105,7 +112,24 @@ public interface PsiSubstitutor
 	 * @return the substitution map instance.
 	 */
 	@Nonnull
+	@Contract(pure = true)
 	Map<PsiTypeParameter, PsiType> getSubstitutionMap();
+
+	/**
+	 * Create a substitutor from the supplied map
+	 *
+	 * @param map a map to create a substitutor from
+	 * @return a substitutor backed by the supplied map
+	 */
+	@Nonnull
+	static PsiSubstitutor createSubstitutor(@Nullable Map<? extends PsiTypeParameter, ? extends PsiType> map)
+	{
+		if(map == null || map.isEmpty())
+		{
+			return EMPTY;
+		}
+		return EMPTY.putAll(map);
+	}
 
 	/**
 	 * Checks if all types which the substitutor can substitute are valid.
@@ -113,6 +137,7 @@ public interface PsiSubstitutor
 	 * @return true if all types are valid, false otherwise.
 	 * @see PsiType#isValid()
 	 */
+	@Contract(pure = true)
 	boolean isValid();
 
 	/**

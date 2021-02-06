@@ -1,23 +1,5 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.java.stubs;
-
-import java.io.IOException;
-
-import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
@@ -35,7 +17,9 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.util.io.StringRef;
+import javax.annotation.Nonnull;
+
+import java.io.IOException;
 
 /**
  * @author max
@@ -66,8 +50,9 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 		return new PsiParameterImpl(node);
 	}
 
+	@Nonnull
 	@Override
-	public PsiParameterStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub)
+	public PsiParameterStub createStub(@Nonnull LighterAST tree, @Nonnull LighterASTNode node, @Nonnull StubElement parentStub)
 	{
 		TypeInfo typeInfo = TypeInfo.create(tree, node, parentStub);
 		LighterASTNode id = LightTreeUtil.requiredChildOfType(tree, node, JavaTokenType.IDENTIFIER);
@@ -79,7 +64,7 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 	public void serialize(@Nonnull PsiParameterStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getName());
-		TypeInfo.writeTYPE(dataStream, stub.getType(false));
+		TypeInfo.writeTYPE(dataStream, stub.getType());
 		dataStream.writeByte(((PsiParameterStubImpl) stub).getFlags());
 	}
 
@@ -87,14 +72,12 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 	@Override
 	public PsiParameterStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
-		StringRef name = dataStream.readName();
+		String name = dataStream.readNameString();
 		if(name == null)
-		{
 			throw new IOException("corrupted indices");
-		}
 		TypeInfo type = TypeInfo.readTYPE(dataStream);
 		byte flags = dataStream.readByte();
-		return new PsiParameterStubImpl(parentStub, name.toString(), type, flags);
+		return new PsiParameterStubImpl(parentStub, name, type, flags);
 	}
 
 	@Override

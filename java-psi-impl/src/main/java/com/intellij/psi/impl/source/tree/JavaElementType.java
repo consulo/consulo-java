@@ -112,6 +112,9 @@ public interface JavaElementType
 	IElementType USES_STATEMENT = JavaStubElementTypes.USES_STATEMENT;
 	IElementType PROVIDES_STATEMENT = JavaStubElementTypes.PROVIDES_STATEMENT;
 	IElementType PROVIDES_WITH_LIST = JavaStubElementTypes.PROVIDES_WITH_LIST;
+	IElementType RECORD_COMPONENT = JavaStubElementTypes.RECORD_COMPONENT;
+	IElementType RECORD_HEADER = JavaStubElementTypes.RECORD_HEADER;
+	IElementType PERMITS_LIST = JavaStubElementTypes.PERMITS_LIST;
 
 	IElementType IMPORT_STATIC_REFERENCE = new JavaCompositeElementType("IMPORT_STATIC_REFERENCE", PsiImportStaticReferenceElementImpl.class);
 	IElementType TYPE = new JavaCompositeElementType("TYPE", PsiTypeElementImpl.class);

@@ -1,79 +1,260 @@
-/*
- * Copyright 2000-2010 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.augment;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.*;
+import com.intellij.psi.util.*;
 import com.intellij.util.Processor;
+import com.intellij.util.SmartList;
+import com.intellij.util.containers.ConcurrentFactoryMap;
+import consulo.logging.Logger;
+import consulo.util.PluginExceptionUtil;
+import consulo.util.dataholder.Key;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-
+/**
+ * Some code is not what it seems to be!
+ * This extension allows plugins <strike>augment a reality</strike> alter a behavior of Java PSI elements.
+ * To get an insight of how the extension may be used see {@code PsiAugmentProviderTest}.
+ * <p>
+ * N.B. during indexing, only {@link DumbAware} providers are run.
+ */
 public abstract class PsiAugmentProvider
 {
+	private static final Logger LOG = Logger.getInstance(PsiAugmentProvider.class);
 	public static final ExtensionPointName<PsiAugmentProvider> EP_NAME = ExtensionPointName.create("consulo.java.augmentProvider");
 
-	@Nonnull
-	public abstract <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type);
+	@SuppressWarnings("rawtypes")
+	private /* non-static */ final Key<CachedValue<Map<Class, List>>> myCacheKey = Key.create(getClass().getName());
 
+	//<editor-fold desc="Methods to override in implementations.">
+
+	/**
+	 * An extension that enables one to add children to some PSI elements, e.g. methods to Java classes.
+	 * The class code remains the same, but its method accessors also include the results returned from {@link PsiAugmentProvider}s.
+	 * An augmenter can be called several times with the same parameters in the same state of the code model,
+	 * and the PSI returned from these invocations must be equal and implement {@link #equals}/{@link #hashCode()} accordingly.
+	 *
+	 * @param nameHint the expected name of the requested augmented members, or null if all members of the specified class are to be returned.
+	 *                 Implementations can ignore this parameter or use it for optimizations.
+	 */
+	@SuppressWarnings({
+			"unchecked",
+			"rawtypes"
+	})
 	@Nonnull
-	public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull final PsiElement element, @Nonnull final Class<Psi> type)
+	protected <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element,
+															 @Nonnull Class<Psi> type,
+															 @Nullable String nameHint)
 	{
-		final List<Psi> augments = new ArrayList<Psi>();
-		for(PsiAugmentProvider provider : Extensions.getExtensions(EP_NAME))
+		if(nameHint == null)
 		{
-			final List<Psi> list = provider.getAugments(element, type);
-			augments.addAll(list);
+			return getAugments(element, type);
 		}
 
-		return augments;
+		// cache to emulate previous behavior where augmenters were called just once, not for each name hint separately
+		Map<Class, List> cache = CachedValuesManager.getCachedValue(element, myCacheKey, () -> {
+			Map<Class, List> map = ConcurrentFactoryMap.createMap(c -> getAugments(element, c));
+			return CachedValueProvider.Result.create(map, PsiModificationTracker.MODIFICATION_COUNT);
+		});
+		return (List<Psi>) cache.get(type);
+	}
+
+	/**
+	 * An extension which enables one to inject extension methods with name {@code nameHint} in class {@code aClass} in context `{@code context}`
+	 *
+	 * @param aClass   where extension methods would be injected
+	 * @param nameHint name of the method which is requested.
+	 *                 Implementations are supposed to use this parameter as no additional name check would be performed
+	 * @param context  context where extension methods should be applicable
+	 */
+	protected List<PsiExtensionMethod> getExtensionMethods(@Nonnull PsiClass aClass, @Nonnull String nameHint, @Nonnull PsiElement context)
+	{
+		return Collections.emptyList();
+	}
+
+	/**
+	 * @deprecated invoke and override {@link #getAugments(PsiElement, Class, String)}.
+	 */
+	@SuppressWarnings("unused")
+	@Deprecated
+	@Nonnull
+	protected <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type)
+	{
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Extends {@link PsiTypeElement#getType()} so that a type could be retrieved from external place
+	 * (e.g. inferred from a variable initializer).
+	 */
+	@Nullable
+	protected PsiType inferType(@Nonnull PsiTypeElement typeElement)
+	{
+		return null;
+	}
+
+	/**
+	 * @return whether this extension might infer the type for the given PSI,
+	 * preferably checked in a lightweight way without actually inferring the type.
+	 */
+	protected boolean canInferType(@Nonnull PsiTypeElement typeElement)
+	{
+		return inferType(typeElement) != null;
 	}
 
 	/**
 	 * Intercepts {@link PsiModifierList#hasModifierProperty(String)}, so that plugins can add imaginary modifiers or hide existing ones.
-	 *
-	 * @since 2016.2
 	 */
 	@Nonnull
-	protected Set<String> transformModifiers(@Nonnull PsiModifierList modifierList, @Nonnull final Set<String> modifiers)
+	protected Set<String> transformModifiers(@Nonnull PsiModifierList modifierList, @Nonnull Set<String> modifiers)
 	{
 		return modifiers;
 	}
 
-	@Nonnull
-	public static Set<String> transformModifierProperties(@Nonnull final PsiModifierList modifierList, @Nonnull Project project, @Nonnull final Set<String> modifiers)
-	{
-		final Ref<Set<String>> result = Ref.create(modifiers);
+	//</editor-fold>
 
-		forEach(project, provider ->
-		{
+	//<editor-fold desc="API and the inner kitchen.">
+
+	/**
+	 * @deprecated use {@link #collectAugments(PsiElement, Class, String)}
+	 */
+	@Nonnull
+	@Deprecated
+	public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull PsiElement element, @Nonnull Class<? extends Psi> type)
+	{
+		return collectAugments(element, type, null);
+	}
+
+	@Nonnull
+	public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull PsiElement element, @Nonnull Class<? extends Psi> type,
+																	 @Nullable String nameHint)
+	{
+		List<Psi> result = new SmartList<>();
+
+		forEach(element.getProject(), provider -> {
+			List<? extends Psi> augments = provider.getAugments(element, type, nameHint);
+			for(Psi augment : augments)
+			{
+				if(nameHint == null || !(augment instanceof PsiNamedElement) || nameHint.equals(((PsiNamedElement) augment).getName()))
+				{
+					try
+					{
+						PsiUtilCore.ensureValid(augment);
+						result.add(augment);
+					}
+					catch(ProcessCanceledException e)
+					{
+						throw e;
+					}
+					catch(Throwable e)
+					{
+						PluginExceptionUtil.logPluginError(LOG, e.getMessage(), e, provider.getClass());
+					}
+				}
+			}
+			return true;
+		});
+
+		return result;
+	}
+
+	@Nonnull
+	public static List<PsiExtensionMethod> collectExtensionMethods(PsiClass aClass, @Nonnull String nameHint, PsiElement context)
+	{
+		List<PsiExtensionMethod> extensionMethods = new SmartList<>();
+		forEach(aClass.getProject(), provider -> {
+			List<PsiExtensionMethod> methods = provider.getExtensionMethods(aClass, nameHint, context);
+			for(PsiExtensionMethod method : methods)
+			{
+				try
+				{
+					PsiUtilCore.ensureValid(method);
+					extensionMethods.add(method);
+				}
+				catch(ProcessCanceledException e)
+				{
+					throw e;
+				}
+				catch(Throwable e)
+				{
+					PluginExceptionUtil.logPluginError(LOG, e.getMessage(), e, provider.getClass());
+				}
+			}
+			return true;
+		});
+		return extensionMethods;
+	}
+
+	@Nullable
+	public static PsiType getInferredType(@Nonnull PsiTypeElement typeElement)
+	{
+		Ref<PsiType> result = Ref.create();
+
+		forEach(typeElement.getProject(), provider -> {
+			PsiType type = provider.inferType(typeElement);
+			if(type != null)
+			{
+				try
+				{
+					PsiUtil.ensureValidType(type);
+				}
+				catch(ProcessCanceledException e)
+				{
+					throw e;
+				}
+				catch(Throwable e)
+				{
+					PluginExceptionUtil.logPluginError(LOG, e.getMessage(), e, provider.getClass());
+				}
+				result.set(type);
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		});
+
+		return result.get();
+	}
+
+	public static boolean isInferredType(@Nonnull PsiTypeElement typeElement)
+	{
+		AtomicBoolean result = new AtomicBoolean();
+
+		forEach(typeElement.getProject(), provider -> {
+			boolean canInfer = provider.canInferType(typeElement);
+			if(canInfer)
+			{
+				result.set(true);
+			}
+			return !canInfer;
+		});
+
+		return result.get();
+	}
+
+	@Nonnull
+	public static Set<String> transformModifierProperties(@Nonnull PsiModifierList modifierList,
+														  @Nonnull Project project,
+														  @Nonnull Set<String> modifiers)
+	{
+		Ref<Set<String>> result = Ref.create(modifiers);
+
+		forEach(project, provider -> {
 			result.set(provider.transformModifiers(modifierList, Collections.unmodifiableSet(result.get())));
 			return true;
 		});
@@ -81,45 +262,10 @@ public abstract class PsiAugmentProvider
 		return result.get();
 	}
 
-	@Nullable
-	public static PsiType getInferredType(@Nonnull PsiTypeElement typeElement)
-	{
-//		Ref<PsiType> result = Ref.create();
-//
-//		forEach(typeElement.getProject(), provider -> {
-//			PsiType type = provider.inferType(typeElement);
-//			if(type != null)
-//			{
-//				try
-//				{
-//					PsiUtil.ensureValidType(type);
-//				}
-//				catch(ProcessCanceledException e)
-//				{
-//					throw e;
-//				}
-//				catch(Throwable e)
-//				{
-//					throw PluginException.createByClass(e, provider.getClass());
-//				}
-//				result.set(type);
-//				return false;
-//			}
-//			else
-//			{
-//				return true;
-//			}
-//		});
-//
-//		return result.get();
-		return null;
-	}
-
-
-	private static void forEach(Project project, Processor<PsiAugmentProvider> processor)
+	private static void forEach(Project project, Processor<? super PsiAugmentProvider> processor)
 	{
 		boolean dumb = DumbService.isDumb(project);
-		for(PsiAugmentProvider provider : Extensions.getExtensions(EP_NAME))
+		for(PsiAugmentProvider provider : EP_NAME.getExtensionList())
 		{
 			if(!dumb || DumbService.isDumbAware(provider))
 			{
@@ -142,4 +288,6 @@ public abstract class PsiAugmentProvider
 			}
 		}
 	}
+
+	//</editor-fold>
 }

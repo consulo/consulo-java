@@ -46,6 +46,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	JDK_13_PREVIEW("13", JavaCoreBundle.message("jdk.13.preview.language.level.description"), 13, "13"),
 	JDK_14("14", JavaCoreBundle.message("jdk.14.language.level.description"), 14, "14"),
 	JDK_15("15", JavaCoreBundle.message("jdk.15.language.level.description"), 15, "15"),
+	JDK_15_PREVIEW("15", JavaCoreBundle.message("jdk.15.preview.language.level.description"), 15, "15"),
 	JDK_16("16", JavaCoreBundle.message("jdk.16.language.level.description"), 16, "16"),
 	JDK_X("X", JavaCoreBundle.message("jdk.X.language.level.description"), 16, "");
 

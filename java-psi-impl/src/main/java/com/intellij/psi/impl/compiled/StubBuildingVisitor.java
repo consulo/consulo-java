@@ -1,26 +1,10 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.compiled;
 
-import static com.intellij.openapi.util.Pair.pair;
-import static com.intellij.util.BitUtil.isSet;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.internal.org.objectweb.asm.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.impl.cache.ModifierFlags;
 import com.intellij.psi.impl.cache.TypeInfo;
@@ -28,11 +12,24 @@ import com.intellij.psi.impl.java.stubs.*;
 import com.intellij.psi.impl.java.stubs.impl.*;
 import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.Function;
+import com.intellij.util.SmartList;
 import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.internal.org.objectweb.asm.*;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.Array;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.intellij.util.BitUtil.isSet;
 
 /**
  * @author max
@@ -50,34 +47,38 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	private static final String SYNTHETIC_CLASS_INIT_METHOD = "<clinit>";
 	private static final String SYNTHETIC_INIT_METHOD = "<init>";
 
-	private static final int ASM_API = Opcodes.API_VERSION;
-
 	private final T mySource;
 	private final InnerClassSourceStrategy<T> myInnersStrategy;
-	private final StubElement myParent;
+	private final StubElement<?> myParent;
 	private final int myAccess;
 	private final String myShortName;
-	private final Function<String, String> myMapping;
+	private final
+	@Nonnull
+	FirstPassData myFirstPassData;
+	private final boolean myAnonymousInner;
+	private final boolean myLocalClassInner;
 	private String myInternalName;
 	private PsiClassStub<?> myResult;
 	private PsiModifierListStub myModList;
-	private final boolean myAnonymousInner;
-	private final boolean myLocalClassInner;
+	private PsiRecordHeaderStub myHeaderStub;
+	private Map<TypeInfo, ClsTypeAnnotationCollector> myAnnoBuilders;
+	private ClassInfo myClassInfo;
 
-	public StubBuildingVisitor(T classSource, InnerClassSourceStrategy<T> innersStrategy, StubElement parent, int access, String shortName)
+	public StubBuildingVisitor(T classSource, InnerClassSourceStrategy<T> innersStrategy, StubElement<?> parent, int access, String shortName)
 	{
 		this(classSource, innersStrategy, parent, access, shortName, false, false);
 	}
 
-	public StubBuildingVisitor(T classSource, InnerClassSourceStrategy<T> innersStrategy, StubElement parent, int access, String shortName, boolean anonymousInner, boolean localClassInner)
+	public StubBuildingVisitor(T classSource, InnerClassSourceStrategy<T> innersStrategy, StubElement<?> parent, int access, String shortName,
+							   boolean anonymousInner, boolean localClassInner)
 	{
-		super(ASM_API);
+		super(Opcodes.API_VERSION);
 		mySource = classSource;
 		myInnersStrategy = innersStrategy;
 		myParent = parent;
 		myAccess = access;
 		myShortName = shortName;
-		myMapping = createMapping(classSource);
+		myFirstPassData = FirstPassData.create(classSource);
 		myAnonymousInner = anonymousInner;
 		myLocalClassInner = localClassInner;
 	}
@@ -91,8 +92,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces)
 	{
 		myInternalName = name;
-		String parentName = myParent instanceof PsiClassStub ? ((PsiClassStub) myParent).getQualifiedName() : myParent instanceof PsiJavaFileStub ? ((PsiJavaFileStub) myParent).getPackageName() :
-				null;
+		String parentName = myParent instanceof PsiClassStub ? ((PsiClassStub<?>) myParent).getQualifiedName() :
+				myParent instanceof PsiJavaFileStub ? ((PsiJavaFileStub) myParent).getPackageName() :
+						null;
 		String fqn = myAnonymousInner || myLocalClassInner ? null : getFqn(name, myShortName, parentName);
 		String shortName = myShortName != null && name.endsWith(myShortName) ? myShortName : fqn != null ? PsiNameHelper.getShortClassName(fqn) : myShortName;
 
@@ -101,58 +103,59 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		boolean isInterface = isSet(flags, Opcodes.ACC_INTERFACE);
 		boolean isEnum = isSet(flags, Opcodes.ACC_ENUM);
 		boolean isAnnotationType = isSet(flags, Opcodes.ACC_ANNOTATION);
-		short stubFlags = PsiClassStubImpl.packFlags(isDeprecated, isInterface, isEnum, false, false, isAnnotationType, false, false, myAnonymousInner, myLocalClassInner);
-		myResult = new PsiClassStubImpl(JavaStubElementTypes.CLASS, myParent, fqn, shortName, null, stubFlags);
+		boolean isRecord = isSet(flags, Opcodes.ACC_RECORD);
+		short stubFlags = PsiClassStubImpl.packFlags(
+				isDeprecated, isInterface, isEnum, false, false, isAnnotationType, false, false, myAnonymousInner, myLocalClassInner, false,
+				isRecord);
+		myResult = new PsiClassStubImpl<>(JavaStubElementTypes.CLASS, myParent, fqn, shortName, null, stubFlags);
 
 		myModList = new PsiModifierListStubImpl(myResult, packClassFlags(flags));
+		if(isRecord)
+		{
+			myHeaderStub = new PsiRecordHeaderStubImpl(myResult);
+		}
 
-		ClassInfo info = null;
 		if(signature != null)
 		{
 			try
 			{
-				info = parseClassSignature(signature);
+				myClassInfo = parseClassSignature(signature);
 			}
 			catch(ClsFormatException e)
 			{
 				if(LOG.isDebugEnabled())
-				{
 					LOG.debug("source=" + mySource + " signature=" + signature, e);
-				}
 			}
 		}
-		if(info == null)
+		if(myClassInfo == null)
 		{
-			info = parseClassDescription(superName, interfaces);
+			myClassInfo = parseClassDescription(superName, interfaces);
 		}
 
-		PsiTypeParameterListStub typeParameterList = new PsiTypeParameterListStubImpl(myResult);
-		for(Pair<String, String[]> parameter : info.typeParameters)
-		{
-			PsiTypeParameterStub parameterStub = new PsiTypeParameterStubImpl(typeParameterList, parameter.first);
-			newReferenceList(JavaStubElementTypes.EXTENDS_BOUND_LIST, parameterStub, parameter.second);
-		}
+		new PsiTypeParameterListStubImpl(myResult);
 
 		if(myResult.isInterface())
 		{
-			if(info.interfaceNames != null && myResult.isAnnotationType())
+			if(myClassInfo.interfaces != null && myResult.isAnnotationType())
 			{
-				info.interfaceNames.remove(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION);
+				myClassInfo.interfaces.removeIf(info -> info.text.equals(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION));
 			}
-			newReferenceList(JavaStubElementTypes.EXTENDS_LIST, myResult, ArrayUtil.toStringArray(info.interfaceNames));
-			newReferenceList(JavaStubElementTypes.IMPLEMENTS_LIST, myResult, ArrayUtil.EMPTY_STRING_ARRAY);
+			newReferenceList(JavaStubElementTypes.EXTENDS_LIST, myResult, myClassInfo.interfaces);
+			newReferenceList(JavaStubElementTypes.IMPLEMENTS_LIST, myResult, Collections.emptyList());
 		}
 		else
 		{
-			if(info.superName == null || "java/lang/Object".equals(superName) || myResult.isEnum() && "java/lang/Enum".equals(superName))
+			if(myClassInfo.superType == null ||
+					myResult.isEnum() && "java/lang/Enum".equals(superName) ||
+					myResult.isRecord() && "java/lang/Record".equals(superName))
 			{
-				newReferenceList(JavaStubElementTypes.EXTENDS_LIST, myResult, ArrayUtil.EMPTY_STRING_ARRAY);
+				newReferenceList(JavaStubElementTypes.EXTENDS_LIST, myResult, Collections.emptyList());
 			}
 			else
 			{
-				newReferenceList(JavaStubElementTypes.EXTENDS_LIST, myResult, new String[]{info.superName});
+				newReferenceList(JavaStubElementTypes.EXTENDS_LIST, myResult, Collections.singletonList(myClassInfo.superType));
 			}
-			newReferenceList(JavaStubElementTypes.IMPLEMENTS_LIST, myResult, ArrayUtil.toStringArray(info.interfaceNames));
+			newReferenceList(JavaStubElementTypes.IMPLEMENTS_LIST, myResult, myClassInfo.interfaces);
 		}
 	}
 
@@ -160,7 +163,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	{
 		if(shortName == null || !internalName.endsWith(shortName))
 		{
-			return myMapping.fun(internalName);
+			return myFirstPassData.mapJvmClassNameToJava(internalName);
 		}
 		if(internalName.length() == shortName.length())
 		{
@@ -168,7 +171,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		}
 		if(parentName == null)
 		{
-			parentName = myMapping.fun(internalName.substring(0, internalName.length() - shortName.length() - 1));
+			parentName = myFirstPassData.mapJvmClassNameToJava(internalName.substring(0, internalName.length() - shortName.length() - 1));
 		}
 		return parentName + '.' + shortName;
 	}
@@ -177,20 +180,17 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	{
 		ClassInfo result = new ClassInfo();
 		CharacterIterator iterator = new StringCharacterIterator(signature);
-		result.typeParameters = SignatureParsing.parseTypeParametersDeclaration(iterator, myMapping);
-		result.superName = SignatureParsing.parseTopLevelClassRefSignature(iterator, myMapping);
+		result.typeParameters = SignatureParsing.parseTypeParametersDeclaration(iterator, myFirstPassData);
+		String superName = SignatureParsing.parseTopLevelClassRefSignature(iterator, myFirstPassData);
+		result.superType = superName == null ? null : new TypeInfo(superName);
 		while(iterator.current() != CharacterIterator.DONE)
 		{
-			String name = SignatureParsing.parseTopLevelClassRefSignature(iterator, myMapping);
+			String name = SignatureParsing.parseTopLevelClassRefSignature(iterator, myFirstPassData);
 			if(name == null)
-			{
 				throw new ClsFormatException();
-			}
-			if(result.interfaceNames == null)
-			{
-				result.interfaceNames = ContainerUtil.newSmartList();
-			}
-			result.interfaceNames.add(name);
+			if(result.interfaces == null)
+				result.interfaces = new SmartList<>();
+			result.interfaces.add(new TypeInfo(name));
 		}
 		return result;
 	}
@@ -198,15 +198,15 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	private ClassInfo parseClassDescription(String superClass, String[] superInterfaces)
 	{
 		ClassInfo result = new ClassInfo();
-		result.typeParameters = ContainerUtil.emptyList();
-		result.superName = superClass != null ? myMapping.fun(superClass) : null;
-		result.interfaceNames = superInterfaces == null ? null : ContainerUtil.map(superInterfaces, myMapping);
+		result.typeParameters = SignatureParsing.TypeParametersDeclaration.EMPTY;
+		result.superType = superClass != null ? new TypeInfo(myFirstPassData.mapJvmClassNameToJava(superClass, false)) : null;
+		result.interfaces = myFirstPassData.createTypes(superInterfaces);
 		return result;
 	}
 
-	private static void newReferenceList(@Nonnull JavaClassReferenceListElementType type, StubElement parent, @Nonnull String[] types)
+	private static void newReferenceList(@Nonnull JavaClassReferenceListElementType type, StubElement<?> parent, @Nullable List<TypeInfo> types)
 	{
-		new PsiClassReferenceListStubImpl(type, parent, types);
+		new PsiClassReferenceListStubImpl(type, parent, types == null ? TypeInfo.EMPTY_ARRAY : types.toArray(TypeInfo.EMPTY_ARRAY));
 	}
 
 	private static int packCommonFlags(int access)
@@ -214,30 +214,18 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		int flags = 0;
 
 		if(isSet(access, Opcodes.ACC_PRIVATE))
-		{
 			flags |= ModifierFlags.PRIVATE_MASK;
-		}
 		else if(isSet(access, Opcodes.ACC_PROTECTED))
-		{
 			flags |= ModifierFlags.PROTECTED_MASK;
-		}
 		else if(isSet(access, Opcodes.ACC_PUBLIC))
-		{
 			flags |= ModifierFlags.PUBLIC_MASK;
-		}
 		else
-		{
 			flags |= ModifierFlags.PACKAGE_LOCAL_MASK;
-		}
 
 		if(isSet(access, Opcodes.ACC_STATIC))
-		{
 			flags |= ModifierFlags.STATIC_MASK;
-		}
 		if(isSet(access, Opcodes.ACC_FINAL))
-		{
 			flags |= ModifierFlags.FINAL_MASK;
-		}
 
 		return flags;
 	}
@@ -246,9 +234,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	{
 		int flags = packCommonFlags(access);
 		if(isSet(access, Opcodes.ACC_ABSTRACT))
-		{
 			flags |= ModifierFlags.ABSTRACT_MASK;
-		}
 		return flags;
 	}
 
@@ -256,13 +242,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	{
 		int flags = packCommonFlags(access);
 		if(isSet(access, Opcodes.ACC_VOLATILE))
-		{
 			flags |= ModifierFlags.VOLATILE_MASK;
-		}
 		if(isSet(access, Opcodes.ACC_TRANSIENT))
-		{
 			flags |= ModifierFlags.TRANSIENT_MASK;
-		}
 		return flags;
 	}
 
@@ -271,26 +253,16 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		int flags = packCommonFlags(access);
 
 		if(isSet(access, Opcodes.ACC_SYNCHRONIZED))
-		{
 			flags |= ModifierFlags.SYNCHRONIZED_MASK;
-		}
 		if(isSet(access, Opcodes.ACC_NATIVE))
-		{
 			flags |= ModifierFlags.NATIVE_MASK;
-		}
 		if(isSet(access, Opcodes.ACC_STRICT))
-		{
 			flags |= ModifierFlags.STRICTFP_MASK;
-		}
 
 		if(isSet(access, Opcodes.ACC_ABSTRACT))
-		{
 			flags |= ModifierFlags.ABSTRACT_MASK;
-		}
 		else if(isInterface && !isSet(access, Opcodes.ACC_STATIC))
-		{
 			flags |= ModifierFlags.DEFAULT_MASK;
-		}
 
 		return flags;
 	}
@@ -298,7 +270,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	@Override
 	public void visitSource(String source, String debug)
 	{
-		((PsiClassStubImpl) myResult).setSourceFileName(source);
+		((PsiClassStubImpl<?>) myResult).setSourceFileName(source);
 	}
 
 	@Override
@@ -313,16 +285,59 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible)
 	{
-		return new AnnotationTextCollector(desc, myMapping, text -> new PsiAnnotationStubImpl(myModList, text));
+		return new AnnotationTextCollector(desc, myFirstPassData, text -> new PsiAnnotationStubImpl(myModList, text));
+	}
+
+	@Override
+	public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible)
+	{
+		TypeReference ref = new TypeReference(typeRef);
+		TypeInfo info = null;
+		if(ref.getSort() == TypeReference.CLASS_TYPE_PARAMETER_BOUND)
+		{
+			info = myClassInfo.typeParameters.getBoundType(ref);
+		}
+		else if(ref.getSort() == TypeReference.CLASS_TYPE_PARAMETER)
+		{
+			info = myClassInfo.typeParameters.getParameterType(ref);
+		}
+		else if(ref.getSort() == TypeReference.CLASS_EXTENDS)
+		{
+			int index = ref.getSuperTypeIndex();
+			if(index == -1)
+			{
+				info = myClassInfo.superType;
+			}
+			else if(index >= 0 && index < myClassInfo.interfaces.size())
+			{
+				info = myClassInfo.interfaces.get(index);
+			}
+		}
+		if(info == null)
+			return null;
+		if(myAnnoBuilders == null)
+		{
+			myAnnoBuilders = new HashMap<>();
+		}
+		return myAnnoBuilders.computeIfAbsent(info, typeInfo -> new ClsTypeAnnotationCollector(typeInfo, myFirstPassData))
+				.collect(typePath, desc);
+	}
+
+	@Override
+	public void visitEnd()
+	{
+		if(myAnnoBuilders != null)
+		{
+			myAnnoBuilders.values().forEach(ClsTypeAnnotationCollector::install);
+		}
+		myClassInfo.typeParameters.fillInTypeParameterList(myResult);
 	}
 
 	@Override
 	public void visitInnerClass(String name, String outerName, String innerName, int access)
 	{
 		if(isSet(access, Opcodes.ACC_SYNTHETIC))
-		{
 			return;
-		}
 		String jvmClassName = innerName;
 
 		boolean isAnonymousInner = innerName == null;
@@ -358,29 +373,46 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 			T innerClass = myInnersStrategy.findInnerClass(jvmClassName, mySource);
 			if(innerClass != null)
 			{
-				myInnersStrategy.accept(innerClass, new StubBuildingVisitor<>(innerClass, myInnersStrategy, myResult, access, innerName, isAnonymousInner, isLocalClassInner));
+				StubBuildingVisitor<T> visitor =
+						new StubBuildingVisitor<>(innerClass, myInnersStrategy, myResult, access, innerName, isAnonymousInner, isLocalClassInner);
+				myInnersStrategy.accept(innerClass, visitor);
 			}
 		}
+	}
+
+	@Override
+	public RecordComponentVisitor visitRecordComponent(String name, String descriptor, String signature)
+	{
+		if(myHeaderStub == null)
+			return null;
+		boolean isEllipsis = myFirstPassData.isVarArgComponent(name);
+		byte flags = PsiRecordComponentStubImpl.packFlags(isEllipsis, false);
+		TypeInfo type = fieldType(descriptor, signature);
+		if(isEllipsis)
+		{
+			type = new TypeInfo(type.text, type.arrayCount, true);
+		}
+		PsiRecordComponentStubImpl stub = new PsiRecordComponentStubImpl(myHeaderStub, name, type, flags);
+		PsiModifierListStub modList = new PsiModifierListStubImpl(stub, 0);
+		return new RecordComponentAnnotationCollectingVisitor(stub, modList, myFirstPassData);
 	}
 
 	@Override
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value)
 	{
 		if(isSet(access, Opcodes.ACC_SYNTHETIC))
-		{
 			return null;
-		}
 		if(name == null)
-		{
 			return null;
-		}
+		if(myResult.isRecord() && access == (Opcodes.ACC_FINAL | Opcodes.ACC_PRIVATE))
+			return null;
 
 		byte flags = PsiFieldStubImpl.packFlags(isSet(access, Opcodes.ACC_ENUM), isSet(access, Opcodes.ACC_DEPRECATED), false, false);
 		TypeInfo type = fieldType(desc, signature);
-		String initializer = constToString(value, type.text, false, myMapping);
+		String initializer = constToString(value, type.text, false, myFirstPassData);
 		PsiFieldStub stub = new PsiFieldStubImpl(myResult, name, type, initializer, flags);
 		PsiModifierListStub modList = new PsiModifierListStubImpl(stub, packFieldFlags(access));
-		return new FieldAnnotationCollectingVisitor(modList, myMapping);
+		return new FieldAnnotationCollectingVisitor(stub, modList, myFirstPassData);
 	}
 
 	private TypeInfo fieldType(String desc, String signature)
@@ -390,19 +422,17 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		{
 			try
 			{
-				type = SignatureParsing.parseTypeString(new StringCharacterIterator(signature), myMapping);
+				type = SignatureParsing.parseTypeString(new StringCharacterIterator(signature), myFirstPassData);
 			}
 			catch(ClsFormatException e)
 			{
 				if(LOG.isDebugEnabled())
-				{
 					LOG.debug("source=" + mySource + " signature=" + signature, e);
-				}
 			}
 		}
 		if(type == null)
 		{
-			type = toJavaType(Type.getType(desc), myMapping);
+			type = toJavaType(Type.getType(desc), myFirstPassData);
 		}
 		return TypeInfo.fromString(type, false);
 	}
@@ -422,39 +452,25 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
 	{
-		// JLS 13.1 says: Any constructs introduced by the compiler that do not have a corresponding construct in the source code
-		// must be marked as synthetic, except for default constructors and the class initialization method.
-		// However Scala compiler erroneously generates ACC_BRIDGE instead of ACC_SYNTHETIC flag for in-trait implementation delegation.
-		// See IDEA-78649
-		if(isSet(access, Opcodes.ACC_SYNTHETIC))
-		{
+		if(isSet(access, Opcodes.ACC_SYNTHETIC) || name == null || SYNTHETIC_CLASS_INIT_METHOD.equals(name))
 			return null;
-		}
-		if(name == null)
-		{
-			return null;
-		}
-		if(SYNTHETIC_CLASS_INIT_METHOD.equals(name))
-		{
-			return null;
-		}
 
-		// skip semi-synthetic enum methods
+		boolean isConstructor = SYNTHETIC_INIT_METHOD.equals(name);
+		if(isConstructor && myAnonymousInner)
+			return null;
+
 		boolean isEnum = myResult.isEnum();
 		if(isEnum)
 		{
 			if("values".equals(name) && desc.startsWith("()"))
-			{
 				return null;
-			}
-			//noinspection SpellCheckingInspection
 			if("valueOf".equals(name) && desc.startsWith("(Ljava/lang/String;)"))
-			{
 				return null;
-			}
 		}
 
-		boolean isConstructor = SYNTHETIC_INIT_METHOD.equals(name);
+		if(myFirstPassData.isSyntheticRecordMethod(name, desc))
+			return null;
+
 		boolean isDeprecated = isSet(access, Opcodes.ACC_DEPRECATED);
 		boolean isVarargs = isSet(access, Opcodes.ACC_VARARGS);
 		boolean isStatic = isSet(access, Opcodes.ACC_STATIC);
@@ -465,20 +481,18 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		String canonicalMethodName = isConstructor ? myResult.getName() : name;
 
 		MethodInfo info = null;
-		boolean generic = false;
+		boolean hasSignature = false;
 		if(signature != null)
 		{
 			try
 			{
 				info = parseMethodSignature(signature, exceptions);
-				generic = true;
+				hasSignature = true;
 			}
 			catch(ClsFormatException e)
 			{
 				if(LOG.isDebugEnabled())
-				{
 					LOG.debug("source=" + mySource + " signature=" + signature, e);
-				}
 			}
 		}
 		if(info == null)
@@ -490,21 +504,22 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 
 		PsiModifierListStub modList = new PsiModifierListStubImpl(stub, packMethodFlags(access, myResult.isInterface()));
 
-		PsiTypeParameterListStub list = new PsiTypeParameterListStubImpl(stub);
-		for(Pair<String, String[]> parameter : info.typeParameters)
-		{
-			PsiTypeParameterStub parameterStub = new PsiTypeParameterStubImpl(list, parameter.first);
-			newReferenceList(JavaStubElementTypes.EXTENDS_BOUND_LIST, parameterStub, parameter.second);
-		}
+		new PsiTypeParameterListStubImpl(stub);
 
-		boolean isEnumConstructor = isEnum && isConstructor;
-		boolean isInnerClassConstructor = isConstructor && myParent instanceof PsiClassStub && !isSet(myModList.getModifiersMask(), Opcodes.ACC_STATIC) && !isGroovyClosure(canonicalMethodName);
+		boolean isEnumConstructor = isConstructor && isEnum;
+		boolean isInnerClassConstructor = isConstructor && !isEnum && isInner() && !isGroovyClosure(canonicalMethodName);
 
 		List<String> args = info.argTypes;
-		if(!generic && isEnumConstructor && args.size() >= 2 && JavaClassNames.JAVA_LANG_STRING.equals(args.get(0)) && "int".equals(args.get(1)))
+		if(!hasSignature)
 		{
-			// omit synthetic enum constructor parameters
-			args = args.subList(2, args.size());
+			if(isEnumConstructor && args.size() >= 2 && CommonClassNames.JAVA_LANG_STRING.equals(args.get(0)) && "int".equals(args.get(1)))
+			{
+				args = args.subList(2, args.size());  // omit synthetic enum constructor parameters
+			}
+			else if(isInnerClassConstructor && args.size() >= 1)
+			{
+				args = args.subList(1, args.size());  // omit synthetic inner class constructor parameter
+			}
 		}
 
 		PsiParameterListStubImpl parameterList = new PsiParameterListStubImpl(stub);
@@ -512,12 +527,6 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		PsiParameterStubImpl[] paramStubs = new PsiParameterStubImpl[paramCount];
 		for(int i = 0; i < paramCount; i++)
 		{
-			// omit synthetic inner class constructor parameter
-			if(i == 0 && !generic && isInnerClassConstructor)
-			{
-				continue;
-			}
-
 			String arg = args.get(i);
 			boolean isEllipsisParam = isVarargs && i == paramCount - 1;
 			TypeInfo typeInfo = TypeInfo.fromString(arg, isEllipsisParam);
@@ -528,18 +537,23 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 			new PsiModifierListStubImpl(parameterStub, 0);
 		}
 
-		newReferenceList(JavaStubElementTypes.THROWS_LIST, stub, ArrayUtil.toStringArray(info.throwTypes));
+		newReferenceList(JavaStubElementTypes.THROWS_LIST, stub, info.throwTypes);
 
-		int localVarIgnoreCount = isStatic ? 0 : isEnumConstructor ? 3 : 1;
 		int paramIgnoreCount = isEnumConstructor ? 2 : isInnerClassConstructor ? 1 : 0;
-		return new MethodAnnotationCollectingVisitor(stub, modList, localVarIgnoreCount, paramIgnoreCount, paramCount, paramStubs, myMapping);
+		int localVarIgnoreCount = isEnumConstructor ? 3 : isInnerClassConstructor ? 2 : !isStatic ? 1 : 0;
+		return new MethodAnnotationCollectingVisitor(stub, info, modList, paramStubs, paramIgnoreCount, localVarIgnoreCount, myFirstPassData);
+	}
+
+	private boolean isInner()
+	{
+		return myParent instanceof PsiClassStub && !isSet(myModList.getModifiersMask(), Opcodes.ACC_STATIC);
 	}
 
 	private boolean isGroovyClosure(String canonicalMethodName)
 	{
 		if(canonicalMethodName != null && canonicalMethodName.startsWith("_closure"))
 		{
-			PsiClassReferenceListStub extendsList = (PsiClassReferenceListStub)myResult.findChildStubByType(JavaStubElementTypes.EXTENDS_LIST);
+			PsiClassReferenceListStub extendsList = myResult.findChildStubByType(JavaStubElementTypes.EXTENDS_LIST);
 			if(extendsList != null)
 			{
 				String[] names = extendsList.getReferencedNames();
@@ -555,12 +569,10 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		MethodInfo result = new MethodInfo();
 		CharacterIterator iterator = new StringCharacterIterator(signature);
 
-		result.typeParameters = SignatureParsing.parseTypeParametersDeclaration(iterator, myMapping);
+		result.typeParameters = SignatureParsing.parseTypeParametersDeclaration(iterator, myFirstPassData);
 
 		if(iterator.current() != '(')
-		{
 			throw new ClsFormatException();
-		}
 		iterator.next();
 		if(iterator.current() == ')')
 		{
@@ -568,34 +580,30 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		}
 		else
 		{
-			result.argTypes = ContainerUtil.newSmartList();
+			result.argTypes = new SmartList<>();
 			while(iterator.current() != ')' && iterator.current() != CharacterIterator.DONE)
 			{
-				result.argTypes.add(SignatureParsing.parseTypeString(iterator, myMapping));
+				result.argTypes.add(SignatureParsing.parseTypeString(iterator, myFirstPassData));
 			}
 			if(iterator.current() != ')')
-			{
 				throw new ClsFormatException();
-			}
 		}
 		iterator.next();
 
-		result.returnType = SignatureParsing.parseTypeString(iterator, myMapping);
+		result.returnType = SignatureParsing.parseTypeString(iterator, myFirstPassData);
 
 		result.throwTypes = null;
 		while(iterator.current() == '^')
 		{
 			iterator.next();
 			if(result.throwTypes == null)
-			{
-				result.throwTypes = ContainerUtil.newSmartList();
-			}
-			result.throwTypes.add(SignatureParsing.parseTypeString(iterator, myMapping));
+				result.throwTypes = new SmartList<>();
+			result.throwTypes.add(new TypeInfo(SignatureParsing.parseTypeString(iterator, myFirstPassData)));
 		}
 		if(exceptions != null && (result.throwTypes == null || exceptions.length > result.throwTypes.size()))
 		{
 			// a signature may be inconsistent with exception list - in this case, the more complete list takes precedence
-			result.throwTypes = ContainerUtil.map(exceptions, myMapping);
+			result.throwTypes = myFirstPassData.createTypes(exceptions);
 		}
 
 		return result;
@@ -604,134 +612,55 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	private MethodInfo parseMethodDescription(String desc, String[] exceptions)
 	{
 		MethodInfo result = new MethodInfo();
-		result.typeParameters = ContainerUtil.emptyList();
-		result.returnType = toJavaType(Type.getReturnType(desc), myMapping);
-		result.argTypes = ContainerUtil.map(Type.getArgumentTypes(desc), type -> toJavaType(type, myMapping));
-		result.throwTypes = exceptions == null ? null : ContainerUtil.map(exceptions, myMapping);
+		result.typeParameters = SignatureParsing.TypeParametersDeclaration.EMPTY;
+		result.returnType = toJavaType(Type.getReturnType(desc), myFirstPassData);
+		result.argTypes = ContainerUtil.map(Type.getArgumentTypes(desc), type -> toJavaType(type, myFirstPassData));
+		result.throwTypes = myFirstPassData.createTypes(exceptions);
 		return result;
 	}
 
 
 	private static class ClassInfo
 	{
-		private List<Pair<String, String[]>> typeParameters;
-		private String superName;
-		private List<String> interfaceNames;
+		private SignatureParsing.TypeParametersDeclaration typeParameters;
+		private TypeInfo superType;
+		private List<TypeInfo> interfaces;
 	}
 
 	private static class MethodInfo
 	{
-		private List<Pair<String, String[]>> typeParameters;
+		private SignatureParsing.TypeParametersDeclaration typeParameters;
 		private String returnType;
 		private List<String> argTypes;
-		private List<String> throwTypes;
+		private List<TypeInfo> throwTypes;
 	}
 
-	private static class AnnotationTextCollector extends AnnotationVisitor
+	private static final class FieldAnnotationCollectingVisitor extends FieldVisitor
 	{
-		private final StringBuilder myBuilder = new StringBuilder();
-		private final Function<String, String> myMapping;
-		private final Consumer<String> myCallback;
-		private boolean hasPrefix;
-		private boolean hasParams;
+		private final
+		@Nonnull
+		PsiModifierListStub myModList;
+		private final
+		@Nonnull
+		FirstPassData myFirstPassData;
+		private final
+		@Nonnull
+		ClsTypeAnnotationCollector myAnnoBuilder;
 
-		private AnnotationTextCollector(@Nullable String desc, Function<String, String> mapping, Consumer<String> callback)
+		private FieldAnnotationCollectingVisitor(@Nonnull PsiFieldStub stub,
+												 @Nonnull PsiModifierListStub modList,
+												 @Nonnull FirstPassData firstPassData)
 		{
-			super(ASM_API);
-			myMapping = mapping;
-			myCallback = callback;
-
-			if(desc != null)
-			{
-				hasPrefix = true;
-				myBuilder.append('@').append(toJavaType(Type.getType(desc), myMapping));
-			}
-		}
-
-		@Override
-		public void visit(String name, Object value)
-		{
-			valuePairPrefix(name);
-			myBuilder.append(constToString(value, null, true, myMapping));
-		}
-
-		@Override
-		public void visitEnum(String name, String desc, String value)
-		{
-			valuePairPrefix(name);
-			myBuilder.append(toJavaType(Type.getType(desc), myMapping)).append('.').append(value);
-		}
-
-		private void valuePairPrefix(String name)
-		{
-			if(!hasParams)
-			{
-				hasParams = true;
-				if(hasPrefix)
-				{
-					myBuilder.append('(');
-				}
-			}
-			else
-			{
-				myBuilder.append(',');
-			}
-
-			if(name != null)
-			{
-				myBuilder.append(name).append('=');
-			}
-		}
-
-		@Override
-		public AnnotationVisitor visitAnnotation(String name, String desc)
-		{
-			valuePairPrefix(name);
-			return new AnnotationTextCollector(desc, myMapping, text -> myBuilder.append(text));
-		}
-
-		@Override
-		public AnnotationVisitor visitArray(String name)
-		{
-			valuePairPrefix(name);
-			myBuilder.append('{');
-			return new AnnotationTextCollector(null, myMapping, text -> myBuilder.append(text).append('}'));
-		}
-
-		@Override
-		public void visitEnd()
-		{
-			if(hasPrefix && hasParams)
-			{
-				myBuilder.append(')');
-			}
-			myCallback.consume(myBuilder.toString());
-		}
-	}
-
-	private static class FieldAnnotationCollectingVisitor extends FieldVisitor
-	{
-		private final PsiModifierListStub myModList;
-		private final Function<String, String> myMapping;
-		private Set<String> myFilter;
-
-		private FieldAnnotationCollectingVisitor(PsiModifierListStub modList, Function<String, String> mapping)
-		{
-			super(ASM_API);
+			super(Opcodes.API_VERSION);
 			myModList = modList;
-			myMapping = mapping;
+			myFirstPassData = firstPassData;
+			myAnnoBuilder = new ClsTypeAnnotationCollector(stub.getType(), firstPassData);
 		}
 
 		@Override
 		public AnnotationVisitor visitAnnotation(String desc, boolean visible)
 		{
-			return new AnnotationTextCollector(desc, myMapping, text ->
-			{
-				if(myFilter == null)
-				{
-					myFilter = ContainerUtil.newTroveSet();
-				}
-				myFilter.add(text);
+			return new AnnotationTextCollector(desc, myFirstPassData, text -> {
 				new PsiAnnotationStubImpl(myModList, text);
 			});
 		}
@@ -739,54 +668,112 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		@Override
 		public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible)
 		{
-			return new AnnotationTextCollector(desc, myMapping, text ->
-			{
-				if(typePath == null && (myFilter == null || !myFilter.contains(text)))
-				{
-					new PsiAnnotationStubImpl(myModList, text);
-				}
-			});
+			return myAnnoBuilder.collect(typePath, desc);
+		}
+
+		@Override
+		public void visitEnd()
+		{
+			myAnnoBuilder.install();
 		}
 	}
 
-	private static class MethodAnnotationCollectingVisitor extends MethodVisitor
+	private static final class RecordComponentAnnotationCollectingVisitor extends RecordComponentVisitor
 	{
-		private final PsiMethodStub myOwner;
-		private final PsiModifierListStub myModList;
-		private final int myIgnoreCount;
-		private final int myParamIgnoreCount;
-		private final int myParamCount;
-		private final PsiParameterStubImpl[] myParamStubs;
-		private final Function<String, String> myMapping;
-		private int myParamNameIndex;
-		private int myUsedParamSize;
-		private int myUsedParamCount;
-		private List<Set<String>> myFilters;
+		private final
+		@Nonnull
+		PsiModifierListStub myModList;
+		private final
+		@Nonnull
+		FirstPassData myFirstPassData;
+		private final
+		@Nonnull
+		ClsTypeAnnotationCollector myAnnoBuilder;
 
-		private MethodAnnotationCollectingVisitor(PsiMethodStub owner,
-				PsiModifierListStub modList,
-				int ignoreCount,
-				int paramIgnoreCount,
-				int paramCount,
-				PsiParameterStubImpl[] paramStubs,
-				Function<String, String> mapping)
+		private RecordComponentAnnotationCollectingVisitor(@Nonnull PsiRecordComponentStub stub,
+														   @Nonnull PsiModifierListStub modList,
+														   @Nonnull FirstPassData firstPassData)
 		{
-			super(ASM_API);
-			myOwner = owner;
+			super(Opcodes.API_VERSION);
 			myModList = modList;
-			myIgnoreCount = ignoreCount;
-			myParamIgnoreCount = paramIgnoreCount;
-			myParamCount = paramCount;
-			myParamStubs = paramStubs;
-			myMapping = mapping;
+			myFirstPassData = firstPassData;
+			myAnnoBuilder = new ClsTypeAnnotationCollector(stub.getType(), firstPassData);
 		}
 
 		@Override
 		public AnnotationVisitor visitAnnotation(String desc, boolean visible)
 		{
-			return new AnnotationTextCollector(desc, myMapping, text ->
+			return new AnnotationTextCollector(desc, myFirstPassData, text -> {
+				new PsiAnnotationStubImpl(myModList, text);
+			});
+		}
+
+		@Override
+		public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible)
+		{
+			return myAnnoBuilder.collect(typePath, desc);
+		}
+
+		@Override
+		public void visitEnd()
+		{
+			myAnnoBuilder.install();
+		}
+	}
+
+	private static final class MethodAnnotationCollectingVisitor extends MethodVisitor
+	{
+		private final PsiMethodStub myOwner;
+		private final
+		@Nonnull
+		MethodInfo myMethodInfo;
+		private final
+		@Nonnull
+		PsiModifierListStub myModList;
+		private final PsiParameterStubImpl[] myParamStubs;
+		private final int myParamCount;
+		private final int myLocalVarIgnoreCount;
+		private final
+		@Nonnull
+		FirstPassData myFirstPassData;
+		private int myParamIgnoreCount;
+		private int myParamNameIndex;
+		private int myUsedParamSize;
+		private int myUsedParamCount;
+		private Map<TypeInfo, ClsTypeAnnotationCollector> myAnnoBuilders;
+
+		private MethodAnnotationCollectingVisitor(PsiMethodStub owner,
+												  @Nonnull MethodInfo methodInfo,
+												  @Nonnull PsiModifierListStub modList,
+												  PsiParameterStubImpl[] paramStubs,
+												  int paramIgnoreCount,
+												  int localVarIgnoreCount,
+												  @Nonnull FirstPassData firstPassData)
+		{
+			super(Opcodes.API_VERSION);
+			myOwner = owner;
+			myMethodInfo = methodInfo;
+			myModList = modList;
+			myParamStubs = paramStubs;
+			myParamCount = paramStubs.length;
+			myLocalVarIgnoreCount = localVarIgnoreCount;
+			myParamIgnoreCount = paramIgnoreCount;
+			myFirstPassData = firstPassData;
+		}
+
+		@Override
+		public void visitAnnotableParameterCount(int parameterCount, boolean visible)
+		{
+			if(myParamIgnoreCount > 0 && parameterCount == myParamCount)
 			{
-				filter(0, text);
+				myParamIgnoreCount = 0;
+			}
+		}
+
+		@Override
+		public AnnotationVisitor visitAnnotation(String desc, boolean visible)
+		{
+			return new AnnotationTextCollector(desc, myFirstPassData, text -> {
 				new PsiAnnotationStubImpl(myModList, text);
 			});
 		}
@@ -794,10 +781,8 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		@Override
 		public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible)
 		{
-			return parameter < myParamIgnoreCount ? null : new AnnotationTextCollector(desc, myMapping, text ->
-			{
+			return parameter < myParamIgnoreCount ? null : new AnnotationTextCollector(desc, myFirstPassData, text -> {
 				int idx = parameter - myParamIgnoreCount;
-				filter(idx + 1, text);
 				new PsiAnnotationStubImpl(myOwner.findParameter(idx).getModList(), text);
 			});
 		}
@@ -806,46 +791,77 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible)
 		{
 			TypeReference ref = new TypeReference(typeRef);
-			return new AnnotationTextCollector(desc, myMapping, text ->
+			TypeInfo info = null;
+			if(ref.getSort() == TypeReference.METHOD_RETURN)
 			{
-				if(ref.getSort() == TypeReference.METHOD_RETURN && typePath == null && !filtered(0, text))
+				info = myOwner.getReturnTypeText();
+			}
+			else if(ref.getSort() == TypeReference.METHOD_FORMAL_PARAMETER)
+			{
+				int parameterIndex = ref.getFormalParameterIndex();
+				if(parameterIndex < myParamStubs.length)
 				{
-					new PsiAnnotationStubImpl(myModList, text);
+					info = myParamStubs[parameterIndex].getType();
 				}
-				else if(ref.getSort() == TypeReference.METHOD_FORMAL_PARAMETER && typePath == null)
+			}
+			else if(ref.getSort() == TypeReference.METHOD_TYPE_PARAMETER)
+			{
+				info = myMethodInfo.typeParameters.getParameterType(ref);
+			}
+			else if(ref.getSort() == TypeReference.METHOD_TYPE_PARAMETER_BOUND)
+			{
+				info = myMethodInfo.typeParameters.getBoundType(ref);
+			}
+			else if(ref.getSort() == TypeReference.THROWS)
+			{
+				int index = ref.getExceptionIndex();
+				if(index < myMethodInfo.throwTypes.size())
 				{
-					int idx = ref.getFormalParameterIndex();
-					if(!filtered(idx + 1, text))
-					{
-						new PsiAnnotationStubImpl(myOwner.findParameter(idx).getModList(), text);
-					}
+					info = myMethodInfo.throwTypes.get(index);
 				}
-			});
+			}
+			if(info == null)
+				return null;
+			if(myAnnoBuilders == null)
+			{
+				myAnnoBuilders = new HashMap<>();
+			}
+			return myAnnoBuilders.computeIfAbsent(info, typeInfo -> new ClsTypeAnnotationCollector(typeInfo, myFirstPassData))
+					.collect(typePath, desc);
+		}
+
+		@Override
+		public void visitEnd()
+		{
+			if(myAnnoBuilders != null)
+			{
+				myAnnoBuilders.values().forEach(ClsTypeAnnotationCollector::install);
+			}
+			myMethodInfo.typeParameters.fillInTypeParameterList(myOwner);
 		}
 
 		@Override
 		public AnnotationVisitor visitAnnotationDefault()
 		{
-			return new AnnotationTextCollector(null, myMapping, text -> ((PsiMethodStubImpl) myOwner).setDefaultValueText(text));
+			return new AnnotationTextCollector(null, myFirstPassData, text -> ((PsiMethodStubImpl) myOwner).setDefaultValueText(text));
 		}
 
 		@Override
 		public void visitParameter(String name, int access)
 		{
-			if(!isSet(access, Opcodes.ACC_SYNTHETIC) && myParamNameIndex < myParamCount)
+			int paramIndex = myParamNameIndex++ - myParamIgnoreCount;
+			if(!isSet(access, Opcodes.ACC_SYNTHETIC) && paramIndex >= 0 && paramIndex < myParamCount)
 			{
-				setParameterName(name, myParamNameIndex);
-				myParamNameIndex++;
+				setParameterName(name, paramIndex);
 			}
 		}
 
 		@Override
 		public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index)
 		{
-			if(index >= myIgnoreCount)
+			if(index >= myLocalVarIgnoreCount)
 			{
-				// long and double variables increase the index by 2, not by 1
-				int paramIndex = index - myIgnoreCount == myUsedParamSize ? myUsedParamCount : index - myIgnoreCount;
+				int paramIndex = index - myLocalVarIgnoreCount == myUsedParamSize ? myUsedParamCount : index - myLocalVarIgnoreCount;
 				if(paramIndex < myParamCount)
 				{
 					setParameterName(name, paramIndex);
@@ -859,45 +875,16 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		{
 			if(ClsParsingUtil.isJavaIdentifier(name, LanguageLevel.HIGHEST))
 			{
-				PsiParameterStubImpl stub = myParamStubs[paramIndex];
-				if(stub != null)
-				{
-					stub.setName(name);
-				}
+				myParamStubs[paramIndex].setName(name);
 			}
-		}
-
-		private void filter(int index, String text)
-		{
-			if(myFilters == null)
-			{
-				myFilters = ContainerUtil.newArrayListWithCapacity(myParamCount + 1);
-				for(int i = 0; i < myParamCount + 1; i++)
-				{
-					myFilters.add(null);
-				}
-			}
-			Set<String> filter = myFilters.get(index);
-			if(filter == null)
-			{
-				myFilters.set(index, filter = ContainerUtil.newTroveSet());
-			}
-			filter.add(text);
-		}
-
-		private boolean filtered(int index, String text)
-		{
-			return myFilters != null && myFilters.get(index) != null && myFilters.get(index).contains(text);
 		}
 	}
 
 	@Nullable
-	private static String constToString(@Nullable Object value, @Nullable String type, boolean anno, Function<String, String> mapping)
+	static String constToString(@Nullable Object value, @Nullable String type, boolean anno, Function<? super String, String> mapping)
 	{
 		if(value == null)
-		{
 			return null;
-		}
 
 		if(value instanceof String)
 		{
@@ -924,13 +911,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 			if("boolean".equals(type))
 			{
 				if(value.equals(0))
-				{
 					return "false";
-				}
 				if(value.equals(1))
-				{
 					return "true";
-				}
 			}
 			if("char".equals(type))
 			{
@@ -979,9 +962,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 			for(int i = 0, length = Array.getLength(value); i < length; i++)
 			{
 				if(i > 0)
-				{
 					buffer.append(", ");
-				}
 				buffer.append(constToString(Array.get(value, i), type, anno, mapping));
 			}
 			buffer.append('}');
@@ -996,7 +977,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		return null;
 	}
 
-	private static String toJavaType(Type type, Function<String, String> mapping)
+	static String toJavaType(Type type, @Nonnull Function<? super String, String> mapping)
 	{
 		int dimensions = 0;
 		if(type.getSort() == Type.ARRAY)
@@ -1006,98 +987,11 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		}
 		String text = type.getSort() == Type.OBJECT ? mapping.fun(type.getInternalName()) : type.getClassName();
 		if(dimensions > 0)
-		{
 			text += StringUtil.repeat("[]", dimensions);
-		}
 		return text;
 	}
 
-	private static Function<String, String> createMapping(Object classSource)
-	{
-		byte[] bytes = null;
-		if(classSource instanceof ClsFileImpl.FileContentPair)
-		{
-			bytes = ((ClsFileImpl.FileContentPair) classSource).getContent();
-		}
-		else if(classSource instanceof VirtualFile)
-		{
-			try
-			{
-				bytes = ((VirtualFile) classSource).contentsToByteArray(false);
-			}
-			catch(IOException ignored)
-			{
-			}
-		}
-
-		if(bytes != null)
-		{
-			Function<String, String> mapping = createMapping(bytes);
-			if(mapping != null)
-			{
-				return mapping;
-			}
-		}
-
-		return GUESSING_MAPPER;
-	}
-
-	private static Function<String, String> createMapping(byte[] classBytes)
-	{
-		final Map<String, Pair<String, String>> mapping = ContainerUtil.newHashMap();
-
-		try
-		{
-			new ClassReader(classBytes).accept(new ClassVisitor(ASM_API)
-			{
-				@Override
-				public void visitInnerClass(String name, String outerName, String innerName, int access)
-				{
-					if(outerName != null && innerName != null)
-					{
-						mapping.put(name, pair(outerName, innerName));
-					}
-				}
-			}, ClsFileImpl.EMPTY_ATTRIBUTES, ClassReader.SKIP_DEBUG | ClassReader.SKIP_CODE | ClassReader.SKIP_FRAMES);
-		}
-		catch(Exception ignored)
-		{
-		}
-
-		if(!mapping.isEmpty())
-		{
-			return new Function<String, String>()
-			{
-				@Override
-				public String fun(String internalName)
-				{
-					String className = internalName;
-
-					if(className.indexOf('$') >= 0)
-					{
-						Pair<String, String> p = mapping.get(className);
-						if(p == null)
-						{
-							return GUESSING_MAPPER.fun(className);
-						}
-						className = p.first;
-						if(p.second != null)
-						{
-							className = fun(p.first) + '.' + p.second;
-							mapping.put(className, pair(className, null));
-						}
-					}
-
-					return className.replace('/', '.');
-				}
-			};
-		}
-
-		return null;
-	}
-
-	public static final Function<String, String> GUESSING_MAPPER = internalName ->
-	{
+	public static final Function<String, String> GUESSING_MAPPER = internalName -> {
 		String canonicalText = internalName;
 
 		if(canonicalText.indexOf('$') >= 0)
@@ -1123,7 +1017,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		return canonicalText.replace('/', '.');
 	};
 
-	public static AnnotationVisitor getAnnotationTextCollector(String desc, Consumer<String> consumer)
+	public static AnnotationVisitor getAnnotationTextCollector(String desc, Consumer<? super String> consumer)
 	{
 		return new AnnotationTextCollector(desc, GUESSING_MAPPER, consumer);
 	}

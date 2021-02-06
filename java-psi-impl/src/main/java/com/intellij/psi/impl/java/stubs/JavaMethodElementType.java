@@ -15,19 +15,11 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.cache.ModifierFlags;
 import com.intellij.psi.impl.cache.RecordUtil;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.impl.java.stubs.impl.PsiMethodStubImpl;
@@ -45,16 +37,22 @@ import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.io.StringRef;
+import consulo.util.lang.BitUtil;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author max
  */
-public abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, PsiMethod>
+abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, PsiMethod>
 {
-	public static final String TYPE_PARAMETER_PSEUDO_NAME = "$TYPE_PARAMETER$";
-
-	public JavaMethodElementType(@NonNls final String name)
+	JavaMethodElementType(@NonNls final String name)
 	{
 		super(name);
 	}
@@ -72,14 +70,12 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 		{
 			return new PsiAnnotationMethodImpl(node);
 		}
-		else
-		{
-			return new PsiMethodImpl(node);
-		}
+		return new PsiMethodImpl(node);
 	}
 
+	@Nonnull
 	@Override
-	public PsiMethodStub createStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub)
+	public PsiMethodStub createStub(@Nonnull final LighterAST tree, @Nonnull final LighterASTNode node, @Nonnull final StubElement parentStub)
 	{
 		String name = null;
 		boolean isConstructor = true;
@@ -118,7 +114,7 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 					final LighterASTNode pType = LightTreeUtil.firstChildOfType(tree, params.get(params.size() - 1), JavaElementType.TYPE);
 					if(pType != null)
 					{
-						isVarArgs = (LightTreeUtil.firstChildOfType(tree, pType, JavaTokenType.ELLIPSIS) != null);
+						isVarArgs = LightTreeUtil.firstChildOfType(tree, pType, JavaTokenType.ELLIPSIS) != null;
 					}
 				}
 			}
@@ -135,7 +131,7 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 		}
 
 		TypeInfo typeInfo = isConstructor ? TypeInfo.createConstructorType() : TypeInfo.create(tree, node, parentStub);
-		boolean isAnno = (node.getTokenType() == JavaElementType.ANNOTATION_METHOD);
+		boolean isAnno = node.getTokenType() == JavaElementType.ANNOTATION_METHOD;
 		byte flags = PsiMethodStubImpl.packFlags(isConstructor, isAnno, isVarArgs, isDeprecatedByComment, hasDeprecatedAnnotation, hasDocComment);
 
 		return new PsiMethodStubImpl(parentStub, name, typeInfo, flags, defValueText);
@@ -145,7 +141,7 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 	public void serialize(@Nonnull final PsiMethodStub stub, @Nonnull final StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getName());
-		TypeInfo.writeTYPE(dataStream, stub.getReturnTypeText(false));
+		TypeInfo.writeTYPE(dataStream, stub.getReturnTypeText());
 		dataStream.writeByte(((PsiMethodStubImpl) stub).getFlags());
 		if(stub.isAnnotationMethod())
 		{
@@ -157,11 +153,11 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 	@Override
 	public PsiMethodStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
 	{
-		StringRef name = dataStream.readName();
+		String name = dataStream.readNameString();
 		final TypeInfo type = TypeInfo.readTYPE(dataStream);
 		byte flags = dataStream.readByte();
-		final StringRef defaultMethodValue = PsiMethodStubImpl.isAnnotationMethod(flags) ? dataStream.readName() : null;
-		return new PsiMethodStubImpl(parentStub, StringRef.toString(name), type, flags, StringRef.toString(defaultMethodValue));
+		String defaultMethodValue = PsiMethodStubImpl.isAnnotationMethod(flags) ? dataStream.readNameString() : null;
+		return new PsiMethodStubImpl(parentStub, name, type, flags, defaultMethodValue);
 	}
 
 	@Override
@@ -174,53 +170,85 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 			if(RecordUtil.isStaticNonPrivateMember(stub))
 			{
 				sink.occurrence(JavaStubIndexKeys.JVM_STATIC_MEMBERS_NAMES, name);
-				sink.occurrence(JavaStubIndexKeys.JVM_STATIC_MEMBERS_TYPES, stub.getReturnTypeText(false).getShortTypeText());
+				sink.occurrence(JavaStubIndexKeys.JVM_STATIC_MEMBERS_TYPES, stub.getReturnTypeText().getShortTypeText());
 			}
 		}
 
-		Set<String> methodTypeParams = null;
-		for(StubElement stubElement : stub.getChildrenStubs())
+		Set<String> methodTypeParams = getVisibleTypeParameters(stub);
+		for(StubElement<?> stubElement : stub.getChildrenStubs())
 		{
-			if(stubElement instanceof PsiTypeParameterListStub)
+			if(stubElement instanceof PsiParameterListStub)
 			{
-				for(Object tStub : stubElement.getChildrenStubs())
-				{
-					if(tStub instanceof PsiTypeParameterStub)
-					{
-						if(methodTypeParams == null)
-						{
-							methodTypeParams = new HashSet<String>();
-						}
-						methodTypeParams.add(((PsiTypeParameterStub) tStub).getName());
-					}
-				}
-			}
-			else if(stubElement instanceof PsiParameterListStub)
-			{
-				for(StubElement paramStub : ((PsiParameterListStub) stubElement).getChildrenStubs())
+				for(StubElement<?> paramStub : stubElement.getChildrenStubs())
 				{
 					if(paramStub instanceof PsiParameterStub)
 					{
-						TypeInfo type = ((PsiParameterStub) paramStub).getType(false);
-						if(type.arrayCount > 0)
-						{
-							continue;
-						}
-						String typeName = type.getShortTypeText();
+						TypeInfo type = ((PsiParameterStub) paramStub).getType();
+						String typeName = PsiNameHelper.getShortClassName(type.text);
 						if(TypeConversionUtil.isPrimitive(typeName) || TypeConversionUtil.isPrimitiveWrapper(typeName))
-						{
 							continue;
-						}
-						sink.occurrence(JavaStubIndexKeys.METHOD_TYPES, typeName);
-						if(methodTypeParams != null && methodTypeParams.contains(typeName))
+						if(!methodTypeParams.contains(typeName))
 						{
-							sink.occurrence(JavaStubIndexKeys.METHOD_TYPES, TYPE_PARAMETER_PSEUDO_NAME);
-							methodTypeParams = null;
+							sink.occurrence(JavaStubIndexKeys.METHOD_TYPES, typeName);
 						}
 					}
 				}
 				break;
 			}
 		}
+	}
+
+	@Nonnull
+	private static Set<String> getVisibleTypeParameters(@Nonnull StubElement<?> stub)
+	{
+		Set<String> result = null;
+		while(stub != null)
+		{
+			Set<String> names = getOwnTypeParameterNames(stub);
+			if(!names.isEmpty())
+			{
+				if(result == null)
+					result = new HashSet<>();
+				result.addAll(names);
+			}
+
+			if(isStatic(stub))
+				break;
+
+			stub = stub.getParentStub();
+		}
+		return result == null ? Collections.emptySet() : result;
+	}
+
+	private static boolean isStatic(@Nonnull StubElement<?> stub)
+	{
+		if(stub instanceof PsiMemberStub)
+		{
+			PsiModifierListStub modList = stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
+			if(modList != null)
+			{
+				return BitUtil.isSet(modList.getModifiersMask(), ModifierFlags.NAME_TO_MODIFIER_FLAG_MAP.get(PsiModifier.STATIC));
+			}
+		}
+		return false;
+	}
+
+	private static Set<String> getOwnTypeParameterNames(StubElement<?> stubElement)
+	{
+		StubElement<PsiTypeParameterList> typeParamList = stubElement.findChildStubByType(JavaStubElementTypes.TYPE_PARAMETER_LIST);
+		if(typeParamList == null)
+			return Collections.emptySet();
+
+		Set<String> methodTypeParams = null;
+		for(Object tStub : typeParamList.getChildrenStubs())
+		{
+			if(tStub instanceof PsiTypeParameterStub)
+			{
+				if(methodTypeParams == null)
+					methodTypeParams = new HashSet<>();
+				methodTypeParams.add(((PsiTypeParameterStub) tStub).getName());
+			}
+		}
+		return methodTypeParams == null ? Collections.emptySet() : methodTypeParams;
 	}
 }

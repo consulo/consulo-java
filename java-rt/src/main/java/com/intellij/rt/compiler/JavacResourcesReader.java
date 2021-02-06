@@ -15,12 +15,12 @@
  */
 package com.intellij.rt.compiler;
 
+import consulo.java.rt.compiler.JavacResourcesReaderConstans;
+
 import java.text.MessageFormat;
 import java.util.ListResourceBundle;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import consulo.java.rt.compiler.JavacResourcesReaderConstans;
 
 /**
  * MUST BE COMPILED WITH JDK 1.1 IN ORDER TO SUPPORT JAVAC LAUNCHING FOR ALL JDKs
@@ -136,6 +136,7 @@ public class JavacResourcesReader implements JavacResourcesReaderConstans
 		}
 		catch(Exception ignored)
 		{
+			ignored.printStackTrace();
 		}
 
 		if(messagesBundle == null)

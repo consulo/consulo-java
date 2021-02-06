@@ -14,17 +14,19 @@ import com.intellij.util.text.CharSequenceHashingStrategy;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.intellij.psi.PsiKeyword.*;
 
 public class JavaLexer extends LexerBase
 {
-	private static final Set<String> KEYWORDS = ContainerUtil.newTroveSet(
+	private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(
 			ABSTRACT, BOOLEAN, BREAK, BYTE, CASE, CATCH, CHAR, CLASS, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, EXTENDS, FINAL, FINALLY,
 			FLOAT, FOR, GOTO, IF, IMPLEMENTS, IMPORT, INSTANCEOF, INT, INTERFACE, LONG, NATIVE, NEW, PACKAGE, PRIVATE, PROTECTED, PUBLIC,
 			RETURN, SHORT, STATIC, STRICTFP, SUPER, SWITCH, SYNCHRONIZED, THIS, THROW, THROWS, TRANSIENT, TRY, VOID, VOLATILE, WHILE,
-			TRUE, FALSE, NULL);
+			TRUE, FALSE, NULL, NON_SEALED));
 
 	private static final Set<CharSequence> JAVA9_KEYWORDS = ContainerUtil.newTroveSet(
 			CharSequenceHashingStrategy.CASE_SENSITIVE,
@@ -41,7 +43,10 @@ public class JavaLexer extends LexerBase
 	{
 		return id != null &&
 				(level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id) ||
-						level.isAtLeast(LanguageLevel.JDK_10) && VAR.contentEquals(id));
+						level.isAtLeast(LanguageLevel.JDK_10) && VAR.contentEquals(id) ||
+						level.isAtLeast(LanguageLevel.JDK_15_PREVIEW) && RECORD.contentEquals(id) ||
+						level.isAtLeast(LanguageLevel.JDK_14) && YIELD.contentEquals(id) ||
+						(level.isAtLeast(LanguageLevel.JDK_15_PREVIEW) && (level == LanguageLevel.JDK_X || level.isPreview()) && (SEALED.contentEquals(id) || PERMITS.contentEquals(id))));
 	}
 
 	private final _JavaLexer myFlexLexer;

@@ -144,4 +144,16 @@ public class ClsStubPsiFactory extends StubPsiFactory
 	{
 		return new ClsProvidesStatementImpl(stub);
 	}
+
+	@Override
+	public PsiRecordComponent createRecordComponent(PsiRecordComponentStub stub)
+	{
+		return new ClsRecordComponentImpl(stub);
+	}
+
+	@Override
+	public PsiRecordHeader createRecordHeader(PsiRecordHeaderStub stub)
+	{
+		return new ClsRecordHeaderImpl(stub);
+	}
 }

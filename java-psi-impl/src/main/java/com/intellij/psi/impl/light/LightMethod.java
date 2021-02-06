@@ -15,10 +15,6 @@
  */
 package com.intellij.psi.impl.light;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.navigation.ItemPresentation;
@@ -32,216 +28,258 @@ import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+
 /**
  * @author ven
  */
-public class LightMethod extends LightElement implements PsiMethod {
-  private final PsiMethod myMethod;
-  private final PsiClass myContainingClass;
+public class LightMethod extends LightElement implements PsiMethod
+{
+	protected final PsiMethod myMethod;
+	protected final PsiClass myContainingClass;
 
-  public LightMethod(@Nonnull PsiManager manager, @Nonnull PsiMethod method, @Nonnull PsiClass containingClass) {
-    this(manager, method, containingClass, JavaLanguage.INSTANCE);
-  }
+	public LightMethod(@Nonnull PsiManager manager, @Nonnull PsiMethod method, @Nonnull PsiClass containingClass)
+	{
+		this(manager, method, containingClass, JavaLanguage.INSTANCE);
+	}
 
-  public LightMethod(@Nonnull PsiManager manager,
-                     @Nonnull PsiMethod method,
-                     @Nonnull PsiClass containingClass,
-                     @Nonnull Language language) {
-    super(manager, language);
-    myMethod = method;
-    myContainingClass = containingClass;
-  }
+	public LightMethod(@Nonnull PsiManager manager,
+					   @Nonnull PsiMethod method,
+					   @Nonnull PsiClass containingClass,
+					   @Nonnull Language language)
+	{
+		super(manager, language);
+		myMethod = method;
+		myContainingClass = containingClass;
+	}
 
-  @Override
-  public ItemPresentation getPresentation() {
-    return ItemPresentationProviders.getItemPresentation(this);
-  }
+	@Override
+	public ItemPresentation getPresentation()
+	{
+		return ItemPresentationProviders.getItemPresentation(this);
+	}
 
-  @Override
-  public boolean hasTypeParameters() {
-    return myMethod.hasTypeParameters();
-  }
+	@Override
+	public boolean hasTypeParameters()
+	{
+		return myMethod.hasTypeParameters();
+	}
 
-  @Override
-  @Nonnull
-  public PsiTypeParameter[] getTypeParameters() {
-    return myMethod.getTypeParameters();
-  }
+	@Override
+	@Nonnull
+	public PsiTypeParameter[] getTypeParameters()
+	{
+		return myMethod.getTypeParameters();
+	}
 
-  @Override
-  public PsiTypeParameterList getTypeParameterList() {
-    return myMethod.getTypeParameterList();
-  }
+	@Override
+	public PsiTypeParameterList getTypeParameterList()
+	{
+		return myMethod.getTypeParameterList();
+	}
 
-  @Override
-  public PsiDocComment getDocComment() {
-    return myMethod.getDocComment();
-  }
+	@Override
+	public PsiDocComment getDocComment()
+	{
+		return myMethod.getDocComment();
+	}
 
-  @Override
-  public boolean isDeprecated() {
-    return myMethod.isDeprecated();
-  }
+	@Override
+	public boolean isDeprecated()
+	{
+		return myMethod.isDeprecated();
+	}
 
-  @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
-    return myMethod.setName(name);
-  }
+	@Override
+	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
+	{
+		return myMethod.setName(name);
+	}
 
-  @Override
-  @Nonnull
-  public String getName() {
-    return myMethod.getName();
-  }
+	@Override
+	@Nonnull
+	public String getName()
+	{
+		return myMethod.getName();
+	}
 
-  @Override
-  @Nonnull
-  public HierarchicalMethodSignature getHierarchicalMethodSignature() {
-    return myMethod.getHierarchicalMethodSignature();
-  }
+	@Override
+	@Nonnull
+	public HierarchicalMethodSignature getHierarchicalMethodSignature()
+	{
+		return myMethod.getHierarchicalMethodSignature();
+	}
 
-  @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
-    return myMethod.hasModifierProperty(name);
-  }
+	@Override
+	public boolean hasModifierProperty(@Nonnull String name)
+	{
+		return myMethod.hasModifierProperty(name);
+	}
 
-  @Override
-  @Nonnull
-  public PsiModifierList getModifierList() {
-    return myMethod.getModifierList();
-  }
+	@Override
+	@Nonnull
+	public PsiModifierList getModifierList()
+	{
+		return myMethod.getModifierList();
+	}
 
-  @Override
-  public PsiType getReturnType() {
-    return myMethod.getReturnType();
-  }
+	@Override
+	public PsiType getReturnType()
+	{
+		return myMethod.getReturnType();
+	}
 
-  @Override
-  public PsiTypeElement getReturnTypeElement() {
-    return myMethod.getReturnTypeElement();
-  }
+	@Override
+	public PsiTypeElement getReturnTypeElement()
+	{
+		return myMethod.getReturnTypeElement();
+	}
 
-  @Override
-  @Nonnull
-  public PsiParameterList getParameterList() {
-    return myMethod.getParameterList();
-  }
+	@Override
+	@Nonnull
+	public PsiParameterList getParameterList()
+	{
+		return myMethod.getParameterList();
+	}
 
-  @Override
-  @Nonnull
-  public PsiReferenceList getThrowsList() {
-    return myMethod.getThrowsList();
-  }
+	@Override
+	@Nonnull
+	public PsiReferenceList getThrowsList()
+	{
+		return myMethod.getThrowsList();
+	}
 
-  @Override
-  public PsiCodeBlock getBody() {
-    return myMethod.getBody();
-  }
+	@Override
+	public PsiCodeBlock getBody()
+	{
+		return myMethod.getBody();
+	}
 
-  @Override
-  public boolean isConstructor() {
-    return myMethod.isConstructor();
-  }
+	@Override
+	public boolean isConstructor()
+	{
+		return myMethod.isConstructor();
+	}
 
-  @Override
-  public boolean isVarArgs() {
-    return myMethod.isVarArgs();
-  }
+	@Override
+	public boolean isVarArgs()
+	{
+		return myMethod.isVarArgs();
+	}
 
-  @Override
-  @Nonnull
-  public MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor) {
-    return myMethod.getSignature(substitutor);
-  }
+	@Override
+	@Nonnull
+	public MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor)
+	{
+		return myMethod.getSignature(substitutor);
+	}
 
-  @Override
-  public PsiIdentifier getNameIdentifier() {
-    return myMethod.getNameIdentifier();
-  }
+	@Override
+	public PsiIdentifier getNameIdentifier()
+	{
+		return myMethod.getNameIdentifier();
+	}
 
-  @Override
-  @Nonnull
-  public PsiMethod[] findSuperMethods() {
-    return myMethod.findSuperMethods();
-  }
+	@Override
+	@Nonnull
+	public PsiMethod[] findSuperMethods()
+	{
+		return myMethod.findSuperMethods();
+	}
 
-  @Override
-  @Nonnull
-  public PsiMethod[] findSuperMethods(boolean checkAccess) {
-    return myMethod.findSuperMethods(checkAccess);
-  }
+	@Override
+	@Nonnull
+	public PsiMethod[] findSuperMethods(boolean checkAccess)
+	{
+		return myMethod.findSuperMethods(checkAccess);
+	}
 
-  @Override
-  @Nonnull
-  public PsiMethod[] findSuperMethods(PsiClass parentClass) {
-    return myMethod.findSuperMethods(parentClass);
-  }
+	@Override
+	@Nonnull
+	public PsiMethod[] findSuperMethods(PsiClass parentClass)
+	{
+		return myMethod.findSuperMethods(parentClass);
+	}
 
-  @Override
-  @Nonnull
-  public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess) {
-    return myMethod.findSuperMethodSignaturesIncludingStatic(checkAccess);
-  }
+	@Override
+	@Nonnull
+	public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess)
+	{
+		return myMethod.findSuperMethodSignaturesIncludingStatic(checkAccess);
+	}
 
-  @Override
-  @SuppressWarnings("deprecation")
-  public PsiMethod findDeepestSuperMethod() {
-    return myMethod.findDeepestSuperMethod();
-  }
+	@Override
+	@SuppressWarnings("deprecation")
+	public PsiMethod findDeepestSuperMethod()
+	{
+		return myMethod.findDeepestSuperMethod();
+	}
 
-  @Override
-  @Nonnull
-  public PsiMethod[] findDeepestSuperMethods() {
-    return myMethod.findDeepestSuperMethods();
-  }
+	@Override
+	@Nonnull
+	public PsiMethod[] findDeepestSuperMethods()
+	{
+		return myMethod.findDeepestSuperMethods();
+	}
 
-  @Override
-  public String getText() {
-    return myMethod.getText();
-  }
+	@Override
+	public String getText()
+	{
+		return myMethod.getText();
+	}
 
-  @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
-    myMethod.accept(visitor);
-  }
+	@Override
+	public void accept(@Nonnull PsiElementVisitor visitor)
+	{
+		myMethod.accept(visitor);
+	}
 
-  @Override
-  public PsiElement copy() {
-    return new LightMethod(myManager, (PsiMethod)myMethod.copy(), myContainingClass);
-  }
+	@Override
+	public PsiElement copy()
+	{
+		return new LightMethod(myManager, (PsiMethod) myMethod.copy(), myContainingClass);
+	}
 
-  @Override
-  public boolean isValid() {
-    return myContainingClass.isValid();
-  }
+	@Override
+	public boolean isValid()
+	{
+		return myContainingClass.isValid();
+	}
 
-  @Override
-  public PsiClass getContainingClass() {
-    return myContainingClass;
-  }
+	@Override
+	public PsiClass getContainingClass()
+	{
+		return myContainingClass;
+	}
 
-  @Override
-  public PsiFile getContainingFile() {
-    return myContainingClass.getContainingFile();
-  }
+	@Override
+	public PsiFile getContainingFile()
+	{
+		return myContainingClass.getContainingFile();
+	}
 
-  public String toString() {
-    return "PsiMethod:" + getName();
-  }
+	public String toString()
+	{
+		return "PsiMethod:" + getName();
+	}
 
-  @Override
-  public boolean isEquivalentTo(final PsiElement another) {
-    return PsiClassImplUtil.isMethodEquivalentTo(this, another);
-  }
+	@Override
+	public boolean isEquivalentTo(final PsiElement another)
+	{
+		return PsiClassImplUtil.isMethodEquivalentTo(this, another);
+	}
 
-  @Override
-  @Nonnull
-  public SearchScope getUseScope() {
-    return PsiImplUtil.getMemberUseScope(this);
-  }
+	@Override
+	@Nonnull
+	public SearchScope getUseScope()
+	{
+		return PsiImplUtil.getMemberUseScope(this);
+	}
 
-  @Override
-  public PsiElement getContext() {
-    return getContainingClass();
-  }
+	@Override
+	public PsiElement getContext()
+	{
+		return getContainingClass();
+	}
 }

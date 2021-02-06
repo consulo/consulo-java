@@ -157,4 +157,16 @@ public class SourceStubPsiFactory extends StubPsiFactory
 	{
 		return new PsiProvidesStatementImpl(stub);
 	}
+
+	@Override
+	public PsiRecordComponent createRecordComponent(PsiRecordComponentStub stub)
+	{
+		return new PsiRecordComponentImpl(stub);
+	}
+
+	@Override
+	public PsiRecordHeader createRecordHeader(PsiRecordHeaderStub stub)
+	{
+		return new PsiRecordHeaderImpl(stub);
+	}
 }

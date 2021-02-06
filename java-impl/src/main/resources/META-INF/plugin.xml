@@ -729,6 +729,7 @@
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.StackTraceElementObjectRenderer"/>
 
 		<augmentProvider implementation="consulo.java.psi.augment.JavaEnumAugmentProvider"/>
+		<augmentProvider implementation="com.intellij.psi.impl.RecordAugmentProvider"/>
 
 		<typeAnnotationModifier implementation="com.intellij.codeInsight.NullityAnnotationModifier"/>
 
@@ -878,8 +879,9 @@
 
 		<applicationService serviceInterface="com.intellij.codeInspection.reference.RefJavaUtil"
 							serviceImplementation="com.intellij.codeInspection.reference.RefJavaUtilImpl"/>
-		<applicationService serviceInterface="com.intellij.psi.EmptySubstitutor"
-							serviceImplementation="com.intellij.psi.impl.EmptySubstitutorImpl"/>
+
+		<applicationService serviceInterface="com.intellij.psi.PsiSubstitutorFactory"
+							serviceImplementation="com.intellij.psi.impl.PsiSubstitutorFactoryImpl"/>
 
 		<applicationService serviceInterface="com.intellij.codeInsight.intention.QuickFixFactory"
 							serviceImplementation="com.intellij.codeInsight.intention.impl.config.QuickFixFactoryImpl"/>
@@ -1717,6 +1719,7 @@
 		<internalFileTemplate name="Java Class"/>
 		<internalFileTemplate name="Java Interface"/>
 		<internalFileTemplate name="Java Enum"/>
+		<internalFileTemplate name="Java Record"/>
 		<internalFileTemplate name="Java AnnotationType" subject="@interface"/>
 		<internalFileTemplate name="package-info"/>
 		<internalFileTemplate name="module-info"/>
@@ -2035,7 +2038,7 @@
 		<textEditorHighlightingPassFactory implementation="com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory"/>
 
 		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jar.JarFileSystemImpl"/>
-		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jrt.JrtFileSystemImpl" />
+		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jrt.JrtFileSystemImpl"/>
 
 		<applicationService serviceInterface="com.intellij.codeInsight.generation.OverrideImplementExploreUtil$MemberImplementorExplorersProvider"
 							serviceImplementation="com.intellij.codeInsight.generation.MemberImplementorExplorersProviderImpl"/>

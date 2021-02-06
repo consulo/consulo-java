@@ -56,7 +56,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	 *
 	 * @return the qualified name of the class, or null for anonymous and local classes, and for type parameters
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	String getQualifiedName();
 
 	/**
@@ -81,6 +81,16 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	boolean isEnum();
 
 	/**
+	 * Checks if the class is a record.
+	 *
+	 * @return true if the class is an record, false otherwise.
+	 */
+	default boolean isRecord()
+	{
+		return false;
+	}
+
+	/**
 	 * Returns the list of classes that this class or interface extends.
 	 *
 	 * @return the extends list, or null for anonymous classes.
@@ -93,7 +103,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	 *
 	 * @return the implements list, or null for anonymous classes
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiReferenceList getImplementsList();
 
 	/**
@@ -232,7 +242,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	 * @param checkBases    if true, the method is also searched in the base classes of the class.
 	 * @return the method instance, or null if the method cannot be found.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiMethod findMethodBySignature(PsiMethod patternMethod, boolean checkBases);
 
 	/**
@@ -292,7 +302,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	 *
 	 * @return the token instance, or null if the token is missing in the source code file.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiElement getLBrace();
 
 	/**
@@ -300,7 +310,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	 *
 	 * @return the token instance, or null if the token is missing in the source code file.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiElement getRBrace();
 
 	/**
@@ -354,7 +364,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	 * @return the containing class, or null if the class is not an inner class.
 	 */
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	PsiClass getContainingClass();
 
 	/**
@@ -389,5 +399,17 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
 	default JvmReferenceType[] getInterfaceTypes()
 	{
 		return getClassInterfaces(this);
+	}
+
+	@Nonnull
+	default PsiRecordComponent  [] getRecordComponents()
+	{
+		return PsiRecordComponent.EMPTY_ARRAY;
+	}
+
+	@Nullable
+	default PsiRecordHeader getRecordHeader()
+	{
+		return null;
 	}
 }

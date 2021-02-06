@@ -19,7 +19,6 @@ import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
@@ -42,9 +41,10 @@ import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.psi.augment.JavaEnumAugmentProvider;
 import consulo.java.psi.impl.java.stub.PsiClassLevelDeclarationStatementStub;
+import consulo.logging.Logger;
 import consulo.util.dataholder.UserDataHolder;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,7 +53,7 @@ import java.util.Map;
 
 public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements PsiExtensibleClass, PsiQualifiedNamedElement, Queryable
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiClassImpl");
+	private static final Logger LOG = Logger.getInstance(PsiClassImpl.class);
 
 	private final ClassInnerStuffCache myInnersCache = new ClassInnerStuffCache(this);
 	private volatile String myCachedName;
@@ -582,6 +582,19 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Override
+	public boolean isRecord()
+	{
+		final PsiClassStub stub = getGreenStub();
+		if(stub != null)
+		{
+			return stub.isRecord();
+		}
+
+		final ASTNode keyword = getNode().findChildByRole(ChildRole.CLASS_OR_INTERFACE_KEYWORD);
+		return keyword != null && keyword.getElementType() == JavaTokenType.RECORD_KEYWORD;
+	}
+
+	@Override
 	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
@@ -815,5 +828,19 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 		{
 			((Queryable) file).putInfo(info);
 		}
+	}
+
+	@Override
+	@Nonnull
+	public PsiRecordComponent [] getRecordComponents()
+	{
+		return myInnersCache.getRecordComponents();
+	}
+
+	@Override
+	@Nullable
+	public PsiRecordHeader getRecordHeader()
+	{
+		return getStubOrPsiChild(JavaStubElementTypes.RECORD_HEADER);
 	}
 }

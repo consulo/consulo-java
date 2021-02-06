@@ -3,18 +3,21 @@ package com.intellij.lang.java.parser;
 
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilderUtil;
 import com.intellij.openapi.util.Pair;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ILazyParseableElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.text.CharArrayUtil;
+import org.jetbrains.annotations.PropertyKey;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jetbrains.annotations.PropertyKey;
 
 import static com.intellij.lang.PsiBuilderUtil.expect;
 import static com.intellij.lang.java.parser.JavaParserUtil.*;
@@ -71,7 +74,29 @@ public class DeclarationParser
 	@Nullable
 	private PsiBuilder.Marker parseClassFromKeyword(PsiBuilder builder, PsiBuilder.Marker declaration, boolean isAnnotation, Context context)
 	{
-		final IElementType keywordTokenType = builder.getTokenType();
+		IElementType keywordTokenType = builder.getTokenType();
+		final boolean isRecord = isRecordToken(builder, keywordTokenType);
+		if(isRecord)
+		{
+			if(builder.lookAhead(1) != JavaTokenType.IDENTIFIER)
+			{
+				declaration.drop();
+				return null;
+			}
+			final IElementType afterIdent = builder.lookAhead(2);
+			// No parser recovery for local records without < or ( to support light stubs
+			// (look at com.intellij.psi.impl.source.JavaLightStubBuilder.CodeBlockVisitor.visit)
+			if(context == Context.CODE_BLOCK && afterIdent != JavaTokenType.LPARENTH && afterIdent != JavaTokenType.LT)
+			{
+				// skipping record kw and identifier
+				PsiBuilderUtil.advance(builder, 2);
+				error(builder, JavaErrorMessages.message("expected.lt.or.lparen"));
+				declaration.drop();
+				return null;
+			}
+			builder.remapCurrentToken(JavaTokenType.RECORD_KEYWORD);
+			keywordTokenType = JavaTokenType.RECORD_KEYWORD;
+		}
 		assert ElementType.CLASS_KEYWORD_BIT_SET.contains(keywordTokenType) : keywordTokenType;
 		builder.advanceLexer();
 		final boolean isEnum = (keywordTokenType == JavaTokenType.ENUM_KEYWORD);
@@ -85,8 +110,22 @@ public class DeclarationParser
 
 		final ReferenceParser refParser = myParser.getReferenceParser();
 		refParser.parseTypeParameters(builder);
+
+		if(builder.getTokenType() == JavaTokenType.LPARENTH)
+		{
+			parseElementList(builder, ListType.RECORD_COMPONENTS);
+		}
+
 		refParser.parseReferenceList(builder, JavaTokenType.EXTENDS_KEYWORD, JavaElementType.EXTENDS_LIST, JavaTokenType.COMMA);
 		refParser.parseReferenceList(builder, JavaTokenType.IMPLEMENTS_KEYWORD, JavaElementType.IMPLEMENTS_LIST, JavaTokenType.COMMA);
+		if(builder.getTokenType() == JavaTokenType.IDENTIFIER && PsiKeyword.PERMITS.equals(builder.getTokenText()))
+		{
+			builder.remapCurrentToken(JavaTokenType.PERMITS_KEYWORD);
+		}
+		if(builder.getTokenType() == JavaTokenType.PERMITS_KEYWORD)
+		{
+			refParser.parseReferenceList(builder, JavaTokenType.PERMITS_KEYWORD, JavaElementType.PERMITS_LIST, JavaTokenType.COMMA);
+		}
 
 		if(builder.getTokenType() != JavaTokenType.LBRACE)
 		{
@@ -319,7 +358,7 @@ public class DeclarationParser
 				return null;
 			}
 		}
-		else if(ElementType.CLASS_KEYWORD_BIT_SET.contains(builder.getTokenType()))
+		else if(ElementType.CLASS_KEYWORD_BIT_SET.contains(builder.getTokenType()) || isRecordToken(builder, builder.getTokenType()))
 		{
 			final PsiBuilder.Marker result = parseClassFromKeyword(builder, declaration, false, context);
 			return result != null ? result : modList;
@@ -464,6 +503,41 @@ public class DeclarationParser
 		return parseFieldOrLocalVariable(builder, declaration, declarationStart, context);
 	}
 
+	static boolean isRecordToken(PsiBuilder builder, IElementType tokenType)
+	{
+		if(tokenType == JavaTokenType.IDENTIFIER && PsiKeyword.RECORD.equals(builder.getTokenText()) &&
+				builder.lookAhead(1) == JavaTokenType.IDENTIFIER)
+		{
+			LanguageLevel level = getLanguageLevel(builder);
+			return level.isAtLeast(LanguageLevel.JDK_15_PREVIEW);
+		}
+		return false;
+	}
+
+	private static boolean isSealedToken(PsiBuilder builder, IElementType tokenType)
+	{
+		return getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_15_PREVIEW) &&
+				tokenType == JavaTokenType.IDENTIFIER &&
+				PsiKeyword.SEALED.equals(builder.getTokenText());
+	}
+
+	private static boolean isNonSealedToken(PsiBuilder builder, IElementType tokenType)
+	{
+		if(!getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_15_PREVIEW) ||
+				tokenType != JavaTokenType.IDENTIFIER ||
+				!"non".equals(builder.getTokenText()) ||
+				builder.lookAhead(1) != JavaTokenType.MINUS ||
+				builder.lookAhead(2) != JavaTokenType.IDENTIFIER)
+		{
+			return false;
+		}
+		PsiBuilder.Marker maybeNonSealed = builder.mark();
+		PsiBuilderUtil.advance(builder, 2);
+		boolean isNonSealed = PsiKeyword.SEALED.equals(builder.getTokenText());
+		maybeNonSealed.rollbackTo();
+		return isNonSealed;
+	}
+
 	@Nonnull
 	public Pair<PsiBuilder.Marker, Boolean> parseModifierList(final PsiBuilder builder)
 	{
@@ -581,7 +655,21 @@ public class DeclarationParser
 		METHOD,
 		RESOURCE,
 		LAMBDA_TYPED,
-		LAMBDA_UNTYPED
+		LAMBDA_UNTYPED,
+		RECORD_COMPONENTS;
+
+		IElementType getNodeType()
+		{
+			if(this == RESOURCE)
+			{
+				return JavaElementType.RESOURCE_LIST;
+			}
+			if(this == RECORD_COMPONENTS)
+			{
+				return JavaElementType.RECORD_HEADER;
+			}
+			return JavaElementType.PARAMETER_LIST;
+		}
 	}
 
 	private void parseElementList(PsiBuilder builder, ListType type)
@@ -654,9 +742,10 @@ public class DeclarationParser
 			}
 			else
 			{
-				final PsiBuilder.Marker listElement = resources ? parseResource(builder) :
-						lambda ? parseLambdaParameter(builder, type == ListType.LAMBDA_TYPED) :
-								parseParameter(builder, true, false, false);
+				final PsiBuilder.Marker listElement = type == ListType.RECORD_COMPONENTS ? parseParameterOrRecordComponent(builder, true, false, false, false) :
+						resources ? parseResource(builder) :
+								lambda ? parseLambdaParameter(builder, type == ListType.LAMBDA_TYPED) :
+										parseParameter(builder, true, false, false);
 				if(listElement != null)
 				{
 					delimiterExpected = true;
@@ -702,11 +791,17 @@ public class DeclarationParser
 			invalidElements.error(errorMessage);
 		}
 
-		done(elementList, resources ? JavaElementType.RESOURCE_LIST : JavaElementType.PARAMETER_LIST);
+		done(elementList, type.getNodeType());
 	}
 
 	@Nullable
 	public PsiBuilder.Marker parseParameter(PsiBuilder builder, boolean ellipsis, boolean disjunctiveType, boolean varType)
+	{
+		return parseParameterOrRecordComponent(builder, ellipsis, disjunctiveType, varType, true);
+	}
+
+	@Nullable
+	public PsiBuilder.Marker parseParameterOrRecordComponent(PsiBuilder builder, boolean ellipsis, boolean disjunctiveType, boolean varType, boolean isParameter)
 	{
 		int typeFlags = 0;
 		if(ellipsis)
@@ -721,7 +816,7 @@ public class DeclarationParser
 		{
 			typeFlags |= ReferenceParser.VAR_TYPE;
 		}
-		return parseListElement(builder, true, typeFlags, false);
+		return parseListElement(builder, true, typeFlags, isParameter ? JavaElementType.PARAMETER : JavaElementType.RECORD_COMPONENT);
 	}
 
 	@Nullable
@@ -738,7 +833,7 @@ public class DeclarationParser
 
 		marker.rollbackTo();
 
-		return parseListElement(builder, true, ReferenceParser.VAR_TYPE, true);
+		return parseListElement(builder, true, ReferenceParser.VAR_TYPE, JavaElementType.RESOURCE_VARIABLE);
 	}
 
 	@Nullable
@@ -749,11 +844,11 @@ public class DeclarationParser
 		{
 			flags |= ReferenceParser.VAR_TYPE;
 		}
-		return parseListElement(builder, typed, flags, false);
+		return parseListElement(builder, typed, flags, JavaElementType.PARAMETER);
 	}
 
 	@Nullable
-	private PsiBuilder.Marker parseListElement(PsiBuilder builder, boolean typed, int typeFlags, boolean resource)
+	private PsiBuilder.Marker parseListElement(PsiBuilder builder, boolean typed, int typeFlags, IElementType type)
 	{
 		PsiBuilder.Marker param = builder.mark();
 
@@ -801,10 +896,10 @@ public class DeclarationParser
 
 		if(expect(builder, JavaTokenType.IDENTIFIER))
 		{
-			if(!resource)
+			if(type == JavaElementType.PARAMETER || type == JavaElementType.RECORD_COMPONENT)
 			{
 				eatBrackets(builder, typeInfo != null && typeInfo.isVarArg ? "expected.rparen" : null);
-				done(param, JavaElementType.PARAMETER);
+				done(param, type);
 				return param;
 			}
 		}

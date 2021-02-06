@@ -187,30 +187,18 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
 		if(stub != null)
 		{
 			PsiType type = SoftReference.dereference(myCachedType);
-			if(type != null)
+			if(type == null)
 			{
-				return type;
+				type = JavaSharedImplUtil.createTypeFromStub(this, stub.getType());
+				myCachedType = new SoftReference<>(type);
 			}
-
-			String typeText = TypeInfo.createTypeText(stub.getType(true));
-			assert typeText != null : stub;
-			try
-			{
-				type = JavaPsiFacade.getInstance(getProject()).getParserFacade().createTypeFromText(typeText, this);
-				myCachedType = new SoftReference<PsiType>(type);
-				return type;
-			}
-			catch(IncorrectOperationException e)
-			{
-				LOG.error(e);
-				return null;
-			}
+			return type;
 		}
 
 		myCachedType = null;
 
 		PsiTypeElement typeElement = getTypeElement();
-		if(typeElement == null)
+		if(typeElement == null || isLambdaParameter() && typeElement.isInferredType())
 		{
 			assert isLambdaParameter() : this;
 			return getLambdaParameterType(this);

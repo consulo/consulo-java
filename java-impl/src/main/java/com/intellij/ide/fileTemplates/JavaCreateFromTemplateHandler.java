@@ -15,10 +15,6 @@
  */
 package com.intellij.ide.fileTemplates;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -26,18 +22,15 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiPackageStatement;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.file.JavaDirectoryServiceImpl;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
+import java.util.Map;
 
 /**
  * @author yole
@@ -51,7 +44,8 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler
 			extension = JavaFileType.INSTANCE.getDefaultExtension();
 		}
 		final String name = "myClass" + "." + extension;
-		final PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(name, JavaFileType.INSTANCE, content);
+		final PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(name, JavaFileType.INSTANCE, content, System.currentTimeMillis(), false, false);
+		psiFile.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.JDK_15_PREVIEW);
 		if(!(psiFile instanceof PsiJavaFile))
 		{
 			throw new IncorrectOperationException("This template did not produce a Java class or an interface\n" + psiFile.getText());

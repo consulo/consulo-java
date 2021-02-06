@@ -1,17 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lang.java.parser;
 
-import static com.intellij.lang.PsiBuilderUtil.expect;
-import static com.intellij.lang.java.parser.JavaParserUtil.PRECEDING_COMMENT_BINDER;
-import static com.intellij.lang.java.parser.JavaParserUtil.SPECIAL_PRECEDING_COMMENT_BINDER;
-import static com.intellij.lang.java.parser.JavaParserUtil.done;
-import static com.intellij.lang.java.parser.JavaParserUtil.exprType;
-import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
-
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.AbstractBundle;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
@@ -22,11 +11,19 @@ import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import java.util.function.Predicate;
+
+import static com.intellij.lang.PsiBuilderUtil.expect;
+import static com.intellij.lang.java.parser.JavaParserUtil.*;
 
 public class FileParser
 {
-	protected static final TokenSet IMPORT_LIST_STOPPER_SET = TokenSet.orSet(ElementType.MODIFIER_BIT_SET, TokenSet.create(JavaTokenType.CLASS_KEYWORD, JavaTokenType.INTERFACE_KEYWORD, JavaTokenType
-			.ENUM_KEYWORD, JavaTokenType.AT));
+	protected static final TokenSet IMPORT_LIST_STOPPER_SET = TokenSet.orSet(
+			ElementType.MODIFIER_BIT_SET,
+			TokenSet.create(JavaTokenType.CLASS_KEYWORD, JavaTokenType.INTERFACE_KEYWORD, JavaTokenType.ENUM_KEYWORD, JavaTokenType.AT));
 
 	private final JavaParser myParser;
 
@@ -40,7 +37,10 @@ public class FileParser
 		parseFile(builder, FileParser::stopImportListParsing, JavaErrorMessages.getInstance(), "expected.class.or.interface");
 	}
 
-	public void parseFile(@Nonnull PsiBuilder builder, @Nonnull Predicate<PsiBuilder> importListStopper, @Nonnull AbstractBundle bundle, @Nonnull String errorMessageKey)
+	public void parseFile(@Nonnull PsiBuilder builder,
+						  @Nonnull Predicate<? super PsiBuilder> importListStopper,
+						  @Nonnull AbstractBundle bundle,
+						  @Nonnull String errorMessageKey)
 	{
 		parsePackageStatement(builder);
 
@@ -106,7 +106,7 @@ public class FileParser
 	private static boolean stopImportListParsing(PsiBuilder b)
 	{
 		IElementType type = b.getTokenType();
-		if(IMPORT_LIST_STOPPER_SET.contains(type))
+		if(IMPORT_LIST_STOPPER_SET.contains(type) || DeclarationParser.isRecordToken(b, type))
 		{
 			return true;
 		}
@@ -156,7 +156,7 @@ public class FileParser
 	}
 
 	@Nonnull
-	protected Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<PsiBuilder> stopper)
+	protected Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<? super PsiBuilder> stopper)
 	{
 		PsiBuilder.Marker list = builder.mark();
 
@@ -233,6 +233,7 @@ public class FileParser
 		return statement;
 	}
 
+	@Nonnull
 	private static String error(@Nonnull AbstractBundle bundle, @Nonnull String errorMessageKey)
 	{
 		return bundle.getMessage(errorMessageKey);

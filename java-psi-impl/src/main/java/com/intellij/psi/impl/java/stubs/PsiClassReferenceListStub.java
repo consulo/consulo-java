@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,30 @@ package com.intellij.psi.impl.java.stubs;
 
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiReferenceList;
+import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.stubs.StubElement;
+import javax.annotation.Nonnull;
 
-public interface PsiClassReferenceListStub extends StubElement<PsiReferenceList> {
-  PsiClassType[] getReferencedTypes();
-  String[] getReferencedNames();
-  PsiReferenceList.Role getRole();
+public interface PsiClassReferenceListStub extends StubElement<PsiReferenceList>
+{
+	/**
+	 * @return types
+	 */
+	@Nonnull
+	PsiClassType[] getReferencedTypes();
+
+	/**
+	 * @return type names
+	 */
+	@Nonnull
+	String[] getReferencedNames();
+
+	/**
+	 * @return array of TypeInfo objects
+	 */
+	@Nonnull
+	TypeInfo[] getTypes();
+
+	@Nonnull
+	PsiReferenceList.Role getRole();
 }

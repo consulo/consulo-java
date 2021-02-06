@@ -16,9 +16,6 @@
 
 package com.intellij.ide.actions;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -31,17 +28,17 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import consulo.ui.annotation.RequiredUIAccess;
-import consulo.awt.TargetAWT;
+import com.intellij.util.PlatformIcons;
 import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
 import consulo.module.extension.ModuleExtension;
+import consulo.ui.annotation.RequiredUIAccess;
+
+import javax.annotation.Nonnull;
+import java.util.Map;
 
 /**
  * The standard "New Class" action.
@@ -61,7 +58,13 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 		builder.setTitle(JavaCoreBundle.message("action.create.new.class"));
 		builder.addKind("Class", AllIcons.Nodes.Class, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
 		builder.addKind("Interface", AllIcons.Nodes.Interface, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
-		if(PsiUtil.getLanguageLevel(directory).isAtLeast(LanguageLevel.JDK_1_5))
+
+		LanguageLevel level = PsiUtil.getLanguageLevel(directory);
+		if(level.isAtLeast(LanguageLevel.JDK_16))
+		{
+			builder.addKind("Record", JavaPsiImplIconGroup.nodesRecord(), JavaTemplateUtil.INTERNAL_RECORD_TEMPLATE_NAME);
+		}
+		if(level.isAtLeast(LanguageLevel.JDK_1_5))
 		{
 			builder.addKind("Enum", AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
 			builder.addKind("Annotation", AllIcons.Nodes.Annotationtype, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);

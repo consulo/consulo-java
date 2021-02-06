@@ -15,8 +15,6 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
@@ -36,26 +34,24 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> implements PsiParameter
 {
 	private final NotNullLazyValue<PsiTypeElement> myType;
 	private volatile String myMirrorName;
 
-	public ClsParameterImpl(@Nonnull PsiParameterStub stub)
+	public ClsParameterImpl(@Nonnull PsiParameterStub thisStub)
 	{
-		super(stub);
-		myType = new AtomicNotNullLazyValue<PsiTypeElement>()
+		super(thisStub);
+		myType = AtomicNotNullLazyValue.createValue(() ->
 		{
-			@Nonnull
-			@Override
-			protected PsiTypeElement compute()
-			{
-				PsiParameterStub stub = getStub();
-				String typeText = TypeInfo.createTypeText(stub.getType(false));
-				assert typeText != null : stub;
-				return new ClsTypeElementImpl(ClsParameterImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
-			}
-		};
+			PsiParameterStub stub = getStub();
+			String typeText = TypeInfo.createTypeText(stub.getType());
+			assert typeText != null : stub;
+			return new ClsTypeElementImpl(ClsParameterImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
+		});
 	}
 
 	@Override

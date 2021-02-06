@@ -15,14 +15,14 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.impl.source.JavaFileElementType;
 import com.intellij.psi.impl.source.tree.java.*;
 import com.intellij.psi.tree.IStubFileElementType;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -49,6 +49,9 @@ public interface JavaStubElementTypes
 
 	JavaPackageAccessibilityStatementElementType EXPORTS_STATEMENT = new JavaPackageAccessibilityStatementElementType("EXPORTS_STATEMENT");
 	JavaPackageAccessibilityStatementElementType OPENS_STATEMENT = new JavaPackageAccessibilityStatementElementType("OPENS_STATEMENT");
+
+	JavaRecordComponentElementType RECORD_COMPONENT = new JavaRecordComponentElementType();
+	JavaRecordHeaderElementType RECORD_HEADER = new JavaRecordHeaderElementType();
 
 	JavaClassElementType CLASS = new JavaClassElementType("CLASS")
 	{
@@ -123,6 +126,15 @@ public interface JavaStubElementTypes
 		public ASTNode createCompositeNode()
 		{
 			return new ReferenceListElement(this, JavaTokenType.EXTENDS_KEYWORD, PsiKeyword.EXTENDS);
+		}
+	};
+	JavaClassReferenceListElementType PERMITS_LIST = new JavaClassReferenceListElementType("PERMITS_LIST")
+	{
+		@Nonnull
+		@Override
+		public ASTNode createCompositeNode()
+		{
+			return new ReferenceListElement(this, JavaTokenType.PERMITS_KEYWORD, PsiKeyword.PERMITS);
 		}
 	};
 	JavaClassReferenceListElementType IMPLEMENTS_LIST = new JavaClassReferenceListElementType("IMPLEMENTS_LIST")

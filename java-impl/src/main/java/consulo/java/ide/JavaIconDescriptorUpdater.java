@@ -15,8 +15,6 @@
  */
 package consulo.java.ide;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -34,7 +32,10 @@ import consulo.ide.IconDescriptorUpdater;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaIcons;
 import consulo.java.module.util.JavaClassNames;
+import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
 import consulo.java.util.JavaProjectRootsUtil;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -66,6 +67,10 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater
 			else if(psiClass.isAnnotationType())
 			{
 				iconDescriptor.setMainIcon(AllIcons.Nodes.Annotationtype);
+			}
+			else if(psiClass.isRecord())
+			{
+				iconDescriptor.setMainIcon(JavaPsiImplIconGroup.nodesRecord());
 			}
 			else if(psiClass.isInterface())
 			{

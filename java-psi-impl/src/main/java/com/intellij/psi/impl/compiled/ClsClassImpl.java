@@ -1,25 +1,11 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.compiled;
 
-import static com.intellij.util.ObjectUtil.assertNotNull;
-import static java.util.Arrays.asList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.ui.Queryable;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -29,12 +15,9 @@ import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiClassStub;
+import com.intellij.psi.impl.java.stubs.PsiRecordHeaderStub;
 import com.intellij.psi.impl.java.stubs.impl.PsiClassStubImpl;
-import com.intellij.psi.impl.source.ClassInnerStuffCache;
-import com.intellij.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.PsiClassImpl;
-import com.intellij.psi.impl.source.PsiExtensibleClass;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import com.intellij.psi.impl.source.*;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.processor.MethodsProcessor;
@@ -45,6 +28,15 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.util.JavaClassNames;
 import consulo.java.psi.augment.JavaEnumAugmentProvider;
+import consulo.util.dataholder.Key;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static com.intellij.util.ObjectUtil.assertNotNull;
+import static java.util.Arrays.asList;
 
 public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiExtensibleClass, Queryable
 {
@@ -727,5 +719,22 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	public void putInfo(@Nonnull Map<String, String> info)
 	{
 		PsiClassImpl.putInfo(this, info);
+	}
+
+	@Override
+	@Nonnull
+	public PsiRecordComponent[] getRecordComponents()
+	{
+		PsiRecordHeader header = getRecordHeader();
+		return header == null ? PsiRecordComponent.EMPTY_ARRAY : header.getRecordComponents();
+	}
+
+	@Override
+	public
+	@Nullable
+	PsiRecordHeader getRecordHeader()
+	{
+		PsiRecordHeaderStub headerStub = getStub().findChildStubByType(JavaStubElementTypes.RECORD_HEADER);
+		return headerStub == null ? null : headerStub.getPsi();
 	}
 }

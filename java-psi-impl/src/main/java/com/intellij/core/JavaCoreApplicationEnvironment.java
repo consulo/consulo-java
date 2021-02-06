@@ -24,7 +24,6 @@ import com.intellij.lang.java.JavaParserDefinition;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.projectRoots.JavaVersionService;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.EmptySubstitutorImpl;
 import com.intellij.psi.impl.LanguageConstantExpressionEvaluator;
 import com.intellij.psi.impl.PsiExpressionEvaluator;
 import com.intellij.psi.impl.compiled.ClassFileStubBuilder;
@@ -55,7 +54,7 @@ public class JavaCoreApplicationEnvironment extends CoreApplicationEnvironment {
 
     myApplication.registerService(PsiPackageImplementationHelper.class, new CorePsiPackageImplementationHelper());
 
-    myApplication.registerService(EmptySubstitutor.class, new EmptySubstitutorImpl());
+    //myApplication.registerService(EmptySubstitutor.class, new EmptySubstitutorImpl());
     myApplication.registerService(JavaDirectoryService.class, createJavaDirectoryService());
     myApplication.registerService(JavaVersionService.class, new JavaVersionService());
 

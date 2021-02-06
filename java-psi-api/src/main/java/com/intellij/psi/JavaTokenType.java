@@ -155,4 +155,10 @@ public interface JavaTokenType extends TokenType
 	IElementType WITH_KEYWORD = new IJavaElementType("WITH");
 
 	IElementType VAR_KEYWORD = new IJavaElementType("VAR");
+	IElementType YIELD_KEYWORD = new IJavaElementType("YIELD");
+	IElementType RECORD_KEYWORD = new IJavaElementType("RECORD");
+
+	IElementType SEALED_KEYWORD = new IJavaElementType("SEALED");
+	IElementType NON_SEALED_KEYWORD = new IKeywordElementType("NON_SEALED");
+	IElementType PERMITS_KEYWORD = new IJavaElementType("PERMITS");
 }

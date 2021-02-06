@@ -60,7 +60,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 			protected PsiTypeElement compute()
 			{
 				PsiFieldStub stub = getStub();
-				String typeText = TypeInfo.createTypeText(stub.getType(false));
+				String typeText = TypeInfo.createTypeText(stub.getType());
 				assert typeText != null : stub;
 				return new ClsTypeElementImpl(ClsFieldImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
 			}
