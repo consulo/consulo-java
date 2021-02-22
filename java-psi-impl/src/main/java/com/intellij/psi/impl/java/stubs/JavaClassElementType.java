@@ -29,7 +29,7 @@ import java.io.IOException;
 
 public abstract class JavaClassElementType extends JavaStubElementType<PsiClassStub<?>, PsiClass>
 {
-	JavaClassElementType(@Nonnull String id)
+	public JavaClassElementType(@Nonnull String id)
 	{
 		super(id);
 	}
