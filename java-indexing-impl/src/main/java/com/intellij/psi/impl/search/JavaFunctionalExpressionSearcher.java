@@ -27,7 +27,6 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.java.stubs.JavaMethodElementType;
 import com.intellij.psi.impl.java.stubs.index.JavaMethodParameterTypesIndex;
 import com.intellij.psi.search.*;
 import com.intellij.psi.search.searches.FunctionalExpressionSearch;
@@ -222,7 +221,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 				StubIndexKey<String, PsiMethod> key = JavaMethodParameterTypesIndex.getInstance().getKey();
 				StubIndex index = StubIndex.getInstance();
 				index.processElements(key, aClass.getName(), project, useScope.intersectWith(visibleFromCandidates), PsiMethod.class, methodProcessor);
-				index.processElements(key, JavaMethodElementType.TYPE_PARAMETER_PSEUDO_NAME, project, visibleFromCandidates, PsiMethod.class, methodProcessor);
+				//broken index.processElements(key, JavaMethodElementType.TYPE_PARAMETER_PSEUDO_NAME, project, visibleFromCandidates, PsiMethod.class, methodProcessor);
 				LOG.info("#methods: " + methods.size());
 				return methods;
 			}
