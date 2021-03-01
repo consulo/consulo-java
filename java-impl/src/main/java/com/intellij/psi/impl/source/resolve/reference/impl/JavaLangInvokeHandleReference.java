@@ -15,17 +15,6 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
-
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
@@ -37,6 +26,16 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 
 /**
  * @author Pavel.Dolgov
@@ -70,29 +69,29 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
 
 			if(type != null)
 			{
-				final PsiClass psiClass = getReflectiveClass(myContext);
-				if(psiClass != null)
+				final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
+				if(reflectiveClass != null)
 				{
 					switch(type)
 					{
 						case FIND_GETTER:
 						case FIND_SETTER:
-							return resolveField(name, psiClass, JavaLangInvokeHandleReference::isNonStaticField);
+							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
 
 						case FIND_STATIC_GETTER:
 						case FIND_STATIC_SETTER:
-							return resolveField(name, psiClass, JavaLangInvokeHandleReference::isStaticField);
+							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
 
 						case FIND_VIRTUAL:
-							return resolveMethod(name, psiClass, JavaLangInvokeHandleReference::isNonStaticMethod);
+							return resolveMethod(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticMethod);
 						case FIND_STATIC:
-							return resolveMethod(name, psiClass, JavaLangInvokeHandleReference::isStaticMethod);
+							return resolveMethod(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticMethod);
 
 						case FIND_VAR_HANDLE:
-							return resolveField(name, psiClass, JavaLangInvokeHandleReference::isNonStaticField);
+							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
 
 						case FIND_STATIC_VAR_HANDLE:
-							return resolveField(name, psiClass, JavaLangInvokeHandleReference::isStaticField);
+							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
 					}
 				}
 			}
@@ -123,27 +122,27 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
 
 			if(type != null)
 			{
-				final PsiClass psiClass = getReflectiveClass(myContext);
-				if(psiClass != null)
+				final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
+				if(reflectiveClass != null)
 				{
 					switch(type)
 					{
 						case FIND_GETTER:
 						case FIND_SETTER:
-							return lookupFields(psiClass, JavaLangInvokeHandleReference::isNonStaticField);
+							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
 						case FIND_STATIC_GETTER:
 						case FIND_STATIC_SETTER:
-							return lookupFields(psiClass, JavaLangInvokeHandleReference::isStaticField);
+							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
 
 						case FIND_VIRTUAL:
-							return lookupMethods(psiClass, JavaLangInvokeHandleReference::isNonStaticMethod);
+							return lookupMethods(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticMethod);
 						case FIND_STATIC:
-							return lookupMethods(psiClass, JavaLangInvokeHandleReference::isStaticMethod);
+							return lookupMethods(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticMethod);
 
 						case FIND_VAR_HANDLE:
-							return lookupFields(psiClass, JavaLangInvokeHandleReference::isNonStaticField);
+							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
 						case FIND_STATIC_VAR_HANDLE:
-							return lookupFields(psiClass, JavaLangInvokeHandleReference::isStaticField);
+							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
 					}
 				}
 			}
@@ -203,12 +202,9 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
 		else if(object instanceof PsiField)
 		{
 			final PsiField field = (PsiField) object;
-			final String typeText = getTypeText(field.getType(), field);
-			if(typeText != null)
-			{
-				final String text = ", " + typeText + ".class";
-				replaceText(context, text);
-			}
+			final String typeText = getTypeText(field.getType());
+			final String text = ", " + typeText + ".class";
+			replaceText(context, text);
 		}
 	}
 

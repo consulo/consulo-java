@@ -15,26 +15,7 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import static com.intellij.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
-import static com.intellij.patterns.PsiJavaPatterns.psiExpression;
-import static com.intellij.patterns.PsiJavaPatterns.psiJavaElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
-import static com.intellij.patterns.StandardPatterns.or;
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
-
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.icons.AllIcons;
@@ -47,6 +28,18 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import static com.intellij.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
+import static com.intellij.patterns.PsiJavaPatterns.*;
+import static com.intellij.patterns.StandardPatterns.or;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 
 /**
  * @author Pavel.Dolgov
@@ -103,23 +96,21 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
 			if(methodName != null && METHOD_HANDLE_FACTORY_NAMES.contains(methodName))
 			{
 				final PsiExpression[] arguments = methodCall.getArgumentList().getExpressions();
-				final PsiClass psiClass = arguments.length != 0 ? getReflectiveClass(arguments[0]) : null;
-				if(psiClass != null)
+				final ReflectiveClass reflectiveClass = arguments.length != 0 ? getReflectiveClass(arguments[0]) : null;
+				if(reflectiveClass != null)
 				{
-
 					switch(methodName)
 					{
 						case FIND_CONSTRUCTOR:
-							addConstructorSignatures(psiClass, position, result);
+							addConstructorSignatures(reflectiveClass.getPsiClass(), position, result);
 							break;
-
 						case FIND_VIRTUAL:
 						case FIND_STATIC:
 						case FIND_SPECIAL:
 							final String name = arguments.length > 1 ? computeConstantExpression(arguments[1], String.class) : null;
 							if(!StringUtil.isEmpty(name))
 							{
-								addMethodSignatures(psiClass, name, FIND_STATIC.equals(methodName), position, result);
+								addMethodSignatures(reflectiveClass.getPsiClass(), name, FIND_STATIC.equals(methodName), position, result);
 							}
 							break;
 					}
@@ -189,10 +180,10 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
 					final String fieldName = computeConstantExpression(arguments[1], String.class);
 					if(!StringUtil.isEmpty(fieldName))
 					{
-						final PsiClass psiClass = getReflectiveClass(arguments[0]);
-						if(psiClass != null)
+						final ReflectiveClass reflectiveClass = getReflectiveClass(arguments[0]);
+						if(reflectiveClass != null)
 						{
-							addFieldType(psiClass, fieldName, position, result);
+							addFieldType(reflectiveClass.getPsiClass(), fieldName, position, result);
 						}
 					}
 				}
@@ -205,15 +196,12 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
 		final PsiField field = psiClass.findFieldByName(fieldName, false);
 		if(field != null)
 		{
-			final String typeText = getTypeText(field.getType(), field);
-			if(typeText != null)
-			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(psiClass.getProject()).getElementFactory();
-				final PsiExpression expression = factory.createExpressionFromText(typeText + ".class", context);
+			final String typeText = getTypeText(field.getType());
+			final PsiElementFactory factory = JavaPsiFacade.getInstance(psiClass.getProject()).getElementFactory();
+			final PsiExpression expression = factory.createExpressionFromText(typeText + ".class", context);
 
-				final String shortType = PsiNameHelper.getShortClassName(typeText);
-				result.consume(lookupExpression(expression, AllIcons.Nodes.Class, shortType + ".class", shortType));
-			}
+			final String shortType = PsiNameHelper.getShortClassName(typeText);
+			result.consume(lookupExpression(expression, AllIcons.Nodes.Class, shortType + ".class", shortType));
 		}
 	}
 

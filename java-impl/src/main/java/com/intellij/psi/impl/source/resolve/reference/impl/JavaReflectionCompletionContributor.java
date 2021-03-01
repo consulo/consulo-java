@@ -15,29 +15,8 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import static com.intellij.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiExpression;
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
-import static com.intellij.patterns.StandardPatterns.or;
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.getParameterTypesText;
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.getReflectiveClass;
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.isPublic;
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.shortenArgumentsClassReferences;
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.withPriority;
-
-import java.util.Set;
-import java.util.function.BiConsumer;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
@@ -50,6 +29,15 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
+import java.util.function.BiConsumer;
+
+import static com.intellij.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
+import static com.intellij.patterns.PsiJavaPatterns.*;
+import static com.intellij.patterns.StandardPatterns.or;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 
 /**
  * @author Pavel.Dolgov
@@ -112,13 +100,13 @@ public class JavaReflectionCompletionContributor extends CompletionContributor
 		PsiMethodCallExpression methodCall = PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class);
 		if(methodCall != null)
 		{
-			PsiClass psiClass = getReflectiveClass(methodCall.getMethodExpression().getQualifierExpression());
-			if(psiClass != null)
+			JavaReflectionReferenceUtil.ReflectiveClass reflectiveClass = getReflectiveClass(methodCall.getMethodExpression().getQualifierExpression());
+			if(reflectiveClass != null)
 			{
 				String methodName = methodCall.getMethodExpression().getReferenceName();
 				if(methodName != null)
 				{
-					variantAdder.accept(psiClass, DECLARED_NAMES.contains(methodName));
+					variantAdder.accept(reflectiveClass.getPsiClass(), DECLARED_NAMES.contains(methodName));
 				}
 			}
 		}
