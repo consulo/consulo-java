@@ -31,6 +31,7 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.PsiUtilBase;
+import consulo.java.JavaBundle;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,8 +45,9 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
     myProject = project;
   }
 
-  public String getDisplay() {
-    return IdeBundle.message("scope.class.hierarchy");
+  @Override
+  public String getDisplayName() {
+    return JavaBundle.message("java.scope.class.hierarchy");
   }
 
   @javax.annotation.Nullable
@@ -58,7 +60,7 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
       PsiClass aClass = chooser.getSelected();
       if (aClass == null) return null;
 
-      List<PsiElement> classesToSearch = new LinkedList<PsiElement>();
+      List<PsiElement> classesToSearch = new LinkedList<>();
       classesToSearch.add(aClass);
 
       classesToSearch.addAll(ClassInheritorsSearch.search(aClass, true).findAll());
