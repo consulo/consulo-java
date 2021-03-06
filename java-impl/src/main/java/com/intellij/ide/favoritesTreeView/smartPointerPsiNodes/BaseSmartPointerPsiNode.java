@@ -15,11 +15,6 @@
  */
 package com.intellij.ide.favoritesTreeView.smartPointerPsiNodes;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ProjectViewNodeDecorator;
@@ -27,26 +22,24 @@ import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.navigation.PsiElementNavigationItem;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtilCore;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.ide.projectView.impl.nodes.PackageElement;
+import consulo.logging.Logger;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPointer> extends ProjectViewNode<Type> implements
                                                                                                                   PsiElementNavigationItem {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.ide.projectView.impl.nodes.BasePsiNode");
+  private static final Logger LOG = Logger.getInstance(BaseSmartPointerPsiNode.class);
 
   protected BaseSmartPointerPsiNode(Project project, Type value, ViewSettings viewSettings) {
     super(project, value, viewSettings);
@@ -56,7 +49,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
   @Nonnull
   public final Collection<AbstractTreeNode> getChildren() {
     PsiElement value = getPsiElement();
-    if (value == null) return new ArrayList<AbstractTreeNode>();
+    if (value == null) return new ArrayList<>();
     LOG.assertTrue(value.isValid());
     return getChildrenImpl();
   }
@@ -112,7 +105,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
       data.setAttributesKey(CodeInsightColors.DEPRECATED_ATTRIBUTES);
     }
     updateImpl(data);
-    for(ProjectViewNodeDecorator decorator: Extensions.getExtensions(ProjectViewNodeDecorator.EP_NAME, myProject)) {
+    for(ProjectViewNodeDecorator decorator: ProjectViewNodeDecorator.EP_NAME.getExtensionList(myProject)) {
       decorator.decorate(this, data);
     }
   }
@@ -149,7 +142,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
   }
 
   protected PsiElement getPsiElement(){
-    final Type value = getValue();
-    return value == null ? null : value.getElement();
+    //noinspection CastToIncompatibleInterface
+    return (PsiElement) getValue(); // automatically de-anchorized in AbstractTreeNode.getValue
   }
 }
