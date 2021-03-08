@@ -54,7 +54,7 @@ import com.intellij.util.Query;
 
 public class PackageUtil
 {
-	private static final Logger LOG = Logger.getInstance("com.intellij.ide.util.PackageUtil");
+	private static final Logger LOG = Logger.getInstance(PackageUtil.class);
 
 	@Nullable
 	public static PsiDirectory findPossiblePackageDirectoryInModule(Module module, String packageName)

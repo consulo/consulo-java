@@ -34,7 +34,7 @@ import com.intellij.util.IncorrectOperationException;
 
 public class JavaTemplateUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.template.impl.JavaTemplateUtil");
+	private static final Logger LOG = Logger.getInstance(JavaTemplateUtil.class);
 
 	private JavaTemplateUtil()
 	{

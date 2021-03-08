@@ -54,7 +54,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
  */
 public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool
 {
-	private static final Logger LOG = Logger.getInstance("#" + LambdaCanBeMethodReferenceInspection.class.getName());
+	private static final Logger LOG = Logger.getInstance(LambdaCanBeMethodReferenceInspection.class);
 
 
 	@Nls

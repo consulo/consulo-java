@@ -29,7 +29,7 @@ import com.intellij.util.ArrayUtil;
  * @author ven
  */
 public class JavaCoverageSuite extends BaseCoverageSuite {
-  private static final Logger LOG = Logger.getInstance(JavaCoverageSuite.class.getName());
+  private static final Logger LOG = Logger.getInstance(JavaCoverageSuite.class);
 
   private String[] myFilters;
   private String mySuiteToMerge;

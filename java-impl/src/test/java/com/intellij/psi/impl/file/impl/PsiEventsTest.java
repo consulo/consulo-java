@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class PsiEventsTest extends PsiTestCase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.impl.PsiEventsTest");
+  private static final Logger LOG = Logger.getInstance(PsiEventsTest.class);
 
   private VirtualFile myPrjDir1;
   private VirtualFile myPrjDir2;

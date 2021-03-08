@@ -62,7 +62,7 @@ import java.util.List;
 
 public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJavaFile
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiJavaFileBaseImpl");
+	private static final Logger LOG = Logger.getInstance(PsiJavaFileBaseImpl.class);
 	@NonNls
 	private static final String[] IMPLICIT_IMPORTS = {JavaClassNames.DEFAULT_PACKAGE};
 	private final CachedValue<MostlySingularMultiMap<String, SymbolCollectingProcessor.ResultWithContext>> myResolveCache;

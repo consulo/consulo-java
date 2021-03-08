@@ -34,7 +34,7 @@ import java.util.Map;
  * @author dsl
  */
 public class CanonicalTypes {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.CanonicalTypes");
+  private static final Logger LOG = Logger.getInstance(CanonicalTypes.class);
 
   private CanonicalTypes() { }
 

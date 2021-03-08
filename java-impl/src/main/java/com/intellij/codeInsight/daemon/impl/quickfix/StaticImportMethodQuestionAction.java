@@ -45,7 +45,7 @@ import java.util.List;
 
 public class StaticImportMethodQuestionAction<T extends PsiMember> implements QuestionAction
 {
-	private static final Logger LOG = Logger.getInstance("#" + StaticImportMethodQuestionAction.class.getName());
+	private static final Logger LOG = Logger.getInstance(StaticImportMethodQuestionAction.class);
 	private final Project myProject;
 	private final Editor myEditor;
 	private List<T> myCandidates;

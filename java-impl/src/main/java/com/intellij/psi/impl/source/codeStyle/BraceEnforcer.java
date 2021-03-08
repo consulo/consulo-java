@@ -31,7 +31,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class BraceEnforcer extends JavaRecursiveElementVisitor
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.BraceEnforcer");
+	private static final Logger LOG = Logger.getInstance(BraceEnforcer.class);
 
 	private final PostFormatProcessorHelper myPostProcessor;
 

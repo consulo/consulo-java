@@ -50,7 +50,7 @@ import java.util.*;
 
 public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements PsiReferenceExpression, SourceJavaCodeReference
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl");
+	private static final Logger LOG = Logger.getInstance(PsiReferenceExpressionImpl.class);
 	private static final ThreadLocal<Map<PsiReferenceExpression, ResolveResult[]>> ourQualifierCache = ThreadLocal.withInitial(() -> new HashMap<>());
 
 	private volatile String myCachedQName;

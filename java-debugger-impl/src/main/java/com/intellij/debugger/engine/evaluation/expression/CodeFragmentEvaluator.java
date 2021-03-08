@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class CodeFragmentEvaluator extends BlockStatementEvaluator
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.evaluation.expression.CodeFragmentEvaluator");
+	private static final Logger LOG = Logger.getInstance(CodeFragmentEvaluator.class);
 
 	private final CodeFragmentEvaluator myParentFragmentEvaluator;
 	private final Map<String, Object> mySyntheticLocals = new HashMap<>();

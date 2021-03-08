@@ -34,7 +34,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
   protected static final Logger LOG = Logger.getInstance(
-    "#com.intellij.codeInsight.daemon.impl.quickfix.CreateClassFromUsageBaseFix");
+		  CreateClassFromUsageBaseFix.class);
   protected CreateClassKind myKind;
   private final SmartPsiElementPointer<PsiJavaCodeReferenceElement> myRefElement;
 

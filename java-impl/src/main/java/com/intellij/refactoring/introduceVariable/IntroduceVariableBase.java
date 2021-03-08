@@ -100,7 +100,7 @@ import consulo.psi.PsiPackage;
  */
 public abstract class IntroduceVariableBase extends IntroduceHandlerBase
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.introduceVariable.IntroduceVariableBase");
+	private static final Logger LOG = Logger.getInstance(IntroduceVariableBase.class);
 	@NonNls
 	private static final String PREFER_STATEMENTS_OPTION = "introduce.variable.prefer.statements";
 

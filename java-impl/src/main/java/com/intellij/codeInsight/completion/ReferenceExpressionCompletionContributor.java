@@ -58,7 +58,7 @@ import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
  */
 public class ReferenceExpressionCompletionContributor
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.ReferenceExpressionCompletionContributor");
+	private static final Logger LOG = Logger.getInstance(ReferenceExpressionCompletionContributor.class);
 	private static final PsiMethodPattern OBJECT_METHOD_PATTERN = psiMethod().withName(StandardPatterns.string().oneOf("hashCode", "equals", "finalize", "wait", "notify", "notifyAll", "getClass",
 			"clone", "toString")).
 			definedInClass(JavaClassNames.JAVA_LANG_OBJECT);

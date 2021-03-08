@@ -42,7 +42,7 @@ import com.intellij.util.IncorrectOperationException;
 
 public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> implements PsiParameter
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiParameterImpl");
+	private static final Logger LOG = Logger.getInstance(PsiParameterImpl.class);
 
 	private volatile Reference<PsiType> myCachedType = null;
 

@@ -40,7 +40,7 @@ public class AppendAccessorsUsageInfo extends FixableUsageInfo{
   private final Set<PsiParameter> paramsNeedingSetters;
   private final Set<PsiParameter> paramsNeedingGetters;
   private final List<IntroduceParameterObjectProcessor.ParameterChunk> parameters;
-  private static final Logger LOGGER = Logger.getInstance("#" + AppendAccessorsUsageInfo.class.getName());
+  private static final Logger LOGGER = Logger.getInstance(AppendAccessorsUsageInfo.class);
 
 
   public AppendAccessorsUsageInfo(PsiElement psiClass, boolean generateAccessors, Set<PsiParameter> paramsNeedingGetters,

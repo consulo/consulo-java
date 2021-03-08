@@ -60,7 +60,7 @@ import java.util.*;
 
 public class GenerateMembersUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.GenerateMembersUtil");
+	private static final Logger LOG = Logger.getInstance(GenerateMembersUtil.class);
 
 	private GenerateMembersUtil()
 	{

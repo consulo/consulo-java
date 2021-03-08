@@ -50,7 +50,7 @@ import com.intellij.util.text.CharArrayUtil;
  */
 public class JavaSmartEnterProcessor extends SmartEnterProcessor
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.editorActions.smartEnter.JavaSmartEnterProcessor");
+	private static final Logger LOG = Logger.getInstance(JavaSmartEnterProcessor.class);
 
 	private static final Fixer[] ourFixers;
 	private static final EnterProcessor[] ourEnterProcessors = {

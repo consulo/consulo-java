@@ -32,7 +32,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 
 public class PsiConditionalExpressionImpl extends ExpressionPsiElement implements PsiConditionalExpression
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiConditionalExpressionImpl");
+	private static final Logger LOG = Logger.getInstance(PsiConditionalExpressionImpl.class);
 
 	public PsiConditionalExpressionImpl()
 	{

@@ -24,7 +24,7 @@ import com.intellij.openapi.diagnostic.Logger;
  * @author yole
  */
 public class GotoBreakContinueHandler extends GotoDeclarationHandlerBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.navigation.actions.GotoBreakContinueHandler"); 
+  private static final Logger LOG = Logger.getInstance(GotoBreakContinueHandler.class);
 
   @Override
   @javax.annotation.Nullable

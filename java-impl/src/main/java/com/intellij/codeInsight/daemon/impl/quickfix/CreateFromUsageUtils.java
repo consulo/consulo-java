@@ -94,7 +94,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public class CreateFromUsageUtils {
   private static final Logger LOG = Logger.getInstance(
-    "#com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils");
+		  CreateFromUsageUtils.class);
   private static final int MAX_GUESSED_MEMBERS_COUNT = 10;
 
   public static boolean isValidReference(PsiReference reference, boolean unresolvedOnly) {

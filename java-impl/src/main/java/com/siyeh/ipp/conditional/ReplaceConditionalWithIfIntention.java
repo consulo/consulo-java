@@ -34,7 +34,7 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 public class ReplaceConditionalWithIfIntention extends Intention
 {
 
-	private static final Logger LOG = Logger.getInstance("#" + ReplaceConditionalWithIfIntention.class.getName());
+	private static final Logger LOG = Logger.getInstance(ReplaceConditionalWithIfIntention.class);
 
 	@Override
 	@Nonnull

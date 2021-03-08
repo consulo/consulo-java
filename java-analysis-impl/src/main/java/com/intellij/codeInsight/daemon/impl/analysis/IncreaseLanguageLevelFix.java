@@ -44,7 +44,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class IncreaseLanguageLevelFix implements IntentionAction
 {
-	private static final Logger LOG = Logger.getInstance("#" + IncreaseLanguageLevelFix.class.getName());
+	private static final Logger LOG = Logger.getInstance(IncreaseLanguageLevelFix.class);
 
 	private final LanguageLevel myLevel;
 

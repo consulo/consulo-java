@@ -35,7 +35,7 @@ import java.util.HashSet;
  */
 public class ThrowSearchUtil {
 
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.ThrowSearchUtil");
+  private static final Logger LOG = Logger.getInstance(ThrowSearchUtil.class);
 
   private ThrowSearchUtil() {
   }

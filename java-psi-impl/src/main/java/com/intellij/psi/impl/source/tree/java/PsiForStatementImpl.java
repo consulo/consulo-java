@@ -33,7 +33,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.util.IncorrectOperationException;
 
 public class PsiForStatementImpl extends CompositePsiElement implements PsiForStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiForStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiForStatementImpl.class);
 
   public PsiForStatementImpl() {
     super(FOR_STATEMENT);

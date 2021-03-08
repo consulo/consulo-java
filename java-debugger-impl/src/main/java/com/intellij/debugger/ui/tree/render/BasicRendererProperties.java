@@ -24,7 +24,7 @@ import com.intellij.openapi.util.JDOMExternalizerUtil;
 
 public final class BasicRendererProperties implements Cloneable
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.BasicRendererProperties");
+	private static final Logger LOG = Logger.getInstance(BasicRendererProperties.class);
 
 	private static final
 	@NonNls

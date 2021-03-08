@@ -44,7 +44,7 @@ import consulo.java.JavaRegistry;
  */
 public class MethodReturnValueWatcher
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.requests.MethodReturnValueWatcher");
+	private static final Logger LOG = Logger.getInstance(MethodReturnValueWatcher.class);
 	private
 	@Nullable
 	Method myLastExecutedMethod;

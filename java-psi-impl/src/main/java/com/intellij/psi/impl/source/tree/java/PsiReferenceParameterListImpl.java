@@ -30,7 +30,7 @@ import com.intellij.util.CharTable;
  *  @author dsl
  */
 public class PsiReferenceParameterListImpl extends CompositePsiElement implements PsiReferenceParameterList {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiReferenceParameterListImpl");
+  private static final Logger LOG = Logger.getInstance(PsiReferenceParameterListImpl.class);
 
   public PsiReferenceParameterListImpl() {
     super(JavaElementType.REFERENCE_PARAMETER_LIST);

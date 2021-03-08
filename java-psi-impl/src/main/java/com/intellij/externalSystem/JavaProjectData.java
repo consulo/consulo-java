@@ -38,7 +38,7 @@ public class JavaProjectData extends AbstractExternalEntityData {
   @Nonnull
   public static final Key<JavaProjectData> KEY = Key.create(JavaProjectData.class, ProjectKeys.PROJECT.getProcessingWeight() + 1);
 
-  private static final Logger LOG = Logger.getInstance("#" + JavaProjectData.class.getName());
+  private static final Logger LOG = Logger.getInstance(JavaProjectData.class);
 
   private static final long serialVersionUID = 1L;
 

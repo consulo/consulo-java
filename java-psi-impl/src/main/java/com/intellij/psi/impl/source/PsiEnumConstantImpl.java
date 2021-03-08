@@ -37,7 +37,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implements PsiEnumConstant
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiEnumConstantImpl");
+	private static final Logger LOG = Logger.getInstance(PsiEnumConstantImpl.class);
 	private final MyReference myReference = new MyReference();
 
 	public PsiEnumConstantImpl(final PsiFieldStub stub)

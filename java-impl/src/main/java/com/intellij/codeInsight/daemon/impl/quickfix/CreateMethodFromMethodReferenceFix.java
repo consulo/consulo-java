@@ -35,7 +35,7 @@ import com.intellij.util.containers.ContainerUtil;
 
 public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix
 {
-	private static final Logger LOG = Logger.getInstance("#" + CreateMethodFromMethodReferenceFix.class.getName());
+	private static final Logger LOG = Logger.getInstance(CreateMethodFromMethodReferenceFix.class);
 
 	private final SmartPsiElementPointer myMethodReferenceExpression;
 

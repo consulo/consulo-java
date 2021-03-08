@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
  */
 public class AddAssertStatementFix implements LocalQuickFix
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.AddAssertStatementFix");
+	private static final Logger LOG = Logger.getInstance(AddAssertStatementFix.class);
 	private final String myText;
 
 	public AddAssertStatementFix(@Nonnull String text)

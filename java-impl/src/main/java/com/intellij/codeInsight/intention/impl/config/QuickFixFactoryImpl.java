@@ -74,7 +74,7 @@ import java.util.*;
 @Singleton
 public class QuickFixFactoryImpl extends QuickFixFactory
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.config.QuickFixFactoryImpl");
+	private static final Logger LOG = Logger.getInstance(QuickFixFactoryImpl.class);
 
 	@Nonnull
 	@Override

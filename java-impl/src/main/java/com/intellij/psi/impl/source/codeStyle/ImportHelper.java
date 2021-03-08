@@ -52,7 +52,7 @@ import consulo.psi.PsiPackage;
 
 public class ImportHelper
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.ImportHelper");
+	private static final Logger LOG = Logger.getInstance(ImportHelper.class);
 
 	private final JavaCodeStyleSettings mySettings;
 	@NonNls

@@ -29,7 +29,7 @@ import com.intellij.psi.tree.IElementType;
  * @author dsl
  */
 public class ImportStatementBaseElement extends CompositeElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ImportStatementBaseElement");
+  private static final Logger LOG = Logger.getInstance(ImportStatementBaseElement.class);
 
   protected ImportStatementBaseElement(IElementType type) {
     super(type);

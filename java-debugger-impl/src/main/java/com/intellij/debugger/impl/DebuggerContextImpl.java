@@ -41,7 +41,7 @@ import consulo.internal.com.sun.jdi.Value;
 
 public final class DebuggerContextImpl implements DebuggerContext
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.DebuggerContextImpl");
+	private static final Logger LOG = Logger.getInstance(DebuggerContextImpl.class);
 
 	public static final DebuggerContextImpl EMPTY_CONTEXT = createDebuggerContext((DebuggerSession) null, null, null, null);
 

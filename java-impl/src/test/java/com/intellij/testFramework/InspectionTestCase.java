@@ -53,7 +53,7 @@ import static org.junit.Assert.assertNotNull;
  */
 @SuppressWarnings({"HardCodedStringLiteral"})
 public abstract class InspectionTestCase extends PsiTestCase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.testFramework.InspectionTestCase");
+  private static final Logger LOG = Logger.getInstance(InspectionTestCase.class);
   private EntryPoint myUnusedCodeExtension;
   private VirtualFile ext_src;
 

@@ -46,7 +46,7 @@ import com.intellij.util.Function;
 
 public class ResetConfigurationModuleAdapter extends HyperlinkAdapter
 {
-	private static final Logger LOG = Logger.getInstance("#" + ResetConfigurationModuleAdapter.class);
+	private static final Logger LOG = Logger.getInstance(ResetConfigurationModuleAdapter.class);
 	private final Project myProject;
 	private final boolean myIsDebug;
 	private final ToolWindowManager myToolWindowManager;

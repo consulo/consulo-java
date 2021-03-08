@@ -46,7 +46,7 @@ import java.util.*;
  * @author dsl
  */
 public class ExtractSuperClassUtil {
-  private static final Logger LOG = Logger.getInstance("com.intellij.refactoring.extractSuperclass.ExtractSuperClassUtil");
+  private static final Logger LOG = Logger.getInstance(ExtractSuperClassUtil.class);
   private ExtractSuperClassUtil() {}
 
   public static PsiClass extractSuperClass(final Project project,

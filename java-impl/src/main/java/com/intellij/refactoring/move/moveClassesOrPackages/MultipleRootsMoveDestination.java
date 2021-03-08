@@ -32,7 +32,7 @@ import java.util.Collection;
  */
 public class MultipleRootsMoveDestination extends AutocreatingMoveDestination {
   private static final Logger LOG = Logger.getInstance(
-    "#com.intellij.refactoring.move.moveClassesOrPackages.MultipleRootsMoveDestination");
+		  MultipleRootsMoveDestination.class);
 
   public MultipleRootsMoveDestination(PackageWrapper aPackage) {
     super(aPackage);

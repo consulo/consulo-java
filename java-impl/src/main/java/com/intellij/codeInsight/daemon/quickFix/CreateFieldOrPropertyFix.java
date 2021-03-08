@@ -44,7 +44,7 @@ import java.util.List;
  * @author peter
 */
 public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance("com.intellij.codeInsight.daemon.quickFix.CreateFieldOrPropertyFix");
+  private static final Logger LOG = Logger.getInstance(CreateFieldOrPropertyFix.class);
 
   private final PsiClass myClass;
   private final String myName;

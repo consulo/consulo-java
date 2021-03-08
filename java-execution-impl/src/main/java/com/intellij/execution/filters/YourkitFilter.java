@@ -39,7 +39,7 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.ui.components.JBList;
 
 public class YourkitFilter implements Filter{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.execution.filters.YourkitFilter");
+  private static final Logger LOG = Logger.getInstance(YourkitFilter.class);
 
   private final Project myProject;
 

@@ -39,7 +39,7 @@ import org.jdom.Element;
 @SuppressWarnings({"HardCodedStringLiteral"})
 @Deprecated
 public class XMLExportUtl {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.util.XMLExportUtl");
+  private static final Logger LOG = Logger.getInstance(XMLExportUtl.class);
 
   private XMLExportUtl() {
   }

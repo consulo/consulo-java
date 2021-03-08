@@ -55,7 +55,7 @@ import consulo.java.JavaQuickFixBundle;
  * @author peter
  */
 public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.quickFix.CreateClassOrPackageFix");
+  private static final Logger LOG = Logger.getInstance(CreateClassOrPackageFix.class);
   private final List<PsiDirectory> myWritableDirectoryList;
   private final String myPresentation;
 

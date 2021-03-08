@@ -28,7 +28,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhileStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiWhileStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiWhileStatementImpl.class);
 
   public PsiWhileStatementImpl() {
     super(WHILE_STATEMENT);

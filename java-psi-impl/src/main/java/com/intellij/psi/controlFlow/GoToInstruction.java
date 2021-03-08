@@ -18,7 +18,7 @@ package com.intellij.psi.controlFlow;
 import com.intellij.openapi.diagnostic.Logger;
 
 public class GoToInstruction extends BranchingInstruction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.controlFlow.GoToInstruction");
+  private static final Logger LOG = Logger.getInstance(GoToInstruction.class);
 
   public final boolean isReturn; //true if goto has been generated as a result of return statement
 

@@ -34,7 +34,7 @@ import consulo.internal.com.sun.jdi.VMDisconnectedException;
  */
 public abstract class InvokeThread<E extends PrioritizedTask>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.InvokeThread");
+	private static final Logger LOG = Logger.getInstance(InvokeThread.class);
 
 	private static final ThreadLocal<WorkerThreadRequest> ourWorkerRequest = new ThreadLocal<WorkerThreadRequest>();
 

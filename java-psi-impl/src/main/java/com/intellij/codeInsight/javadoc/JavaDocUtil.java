@@ -32,7 +32,7 @@ import com.intellij.util.IncorrectOperationException;
 
 public class JavaDocUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.javadoc.JavaDocUtil");
+	private static final Logger LOG = Logger.getInstance(JavaDocUtil.class);
 
 	private static final
 	@NonNls

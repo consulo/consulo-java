@@ -31,7 +31,7 @@ import com.intellij.psi.util.PsiTreeUtil;
  */
 public class CollapseBlockHandler implements CodeInsightActionHandler {
   public static final String ourPlaceHolderText = "{...}";
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.folding.impl.CollapseBlockHandler");
+  private static final Logger LOG = Logger.getInstance(CollapseBlockHandler.class);
 
   @Override
   public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {

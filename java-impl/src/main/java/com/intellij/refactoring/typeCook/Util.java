@@ -34,7 +34,7 @@ import java.util.Set;
  * To change this template use Options | File Templates.
  */
 public class Util {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.typeCook.Util");
+  private static final Logger LOG = Logger.getInstance(Util.class);
 
   public static PsiType createArrayType(PsiType theType, int level) {
     while (level-- > 0) {

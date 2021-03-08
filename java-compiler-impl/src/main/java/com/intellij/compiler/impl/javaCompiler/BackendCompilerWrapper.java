@@ -101,7 +101,7 @@ import consulo.util.dataholder.Key;
  */
 public class BackendCompilerWrapper
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.BackendCompilerWrapper");
+	private static final Logger LOG = Logger.getInstance(BackendCompilerWrapper.class);
 
 	private final BackendCompiler myCompiler;
 

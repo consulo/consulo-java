@@ -36,7 +36,7 @@ import com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable;
  */
 public class TypeEqualityConstraint implements ConstraintFormula
 {
-	private static final Logger LOG = Logger.getInstance("#" + TypeEqualityConstraint.class.getName());
+	private static final Logger LOG = Logger.getInstance(TypeEqualityConstraint.class);
 	private PsiType myT;
 	private PsiType myS;
 

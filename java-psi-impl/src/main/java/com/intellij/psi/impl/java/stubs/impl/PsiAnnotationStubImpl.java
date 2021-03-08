@@ -32,7 +32,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author max
  */
 public class PsiAnnotationStubImpl extends StubBase<PsiAnnotation> implements PsiAnnotationStub {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.java.stubs.impl.PsiAnnotationStubImpl");
+  private static final Logger LOG = Logger.getInstance(PsiAnnotationStubImpl.class);
 
   private final String myText;
   private SoftReference<PsiAnnotation> myParsedFromRepository;

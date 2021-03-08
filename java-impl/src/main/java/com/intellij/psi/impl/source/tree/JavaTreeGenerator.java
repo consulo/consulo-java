@@ -43,7 +43,7 @@ import com.intellij.util.CharTable;
  */
 public class JavaTreeGenerator implements TreeGenerator
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.JavaTreeGenerator");
+	private static final Logger LOG = Logger.getInstance(JavaTreeGenerator.class);
 
 	private static final JavaParserUtil.ParserWrapper MOD_LIST = new JavaParserUtil.ParserWrapper()
 	{

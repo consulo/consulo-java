@@ -28,7 +28,7 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 import javax.annotation.Nullable;
 
 public class InferLambdaParameterTypeIntention extends Intention {
-  private static final Logger LOG = Logger.getInstance("#" + InferLambdaParameterTypeIntention.class.getName());
+  private static final Logger LOG = Logger.getInstance(InferLambdaParameterTypeIntention.class);
   private String myInferredTypesText;
 
   @Nonnull

@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class DeannotateIntentionAction implements IntentionAction {
-  private static final Logger LOG = Logger.getInstance("#" + DeannotateIntentionAction.class.getName());
+  private static final Logger LOG = Logger.getInstance(DeannotateIntentionAction.class);
   private String myAnnotationName = null;
 
   @Override

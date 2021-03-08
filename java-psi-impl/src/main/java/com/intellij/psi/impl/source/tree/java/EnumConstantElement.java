@@ -28,7 +28,7 @@ import com.intellij.psi.tree.IElementType;
  * @author dsl
  */
 public class EnumConstantElement extends CompositeElement implements Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.EnumConstantElement");
+  private static final Logger LOG = Logger.getInstance(EnumConstantElement.class);
   public EnumConstantElement() {
     super(ENUM_CONSTANT);
   }

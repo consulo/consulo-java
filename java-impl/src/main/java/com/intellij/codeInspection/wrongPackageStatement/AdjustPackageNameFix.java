@@ -35,7 +35,7 @@ import com.intellij.psi.PsiPackageStatement;
 import com.intellij.util.IncorrectOperationException;
 
 public class AdjustPackageNameFix implements LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.wrongPackageStatement.AdjustPackageNameFix");
+  private static final Logger LOG = Logger.getInstance(AdjustPackageNameFix.class);
   private final String myName;
 
   public AdjustPackageNameFix(String targetPackage) {

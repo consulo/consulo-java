@@ -59,7 +59,7 @@ import com.intellij.util.IncorrectOperationException;
 
 public class ExtractMethodHandler implements RefactoringActionHandler
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractMethod.ExtractMethodHandler");
+	private static final Logger LOG = Logger.getInstance(ExtractMethodHandler.class);
 
 	public static final String REFACTORING_NAME = RefactoringBundle.message("extract.method.title");
 

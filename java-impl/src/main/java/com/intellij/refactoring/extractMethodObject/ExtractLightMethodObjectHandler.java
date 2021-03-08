@@ -46,7 +46,7 @@ import com.intellij.util.containers.ContainerUtil;
 
 public class ExtractLightMethodObjectHandler
 {
-	private static final Logger LOG = Logger.getInstance("#" + ExtractLightMethodObjectHandler.class.getName());
+	private static final Logger LOG = Logger.getInstance(ExtractLightMethodObjectHandler.class);
 
 	public static class ExtractedData
 	{

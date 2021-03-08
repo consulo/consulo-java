@@ -31,7 +31,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiExpressionListStatementImpl extends CompositePsiElement implements PsiExpressionListStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiExpressionListStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiExpressionListStatementImpl.class);
 
   public PsiExpressionListStatementImpl() {
     super(EXPRESSION_LIST_STATEMENT);

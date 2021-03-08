@@ -34,7 +34,7 @@ import java.util.Collection;
  * @author ven
  */
 public class BringVariableIntoScopeFix implements IntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.BringVariableIntoScopeFix");
+  private static final Logger LOG = Logger.getInstance(BringVariableIntoScopeFix.class);
   private final PsiReferenceExpression myUnresolvedReference;
   private PsiLocalVariable myOutOfScopeVariable;
 

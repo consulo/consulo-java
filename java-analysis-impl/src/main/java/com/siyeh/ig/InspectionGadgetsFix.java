@@ -42,7 +42,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
 
   public static final InspectionGadgetsFix[] EMPTY_ARRAY = {};
   private static final Logger LOG =
-    Logger.getInstance("#com.siyeh.ig.InspectionGadgetsFix");
+    Logger.getInstance(InspectionGadgetsFix.class);
 
   private boolean myOnTheFly = false;
 

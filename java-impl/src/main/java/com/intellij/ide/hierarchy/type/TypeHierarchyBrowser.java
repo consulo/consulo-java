@@ -42,7 +42,7 @@ import com.intellij.psi.presentation.java.ClassPresentationUtil;
 
 public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.ide.hierarchy.type.TypeHierarchyBrowser");
+	private static final Logger LOG = Logger.getInstance(TypeHierarchyBrowser.class);
 
 
 	public TypeHierarchyBrowser(final Project project, final PsiClass psiClass)

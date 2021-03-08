@@ -38,7 +38,7 @@ import consulo.ui.image.Image;
  */
 public abstract class NodeRendererImpl implements NodeRenderer
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.NodeRendererImpl");
+	private static final Logger LOG = Logger.getInstance(NodeRendererImpl.class);
 	protected BasicRendererProperties myProperties;
 
 	protected NodeRendererImpl()

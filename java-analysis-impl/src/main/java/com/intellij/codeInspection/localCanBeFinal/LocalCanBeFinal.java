@@ -42,7 +42,7 @@ import java.util.List;
  * @author max
  */
 public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.localCanBeFinal.LocalCanBeFinal");
+  private static final Logger LOG = Logger.getInstance(LocalCanBeFinal.class);
 
   public boolean REPORT_VARIABLES = true;
   public boolean REPORT_PARAMETERS = true;

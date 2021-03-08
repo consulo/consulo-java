@@ -48,7 +48,7 @@ import com.intellij.psi.util.PsiTreeUtil;
  */
 public class FileHeaderChecker
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.defaultFileTemplateUsage.FileHeaderChecker");
+	private static final Logger LOG = Logger.getInstance(FileHeaderChecker.class);
 
 	static ProblemDescriptor checkFileHeader(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean onTheFly)
 	{

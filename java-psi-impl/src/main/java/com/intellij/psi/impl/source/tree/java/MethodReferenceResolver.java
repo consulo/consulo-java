@@ -41,7 +41,7 @@ import com.intellij.util.SmartList;
 
 public class MethodReferenceResolver implements ResolveCache.PolyVariantContextResolver<PsiMethodReferenceExpressionImpl>
 {
-	private static final Logger LOG = Logger.getInstance("#" + MethodReferenceResolver.class.getName());
+	private static final Logger LOG = Logger.getInstance(MethodReferenceResolver.class);
 
 	@Nonnull
 	@Override

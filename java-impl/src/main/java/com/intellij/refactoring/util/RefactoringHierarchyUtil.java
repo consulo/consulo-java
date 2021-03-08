@@ -39,7 +39,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class RefactoringHierarchyUtil {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.RefactoringHierarchyUtil");
+  private static final Logger LOG = Logger.getInstance(RefactoringHierarchyUtil.class);
 
   private static final List<? extends PsiType> PRIMITIVE_TYPES = Arrays.asList(
       PsiType.BYTE, PsiType.CHAR, PsiType.SHORT, PsiType.INT, PsiType.LONG, PsiType.FLOAT, PsiType.DOUBLE

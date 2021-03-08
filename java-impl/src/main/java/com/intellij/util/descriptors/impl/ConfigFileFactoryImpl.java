@@ -48,7 +48,7 @@ import com.intellij.util.descriptors.ConfigFileVersion;
 @Singleton
 public class ConfigFileFactoryImpl extends ConfigFileFactory
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.util.descriptors.impl.ConfigFileFactoryImpl");
+	private static final Logger LOG = Logger.getInstance(ConfigFileFactoryImpl.class);
 
 	@Override
 	public ConfigFileMetaDataProvider createMetaDataProvider(final ConfigFileMetaData... metaDatas)

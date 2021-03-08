@@ -37,7 +37,7 @@ import java.util.Collections;
  * @author cdr
  */
 public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMethodAction {
-  private static final Logger LOG = Logger.getInstance("#" + MoveInitializerToSetUpMethodAction.class.getName());
+  private static final Logger LOG = Logger.getInstance(MoveInitializerToSetUpMethodAction.class);
 
   @Override
   @Nonnull

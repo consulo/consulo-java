@@ -64,7 +64,7 @@ import static com.intellij.psi.PsiAnnotation.TargetType;
 
 public class PsiImplUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.PsiImplUtil");
+	private static final Logger LOG = Logger.getInstance(PsiImplUtil.class);
 
 	private PsiImplUtil()
 	{

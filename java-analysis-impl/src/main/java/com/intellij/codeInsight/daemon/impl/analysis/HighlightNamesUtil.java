@@ -44,7 +44,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 public class HighlightNamesUtil
 {
-	private static final Logger LOG = Logger.getInstance("#" + HighlightNamesUtil.class.getName());
+	private static final Logger LOG = Logger.getInstance(HighlightNamesUtil.class);
 
 	@javax.annotation.Nullable
 	static HighlightInfo highlightMethodName(@Nonnull PsiMethod method, @Nonnull PsiElement elementToHighlight, final boolean isDeclaration, @Nonnull TextAttributesScheme colorsScheme)

@@ -35,7 +35,7 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 
 public class EncapsulateFieldsHandler implements RefactoringActionHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.encapsulateFields.EncapsulateFieldsHandler");
+  private static final Logger LOG = Logger.getInstance(EncapsulateFieldsHandler.class);
   public static final String REFACTORING_NAME = RefactoringBundle.message("encapsulate.fields.title");
 
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {

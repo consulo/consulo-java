@@ -79,7 +79,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   private final PsiElement[] myElementsToMove;
   private final MoveCallback myMoveCallback;
 
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog");
+  private static final Logger LOG = Logger.getInstance(MoveClassesOrPackagesDialog.class);
 
 
   private JLabel myNameLabel;

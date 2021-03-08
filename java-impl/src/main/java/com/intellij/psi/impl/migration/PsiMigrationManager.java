@@ -30,7 +30,7 @@ import com.intellij.psi.impl.PsiManagerImpl;
 
 @Singleton
 public class PsiMigrationManager {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.migration.PsiMigrationManager");
+  private static final Logger LOG = Logger.getInstance(PsiMigrationManager.class);
 
   public static PsiMigrationManager getInstance(Project project) {
     return ServiceManager.getService(project, PsiMigrationManager.class);

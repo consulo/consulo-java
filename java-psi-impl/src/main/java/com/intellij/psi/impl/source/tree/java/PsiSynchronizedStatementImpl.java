@@ -27,7 +27,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiSynchronizedStatementImpl extends CompositePsiElement implements PsiSynchronizedStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiSynchronizedStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiSynchronizedStatementImpl.class);
 
   public PsiSynchronizedStatementImpl() {
     super(SYNCHRONIZED_STATEMENT);

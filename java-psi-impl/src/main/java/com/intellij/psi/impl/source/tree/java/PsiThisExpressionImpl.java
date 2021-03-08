@@ -28,7 +28,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiThisExpression, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiThisExpressionImpl");
+  private static final Logger LOG = Logger.getInstance(PsiThisExpressionImpl.class);
 
   public PsiThisExpressionImpl() {
     super(THIS_EXPRESSION);

@@ -56,7 +56,7 @@ import com.intellij.util.ui.UIUtil;
 
 public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHandlerBase
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.GenerateGetterSetterHandlerBase");
+	private static final Logger LOG = Logger.getInstance(GenerateGetterSetterHandlerBase.class);
 
 	static
 	{

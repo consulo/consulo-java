@@ -47,7 +47,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author cdr
  */
 public class PermuteArgumentsFix implements IntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.PermuteArgumentsFix");
+  private static final Logger LOG = Logger.getInstance(PermuteArgumentsFix.class);
   private final PsiCall myCall;
   private final PsiCall myPermutation;
 

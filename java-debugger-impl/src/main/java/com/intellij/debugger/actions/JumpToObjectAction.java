@@ -44,7 +44,7 @@ import consulo.internal.com.sun.jdi.Value;
 
 public class JumpToObjectAction extends DebuggerAction
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.actions.JumpToObjectAction");
+	private static final Logger LOG = Logger.getInstance(JumpToObjectAction.class);
 
 	@Override
 	public void actionPerformed(AnActionEvent e)

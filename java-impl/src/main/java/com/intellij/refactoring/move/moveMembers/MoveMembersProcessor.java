@@ -67,7 +67,7 @@ import com.intellij.util.containers.MultiMap;
  */
 public class MoveMembersProcessor extends BaseRefactoringProcessor
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveMembers.MoveMembersProcessor");
+	private static final Logger LOG = Logger.getInstance(MoveMembersProcessor.class);
 
 	private PsiClass myTargetClass;
 	private final Set<PsiMember> myMembersToMove = new LinkedHashSet<PsiMember>();

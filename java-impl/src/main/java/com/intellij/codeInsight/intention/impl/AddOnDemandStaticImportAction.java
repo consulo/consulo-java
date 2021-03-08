@@ -39,7 +39,7 @@ import java.util.List;
  * @author ven
  */
 public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.AddOnDemandStaticImportAction");
+  private static final Logger LOG = Logger.getInstance(AddOnDemandStaticImportAction.class);
 
   @Override
   @Nonnull

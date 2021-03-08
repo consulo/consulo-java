@@ -39,7 +39,7 @@ import com.intellij.util.ReflectionUtil;
 import com.intellij.util.containers.IntArrayList;
 
 public class ControlFlowUtil {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.controlFlow.ControlFlowUtil");
+  private static final Logger LOG = Logger.getInstance(ControlFlowUtil.class);
 
   private static class SSAInstructionState implements Cloneable {
     private final int myWriteCount;

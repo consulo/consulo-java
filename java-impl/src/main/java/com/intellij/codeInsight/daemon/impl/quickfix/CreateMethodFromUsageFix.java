@@ -51,7 +51,7 @@ import com.intellij.util.containers.ContainerUtil;
  * @author Mike
  */
 public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.CreateMethodFromUsageFix");
+  private static final Logger LOG = Logger.getInstance(CreateMethodFromUsageFix.class);
 
   private final SmartPsiElementPointer myMethodCall;
 

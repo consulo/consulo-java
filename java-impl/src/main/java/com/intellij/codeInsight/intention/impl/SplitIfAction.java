@@ -34,7 +34,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author mike
  */
 public class SplitIfAction extends PsiElementBaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.SplitIfAction");
+  private static final Logger LOG = Logger.getInstance(SplitIfAction.class);
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {

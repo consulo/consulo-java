@@ -43,7 +43,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.InvertIfConditionAction");
+  private static final Logger LOG = Logger.getInstance(InvertIfConditionAction.class);
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {

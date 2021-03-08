@@ -47,7 +47,7 @@ import consulo.internal.com.sun.jdi.request.EventRequestManager;
 
 public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.jdi.VirtualMachineProxyImpl");
+	private static final Logger LOG = Logger.getInstance(VirtualMachineProxyImpl.class);
 	private final DebugProcessImpl myDebugProcess;
 	private final VirtualMachine myVirtualMachine;
 	private int myTimeStamp = 0;

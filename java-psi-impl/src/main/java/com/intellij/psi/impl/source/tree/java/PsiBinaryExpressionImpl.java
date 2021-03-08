@@ -31,7 +31,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
 
 public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements PsiBinaryExpression {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiBinaryExpressionImpl");
+  private static final Logger LOG = Logger.getInstance(PsiBinaryExpressionImpl.class);
 
   /** used via reflection in {@link com.intellij.psi.impl.source.tree.JavaElementType.JavaCompositeElementType#JavaCompositeElementType(java.lang.String, java.lang.Class)} */
   @SuppressWarnings("UnusedDeclaration")

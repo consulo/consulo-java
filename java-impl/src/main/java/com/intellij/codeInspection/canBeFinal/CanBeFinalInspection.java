@@ -45,7 +45,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class CanBeFinalInspection extends GlobalJavaInspectionTool {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.canBeFinal.CanBeFinalInspection");
+  private static final Logger LOG = Logger.getInstance(CanBeFinalInspection.class);
 
   public boolean REPORT_CLASSES = false;
   public boolean REPORT_METHODS = false;

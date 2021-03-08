@@ -51,7 +51,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class PushDownProcessor extends BaseRefactoringProcessor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.memberPushDown.PushDownProcessor");
+  private static final Logger LOG = Logger.getInstance(PushDownProcessor.class);
 
   private final MemberInfo[] myMemberInfos;
   private PsiClass myClass;

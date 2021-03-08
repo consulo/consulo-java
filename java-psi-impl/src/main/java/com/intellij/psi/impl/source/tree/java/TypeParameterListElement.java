@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
  * @author max
  */
 public class TypeParameterListElement extends CompositeElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.TypeParameterListElement");
+  private static final Logger LOG = Logger.getInstance(TypeParameterListElement.class);
 
   public TypeParameterListElement() {
     super(JavaElementType.TYPE_PARAMETER_LIST);

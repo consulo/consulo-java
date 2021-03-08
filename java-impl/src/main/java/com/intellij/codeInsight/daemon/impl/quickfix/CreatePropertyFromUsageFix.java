@@ -55,7 +55,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author ven
  */
 public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implements HighPriorityAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.CreatePropertyFromUsageFix");
+  private static final Logger LOG = Logger.getInstance(CreatePropertyFromUsageFix.class);
   @NonNls private static final String FIELD_VARIABLE = "FIELD_NAME_VARIABLE";
   @NonNls private static final String TYPE_VARIABLE = "FIELD_TYPE_VARIABLE";
   @NonNls private static final String GET_PREFIX = "get";

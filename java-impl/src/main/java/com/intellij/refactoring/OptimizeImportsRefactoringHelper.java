@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public class OptimizeImportsRefactoringHelper implements RefactoringHelper<Set<PsiJavaFile>> {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.OptimizeImportsRefactoringHelper");
+  private static final Logger LOG = Logger.getInstance(OptimizeImportsRefactoringHelper.class);
 
   @Override
   public Set<PsiJavaFile> prepareOperation(final UsageInfo[] usages) {

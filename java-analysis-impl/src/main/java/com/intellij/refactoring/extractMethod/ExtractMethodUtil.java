@@ -36,7 +36,7 @@ import java.util.Map;
 public class ExtractMethodUtil
 {
 	private static final Key<PsiMethod> RESOLVE_TARGET_KEY = Key.create("RESOLVE_TARGET_KEY");
-	private static final Logger LOG = Logger.getInstance("com.intellij.refactoring.extractMethod.ExtractMethodUtil");
+	private static final Logger LOG = Logger.getInstance(ExtractMethodUtil.class);
 
 	private ExtractMethodUtil()
 	{

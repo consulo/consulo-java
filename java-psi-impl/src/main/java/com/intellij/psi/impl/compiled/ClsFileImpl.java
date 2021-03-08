@@ -72,7 +72,7 @@ import java.util.Set;
 
 public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx, Queryable, PsiClassOwnerEx, PsiCompiledFile
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.compiled.ClsFileImpl");
+	private static final Logger LOG = Logger.getInstance(ClsFileImpl.class);
 
 	private static final String BANNER = "\n" + "  // IntelliJ API Decompiler stub source generated from a class file\n" + "  // Implementation of methods is not available\n" + "\n";
 

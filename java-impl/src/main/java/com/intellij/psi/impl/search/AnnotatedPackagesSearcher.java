@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 
 public class AnnotatedPackagesSearcher implements QueryExecutor<PsiJavaPackage, AnnotatedPackagesSearch.Parameters> {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.AnnotatedPackagesSearcher");
+  private static final Logger LOG = Logger.getInstance(AnnotatedPackagesSearcher.class);
 
   @Override
   public boolean execute(@Nonnull final AnnotatedPackagesSearch.Parameters p, @Nonnull final Processor<? super PsiJavaPackage> consumer) {

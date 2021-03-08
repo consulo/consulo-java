@@ -56,7 +56,7 @@ import java.util.*;
 public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin
 {
 	private final Project myProject;
-	private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.vcs.contentAnnotation.VcsContentAnnotationExceptionFilter");
+	private static final Logger LOG = Logger.getInstance(VcsContentAnnotationExceptionFilter.class);
 	private final VcsContentAnnotationSettings mySettings;
 	private final Map<VirtualFile, VcsRevisionNumber> myRevNumbersCache;
 	private final ExceptionInfoCache myCache;

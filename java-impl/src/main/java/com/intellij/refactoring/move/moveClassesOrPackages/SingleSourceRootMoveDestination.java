@@ -36,7 +36,7 @@ import java.util.Collection;
  */
 public class SingleSourceRootMoveDestination implements MoveDestination {
   private static final Logger LOG = Logger.getInstance(
-    "#com.intellij.refactoring.move.moveClassesOrPackages.SingleSourceRootMoveDestination");
+		  SingleSourceRootMoveDestination.class);
   private final PackageWrapper myPackage;
   private final PsiDirectory myTargetDirectory;
 

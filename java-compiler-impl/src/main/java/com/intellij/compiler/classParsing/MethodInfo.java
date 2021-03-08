@@ -41,7 +41,7 @@ import java.util.Objects;
 
 public class MethodInfo extends MemberInfo
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.classParsing.MethodInfo");
+	private static final Logger LOG = Logger.getInstance(MethodInfo.class);
 
 	private static final int[] EXCEPTION_INFO_UNAVAILABLE = ArrayUtil.EMPTY_INT_ARRAY;
 	public static final MethodInfo[] EMPTY_ARRAY = new MethodInfo[0];

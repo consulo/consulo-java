@@ -38,7 +38,7 @@ import com.intellij.psi.search.GlobalSearchScope;
  */
 public class CoreJavaFileManager implements JavaFileManager
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.core.CoreJavaFileManager");
+	private static final Logger LOG = Logger.getInstance(CoreJavaFileManager.class);
 
 	private final List<VirtualFile> myClasspath = new ArrayList<VirtualFile>();
 

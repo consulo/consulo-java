@@ -125,7 +125,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
 		return javaFile.getPackageStatement();
 	}
 
-	private static final Logger logger = Logger.getInstance(UpdateJavaFileCopyright.class.getName());
+	private static final Logger logger = Logger.getInstance(UpdateJavaFileCopyright.class);
 
 	public static class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider<CopyrightFileConfig>
 	{

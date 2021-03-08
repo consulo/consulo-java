@@ -37,7 +37,7 @@ import com.intellij.psi.PsiWildcardType;
 class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final String myPrimitiveName;
   private final String myBoxedTypeName;
-  private static final Logger LOG = Logger.getInstance("#" + ReplacePrimitiveWithBoxedTypeAction.class.getName());
+  private static final Logger LOG = Logger.getInstance(ReplacePrimitiveWithBoxedTypeAction.class);
 
   protected ReplacePrimitiveWithBoxedTypeAction(@Nullable PsiTypeElement element, String typeName, String boxedTypeName) {
     super(element);

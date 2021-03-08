@@ -24,7 +24,7 @@ import com.intellij.testIntegration.createTest.CreateTestAction;
 import com.intellij.util.IncorrectOperationException;
 
 public class JavaTestCreator implements TestCreator {
-  private static final Logger LOG = Logger.getInstance("com.intellij.testIntegration.JavaTestCreator");
+  private static final Logger LOG = Logger.getInstance(JavaTestCreator.class);
 
 
   @Override

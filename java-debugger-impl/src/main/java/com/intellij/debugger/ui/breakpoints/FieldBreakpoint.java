@@ -70,7 +70,7 @@ import consulo.ui.image.Image;
  */
 public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpointProperties>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.FieldBreakpoint");
+	private static final Logger LOG = Logger.getInstance(FieldBreakpoint.class);
 	private boolean myIsStatic;
 
 	@NonNls

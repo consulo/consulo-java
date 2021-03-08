@@ -41,7 +41,7 @@ import java.util.List;
 
 public class PsiScopesUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.scope.util.PsiScopesUtil");
+	private static final Logger LOG = Logger.getInstance(PsiScopesUtil.class);
 
 	private PsiScopesUtil()
 	{

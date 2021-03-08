@@ -81,7 +81,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.roots.types.BinariesOrderRootType;
 
 public class UnusedLibrariesInspection extends GlobalInspectionTool {
-  private static final Logger LOG = Logger.getInstance("#" + UnusedLibrariesInspection.class.getName());
+  private static final Logger LOG = Logger.getInstance(UnusedLibrariesInspection.class);
   private final JobDescriptor BACKWARD_ANALYSIS = new JobDescriptor(InspectionsBundle.message("unused.library.backward.analysis.job.description"));
 
   @Nullable

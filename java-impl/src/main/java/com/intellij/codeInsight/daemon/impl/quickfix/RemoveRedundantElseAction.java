@@ -32,7 +32,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author ven
  */
 public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.RemoveRedundantElseAction");
+  private static final Logger LOG = Logger.getInstance(RemoveRedundantElseAction.class);
 
   @Override
   @Nonnull

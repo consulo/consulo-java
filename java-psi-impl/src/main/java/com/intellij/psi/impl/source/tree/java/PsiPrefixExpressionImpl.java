@@ -27,7 +27,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 
 public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements PsiPrefixExpression {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiPrefixExpressionImpl");
+  private static final Logger LOG = Logger.getInstance(PsiPrefixExpressionImpl.class);
 
   public PsiPrefixExpressionImpl() {
     super(JavaElementType.PREFIX_EXPRESSION);

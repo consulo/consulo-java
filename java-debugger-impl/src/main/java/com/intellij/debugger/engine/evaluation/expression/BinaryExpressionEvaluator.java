@@ -35,7 +35,7 @@ import consulo.internal.com.sun.jdi.*;
 
 class BinaryExpressionEvaluator implements Evaluator
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.evaluation.expression.BinaryExpressionEvaluator");
+	private static final Logger LOG = Logger.getInstance(BinaryExpressionEvaluator.class);
 	private final Evaluator myLeftOperand;
 	private final Evaluator myRightOperand;
 	private final IElementType myOpType;

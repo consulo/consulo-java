@@ -50,7 +50,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 {
 	public static final Key<PsiCompiledElement> COMPILED_ELEMENT = Key.create("COMPILED_ELEMENT");
 
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.compiled.ClsElementImpl");
+	private static final Logger LOG = Logger.getInstance(ClsElementImpl.class);
 
 	private volatile Pair<TextRange, Identikit.ByType> myMirror;
 

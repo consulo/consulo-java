@@ -27,7 +27,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.util.CharTable;
 
 public class PsiArrayInitializerExpressionImpl extends ExpressionPsiElement implements PsiArrayInitializerExpression, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiArrayInitializerExpressionImpl");
+  private static final Logger LOG = Logger.getInstance(PsiArrayInitializerExpressionImpl.class);
 
   public PsiArrayInitializerExpressionImpl() {
     super(ARRAY_INITIALIZER_EXPRESSION);

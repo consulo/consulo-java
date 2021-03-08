@@ -46,7 +46,7 @@ import com.intellij.util.containers.ContainerUtil;
  * Time: 8:23:06 PM
  */
 public abstract class SourcePosition implements Navigatable{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.SourcePosition");
+  private static final Logger LOG = Logger.getInstance(SourcePosition.class);
   @Nonnull
   public abstract PsiFile getFile();
 

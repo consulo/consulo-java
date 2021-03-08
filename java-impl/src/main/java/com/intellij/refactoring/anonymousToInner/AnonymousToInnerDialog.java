@@ -48,7 +48,7 @@ import com.intellij.util.ui.FormBuilder;
 import consulo.java.module.util.JavaClassNames;
 
 class AnonymousToInnerDialog extends DialogWrapper{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.anonymousToInner.AnonymousToInnerDialog");
+  private static final Logger LOG = Logger.getInstance(AnonymousToInnerDialog.class);
 
   private final Project myProject;
   private final PsiAnonymousClass myAnonClass;

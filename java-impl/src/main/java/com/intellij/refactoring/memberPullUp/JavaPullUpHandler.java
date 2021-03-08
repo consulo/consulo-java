@@ -52,7 +52,7 @@ import com.intellij.util.containers.MultiMap;
 
 public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog.Callback, ElementsHandler
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.memberPullUp.JavaPullUpHandler");
+	private static final Logger LOG = Logger.getInstance(JavaPullUpHandler.class);
 	public static final String REFACTORING_NAME = RefactoringBundle.message("pull.members.up.title");
 	private PsiClass mySubclass;
 	private Project myProject;

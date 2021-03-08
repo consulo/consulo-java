@@ -24,7 +24,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 
 public class ClassInitializerElement extends CompositeElement implements Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ClassInitializerElement");
+  private static final Logger LOG = Logger.getInstance(ClassInitializerElement.class);
 
   public ClassInitializerElement() {
     super(CLASS_INITIALIZER);

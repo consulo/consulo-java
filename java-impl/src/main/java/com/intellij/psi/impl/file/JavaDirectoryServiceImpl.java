@@ -57,7 +57,7 @@ import consulo.java.module.extension.JavaModuleExtension;
 @Singleton
 public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.JavaDirectoryServiceImpl");
+	private static final Logger LOG = Logger.getInstance(JavaDirectoryServiceImpl.class);
 
 	@Override
 	public PsiJavaPackage getPackage(@Nonnull PsiDirectory dir)

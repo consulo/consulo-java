@@ -67,7 +67,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 public class MethodDuplicatesHandler implements RefactoringActionHandler, ContextAwareActionHandler
 {
 	public static final String REFACTORING_NAME = RefactoringBundle.message("replace.method.code.duplicates.title");
-	private static final Logger LOG = Logger.getInstance("#" + MethodDuplicatesHandler.class.getName());
+	private static final Logger LOG = Logger.getInstance(MethodDuplicatesHandler.class);
 
 	@Override
 	public boolean isAvailableForQuickList(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext)

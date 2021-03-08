@@ -31,7 +31,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiBreakStatementImpl extends CompositePsiElement implements PsiBreakStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiBreakStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiBreakStatementImpl.class);
 
   public PsiBreakStatementImpl() {
     super(BREAK_STATEMENT);

@@ -54,7 +54,7 @@ import java.util.Set;
  * @author cdr
  */
 public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.CreateLocalVarFromInstanceofAction");
+  private static final Logger LOG = Logger.getInstance(CreateLocalVarFromInstanceofAction.class);
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {

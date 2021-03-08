@@ -41,7 +41,7 @@ import consulo.internal.com.sun.jdi.*;
 
 public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl implements ThreadReferenceProxy
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.jdi.ThreadReferenceProxyImpl");
+	private static final Logger LOG = Logger.getInstance(ThreadReferenceProxyImpl.class);
 	// cached data
 	private String myName;
 	private int myFrameCount = -1;

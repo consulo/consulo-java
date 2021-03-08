@@ -45,7 +45,7 @@ import java.util.*;
  * @author yole
  */
 public class InlineParameterHandler extends JavaInlineActionHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.inline.InlineParameterHandler");
+  private static final Logger LOG = Logger.getInstance(InlineParameterHandler.class);
   public static final String REFACTORING_NAME = RefactoringBundle.message("inline.parameter.refactoring");
 
   public boolean canInlineElement(PsiElement element) {

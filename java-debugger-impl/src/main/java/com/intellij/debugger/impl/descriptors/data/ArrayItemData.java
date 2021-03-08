@@ -22,7 +22,7 @@ import consulo.internal.com.sun.jdi.ArrayReference;
 import javax.annotation.Nonnull;
 
 public final class ArrayItemData extends DescriptorData<ArrayElementDescriptorImpl>{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.descriptors.data.ArrayItemData");
+  private static final Logger LOG = Logger.getInstance(ArrayItemData.class);
 
   private final ArrayReference myArray;
   private final int myIndex;

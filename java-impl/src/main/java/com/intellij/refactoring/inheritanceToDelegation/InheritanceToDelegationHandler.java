@@ -48,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InheritanceToDelegationHandler implements RefactoringActionHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.inheritanceToDelegation.InheritanceToDelegationHandler");
+  private static final Logger LOG = Logger.getInstance(InheritanceToDelegationHandler.class);
   public static final String REFACTORING_NAME = RefactoringBundle.message("replace.inheritance.with.delegation.title");
 
   private static final MemberInfo.Filter<PsiMember> MEMBER_INFO_FILTER = new MemberInfo.Filter<PsiMember>() {

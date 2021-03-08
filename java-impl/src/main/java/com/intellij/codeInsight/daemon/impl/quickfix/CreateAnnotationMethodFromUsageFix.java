@@ -31,7 +31,7 @@ import consulo.java.JavaQuickFixBundle;
 
 public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix
 {
-	private static final Logger LOG = Logger.getInstance("#" + CreateAnnotationMethodFromUsageFix.class.getName());
+	private static final Logger LOG = Logger.getInstance(CreateAnnotationMethodFromUsageFix.class);
 
 	private final SmartPsiElementPointer<PsiNameValuePair> myNameValuePair;
 

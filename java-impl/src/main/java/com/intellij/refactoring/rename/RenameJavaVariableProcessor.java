@@ -51,7 +51,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;
 
 public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.rename.RenameJavaVariableProcessor");
+  private static final Logger LOG = Logger.getInstance(RenameJavaVariableProcessor.class);
 
   public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiVariable;

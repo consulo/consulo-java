@@ -25,7 +25,7 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
-  private static final Logger LOG = Logger.getInstance("#" + ExpandOneLineLambda2CodeBlockIntention.class.getName());
+  private static final Logger LOG = Logger.getInstance(ExpandOneLineLambda2CodeBlockIntention.class);
   @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {

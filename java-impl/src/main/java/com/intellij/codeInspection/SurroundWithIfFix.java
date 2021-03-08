@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
  */
 public class SurroundWithIfFix implements LocalQuickFix
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.SurroundWithIfFix");
+	private static final Logger LOG = Logger.getInstance(SurroundWithIfFix.class);
 	private final String myText;
 	private final String mySuffix;
 

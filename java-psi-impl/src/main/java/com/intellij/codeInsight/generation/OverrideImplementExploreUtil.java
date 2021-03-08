@@ -29,7 +29,7 @@ import consulo.java.module.util.JavaClassNames;
 
 public class OverrideImplementExploreUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.OverrideImplementExploreUtil");
+	private static final Logger LOG = Logger.getInstance(OverrideImplementExploreUtil.class);
 
 	@Nonnull
 	public static Collection<CandidateInfo> getMethodsToOverrideImplement(PsiClass aClass, boolean toImplement)

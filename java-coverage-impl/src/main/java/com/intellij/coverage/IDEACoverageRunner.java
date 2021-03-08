@@ -17,7 +17,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
  */
 public class IDEACoverageRunner extends JavaCoverageRunner
 {
-	private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class.getName());
+	private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class);
 
 	@Override
 	public ProjectData loadCoverageData(@Nonnull final File sessionDataFile, @javax.annotation.Nullable final CoverageSuite coverageSuite)

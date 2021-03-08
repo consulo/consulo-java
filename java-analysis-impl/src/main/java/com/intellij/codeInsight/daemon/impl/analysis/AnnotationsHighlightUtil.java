@@ -55,7 +55,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public class AnnotationsHighlightUtil
 {
-	private static final Logger LOG = Logger.getInstance("com.intellij.codeInsight.daemon.impl.analysis.AnnotationsHighlightUtil");
+	private static final Logger LOG = Logger.getInstance(AnnotationsHighlightUtil.class);
 
 	@javax.annotation.Nullable
 	static HighlightInfo checkNameValuePair(PsiNameValuePair pair)

@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class GenerateSuperMethodCallHandler implements CodeInsightActionHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.actions.GenerateSuperMethodCallHandler");
+  private static final Logger LOG = Logger.getInstance(GenerateSuperMethodCallHandler.class);
 
   @Override
   public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {

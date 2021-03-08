@@ -31,7 +31,7 @@ import java.util.Iterator;
 // Author: dyoma
 
 public class MethodLocation extends Location<PsiMethod> {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.execution.junit2.info.MethodLocation");
+  private static final Logger LOG = Logger.getInstance(MethodLocation.class);
   private final Project myProject;
   @Nonnull
   private final PsiMethod myMethod;

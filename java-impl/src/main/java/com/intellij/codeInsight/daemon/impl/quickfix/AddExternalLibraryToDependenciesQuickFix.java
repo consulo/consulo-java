@@ -36,7 +36,7 @@ import javax.annotation.Nonnull;
  */
 class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddExternalLibraryToDependenciesQuickFix");
+	private static final Logger LOG = Logger.getInstance(AddExternalLibraryToDependenciesQuickFix.class);
 	private final Module myCurrentModule;
 	private final ExternalLibraryDescriptor myLibraryDescriptor;
 	private final String myQualifiedClassName;

@@ -70,7 +70,7 @@ import consulo.internal.com.sun.jdi.Value;
 
 public class ArrayRenderer extends NodeRendererImpl
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.ArrayRenderer");
+	private static final Logger LOG = Logger.getInstance(ArrayRenderer.class);
 
 	@NonNls
 	public static final String UNIQUE_ID = "ArrayRenderer";

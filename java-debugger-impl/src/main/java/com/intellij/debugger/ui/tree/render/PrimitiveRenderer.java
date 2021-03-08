@@ -44,7 +44,7 @@ public class PrimitiveRenderer extends NodeRendererImpl
 	public static final
 	@NonNls
 	String UNIQUE_ID = "PrimitiveRenderer";
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.PrimitiveRenderer");
+	private static final Logger LOG = Logger.getInstance(PrimitiveRenderer.class);
 
 	public boolean SHOW_HEX_VALUE = false;
 

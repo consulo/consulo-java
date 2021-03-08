@@ -32,7 +32,7 @@ import consulo.java.module.util.JavaClassNames;
 
 public class InheritanceImplUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.InheritanceImplUtil");
+	private static final Logger LOG = Logger.getInstance(InheritanceImplUtil.class);
 
 	public static boolean isInheritor(@Nonnull final PsiClass candidateClass, @Nonnull PsiClass baseClass, final boolean checkDeep)
 	{

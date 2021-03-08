@@ -108,7 +108,7 @@ import com.intellij.util.containers.MultiMap;
 
 public class ExtractMethodProcessor implements MatchProvider
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractMethod.ExtractMethodProcessor");
+	private static final Logger LOG = Logger.getInstance(ExtractMethodProcessor.class);
 
 	protected final Project myProject;
 	private final Editor myEditor;

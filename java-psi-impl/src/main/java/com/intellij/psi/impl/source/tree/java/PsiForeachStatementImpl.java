@@ -32,7 +32,7 @@ import com.intellij.psi.tree.IElementType;
  * @author dsl
  */
 public class PsiForeachStatementImpl extends CompositePsiElement implements PsiForeachStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiForeachStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiForeachStatementImpl.class);
   public PsiForeachStatementImpl() {
     super(FOREACH_STATEMENT);
   }

@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PsiLabeledStatementImpl extends CompositePsiElement implements PsiLabeledStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiLabeledStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiLabeledStatementImpl.class);
 
   public PsiLabeledStatementImpl() {
     super(LABELED_STATEMENT);

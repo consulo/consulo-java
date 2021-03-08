@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ControlFlowImpl implements ControlFlow {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.controlFlow.ControlFlowImpl");
+  private static final Logger LOG = Logger.getInstance(ControlFlowImpl.class);
 
   private final List<Instruction> myInstructions = new ArrayList<Instruction>();
   private final TObjectIntHashMap<PsiElement> myElementToStartOffsetMap = new TObjectIntHashMap<PsiElement>();

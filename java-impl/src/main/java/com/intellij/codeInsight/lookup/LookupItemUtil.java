@@ -41,7 +41,7 @@ import com.intellij.psi.util.PsiUtilCore;
  */
 public class LookupItemUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.lookup.LookupItemUtil");
+	private static final Logger LOG = Logger.getInstance(LookupItemUtil.class);
 
 	/**
 	 * @see LookupElementBuilder

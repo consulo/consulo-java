@@ -37,7 +37,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class CheckedExceptionCompatibilityConstraint extends InputOutputConstraintFormula
 {
-	private static final Logger LOG = Logger.getInstance("#" + CheckedExceptionCompatibilityConstraint.class.getName());
+	private static final Logger LOG = Logger.getInstance(CheckedExceptionCompatibilityConstraint.class);
 	private final PsiExpression myExpression;
 	private PsiType myT;
 

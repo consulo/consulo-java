@@ -42,7 +42,7 @@ import com.intellij.util.text.CharArrayUtil;
 public class JavaChainLookupElement extends LookupElementDecorator<LookupElement> implements TypedLookupItem
 {
 	public static final Key<Boolean> CHAIN_QUALIFIER = Key.create("CHAIN_QUALIFIER");
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.JavaChainLookupElement");
+	private static final Logger LOG = Logger.getInstance(JavaChainLookupElement.class);
 	public static final ClassConditionKey<JavaChainLookupElement> CLASS_CONDITION_KEY = ClassConditionKey.create(JavaChainLookupElement.class);
 	private final LookupElement myQualifier;
 

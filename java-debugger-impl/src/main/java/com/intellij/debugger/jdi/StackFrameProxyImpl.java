@@ -39,7 +39,7 @@ import consulo.internal.com.sun.jdi.*;
 
 public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.jdi.StackFrameProxyImpl");
+	private static final Logger LOG = Logger.getInstance(StackFrameProxyImpl.class);
 	private final ThreadReferenceProxyImpl myThreadProxy;
 	private final int myFrameFromBottomIndex; // 1-based
 

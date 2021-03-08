@@ -88,7 +88,7 @@ import com.intellij.util.containers.ContainerUtil;
 
 public class OverrideImplementUtil extends OverrideImplementExploreUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.OverrideImplementUtil");
+	private static final Logger LOG = Logger.getInstance(OverrideImplementUtil.class);
 
 	private OverrideImplementUtil()
 	{

@@ -57,7 +57,7 @@ import com.intellij.util.Processor;
  * @author nik
  */
 public class JarFromModulesTemplate extends ArtifactTemplate {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.packaging.impl.artifacts.JarFromModulesTemplate");
+  private static final Logger LOG = Logger.getInstance(JarFromModulesTemplate.class);
 
   private PackagingElementResolvingContext myContext;
 

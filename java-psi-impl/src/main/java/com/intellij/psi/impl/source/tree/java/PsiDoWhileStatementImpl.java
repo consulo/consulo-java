@@ -29,7 +29,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiDoWhileStatementImpl extends CompositePsiElement implements PsiDoWhileStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiDoWhileStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiDoWhileStatementImpl.class);
 
   public PsiDoWhileStatementImpl() {
     super(DO_WHILE_STATEMENT);

@@ -34,7 +34,7 @@ import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
  * @author dsl
  */
 public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.IntroduceHandlerBase");
+  private static final Logger LOG = Logger.getInstance(IntroduceHandlerBase.class);
 
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     LOG.assertTrue(elements.length >= 1 && elements[0] instanceof PsiExpression, "incorrect invoke() parameters");

@@ -42,7 +42,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author mike
  */
 public class AddExceptionToCatchFix extends BaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddExceptionToCatchFix");
+  private static final Logger LOG = Logger.getInstance(AddExceptionToCatchFix.class);
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {

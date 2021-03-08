@@ -45,7 +45,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.ConvertToBasicLatinAction");
+  private static final Logger LOG = Logger.getInstance(ConvertToBasicLatinAction.class);
 
   @Override
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {

@@ -43,7 +43,7 @@ import java.util.Set;
 
 public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, ClassInheritorsSearch.SearchParameters>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.JavaClassInheritorsSearcher");
+	private static final Logger LOG = Logger.getInstance(JavaClassInheritorsSearcher.class);
 
 	@Override
 	public void processQuery(@Nonnull ClassInheritorsSearch.SearchParameters parameters, @Nonnull Processor<? super PsiClass> consumer)

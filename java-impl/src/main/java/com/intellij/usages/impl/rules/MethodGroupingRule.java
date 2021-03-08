@@ -55,7 +55,7 @@ import consulo.ui.image.Image;
  * @author max
  */
 public class MethodGroupingRule implements UsageGroupingRule {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.usages.impl.rules.MethodGroupingRule");
+  private static final Logger LOG = Logger.getInstance(MethodGroupingRule.class);
 
   @Override
   public UsageGroup groupUsage(@Nonnull Usage usage) {

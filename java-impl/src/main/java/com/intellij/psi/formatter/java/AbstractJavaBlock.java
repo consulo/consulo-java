@@ -60,7 +60,7 @@ import com.intellij.util.text.CharArrayUtil;
 @SuppressWarnings("BoundedWildcard")
 public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlock, ReservedWrapsProvider
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.formatter.java.AbstractJavaBlock");
+	private static final Logger LOG = Logger.getInstance(AbstractJavaBlock.class);
 
 	@Nonnull
 	protected final CommonCodeStyleSettings mySettings;

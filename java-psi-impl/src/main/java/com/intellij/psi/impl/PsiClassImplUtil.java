@@ -63,7 +63,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class PsiClassImplUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.PsiClassImplUtil");
+	private static final Logger LOG = Logger.getInstance(PsiClassImplUtil.class);
 	private static final Key<ParameterizedCachedValue<Map<GlobalSearchScope, MembersMap>, PsiClass>> MAP_IN_CLASS_KEY = Key.create("MAP_KEY");
 
 	private static boolean JAVA_CORRECT_CLASS_TYPE_BY_PLACE_RESOLVE_SCOPE = SystemProperties.getBooleanProperty("java.correct.class.type.by.place.resolve.scope", true);

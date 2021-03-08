@@ -85,7 +85,7 @@ import consulo.java.module.util.JavaClassNames;
 
 public class JavaDocInfoGenerator
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.javadoc.JavaDocInfoGenerator");
+	private static final Logger LOG = Logger.getInstance(JavaDocInfoGenerator.class);
 
 	private interface InheritDocProvider<T>
 	{

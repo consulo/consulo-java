@@ -43,7 +43,7 @@ import java.util.List;
  * @author yole
  */
 public class JavaQualifiedNameProvider implements QualifiedNameProvider {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.ide.actions.JavaQualifiedNameProvider");
+  private static final Logger LOG = Logger.getInstance(JavaQualifiedNameProvider.class);
 
   @Nullable
   public PsiElement adjustElementToCopy(final PsiElement element) {

@@ -37,7 +37,7 @@ import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nullable;
 
 public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.AddSingleMemberStaticImportAction");
+  private static final Logger LOG = Logger.getInstance(AddSingleMemberStaticImportAction.class);
   private static final Key<PsiElement> TEMP_REFERENT_USER_DATA = new Key<PsiElement>("TEMP_REFERENT_USER_DATA");
 
   @Override

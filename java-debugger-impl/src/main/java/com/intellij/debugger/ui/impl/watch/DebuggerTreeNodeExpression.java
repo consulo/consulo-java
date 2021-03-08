@@ -47,7 +47,7 @@ import consulo.internal.com.sun.jdi.Value;
  */
 public class DebuggerTreeNodeExpression
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeExpression");
+	private static final Logger LOG = Logger.getInstance(DebuggerTreeNodeExpression.class);
 
 	//  private static PsiExpression beautifyExpression(PsiExpression expression) throws IncorrectOperationException {
 	//    final PsiElementFactory elementFactory = expression.getManager().getElementFactory();

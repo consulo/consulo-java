@@ -34,7 +34,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author Maxim.Medvedev
  */
 public class MoveJavaClassHandler implements MoveClassHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveClassesOrPackages.MoveJavaClassHandler");
+  private static final Logger LOG = Logger.getInstance(MoveJavaClassHandler.class);
 
   @Override
   public void finishMoveClass(@Nonnull PsiClass aClass) {

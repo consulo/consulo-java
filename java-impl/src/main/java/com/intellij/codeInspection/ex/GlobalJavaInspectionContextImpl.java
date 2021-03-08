@@ -84,7 +84,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
 
 public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext {
-  private static final Logger LOG = Logger.getInstance("#" + GlobalJavaInspectionContextImpl.class.getName());
+  private static final Logger LOG = Logger.getInstance(GlobalJavaInspectionContextImpl.class);
 
   private THashMap<SmartPsiElementPointer, List<DerivedMethodsProcessor>> myDerivedMethodsRequests;
   private THashMap<SmartPsiElementPointer, List<DerivedClassesProcessor>> myDerivedClassesRequests;

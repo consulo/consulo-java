@@ -46,7 +46,7 @@ import consulo.internal.com.sun.jdi.event.LocatableEvent;
  */
 public class StepIntoBreakpoint extends RunToCursorBreakpoint
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.StepIntoBreakpoint");
+	private static final Logger LOG = Logger.getInstance(StepIntoBreakpoint.class);
 	@Nonnull
 	private final BreakpointStepMethodFilter myFilter;
 	@javax.annotation.Nullable

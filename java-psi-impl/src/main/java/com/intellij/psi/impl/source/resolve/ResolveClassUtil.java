@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiUtil;
 
 public class ResolveClassUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.ResolveClassUtil");
+	private static final Logger LOG = Logger.getInstance(ResolveClassUtil.class);
 
 	@Nullable
 	public static PsiClass resolveClass(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiFile containingFile)

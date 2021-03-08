@@ -40,7 +40,7 @@ import java.util.Map;
   */
 public class GuessTypeParameters {
   private final JVMElementFactory myFactory;
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.GuessTypeParameters"); 
+  private static final Logger LOG = Logger.getInstance(GuessTypeParameters.class);
 
   public GuessTypeParameters(JVMElementFactory factory) {
     myFactory = factory;

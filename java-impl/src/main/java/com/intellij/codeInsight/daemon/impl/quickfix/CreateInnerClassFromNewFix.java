@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiUtil;
  * @author yole
  */
 public class CreateInnerClassFromNewFix extends CreateClassFromNewFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.CreateInnerClassFromNewFix");
+  private static final Logger LOG = Logger.getInstance(CreateInnerClassFromNewFix.class);
 
   public CreateInnerClassFromNewFix(final PsiNewExpression expr) {
     super(expr);

@@ -38,7 +38,7 @@ import consulo.java.module.util.JavaClassNames;
 
 public class ClassResolverProcessor extends BaseScopeProcessor implements NameHint, ElementClassHint
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.ClassResolverProcessor");
+	private static final Logger LOG = Logger.getInstance(ClassResolverProcessor.class);
 	private static final String[] DEFAULT_PACKAGES = {JavaClassNames.DEFAULT_PACKAGE};
 
 	private final String myClassName;

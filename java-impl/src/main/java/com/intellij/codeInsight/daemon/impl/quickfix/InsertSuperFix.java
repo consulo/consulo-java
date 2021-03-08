@@ -31,7 +31,7 @@ import com.intellij.psi.util.PsiMatchers;
 import com.intellij.util.IncorrectOperationException;
 
 public class InsertSuperFix implements IntentionAction, HighPriorityAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.InsertSuperFix");
+  private static final Logger LOG = Logger.getInstance(InsertSuperFix.class);
 
   private final PsiMethod myConstructor;
 

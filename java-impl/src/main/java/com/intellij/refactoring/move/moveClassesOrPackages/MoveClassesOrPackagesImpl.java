@@ -51,7 +51,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MoveClassesOrPackagesImpl {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesImpl");
+  private static final Logger LOG = Logger.getInstance(MoveClassesOrPackagesImpl.class);
 
   public static void doMove(final Project project,
                             PsiElement[] adjustedElements,

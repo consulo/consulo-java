@@ -45,7 +45,7 @@ import com.intellij.util.text.CharArrayUtil;
 
 public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDocComment, JavaTokenType, Constants
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.javadoc.PsiDocCommentImpl");
+	private static final Logger LOG = Logger.getInstance(PsiDocCommentImpl.class);
 
 	private static final TokenSet TAG_BIT_SET = TokenSet.create(DOC_TAG);
 	private static final ArrayFactory<PsiDocTag> ARRAY_FACTORY = count -> count == 0 ? PsiDocTag.EMPTY_ARRAY : new PsiDocTag[count];

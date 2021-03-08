@@ -42,7 +42,7 @@ import com.intellij.util.IncorrectOperationException;
 
 public class JavaSourceUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.JavaSourceUtil");
+	private static final Logger LOG = Logger.getInstance(JavaSourceUtil.class);
 
 	private static final TokenSet REF_FILTER = TokenSet.orSet(ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET,
 			TokenSet.create(JavaElementType.ANNOTATION));

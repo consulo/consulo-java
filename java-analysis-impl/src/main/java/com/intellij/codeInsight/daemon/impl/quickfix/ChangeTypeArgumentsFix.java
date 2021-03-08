@@ -44,7 +44,7 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
   private final PsiMethod myTargetMethod;
   private final PsiClass myPsiClass;
   private final PsiExpression[] myExpressions;
-  private static final Logger LOG = Logger.getInstance("#" + ChangeTypeArgumentsFix.class.getName());
+  private static final Logger LOG = Logger.getInstance(ChangeTypeArgumentsFix.class);
   private final PsiNewExpression myNewExpression;
 
   ChangeTypeArgumentsFix(@Nonnull PsiMethod targetMethod,

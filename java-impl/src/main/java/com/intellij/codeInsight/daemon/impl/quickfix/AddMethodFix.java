@@ -43,7 +43,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.java.JavaQuickFixBundle;
 
 public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddMethodFix");
+  private static final Logger LOG = Logger.getInstance(AddMethodFix.class);
 
   private final PsiMethod myMethodPrototype;
   private String myText;

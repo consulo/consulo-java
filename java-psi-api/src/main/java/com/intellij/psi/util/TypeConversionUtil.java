@@ -43,7 +43,7 @@ import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 public class TypeConversionUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.util.TypeConversionUtil");
+	private static final Logger LOG = Logger.getInstance(TypeConversionUtil.class);
 
 	private static final boolean[][] IS_ASSIGNABLE_BIT_SET = {
 			{

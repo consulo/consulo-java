@@ -38,7 +38,7 @@ import consulo.annotation.access.RequiredReadAction;
 
 public class MacroUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.template.macro.MacroUtil");
+	private static final Logger LOG = Logger.getInstance(MacroUtil.class);
 
 	@javax.annotation.Nullable
 	@RequiredReadAction

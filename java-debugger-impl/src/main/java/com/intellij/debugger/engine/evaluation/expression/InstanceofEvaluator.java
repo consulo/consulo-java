@@ -35,7 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 class InstanceofEvaluator implements Evaluator {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.evaluation.expression.InstanceofEvaluator");
+  private static final Logger LOG = Logger.getInstance(InstanceofEvaluator.class);
   private final Evaluator myOperandEvaluator;
   private final TypeEvaluator myTypeEvaluator;
 

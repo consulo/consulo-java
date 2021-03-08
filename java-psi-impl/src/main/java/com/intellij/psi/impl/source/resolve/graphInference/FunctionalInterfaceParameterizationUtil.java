@@ -25,7 +25,7 @@ import com.intellij.util.containers.ContainerUtil;
 
 public class FunctionalInterfaceParameterizationUtil
 {
-	private static final Logger LOG = Logger.getInstance("#" + FunctionalInterfaceParameterizationUtil.class.getName());
+	private static final Logger LOG = Logger.getInstance(FunctionalInterfaceParameterizationUtil.class);
 
 	public static boolean isWildcardParameterized(@Nullable PsiType classType)
 	{

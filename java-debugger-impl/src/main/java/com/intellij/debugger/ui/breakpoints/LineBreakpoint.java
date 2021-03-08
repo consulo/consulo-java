@@ -67,7 +67,7 @@ import consulo.ui.image.Image;
 
 public class LineBreakpoint<P extends JavaBreakpointProperties> extends BreakpointWithHighlighter<P>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.LineBreakpoint");
+	private static final Logger LOG = Logger.getInstance(LineBreakpoint.class);
 
 	public static final
 	@NonNls

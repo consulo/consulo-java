@@ -38,7 +38,7 @@ import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
 
 public class JavaChangeInfoImpl implements JavaChangeInfo {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.JavaChangeInfoImpl");
+  private static final Logger LOG = Logger.getInstance(JavaChangeInfoImpl.class);
 
   @PsiModifier.ModifierConstant
   final String newVisibility;

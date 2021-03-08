@@ -44,7 +44,7 @@ import java.util.List;
  * To change this template use Options | File Templates.
  */
 public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsageBaseFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.CreateConstructorFromThisOrSuperFix");
+  private static final Logger LOG = Logger.getInstance(CreateConstructorFromThisOrSuperFix.class);
 
   protected PsiMethodCallExpression myMethodCall;
 

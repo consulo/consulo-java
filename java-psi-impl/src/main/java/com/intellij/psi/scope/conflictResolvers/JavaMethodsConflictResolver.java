@@ -53,7 +53,7 @@ import java.util.*;
  */
 public class JavaMethodsConflictResolver implements PsiConflictResolver
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.scope.conflictResolvers.JavaMethodsConflictResolver");
+	private static final Logger LOG = Logger.getInstance(JavaMethodsConflictResolver.class);
 
 	private final PsiElement myArgumentsList;
 	private final PsiType[] myActualParameterTypes;

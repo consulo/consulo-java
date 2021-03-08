@@ -33,7 +33,7 @@ import java.util.Objects;
  */
 public final class ClassInfo implements Cloneable
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.classParsing.ClassInfo");
+	private static final Logger LOG = Logger.getInstance(ClassInfo.class);
 
 	private static final ReferenceInfo[] EMPTY_REF_ARRAY = new ReferenceInfo[0];
 

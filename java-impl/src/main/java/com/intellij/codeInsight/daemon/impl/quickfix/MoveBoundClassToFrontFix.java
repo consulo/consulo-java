@@ -33,7 +33,7 @@ import com.intellij.util.IncorrectOperationException;
 import consulo.java.JavaQuickFixBundle;
 
 public class MoveBoundClassToFrontFix extends ExtendsListFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.MoveBoundClassToFrontFix");
+  private static final Logger LOG = Logger.getInstance(MoveBoundClassToFrontFix.class);
   private final String myName;
 
   public MoveBoundClassToFrontFix(PsiClass aClass, PsiClassType classToExtendFrom) {

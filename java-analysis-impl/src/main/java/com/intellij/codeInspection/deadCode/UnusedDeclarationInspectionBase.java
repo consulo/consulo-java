@@ -95,7 +95,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool
 	public static final String ALTERNATIVE_ID = "UnusedDeclaration";
 
 	final List<EntryPoint> myExtensions = ContainerUtil.createLockFreeCopyOnWriteList();
-	private static final Logger LOG = Logger.getInstance("#" + UnusedDeclarationInspectionBase.class.getName());
+	private static final Logger LOG = Logger.getInstance(UnusedDeclarationInspectionBase.class);
 	private GlobalInspectionContext myContext;
 	final UnusedSymbolLocalInspectionBase myLocalInspectionBase = createUnusedSymbolLocalInspection();
 	private final boolean myEnabledInEditor;

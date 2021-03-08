@@ -31,7 +31,7 @@ import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.util.IncorrectOperationException;
 
 public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.MethodThrowsFix");
+  private static final Logger LOG = Logger.getInstance(MethodThrowsFix.class);
 
   private final String myThrowsCanonicalText;
   private final boolean myShouldThrow;

@@ -26,7 +26,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import java.util.HashMap;
 
 public class ModifierListElement extends CompositeElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ModifierListElement");
+  private static final Logger LOG = Logger.getInstance(ModifierListElement.class);
 
   public ModifierListElement() {
     super(JavaElementType.MODIFIER_LIST);

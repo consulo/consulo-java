@@ -24,7 +24,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.util.IncorrectOperationException;
 
 public class BlockJoinLinesHandler implements JoinLinesHandlerDelegate {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.editorActions.BlockJoinLinesHandler");
+  private static final Logger LOG = Logger.getInstance(BlockJoinLinesHandler.class);
 
   @Override
   public int tryJoinLines(final Document document, final PsiFile psiFile, final int start, final int end) {

@@ -45,7 +45,7 @@ import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 
 public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private static final Logger LOG = Logger.getInstance("#" + PullAsAbstractUpFix.class.getName());
+  private static final Logger LOG = Logger.getInstance(PullAsAbstractUpFix.class);
   private final String myName;
 
   public PullAsAbstractUpFix(PsiMethod psiMethod, final String name) {

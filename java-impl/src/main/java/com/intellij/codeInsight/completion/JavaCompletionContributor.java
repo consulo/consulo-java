@@ -89,7 +89,7 @@ import com.intellij.util.containers.MultiMap;
  */
 public class JavaCompletionContributor extends CompletionContributor
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.JavaCompletionContributor");
+	private static final Logger LOG = Logger.getInstance(JavaCompletionContributor.class);
 
 	public static final ElementPattern<PsiElement> ANNOTATION_NAME = psiElement().
 			withParents(PsiJavaCodeReferenceElement.class, PsiAnnotation.class).afterLeaf("@");

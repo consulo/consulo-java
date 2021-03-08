@@ -36,7 +36,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public class PsiOldInferenceHelper implements PsiInferenceHelper
 {
-	private static final Logger LOG = Logger.getInstance("#" + PsiOldInferenceHelper.class.getName());
+	private static final Logger LOG = Logger.getInstance(PsiOldInferenceHelper.class);
 	public static final Pair<PsiType, ConstraintType> RAW_INFERENCE = new Pair<PsiType, ConstraintType>(null, ConstraintType.EQUALS);
 	private final PsiManager myManager;
 

@@ -67,7 +67,7 @@ import consulo.roots.types.SourcesOrderRootType;
 @Singleton
 public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.JavaPsiImplementationHelperImpl");
+	private static final Logger LOG = Logger.getInstance(JavaPsiImplementationHelperImpl.class);
 
 	private final Project myProject;
 

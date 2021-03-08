@@ -35,7 +35,7 @@ import com.intellij.util.indexing.FileBasedIndex;
 
 public class JavaNullMethodArgumentUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.JavaNullMethodArgumentUtil");
+	private static final Logger LOG = Logger.getInstance(JavaNullMethodArgumentUtil.class);
 
 	public static boolean hasNullArgument(@Nonnull PsiMethod method, final int argumentIdx)
 	{

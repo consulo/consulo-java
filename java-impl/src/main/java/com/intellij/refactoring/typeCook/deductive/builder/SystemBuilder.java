@@ -47,7 +47,7 @@ import consulo.java.module.util.JavaClassNames;
  * To change this template use Options | File Templates.
  */
 public class SystemBuilder {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.typeCook.deductive.builder.SystemBuilder");
+  private static final Logger LOG = Logger.getInstance(SystemBuilder.class);
 
   private final PsiManager myManager;
   private final HashMap<PsiElement, Boolean> myMethodCache;

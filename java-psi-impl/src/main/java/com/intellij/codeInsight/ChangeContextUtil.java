@@ -26,7 +26,7 @@ import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 
 public class ChangeContextUtil {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.ChangeContextUtil");
+  private static final Logger LOG = Logger.getInstance(ChangeContextUtil.class);
 
   public static final Key<String> ENCODED_KEY = Key.create("ENCODED_KEY");
   public static final Key<PsiClass> THIS_QUALIFIER_CLASS_KEY = Key.create("THIS_QUALIFIER_CLASS_KEY");

@@ -58,7 +58,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem
 		}
 	};
 
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.lookup.PsiTypeLookupItem");
+	private static final Logger LOG = Logger.getInstance(PsiTypeLookupItem.class);
 	public static final ClassConditionKey<PsiTypeLookupItem> CLASS_CONDITION_KEY = ClassConditionKey.create(PsiTypeLookupItem.class);
 	private final boolean myDiamond;
 	private final int myBracketsCount;

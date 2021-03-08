@@ -50,7 +50,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public class ConstructorInsertHandler implements InsertHandler<LookupElementDecorator<LookupElement>>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.ConstructorInsertHandler");
+	private static final Logger LOG = Logger.getInstance(ConstructorInsertHandler.class);
 	public static final ConstructorInsertHandler SMART_INSTANCE = new ConstructorInsertHandler(true);
 	public static final ConstructorInsertHandler BASIC_INSTANCE = new ConstructorInsertHandler(false);
 	static final OffsetKey PARAM_LIST_START = OffsetKey.create("paramListStart");

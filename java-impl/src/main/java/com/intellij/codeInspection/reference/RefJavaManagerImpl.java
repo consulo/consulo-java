@@ -57,7 +57,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class RefJavaManagerImpl extends RefJavaManager
 {
-	private static final Logger LOG = Logger.getInstance(RefJavaManagerImpl.class.getName());
+	private static final Logger LOG = Logger.getInstance(RefJavaManagerImpl.class);
 	private static final Condition<PsiElement> PROBLEM_ELEMENT_CONDITION =
 			Conditions.or(Conditions.instanceOf(PsiFile.class, PsiJavaModule.class),
 					Conditions.and(Conditions.notInstanceOf(PsiTypeParameter.class), psi -> (psi instanceof PsiField || !(psi instanceof PsiVariable)) && (!(psi instanceof PsiClassInitializer))));

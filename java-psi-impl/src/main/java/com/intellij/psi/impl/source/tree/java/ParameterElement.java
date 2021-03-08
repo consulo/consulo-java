@@ -27,7 +27,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 
 public class ParameterElement extends CompositeElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ParameterElement");
+  private static final Logger LOG = Logger.getInstance(ParameterElement.class);
 
   public ParameterElement(@Nonnull IElementType type) {
     super(type);

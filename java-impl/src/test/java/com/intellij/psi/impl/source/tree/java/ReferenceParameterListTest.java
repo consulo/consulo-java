@@ -11,7 +11,7 @@ import com.intellij.util.IncorrectOperationException;
  *  @author dsl
  */
 public abstract class ReferenceParameterListTest extends PsiTestCase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.ReferenceParameterListTest");
+  private static final Logger LOG = Logger.getInstance(ReferenceParameterListTest.class);
   public void testParameterListInExtends() throws Exception {
     final PsiManager manager = PsiManager.getInstance(myProject);
     final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();

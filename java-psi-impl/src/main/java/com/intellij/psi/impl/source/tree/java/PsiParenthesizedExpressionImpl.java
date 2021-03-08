@@ -26,7 +26,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement implements PsiParenthesizedExpression, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiParenthesizedExpressionImpl");
+  private static final Logger LOG = Logger.getInstance(PsiParenthesizedExpressionImpl.class);
 
   public PsiParenthesizedExpressionImpl() {
     super(PARENTH_EXPRESSION);

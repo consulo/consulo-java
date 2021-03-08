@@ -34,7 +34,7 @@ import java.util.Map;
  * @author db
  */
 public class Result {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.typeCook.deductive.builder.Result");
+  private static final Logger LOG = Logger.getInstance(Result.class);
 
   private final HashSet<PsiElement> myVictims;
   private final HashMap<PsiElement, PsiType> myTypes;

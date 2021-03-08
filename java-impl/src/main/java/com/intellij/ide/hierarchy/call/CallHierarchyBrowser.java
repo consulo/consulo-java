@@ -36,7 +36,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.ide.hierarchy.call.CallHierarchyBrowser");
+  private static final Logger LOG = Logger.getInstance(CallHierarchyBrowser.class);
 
   public CallHierarchyBrowser(@Nonnull Project project, @Nonnull PsiMethod method) {
     super(project, method);

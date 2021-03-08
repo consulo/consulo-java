@@ -42,7 +42,7 @@ import java.util.List;
  * @author max
  */
 public class SameParameterValueInspection extends GlobalJavaInspectionTool {
-  private static final Logger LOG = Logger.getInstance("#" + SameParameterValueInspection.class.getName());
+  private static final Logger LOG = Logger.getInstance(SameParameterValueInspection.class);
 
   @Override
   @javax.annotation.Nullable

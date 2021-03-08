@@ -37,7 +37,7 @@ import com.intellij.util.containers.Stack;
 
 public class JavaSharedImplUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.JavaSharedImplUtil");
+	private static final Logger LOG = Logger.getInstance(JavaSharedImplUtil.class);
 
 	private static final TokenSet BRACKETS = TokenSet.create(JavaTokenType.LBRACKET, JavaTokenType.RBRACKET);
 

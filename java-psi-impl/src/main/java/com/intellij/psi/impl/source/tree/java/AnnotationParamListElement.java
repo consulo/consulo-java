@@ -44,7 +44,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class AnnotationParamListElement extends CompositeElement
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.AnnotationParamListElement");
+	private static final Logger LOG = Logger.getInstance(AnnotationParamListElement.class);
 	private static final TokenSet NAME_VALUE_PAIR_BIT_SET = TokenSet.create(JavaElementType.NAME_VALUE_PAIR);
 
 	public AnnotationParamListElement()

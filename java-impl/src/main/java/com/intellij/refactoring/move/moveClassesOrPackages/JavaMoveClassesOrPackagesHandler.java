@@ -57,7 +57,7 @@ import consulo.java.util.JavaProjectRootsUtil;
 
 public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate
 {
-	private static final Logger LOG = Logger.getInstance("#" + JavaMoveClassesOrPackagesHandler.class.getName());
+	private static final Logger LOG = Logger.getInstance(JavaMoveClassesOrPackagesHandler.class);
 	private static final JavaVetoRenameCondition VETO_RENAME_CONDITION = new JavaVetoRenameCondition();
 
 	public static boolean isPackageOrDirectory(final PsiElement element)

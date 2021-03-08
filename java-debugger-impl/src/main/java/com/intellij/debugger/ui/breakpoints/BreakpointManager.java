@@ -89,7 +89,7 @@ import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 
 public class BreakpointManager
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.BreakpointManager");
+	private static final Logger LOG = Logger.getInstance(BreakpointManager.class);
 
 	@NonNls
 	private static final String MASTER_BREAKPOINT_TAGNAME = "master_breakpoint";

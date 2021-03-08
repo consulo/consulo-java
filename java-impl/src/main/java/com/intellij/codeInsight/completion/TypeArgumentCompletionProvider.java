@@ -53,7 +53,7 @@ import consulo.codeInsight.completion.CompletionProvider;
 class TypeArgumentCompletionProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> IN_TYPE_ARGS = psiElement().inside(PsiReferenceParameterList.class);
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.TypeArgumentCompletionProvider");
+	private static final Logger LOG = Logger.getInstance(TypeArgumentCompletionProvider.class);
 	private final boolean mySmart;
 	@Nullable
 	private final JavaCompletionSession mySession;

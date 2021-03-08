@@ -42,7 +42,7 @@ import java.util.List;
  */
 
 public class BatchEvaluator {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.BatchEvaluator");
+  private static final Logger LOG = Logger.getInstance(BatchEvaluator.class);
 
   private final DebugProcess myDebugProcess;
   private boolean myBatchEvaluatorChecked;

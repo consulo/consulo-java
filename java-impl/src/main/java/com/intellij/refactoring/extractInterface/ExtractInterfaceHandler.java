@@ -43,7 +43,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
 
 public class ExtractInterfaceHandler implements RefactoringActionHandler, ElementsHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractInterface.ExtractInterfaceHandler");
+  private static final Logger LOG = Logger.getInstance(ExtractInterfaceHandler.class);
 
   public static final String REFACTORING_NAME = RefactoringBundle.message("extract.interface.title");
 

@@ -66,7 +66,7 @@ import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
  */
 public class PositionManagerImpl implements PositionManager, MultiRequestPositionManager
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.PositionManagerImpl");
+	private static final Logger LOG = Logger.getInstance(PositionManagerImpl.class);
 
 	private final DebugProcessImpl myDebugProcess;
 

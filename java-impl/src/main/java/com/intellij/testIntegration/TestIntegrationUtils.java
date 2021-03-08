@@ -47,7 +47,7 @@ import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.SmartList;
 
 public class TestIntegrationUtils {
-  private static final Logger LOG = Logger.getInstance("#" + TestIntegrationUtils.class.getName());
+  private static final Logger LOG = Logger.getInstance(TestIntegrationUtils.class);
 
   public enum MethodKind {
     SET_UP("setUp") {

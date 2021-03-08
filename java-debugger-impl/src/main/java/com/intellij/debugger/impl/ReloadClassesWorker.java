@@ -41,7 +41,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
  */
 class ReloadClassesWorker
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.ReloadClassesWorker");
+	private static final Logger LOG = Logger.getInstance(ReloadClassesWorker.class);
 	private final DebuggerSession myDebuggerSession;
 	private final HotSwapProgress myProgress;
 

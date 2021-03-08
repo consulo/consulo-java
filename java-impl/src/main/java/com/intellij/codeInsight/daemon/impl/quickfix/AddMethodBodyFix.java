@@ -30,7 +30,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class AddMethodBodyFix implements IntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddMethodBodyFix");
+  private static final Logger LOG = Logger.getInstance(AddMethodBodyFix.class);
 
   private final PsiMethod myMethod;
 

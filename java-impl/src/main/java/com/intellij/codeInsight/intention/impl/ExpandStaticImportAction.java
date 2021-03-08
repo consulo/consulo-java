@@ -36,7 +36,7 @@ import java.util.List;
 import static com.intellij.psi.util.ImportsUtil.*;
 
 public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
-  private static final Logger LOG = Logger.getInstance("#" + ExpandStaticImportAction.class.getName());
+  private static final Logger LOG = Logger.getInstance(ExpandStaticImportAction.class);
   private static final String REPLACE_THIS_OCCURRENCE = "Replace this occurrence and keep the method";
   private static final String REPLACE_ALL_AND_DELETE_IMPORT = "Replace all and delete the import";
 

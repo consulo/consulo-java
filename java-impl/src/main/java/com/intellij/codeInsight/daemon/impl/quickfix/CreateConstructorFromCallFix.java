@@ -37,7 +37,7 @@ import java.util.List;
  * @author mike
  */
 public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.CreateConstructorFromCallFix");
+  private static final Logger LOG = Logger.getInstance(CreateConstructorFromCallFix.class);
 
   private final PsiConstructorCall myConstructorCall;
 

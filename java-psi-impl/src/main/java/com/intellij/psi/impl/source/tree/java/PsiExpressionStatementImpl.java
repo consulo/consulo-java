@@ -27,7 +27,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 
 public class PsiExpressionStatementImpl extends CompositePsiElement implements PsiExpressionStatement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiExpressionStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiExpressionStatementImpl.class);
 
   public PsiExpressionStatementImpl() {
     super(JavaElementType.EXPRESSION_STATEMENT);

@@ -15,12 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
@@ -39,9 +33,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.JavaQuickFixBundle;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AccessStaticViaInstanceFix");
+  private static final Logger LOG = Logger.getInstance(AccessStaticViaInstanceFix.class);
   private final boolean myOnTheFly;
   private final String myText;
 

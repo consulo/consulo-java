@@ -35,7 +35,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class JavaElementSignatureProvider extends AbstractElementSignatureProvider {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.folding.impl.JavaElementSignatureProvider");
+  private static final Logger LOG = Logger.getInstance(JavaElementSignatureProvider.class);
 
   @Override
   @javax.annotation.Nullable

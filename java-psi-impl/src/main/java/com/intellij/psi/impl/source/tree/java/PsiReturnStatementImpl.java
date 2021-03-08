@@ -31,7 +31,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiReturnStatementImpl extends CompositePsiElement implements PsiReturnStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiReturnStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiReturnStatementImpl.class);
 
   public PsiReturnStatementImpl() {
     super(RETURN_STATEMENT);

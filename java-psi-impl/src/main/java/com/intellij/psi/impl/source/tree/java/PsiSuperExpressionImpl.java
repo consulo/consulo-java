@@ -31,7 +31,7 @@ import consulo.java.module.util.JavaClassNames;
 import javax.annotation.Nullable;
 
 public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiSuperExpression, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiSuperExpressionImpl");
+  private static final Logger LOG = Logger.getInstance(PsiSuperExpressionImpl.class);
 
   public PsiSuperExpressionImpl() {
     super(SUPER_EXPRESSION);

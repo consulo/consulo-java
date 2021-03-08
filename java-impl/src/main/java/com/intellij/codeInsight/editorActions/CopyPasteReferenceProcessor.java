@@ -44,7 +44,7 @@ import com.intellij.util.ArrayUtil;
 
 public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> extends CopyPastePostProcessor<ReferenceTransferableData>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.editorActions.CopyPasteReferenceProcessor");
+	private static final Logger LOG = Logger.getInstance(CopyPasteReferenceProcessor.class);
 
 	@Nonnull
 	@Override

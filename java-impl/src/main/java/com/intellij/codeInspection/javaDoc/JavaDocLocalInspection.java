@@ -151,7 +151,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     myIgnoreSimpleAccessors = ignoreSimpleAccessors;
   }
 
-  private static final Logger LOG = Logger.getInstance("com.intellij.codeInspection.javaDoc.JavaDocLocalInspection");
+  private static final Logger LOG = Logger.getInstance(JavaDocLocalInspection.class);
 
   private class OptionsPanel extends JPanel {
     private JPanel createOptionsPanel(String[] modifiers, String[] tags, Options options) {

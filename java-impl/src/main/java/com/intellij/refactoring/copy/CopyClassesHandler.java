@@ -51,7 +51,7 @@ import com.intellij.util.IncorrectOperationException;
 import consulo.java.util.JavaProjectRootsUtil;
 
 public class CopyClassesHandler extends CopyHandlerDelegateBase {
-  private static final Logger LOG = Logger.getInstance("#" + CopyClassesHandler.class.getName());
+  private static final Logger LOG = Logger.getInstance(CopyClassesHandler.class);
 
   @Override
   public boolean forbidToClone(PsiElement[] elements, boolean fromUpdate) {

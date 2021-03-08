@@ -53,7 +53,7 @@ import java.util.regex.Pattern;
  * @author yole
  */
 public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.rename.RenameJavaClassProcessor");
+  private static final Logger LOG = Logger.getInstance(RenameJavaClassProcessor.class);
 
   public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiClass;

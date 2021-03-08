@@ -39,7 +39,7 @@ import consulo.application.AccessRule;
 
 public class RemoveInitializerFix implements LocalQuickFix
 {
-	private static final Logger LOG = Logger.getInstance("#" + RemoveInitializerFix.class.getName());
+	private static final Logger LOG = Logger.getInstance(RemoveInitializerFix.class);
 
 	@Override
 	@Nonnull

@@ -27,7 +27,7 @@ import consulo.internal.com.sun.jdi.Value;
  * @author lex
  */
 public class SyntheticVariableEvaluator implements Evaluator{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.evaluation.expression.SyntheticVariableEvaluator");
+  private static final Logger LOG = Logger.getInstance(SyntheticVariableEvaluator.class);
 
   private final CodeFragmentEvaluator myCodeFragmentEvaluator;
   private final String myLocalName;

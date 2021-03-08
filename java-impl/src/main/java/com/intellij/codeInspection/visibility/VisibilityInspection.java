@@ -56,7 +56,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class VisibilityInspection extends GlobalJavaInspectionTool {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.visibility.VisibilityInspection");
+  private static final Logger LOG = Logger.getInstance(VisibilityInspection.class);
   public boolean SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS = true;
   public boolean SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES = true;
   public boolean SUGGEST_PRIVATE_FOR_INNERS = false;

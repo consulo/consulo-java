@@ -54,7 +54,7 @@ public class TreeModelBuilder {
   public static final String SCANNING_PACKAGES_MESSAGE = AnalysisScopeBundle.message("package.dependencies.build.progress.text");
   private final ProjectFileIndex myFileIndex;
   private final Project myProject;
-  private static final Logger LOG = Logger.getInstance("com.intellij.packageDependencies.ui.TreeModelBuilder");
+  private static final Logger LOG = Logger.getInstance(TreeModelBuilder.class);
   private final boolean myShowModuleGroups;
   protected final JavaPsiFacade myJavaPsiFacade;
   private static final Key<Integer> FILE_COUNT = Key.create("packages.FILE_COUNT");

@@ -71,7 +71,7 @@ import consulo.java.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
  */
 public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsageProcessorEx
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.JavaChangeSignatureUsageProcessor");
+	private static final Logger LOG = Logger.getInstance(JavaChangeSignatureUsageProcessor.class);
 
 	private static boolean isJavaUsage(UsageInfo info)
 	{

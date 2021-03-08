@@ -32,7 +32,7 @@ import java.util.List;
  * @author ven
  */
 public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.miscGenerics.RedundantTypeArgsInspection");
+  private static final Logger LOG = Logger.getInstance(RedundantTypeArgsInspection.class);
 
   public RedundantTypeArgsInspection() {
     myQuickFixAction = new MyQuickFixAction();

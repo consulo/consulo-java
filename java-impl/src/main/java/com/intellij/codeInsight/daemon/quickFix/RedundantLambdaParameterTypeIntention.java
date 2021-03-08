@@ -35,7 +35,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntentionAction
 {
-	public static final Logger LOG = Logger.getInstance("#" + RedundantLambdaParameterTypeIntention.class.getName());
+	public static final Logger LOG = Logger.getInstance(RedundantLambdaParameterTypeIntention.class);
 
 	@Nonnull
 	@Override

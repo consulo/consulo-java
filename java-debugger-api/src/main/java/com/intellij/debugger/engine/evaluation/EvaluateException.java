@@ -21,7 +21,7 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 import javax.annotation.Nullable;
 
 public class EvaluateException extends Exception {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.evaluation.EvaluateException");
+  private static final Logger LOG = Logger.getInstance(EvaluateException.class);
   private ObjectReference myTargetException;
 
   public EvaluateException(final String message) {

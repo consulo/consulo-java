@@ -26,7 +26,7 @@ import org.junit.Test;
 import com.intellij.openapi.diagnostic.Logger;
 
 public abstract class TestClassesFilterTest {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.TestClassesFilterTest");
+  private static final Logger LOG = Logger.getInstance(TestClassesFilterTest.class);
 
   @Test
   public void test() throws Exception {

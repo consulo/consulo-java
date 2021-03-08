@@ -26,7 +26,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiPostfixExpressionImpl extends ExpressionPsiElement implements PsiPostfixExpression {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiPostfixExpressionImpl");
+  private static final Logger LOG = Logger.getInstance(PsiPostfixExpressionImpl.class);
 
   public PsiPostfixExpressionImpl() {
     super(Constants.POSTFIX_EXPRESSION);

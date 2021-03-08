@@ -46,7 +46,7 @@ import com.intellij.refactoring.util.duplicates.DuplicatesImpl;
 import com.intellij.util.IncorrectOperationException;
 
 public class ExtractMethodObjectHandler implements RefactoringActionHandler {
-  private static final Logger LOG = Logger.getInstance("#" + ExtractMethodObjectHandler.class.getName());
+  private static final Logger LOG = Logger.getInstance(ExtractMethodObjectHandler.class);
 
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
     ExtractMethodHandler.selectAndPass(project, editor, file, new Pass<PsiElement[]>() {

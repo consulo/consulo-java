@@ -40,7 +40,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool
 {
-	private static final Logger LOG = Logger.getInstance("#" + AnonymousCanBeMethodReferenceInspection.class.getName());
+	private static final Logger LOG = Logger.getInstance(AnonymousCanBeMethodReferenceInspection.class);
 
 	public boolean reportNotAnnotatedInterfaces = true;
 

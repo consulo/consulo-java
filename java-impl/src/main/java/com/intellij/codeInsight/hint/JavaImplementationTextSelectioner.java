@@ -30,7 +30,7 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.javadoc.PsiDocComment;
 
 public class JavaImplementationTextSelectioner implements ImplementationTextSelectioner {
-  private static final Logger LOG = Logger.getInstance("#" + JavaImplementationTextSelectioner.class.getName());
+  private static final Logger LOG = Logger.getInstance(JavaImplementationTextSelectioner.class);
 
   @Override
   public int getTextStartOffset(@Nonnull final PsiElement parent) {

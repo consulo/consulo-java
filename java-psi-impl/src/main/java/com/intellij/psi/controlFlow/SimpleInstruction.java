@@ -22,7 +22,7 @@ package com.intellij.psi.controlFlow;
 import com.intellij.openapi.diagnostic.Logger;
 
 public abstract class SimpleInstruction extends InstructionBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.controlFlow.SimpleInstruction");
+  private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);
 
   @Override
   public int nNext() { return 1; }

@@ -30,7 +30,7 @@ import java.io.IOException;
 
 public class MemberInfoExternalizer
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.classParsing.MemberInfoExternalizer");
+	private static final Logger LOG = Logger.getInstance(MemberInfoExternalizer.class);
 
 	public static final byte FIELD_INFO_TAG = 1;
 	public static final byte METHOD_INFO_TAG = 2;

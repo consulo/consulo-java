@@ -45,7 +45,7 @@ import java.util.*;
  */
 public class RedundantSuppressInspection extends GlobalInspectionTool{
   private BidirectionalMap<String, QuickFix> myQuickFixes = null;
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.RedundantSuppressInspection");
+  private static final Logger LOG = Logger.getInstance(RedundantSuppressInspection.class);
 
   public boolean IGNORE_ALL = false;
 

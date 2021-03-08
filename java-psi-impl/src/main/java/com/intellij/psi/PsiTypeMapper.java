@@ -29,7 +29,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType>
 {
-	protected static final Logger LOG = Logger.getInstance("#com.intellij.psi.PsiTypeMapper");
+	protected static final Logger LOG = Logger.getInstance(PsiTypeMapper.class);
 
 	@javax.annotation.Nullable
 	public <T extends PsiType> T mapType(@Nonnull T type)

@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NonNls;
  */
 public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionAction {
 
-  private final static Logger LOG = Logger.getInstance("#com.intellij.psi.impl.beanProperties.CreateBeanPropertyFix");
+  private final static Logger LOG = Logger.getInstance(CreateBeanPropertyFix.class);
   private static final CreateBeanPropertyFix[] NO_FIXES = new CreateBeanPropertyFix[0];
 
   protected final String myPropertyName;

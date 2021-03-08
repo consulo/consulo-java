@@ -65,7 +65,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspectionTool
 {
-	public static final Logger LOG = Logger.getInstance("#" + AnonymousCanBeLambdaInspection.class.getName());
+	public static final Logger LOG = Logger.getInstance(AnonymousCanBeLambdaInspection.class);
 
 	public boolean reportNotAnnotatedInterfaces = true;
 

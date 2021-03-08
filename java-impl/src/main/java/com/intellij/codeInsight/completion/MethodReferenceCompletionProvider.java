@@ -34,7 +34,7 @@ import consulo.codeInsight.completion.CompletionProvider;
 
 public class MethodReferenceCompletionProvider implements CompletionProvider
 {
-	private static final Logger LOG = Logger.getInstance("#" + MethodReferenceCompletionProvider.class.getName());
+	private static final Logger LOG = Logger.getInstance(MethodReferenceCompletionProvider.class);
 
 	@Override
 	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result)

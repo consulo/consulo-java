@@ -33,7 +33,7 @@ import java.util.Map;
  * @author yole
  */
 public class CoreJavaDirectoryService extends JavaDirectoryService {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.core.CoreJavaDirectoryService");
+  private static final Logger LOG = Logger.getInstance(CoreJavaDirectoryService.class);
 
   @Override
   public PsiJavaPackage getPackage(@Nonnull PsiDirectory dir) {

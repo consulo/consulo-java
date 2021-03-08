@@ -38,7 +38,7 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class ReplaceLambdaWithAnonymousIntention extends Intention
 {
-	private static final Logger LOG = Logger.getInstance("#" + ReplaceLambdaWithAnonymousIntention.class.getName());
+	private static final Logger LOG = Logger.getInstance(ReplaceLambdaWithAnonymousIntention.class);
 
 	@Nonnull
 	@Override

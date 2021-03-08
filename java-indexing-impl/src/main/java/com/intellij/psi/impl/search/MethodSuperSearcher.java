@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class MethodSuperSearcher implements QueryExecutor<MethodSignatureBackedByPsiMethod, SuperMethodsSearch.SearchParameters>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.MethodSuperSearcher");
+	private static final Logger LOG = Logger.getInstance(MethodSuperSearcher.class);
 
 	@Override
 	public boolean execute(@Nonnull final SuperMethodsSearch.SearchParameters queryParameters, @Nonnull final Processor<? super MethodSignatureBackedByPsiMethod> consumer)

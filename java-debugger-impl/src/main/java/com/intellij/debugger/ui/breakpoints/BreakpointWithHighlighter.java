@@ -57,7 +57,7 @@ import consulo.ui.image.Image;
 
 public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperties> extends Breakpoint<P>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.BreakpointWithHighlighter");
+	private static final Logger LOG = Logger.getInstance(BreakpointWithHighlighter.class);
 
 	@javax.annotation.Nullable
 	private SourcePosition mySourcePosition;

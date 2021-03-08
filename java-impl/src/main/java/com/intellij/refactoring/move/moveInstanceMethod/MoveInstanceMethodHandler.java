@@ -52,7 +52,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class MoveInstanceMethodHandler implements RefactoringActionHandler
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodHandler");
+	private static final Logger LOG = Logger.getInstance(MoveInstanceMethodHandler.class);
 	static final String REFACTORING_NAME = RefactoringBundle.message("move.instance.method.title");
 
 	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)

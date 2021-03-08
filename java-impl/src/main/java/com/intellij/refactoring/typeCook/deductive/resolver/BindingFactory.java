@@ -45,7 +45,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 @SuppressWarnings({"SuspiciousNameCombination"})
 public class BindingFactory {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.typeCook.deductive.resolver.BindingFactory");
+  private static final Logger LOG = Logger.getInstance(BindingFactory.class);
 
   private final HashSet<PsiTypeVariable> myBoundVariables;
   private final Project myProject;

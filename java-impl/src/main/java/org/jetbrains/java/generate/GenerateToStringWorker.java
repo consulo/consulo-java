@@ -51,7 +51,7 @@ import com.intellij.util.IncorrectOperationException;
 
 public class GenerateToStringWorker
 {
-	private static final Logger logger = Logger.getInstance("#" + GenerateToStringWorker.class.getName());
+	private static final Logger logger = Logger.getInstance(GenerateToStringWorker.class);
 
 	private final Editor editor;
 	private final PsiClass clazz;

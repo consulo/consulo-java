@@ -50,7 +50,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 
 abstract class OverrideImplementMethodAction extends AnAction
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.ide.hierarchy.method.OverrideImplementMethodAction");
+	private static final Logger LOG = Logger.getInstance(OverrideImplementMethodAction.class);
 
 	@RequiredUIAccess
 	@Override

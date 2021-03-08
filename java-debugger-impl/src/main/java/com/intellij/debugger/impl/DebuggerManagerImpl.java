@@ -88,7 +88,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 @State(name = "DebuggerManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 public class DebuggerManagerImpl extends DebuggerManagerEx implements PersistentStateComponent<Element>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.DebuggerManagerImpl");
+	private static final Logger LOG = Logger.getInstance(DebuggerManagerImpl.class);
 
 	private final Project myProject;
 	private final HashMap<ProcessHandler, DebuggerSession> mySessions = new HashMap<>();

@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NonNls;
  * @author lesya
  */
 public class ImportsFormatter extends XmlRecursiveElementVisitor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.ImportsFormatter");
+  private static final Logger LOG = Logger.getInstance(ImportsFormatter.class);
   
   private final FormattingDocumentModelImpl myDocumentModel;
   private final CommonCodeStyleSettings.IndentOptions myIndentOptions;

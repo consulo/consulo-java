@@ -54,7 +54,7 @@ import com.intellij.util.CharTable;
 import com.intellij.util.IncorrectOperationException;
 
 public class PsiLocalVariableImpl extends CompositePsiElement implements PsiLocalVariable, PsiVariableEx, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiLocalVariableImpl");
+  private static final Logger LOG = Logger.getInstance(PsiLocalVariableImpl.class);
 
   private volatile String myCachedName = null;
 

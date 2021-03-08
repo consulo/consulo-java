@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implements HighPriorityAction{
-  private static final Logger LOG = Logger.getInstance("com.intellij.codeInsight.daemon.impl.quickfix.CreateEnumConstantFromUsageFix");
+  private static final Logger LOG = Logger.getInstance(CreateEnumConstantFromUsageFix.class);
   public CreateEnumConstantFromUsageFix(final PsiReferenceExpression referenceElement) {
     super(referenceElement);
   }

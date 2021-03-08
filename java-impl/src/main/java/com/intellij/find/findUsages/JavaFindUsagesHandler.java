@@ -61,7 +61,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class JavaFindUsagesHandler extends FindUsagesHandler
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.find.findUsages.JavaFindUsagesHandler");
+	private static final Logger LOG = Logger.getInstance(JavaFindUsagesHandler.class);
 	protected static final String ACTION_STRING = FindBundle.message("find.super.method.warning.action.verb");
 
 	private final PsiElement[] myElementsToSearch;

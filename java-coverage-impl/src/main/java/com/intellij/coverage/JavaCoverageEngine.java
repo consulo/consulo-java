@@ -65,7 +65,7 @@ import consulo.roots.impl.TestContentFolderTypeProvider;
  * @author Roman.Chernyatchik
  */
 public class JavaCoverageEngine extends CoverageEngine {
-  private static final Logger LOG = Logger.getInstance(JavaCoverageEngine.class.getName());
+  private static final Logger LOG = Logger.getInstance(JavaCoverageEngine.class);
 
   @Override
   public boolean isApplicableTo(@javax.annotation.Nullable final RunConfigurationBase conf) {

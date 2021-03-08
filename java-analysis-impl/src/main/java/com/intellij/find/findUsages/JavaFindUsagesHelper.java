@@ -63,7 +63,7 @@ import consulo.psi.PsiPackage;
 
 public class JavaFindUsagesHelper
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.find.findUsages.JavaFindUsagesHelper");
+	private static final Logger LOG = Logger.getInstance(JavaFindUsagesHelper.class);
 
 	@Nonnull
 	public static Set<String> getElementNames(@Nonnull final PsiElement element)

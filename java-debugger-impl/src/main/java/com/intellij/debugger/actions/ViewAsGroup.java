@@ -42,7 +42,7 @@ import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 
 public class ViewAsGroup extends ActionGroup implements DumbAware
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.actions.ViewAsGroup");
+	private static final Logger LOG = Logger.getInstance(ViewAsGroup.class);
 
 	private volatile AnAction[] myChildren = AnAction.EMPTY_ARRAY;
 

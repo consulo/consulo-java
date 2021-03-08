@@ -54,7 +54,7 @@ import com.intellij.util.graph.InboundSemiGraph;
  */
 public class TypeMigrationLabeler
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.typeMigration.TypeMigrationLabeler");
+	private static final Logger LOG = Logger.getInstance(TypeMigrationLabeler.class);
 	private boolean myShowWarning = true;
 	private volatile MigrateException myException;
 	private final Semaphore myDialogSemaphore = new Semaphore();

@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import java.util.Comparator;
 
 public class VisibilityComparator implements Comparator {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.ide.structureView.impl.java.VisibilityComparator");
+  private static final Logger LOG = Logger.getInstance(VisibilityComparator.class);
   private static final int GROUP_ACCESS_SUBLEVEL = 1;
   public static Comparator THEN_SOURCE = new VisibilityComparator(SourceComparator.INSTANCE);
   public static Comparator THEN_ALPHA = new VisibilityComparator(AlphaComparator.INSTANCE);

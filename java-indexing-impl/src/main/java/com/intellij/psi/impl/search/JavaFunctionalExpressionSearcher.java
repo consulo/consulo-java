@@ -50,7 +50,7 @@ import static com.intellij.util.containers.ContainerUtilRt.newHashSet;
 
 public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters>
 {
-	private static final Logger LOG = Logger.getInstance("#" + JavaFunctionalExpressionSearcher.class.getName());
+	private static final Logger LOG = Logger.getInstance(JavaFunctionalExpressionSearcher.class);
 	/**
 	 * The least number of candidate files with functional expressions that directly scanning them becomes expensive
 	 * and more advanced ways of searching become necessary: e.g. first searching for methods where the functional interface class is used

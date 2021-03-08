@@ -38,7 +38,7 @@ import java.util.*;
  */
 public class GenerateEqualsHelper implements Runnable
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.GenerateEqualsHelper");
+	private static final Logger LOG = Logger.getInstance(GenerateEqualsHelper.class);
 
 	@NonNls
 	private static final String INSTANCE_NAME = "instanceBaseName";

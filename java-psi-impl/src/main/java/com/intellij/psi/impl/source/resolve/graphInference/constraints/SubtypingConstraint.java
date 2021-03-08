@@ -25,7 +25,7 @@ import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 
 public class SubtypingConstraint implements ConstraintFormula
 {
-	private static final Logger LOG = Logger.getInstance("#" + SubtypingConstraint.class.getName());
+	private static final Logger LOG = Logger.getInstance(SubtypingConstraint.class);
 
 	private PsiType myS;
 	private PsiType myT;

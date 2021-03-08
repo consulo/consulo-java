@@ -39,7 +39,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class PsiMethodReferenceCompatibilityConstraint implements ConstraintFormula
 {
-	private static final Logger LOG = Logger.getInstance("#" + PsiMethodReferenceCompatibilityConstraint.class.getName());
+	private static final Logger LOG = Logger.getInstance(PsiMethodReferenceCompatibilityConstraint.class);
 	private final PsiMethodReferenceExpression myExpression;
 	private PsiType myT;
 

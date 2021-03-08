@@ -35,7 +35,7 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 {
 	private T myMember;
 	private final boolean myMergeIfExists;
-	private static final Logger LOG = Logger.getInstance("#" + PsiGenerationInfo.class.getName());
+	private static final Logger LOG = Logger.getInstance(PsiGenerationInfo.class);
 
 	public PsiGenerationInfo(@Nonnull final T member)
 	{

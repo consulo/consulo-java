@@ -29,7 +29,7 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 
 public class ReplaceWithSubtypeUsageInfo extends FixableUsageInfo {
-  public static final Logger LOG = Logger.getInstance("#" + ReplaceWithSubtypeUsageInfo.class.getName());
+  public static final Logger LOG = Logger.getInstance(ReplaceWithSubtypeUsageInfo.class);
   private final PsiTypeElement myTypeElement;
   private final PsiClassType myTargetClassType;
   private final PsiType myOriginalType;

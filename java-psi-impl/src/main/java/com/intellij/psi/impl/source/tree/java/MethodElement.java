@@ -32,7 +32,7 @@ import consulo.annotation.access.RequiredReadAction;
 
 public class MethodElement extends CompositeElement implements Constants
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.MethodElement");
+	private static final Logger LOG = Logger.getInstance(MethodElement.class);
 
 	public MethodElement()
 	{

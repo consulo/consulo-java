@@ -88,7 +88,7 @@ import java.util.regex.Pattern;
  */
 public class HighlightUtil extends HighlightUtilBase
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil");
+	private static final Logger LOG = Logger.getInstance(HighlightUtil.class);
 
 	private static final QuickFixFactory QUICK_FIX_FACTORY = QuickFixFactory.getInstance();
 

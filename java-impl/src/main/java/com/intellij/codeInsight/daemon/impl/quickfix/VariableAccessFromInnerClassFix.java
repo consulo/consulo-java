@@ -40,7 +40,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class VariableAccessFromInnerClassFix implements IntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.VariableAccessFromInnerClassFix");
+  private static final Logger LOG = Logger.getInstance(VariableAccessFromInnerClassFix.class);
   private final PsiVariable myVariable;
   private final PsiElement myContext;
   private final int myFixType;

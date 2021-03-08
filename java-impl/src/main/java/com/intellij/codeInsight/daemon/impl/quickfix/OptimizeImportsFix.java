@@ -29,7 +29,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 
 public class OptimizeImportsFix implements IntentionAction{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.OptimizeImportsFix");
+  private static final Logger LOG = Logger.getInstance(OptimizeImportsFix.class);
 
   @Override
   @Nonnull

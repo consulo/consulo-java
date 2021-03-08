@@ -46,7 +46,7 @@ import java.lang.reflect.InvocationTargetException;
  * User: cdr
  */
 class StaticInheritanceFix extends InspectionGadgetsFix {
-  private static final Logger LOG = Logger.getInstance("#com.siyeh.ig.inheritance.StaticInheritanceFix");
+  private static final Logger LOG = Logger.getInstance(StaticInheritanceFix.class);
   private final boolean myReplaceInWholeProject;
 
   StaticInheritanceFix(boolean replaceInWholeProject) {

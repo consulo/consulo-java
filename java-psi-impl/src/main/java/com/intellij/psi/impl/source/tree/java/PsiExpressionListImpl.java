@@ -40,7 +40,7 @@ import com.intellij.util.CharTable;
 
 public class PsiExpressionListImpl extends CompositePsiElement implements PsiExpressionList
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiExpressionListImpl");
+	private static final Logger LOG = Logger.getInstance(PsiExpressionListImpl.class);
 
 	public PsiExpressionListImpl()
 	{

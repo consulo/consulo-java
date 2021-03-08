@@ -34,7 +34,7 @@ import com.intellij.psi.util.TypeConversionUtil;
  */
 public class PsiMethodReferenceUtil
 {
-	private static final Logger LOG = Logger.getInstance("#" + PsiMethodReferenceUtil.class.getName());
+	private static final Logger LOG = Logger.getInstance(PsiMethodReferenceUtil.class);
 
 	public static boolean isSecondSearchPossible(PsiType[] parameterTypes, QualifierResolveResult qualifierResolveResult, PsiMethodReferenceExpression methodRef)
 	{

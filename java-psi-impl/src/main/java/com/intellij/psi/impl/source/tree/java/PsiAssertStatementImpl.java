@@ -29,7 +29,7 @@ import com.intellij.psi.tree.ChildRoleBase;
 import javax.annotation.Nonnull;
 
 public class PsiAssertStatementImpl extends CompositePsiElement implements PsiAssertStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiAssertStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiAssertStatementImpl.class);
 
   public PsiAssertStatementImpl() {
     super(ASSERT_STATEMENT);

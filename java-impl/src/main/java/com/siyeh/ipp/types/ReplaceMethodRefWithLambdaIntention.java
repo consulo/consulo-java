@@ -45,7 +45,7 @@ import com.siyeh.ipp.base.PsiElementPredicate;
 
 public class ReplaceMethodRefWithLambdaIntention extends Intention
 {
-	private static final Logger LOG = Logger.getInstance("#" + ReplaceMethodRefWithLambdaIntention.class.getName());
+	private static final Logger LOG = Logger.getInstance(ReplaceMethodRefWithLambdaIntention.class);
 
 	@Nonnull
 	@Override

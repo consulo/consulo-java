@@ -38,7 +38,7 @@ import com.intellij.util.IncorrectOperationException;
 import consulo.java.JavaQuickFixBundle;
 
 public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.ExtendsListFix");
+  private static final Logger LOG = Logger.getInstance(ExtendsListFix.class);
 
   final PsiClass myClassToExtendFrom;
   private final boolean myToAdd;

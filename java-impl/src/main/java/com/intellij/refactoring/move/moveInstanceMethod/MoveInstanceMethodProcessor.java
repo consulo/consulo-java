@@ -61,7 +61,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodProcessor");
+	private static final Logger LOG = Logger.getInstance(MoveInstanceMethodProcessor.class);
 
 	public PsiMethod getMethod()
 	{

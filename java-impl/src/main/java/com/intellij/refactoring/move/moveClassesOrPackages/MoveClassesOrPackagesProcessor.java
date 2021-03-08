@@ -67,7 +67,7 @@ import com.intellij.util.containers.MultiMap;
  */
 public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
   private static final Logger LOG = Logger.getInstance(
-    "#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesProcessor");
+		  MoveClassesOrPackagesProcessor.class);
 
   private final PsiElement[] myElementsToMove;
   private boolean mySearchInComments;

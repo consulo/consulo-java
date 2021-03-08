@@ -32,7 +32,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 
 public class AddReturnFix implements IntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddReturnFix");
+  private static final Logger LOG = Logger.getInstance(AddReturnFix.class);
   private final PsiMethod myMethod;
 
   public AddReturnFix(PsiMethod method) {

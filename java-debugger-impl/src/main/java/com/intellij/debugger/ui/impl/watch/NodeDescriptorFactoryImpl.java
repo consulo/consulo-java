@@ -45,7 +45,7 @@ import consulo.internal.com.sun.jdi.Value;
 
 public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.watch.NodeDescriptorFactoryImpl");
+	private static final Logger LOG = Logger.getInstance(NodeDescriptorFactoryImpl.class);
 	private DescriptorTree myCurrentHistoryTree = new DescriptorTree(true);
 
 	private DescriptorTreeSearcher myDescriptorSearcher;

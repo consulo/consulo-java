@@ -29,7 +29,7 @@ import com.intellij.refactoring.move.MoveCallback;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 
 public class MoveInnerImpl {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.move.moveInner.MoveInnerImpl");
+  private static final Logger LOG = Logger.getInstance(MoveInnerImpl.class);
 
   public static final String REFACTORING_NAME = RefactoringBundle.message("move.inner.to.upper.level.title");
 

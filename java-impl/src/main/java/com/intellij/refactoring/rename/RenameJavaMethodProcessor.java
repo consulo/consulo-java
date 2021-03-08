@@ -50,7 +50,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.rename.RenameJavaMethodProcessor");
+  private static final Logger LOG = Logger.getInstance(RenameJavaMethodProcessor.class);
 
   public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiMethod;

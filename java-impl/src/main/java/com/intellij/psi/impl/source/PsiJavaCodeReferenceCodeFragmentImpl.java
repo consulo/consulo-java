@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * @author ven
  */
 public class PsiJavaCodeReferenceCodeFragmentImpl extends PsiCodeFragmentImpl implements PsiJavaCodeReferenceCodeFragment {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiJavaCodeReferenceCodeFragmentImpl");
+  private static final Logger LOG = Logger.getInstance(PsiJavaCodeReferenceCodeFragmentImpl.class);
   private final boolean myIsClassesAccepted;
 
   public PsiJavaCodeReferenceCodeFragmentImpl(final Project project,

@@ -25,7 +25,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 * @author peter
 */
 class AnnotationInsertHandler implements InsertHandler<JavaPsiClassReferenceElement> {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.AnnotationInsertHandler");
+  private static final Logger LOG = Logger.getInstance(AnnotationInsertHandler.class);
   static final AnnotationInsertHandler INSTANCE = new AnnotationInsertHandler();
 
   @Override

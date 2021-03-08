@@ -55,7 +55,7 @@ import consulo.java.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 
 public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.ChangeSignatureProcessor");
+	private static final Logger LOG = Logger.getInstance(ChangeSignatureProcessor.class);
 
 	public ChangeSignatureProcessor(Project project, PsiMethod method, final boolean generateDelegate,
 			@PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, @Nonnull ParameterInfoImpl[] parameterInfo)

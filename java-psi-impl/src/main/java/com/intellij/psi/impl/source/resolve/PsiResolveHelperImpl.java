@@ -35,7 +35,7 @@ import com.intellij.util.IncorrectOperationException;
 @Singleton
 public class PsiResolveHelperImpl implements PsiResolveHelper
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl");
+	private static final Logger LOG = Logger.getInstance(PsiResolveHelperImpl.class);
 	private final PsiManager myManager;
 
 	@Inject

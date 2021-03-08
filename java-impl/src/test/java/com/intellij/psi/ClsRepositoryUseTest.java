@@ -49,7 +49,7 @@ import consulo.java.module.util.JavaClassNames;
 
 @PlatformTestCase.WrapInCommand
 public abstract class ClsRepositoryUseTest extends PsiTestCase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.ClsRepositoryUseTest");
+  private static final Logger LOG = Logger.getInstance(ClsRepositoryUseTest.class);
 
   private static final String TEST_ROOT = "/psi/repositoryUse/cls";
   private GlobalSearchScope RESOLVE_SCOPE;

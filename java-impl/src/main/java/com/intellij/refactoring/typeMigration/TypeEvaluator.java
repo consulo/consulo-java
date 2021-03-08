@@ -32,7 +32,7 @@ import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
  */
 public class TypeEvaluator
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.typeMigration.TypeEvaluator");
+	private static final Logger LOG = Logger.getInstance(TypeEvaluator.class);
 
 	private final HashMap<TypeMigrationUsageInfo, LinkedList<PsiType>> myTypeMap;
 	private final TypeMigrationRules myRules;

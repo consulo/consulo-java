@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 
 public class PsiSwitchLabelStatementImpl extends PsiSwitchLabelStatementBaseImpl implements PsiSwitchLabelStatement
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiSwitchLabelStatementImpl");
+	private static final Logger LOG = Logger.getInstance(PsiSwitchLabelStatementImpl.class);
 
 	public PsiSwitchLabelStatementImpl()
 	{

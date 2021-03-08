@@ -47,7 +47,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
  */
 public class JVMNameUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.JVMNameUtil");
+	private static final Logger LOG = Logger.getInstance(JVMNameUtil.class);
 
 	public static final String CONSTRUCTOR_NAME = "<init>";
 

@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
  */
 public class ClsParsingUtil
 {
-	private static final Logger LOG = Logger.getInstance("com.intellij.psi.impl.compiled.ClsParsingUtil");
+	private static final Logger LOG = Logger.getInstance(ClsParsingUtil.class);
 
 	private static final JavaParserUtil.ParserWrapper ANNOTATION_VALUE = new JavaParserUtil.ParserWrapper()
 	{

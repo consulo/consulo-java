@@ -54,7 +54,7 @@ import com.intellij.util.containers.IntArrayList;
  */
 public class DuplicatesFinder
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.duplicates.DuplicatesFinder");
+	private static final Logger LOG = Logger.getInstance(DuplicatesFinder.class);
 	public static final Key<Pair<PsiVariable, PsiType>> PARAMETER = Key.create("PARAMETER");
 	private final PsiElement[] myPattern;
 	private final InputVariables myParameters;

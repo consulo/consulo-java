@@ -33,7 +33,7 @@ import com.intellij.psi.util.PsiUtil;
 
 public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements PsiTypeCastExpression, Constants
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiTypeCastExpressionImpl");
+	private static final Logger LOG = Logger.getInstance(PsiTypeCastExpressionImpl.class);
 
 	public PsiTypeCastExpressionImpl()
 	{

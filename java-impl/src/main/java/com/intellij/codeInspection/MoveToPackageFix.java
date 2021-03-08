@@ -33,7 +33,7 @@ import com.intellij.refactoring.util.RefactoringMessageUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class MoveToPackageFix implements LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.MoveToPackageFix");
+  private static final Logger LOG = Logger.getInstance(MoveToPackageFix.class);
   private final String myTargetPackage;
 
   public MoveToPackageFix(String targetPackage) {

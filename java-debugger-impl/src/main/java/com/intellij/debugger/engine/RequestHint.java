@@ -47,7 +47,7 @@ public class RequestHint
 	public static final int STOP = 0;
 	public static final int RESUME = -100;
 
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.RequestHint");
+	private static final Logger LOG = Logger.getInstance(RequestHint.class);
 	@MagicConstant(intValues = {
 			StepRequest.STEP_MIN,
 			StepRequest.STEP_LINE

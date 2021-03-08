@@ -56,7 +56,7 @@ public class InferenceSession
 	// Javac creates fresh variables only for i: Ai is a wildcard
 	private static boolean JAVAC_FRESH_VARIABLES_FOR_CAPTURED_WILDCARDS_ONLY = SystemProperties.getBooleanProperty("javac.fresh.variables.for.captured.wildcards.only", true);
 
-	private static final Logger LOG = Logger.getInstance("#" + InferenceSession.class.getName());
+	private static final Logger LOG = Logger.getInstance(InferenceSession.class);
 	private static final Key<PsiType> LOWER_BOUND = Key.create("LowBound");
 	private static final Key<PsiType> UPPER_BOUND = Key.create("UpperBound");
 	private static final Key<Boolean> ERASED = Key.create("UNCHECKED_CONVERSION");

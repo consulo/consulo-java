@@ -43,7 +43,7 @@ import java.util.List;
 
 public class AddImportAction implements QuestionAction
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.actions.AddImportAction");
+	private static final Logger LOG = Logger.getInstance(AddImportAction.class);
 
 	private final Project myProject;
 	private final PsiReference myReference;

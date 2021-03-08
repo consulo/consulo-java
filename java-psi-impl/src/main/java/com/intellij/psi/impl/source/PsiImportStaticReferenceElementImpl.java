@@ -45,7 +45,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author dsl
  */
 public class PsiImportStaticReferenceElementImpl extends CompositePsiElement implements PsiImportStaticReferenceElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiImportStaticReferenceElementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiImportStaticReferenceElementImpl.class);
   private volatile String myCanonicalText;
 
   public PsiImportStaticReferenceElementImpl() {

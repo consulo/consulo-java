@@ -20,7 +20,7 @@ import com.intellij.openapi.diagnostic.Logger;
 
 public class ThrowToInstruction extends BranchingInstruction {
 
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.controlFlow.ThrowToInstruction");
+  private static final Logger LOG = Logger.getInstance(ThrowToInstruction.class);
 
   public ThrowToInstruction(int offset) {
     super(offset, Role.END);

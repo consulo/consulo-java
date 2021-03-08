@@ -36,7 +36,7 @@ import consulo.internal.com.sun.jdi.*;
 import java.util.List;
 
 class LocalVariableEvaluator implements Evaluator {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.evaluation.expression.LocalVariableEvaluator");
+  private static final Logger LOG = Logger.getInstance(LocalVariableEvaluator.class);
 
   private final String myLocalVariableName;
   private EvaluationContextImpl myContext;

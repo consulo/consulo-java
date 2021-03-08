@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
   * @author mike
   */
  public class ExpressionUtil {
-   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.template.ExpressionUtil");
+   private static final Logger LOG = Logger.getInstance(ExpressionUtil.class);
 
    private ExpressionUtil() {
    }

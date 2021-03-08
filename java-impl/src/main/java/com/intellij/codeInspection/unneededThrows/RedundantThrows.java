@@ -43,7 +43,7 @@ import java.util.List;
  * @author max
  */
 public class RedundantThrows extends GlobalJavaInspectionTool {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.unneededThrows.RedundantThrows");
+  private static final Logger LOG = Logger.getInstance(RedundantThrows.class);
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.redundant.throws.display.name");
   private final BidirectionalMap<String, QuickFix> myQuickFixes = new BidirectionalMap<String, QuickFix>();
   @NonNls private static final String SHORT_NAME = "RedundantThrows";

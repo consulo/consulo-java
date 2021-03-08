@@ -36,7 +36,7 @@ import consulo.ui.image.Image;
  * @author peter
  */
 public abstract class JamSupportMetaData<T extends CommonModelElement> implements PsiWritableMetaData, PsiPresentableMetaData {
-  private static final Logger LOG = Logger.getInstance(JamSupportMetaData.class.getName());
+  private static final Logger LOG = Logger.getInstance(JamSupportMetaData.class);
   private T myElement;
 
   protected final void setElement(final T element) {

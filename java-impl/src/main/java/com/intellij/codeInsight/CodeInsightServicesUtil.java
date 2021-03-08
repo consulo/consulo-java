@@ -24,7 +24,7 @@ import com.intellij.util.IncorrectOperationException;
  * @author ven
  */
 public class CodeInsightServicesUtil {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.CodeInsightServicesUtil");
+  private static final Logger LOG = Logger.getInstance(CodeInsightServicesUtil.class);
 
   private static final IElementType[] ourTokenMap = {
     JavaTokenType.EQEQ, JavaTokenType.NE,

@@ -70,7 +70,7 @@ import consulo.java.module.util.JavaClassNames;
 @Singleton
 public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl");
+	private static final Logger LOG = Logger.getInstance(JavaCodeStyleManagerImpl.class);
 
 	@NonNls
 	private static final String IMPL_SUFFIX = "Impl";

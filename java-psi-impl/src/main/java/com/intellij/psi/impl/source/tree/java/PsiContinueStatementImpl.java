@@ -28,7 +28,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 
 public class PsiContinueStatementImpl extends CompositePsiElement implements PsiContinueStatement, Constants {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.java.PsiContinueStatementImpl");
+  private static final Logger LOG = Logger.getInstance(PsiContinueStatementImpl.class);
 
   public PsiContinueStatementImpl() {
     super(CONTINUE_STATEMENT);

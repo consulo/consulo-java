@@ -60,7 +60,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
 
   public final JDOMExternalizableStringList EXCLUDE_ANNOS = new JDOMExternalizableStringList();
   @NonNls private static final String QUICK_FIX_NAME = InspectionsBundle.message("inspection.empty.method.delete.quickfix");
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.emptyMethod.EmptyMethodInspection");
+  private static final Logger LOG = Logger.getInstance(EmptyMethodInspection.class);
 
   @Override
   @Nullable

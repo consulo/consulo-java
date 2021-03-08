@@ -52,7 +52,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
 
 public class ExtractSuperclassHandler implements RefactoringActionHandler, ExtractSuperclassDialog.Callback, ElementsHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractSuperclass.ExtractSuperclassHandler");
+  private static final Logger LOG = Logger.getInstance(ExtractSuperclassHandler.class);
 
   public static final String REFACTORING_NAME = RefactoringBundle.message("extract.superclass.title");
 

@@ -48,7 +48,7 @@ public class PropertyUtil
 {
 	@NonNls
 	private static final String IS_PREFIX = "is";
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.util.PropertyUtil");
+	private static final Logger LOG = Logger.getInstance(PropertyUtil.class);
 
 	private PropertyUtil()
 	{

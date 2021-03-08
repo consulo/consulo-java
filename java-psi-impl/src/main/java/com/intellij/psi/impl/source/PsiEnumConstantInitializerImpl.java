@@ -25,7 +25,7 @@ import com.intellij.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.psi.impl.light.LightClassReference;
 
 public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiEnumConstantInitializer {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiEnumConstantInitializerImpl");
+  private static final Logger LOG = Logger.getInstance(PsiEnumConstantInitializerImpl.class);
   private PsiClassType myCachedBaseType = null;
 
   public PsiEnumConstantInitializerImpl(final PsiClassStub stub) {

@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
  */
 public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass, PsiMember, MemberInfo>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.ui.GenerateEqualsWizard");
+	private static final Logger LOG = Logger.getInstance(GenerateEqualsWizard.class);
 
 	private static final MyMemberInfoFilter MEMBER_INFO_FILTER = new MyMemberInfoFilter();
 

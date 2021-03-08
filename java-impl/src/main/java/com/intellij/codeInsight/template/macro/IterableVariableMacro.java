@@ -36,7 +36,7 @@ import consulo.java.module.util.JavaClassNames;
  */
 public class IterableVariableMacro extends VariableTypeMacroBase
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.template.macro.IterableVariableMacro");
+	private static final Logger LOG = Logger.getInstance(IterableVariableMacro.class);
 
 	@Override
 	public String getName()
