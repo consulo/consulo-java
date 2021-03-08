@@ -15,25 +15,20 @@
  */
 package com.intellij.debugger.memory.component;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.intellij.debugger.memory.event.InstancesTrackerListener;
+import com.intellij.debugger.memory.tracking.TrackingType;
+import com.intellij.openapi.components.*;
+import com.intellij.openapi.project.Project;
+import com.intellij.util.EventDispatcher;
+import com.intellij.util.xmlb.annotations.AbstractCollection;
+import consulo.disposer.Disposable;
+import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import jakarta.inject.Singleton;
-
-import com.intellij.debugger.memory.event.InstancesTrackerListener;
-import com.intellij.debugger.memory.tracking.TrackingType;
-import consulo.disposer.Disposable;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.EventDispatcher;
-import com.intellij.util.containers.HashMap;
-import com.intellij.util.xmlb.annotations.AbstractCollection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
 @State(name = "InstancesTracker", storages = @Storage(StoragePathMacros.WORKSPACE_FILE))

@@ -16,9 +16,8 @@
  */
 package com.intellij.codeInsight.guess.impl;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import com.intellij.util.containers.HashMap;
 
 class MethodPatternMap {
   private final Map<String, MethodPattern> myMethodNameToPatternsMap = new HashMap<String, MethodPattern>();

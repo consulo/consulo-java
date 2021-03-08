@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.util.Processor;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 
 public class InheritanceUtil
 {

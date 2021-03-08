@@ -23,7 +23,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.changeSignature.CallerChooserBase;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.Consumer;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 
 public class JavaCallerChooser extends CallerChooserBase<PsiMethod> {
 

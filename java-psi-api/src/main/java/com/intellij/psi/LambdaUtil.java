@@ -26,7 +26,6 @@ import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.*;
 import com.intellij.util.*;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.HashMap;
 import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 

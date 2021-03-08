@@ -15,16 +15,16 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
-import java.util.Map;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateRuntimeException;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.util.containers.HashMap;
 import consulo.internal.com.sun.jdi.Value;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lex

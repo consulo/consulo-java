@@ -40,7 +40,7 @@ import com.intellij.debugger.engine.jdi.VirtualMachineProxy;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ThreeState;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.EventQueue;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;

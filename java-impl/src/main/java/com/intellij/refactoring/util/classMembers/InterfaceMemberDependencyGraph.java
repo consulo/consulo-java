@@ -15,19 +15,15 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.psi.*;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.classMembers.MemberDependencyGraph;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
-import com.intellij.util.containers.HashMap;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class InterfaceMemberDependencyGraph<T extends PsiMember, M extends MemberInfoBase<T>> implements
 		MemberDependencyGraph<T, M>

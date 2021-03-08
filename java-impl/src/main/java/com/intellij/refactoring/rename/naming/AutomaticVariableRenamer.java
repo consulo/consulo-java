@@ -25,7 +25,7 @@ import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageInfo;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 
 import java.util.Collection;
 import java.util.List;

@@ -31,7 +31,7 @@ import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;

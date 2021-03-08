@@ -53,7 +53,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.rt.coverage.data.JumpData;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.SwitchData;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.psi.PsiPackage;
 import consulo.roots.ContentFolderScopes;

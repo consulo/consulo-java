@@ -19,7 +19,7 @@ import java.util.Set;
 
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
 
 /**

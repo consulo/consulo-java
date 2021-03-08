@@ -1,14 +1,5 @@
 package com.intellij.codeInsight.generation.ui;
 
-import java.awt.Component;
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.ide.wizard.AbstractWizard;
 import com.intellij.ide.wizard.Step;
@@ -17,7 +8,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
 import com.intellij.refactoring.ui.AbstractMemberSelectionPanel;
-import com.intellij.util.containers.HashMap;
+
+import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import java.awt.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Nikolay.Tropin

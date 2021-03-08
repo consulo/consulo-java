@@ -51,7 +51,6 @@ import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.GuiUtils;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.HashMap;
 import consulo.editor.notifications.EditorNotificationProvider;
 import consulo.java.JavaBundle;
 import consulo.roots.types.BinariesOrderRootType;

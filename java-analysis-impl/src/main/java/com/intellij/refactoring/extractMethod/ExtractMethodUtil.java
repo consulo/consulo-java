@@ -15,11 +15,7 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
 import com.intellij.openapi.diagnostic.Logger;
-import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
@@ -28,7 +24,11 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.RedundantCastUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
-import com.intellij.util.containers.HashMap;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ven

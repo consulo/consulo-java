@@ -47,7 +47,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
 
 /**

@@ -13,7 +13,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.replaceConstructorWithBuilder.ParameterData;
 import com.intellij.refactoring.replaceConstructorWithBuilder.ReplaceConstructorWithBuilderProcessor;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

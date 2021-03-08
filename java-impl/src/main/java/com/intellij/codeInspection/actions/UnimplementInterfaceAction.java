@@ -38,7 +38,7 @@ import com.intellij.psi.PsiReferenceList;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 
 public class UnimplementInterfaceAction implements IntentionAction {
   private String myName = "Interface";

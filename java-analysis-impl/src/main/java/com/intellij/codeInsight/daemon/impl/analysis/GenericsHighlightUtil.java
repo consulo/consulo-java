@@ -42,8 +42,6 @@ import com.intellij.psi.search.searches.SuperMethodsSearch;
 import com.intellij.psi.util.*;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.HashMap;
-import com.intellij.util.containers.HashSet;
 import consulo.java.module.util.JavaClassNames;
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;

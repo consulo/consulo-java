@@ -60,7 +60,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import consulo.java.module.util.JavaClassNames;
 import consulo.java.psi.JavaLanguageVersion;
 

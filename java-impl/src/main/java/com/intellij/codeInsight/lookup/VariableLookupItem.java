@@ -32,7 +32,7 @@ import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.impl.source.PsiFieldImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import consulo.ui.color.ColorValue;
 import consulo.ui.image.ImageEffects;
 

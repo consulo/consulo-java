@@ -3,7 +3,7 @@ package com.intellij.refactoring;
 import com.intellij.FileSetTestCase;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.RefactoringUtil;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import junit.framework.Test;
 
 import java.io.File;

@@ -15,90 +15,30 @@
  */
 package com.intellij.ide.util.gotoByName;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
-import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.intellij.util.indexing.IdFilter;
+import gnu.trove.THashSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class DefaultSymbolNavigationContributor implements ChooseByNameContributorEx
 {
 	private static final Logger LOGGER = Logger.getInstance(DefaultSymbolNavigationContributor.class);
-
-	@Override
-	@Nonnull
-	public String[] getNames(Project project, boolean includeNonProjectItems)
-	{
-		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(project);
-		HashSet<String> set = new HashSet<String>();
-		cache.getAllMethodNames(set);
-		cache.getAllFieldNames(set);
-		cache.getAllClassNames(set);
-		return ArrayUtil.toStringArray(set);
-	}
-
-	@Override
-	@Nonnull
-	public NavigationItem[] getItemsByName(String name, final String pattern, Project project, boolean includeNonProjectItems)
-	{
-		GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
-		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(project);
-
-		List<PsiMember> result = new ArrayList<PsiMember>();
-		for(PsiMethod method : cache.getMethodsByName(name, scope))
-		{
-			if(!method.isConstructor() && isOpenable(method) && !hasSuperMethod(method))
-			{
-				result.add(method);
-			}
-		}
-		for(PsiField field : cache.getFieldsByName(name, scope))
-		{
-			if(isOpenable(field))
-			{
-				result.add(field);
-			}
-		}
-		for(PsiClass aClass : cache.getClassesByName(name, scope))
-		{
-			if(isOpenable(aClass))
-			{
-				result.add(aClass);
-			}
-		}
-		PsiMember[] array = result.toArray(new PsiMember[result.size()]);
-		Arrays.sort(array, MyComparator.INSTANCE);
-		return array;
-	}
 
 	private static boolean isOpenable(PsiMember member)
 	{

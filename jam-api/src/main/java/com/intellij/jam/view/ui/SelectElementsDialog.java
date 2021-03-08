@@ -29,7 +29,7 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.refactoring.ui.EnableDisableAction;
 import com.intellij.ui.*;
 import com.intellij.ui.table.TableView;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
 import consulo.awt.TargetAWT;

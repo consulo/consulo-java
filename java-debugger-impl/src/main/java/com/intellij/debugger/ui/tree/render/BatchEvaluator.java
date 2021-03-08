@@ -15,10 +15,6 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessAdapter;
@@ -30,10 +26,14 @@ import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
 import com.intellij.openapi.diagnostic.Logger;
-import consulo.util.dataholder.Key;
-import com.intellij.util.containers.HashMap;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.util.dataholder.Key;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * User: lex

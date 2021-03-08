@@ -44,7 +44,7 @@ import com.intellij.psi.util.*;
 import com.intellij.util.*;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
 import consulo.util.dataholder.Key;
 import consulo.util.dataholder.UserDataHolderEx;

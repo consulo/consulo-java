@@ -68,7 +68,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
 import com.intellij.psi.ServerPageFile;
 import com.intellij.util.PathsList;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.roots.types.SourcesOrderRootType;
 import consulo.ui.image.Image;
 

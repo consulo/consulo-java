@@ -31,7 +31,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 
 /**
  * @author cdr

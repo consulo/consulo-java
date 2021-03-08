@@ -4,7 +4,7 @@ import com.intellij.codeInspection.ex.EntryPointsManagerImpl;
 import com.intellij.codeInspection.reference.SmartRefElementPointer;
 import com.intellij.openapi.util.JDOMExternalizableStringList;
 import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import junit.framework.TestCase;
 import org.jdom.Element;
 

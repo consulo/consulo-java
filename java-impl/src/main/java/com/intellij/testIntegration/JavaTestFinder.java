@@ -25,100 +25,119 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
-import com.intellij.util.containers.HashSet;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
-public class JavaTestFinder implements TestFinder {
-  public PsiClass findSourceElement(@Nonnull PsiElement element) {
-    return TestIntegrationUtils.findOuterClass(element);
-  }
+public class JavaTestFinder implements TestFinder
+{
+	public PsiClass findSourceElement(@Nonnull PsiElement element)
+	{
+		return TestIntegrationUtils.findOuterClass(element);
+	}
 
-  @Nonnull
-  public Collection<PsiElement> findClassesForTest(@Nonnull PsiElement element) {
-    PsiClass klass = findSourceElement(element);
-    if (klass == null) return Collections.emptySet();
+	@Nonnull
+	public Collection<PsiElement> findClassesForTest(@Nonnull PsiElement element)
+	{
+		PsiClass klass = findSourceElement(element);
+		if(klass == null)
+		{
+			return Collections.emptySet();
+		}
 
-    GlobalSearchScope scope;
-    Module module = getModule(element);
-    if (module != null) {
-      scope = GlobalSearchScope.moduleWithDependenciesScope(module);
-    }
-    else {
-      scope = GlobalSearchScope.projectScope(element.getProject());
-    }
+		GlobalSearchScope scope;
+		Module module = getModule(element);
+		if(module != null)
+		{
+			scope = GlobalSearchScope.moduleWithDependenciesScope(module);
+		}
+		else
+		{
+			scope = GlobalSearchScope.projectScope(element.getProject());
+		}
 
-    PsiShortNamesCache cache = PsiShortNamesCache.getInstance(element.getProject());
+		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(element.getProject());
 
-    List<Pair<? extends PsiNamedElement, Integer>> classesWithWeights = new ArrayList<Pair<? extends PsiNamedElement, Integer>>();
-    for (Pair<String, Integer> eachNameWithWeight : TestFinderHelper.collectPossibleClassNamesWithWeights(klass.getName())) {
-      for (PsiClass eachClass : cache.getClassesByName(eachNameWithWeight.first, scope)) {
-        if (isTestSubjectClass(eachClass)) {
-          classesWithWeights.add(new Pair<PsiClass, Integer>(eachClass, eachNameWithWeight.second));
-        }
-      }
-    }
+		List<Pair<? extends PsiNamedElement, Integer>> classesWithWeights = new ArrayList<Pair<? extends PsiNamedElement, Integer>>();
+		for(Pair<String, Integer> eachNameWithWeight : TestFinderHelper.collectPossibleClassNamesWithWeights(klass.getName()))
+		{
+			for(PsiClass eachClass : cache.getClassesByName(eachNameWithWeight.first, scope))
+			{
+				if(isTestSubjectClass(eachClass))
+				{
+					classesWithWeights.add(Pair.create(eachClass, eachNameWithWeight.second));
+				}
+			}
+		}
 
-    return TestFinderHelper.getSortedElements(classesWithWeights, false);
-  }
+		return TestFinderHelper.getSortedElements(classesWithWeights, false);
+	}
 
-  private static boolean isTestSubjectClass(PsiClass klass) {
-    if (klass.isAnnotationType() || TestFrameworks.getInstance().isTestClass(klass)) {
-      return false;
-    }
-    return true;
-  }
+	private static boolean isTestSubjectClass(PsiClass klass)
+	{
+		if(klass.isAnnotationType() || TestFrameworks.getInstance().isTestClass(klass))
+		{
+			return false;
+		}
+		return true;
+	}
 
-  @Nonnull
-  public Collection<PsiElement> findTestsForClass(@Nonnull PsiElement element) {
-    PsiClass klass = findSourceElement(element);
-    if (klass == null) return Collections.emptySet();
+	@Nonnull
+	public Collection<PsiElement> findTestsForClass(@Nonnull PsiElement element)
+	{
+		PsiClass klass = findSourceElement(element);
+		if(klass == null)
+		{
+			return Collections.emptySet();
+		}
 
-    GlobalSearchScope scope;
-    Module module = getModule(element);
-    if (module != null) {
-      scope = GlobalSearchScope.moduleWithDependentsScope(module);
-    }
-    else {
-      scope = GlobalSearchScope.projectScope(element.getProject());
-    }
+		GlobalSearchScope scope;
+		Module module = getModule(element);
+		if(module != null)
+		{
+			scope = GlobalSearchScope.moduleWithDependentsScope(module);
+		}
+		else
+		{
+			scope = GlobalSearchScope.projectScope(element.getProject());
+		}
 
-    PsiShortNamesCache cache = PsiShortNamesCache.getInstance(element.getProject());
+		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(element.getProject());
 
-    String klassName = klass.getName();
-    Pattern pattern = Pattern.compile(".*" + klassName + ".*");
+		String klassName = klass.getName();
+		Pattern pattern = Pattern.compile(".*" + klassName + ".*");
 
-    List<Pair<? extends PsiNamedElement, Integer>> classesWithProximities = new ArrayList<Pair<? extends PsiNamedElement, Integer>>();
+		List<Pair<? extends PsiNamedElement, Integer>> classesWithProximities = new ArrayList<Pair<? extends PsiNamedElement, Integer>>();
 
-    HashSet<String> names = new HashSet<String>();
-    cache.getAllClassNames(names);
-    for (String eachName : names) {
-      if (pattern.matcher(eachName).matches()) {
-        for (PsiClass eachClass : cache.getClassesByName(eachName, scope)) {
-          if (TestFrameworks.getInstance().isTestClass(eachClass)) {
-            classesWithProximities.add(
-                new Pair<PsiClass, Integer>(eachClass, TestFinderHelper.calcTestNameProximity(klassName, eachName)));
-          }
-        }
-      }
-    }
+		cache.processAllClassNames(eachName ->
+		{
+			if(pattern.matcher(eachName).matches())
+			{
+				for(PsiClass eachClass : cache.getClassesByName(eachName, scope))
+				{
+					if(TestFrameworks.getInstance().isTestClass(eachClass))
+					{
+						classesWithProximities.add(Pair.create(eachClass, TestFinderHelper.calcTestNameProximity(klassName, eachName)));
+					}
+				}
+			}
+			return true;
+		});
 
-    return TestFinderHelper.getSortedElements(classesWithProximities, true);
-  }
+		return TestFinderHelper.getSortedElements(classesWithProximities, true);
+	}
 
-  @Nullable
-  private static Module getModule(PsiElement element) {
-    ProjectFileIndex index = ProjectRootManager.getInstance(element.getProject()).getFileIndex();
-    return index.getModuleForFile(element.getContainingFile().getVirtualFile());
-  }
+	@Nullable
+	private static Module getModule(PsiElement element)
+	{
+		ProjectFileIndex index = ProjectRootManager.getInstance(element.getProject()).getFileIndex();
+		return index.getModuleForFile(element.getContainingFile().getVirtualFile());
+	}
 
-  public boolean isTest(@Nonnull PsiElement element) {
-    return TestIntegrationUtils.isTest(element);
-  }
+	public boolean isTest(@Nonnull PsiElement element)
+	{
+		return TestIntegrationUtils.isTest(element);
+	}
 }

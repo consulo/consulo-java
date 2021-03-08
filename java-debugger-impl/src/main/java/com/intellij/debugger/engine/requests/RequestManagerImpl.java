@@ -44,7 +44,7 @@ import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.ui.classFilter.ClassFilter;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.InterfaceType;

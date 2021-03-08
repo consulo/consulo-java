@@ -27,7 +27,7 @@ package com.intellij.refactoring.makeStatic;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiType;
 import com.intellij.refactoring.util.VariableData;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import javax.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public final class Settings {
     myMakeFieldParameters = variableDatum != null;
     myFieldToNameList = new ArrayList<FieldParameter>();
     if(myMakeFieldParameters) {
-      myFieldToNameMapping = new com.intellij.util.containers.HashMap<PsiField, String>();
+      myFieldToNameMapping = new java.util.HashMap<PsiField, String>();
       for (VariableData data : variableDatum) {
         if (data.passAsParameter) {
           myFieldToNameMapping.put((PsiField)data.variable, data.name);

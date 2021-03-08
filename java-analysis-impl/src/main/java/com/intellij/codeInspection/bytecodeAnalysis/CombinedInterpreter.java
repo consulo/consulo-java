@@ -16,7 +16,7 @@
 
 package com.intellij.codeInspection.bytecodeAnalysis;
 
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.internal.org.objectweb.asm.Handle;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.Type;

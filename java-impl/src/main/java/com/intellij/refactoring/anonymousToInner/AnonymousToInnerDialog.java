@@ -43,7 +43,7 @@ import com.intellij.refactoring.util.VariableData;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.util.Function;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import com.intellij.util.ui.FormBuilder;
 import consulo.java.module.util.JavaClassNames;
 

@@ -34,7 +34,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.FactoryMap;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;

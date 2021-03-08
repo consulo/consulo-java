@@ -20,10 +20,10 @@ import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.containers.HashMap;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**

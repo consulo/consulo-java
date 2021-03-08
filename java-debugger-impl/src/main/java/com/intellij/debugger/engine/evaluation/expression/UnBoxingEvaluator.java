@@ -26,7 +26,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Couple;
 import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.impl.PsiJavaParserFacadeImpl;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.Method;

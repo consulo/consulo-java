@@ -57,7 +57,7 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.HashSet;
+import java.util.HashSet;
 import consulo.java.JavaQuickFixBundle;
 import consulo.java.module.util.JavaClassNames;
 import consulo.ui.impl.ModalityPerProjectEAPDescriptor;

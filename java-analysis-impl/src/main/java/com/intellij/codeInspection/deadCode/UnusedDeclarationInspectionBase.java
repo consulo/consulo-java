@@ -74,7 +74,7 @@ import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import consulo.java.codeInspection.JavaExtensionPoints;
 import consulo.java.module.util.JavaClassNames;
 

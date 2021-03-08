@@ -20,12 +20,6 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.swing.SwingUtilities;
-import javax.swing.tree.MutableTreeNode;
-
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
@@ -39,12 +33,17 @@ import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import consulo.util.dataholder.Key;
 import com.intellij.ui.SimpleColoredText;
-import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.ui.image.Image;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.tree.MutableTreeNode;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTreeNode, NodeDescriptorProvider, MutableTreeNode
 {

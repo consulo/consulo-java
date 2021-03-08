@@ -21,9 +21,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.HashMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class CalleeMethodsTreeStructure extends HierarchyTreeStructure {
   private final String myScopeType;
