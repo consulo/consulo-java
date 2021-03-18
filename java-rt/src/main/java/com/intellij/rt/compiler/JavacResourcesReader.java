@@ -15,7 +15,7 @@
  */
 package com.intellij.rt.compiler;
 
-import consulo.java.rt.compiler.JavacResourcesReaderConstans;
+import consulo.java.rt.compiler.JavacResourcesReaderConstants;
 
 import java.text.MessageFormat;
 import java.util.ListResourceBundle;
@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
  * @author Eugene Zhuravlev
  *         Date: Oct 10, 2005
  */
-public class JavacResourcesReader implements JavacResourcesReaderConstans
+public class JavacResourcesReader implements JavacResourcesReaderConstants
 {
 	private static final String[] BUNDLE_NAMES = new String[]{
 			"com.sun.tools.javac.resources.compiler",

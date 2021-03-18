@@ -20,7 +20,7 @@ package consulo.java.rt.compiler;
  * @author VISTALL
  * @since 2018-04-26
  */
-public interface JavacResourcesReaderConstans
+public interface JavacResourcesReaderConstants
 {
 	public static final String MSG_PATTERNS_START = "__patterns_start";
 	public static final String MSG_PATTERNS_END = "__patterns_end";

@@ -15,38 +15,14 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.compiler.CompilerIOUtil;
+import com.intellij.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.compiler.OutputParser;
-import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.ExternalCompiler;
+import com.intellij.compiler.impl.javaCompiler.BackendCompiler;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.module.Module;
@@ -56,14 +32,11 @@ import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.projectRoots.impl.MockSdkWrapper;
 import com.intellij.openapi.roots.DependencyScope;
 import com.intellij.openapi.roots.ExportableOrderEntry;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderEnumerator;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -81,25 +54,31 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AccessRule;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.compiler.roots.CompilerPathsImpl;
+import consulo.ide.eap.EarlyAccessProgramManager;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
+import consulo.java.compiler.NewJavaCompilerEarlyAccessDescriptor;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
+import consulo.java.compiler.impl.javaCompiler.JavaToolMonitor;
+import consulo.java.compiler.impl.javaCompiler.NewBackendCompilerProcessBuilder;
+import consulo.java.compiler.impl.javaCompiler.old.OldBackendCompilerProcessBuilder;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
-import consulo.java.rt.JavaRtClassNames;
-import consulo.logging.Logger;
 import consulo.roots.ContentFolderScopes;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.roots.impl.TestContentFolderTypeProvider;
 
-public class JavacCompiler extends ExternalCompiler
-{
-	public static final String TESTS_EXTERNAL_COMPILER_HOME_PROPERTY_NAME = "tests.external.compiler.home";
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
 
-	private static final Logger LOG = Logger.getInstance(JavacCompiler.class);
+public class JavacCompiler implements BackendCompiler
+{
 	private final Project myProject;
-	private final List<File> myTempFiles = new ArrayList<>();
-	private static final String JAVAC_MAIN_CLASS_OLD = "sun.tools.javac.Main";
-	public static final String JAVAC_MAIN_CLASS = "com.sun.tools.javac.Main";
 	private boolean myAnnotationProcessorMode = false;
 
 	public JavacCompiler(Project project)
@@ -205,138 +184,47 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@Override
-	public OutputParser createErrorParser(@Nonnull final String outputDir, ProcessHandler process)
+	public OutputParser createErrorParser(BackendCompilerProcessBuilder processBuilder, @Nonnull final String outputDir, ProcessHandler process)
 	{
+		if(processBuilder instanceof NewBackendCompilerProcessBuilder)
+		{
+			return null;
+		}
 		return new JavacOutputParser(myProject);
 	}
 
+	@Nullable
 	@Override
-	public OutputParser createOutputParser(@Nonnull final String outputDir)
+	public BackendCompilerMonitor createMonitor(BackendCompilerProcessBuilder processBuilder)
 	{
+		if(processBuilder instanceof NewBackendCompilerProcessBuilder)
+		{
+			return new JavaToolMonitor((NewBackendCompilerProcessBuilder) processBuilder);
+		}
 		return null;
 	}
 
+	@Nonnull
 	@Override
-	@Nonnull
-	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
+	public BackendCompilerProcessBuilder prepareProcess(@Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException
 	{
-		return ReadAction.compute(() -> createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
-				.isAnnotationProcessorsEnabled()));
-	}
+		JpsJavaCompilerOptions javaCompilerOptions = JavacCompilerConfiguration.getInstance(myProject);
+		JavaCompilerConfiguration javaCompilerConfiguration = JavaCompilerConfiguration.getInstance(myProject);
 
-	@Nonnull
-	@RequiredReadAction
-	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
-													final String outputPath,
-													final CompileContext compileContext,
-													JpsJavaCompilerOptions javacOptions,
-													final boolean annotationProcessorsEnabled) throws IOException
-	{
-		final Sdk jdk = getJdkForStartupCommand(chunk);
-		final String versionString = jdk.getVersionString();
-		JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
-		if(versionString == null || version == null || !(jdk.getSdkType() instanceof JavaSdk))
+		//noinspection ConstantConditions
+		return AccessRule.read(() ->
 		{
-			throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
-		}
+			final Sdk jdk = getJdkForStartupCommand(chunk);
 
-		JavaSdk sdkType = (JavaSdk) jdk.getSdkType();
+			JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
 
-		if(!version.isAtLeast(JavaSdkVersion.JDK_1_9))
-		{
-			final String toolsJarPath = sdkType.getToolsPath(jdk);
-			if(toolsJarPath == null)
+			if(version != null && version.isAtLeast(JavaSdkVersion.JDK_1_8) && EarlyAccessProgramManager.is(NewJavaCompilerEarlyAccessDescriptor.class))
 			{
-				throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.tools.jar.missing", jdk.getName()));
+				return new NewBackendCompilerProcessBuilder(chunk, outputDir, compileContext, javaCompilerOptions, javaCompilerConfiguration.isAnnotationProcessorsEnabled());
 			}
-		}
 
-		GeneralCommandLine commandLine = new GeneralCommandLine();
-		sdkType.setupCommandLine(commandLine, jdk);
-
-		ParametersList parametersList = commandLine.getParametersList();
-
-		if(version.isAtLeast(JavaSdkVersion.JDK_1_2))
-		{
-			parametersList.add("-Xmx" + javacOptions.MAXIMUM_HEAP_SIZE + "m");
-		}
-		else
-		{
-			parametersList.add("-mx" + javacOptions.MAXIMUM_HEAP_SIZE + "m");
-		}
-
-		final List<String> additionalOptions = addAdditionalSettings(parametersList, javacOptions, myAnnotationProcessorMode, version, chunk, annotationProcessorsEnabled);
-
-		JavaCompilerUtil.addLocaleOptions(parametersList, false);
-
-		parametersList.add("-classpath");
-
-		if(version == JavaSdkVersion.JDK_1_0)
-		{
-			parametersList.add(sdkType.getToolsPath(jdk)); //  do not use JavacRunner for jdk 1.0
-		}
-		else if(version.isAtLeast(JavaSdkVersion.JDK_1_9))
-		{
-			parametersList.add(JavaSdkUtil.getJavaRtJarPath());
-			parametersList.add(JavaRtClassNames.JAVAC_RUNNER);
-			parametersList.add("\"" + versionString + "\"");
-		}
-		else
-		{
-			parametersList.add(sdkType.getToolsPath(jdk) + File.pathSeparator + JavaSdkUtil.getJavaRtJarPath());
-			parametersList.add(JavaRtClassNames.JAVAC_RUNNER);
-			parametersList.add("\"" + versionString + "\"");
-		}
-
-		if(version.isAtLeast(JavaSdkVersion.JDK_1_3))
-		{
-			parametersList.add(JAVAC_MAIN_CLASS);
-		}
-		else
-		{
-			parametersList.add(JAVAC_MAIN_CLASS_OLD);
-		}
-
-		addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, true, myAnnotationProcessorMode);
-
-		parametersList.addAll(additionalOptions);
-
-		final List<VirtualFile> files = chunk.getFilesToCompile();
-
-		if(version == JavaSdkVersion.JDK_1_0)
-		{
-			for(VirtualFile file : files)
-			{
-				String path = file.getPath();
-				if(LOG.isDebugEnabled())
-				{
-					LOG.debug("Adding path for compilation " + path);
-				}
-				parametersList.add(CompilerUtil.quotePath(path));
-			}
-		}
-		else
-		{
-			File sourcesFile = File.createTempFile("javac", ".tmp");
-			sourcesFile.deleteOnExit();
-			myTempFiles.add(sourcesFile);
-			try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile))))
-			{
-				for(final VirtualFile file : files)
-				{
-					// Important: should use "/" slashes!
-					// but not for JDK 1.5 - see SCR 36673
-					final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.getPath().replace('/', File.separatorChar) : file.getPath();
-					if(LOG.isDebugEnabled())
-					{
-						LOG.debug("Adding path for compilation " + path);
-					}
-					writer.println(version == JavaSdkVersion.JDK_1_1 ? path : CompilerUtil.quotePath(path));
-				}
-			}
-			parametersList.add("@" + sourcesFile.getAbsolutePath());
-		}
-		return commandLine;
+			return new OldBackendCompilerProcessBuilder(chunk, outputDir, compileContext, javaCompilerOptions, javaCompilerConfiguration.isAnnotationProcessorsEnabled());
+		});
 	}
 
 	public static List<String> addAdditionalSettings(ParametersList parametersList,
@@ -388,7 +276,7 @@ public class JavacCompiler extends ExternalCompiler
 
 		while(tokenizer.hasMoreTokens())
 		{
-			@NonNls String token = tokenizer.nextToken();
+			String token = tokenizer.nextToken();
 			if(version == JavaSdkVersion.JDK_1_0 && "-deprecation".equals(token))
 			{
 				continue; // not supported for this version
@@ -435,13 +323,12 @@ public class JavacCompiler extends ExternalCompiler
 	@RequiredReadAction
 	public static void addCommandLineOptions(CompileContext compileContext,
 											 ModuleChunk chunk,
-											 @NonNls ParametersList commandLine,
+											 ParametersList commandLine,
 											 String outputPath,
 											 Sdk jdk,
 											 JavaSdkVersion version,
 											 List<File> tempFiles,
 											 boolean addSourcePath,
-											 boolean useTempFile,
 											 boolean isAnnotationProcessingMode) throws IOException
 	{
 		LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
@@ -472,42 +359,47 @@ public class JavacCompiler extends ExternalCompiler
 		final Set<VirtualFile> cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
 		final Set<VirtualFile> bootCp = filterModFiles(JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk));
 
-		final String classPath;
+		final List<String> classPath;
 		if(version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1)
 		{
-			classPath = asString(bootCp) + File.pathSeparator + asString(cp);
+			classPath = new ArrayList<>();
+			classPath.addAll(toStringList(bootCp));
+			classPath.addAll(toStringList(cp));
 		}
 		else
 		{
-			classPath = asString(cp);
+			classPath = toStringList(cp);
 			if(version.isAtLeast(JavaSdkVersion.JDK_1_9))
 			{
 				// add bootpath if target is 1.8 or lower
 				if(languageLevel != null && !languageLevel.isAtLeast(LanguageLevel.JDK_1_9) && !bootCp.isEmpty())
 				{
 					commandLine.add("-bootclasspath");
-					addClassPathValue(jdk, version, commandLine, asString(bootCp), "javac_bootcp", tempFiles, useTempFile);
+					addClassPathValue(jdk, version, commandLine, toStringList(bootCp), "javac_bootcp", tempFiles);
 				}
 			}
 			else
 			{
 				commandLine.add("-bootclasspath");
-				addClassPathValue(jdk, version, commandLine, asString(bootCp), "javac_bootcp", tempFiles, useTempFile);
+				addClassPathValue(jdk, version, commandLine, toStringList(bootCp), "javac_bootcp", tempFiles);
 			}
 		}
 
-		if(isJava9Version)
+		PsiJavaModule javaModule = isJava9Version ? JavaModuleGraphUtil.findDescriptorByModule(chunk.getModule(), chunk.getSourcesFilter() == ModuleChunk.TEST_SOURCES) : null;
+
+		// enable module-path only if module contains module-info
+		if(isJava9Version && javaModule != null)
 		{
 			commandLine.add("--module-path");
-			addClassPathValue(jdk, version, commandLine, classPath, "javac_mp", tempFiles, useTempFile);
+			addClassPathValue(jdk, version, commandLine, classPath, "javac_mp", tempFiles);
 		}
 		else
 		{
 			commandLine.add("-classpath");
-			addClassPathValue(jdk, version, commandLine, classPath, "javac_cp", tempFiles, useTempFile);
+			addClassPathValue(jdk, version, commandLine, classPath, "javac_cp", tempFiles);
 		}
 
-		if(isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9) && chunk.getSourcesFilter() == ModuleChunk.TEST_SOURCES)
+		if(isJava9Version && chunk.getSourcesFilter() == ModuleChunk.TEST_SOURCES)
 		{
 			String moduleName = findModuleName(module);
 			if(moduleName != null)
@@ -672,86 +564,31 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@Nonnull
-	private static String asString(Set<VirtualFile> files)
+	private static List<String> toStringList(Set<VirtualFile> files)
 	{
 		PathsList pathsList = new PathsList();
 		pathsList.addVirtualFiles(files);
-		return pathsList.getPathsString();
+		return pathsList.getPathList();
 	}
 
 	private static void addClassPathValue(final Sdk jdk,
 										  final JavaSdkVersion version,
 										  final ParametersList parametersList,
-										  final String cpString,
-										  @NonNls final String tempFileName,
-										  List<File> tempFiles,
-										  boolean useTempFile) throws IOException
+										  final List<String> cpString,
+										  final String tempFileName,
+										  List<File> tempFiles) throws IOException
 	{
-		if(!useTempFile)
-		{
-			parametersList.add(cpString);
-			return;
-		}
-		// must include output path to classpath, otherwise javac will compile all dependent files no matter were they compiled before or not
-		if(version == JavaSdkVersion.JDK_1_0)
-		{
-			parametersList.add(((JavaSdk) jdk.getSdkType()).getToolsPath(jdk) + File.pathSeparator + cpString);
-		}
-		else
-		{
-			File cpFile = File.createTempFile(tempFileName, ".tmp");
-			cpFile.deleteOnExit();
-			tempFiles.add(cpFile);
-			final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(cpFile)));
-			try
-			{
-				CompilerIOUtil.writeString(cpString, out);
-			}
-			finally
-			{
-				out.close();
-			}
-			parametersList.add("@" + cpFile.getAbsolutePath());
-		}
+		File cpFile = File.createTempFile(tempFileName, ".tmp");
+		cpFile.deleteOnExit();
+		tempFiles.add(cpFile);
+
+		Files.write(cpFile.toPath(), cpString);
+
+		parametersList.add("@" + cpFile.getAbsolutePath());
 	}
 
-	private Sdk getJdkForStartupCommand(final ModuleChunk chunk)
+	public static Sdk getJdkForStartupCommand(final ModuleChunk chunk)
 	{
-		final Sdk jdk = JavaCompilerUtil.getSdkForCompilation(chunk);
-		if(ApplicationManager.getApplication().isUnitTestMode() && JavacCompilerConfiguration.getInstance(myProject).isTestsUseExternalCompiler())
-		{
-			final String jdkHomePath = getTestsExternalCompilerHome();
-			if(jdkHomePath == null)
-			{
-				throw new IllegalArgumentException("[TEST-MODE] Cannot determine home directory for JDK to use javac from");
-			}
-			// when running under Mock JDK use VM executable from the JDK on which the tests run
-			return new MockSdkWrapper(jdkHomePath, jdk);
-		}
-		return jdk;
-	}
-
-	public static String getTestsExternalCompilerHome()
-	{
-		String compilerHome = System.getProperty(TESTS_EXTERNAL_COMPILER_HOME_PROPERTY_NAME, null);
-		if(compilerHome == null)
-		{
-			if(SystemInfo.isMac)
-			{
-				compilerHome = new File(System.getProperty("java.home")).getAbsolutePath();
-			}
-			else
-			{
-				compilerHome = new File(System.getProperty("java.home")).getParentFile().getAbsolutePath();
-			}
-		}
-		return compilerHome;
-	}
-
-	@Override
-	public void compileFinished()
-	{
-		FileUtil.asyncDelete(myTempFiles);
-		myTempFiles.clear();
+		return JavaCompilerUtil.getSdkForCompilation(chunk);
 	}
 }

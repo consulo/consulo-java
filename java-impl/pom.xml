@@ -71,6 +71,10 @@
 								<path>java-rt-shaded.jar</path>
 							</copy>
 							<copy>
+								<artifact>${project.groupId}:consulo.java-java.rt:${project.version}</artifact>
+								<path>java-rt.jar</path>
+							</copy>
+							<copy>
 								<artifact>consulo.internal:java.coverage.agent:1.0</artifact>
 								<path>coverage/consulo/agent.jar</path>
 							</copy>
@@ -90,12 +94,12 @@
 	</build>
 
 	<dependencies>
+		<!--just for correct working packaging-->
 		<dependency>
-			<!--just for correct working packaging-->
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-java.rt.shaded</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>

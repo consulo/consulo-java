@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2013-2020 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.compiler.impl.javaCompiler.javac;
 
-/**
- * @author nik
- */
-public class JpsJavaCompilerOptions
+namespace * consulo.java.rt.common.compiler
+
+service JavaCompilerInterface
 {
-	public boolean DEBUGGING_INFO = true;
-	public boolean GENERATE_NO_WARNINGS = false;
-	public boolean DEPRECATION = true;
-	public String ADDITIONAL_OPTIONS_STRING = "";
-	public int MAXIMUM_HEAP_SIZE = 128;
+  void logInfo(1:string message, 2:string fileUri, 3:i64 lineNumber, 4:i64 columnNumber);
+  
+  void logError(1:string message, 2:string fileUri, 3:i64 lineNumber, 4:i64 columnNumber);
+
+  void logWarning(1:string message, 2:string fileUri, 3:i64 lineNumber, 4:i64 columnNumber);
+
+  void fileWrote(1:string filePath);
 }

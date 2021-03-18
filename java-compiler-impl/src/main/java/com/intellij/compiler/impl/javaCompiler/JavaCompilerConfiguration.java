@@ -13,12 +13,12 @@ import consulo.annotation.DeprecationInfo;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
 import consulo.java.module.extension.JavaModuleExtension;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.jdom.Element;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import java.io.File;
 import java.util.*;
 
@@ -113,7 +113,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 	@Nullable
 	public BackendCompiler findCompiler(@Nonnull String className)
 	{
-		for(BackendCompilerEP ep : BackendCompiler.EP_NAME.getExtensions(myProject))
+		for(BackendCompilerEP ep : BackendCompiler.EP_NAME.getExtensionList(myProject))
 		{
 			if(className.equals(ep.getInstance(myProject).getClass().getSimpleName()))
 			{

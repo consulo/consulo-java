@@ -15,7 +15,6 @@
  */
 package com.intellij.openapi.projectRoots.ex;
 
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -23,6 +22,7 @@ import com.intellij.openapi.projectRoots.*;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.PathsList;
 import consulo.annotation.DeprecationInfo;
+import consulo.container.plugin.PluginManager;
 import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.Contract;
 
@@ -50,6 +50,14 @@ public class JavaSdkUtil
 	{
 		File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
 		File jarFile = new File(pluginPath, "java-rt-shaded.jar");
+		return jarFile.getPath();
+	}
+
+	@Nonnull
+	public static String getJavaRtJarNotShadedPath()
+	{
+		File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
+		File jarFile = new File(pluginPath, "java-rt.jar");
 		return jarFile.getPath();
 	}
 

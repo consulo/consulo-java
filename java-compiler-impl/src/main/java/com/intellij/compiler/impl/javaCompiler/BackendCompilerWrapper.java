@@ -15,31 +15,6 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import gnu.trove.THashMap;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.compiler.CompilerEncodingService;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.OutputParser;
@@ -52,28 +27,17 @@ import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessHandlerFactory;
+import com.intellij.execution.process.*;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.compiler.JavaSourceTransformingCompiler;
-import com.intellij.openapi.compiler.TranslatingCompiler;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ContentIterator;
-import com.intellij.openapi.roots.ModuleFileIndex;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.roots.*;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pair;
@@ -93,7 +57,20 @@ import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.concurrency.AppExecutorUtil;
 import consulo.application.AccessRule;
 import consulo.compiler.make.impl.CompositeDependencyCache;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.util.dataholder.Key;
+import gnu.trove.THashMap;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * @author Eugene Zhuravlev
@@ -101,6 +78,8 @@ import consulo.util.dataholder.Key;
  */
 public class BackendCompilerWrapper
 {
+	public static final Key<ClassParsingHandler> CLASS_PARSING_HANDLER_KEY = Key.create(ClassParsingHandler.class.getName());
+
 	private static final Logger LOG = Logger.getInstance(BackendCompilerWrapper.class);
 
 	private final BackendCompiler myCompiler;
@@ -261,6 +240,7 @@ public class BackendCompilerWrapper
 			for(final OutputDir outputDir : outs)
 			{
 				chunk.setSourcesFilter(outputDir.getKind());
+
 				doCompile(chunk, outputDir.getPath(), parsingInfo);
 			}
 		}
@@ -454,27 +434,46 @@ public class BackendCompilerWrapper
 			return; // should not invoke javac with empty sources list
 		}
 
+		BackendCompilerProcessBuilder processBuilder = null;
 		int exitValue = 0;
 		try
 		{
-			final GeneralCommandLine commandLine = myCompiler.launchProcess(chunk, outputDir, myCompileContext);
+			ClassParsingHandler classParsingHandler = new ClassParsingHandler(parsingInfo);
 
-			OSProcessHandler process;
+			myCompileContext.putUserData(CLASS_PARSING_HANDLER_KEY, classParsingHandler);
+
+			processBuilder = myCompiler.prepareProcess(chunk, outputDir, myCompileContext);
+
+			BackendCompilerMonitor monitor = myCompiler.createMonitor(processBuilder);
+
+			GeneralCommandLine commandLine = AccessRule.read(processBuilder::buildCommandLine);
+
+			assert commandLine != null;
+
+			ProcessHandler process;
 			try
 			{
-				process = ProcessHandlerFactory.getInstance().createProcessHandler(commandLine);
+				process = processBuilder.createProcess(commandLine);
+				if(monitor != null)
+				{
+					monitor.handleProcessStart(process);
+				}
 			}
 			catch(ExecutionException e)
 			{
+				if(monitor != null)
+				{
+					monitor.disposeWithTree();
+				}
 				throw new IOException(e);
 			}
 
-			ClassParsingHandler classParsingThread = new ClassParsingHandler(parsingInfo);
 			ExecutorService executorService = AppExecutorUtil.getAppExecutorService();
-			Future<?> classParsingFuture = executorService.submit(classParsingThread);
+			Future<?> classParsingFuture = executorService.submit(classParsingHandler);
 
-			OutputParser errorParser = myCompiler.createErrorParser(outputDir, process);
-			CompilerParsingThread errorParsingThread = errorParser == null ? null : new CompilerParsingHandler(process, myCompileContext, errorParser, classParsingThread, true, errorParser.isTrimLines());
+			OutputParser errorParser = myCompiler.createErrorParser(processBuilder, outputDir, process);
+			CompilerParsingThread errorParsingThread = errorParser == null ? null : new CompilerParsingHandler(process, myCompileContext, errorParser, classParsingHandler, true, errorParser
+					.isTrimLines());
 
 			Future<?> errorParsingFuture = CompletableFuture.completedFuture(null);
 			if(errorParsingThread != null)
@@ -483,8 +482,9 @@ public class BackendCompilerWrapper
 			}
 
 			Future<?> outputParsingFuture = CompletableFuture.completedFuture(null);
-			OutputParser outputParser = myCompiler.createOutputParser(outputDir);
-			CompilerParsingThread outputParsingHandler = outputParser == null ? null : new CompilerParsingHandler(process, myCompileContext, outputParser, classParsingThread, false, outputParser.isTrimLines());
+			OutputParser outputParser = myCompiler.createOutputParser(processBuilder, outputDir);
+			CompilerParsingThread outputParsingHandler = outputParser == null ? null : new CompilerParsingHandler(process, myCompileContext, outputParser, classParsingHandler, false, outputParser
+					.isTrimLines());
 			if(outputParsingHandler != null)
 			{
 				outputParsingFuture = executorService.submit(outputParsingHandler);
@@ -498,6 +498,11 @@ public class BackendCompilerWrapper
 			}
 			catch(Throwable e)
 			{
+				if(monitor != null)
+				{
+					monitor.disposeWithTree();
+				}
+
 				throw new IOException(e);
 			}
 			finally
@@ -516,7 +521,12 @@ public class BackendCompilerWrapper
 				{
 					outputParsingHandler.stopParsing();
 				}
-				classParsingThread.stopParsing();
+				classParsingHandler.stopParsing();
+
+				if(monitor != null)
+				{
+					monitor.disposeWithTree();
+				}
 
 				waitABit(classParsingFuture);
 				waitABit(errorParsingFuture);
@@ -527,11 +537,15 @@ public class BackendCompilerWrapper
 
 				assert outputParsingHandler == null || !outputParsingHandler.processing;
 				assert errorParsingThread == null || !errorParsingThread.processing;
-				assert classParsingThread == null || !classParsingThread.processing;
+				assert classParsingHandler == null || !classParsingHandler.processing;
 			}
 		}
 		finally
 		{
+			if(processBuilder != null)
+			{
+				processBuilder.clearTempFiles();
+			}
 			compileFinished(exitValue, chunk, outputDir);
 			myModuleName = null;
 		}
@@ -690,14 +704,11 @@ public class BackendCompilerWrapper
 
 	private void compileFinished(int exitValue, final ModuleChunk chunk, final String outputDir)
 	{
-		if(exitValue != 0 && !myCompileContext.getProgressIndicator().isCanceled() && myCompileContext.getMessageCount(CompilerMessageCategory
-				.ERROR) == 0)
+		if(exitValue != 0 && !myCompileContext.getProgressIndicator().isCanceled() && myCompileContext.getMessageCount(CompilerMessageCategory.ERROR) == 0)
 		{
-			myCompileContext.addMessage(CompilerMessageCategory.ERROR, CompilerBundle.message("error.compiler.internal.error", exitValue), null, -1,
-					-1);
+			myCompileContext.addMessage(CompilerMessageCategory.ERROR, CompilerBundle.message("error.compiler.internal.error", exitValue), null, -1, -1);
 		}
 
-		myCompiler.compileFinished();
 		final List<File> toRefresh = new ArrayList<>();
 		final Map<String, Collection<TranslatingCompiler.OutputItem>> results = new HashMap<>();
 		try
@@ -1053,7 +1064,7 @@ public class BackendCompilerWrapper
 		//myCompileContext.getProgressIndicator().setFraction(1.0* myProcessedFilesCount /myTotalFilesToCompile);
 	}
 
-	private class ClassParsingHandler implements Runnable
+	public class ClassParsingHandler implements Runnable
 	{
 		private final BlockingQueue<FileObject> myPaths = new ArrayBlockingQueue<>(50000);
 		private CacheCorruptedException myError = null;

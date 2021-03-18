@@ -24,6 +24,8 @@ public interface JavaRtClassNames
 {
 	String JAVAC_RUNNER = "com.intellij.rt.compiler.JavacRunner";
 
+	String NEW_COMPILER_RUNNER = "consulo.java.rt.compiler.NewJavaRunner";
+
 	String BATCH_EVALUATOR_SERVER = "com.intellij.rt.debugger.BatchEvaluatorServer";
 
 	String IMAGE_SERIALIZER = "com.intellij.rt.debugger.ImageSerializer";

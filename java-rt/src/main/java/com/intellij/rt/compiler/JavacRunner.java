@@ -54,8 +54,7 @@ public class JavacRunner
 				final String arg = args[idx];
 				if(arg.startsWith("@") && !isClasspath)
 				{
-					String path = arg.substring(1);
-					addFilesToCompile(arguments, path);
+					addFilesToCompile(arguments, arg);
 				}
 				else
 				{
@@ -86,8 +85,10 @@ public class JavacRunner
 		}
 	}
 
-	private static void addFilesToCompile(Vector arguments, String path) throws IOException
+	private static void addFilesToCompile(Vector arguments, String pathWithAt) throws IOException
 	{
+		String path = pathWithAt.substring(1);
+
 		BufferedReader reader = null;
 		try
 		{
@@ -117,43 +118,29 @@ public class JavacRunner
 				final String cpValue = args[idx + 1];
 				if(cpValue.startsWith("@"))
 				{
-					args[idx + 1] = readClasspath(cpValue.substring(1));
+					args[idx + 1] = readClassPathWithAt(cpValue);
 				}
 			}
 		}
 	}
 
-	public static String readClasspath(String filePath) throws IOException
+	public static String readClassPathWithAt(String filePath) throws IOException
 	{
-		final DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(new File(filePath))));
-		try
+		Vector elements = new Vector();
+
+		addFilesToCompile(elements, filePath);
+
+		StringBuffer builder = new StringBuffer();
+
+		for(int i = 0; i < elements.size(); i++)
 		{
-			return readString(in);
+			if(i != 0)
+			{
+				builder.append(File.pathSeparatorChar);
+			}
+
+			builder.append(elements.get(i));
 		}
-		finally
-		{
-			in.close();
-		}
+		return builder.toString();
 	}
-
-	private static String readString(DataInput stream) throws IOException
-	{
-		int length = stream.readInt();
-		if(length == -1)
-		{
-			return null;
-		}
-
-		char[] chars = new char[length];
-		byte[] bytes = new byte[length * 2];
-		stream.readFully(bytes);
-
-		for(int i = 0, i2 = 0; i < length; i++, i2 += 2)
-		{
-			chars[i] = (char) ((bytes[i2] << 8) + (bytes[i2 + 1] & 0xFF));
-		}
-
-		return new String(chars);
-	}
-
 }

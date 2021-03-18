@@ -15,19 +15,19 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import java.io.IOException;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 public interface BackendCompiler
 {
@@ -37,15 +37,28 @@ public interface BackendCompiler
 	String getPresentableName();
 
 	@Nullable
-	OutputParser createErrorParser(@Nonnull String outputDir, ProcessHandler process);
+	default OutputParser createErrorParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir, ProcessHandler process)
+	{
+		return null;
+	}
 
 	@Nullable
-	OutputParser createOutputParser(@Nonnull String outputDir);
+	default OutputParser createOutputParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir)
+	{
+		return null;
+	}
 
-	boolean checkCompiler(final CompileScope scope);
+	@Nullable
+	default BackendCompilerMonitor createMonitor(BackendCompilerProcessBuilder processBuilder)
+	{
+		return null;
+	}
+
+	default boolean checkCompiler(final CompileScope scope)
+	{
+		return true;
+	}
 
 	@Nonnull
-	GeneralCommandLine launchProcess(@Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
-
-	void compileFinished();
+	BackendCompilerProcessBuilder prepareProcess(@Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
 }

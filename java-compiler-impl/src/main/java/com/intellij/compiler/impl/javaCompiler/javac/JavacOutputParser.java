@@ -15,15 +15,6 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.compiler.OutputParser;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -34,9 +25,17 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import consulo.java.rt.compiler.JavacResourcesReaderConstans;
+import consulo.java.rt.compiler.JavacResourcesReaderConstants;
+import org.jetbrains.annotations.NonNls;
 
-public class JavacOutputParser extends OutputParser implements JavacResourcesReaderConstans
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class JavacOutputParser extends OutputParser implements JavacResourcesReaderConstants
 {
 	private final int myTabSize;
 	@NonNls
