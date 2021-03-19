@@ -15,8 +15,6 @@
  */
 package com.intellij.psi.impl.source;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -25,14 +23,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.filters.ClassFilter;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.impl.source.resolve.StaticImportResolveProcessor;
-import com.intellij.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.Factory;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.impl.source.tree.SharedImplUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.processor.FilterScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
@@ -40,6 +31,9 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -146,7 +140,7 @@ public class PsiImportStaticReferenceElementImpl extends CompositePsiElement imp
     else {
       final LeafElement dot = Factory.createSingleLeafElement(JavaTokenType.DOT, ".", 0, 1, SharedImplUtil.findCharTableByTree(newRef), getManager());
       newRef.rawInsertAfterMe(dot);
-      final CompositeElement errorElement = Factory.createErrorElement(JavaErrorMessages.message("import.statement.identifier.or.asterisk.expected."));
+      final CompositeElement errorElement = Factory.createErrorElement(LocalizeValue.localizeTODO(JavaErrorMessages.message("import.statement.identifier.or.asterisk.expected.")));
       dot.rawInsertAfterMe(errorElement);
       final CompositeElement parentComposite = (CompositeElement)SourceTreeToPsiMap.psiElementToTree(getParent());
       parentComposite.addInternal(newRef, errorElement, this, Boolean.TRUE);
