@@ -4,17 +4,17 @@ package com.intellij.lang.java.parser;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.WhitespacesBinders;
-import consulo.util.dataholder.Key;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.PropertyKey;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 import static com.intellij.codeInsight.daemon.JavaErrorMessages.BUNDLE;
@@ -66,6 +66,7 @@ public class ExpressionParser
 	private static final TokenSet ID_OR_SUPER = TokenSet.create(JavaTokenType.IDENTIFIER, JavaTokenType.SUPER_KEYWORD);
 	private static final TokenSet TYPE_START = TokenSet.orSet(
 			ElementType.PRIMITIVE_TYPE_BIT_SET, TokenSet.create(JavaTokenType.IDENTIFIER, JavaTokenType.AT));
+	private static final TokenSet PATTERN_MODIFIERS = TokenSet.create(JavaTokenType.FINAL_KEYWORD);
 
 	private static final Key<Boolean> CASE_LABEL = Key.create("java.parser.case.label.expr");
 
@@ -273,16 +274,16 @@ public class ExpressionParser
 		while((tokenType = getGtTokenType(builder)) != null)
 		{
 			final IElementType toCreate;
-			final ExprType toParse;
+			final boolean patternExpected; // Otherwise ExprType.SHIFT is expected
 			if(RELATIONAL_OPS.contains(tokenType))
 			{
 				toCreate = JavaElementType.BINARY_EXPRESSION;
-				toParse = ExprType.SHIFT;
+				patternExpected = false;
 			}
 			else if(tokenType == JavaTokenType.INSTANCEOF_KEYWORD)
 			{
 				toCreate = JavaElementType.INSTANCE_OF_EXPRESSION;
-				toParse = ExprType.TYPE;
+				patternExpected = true;
 			}
 			else
 			{
@@ -292,10 +293,10 @@ public class ExpressionParser
 			final PsiBuilder.Marker expression = left.precede();
 			advanceGtToken(builder, tokenType);
 
-			final PsiBuilder.Marker right = parseExpression(builder, toParse);
+			final PsiBuilder.Marker right = patternExpected ? parsePattern(builder) : parseExpression(builder, ExprType.SHIFT);
 			if(right == null)
 			{
-				error(builder, JavaErrorMessages.message(toParse == ExprType.TYPE ? "expected.type" : "expected.expression"));
+				error(builder, JavaErrorMessages.message(patternExpected ? "expected.type" : "expected.expression"));
 				expression.done(toCreate);
 				return expression;
 			}
@@ -305,6 +306,52 @@ public class ExpressionParser
 		}
 
 		return left;
+	}
+
+	@Nullable
+	private PsiBuilder.Marker parsePattern(final PsiBuilder builder)
+	{
+		PsiBuilder.Marker typeTestPattern = parseSimpleTypeTest(builder);
+		if(typeTestPattern != null)
+			return typeTestPattern;
+
+		PsiBuilder.Marker pattern = builder.mark();
+		PsiBuilder.Marker patternVariable = builder.mark();
+		PsiBuilder.Marker modifiers = myParser.getDeclarationParser().parseModifierList(builder, PATTERN_MODIFIERS).first;
+
+		PsiBuilder.Marker type = myParser.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.WILDCARD);
+		if(type == null)
+		{
+			patternVariable.drop();
+			pattern.drop();
+			modifiers.drop();
+			return null;
+		}
+		if(!expect(builder, JavaTokenType.IDENTIFIER))
+		{
+			patternVariable.drop();
+			modifiers.drop();
+		}
+		else
+		{
+			patternVariable.done(JavaElementType.PATTERN_VARIABLE);
+		}
+		pattern.done(JavaElementType.TYPE_TEST_PATTERN);
+		return pattern;
+	}
+
+	@Nullable
+	private PsiBuilder.Marker parseSimpleTypeTest(final PsiBuilder builder)
+	{
+		PsiBuilder.Marker pattern = builder.mark();
+		PsiBuilder.Marker type = myParser.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.WILDCARD);
+		if(type == null || builder.getTokenType() == JavaTokenType.IDENTIFIER)
+		{
+			pattern.rollbackTo();
+			return null;
+		}
+		pattern.done(JavaElementType.TYPE_TEST_PATTERN);
+		return pattern;
 	}
 
 	@Nullable
@@ -362,10 +409,10 @@ public class ExpressionParser
 			typeCast.done(JavaElementType.TYPE_CAST_EXPRESSION);
 			return typeCast;
 		}
-//		else if(tokenType == JavaTokenType.SWITCH_KEYWORD)
-//		{
-//			return myParser.getStatementParser().parseExprInParenthWithBlock(builder, JavaElementType.SWITCH_EXPRESSION, true);
-//		}
+		//		else if(tokenType == JavaTokenType.SWITCH_KEYWORD)
+		//		{
+		//			return myParser.getStatementParser().parseExprInParenthWithBlock(builder, JavaElementType.SWITCH_EXPRESSION, true);
+		//		}
 		else
 		{
 			return parsePostfix(builder);

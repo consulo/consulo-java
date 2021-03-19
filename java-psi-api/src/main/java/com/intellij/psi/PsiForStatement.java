@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 /**
  * Represents a Java basic <code>for</code> statement.
  */
-public interface PsiForStatement extends PsiLoopStatement{
+public interface PsiForStatement extends PsiConditionalLoopStatement {
   /**
    * Returns the initialization part of the statement.
    *

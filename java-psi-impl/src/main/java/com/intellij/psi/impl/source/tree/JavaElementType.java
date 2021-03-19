@@ -15,43 +15,28 @@
  */
 package com.intellij.psi.impl.source.tree;
 
-import java.lang.reflect.Constructor;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.lang.LighterASTNode;
-import com.intellij.lang.LighterLazyParseableNode;
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.*;
 import com.intellij.lang.java.JavaLanguage;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.lang.java.parser.ReferenceParser;
-import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
-import com.intellij.psi.impl.source.JavaDummyElement;
-import com.intellij.psi.impl.source.PsiDiamondTypeElementImpl;
-import com.intellij.psi.impl.source.PsiImportStaticReferenceElementImpl;
-import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
-import com.intellij.psi.impl.source.PsiJavaModuleReferenceElementImpl;
-import com.intellij.psi.impl.source.PsiReceiverParameterImpl;
-import com.intellij.psi.impl.source.PsiTypeElementImpl;
+import com.intellij.psi.impl.source.*;
 import com.intellij.psi.impl.source.tree.java.*;
-import com.intellij.psi.tree.ICompositeElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.IErrorCounterReparseableElementType;
-import com.intellij.psi.tree.ILazyParseableElementType;
-import com.intellij.psi.tree.ILightLazyParseableElementType;
+import com.intellij.psi.tree.*;
 import com.intellij.psi.tree.java.IJavaElementType;
 import com.intellij.util.ReflectionUtil;
 import com.intellij.util.diff.FlyweightCapableTreeStructure;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
 
 public interface JavaElementType
 {
@@ -169,6 +154,8 @@ public interface JavaElementType
 	IElementType ANNOTATION_ARRAY_INITIALIZER = new JavaCompositeElementType("ANNOTATION_ARRAY_INITIALIZER", PsiArrayInitializerMemberValueImpl.class);
 	IElementType RECEIVER_PARAMETER = new JavaCompositeElementType("RECEIVER", PsiReceiverParameterImpl.class);
 	IElementType MODULE_REFERENCE = new JavaCompositeElementType("MODULE_REFERENCE", PsiJavaModuleReferenceElementImpl.class);
+	IElementType TYPE_TEST_PATTERN = new JavaCompositeElementType("TYPE_TEST_PATTERN", PsiTypeTestPatternImpl.class);
+	IElementType PATTERN_VARIABLE = new JavaCompositeElementType("PATTERN_VARIABLE", PsiPatternVariableImpl.class);
 
 	class ICodeBlockElementType extends IErrorCounterReparseableElementType implements ICompositeElementType, ILightLazyParseableElementType
 	{

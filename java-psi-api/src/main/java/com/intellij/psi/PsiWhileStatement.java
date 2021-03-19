@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 /**
  * Represents a Java <code>while</code> statement.
  */
-public interface PsiWhileStatement extends PsiLoopStatement {
+public interface PsiWhileStatement extends PsiConditionalLoopStatement {
   /**
    * Returns the expression representing the exit condition of the loop.
    *
