@@ -16,11 +16,13 @@
 
 package consulo.java.module.extension;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.pom.java.LanguageLevel;
 import consulo.module.extension.MutableModuleExtensionWithSdk;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author VISTALL
@@ -33,5 +35,7 @@ public interface JavaMutableModuleExtension<T extends JavaModuleExtension<T>> ex
 
 	void setSpecialDirLocation(@Nonnull SpecialDirLocation location);
 
-	void setBytecodeVersion(@javax.annotation.Nullable String version);
+	void setBytecodeVersion(@Nullable String version);
+
+	void setCompilerArguments(@Nonnull List<String> arguments);
 }

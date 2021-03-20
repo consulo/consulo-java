@@ -24,6 +24,7 @@ import consulo.module.extension.ModuleExtensionWithSdk;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,4 +62,7 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 
 	@Nullable
 	String getBytecodeVersion();
+
+	@Nonnull
+	List<String> getCompilerArguments();
 }

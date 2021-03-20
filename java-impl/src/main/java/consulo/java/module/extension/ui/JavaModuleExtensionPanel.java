@@ -16,18 +16,10 @@
 
 package consulo.java.module.extension.ui;
 
-import java.awt.event.ItemEvent;
-
-import javax.annotation.Nonnull;
-import javax.swing.ButtonGroup;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.event.ChangeListener;
-
 import com.intellij.compiler.impl.javaCompiler.TargetOptionsComponent;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -35,14 +27,15 @@ import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.LabeledComponent;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.TitledSeparator;
+import com.intellij.ui.*;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBList;
 import com.intellij.util.ObjectUtil;
-import consulo.ui.annotation.RequiredUIAccess;
+import com.intellij.util.ui.JBUI;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.extension.ui.ModuleExtensionSdkBoxBuilder;
 import consulo.java.module.extension.JavaModuleExtension;
@@ -51,6 +44,12 @@ import consulo.java.module.extension.SpecialDirLocation;
 import consulo.module.extension.ModuleExtension;
 import consulo.module.extension.ModuleExtensionWithSdk;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
+import consulo.ui.annotation.RequiredUIAccess;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import java.awt.event.ItemEvent;
 
 /**
  * @author VISTALL
@@ -173,7 +172,26 @@ public class JavaModuleExtensionPanel extends JPanel
 			myExtension.setBytecodeVersion(StringUtil.nullize((String) selectedItem, true));
 		});
 
-		add(LabeledComponent.left(targetOptionsCombo, "Bytecode version"));
+		add(LabeledComponent.create(targetOptionsCombo, "Bytecode version"));
+
+		CollectionListModel<String> argsModel = new CollectionListModel<>(extension.getCompilerArguments(), true);
+		JList<String> compilerArgs = new JBList<>(argsModel);
+
+		add(new JBLabel("Additional compiler arguments:"));
+		JPanel panel = ToolbarDecorator.createDecorator(compilerArgs)
+				.setToolbarPosition(ActionToolbarPosition.RIGHT)
+				.setAddAction(button -> {
+					String argument = Messages.showInputDialog(extension.getProject(), "Compiler argument", "Enter Compiler Argument", null);
+					if(argument == null)
+					{
+						return;
+					}
+
+					argsModel.add(argument);
+				})
+				.setToolbarBorder(JBUI.Borders.empty()).createPanel();
+
+		add(panel);
 	}
 
 	@RequiredReadAction

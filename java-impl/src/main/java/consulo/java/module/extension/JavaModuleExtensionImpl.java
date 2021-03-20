@@ -15,11 +15,6 @@
  */
 package consulo.java.module.extension;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jdom.Element;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -33,20 +28,29 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.module.extension.ModuleInheritableNamedPointer;
 import consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.roots.ModuleRootLayer;
+import org.jdom.Element;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author VISTALL
  * @since 10:02/19.05.13
  */
-public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements
-		JavaModuleExtension<JavaModuleExtensionImpl>
+public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl>
 {
 	private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
 	private static final String BYTECODE_VERSION = "bytecode-version";
+	private static final String COMPILER_ARGUMENTS = "compiler-arguments";
+	private static final String COMPILER_ARGUMENT = "compiler-argument";
 
 	protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
 	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
 	protected String myBytecodeVersion;
+	protected List<String> myCompilerArguments = new ArrayList<>();
 
 	private LazyValueBySdk<LanguageLevel> myLanguageLevelValue;
 
@@ -69,6 +73,8 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		myLanguageLevel.set(mutableModuleExtension.getInheritableLanguageLevel());
 		mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
 		myBytecodeVersion = mutableModuleExtension.getBytecodeVersion();
+		myCompilerArguments.clear();
+		myCompilerArguments.addAll(mutableModuleExtension.getCompilerArguments());
 	}
 
 	@Override
@@ -78,7 +84,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		return myLanguageLevel.isNull() ? myLanguageLevelValue.getValue() : myLanguageLevel.get();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public LanguageLevel getLanguageLevelNoDefault()
 	{
@@ -92,14 +98,14 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		return mySpecialDirLocation;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Sdk getSdkForCompilation()
 	{
 		return getSdk();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getBytecodeVersion()
 	{
@@ -133,19 +139,39 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		return JavaSdk.class;
 	}
 
+	@Nonnull
+	@Override
+	public List<String> getCompilerArguments()
+	{
+		return myCompilerArguments;
+	}
+
 	@Override
 	protected void getStateImpl(@Nonnull Element element)
 	{
 		super.getStateImpl(element);
 
 		myLanguageLevel.toXml(element);
+
 		if(mySpecialDirLocation != SpecialDirLocation.SOURCE_DIR)
 		{
 			element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
 		}
+
 		if(!StringUtil.isEmpty(myBytecodeVersion))
 		{
 			element.setAttribute(BYTECODE_VERSION, myBytecodeVersion);
+		}
+
+		if(!myCompilerArguments.isEmpty())
+		{
+			Element compilerArgs = new Element(COMPILER_ARGUMENTS);
+			element.addContent(compilerArgs);
+			
+			for(String compilerArgument : myCompilerArguments)
+			{
+				compilerArgs.addContent(new Element(COMPILER_ARGUMENT).setText(compilerArgument));
+			}
 		}
 	}
 
@@ -158,5 +184,14 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		myLanguageLevel.fromXml(element);
 		mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.SOURCE_DIR.name()));
 		myBytecodeVersion = element.getAttributeValue(BYTECODE_VERSION, (String) null);
+
+		Element compilerArgs = element.getChild(COMPILER_ARGUMENTS);
+		if(compilerArgs != null)
+		{
+			for(Element compilerArg : compilerArgs.getChildren(COMPILER_ARGUMENT))
+			{
+				myCompilerArguments.add(compilerArg.getTextTrim());
+			}
+		}
 	}
 }

@@ -15,23 +15,23 @@
  */
 package consulo.java.module.extension;
 
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import javax.annotation.Nullable;
-
-import consulo.disposer.Disposable;
-import consulo.java.module.extension.ui.JavaModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.disposer.Disposable;
+import consulo.java.module.extension.ui.JavaModuleExtensionPanel;
+import consulo.module.extension.MutableModuleInheritableNamedPointer;
 import consulo.module.extension.swing.SwingMutableModuleExtension;
+import consulo.roots.ModuleRootLayer;
 import consulo.ui.Component;
 import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.module.extension.MutableModuleInheritableNamedPointer;
-import consulo.roots.ModuleRootLayer;
 import consulo.ui.layout.VerticalLayout;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.List;
 
 /**
  * @author VISTALL
@@ -80,6 +80,13 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 	}
 
 	@Override
+	public void setCompilerArguments(@Nonnull List<String> arguments)
+	{
+		myCompilerArguments.clear();
+		myCompilerArguments.addAll(arguments);
+	}
+
+	@Override
 	public void setSpecialDirLocation(@Nonnull SpecialDirLocation specialDirLocation)
 	{
 		mySpecialDirLocation = specialDirLocation;
@@ -104,6 +111,11 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 		}
 
 		if(!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation()))
+		{
+			return true;
+		}
+
+		if(!myCompilerArguments.equals(javaModuleExtension.myCompilerArguments))
 		{
 			return true;
 		}

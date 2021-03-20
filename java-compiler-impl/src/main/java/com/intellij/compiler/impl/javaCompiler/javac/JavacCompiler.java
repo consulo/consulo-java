@@ -331,6 +331,7 @@ public class JavacCompiler implements BackendCompiler
 											 boolean addSourcePath,
 											 boolean isAnnotationProcessingMode) throws IOException
 	{
+		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(chunk.getModule(), JavaModuleExtension.class);
 		LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
 		boolean isJava9Version = isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9);
 
@@ -342,7 +343,6 @@ public class JavacCompiler implements BackendCompiler
 		}
 		else
 		{
-			JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
 			if(extension != null)
 			{
 				String bytecodeVersion = extension.getBytecodeVersion();
@@ -352,6 +352,11 @@ public class JavacCompiler implements BackendCompiler
 					commandLine.add(bytecodeVersion);
 				}
 			}
+		}
+
+		if(extension != null)
+		{
+			commandLine.addAll(extension.getCompilerArguments());
 		}
 
 		commandLine.add("-verbose");
