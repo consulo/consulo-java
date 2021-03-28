@@ -20,81 +20,137 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.scope.ElementClassHint;
+import com.intellij.psi.scope.PatternResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.ChildRoleBase;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiTreeUtil;
 import javax.annotation.Nonnull;
 
-public class PsiInstanceOfExpressionImpl extends ExpressionPsiElement implements PsiInstanceOfExpression, Constants {
-  private static final Logger LOG = Logger.getInstance(PsiInstanceOfExpressionImpl.class);
+import javax.annotation.Nullable;
 
-  public PsiInstanceOfExpressionImpl() {
-    super(INSTANCE_OF_EXPRESSION);
-  }
+public class PsiInstanceOfExpressionImpl extends ExpressionPsiElement implements PsiInstanceOfExpression, Constants
+{
+	private static final Logger LOG = Logger.getInstance(PsiInstanceOfExpressionImpl.class);
 
-  @Override
-  @Nonnull
-  public PsiExpression getOperand() {
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.OPERAND);
-  }
+	public PsiInstanceOfExpressionImpl()
+	{
+		super(INSTANCE_OF_EXPRESSION);
+	}
 
-  @Override
-  public PsiTypeElement getCheckType() {
-    return (PsiTypeElement)findChildByRoleAsPsiElement(ChildRole.TYPE);
-  }
+	@Override
+	@Nonnull
+	public PsiExpression getOperand()
+	{
+		return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.OPERAND);
+	}
 
-  @Override
-  public PsiType getType() {
-    return PsiType.BOOLEAN;
-  }
+	@Override
+	public PsiTypeElement getCheckType()
+	{
+		return (PsiTypeElement) findChildByRoleAsPsiElement(ChildRole.TYPE);
+	}
 
-  @Override
-  public ASTNode findChildByRole(int role) {
-    LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
-      default:
-        return null;
+	@Override
+	public PsiType getType()
+	{
+		return PsiType.BOOLEAN;
+	}
 
-      case ChildRole.OPERAND:
-        return findChildByType(EXPRESSION_BIT_SET);
+	@Nullable
+	@Override
+	public PsiPattern getPattern()
+	{
+		return PsiTreeUtil.getChildOfType(this, PsiPattern.class);
+	}
 
-      case ChildRole.INSTANCEOF_KEYWORD:
-        return findChildByType(INSTANCEOF_KEYWORD);
+	@Override
+	public ASTNode findChildByRole(int role)
+	{
+		LOG.assertTrue(ChildRole.isUnique(role));
+		switch(role)
+		{
+			default:
+				return null;
 
-      case ChildRole.TYPE:
-        return findChildByType(TYPE);
-    }
-  }
+			case ChildRole.OPERAND:
+				return findChildByType(EXPRESSION_BIT_SET);
 
-  @Override
-  public int getChildRole(ASTNode child) {
-    LOG.assertTrue(child.getTreeParent() == this);
-    IElementType i = child.getElementType();
-    if (i == TYPE) {
-      return ChildRole.TYPE;
-    }
-    else if (i == INSTANCEOF_KEYWORD) {
-      return ChildRole.INSTANCEOF_KEYWORD;
-    }
-    else {
-      if (EXPRESSION_BIT_SET.contains(child.getElementType())) {
-        return ChildRole.OPERAND;
-      }
-      return ChildRoleBase.NONE;
-    }
-  }
+			case ChildRole.INSTANCEOF_KEYWORD:
+				return findChildByType(INSTANCEOF_KEYWORD);
 
-  @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitInstanceOfExpression(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+			case ChildRole.TYPE:
+				return findChildByType(TYPE);
+		}
+	}
 
-  public String toString() {
-    return "PsiInstanceofExpression:" + getText();
-  }
+	@Override
+	public int getChildRole(ASTNode child)
+	{
+		LOG.assertTrue(child.getTreeParent() == this);
+		IElementType i = child.getElementType();
+		if(i == TYPE)
+		{
+			return ChildRole.TYPE;
+		}
+		else if(i == INSTANCEOF_KEYWORD)
+		{
+			return ChildRole.INSTANCEOF_KEYWORD;
+		}
+		else
+		{
+			if(EXPRESSION_BIT_SET.contains(child.getElementType()))
+			{
+				return ChildRole.OPERAND;
+			}
+			return ChildRoleBase.NONE;
+		}
+	}
+
+	@Override
+	public void accept(@Nonnull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitInstanceOfExpression(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
+
+	@Override
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+									   @Nonnull ResolveState state,
+									   PsiElement lastParent,
+									   @Nonnull PsiElement place)
+	{
+		if(lastParent != null)
+		{
+			return true;
+		}
+		ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
+		if(elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE))
+		{
+			return true;
+		}
+		if(state.get(PatternResolveState.KEY) == PatternResolveState.WHEN_FALSE)
+		{
+			return true;
+		}
+		PsiPattern pattern = getPattern();
+		if(pattern == null)
+		{
+			return true;
+		}
+		return pattern.processDeclarations(processor, state, null, place);
+	}
+
+	public String toString()
+	{
+		return "PsiInstanceofExpression:" + getText();
+	}
 }
 

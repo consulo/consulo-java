@@ -21,20 +21,28 @@ import javax.annotation.Nullable;
 /**
  * Represents a Java <code>instanceof</code> expression.
  */
-public interface PsiInstanceOfExpression extends PsiExpression {
-  /**
-   * Returns the expression on the left side of the <code>instanceof</code>.
-   *
-   * @return the checked expression.
-   */
-  @Nonnull
-  PsiExpression getOperand();
+public interface PsiInstanceOfExpression extends PsiExpression
+{
+	/**
+	 * Returns the expression on the left side of the <code>instanceof</code>.
+	 *
+	 * @return the checked expression.
+	 */
+	@Nonnull
+	PsiExpression getOperand();
 
-  /**
-   * Returns the type element on the right side of the <code>instanceof</code>.
-   *
-   * @return the type element, or null if the expression is incomplete.
-   */
-  @Nullable
-  PsiTypeElement getCheckType();
+	/**
+	 * Returns the type element on the right side of the <code>instanceof</code>.
+	 *
+	 * @return the type element, or null if the expression is incomplete.
+	 */
+	@Nullable
+	PsiTypeElement getCheckType();
+
+
+	/**
+	 * @return pattern against which operand will be matched
+	 */
+	@Nullable
+	PsiPattern getPattern();
 }

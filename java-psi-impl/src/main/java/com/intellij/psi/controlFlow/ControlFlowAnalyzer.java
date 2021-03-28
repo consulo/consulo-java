@@ -15,18 +15,6 @@
  */
 package com.intellij.psi.controlFlow;
 
-import gnu.trove.THashMap;
-import gnu.trove.TIntArrayList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.openapi.diagnostic.Logger;
@@ -38,6 +26,12 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.Stack;
+import gnu.trove.THashMap;
+import gnu.trove.TIntArrayList;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 class ControlFlowAnalyzer extends JavaElementVisitor
 {
@@ -1757,6 +1751,17 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 
 		final PsiExpression operand = expression.getOperand();
 		operand.accept(this);
+
+		PsiPattern pattern = expression.getPattern();
+		if(pattern instanceof PsiTypeTestPattern)
+		{
+			PsiPatternVariable variable = ((PsiTypeTestPattern) pattern).getPatternVariable();
+
+			if(variable != null)
+			{
+				myCurrentFlow.addInstruction(new WriteVariableInstruction(variable));
+			}
+		}
 
 		finishElement(expression);
 	}
