@@ -16,7 +16,6 @@
 package com.intellij.refactoring.rename;
 
 import com.intellij.ide.util.SuperMethodWarningUtil;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pass;
@@ -44,6 +43,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import java.util.HashSet;
 import com.intellij.util.containers.MultiMap;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

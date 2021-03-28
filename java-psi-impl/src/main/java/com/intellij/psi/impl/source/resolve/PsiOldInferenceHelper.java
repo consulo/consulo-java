@@ -17,7 +17,7 @@ package com.intellij.psi.impl.source.resolve;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.diagnostic.Logger;
+
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
 import com.intellij.openapi.util.Pair;
@@ -30,6 +30,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 
 /**
  * User: anna

@@ -19,7 +19,7 @@
  */
 package com.intellij.psi.controlFlow;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 public abstract class SimpleInstruction extends InstructionBase {
   private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);

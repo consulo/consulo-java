@@ -26,7 +26,6 @@ package com.intellij.refactoring.inheritanceToDelegation;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
@@ -39,6 +38,7 @@ import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.classMembers.MemberInfoStorage;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.Nonnull;
 
+import consulo.logging.Logger;
 import org.intellij.lang.annotations.MagicConstant;
 
 import javax.annotation.Nullable;
@@ -36,7 +37,6 @@ import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.diagnostic.ThreadDumper;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import java.util.HashSet;
 import com.intellij.xdebugger.frame.XSuspendContext;

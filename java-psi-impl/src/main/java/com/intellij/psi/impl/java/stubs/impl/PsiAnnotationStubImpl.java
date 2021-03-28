@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.java.stubs.impl;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiJavaParserFacade;

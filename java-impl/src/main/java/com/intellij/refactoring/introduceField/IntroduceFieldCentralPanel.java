@@ -17,7 +17,6 @@ package com.intellij.refactoring.introduceField;
 
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -28,6 +27,7 @@ import com.intellij.refactoring.ui.TypeSelectorManager;
 import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.util.Processor;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;

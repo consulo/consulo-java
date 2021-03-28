@@ -58,7 +58,6 @@ import com.intellij.debugger.ui.tree.render.ToStringRenderer;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.util.text.StringUtil;
@@ -83,6 +82,7 @@ import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 import consulo.ui.image.Image;
 
 /**

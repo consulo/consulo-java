@@ -23,7 +23,7 @@ package com.intellij.packageDependencies.ui;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.scopeChooser.GroupByScopeTypeAction;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;

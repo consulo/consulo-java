@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
@@ -28,7 +29,6 @@ import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
 import com.intellij.debugger.impl.InvokeAndWaitThread;
 import consulo.disposer.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.util.ProgressIndicatorListenerAdapter;
 import com.intellij.openapi.progress.util.ProgressWindow;

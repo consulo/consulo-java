@@ -17,7 +17,6 @@ package com.intellij.codeInsight;
 
 import com.intellij.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NullableComputable;
 import com.intellij.psi.*;
@@ -42,6 +41,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Stack;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 import gnu.trove.THashSet;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;

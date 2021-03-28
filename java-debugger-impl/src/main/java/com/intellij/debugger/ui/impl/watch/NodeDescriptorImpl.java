@@ -22,7 +22,7 @@ import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import java.util.HashMap;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;

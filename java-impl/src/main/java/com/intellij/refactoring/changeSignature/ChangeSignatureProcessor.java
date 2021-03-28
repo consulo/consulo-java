@@ -29,7 +29,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
@@ -52,6 +51,7 @@ import com.intellij.util.VisibilityUtil;
 import java.util.HashSet;
 import com.intellij.util.containers.MultiMap;
 import consulo.java.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
+import consulo.logging.Logger;
 
 public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 {

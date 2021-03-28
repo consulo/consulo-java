@@ -2,10 +2,9 @@ package com.intellij.refactoring.introduceVariable;
 
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.codeInsight.lookup.impl.LookupImpl;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.psi.*;
 
 /**

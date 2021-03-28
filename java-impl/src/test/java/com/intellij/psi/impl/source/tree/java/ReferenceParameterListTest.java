@@ -1,11 +1,11 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 /**
  *  @author dsl

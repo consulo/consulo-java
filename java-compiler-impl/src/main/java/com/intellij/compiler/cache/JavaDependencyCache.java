@@ -20,6 +20,7 @@
  */
 package com.intellij.compiler.cache;
 
+import consulo.logging.Logger;
 import gnu.trove.TIntHashSet;
 
 import java.io.File;
@@ -41,7 +42,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;

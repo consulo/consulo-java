@@ -17,7 +17,7 @@
 package com.intellij.util.descriptors;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 import java.util.Arrays;
 

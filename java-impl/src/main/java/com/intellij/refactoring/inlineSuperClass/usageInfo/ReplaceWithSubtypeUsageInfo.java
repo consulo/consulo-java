@@ -20,13 +20,13 @@
  */
 package com.intellij.refactoring.inlineSuperClass.usageInfo;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 public class ReplaceWithSubtypeUsageInfo extends FixableUsageInfo {
   public static final Logger LOG = Logger.getInstance(ReplaceWithSubtypeUsageInfo.class);

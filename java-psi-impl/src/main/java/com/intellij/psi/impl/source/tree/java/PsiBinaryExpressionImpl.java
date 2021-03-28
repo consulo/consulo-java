@@ -18,7 +18,6 @@ package com.intellij.psi.impl.source.tree.java;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.JavaResolveCache;
 import com.intellij.psi.impl.source.tree.ChildRole;
@@ -29,6 +28,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
+import consulo.logging.Logger;
 
 public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements PsiBinaryExpression {
   private static final Logger LOG = Logger.getInstance(PsiBinaryExpressionImpl.class);

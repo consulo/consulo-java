@@ -18,7 +18,7 @@ package com.intellij.psi;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.MethodSignature;

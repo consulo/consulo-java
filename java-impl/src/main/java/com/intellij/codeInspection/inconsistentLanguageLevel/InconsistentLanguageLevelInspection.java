@@ -20,6 +20,7 @@
  */
 package com.intellij.codeInspection.inconsistentLanguageLevel;
 
+import consulo.logging.Logger;
 import gnu.trove.THashSet;
 
 import java.util.Set;
@@ -38,7 +39,6 @@ import com.intellij.codeInspection.ProblemDescriptionsProcessor;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.codeInspection.reference.RefModule;
 import com.intellij.codeInspection.unnecessaryModuleDependency.UnnecessaryModuleDependencyInspection;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;

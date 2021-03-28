@@ -20,8 +20,8 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateRuntimeException;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
-import com.intellij.openapi.diagnostic.Logger;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.logging.Logger;
 
 import java.util.HashMap;
 import java.util.Map;

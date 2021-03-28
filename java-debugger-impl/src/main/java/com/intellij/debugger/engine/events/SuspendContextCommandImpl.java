@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.util.containers.Stack;
 
 /**

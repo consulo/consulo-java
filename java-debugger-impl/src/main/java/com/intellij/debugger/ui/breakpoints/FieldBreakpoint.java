@@ -18,6 +18,7 @@ package com.intellij.debugger.ui.breakpoints;
 
 import javax.annotation.Nonnull;
 
+import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaFieldBreakpointProperties;
@@ -32,7 +33,6 @@ import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.debugger.impl.PositionUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;

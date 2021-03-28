@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import consulo.logging.Logger;
 import gnu.trove.THashSet;
 
 import java.beans.Introspector;
@@ -35,7 +36,6 @@ import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.application.options.CodeStyle;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;

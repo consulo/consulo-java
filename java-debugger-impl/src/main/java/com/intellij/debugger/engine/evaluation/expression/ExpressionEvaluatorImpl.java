@@ -20,8 +20,8 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.intellij.openapi.diagnostic.Logger;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.logging.Logger;
 
 public class ExpressionEvaluatorImpl implements ExpressionEvaluator
 {

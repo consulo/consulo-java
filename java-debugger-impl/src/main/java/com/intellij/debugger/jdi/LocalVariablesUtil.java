@@ -32,7 +32,6 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.impl.SimpleStackFrameContext;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ReflectionUtil;
@@ -42,6 +41,7 @@ import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.StackFrame;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.VirtualMachine;
+import consulo.logging.Logger;
 
 /**
  * From JDI sources:

@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import consulo.logging.Logger;
 import gnu.trove.THashMap;
 import gnu.trove.TIntArrayList;
 
@@ -64,7 +65,6 @@ import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.extensions.Extensions;

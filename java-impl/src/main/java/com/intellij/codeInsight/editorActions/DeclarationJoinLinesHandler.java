@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.editorActions;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;

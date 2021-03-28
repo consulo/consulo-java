@@ -18,10 +18,11 @@ package com.intellij.psi.impl.source.resolve.graphInference;
 import java.util.HashSet;
 
 import javax.annotation.Nullable;
-import com.intellij.openapi.diagnostic.Logger;
+
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
 
 public class FunctionalInterfaceParameterizationUtil
 {

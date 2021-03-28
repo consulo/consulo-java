@@ -19,7 +19,6 @@ import javax.annotation.Nullable;
 import com.intellij.find.FindSettings;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.scopeChooser.ScopeChooserCombo;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
@@ -47,6 +46,7 @@ import com.intellij.util.Functions;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.ui.JBUI;
 import consulo.disposer.Disposer;
+import consulo.logging.Logger;
 
 /**
  * @author anna

@@ -24,7 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import javax.annotation.Nonnull;
-import com.intellij.openapi.diagnostic.Logger;
+
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -46,6 +46,7 @@ import com.intellij.util.Function;
 import java.util.HashMap;
 import com.intellij.util.ui.FormBuilder;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 
 class AnonymousToInnerDialog extends DialogWrapper{
   private static final Logger LOG = Logger.getInstance(AnonymousToInnerDialog.class);

@@ -28,7 +28,6 @@ import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -43,6 +42,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.ui.HyperlinkAdapter;
 import com.intellij.util.Function;
+import consulo.logging.Logger;
 
 public class ResetConfigurationModuleAdapter extends HyperlinkAdapter
 {

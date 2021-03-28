@@ -22,7 +22,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import com.intellij.codeInsight.generation.GetterSetterPrototypeProvider;
 import com.intellij.codeInsight.intention.impl.SplitDeclarationAction;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;

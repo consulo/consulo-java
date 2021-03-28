@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ArrayUtil;
+import consulo.logging.Logger;
 
 public class JavaCacheUtils
 {

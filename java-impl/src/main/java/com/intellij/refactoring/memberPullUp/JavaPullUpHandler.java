@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.progress.ProgressManager;
@@ -49,6 +48,7 @@ import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.classMembers.MemberInfoStorage;
 import com.intellij.util.containers.MultiMap;
+import consulo.logging.Logger;
 
 public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog.Callback, ElementsHandler
 {

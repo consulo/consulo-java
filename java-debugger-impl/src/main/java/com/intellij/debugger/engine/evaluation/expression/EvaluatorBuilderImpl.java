@@ -46,7 +46,6 @@ import com.intellij.debugger.engine.evaluation.EvaluateRuntimeException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
@@ -59,6 +58,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 
 public class EvaluatorBuilderImpl implements EvaluatorBuilder
 {

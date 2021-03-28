@@ -18,7 +18,6 @@ package com.intellij.openapi.roots.impl;
 import com.intellij.codeInsight.daemon.impl.quickfix.LocateLibraryDialog;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
@@ -31,6 +30,7 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaMutableModuleExtension;
+import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

@@ -17,7 +17,8 @@ package com.intellij.ide.structureView.impl.java;
 
 import com.intellij.ide.util.treeView.AlphaComparator;
 import com.intellij.ide.util.treeView.SourceComparator;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 
 import java.util.Comparator;

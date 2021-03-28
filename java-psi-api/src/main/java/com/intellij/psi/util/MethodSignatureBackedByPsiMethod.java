@@ -17,8 +17,8 @@ package com.intellij.psi.util;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
+import consulo.logging.Logger;
 
 public class MethodSignatureBackedByPsiMethod extends MethodSignatureBase {
   private static final Logger LOG = Logger.getInstance(MethodSignatureBackedByPsiMethod.class);

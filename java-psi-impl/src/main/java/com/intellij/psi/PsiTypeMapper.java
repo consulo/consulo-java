@@ -19,8 +19,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.diagnostic.Logger;
+
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
 
 /**
  * Copies PsiType structure with an ability to replace some inner components.

@@ -25,11 +25,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import consulo.logging.Logger;
 import org.intellij.images.editor.impl.ImageEditorManagerImpl;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebugProcess;
@@ -40,7 +40,6 @@ import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.impl.ClassLoadingUtils;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
 import consulo.awt.TargetAWT;
 import consulo.internal.com.sun.jdi.ArrayReference;
@@ -50,7 +49,6 @@ import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.ui.image.Image;
-import consulo.ui.image.ImageEffects;
 
 /**
  * Created by Egor on 04.10.2014.

@@ -25,6 +25,8 @@ import java.util.jar.Attributes;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+
+import consulo.logging.Logger;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javax.swing.SwingUtilities;
@@ -63,7 +65,6 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;

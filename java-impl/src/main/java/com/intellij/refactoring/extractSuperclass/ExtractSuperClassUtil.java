@@ -16,7 +16,7 @@
 package com.intellij.refactoring.extractSuperclass;
 
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;

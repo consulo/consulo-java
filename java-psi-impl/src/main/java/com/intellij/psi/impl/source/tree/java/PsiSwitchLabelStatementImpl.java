@@ -2,7 +2,6 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiElementVisitor;
@@ -12,6 +11,8 @@ import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 
 public class PsiSwitchLabelStatementImpl extends PsiSwitchLabelStatementBaseImpl implements PsiSwitchLabelStatement

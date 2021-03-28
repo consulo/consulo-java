@@ -16,7 +16,6 @@
 package com.intellij.compiler.cache;
 
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Ref;
 import com.intellij.util.containers.SLRUCache;
 import com.intellij.util.io.DataExternalizer;
@@ -24,6 +23,7 @@ import com.intellij.util.io.EnumeratorIntegerDescriptor;
 import com.intellij.util.io.PersistentHashMap;
 import consulo.disposer.Disposable;
 
+import consulo.logging.Logger;
 import gnu.trove.*;
 import javax.annotation.Nonnull;
 

@@ -30,12 +30,12 @@ import javax.annotation.Nonnull;
 
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 public class JavaChangeInfoImpl implements JavaChangeInfo {
   private static final Logger LOG = Logger.getInstance(JavaChangeInfoImpl.class);

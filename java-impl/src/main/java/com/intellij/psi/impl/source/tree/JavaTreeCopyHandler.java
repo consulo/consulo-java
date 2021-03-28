@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source.tree;
 import java.util.Map;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;

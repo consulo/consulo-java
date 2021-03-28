@@ -34,7 +34,6 @@ import com.intellij.formatting.Wrap;
 import com.intellij.formatting.alignment.AlignmentStrategy;
 import com.intellij.formatting.blocks.CStyleCommentBlock;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -56,6 +55,7 @@ import com.intellij.psi.impl.source.tree.java.ClassElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
+import consulo.logging.Logger;
 
 @SuppressWarnings("BoundedWildcard")
 public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlock, ReservedWrapsProvider

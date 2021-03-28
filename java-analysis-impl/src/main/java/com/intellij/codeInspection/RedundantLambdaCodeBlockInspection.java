@@ -19,10 +19,10 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;

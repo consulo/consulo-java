@@ -9,7 +9,6 @@ import com.intellij.codeInspection.dataFlow.ContractReturnValue;
 import com.intellij.codeInspection.dataFlow.JavaMethodContractUtil;
 import com.intellij.codeInspection.dataFlow.Mutability;
 import com.intellij.codeInspection.dataFlow.StandardMethodContract;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -21,6 +20,8 @@ import com.intellij.psi.util.*;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 
 import java.util.BitSet;

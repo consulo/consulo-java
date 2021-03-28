@@ -20,7 +20,7 @@ import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiNewExpression;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 /**
  * @author ven

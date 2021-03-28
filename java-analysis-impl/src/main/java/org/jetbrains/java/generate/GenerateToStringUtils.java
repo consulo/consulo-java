@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.java.generate.config.FilterPattern;
 import org.jetbrains.java.generate.psi.PsiAdapter;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;

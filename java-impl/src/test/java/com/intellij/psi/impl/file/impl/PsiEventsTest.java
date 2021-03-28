@@ -2,7 +2,6 @@ package com.intellij.psi.impl.file.impl;
 
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
@@ -18,6 +17,8 @@ import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.WaitFor;
 import com.intellij.util.io.ReadOnlyAttributeUtil;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 
 import java.io.File;

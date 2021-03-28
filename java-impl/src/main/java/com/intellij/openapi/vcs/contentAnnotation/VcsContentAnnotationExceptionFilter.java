@@ -20,7 +20,7 @@ import com.intellij.execution.filters.ExceptionWorker;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.FilterMixin;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.diff.DiffColors;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.Document;

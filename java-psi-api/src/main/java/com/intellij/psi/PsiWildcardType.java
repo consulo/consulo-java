@@ -17,8 +17,9 @@ package com.intellij.psi;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.diagnostic.Logger;
+
 import com.intellij.openapi.util.Comparing;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.search.GlobalSearchScope;
 import consulo.java.module.util.JavaClassNames;

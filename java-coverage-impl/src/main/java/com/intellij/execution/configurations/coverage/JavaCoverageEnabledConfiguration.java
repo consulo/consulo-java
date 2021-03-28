@@ -30,7 +30,7 @@ import com.intellij.coverage.IDEACoverageRunner;
 import com.intellij.coverage.JavaCoverageEngine;
 import com.intellij.coverage.JavaCoverageRunner;
 import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.ui.classFilter.ClassFilter;

@@ -15,7 +15,6 @@
  */
 package com.intellij.psi;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Couple;
 import com.intellij.openapi.util.Pair;
@@ -23,6 +22,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;
 

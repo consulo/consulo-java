@@ -17,7 +17,6 @@ package com.intellij.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiAnnotation;
@@ -38,6 +37,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.CharTable;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 /**
  * @author ven

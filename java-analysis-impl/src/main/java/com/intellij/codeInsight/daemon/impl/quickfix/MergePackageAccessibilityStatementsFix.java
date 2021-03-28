@@ -23,8 +23,8 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.PsiKeyword;

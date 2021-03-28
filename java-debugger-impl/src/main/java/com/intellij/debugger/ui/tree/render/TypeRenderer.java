@@ -18,7 +18,7 @@ package com.intellij.debugger.ui.tree.render;
 import org.jdom.Element;
 import javax.annotation.Nonnull;
 import com.intellij.debugger.engine.DebuggerUtils;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import consulo.java.module.util.JavaClassNames;

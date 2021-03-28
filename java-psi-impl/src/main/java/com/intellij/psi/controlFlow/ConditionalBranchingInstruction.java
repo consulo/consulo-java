@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.controlFlow;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiExpression;
+import consulo.logging.Logger;
 
 /**
  * Author: msk

@@ -33,12 +33,12 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import consulo.disposer.Disposable;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.logging.Logger;
 
 /**
  * @author egor

@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInspection.duplicateStringLiteral;
 
+import consulo.logging.Logger;
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;
 import gnu.trove.TIntProcedure;
@@ -52,7 +53,6 @@ import com.intellij.codeInspection.SuppressManager;
 import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;

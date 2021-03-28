@@ -46,10 +46,10 @@ import com.intellij.debugger.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ThreadDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ThreadGroupDescriptorImpl;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.ui.tree.TreeModelAdapter;
 import com.intellij.xdebugger.XDebuggerBundle;
+import consulo.logging.Logger;
 
 /**
  * User: lex

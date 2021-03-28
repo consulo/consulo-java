@@ -23,11 +23,11 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nonnull;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.logging.Logger;
 
 /**
  * @author lex

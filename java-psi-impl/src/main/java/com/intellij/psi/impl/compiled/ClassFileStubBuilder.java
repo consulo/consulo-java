@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.compiled.ClassFileDecompilers;
 import com.intellij.psi.stubs.BinaryFileStubBuilder;

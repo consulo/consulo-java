@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;

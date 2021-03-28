@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 
 import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.rt.coverage.data.ProjectData;
 import com.intellij.rt.coverage.util.ProjectDataLoader;
 import consulo.java.execution.configurations.OwnJavaParameters;

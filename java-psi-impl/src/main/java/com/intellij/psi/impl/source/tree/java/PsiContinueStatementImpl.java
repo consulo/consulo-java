@@ -18,7 +18,6 @@ package com.intellij.psi.impl.source.tree.java;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiLabelReference;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
@@ -26,6 +25,7 @@ import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
+import consulo.logging.Logger;
 
 public class PsiContinueStatementImpl extends CompositePsiElement implements PsiContinueStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiContinueStatementImpl.class);

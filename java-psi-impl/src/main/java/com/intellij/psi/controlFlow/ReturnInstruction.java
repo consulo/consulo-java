@@ -17,7 +17,7 @@ package com.intellij.psi.controlFlow;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 
 public class ReturnInstruction extends GoToInstruction {

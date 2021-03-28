@@ -30,7 +30,7 @@ import com.intellij.lang.jvm.JvmTypeParameter;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmSubstitutor;
 import com.intellij.lang.jvm.types.JvmType;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.java.module.util.JavaClassNames;
 
 class PsiJvmConversionHelper

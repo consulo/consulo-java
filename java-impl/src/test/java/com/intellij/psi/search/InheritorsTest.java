@@ -16,7 +16,7 @@
 package com.intellij.psi.search;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;

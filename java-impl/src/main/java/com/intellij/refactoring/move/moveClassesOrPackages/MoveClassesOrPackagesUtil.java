@@ -18,7 +18,6 @@ package com.intellij.refactoring.move.moveClassesOrPackages;
 import com.intellij.ide.util.DirectoryChooserUtil;
 import com.intellij.lang.java.JavaFindUsagesProvider;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -39,6 +38,8 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import java.util.HashMap;
 import com.intellij.psi.PsiJavaPackage;
+import consulo.logging.Logger;
+
 import javax.annotation.Nullable;
 
 import java.io.File;

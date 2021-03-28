@@ -24,7 +24,6 @@ import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.generation.ui.GenerateEqualsWizard;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -36,6 +35,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 /**
  * @author dsl

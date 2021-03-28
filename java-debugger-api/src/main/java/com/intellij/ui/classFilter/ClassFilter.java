@@ -19,8 +19,8 @@ package com.intellij.ui.classFilter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import consulo.logging.Logger;
 import org.jdom.Element;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;

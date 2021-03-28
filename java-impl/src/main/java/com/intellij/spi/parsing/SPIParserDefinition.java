@@ -23,7 +23,6 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
@@ -38,6 +37,7 @@ import com.intellij.spi.psi.SPIClassProvidersElementList;
 import com.intellij.spi.psi.SPIFile;
 import com.intellij.spi.psi.SPIPackageOrClassReferenceElement;
 import consulo.lang.LanguageVersion;
+import consulo.logging.Logger;
 
 /**
  * User: anna

@@ -15,6 +15,7 @@
  */
 package org.jetbrains.java.generate.config;
 
+import consulo.logging.Logger;
 import gnu.trove.THashSet;
 
 import java.util.Collections;
@@ -25,7 +26,6 @@ import java.util.regex.PatternSyntaxException;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.java.generate.psi.PsiAdapter;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;

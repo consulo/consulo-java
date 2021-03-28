@@ -7,6 +7,8 @@ import java.io.StringWriter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import consulo.logging.Logger;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -16,7 +18,6 @@ import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
 import com.intellij.codeInsight.documentation.DockablePopupManager;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;

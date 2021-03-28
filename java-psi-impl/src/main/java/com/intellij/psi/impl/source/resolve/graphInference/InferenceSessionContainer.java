@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;

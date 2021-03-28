@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.inheritanceToDelegation;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 

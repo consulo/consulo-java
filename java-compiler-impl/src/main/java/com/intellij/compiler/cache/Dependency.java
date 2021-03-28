@@ -22,7 +22,7 @@ package com.intellij.compiler.cache;
 
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.make.CacheUtils;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
 

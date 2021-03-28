@@ -16,7 +16,7 @@
 package com.intellij.refactoring.encapsulateFields;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Iconable;

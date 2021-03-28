@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.safeDelete.usageInfo;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtilRt;

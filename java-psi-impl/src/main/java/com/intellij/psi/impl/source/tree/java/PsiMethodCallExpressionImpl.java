@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source.tree.java;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.pom.java.LanguageLevel;

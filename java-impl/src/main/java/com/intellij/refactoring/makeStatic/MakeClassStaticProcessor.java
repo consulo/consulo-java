@@ -15,7 +15,6 @@
  */
 package com.intellij.refactoring.makeStatic;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -35,6 +34,7 @@ import com.intellij.refactoring.util.javadoc.MethodJavaDocHelper;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;

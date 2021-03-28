@@ -22,12 +22,12 @@ package com.intellij.codeInsight.hint;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.javadoc.PsiDocComment;
+import consulo.logging.Logger;
 
 public class JavaImplementationTextSelectioner implements ImplementationTextSelectioner {
   private static final Logger LOG = Logger.getInstance(JavaImplementationTextSelectioner.class);

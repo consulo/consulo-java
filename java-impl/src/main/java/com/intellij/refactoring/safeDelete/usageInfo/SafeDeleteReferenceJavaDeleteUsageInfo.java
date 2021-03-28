@@ -15,10 +15,10 @@
  */
 package com.intellij.refactoring.safeDelete.usageInfo;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.safeDelete.ImportSearcher;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 /**
  * @author yole

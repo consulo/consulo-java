@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.TypePresentationService;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.meta.PsiPresentableMetaData;

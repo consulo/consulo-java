@@ -16,7 +16,7 @@
 package com.intellij.refactoring.inline;
 
 import com.intellij.codeInsight.ChangeContextUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;

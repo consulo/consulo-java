@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.controlFlow;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 
 public class ThrowToInstruction extends BranchingInstruction {

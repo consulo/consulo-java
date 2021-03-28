@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 
 public final class BasicRendererProperties implements Cloneable

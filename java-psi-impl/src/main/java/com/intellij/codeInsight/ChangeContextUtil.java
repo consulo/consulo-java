@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;

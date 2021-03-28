@@ -19,9 +19,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.*;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
@@ -30,6 +28,7 @@ import com.intellij.refactoring.rename.RenameProcessor;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
+import consulo.logging.Logger;
 
 import java.io.File;
 import java.io.IOException;

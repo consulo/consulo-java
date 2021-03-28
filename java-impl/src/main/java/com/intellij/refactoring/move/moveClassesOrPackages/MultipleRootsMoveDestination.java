@@ -15,7 +15,6 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -24,6 +23,7 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
+import consulo.logging.Logger;
 
 import java.util.Collection;
 

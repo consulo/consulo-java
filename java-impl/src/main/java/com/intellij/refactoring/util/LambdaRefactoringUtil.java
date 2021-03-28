@@ -24,7 +24,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
@@ -44,6 +43,7 @@ import com.intellij.refactoring.introduceVariable.IntroduceVariableHandler;
 import com.intellij.util.Function;
 import com.intellij.util.text.UniqueNameGenerator;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import consulo.logging.Logger;
 
 public class LambdaRefactoringUtil
 {

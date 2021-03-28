@@ -24,7 +24,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.containers.InternalIterator;

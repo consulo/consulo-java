@@ -16,7 +16,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.codeInsight.generation.surroundWith.JavaWithIfSurrounder;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;

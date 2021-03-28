@@ -37,7 +37,7 @@ import org.jetbrains.java.generate.template.TemplatesManager;
 import org.jetbrains.java.generate.view.TemplatesPanel;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;

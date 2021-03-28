@@ -21,11 +21,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;

@@ -16,7 +16,6 @@
 package com.intellij.refactoring.invertBoolean;
 
 import com.intellij.codeInsight.CodeInsightServicesUtil;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
@@ -31,6 +30,8 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Query;
+import consulo.logging.Logger;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import javax.annotation.Nonnull;

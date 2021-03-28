@@ -20,6 +20,7 @@
  */
 package com.intellij.codeInspection.ex;
 
+import consulo.logging.Logger;
 import gnu.trove.THashMap;
 
 import java.util.ArrayList;
@@ -47,7 +48,6 @@ import com.intellij.codeInspection.ui.InspectionToolPresentation;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;

@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.convertToInstanceMethod;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;

@@ -17,7 +17,7 @@ package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
 import java.util.List;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClass;

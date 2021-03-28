@@ -25,7 +25,6 @@ import javax.annotation.Nonnull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.ScrollType;
@@ -44,6 +43,7 @@ import com.intellij.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.duplicates.DuplicatesImpl;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 public class ExtractMethodObjectHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance(ExtractMethodObjectHandler.class);

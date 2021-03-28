@@ -24,7 +24,7 @@ import com.intellij.codeInspection.dataFlow.value.DfaInstanceofValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.util.containers.MultiMap;
 import gnu.trove.TObjectHashingStrategy;

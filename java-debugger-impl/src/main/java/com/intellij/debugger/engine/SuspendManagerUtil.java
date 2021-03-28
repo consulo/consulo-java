@@ -20,9 +20,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.SmartHashSet;
 import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.logging.Logger;
 
 public class SuspendManagerUtil
 {

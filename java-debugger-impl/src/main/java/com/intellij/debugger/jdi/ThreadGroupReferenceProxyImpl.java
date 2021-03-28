@@ -20,7 +20,7 @@
 package com.intellij.debugger.jdi;
 
 import com.intellij.debugger.engine.jdi.ThreadGroupReferenceProxy;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.internal.com.sun.jdi.ThreadGroupReference;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import org.jetbrains.annotations.NonNls;

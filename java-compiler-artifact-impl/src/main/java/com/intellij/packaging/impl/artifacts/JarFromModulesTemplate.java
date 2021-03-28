@@ -27,7 +27,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderEnumerator;

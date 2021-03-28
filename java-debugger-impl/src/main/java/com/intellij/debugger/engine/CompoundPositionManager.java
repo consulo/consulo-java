@@ -25,7 +25,6 @@ import com.intellij.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.requests.ClassPrepareRequestor;
 import com.intellij.execution.filters.LineNumbersMapping;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -36,6 +35,7 @@ import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
+import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

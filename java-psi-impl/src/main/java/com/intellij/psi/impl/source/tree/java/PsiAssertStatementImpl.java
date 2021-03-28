@@ -16,7 +16,6 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiAssertStatement;
 import com.intellij.psi.PsiElementVisitor;
@@ -26,6 +25,8 @@ import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 
 public class PsiAssertStatementImpl extends CompositePsiElement implements PsiAssertStatement, Constants {

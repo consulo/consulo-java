@@ -19,7 +19,7 @@ import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.impl.ConcatenationToMessageFormatAction;
 import com.intellij.lang.properties.psi.I18nizedTextGenerator;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;

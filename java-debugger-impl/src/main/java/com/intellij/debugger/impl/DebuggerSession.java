@@ -60,7 +60,6 @@ import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -86,6 +85,7 @@ import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.StepRequest;
+import consulo.logging.Logger;
 
 public class DebuggerSession implements AbstractDebuggerSession
 {

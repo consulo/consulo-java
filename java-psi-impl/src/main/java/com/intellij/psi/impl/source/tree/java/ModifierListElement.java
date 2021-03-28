@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;

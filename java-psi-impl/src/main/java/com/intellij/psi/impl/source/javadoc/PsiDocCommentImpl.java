@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.JavaTokenType;
@@ -42,6 +41,7 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.CharTable;
 import com.intellij.util.text.CharArrayUtil;
+import consulo.logging.Logger;
 
 public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDocComment, JavaTokenType, Constants
 {

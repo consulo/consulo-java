@@ -22,7 +22,7 @@ import com.intellij.debugger.engine.SuspendManager;
 import com.intellij.debugger.engine.SuspendManagerUtil;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 
 public abstract class DebuggerContextCommandImpl extends SuspendContextCommandImpl

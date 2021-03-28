@@ -25,7 +25,7 @@ import com.intellij.debugger.engine.jdi.StackFrameProxy;
 import com.intellij.debugger.jdi.LocalVariableProxyImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.JavaPsiFacade;

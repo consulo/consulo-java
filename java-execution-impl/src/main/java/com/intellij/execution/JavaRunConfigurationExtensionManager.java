@@ -15,13 +15,13 @@
  */
 package com.intellij.execution;
 
+import consulo.logging.Logger;
 import jakarta.inject.Singleton;
 
 import com.intellij.execution.configuration.RunConfigurationExtensionsManager;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 
 /**
  * User: anna

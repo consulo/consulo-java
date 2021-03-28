@@ -24,10 +24,10 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;

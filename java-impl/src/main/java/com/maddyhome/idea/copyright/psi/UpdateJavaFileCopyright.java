@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 
 import javax.annotation.Nullable;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;

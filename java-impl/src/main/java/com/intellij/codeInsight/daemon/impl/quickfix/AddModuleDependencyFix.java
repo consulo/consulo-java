@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import com.intellij.application.options.ModuleListCellRenderer;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.compiler.ModuleCompilerUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;

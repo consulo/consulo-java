@@ -16,7 +16,7 @@
 package org.jetbrains.java.generate.element;
 
 import org.jetbrains.java.generate.psi.PsiAdapter;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;

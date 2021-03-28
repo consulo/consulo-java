@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 
 import org.intellij.lang.annotations.Flow;
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;

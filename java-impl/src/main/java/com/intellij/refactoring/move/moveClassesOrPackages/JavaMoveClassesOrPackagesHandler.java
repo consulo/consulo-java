@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -54,6 +53,7 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
 import java.util.HashSet;
 import consulo.java.util.JavaProjectRootsUtil;
+import consulo.logging.Logger;
 
 public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate
 {

@@ -17,7 +17,6 @@ package com.intellij.psi.impl.search;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.openapi.application.*;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -41,6 +40,7 @@ import java.util.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
+import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.*;

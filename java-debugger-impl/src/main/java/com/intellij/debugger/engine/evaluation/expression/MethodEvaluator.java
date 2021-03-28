@@ -38,7 +38,6 @@ import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.impl.ClassLoadingUtils;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
-import com.intellij.openapi.diagnostic.Logger;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
 import consulo.internal.com.sun.jdi.Method;
@@ -46,6 +45,7 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.logging.Logger;
 
 public class MethodEvaluator implements Evaluator
 {

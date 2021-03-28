@@ -2,7 +2,7 @@
 package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.CodeInsightUtilCore;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;

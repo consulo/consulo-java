@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import org.intellij.lang.annotations.MagicConstant;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.event.EventSet;

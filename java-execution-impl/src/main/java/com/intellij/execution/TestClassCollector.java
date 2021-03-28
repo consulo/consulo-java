@@ -17,7 +17,6 @@ package com.intellij.execution;
 
 import com.intellij.execution.testframework.TestSearchScope;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressManager;
@@ -29,6 +28,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.PathsList;
 import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.logging.Logger;
 import consulo.roots.impl.TestContentFolderTypeProvider;
 import consulo.util.nodep.classloader.UrlClassLoader;
 

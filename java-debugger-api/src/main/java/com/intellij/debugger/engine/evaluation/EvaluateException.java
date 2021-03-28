@@ -15,9 +15,10 @@
  */
 package com.intellij.debugger.engine.evaluation;
 
-import com.intellij.openapi.diagnostic.Logger;
 import consulo.internal.com.sun.jdi.InvocationException;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.logging.Logger;
+
 import javax.annotation.Nullable;
 
 public class EvaluateException extends Exception {

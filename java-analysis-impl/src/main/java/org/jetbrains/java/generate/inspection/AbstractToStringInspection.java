@@ -17,7 +17,7 @@ package org.jetbrains.java.generate.inspection;
 
 import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 /**
  * Base class for inspection support.

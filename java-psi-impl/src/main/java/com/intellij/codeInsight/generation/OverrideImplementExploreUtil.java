@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.MemberImplementorExplorer;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.NullableLazyValue;
 import com.intellij.openapi.util.VolatileNullableLazyValue;
 import com.intellij.openapi.util.text.StringUtil;
@@ -26,6 +25,7 @@ import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 
 public class OverrideImplementExploreUtil
 {

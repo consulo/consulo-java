@@ -19,6 +19,7 @@
  */
 package com.intellij.debugger.jdi;
 
+import consulo.logging.Logger;
 import gnu.trove.THashMap;
 
 import java.util.ArrayList;
@@ -34,7 +35,6 @@ import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.jdi.StackFrameProxy;
-import com.intellij.openapi.diagnostic.Logger;
 import consulo.internal.com.sun.jdi.*;
 
 public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy

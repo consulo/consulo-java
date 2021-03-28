@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
@@ -36,7 +37,6 @@ import com.intellij.ide.util.PsiClassListCellRenderer;
 import com.intellij.ide.util.PsiElementListCellRenderer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;

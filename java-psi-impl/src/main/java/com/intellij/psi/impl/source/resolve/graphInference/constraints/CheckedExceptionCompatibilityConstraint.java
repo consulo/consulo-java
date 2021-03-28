@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.intellij.codeInsight.ExceptionUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;

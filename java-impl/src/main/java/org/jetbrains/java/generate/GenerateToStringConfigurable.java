@@ -17,9 +17,9 @@ package org.jetbrains.java.generate;
 
 import javax.swing.JComponent;
 
+import consulo.logging.Logger;
 import org.jetbrains.java.generate.config.Config;
 import org.jetbrains.java.generate.view.ConfigUI;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;

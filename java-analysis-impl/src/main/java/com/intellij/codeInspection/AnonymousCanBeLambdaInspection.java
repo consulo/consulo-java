@@ -30,6 +30,7 @@ import java.util.function.UnaryOperator;
 import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nullable;
@@ -39,7 +40,6 @@ import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;

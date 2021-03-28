@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.typeCook.deductive.builder;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.RefactoringBundle;

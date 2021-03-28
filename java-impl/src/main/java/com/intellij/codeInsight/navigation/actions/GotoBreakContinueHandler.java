@@ -18,7 +18,7 @@ package com.intellij.codeInsight.navigation.actions;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 /**
  * @author yole

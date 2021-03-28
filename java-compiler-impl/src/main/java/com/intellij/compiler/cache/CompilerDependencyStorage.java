@@ -16,7 +16,7 @@
 package com.intellij.compiler.cache;
 
 import consulo.disposer.Disposable;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Ref;
 import com.intellij.util.containers.SLRUCache;
 import com.intellij.util.io.DataExternalizer;

@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source.tree.java;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;

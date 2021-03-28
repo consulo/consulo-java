@@ -25,7 +25,7 @@
 package com.intellij.refactoring.makeStatic;
 
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;

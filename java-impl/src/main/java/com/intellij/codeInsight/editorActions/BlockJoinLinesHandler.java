@@ -15,13 +15,13 @@
  */
 package com.intellij.codeInsight.editorActions;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 public class BlockJoinLinesHandler implements JoinLinesHandlerDelegate {
   private static final Logger LOG = Logger.getInstance(BlockJoinLinesHandler.class);

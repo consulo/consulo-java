@@ -15,7 +15,6 @@
  */
 package com.intellij.refactoring.util.javadoc;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -23,6 +22,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 /**
  *  @author dsl

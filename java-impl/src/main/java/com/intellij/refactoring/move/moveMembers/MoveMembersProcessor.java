@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.ide.util.EditorHelper;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.JavaPsiFacade;
@@ -59,6 +58,7 @@ import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import java.util.HashMap;
 import com.intellij.util.containers.MultiMap;
+import consulo.logging.Logger;
 
 /**
  * created at Sep 11, 2001

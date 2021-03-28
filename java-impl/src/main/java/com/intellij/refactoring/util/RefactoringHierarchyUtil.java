@@ -24,7 +24,7 @@
  */
 package com.intellij.refactoring.util;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
 import com.intellij.psi.search.PsiElementProcessor;

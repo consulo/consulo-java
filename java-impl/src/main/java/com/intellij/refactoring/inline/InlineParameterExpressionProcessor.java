@@ -17,7 +17,7 @@ package com.intellij.refactoring.inline;
 
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInspection.sameParameterValue.SameParameterValueInspection;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;

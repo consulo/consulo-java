@@ -19,7 +19,7 @@ package com.intellij.lang.java;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.intellij.lang.ImportOptimizer;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.EmptyRunnable;

@@ -29,7 +29,6 @@ import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
@@ -40,6 +39,7 @@ import com.intellij.xdebugger.impl.actions.MarkObjectActionHandler;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.awt.TargetAWT;
 import consulo.internal.com.sun.jdi.*;
+import consulo.logging.Logger;
 import consulo.ui.color.ColorValue;
 
 import javax.annotation.Nonnull;

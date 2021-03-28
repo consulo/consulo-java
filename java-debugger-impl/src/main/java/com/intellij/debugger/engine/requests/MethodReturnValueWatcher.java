@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.settings.DebuggerSettings;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.com.sun.jdi.Method;
@@ -37,6 +36,7 @@ import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 import consulo.java.JavaRegistry;
+import consulo.logging.Logger;
 
 /**
  * @author Eugene Zhuravlev

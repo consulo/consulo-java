@@ -3,7 +3,7 @@ package com.intellij.psi.impl.source.tree.java;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.RecursionGuard;

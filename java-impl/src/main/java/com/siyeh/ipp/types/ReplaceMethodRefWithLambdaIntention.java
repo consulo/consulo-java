@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;

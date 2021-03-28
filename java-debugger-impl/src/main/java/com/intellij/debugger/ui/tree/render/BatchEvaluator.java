@@ -25,9 +25,9 @@ import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
-import com.intellij.openapi.diagnostic.Logger;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 
 import java.util.ArrayList;

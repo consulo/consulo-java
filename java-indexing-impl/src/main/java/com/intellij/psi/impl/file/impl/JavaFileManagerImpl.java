@@ -17,7 +17,7 @@ package com.intellij.psi.impl.file.impl;
 
 import com.intellij.ProjectTopics;
 import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.impl.scopes.ModuleWithDependenciesScope;
 import com.intellij.openapi.project.Project;

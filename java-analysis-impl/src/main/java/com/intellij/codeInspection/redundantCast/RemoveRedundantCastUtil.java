@@ -1,7 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.redundantCast;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiParenthesizedExpression;
@@ -9,6 +8,7 @@ import com.intellij.psi.PsiTypeCastExpression;
 import com.intellij.psi.util.PsiPrecedenceUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.logging.Logger;
 
 public class RemoveRedundantCastUtil
 {

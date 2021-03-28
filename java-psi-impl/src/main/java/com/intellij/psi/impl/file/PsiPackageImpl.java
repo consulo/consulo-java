@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.completion.scope.JavaCompletionHints;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.util.Condition;

@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
 import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.GenericsUtil;
@@ -42,6 +41,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
 
 /**
  * User: anna

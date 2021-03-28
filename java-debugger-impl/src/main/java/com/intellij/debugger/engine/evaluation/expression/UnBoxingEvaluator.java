@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.Couple;
 import consulo.java.module.util.JavaClassNames;
 import com.intellij.psi.impl.PsiJavaParserFacadeImpl;

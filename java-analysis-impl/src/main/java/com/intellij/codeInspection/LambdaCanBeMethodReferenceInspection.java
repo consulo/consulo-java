@@ -20,12 +20,12 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;

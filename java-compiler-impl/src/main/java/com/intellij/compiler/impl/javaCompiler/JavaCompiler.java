@@ -16,6 +16,7 @@
 
 package com.intellij.compiler.impl.javaCompiler;
 
+import consulo.logging.Logger;
 import gnu.trove.THashMap;
 
 import java.io.File;
@@ -38,7 +39,6 @@ import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;

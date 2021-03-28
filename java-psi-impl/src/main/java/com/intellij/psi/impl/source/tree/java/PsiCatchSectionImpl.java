@@ -17,7 +17,7 @@ package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.Constants;

@@ -15,7 +15,6 @@
  */
 package com.intellij.refactoring.extractclass;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
@@ -28,6 +27,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.psi.MethodInheritanceUtils;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;

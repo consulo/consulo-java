@@ -20,7 +20,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.find.findUsages.FindUsagesOptions;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.MethodReferencesSearch;

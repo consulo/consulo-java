@@ -22,7 +22,7 @@
 package com.intellij.compiler.cache;
 
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 public class JavaDependencyCacheNavigator {
   private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.make.DependencyCacheNavigator");

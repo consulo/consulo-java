@@ -26,7 +26,7 @@ import com.intellij.compiler.impl.ExitStatus;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;

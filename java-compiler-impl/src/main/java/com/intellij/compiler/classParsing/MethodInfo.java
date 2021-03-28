@@ -24,10 +24,10 @@ package com.intellij.compiler.classParsing;
 import com.intellij.compiler.cache.SymbolTable;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.make.CacheUtils;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.cls.ClsUtil;
+import consulo.logging.Logger;
 import gnu.trove.TIntHashSet;
 import org.jetbrains.annotations.NonNls;
 

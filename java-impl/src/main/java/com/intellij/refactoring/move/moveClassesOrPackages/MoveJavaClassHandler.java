@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;

@@ -26,7 +26,7 @@ import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.breakpoints.StackCapturingLineBreakpoint;
 import com.intellij.debugger.ui.tree.render.ClassRenderer;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ColoredTextContainer;

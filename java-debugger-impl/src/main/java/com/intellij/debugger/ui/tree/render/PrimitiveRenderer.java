@@ -25,14 +25,13 @@ import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.*;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * User: lex

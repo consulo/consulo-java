@@ -27,7 +27,7 @@ import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.configurations.SimpleProgramParameters;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessTerminatedListener;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.CharsetToolkit;

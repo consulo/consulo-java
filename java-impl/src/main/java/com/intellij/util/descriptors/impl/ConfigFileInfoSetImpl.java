@@ -16,12 +16,12 @@
 
 package com.intellij.util.descriptors.impl;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.MultiValuesMap;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.descriptors.*;
+import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.ExecutionException;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 import consulo.java.debugger.apiAdapters.TransportClassDelegates;

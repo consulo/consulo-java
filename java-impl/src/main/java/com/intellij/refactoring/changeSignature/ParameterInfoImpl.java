@@ -2,12 +2,12 @@
 
 package com.intellij.refactoring.changeSignature;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
