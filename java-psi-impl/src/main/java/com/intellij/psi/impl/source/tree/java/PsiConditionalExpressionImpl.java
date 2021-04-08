@@ -15,10 +15,7 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
@@ -26,9 +23,15 @@ import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.psi.scope.ElementClassHint;
+import com.intellij.psi.scope.PatternResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class PsiConditionalExpressionImpl extends ExpressionPsiElement implements PsiConditionalExpression
 {
@@ -268,6 +271,34 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
 		}
 	}
 
+	@Override
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+									   @Nonnull ResolveState state,
+									   PsiElement lastParent,
+									   @Nonnull PsiElement place)
+	{
+		if(lastParent == null)
+		{
+			return true;
+		}
+		ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
+		if(elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE))
+		{
+			return true;
+		}
+		PsiExpression condition = getCondition();
+		if(lastParent == getThenExpression())
+		{
+			return condition.processDeclarations(processor, PatternResolveState.WHEN_TRUE.putInto(state), null, place);
+		}
+		if(lastParent == getElseExpression())
+		{
+			return condition.processDeclarations(processor, PatternResolveState.WHEN_FALSE.putInto(state), null, place);
+		}
+		return true;
+	}
+
+	@Override
 	public String toString()
 	{
 		return "PsiConditionalExpression:" + getText();
