@@ -26,6 +26,7 @@ import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.command.CommandProcessor;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -443,7 +444,9 @@ public class PackageUtil
 			Project project = module.getProject();
 			Messages.showErrorDialog(project, ProjectBundle.message("module.source.roots.not.configured.error", module.getName()), ProjectBundle.message("module.source.roots.not.configured.title"));
 
-			ProjectSettingsService.getInstance(project).showModuleConfigurationDialog(module.getName(), ContentEntriesEditor.NAME);
+			ShowSettingsUtil.getInstance().showProjectStructureDialog(module.getProject(), projectStructureSelector -> {
+				projectStructureSelector.select(module.getName(), null, true);
+			});
 
 			sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
 			if(sourceRoots.length == 0)
