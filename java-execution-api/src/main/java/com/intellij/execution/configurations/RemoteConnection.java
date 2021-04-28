@@ -73,7 +73,7 @@ public class RemoteConnection {
     final boolean shmem = !isUseSockets();
     final boolean serverMode = isServerMode();
 
-    @NonNls String result;
+    String result;
     if (shmem) {
       if (serverMode) {
         result = "-Xdebug -Xrunjdwp:transport=dt_shmem,server=n,address=" +

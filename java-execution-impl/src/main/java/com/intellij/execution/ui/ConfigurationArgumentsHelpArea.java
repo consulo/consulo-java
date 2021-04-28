@@ -16,84 +16,73 @@
 package com.intellij.execution.ui;
 
 import com.intellij.execution.ExecutionBundle;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.ActionPopupMenu;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.ui.FixedSizeButton;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.PopupHandler;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.util.PlatformIcons;
+import consulo.awt.TargetAWT;
+import consulo.ui.TextBoxWithExpandAction;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class ConfigurationArgumentsHelpArea extends JPanel {
-  private JTextArea myHelpArea;
-  private JPanel myPanel;
-  private JLabel myLabel;
-  private JPanel myToolbarPanel;
+public class ConfigurationArgumentsHelpArea extends JPanel
+{
+	private TextBoxWithExpandAction myHelpArea;
+	private JLabel myLabel;
+	private final FixedSizeButton myCopyButton;
 
-  public ConfigurationArgumentsHelpArea() {
-    super(new BorderLayout());
-    add(myPanel);
-    setBorder(IdeBorderFactory.createEmptyBorder(10, 0, 0, 0));
+	public ConfigurationArgumentsHelpArea()
+	{
+		super(new BorderLayout());
 
-    final DefaultActionGroup group = new DefaultActionGroup();
-    group.add(new MyCopyAction());
-    myHelpArea.addMouseListener(
-      new PopupHandler(){
-        public void invokePopup(final Component comp,final int x,final int y){
-          createPopupMenu(group).getComponent().show(comp,x,y);
-        }
-      }
-    );
+		myLabel = new JBLabel(ExecutionBundle.message("environment.variables.helper.use.arguments.label"));
+		add(myLabel, BorderLayout.NORTH);
 
-    FixedSizeButton copyButton = new FixedSizeButton(22);
-    copyButton.setIcon(PlatformIcons.COPY_ICON);
-    copyButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        final StringSelection contents = new StringSelection(myHelpArea.getText().trim());
-        CopyPasteManager.getInstance().setContents(contents);
-      }
-    });
-    myToolbarPanel.add(copyButton, BorderLayout.NORTH);
-    myToolbarPanel.setVisible(false);
-  }
+		myHelpArea = TextBoxWithExpandAction.create(null, "Command line", s -> StringUtil.split(s, "\n"), list -> String.join("\n", list));
+		myHelpArea.setEditable(false);
 
-  public void setToolbarVisible() {
-    myToolbarPanel.setVisible(true);
-  }
+		add(TargetAWT.to(myHelpArea), BorderLayout.CENTER);
 
-  private static ActionPopupMenu createPopupMenu(DefaultActionGroup group) {
-    return ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, group);
-  }
+		myCopyButton = new FixedSizeButton();
+		myCopyButton.setIcon(PlatformIcons.COPY_ICON);
+		myCopyButton.addActionListener(e -> {
+			final StringSelection contents = new StringSelection(myHelpArea.getValueOrError().trim());
+			CopyPasteManager.getInstance().setContents(contents);
+		});
+		myCopyButton.setVisible(false);
 
-  public void updateText(final String text) {
-    myHelpArea.setText(text);
-  }
+		add(myCopyButton, BorderLayout.EAST);
+	}
 
-  public void setLabelText(final String text) {
-    myLabel.setText(text);
-  }
+	public void setToolbarVisible()
+	{
+		myCopyButton.setVisible(true);
+	}
 
-  public String getLabelText() {
-    return myLabel.getText();
-  }
+	private static ActionPopupMenu createPopupMenu(DefaultActionGroup group)
+	{
+		return ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, group);
+	}
 
-  private class MyCopyAction extends AnAction {
-    public MyCopyAction() {
-      super(ExecutionBundle.message("run.configuration.arguments.help.panel.copy.action.name"));
-      copyFrom(ActionManager.getInstance().getAction(IdeActions.ACTION_COPY));
-    }
+	public void updateText(final String text)
+	{
+		myHelpArea.setValue(text);
+	}
 
-    public void actionPerformed(final AnActionEvent e) {
-      final StringSelection contents = new StringSelection(myHelpArea.getText().trim());
-      CopyPasteManager.getInstance().setContents(contents);
-    }
-  }
+	public void setLabelText(final String text)
+	{
+		myLabel.setText(text);
+	}
 
-
+	public String getLabelText()
+	{
+		return myLabel.getText();
+	}
 }
