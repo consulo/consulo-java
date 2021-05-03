@@ -36,7 +36,6 @@ import javax.annotation.Nonnull;
 public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewModuleWizardContext>
 {
 	private BundleBox myBundleBox;
-	private Disposable myUiDisposable;
 
 	public JavaSdkSelectStep(@Nonnull JavaNewModuleWizardContext context)
 	{
@@ -45,13 +44,11 @@ public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewMod
 
 	@RequiredUIAccess
 	@Override
-	protected void extend(@Nonnull FormBuilder builder)
+	protected void extend(@Nonnull FormBuilder builder, @Nonnull Disposable uiDisposable)
 	{
-		super.extend(builder);
+		super.extend(builder, uiDisposable);
 
-		myUiDisposable = Disposable.newDisposable();
-
-		BundleBoxBuilder boxBuilder = BundleBoxBuilder.create(myUiDisposable);
+		BundleBoxBuilder boxBuilder = BundleBoxBuilder.create(uiDisposable);
 		boxBuilder.withSdkTypeFilter(sdkTypeId -> sdkTypeId instanceof JavaSdk);
 
 		builder.addLabeled(LocalizeValue.localizeTODO("JDK:"), (myBundleBox = boxBuilder.build()).getComponent());
@@ -72,18 +69,6 @@ public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewMod
 		if(selectedBundleName != null)
 		{
 			context.setSdk(SdkTable.getInstance().findSdk(selectedBundleName));
-		}
-	}
-
-	@Override
-	public void disposeUIResources()
-	{
-		super.disposeUIResources();
-
-		if(myUiDisposable != null)
-		{
-			myUiDisposable.disposeWithTree();
-			myUiDisposable = null;
 		}
 	}
 }
