@@ -15,20 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
@@ -57,10 +43,15 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
-import java.util.HashSet;
 import consulo.java.JavaQuickFixBundle;
 import consulo.java.module.util.JavaClassNames;
 import consulo.ui.impl.ModalityPerProjectEAPDescriptor;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * @author peter
@@ -286,7 +277,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		PsiJavaFile javaFile = (PsiJavaFile) containingFile;
 		PsiImportList importList = javaFile.getImportList();
 		PsiImportStatementBase[] importStatements = importList == null ? PsiImportStatementBase.EMPTY_ARRAY : importList.getAllImportStatements();
-		Set<String> importedNames = new THashSet<>(importStatements.length);
+		Set<String> importedNames = new HashSet<>(importStatements.length);
 		for(PsiImportStatementBase statement : importStatements)
 		{
 			PsiJavaCodeReferenceElement ref = statement.getImportReference();

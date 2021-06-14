@@ -15,31 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import static com.intellij.util.ObjectUtil.notNull;
-
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectIntHashMap;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import jakarta.inject.Inject;
-
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
-import com.intellij.codeInsight.daemon.impl.CheckLevelHighlightInfoHolder;
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx;
-import com.intellij.codeInsight.daemon.impl.DefaultHighlightUtil;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.HighlightVisitor;
-import com.intellij.codeInsight.daemon.impl.JavaHighlightInfoTypes;
+import com.intellij.codeInsight.daemon.impl.*;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil.Feature;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
@@ -67,16 +45,20 @@ import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import consulo.application.ApplicationProperties;
 import consulo.java.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
+import jakarta.inject.Inject;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static com.intellij.util.ObjectUtil.notNull;
 
 public class HighlightVisitorImpl extends JavaElementVisitor implements HighlightVisitor
 {
@@ -93,15 +75,15 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 	private PsiJavaModule myJavaModule;
 
 	// map codeBlock->List of PsiReferenceExpression of uninitialized final variables
-	private final Map<PsiElement, Collection<PsiReferenceExpression>> myUninitializedVarProblems = new THashMap<>();
+	private final Map<PsiElement, Collection<PsiReferenceExpression>> myUninitializedVarProblems = new HashMap<>();
 	// map codeBlock->List of PsiReferenceExpression of extra initialization of final variable
-	private final Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> myFinalVarProblems = new THashMap<>();
+	private final Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> myFinalVarProblems = new HashMap<>();
 
 	// value==1: no info if the parameter was reassigned (but the parameter is present in current file), value==2: parameter was reassigned
-	private final TObjectIntHashMap<PsiParameter> myReassignedParameters = new TObjectIntHashMap<>();
+	private final ObjectIntMap<PsiParameter> myReassignedParameters = ObjectMaps.newObjectIntHashMap();
 
-	private final Map<String, Pair<PsiImportStaticReferenceElement, PsiClass>> mySingleImportedClasses = new THashMap<>();
-	private final Map<String, Pair<PsiImportStaticReferenceElement, PsiField>> mySingleImportedFields = new THashMap<>();
+	private final Map<String, Pair<PsiImportStaticReferenceElement, PsiClass>> mySingleImportedClasses = new HashMap<>();
+	private final Map<String, Pair<PsiImportStaticReferenceElement, PsiField>> mySingleImportedFields = new HashMap<>();
 
 	private final PsiElementVisitor REGISTER_REFERENCES_VISITOR = new PsiRecursiveElementWalkingVisitor()
 	{
@@ -123,8 +105,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 			}
 		}
 	};
-	private final Map<PsiClass, MostlySingularMultiMap<MethodSignature, PsiMethod>> myDuplicateMethods = new THashMap<>();
-	private final Set<PsiClass> myOverrideEquivalentMethodsVisitedClasses = new THashSet<>();
+	private final Map<PsiClass, MostlySingularMultiMap<MethodSignature, PsiMethod>> myDuplicateMethods = new HashMap<>();
+	private final Set<PsiClass> myOverrideEquivalentMethodsVisitedClasses = new HashSet<>();
 
 	private static class Holder
 	{
@@ -914,7 +896,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 			boolean isMethodParameter = variable instanceof PsiParameter && ((PsiParameter) variable).getDeclarationScope() instanceof PsiMethod;
 			if(isMethodParameter)
 			{
-				myReassignedParameters.put((PsiParameter) variable, 1); // mark param as present in current file
+				myReassignedParameters.putInt((PsiParameter) variable, 1); // mark param as present in current file
 			}
 			else
 			{
@@ -1216,7 +1198,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
 		for(PsiParameter parameter : parameters)
 		{
-			int info = myReassignedParameters.get(parameter);
+			int info = myReassignedParameters.getInt(parameter);
 			if(info == 0)
 			{
 				continue; // out of this file
@@ -1712,7 +1694,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
 			if(variable instanceof PsiParameter && ref instanceof PsiExpression && PsiUtil.isAccessedForWriting((PsiExpression) ref))
 			{
-				myReassignedParameters.put((PsiParameter) variable, 2);
+				myReassignedParameters.putInt((PsiParameter) variable, 2);
 			}
 
 			final TextAttributesScheme colorsScheme = myHolder.getColorsScheme();
@@ -2457,7 +2439,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 			boolean reassigned;
 			if(variable instanceof PsiParameter)
 			{
-				reassigned = myReassignedParameters.get((PsiParameter) variable) == 2;
+				reassigned = myReassignedParameters.getInt((PsiParameter) variable) == 2;
 			}
 			else
 			{

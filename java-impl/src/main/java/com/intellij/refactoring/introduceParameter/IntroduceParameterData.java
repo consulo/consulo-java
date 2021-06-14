@@ -19,8 +19,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
-import gnu.trove.TIntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
 import org.intellij.lang.annotations.MagicConstant;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -51,7 +52,7 @@ public interface IntroduceParameterData {
   PsiType getForcedType();
 
   @Nonnull
-  TIntArrayList getParametersToRemove();
+  IntList getParametersToRemove();
 
   interface ExpressionWrapper<RealExpression extends PsiElement> {
     @Nonnull

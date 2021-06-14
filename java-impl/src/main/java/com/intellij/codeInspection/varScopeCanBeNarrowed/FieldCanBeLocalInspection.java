@@ -39,19 +39,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import consulo.java.module.util.JavaClassNames;
-
-import gnu.trove.THashSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author ven
@@ -126,7 +122,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     removeFieldsReferencedFromInitializers(aClass, candidates);
     if (candidates.isEmpty()) return;
 
-    final Set<PsiField> usedFields = new THashSet<PsiField>();
+    final Set<PsiField> usedFields = new HashSet<PsiField>();
     removeReadFields(aClass, candidates, usedFields);
 
     if (candidates.isEmpty()) return;

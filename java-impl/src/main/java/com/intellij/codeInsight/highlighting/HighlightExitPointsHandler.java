@@ -15,26 +15,22 @@
  */
 package com.intellij.codeInsight.highlighting;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.featureStatistics.ProductivityFeatureNames;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
-import com.intellij.util.containers.IntArrayList;
+import consulo.util.collection.primitive.ints.IntLists;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiElement>
 {
@@ -163,7 +159,7 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
 		ControlFlow flow = ControlFlowFactory.getInstance(project).getControlFlow(body, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(),
 				false);
 
-		Collection<PsiStatement> exitStatements = ControlFlowUtil.findExitPointsAndStatements(flow, 0, flow.getSize(), new IntArrayList(),
+		Collection<PsiStatement> exitStatements = ControlFlowUtil.findExitPointsAndStatements(flow, 0, flow.getSize(), IntLists.newArrayList(),
 				PsiReturnStatement.class, PsiBreakStatement.class, PsiContinueStatement.class, PsiThrowStatement.class);
 		if(!exitStatements.contains(parent))
 		{

@@ -19,16 +19,12 @@ import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import java.util.HashSet;
 import consulo.annotation.access.RequiredReadAction;
-import gnu.trove.THashMap;
+import consulo.util.collection.Maps;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PsiSuperMethodUtil
 {
@@ -128,7 +124,7 @@ public class PsiSuperMethodUtil
 			final PsiType t = derivedSubstitutor.substitute(type);
 			if(map == null)
 			{
-				map = new THashMap<PsiTypeParameter, PsiType>();
+				map = new HashMap<PsiTypeParameter, PsiType>();
 			}
 			map.put(typeParameter, t);
 		}
@@ -139,7 +135,7 @@ public class PsiSuperMethodUtil
 	@Nonnull
 	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@Nonnull PsiClass aClass)
 	{
-		final Map<MethodSignature, Set<PsiMethod>> overrideEquivalent = new THashMap<MethodSignature, Set<PsiMethod>>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
+		final Map<MethodSignature, Set<PsiMethod>> overrideEquivalent = Maps.newHashMap(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 		final GlobalSearchScope resolveScope = aClass.getResolveScope();
 		PsiClass[] supers = aClass.getSupers();
 		for(int i = 0; i < supers.length; i++)

@@ -15,17 +15,6 @@
  */
 package com.intellij.codeInspection.i18n;
 
-import gnu.trove.THashSet;
-
-import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.template.macro.MacroUtil;
 import com.intellij.lang.properties.IProperty;
@@ -35,21 +24,20 @@ import com.intellij.lang.properties.psi.PropertyCreationHandler;
 import com.intellij.lang.properties.references.I18nUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.ParameterizedCachedValue;
-import com.intellij.psi.util.ParameterizedCachedValueProvider;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
-import java.util.HashMap;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * @author max
@@ -186,7 +174,7 @@ public class JavaI18nUtil extends I18nUtil {
       if (processed.contains(method)) return false;
     }
     else {
-      processed = new THashSet<PsiMethod>();
+      processed = new HashSet<PsiMethod>();
     }
     processed.add(method);
 

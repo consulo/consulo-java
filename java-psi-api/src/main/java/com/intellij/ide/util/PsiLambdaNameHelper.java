@@ -15,25 +15,13 @@
  */
 package com.intellij.ide.util;
 
-import gnu.trove.THashMap;
-
-import java.util.Map;
+import com.intellij.psi.*;
+import com.intellij.psi.util.*;
+import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
-
-import consulo.util.dataholder.Key;
-import com.intellij.psi.JavaRecursiveElementWalkingVisitor;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.ParameterizedCachedValue;
-import com.intellij.psi.util.ParameterizedCachedValueProvider;
-import com.intellij.psi.util.PsiTreeUtil;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PsiLambdaNameHelper
 {
@@ -55,7 +43,7 @@ public class PsiLambdaNameHelper
 				@Override
 				public CachedValueProvider.Result<Map<PsiLambdaExpression, String>> compute(final PsiClass upper)
 				{
-					final Map<PsiLambdaExpression, String> map = new THashMap<PsiLambdaExpression, String>();
+					final Map<PsiLambdaExpression, String> map = new HashMap<PsiLambdaExpression, String>();
 					upper.accept(new JavaRecursiveElementWalkingVisitor()
 					{
 						int index;

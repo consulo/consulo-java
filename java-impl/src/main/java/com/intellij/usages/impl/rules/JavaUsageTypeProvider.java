@@ -23,11 +23,11 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.PsiElementUsageTarget;
 import com.intellij.usages.UsageTarget;
 import com.intellij.util.Processor;
-import gnu.trove.THashSet;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
@@ -112,8 +112,8 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     supers1Q.add(m1);
     final Queue<PsiMethod> supers2Q = new ArrayDeque<PsiMethod>();
     supers2Q.add(m2);
-    Set<PsiMethod> supers1 = new THashSet<PsiMethod>();
-    Set<PsiMethod> supers2 = new THashSet<PsiMethod>();
+    Set<PsiMethod> supers1 = new HashSet<PsiMethod>();
+    Set<PsiMethod> supers2 = new HashSet<PsiMethod>();
     while (true) {
       PsiMethod me1;
       if ((me1 = supers1Q.poll()) != null) {

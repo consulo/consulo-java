@@ -2,9 +2,12 @@
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph.Edge;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntHashSet;
-import gnu.trove.TIntIterator;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.collection.primitive.ints.IntSet;
+import consulo.util.collection.primitive.ints.IntSets;
+
+import java.util.PrimitiveIterator;
 
 /**
  * @author lambdamix
@@ -30,9 +33,9 @@ public final class RichControlFlow
 		}
 		int size = controlFlow.transitions.length;
 		boolean[] loopEnters = dfsTree.loopEnters;
-		TIntHashSet[] cycleIncoming = new TIntHashSet[size];
+		IntSet[] cycleIncoming = new IntSet[size];
 		// really this may be array, since dfs already ensures no duplicates
-		TIntArrayList[] nonCycleIncoming = new TIntArrayList[size];
+		IntList[] nonCycleIncoming = new IntList[size];
 		int[] collapsedTo = new int[size];
 		int[] queue = new int[size];
 		int top;
@@ -40,9 +43,9 @@ public final class RichControlFlow
 		{
 			if(loopEnters[i])
 			{
-				cycleIncoming[i] = new TIntHashSet();
+				cycleIncoming[i] = IntSets.newHashSet();
 			}
-			nonCycleIncoming[i] = new TIntArrayList();
+			nonCycleIncoming[i] = IntLists.newArrayList();
 			collapsedTo[i] = i;
 		}
 
@@ -61,24 +64,24 @@ public final class RichControlFlow
 		{
 			top = 0;
 			// NB - it is modified later!
-			TIntHashSet p = cycleIncoming[w];
+			IntSet p = cycleIncoming[w];
 			if(p == null)
 			{
 				continue;
 			}
-			TIntIterator it = p.iterator();
+			PrimitiveIterator.OfInt it = p.iterator();
 			while(it.hasNext())
 			{
-				queue[top++] = it.next();
+				queue[top++] = it.nextInt();
 			}
 
 			while(top > 0)
 			{
 				int x = queue[--top];
-				TIntArrayList incoming = nonCycleIncoming[x];
+				IntList incoming = nonCycleIncoming[x];
 				for(int i = 0; i < incoming.size(); i++)
 				{
-					int y1 = collapsedTo[incoming.getQuick(i)];
+					int y1 = collapsedTo[incoming.get(i)];
 					if(!dfsTree.isDescendant(y1, w))
 					{
 						return false;

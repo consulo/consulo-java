@@ -15,13 +15,13 @@
  */
 package com.intellij.ide.util;
 
-import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.*;
-import gnu.trove.THashMap;
+import consulo.util.dataholder.Key;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -48,7 +48,7 @@ public class JavaAnonymousClassesHelper {
   private static class AnonClassProvider implements ParameterizedCachedValueProvider<Map<PsiAnonymousClass, String>, PsiClass> {
     @Override
     public CachedValueProvider.Result<Map<PsiAnonymousClass, String>> compute(final PsiClass upper) {
-      final Map<PsiAnonymousClass, String> map = new THashMap<PsiAnonymousClass, String>();
+      final Map<PsiAnonymousClass, String> map = new HashMap<PsiAnonymousClass, String>();
       upper.accept(new JavaRecursiveElementWalkingVisitor() {
         int index = 0;
 

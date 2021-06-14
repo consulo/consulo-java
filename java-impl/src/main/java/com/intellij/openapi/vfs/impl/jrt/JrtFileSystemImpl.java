@@ -19,15 +19,15 @@ import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent;
 import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent;
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
 import consulo.java.projectRoots.OwnJdkUtil;
-import gnu.trove.THashMap;
-import javax.annotation.Nonnull;
+import consulo.util.collection.Maps;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class JrtFileSystemImpl extends JrtFileSystem
 {
-	private final Map<String, ArchiveHandler> myHandlers =Collections.synchronizedMap(new THashMap<>(FileUtil.PATH_HASHING_STRATEGY));
+	private final Map<String, ArchiveHandler> myHandlers =Collections.synchronizedMap(Maps.newHashMap(FileUtil.PATH_HASHING_STRATEGY));
 	private final AtomicBoolean mySubscribed = new AtomicBoolean(false);
 
 	@Nonnull

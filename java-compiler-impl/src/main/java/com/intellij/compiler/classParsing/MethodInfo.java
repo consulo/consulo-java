@@ -28,7 +28,8 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.cls.ClsUtil;
 import consulo.logging.Logger;
-import gnu.trove.TIntHashSet;
+import consulo.util.collection.primitive.ints.IntSet;
+import consulo.util.collection.primitive.ints.IntSets;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -144,7 +145,7 @@ public class MethodInfo extends MemberInfo
 		}
 		if(myThrownExceptions.length != 0)
 		{ // optimization
-			TIntHashSet exceptionsSet = new TIntHashSet();
+			IntSet exceptionsSet = IntSets.newHashSet();
 			for(int thrownException : myThrownExceptions)
 			{
 				exceptionsSet.add(thrownException);

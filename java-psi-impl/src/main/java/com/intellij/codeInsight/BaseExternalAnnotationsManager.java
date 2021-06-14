@@ -19,7 +19,6 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.openapi.util.Condition;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.LowMemoryWatcher;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -36,7 +35,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.text.CharSequenceReader;
 import consulo.logging.Logger;
-import gnu.trove.THashSet;
+import consulo.util.dataholder.Key;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -316,7 +315,7 @@ public abstract class BaseExternalAnnotationsManager extends ExternalAnnotations
 			}
 		}
 
-		Set<PsiFile> possibleAnnotations = new THashSet<PsiFile>();
+		Set<PsiFile> possibleAnnotations = new HashSet<PsiFile>();
 		String relativePath = ((PsiJavaFile) containingFile).getPackageName().replace('.', '/') + '/' + ANNOTATIONS_XML;
 		for(VirtualFile root : getExternalAnnotationsRoots(virtualFile))
 		{

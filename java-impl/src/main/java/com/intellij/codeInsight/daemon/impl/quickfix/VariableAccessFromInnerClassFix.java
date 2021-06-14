@@ -16,14 +16,11 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
@@ -33,10 +30,12 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashMap;
+import consulo.java.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class VariableAccessFromInnerClassFix implements IntentionAction {
@@ -312,8 +311,8 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
 
   private static boolean canBeFinal(@Nonnull PsiVariable variable, @Nonnull List<PsiReferenceExpression> references) {
     // if there is at least one assignment to this variable, it cannot be final
-    Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems = new THashMap<PsiElement, Collection<PsiReferenceExpression>>();
-    Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems = new THashMap<PsiElement, Collection<ControlFlowUtil.VariableInfo>>();
+    Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems = new HashMap<PsiElement, Collection<PsiReferenceExpression>>();
+    Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems = new HashMap<PsiElement, Collection<ControlFlowUtil.VariableInfo>>();
     for (PsiReferenceExpression expression : references) {
       if (ControlFlowUtil.isVariableAssignedInLoop(expression, variable)) return false;
       HighlightInfo highlightInfo = HighlightControlFlowUtil.checkVariableInitializedBeforeUsage(expression, variable, uninitializedVarProblems,

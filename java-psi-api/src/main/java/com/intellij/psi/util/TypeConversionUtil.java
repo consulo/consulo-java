@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.util;
 
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootModificationTracker;
 import com.intellij.openapi.util.Comparing;
@@ -29,10 +28,10 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.dataholder.Key;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectIntHashMap;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -118,7 +117,7 @@ public class TypeConversionUtil
 			// double
 	};
 
-	private static final TObjectIntHashMap<PsiType> TYPE_TO_RANK_MAP = new TObjectIntHashMap<PsiType>();
+	private static final ObjectIntMap<PsiType> TYPE_TO_RANK_MAP = ObjectMaps.newObjectIntHashMap();
 
 	public static final int BYTE_RANK = 1;
 	public static final int SHORT_RANK = 2;
@@ -149,14 +148,14 @@ public class TypeConversionUtil
 
 	static
 	{
-		TYPE_TO_RANK_MAP.put(PsiType.BYTE, BYTE_RANK);
-		TYPE_TO_RANK_MAP.put(PsiType.SHORT, SHORT_RANK);
-		TYPE_TO_RANK_MAP.put(PsiType.CHAR, CHAR_RANK);
-		TYPE_TO_RANK_MAP.put(PsiType.INT, INT_RANK);
-		TYPE_TO_RANK_MAP.put(PsiType.LONG, LONG_RANK);
-		TYPE_TO_RANK_MAP.put(PsiType.FLOAT, FLOAT_RANK);
-		TYPE_TO_RANK_MAP.put(PsiType.DOUBLE, DOUBLE_RANK);
-		TYPE_TO_RANK_MAP.put(PsiType.BOOLEAN, BOOL_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.BYTE, BYTE_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.SHORT, SHORT_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.CHAR, CHAR_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.INT, INT_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.LONG, LONG_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.FLOAT, FLOAT_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.DOUBLE, DOUBLE_RANK);
+		TYPE_TO_RANK_MAP.putInt(PsiType.BOOLEAN, BOOL_RANK);
 	}
 
 	private TypeConversionUtil()
@@ -571,7 +570,7 @@ public class TypeConversionUtil
 
 		if(visited == null)
 		{
-			visited = new THashSet<PsiClass>();
+			visited = new HashSet<PsiClass>();
 		}
 		visited.add(derived);
 		for(PsiClass aSuper : supers)
@@ -729,7 +728,7 @@ public class TypeConversionUtil
 			type = unboxedType;
 		}
 
-		int rank = TYPE_TO_RANK_MAP.get(type);
+		int rank = TYPE_TO_RANK_MAP.getInt(type);
 		if(rank != 0)
 		{
 			return rank;
@@ -1199,8 +1198,8 @@ public class TypeConversionUtil
 			{
 				return left instanceof PsiClassType && isBoxable((PsiClassType) left, (PsiPrimitiveType) right);
 			}
-			int leftTypeIndex = TYPE_TO_RANK_MAP.get(left) - 1;
-			int rightTypeIndex = TYPE_TO_RANK_MAP.get(right) - 1;
+			int leftTypeIndex = TYPE_TO_RANK_MAP.getInt(left) - 1;
+			int rightTypeIndex = TYPE_TO_RANK_MAP.getInt(right) - 1;
 			return leftTypeIndex >= 0 &&
 					rightTypeIndex >= 0 &&
 					rightTypeIndex < IS_ASSIGNABLE_BIT_SET.length &&
@@ -1357,7 +1356,7 @@ public class TypeConversionUtil
 				public Result<Set<String>> compute()
 				{
 					final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-					final Set<String> set = new THashSet<String>();
+					final Set<String> set = new HashSet<String>();
 					for(final String qname : PsiPrimitiveType.getAllBoxedTypeNames())
 					{
 						final PsiClass boxedClass = facade.findClass(qname, GlobalSearchScope.allScope(project));
@@ -1568,7 +1567,7 @@ public class TypeConversionUtil
 			return PsiSubstitutor.EMPTY; //optimization and protection against EJB queer hierarchy
 		}
 
-		Set<PsiClass> visited = new THashSet<PsiClass>();
+		Set<PsiClass> visited = new HashSet<PsiClass>();
 		PsiSubstitutor substitutor = getMaybeSuperClassSubstitutor(superClass, derivedClass, derivedSubstitutor, visited);
 
 		if(substitutor == null)
@@ -1689,7 +1688,7 @@ public class TypeConversionUtil
 		return type;
 	}
 
-	private static final Set<String> INTEGER_NUMBER_TYPES = new THashSet<String>(5);
+	private static final Set<String> INTEGER_NUMBER_TYPES = new HashSet<String>(5);
 
 	static
 	{
@@ -1700,7 +1699,7 @@ public class TypeConversionUtil
 		INTEGER_NUMBER_TYPES.add(PsiType.SHORT.getCanonicalText());
 	}
 
-	private static final Set<String> PRIMITIVE_TYPES = new THashSet<String>(9);
+	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(9);
 
 	static
 	{
@@ -1715,7 +1714,7 @@ public class TypeConversionUtil
 		PRIMITIVE_TYPES.add(PsiType.BOOLEAN.getCanonicalText());
 	}
 
-	private static final Set<String> PRIMITIVE_WRAPPER_TYPES = new THashSet<String>(8);
+	private static final Set<String> PRIMITIVE_WRAPPER_TYPES = new HashSet<String>(8);
 
 	static
 	{
@@ -1781,7 +1780,7 @@ public class TypeConversionUtil
 			final PsiClass psiClass = extendsList[0].resolve();
 			if(psiClass instanceof PsiTypeParameter)
 			{
-				Set<PsiClass> visited = new THashSet<PsiClass>();
+				Set<PsiClass> visited = new HashSet<PsiClass>();
 				visited.add(psiClass);
 				final PsiTypeParameter boundTypeParameter = (PsiTypeParameter) psiClass;
 				if(beforeSubstitutor.getSubstitutionMap().containsKey(boundTypeParameter))
@@ -2663,8 +2662,8 @@ public class TypeConversionUtil
 			return true;
 		}
 
-		int sourceRank = TYPE_TO_RANK_MAP.get(source);
-		int targetRank = TYPE_TO_RANK_MAP.get(target);
+		int sourceRank = TYPE_TO_RANK_MAP.getInt(source);
+		int targetRank = TYPE_TO_RANK_MAP.getInt(target);
 		if(sourceRank == 0 || sourceRank > MAX_NUMERIC_RANK ||
 				targetRank == 0 || targetRank > MAX_NUMERIC_RANK ||
 				!IS_ASSIGNABLE_BIT_SET[sourceRank - 1][targetRank - 1])
@@ -2682,7 +2681,7 @@ public class TypeConversionUtil
 		return true;
 	}
 
-	private static final Map<Class, PsiType> WRAPPER_TO_PRIMITIVE = new THashMap<Class, PsiType>(8);
+	private static final Map<Class, PsiType> WRAPPER_TO_PRIMITIVE = new HashMap<Class, PsiType>(8);
 
 	static
 	{

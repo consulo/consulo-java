@@ -15,13 +15,6 @@
  */
 package com.intellij.codeInsight.slice;
 
-import static org.junit.Assert.assertNotNull;
-
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.Collection;
-import java.util.Map;
-
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -31,13 +24,20 @@ import com.intellij.psi.PsiElement;
 import com.intellij.slicer.SliceAnalysisParams;
 import com.intellij.slicer.SliceForwardHandler;
 import com.intellij.slicer.SliceUsage;
-import com.intellij.util.containers.IntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+
+import java.util.Collection;
+import java.util.Map;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author cdr
  */
 public abstract class SliceForwardTest extends DaemonAnalyzerTestCase {
-  private final TIntObjectHashMap<IntArrayList> myFlownOffsets = new TIntObjectHashMap<IntArrayList>();
+  private final IntObjectMap<IntList> myFlownOffsets = IntMaps.newIntObjectHashMap();
 
   private void dotest() throws Exception {
     configureByFile("/codeInsight/slice/forward/"+getTestName(false)+".java");

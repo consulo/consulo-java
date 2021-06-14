@@ -17,8 +17,10 @@ package com.intellij.codeInspection.dataFlow.value;
 
 import com.intellij.codeInspection.dataFlow.*;
 import com.intellij.psi.PsiType;
-import gnu.trove.TIntObjectHashMap;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -59,7 +61,7 @@ public class DfaBoxedValue extends DfaValue
 
 	public static class Factory
 	{
-		private final TIntObjectHashMap<DfaBoxedValue> cachedValues = new TIntObjectHashMap<>();
+		private final IntObjectMap<DfaBoxedValue> cachedValues = IntMaps.newIntObjectHashMap();
 
 		private final DfaValueFactory myFactory;
 

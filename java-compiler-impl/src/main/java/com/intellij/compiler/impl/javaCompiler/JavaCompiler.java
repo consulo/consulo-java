@@ -16,43 +16,37 @@
 
 package com.intellij.compiler.impl.javaCompiler;
 
-import consulo.logging.Logger;
-import gnu.trove.THashMap;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-import jakarta.inject.Inject;
-
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.compiler.TranslatingCompiler;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
 import consulo.java.module.extension.JavaModuleExtension;
+import consulo.logging.Logger;
 import consulo.roots.ContentFolderTypeProvider;
 import consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
 import consulo.roots.impl.TestResourceContentFolderTypeProvider;
+import consulo.util.collection.Maps;
+import consulo.util.dataholder.Key;
+import jakarta.inject.Inject;
+
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /*
  * @author: Eugene Zhuravlev
@@ -105,7 +99,7 @@ public class JavaCompiler implements TranslatingCompiler
 			return;
 		}
 
-		Map<File, FileObject> parsingInfo = new THashMap<>(FileUtil.FILE_HASHING_STRATEGY);
+		Map<File, FileObject> parsingInfo = Maps.newHashMap(FileUtil.FILE_HASHING_STRATEGY);
 		context.putUserData(ourOutputFileParseInfo, parsingInfo);
 
 		final BackendCompiler backEndCompiler = getBackEndCompiler();

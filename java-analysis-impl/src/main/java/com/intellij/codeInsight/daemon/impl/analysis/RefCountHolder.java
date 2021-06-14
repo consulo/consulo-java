@@ -37,7 +37,6 @@ import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.Predicate;
 import consulo.util.dataholder.Key;
 import consulo.util.dataholder.UserDataHolderEx;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -53,8 +52,8 @@ class RefCountHolder
 	// resolved elements -> list of their references
 	private final MultiMap<PsiElement, PsiReference> myLocalRefsMap = MultiMap.createSet();
 
-	private final Map<PsiAnchor, Boolean> myDclsUsedMap = new THashMap<PsiAnchor, Boolean>();
-	private final Map<PsiReference, PsiImportStatementBase> myImportStatements = new THashMap<PsiReference, PsiImportStatementBase>();
+	private final Map<PsiAnchor, Boolean> myDclsUsedMap = new HashMap<PsiAnchor, Boolean>();
+	private final Map<PsiReference, PsiImportStatementBase> myImportStatements = new HashMap<PsiReference, PsiImportStatementBase>();
 	private final AtomicReference<ProgressIndicator> myState = new AtomicReference<ProgressIndicator>(EMPTY);
 	// contains useful information
 	private static final ProgressIndicator READY = new DaemonProgressIndicator()

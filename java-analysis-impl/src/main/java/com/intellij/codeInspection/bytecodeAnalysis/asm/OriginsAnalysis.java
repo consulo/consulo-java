@@ -5,9 +5,10 @@ import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import consulo.internal.org.objectweb.asm.tree.InsnList;
 import consulo.internal.org.objectweb.asm.tree.analysis.*;
-import gnu.trove.TIntArrayList;
-import javax.annotation.Nonnull;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -108,10 +109,10 @@ public class OriginsAnalysis
 	public static boolean[] resultOrigins(Frame<? extends Value>[] frames, InsnList instructions, ControlFlowGraph graph)
 			throws AnalyzerException
 	{
-		TIntArrayList[] backTransitions = new TIntArrayList[instructions.size()];
+		IntList[] backTransitions = new IntList[instructions.size()];
 		for(int i = 0; i < backTransitions.length; i++)
 		{
-			backTransitions[i] = new TIntArrayList();
+			backTransitions[i] = IntLists.newArrayList();
 		}
 		LinkedList<InsnLocation> queue = new LinkedList<>();
 		HashSet<InsnLocation> queued = new HashSet<>();
@@ -119,7 +120,7 @@ public class OriginsAnalysis
 		{
 			for(int to : graph.transitions[from])
 			{
-				TIntArrayList froms = backTransitions[to];
+				IntList froms = backTransitions[to];
 				froms.add(from);
 				int opcode = instructions.get(to).getOpcode();
 				if(opcode >= Opcodes.IRETURN && opcode <= Opcodes.ARETURN)
@@ -152,10 +153,10 @@ public class OriginsAnalysis
 			}
 			else
 			{
-				TIntArrayList froms = backTransitions[insnIndex];
+				IntList froms = backTransitions[insnIndex];
 				for(int i = 0; i < froms.size(); i++)
 				{
-					InsnLocation preILoc = new InsnLocation(preLocation.local, froms.getQuick(i), preLocation.slot);
+					InsnLocation preILoc = new InsnLocation(preLocation.local, froms.get(i), preLocation.slot);
 					if(queued.add(preILoc))
 					{
 						queue.push(preILoc);

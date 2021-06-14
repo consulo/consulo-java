@@ -21,12 +21,13 @@
  */
 package com.intellij.psi.controlFlow;
 
-import com.intellij.util.containers.IntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
 
 import java.util.ArrayList;
 
 public class ControlFlowStack {
-  private final IntArrayList myIpStack = new IntArrayList();
+  private final IntList myIpStack = IntLists.newArrayList();
   private final ArrayList<CallInstruction> myCallInstructionStack = new ArrayList<CallInstruction>();
 
   public void push(int ip, CallInstruction callInstruction) {

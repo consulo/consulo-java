@@ -15,39 +15,27 @@
  */
 package com.intellij.refactoring.util.duplicates;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Comparing;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.controlFlow.LocalsControlFlowPolicy;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.refactoring.extractMethod.InputVariables;
 import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.IntArrayList;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author dsl
@@ -94,7 +82,7 @@ public class DuplicatesFinder
 			}
 			while(endOffset < 0 && j >= 0);
 
-			IntArrayList exitPoints = new IntArrayList();
+			IntList exitPoints = IntLists.newArrayList();
 			final Collection<PsiStatement> exitStatements = ControlFlowUtil.findExitPointsAndStatements(controlFlow, startOffset, endOffset, exitPoints,
 					ControlFlowUtil.DEFAULT_EXIT_STATEMENTS_CLASSES);
 			myMultipleExitPoints = exitPoints.size() > 1;
@@ -317,7 +305,7 @@ public class DuplicatesFinder
 			}
 			while(endOffset < 0 && j >= 0);
 
-			final IntArrayList exitPoints = new IntArrayList();
+			final IntList exitPoints = IntLists.newArrayList();
 			ControlFlowUtil.findExitPointsAndStatements(controlFlow, startOffset, endOffset, exitPoints, ControlFlowUtil.DEFAULT_EXIT_STATEMENTS_CLASSES);
 			final PsiVariable[] outVariables = ControlFlowUtil.getOutputVariables(controlFlow, startOffset, endOffset, exitPoints.toArray());
 

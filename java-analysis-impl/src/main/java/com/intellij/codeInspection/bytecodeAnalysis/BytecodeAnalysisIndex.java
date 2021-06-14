@@ -10,10 +10,10 @@ import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.io.DifferentSerializableBytesImplyNonEqualityPolicy;
 import com.intellij.util.io.KeyDescriptor;
-import one.util.streamex.StreamEx;
-import javax.annotation.Nonnull;
 import consulo.internal.org.objectweb.asm.*;
+import one.util.streamex.StreamEx;
 
+import javax.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -139,18 +139,6 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember>
 			byte[] bytes = new byte[HMember.HASH_SIZE];
 			in.readFully(bytes);
 			return new HMember(bytes);
-		}
-
-		@Override
-		public int getHashCode(HMember value)
-		{
-			return value.hashCode();
-		}
-
-		@Override
-		public boolean isEqual(HMember val1, HMember val2)
-		{
-			return val1.equals(val2);
 		}
 	}
 

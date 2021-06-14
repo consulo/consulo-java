@@ -16,14 +16,14 @@
 package com.intellij.jam.view;
 
 import com.intellij.ide.DeleteProvider;
-import com.intellij.jam.model.common.CommonModelManager;
 import com.intellij.jam.model.common.CommonModelElement;
+import com.intellij.jam.model.common.CommonModelManager;
 import com.intellij.openapi.actionSystem.DataContext;
-import gnu.trove.THashSet;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * @author peter
@@ -33,7 +33,7 @@ public class JamDeleteProvider implements DeleteProvider {
   private final JamUserResponse myResponse;
 
   public JamDeleteProvider(final Collection<JamDeleteProvider> providers) {
-    myElements = new THashSet<CommonModelElement>();
+    myElements = new HashSet<CommonModelElement>();
     JamUserResponse response = JamUserResponse.QUIET;
     for (JamDeleteProvider provider : providers) {
       myElements.addAll(provider.myElements);

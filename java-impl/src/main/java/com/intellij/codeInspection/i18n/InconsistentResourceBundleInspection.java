@@ -19,21 +19,18 @@ import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.lang.properties.ResourceBundle;
 import com.intellij.lang.properties.*;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.util.Comparing;
-import consulo.util.dataholder.Key;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.BidirectionalMap;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
+import consulo.util.dataholder.Key;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author max
@@ -83,7 +80,7 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
   public void inspectionStarted(@Nonnull InspectionManager manager,
                                 @Nonnull GlobalInspectionContext globalContext,
                                 @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
-    globalContext.putUserData(VISITED_BUNDLES_KEY, new THashSet<ResourceBundle>());
+    globalContext.putUserData(VISITED_BUNDLES_KEY, new HashSet<ResourceBundle>());
   }
 
   @Override
@@ -113,9 +110,9 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
         parents.put(f, parent);
       }
     }
-    Map<PropertiesFile, Set<String>> keysUpToParent = new THashMap<PropertiesFile, Set<String>>();
+    Map<PropertiesFile, Set<String>> keysUpToParent = new HashMap<PropertiesFile, Set<String>>();
     for (PropertiesFile f : files) {
-      Set<String> keys = new THashSet<String>(f.getNamesMap().keySet());
+      Set<String> keys = new HashSet<String>(f.getNamesMap().keySet());
       PropertiesFile parent = parents.get(f);
       while (parent != null) {
         keys.addAll(parent.getNamesMap().keySet());
@@ -144,7 +141,7 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
       PropertiesFile parent = parents.get(file);
       if (parent == null) continue;
       Set<String> parentKeys = keysUpToParent.get(parent);
-      Set<String> overriddenKeys = new THashSet<String>(file.getNamesMap().keySet());
+      Set<String> overriddenKeys = new HashSet<String>(file.getNamesMap().keySet());
       overriddenKeys.retainAll(parentKeys);
       for (String overriddenKey : overriddenKeys) {
         IProperty property = file.findPropertyByKey(overriddenKey);
@@ -172,7 +169,7 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
       PropertiesFile parent = parents.get(file);
       Set<String> parentKeys = keysUpToParent.get(parent);
       if (parent == null) {
-        parentKeys = new THashSet<String>();
+        parentKeys = new HashSet<String>();
         for (PropertiesFile otherTopLevelFile : files) {
           if (otherTopLevelFile != file && parents.get(otherTopLevelFile) == null) {
             parent = otherTopLevelFile;
@@ -181,7 +178,7 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
         }
         if (parent == null) continue;
       }
-      Set<String> keys = new THashSet<String>(file.getNamesMap().keySet());
+      Set<String> keys = new HashSet<String>(file.getNamesMap().keySet());
       keys.removeAll(parentKeys);
       for (String inconsistentKey : keys) {
         IProperty property = file.findPropertyByKey(inconsistentKey);
@@ -207,14 +204,14 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
       boolean isLeaf = children == null || children.isEmpty();
       if (!isLeaf) continue;
       Set<String> keys = file.getNamesMap().keySet();
-      Set<String> parentKeys = new THashSet<String>(keysUpToParent.get(parent));
+      Set<String> parentKeys = new HashSet<String>(keysUpToParent.get(parent));
       if (parent.getLocale().getLanguage().equals(file.getLocale().getLanguage())) {
         // properties can be left untranslated in the dialect files
-        keys = new THashSet<String>(keys);
+        keys = new HashSet<String>(keys);
         keys.addAll(parent.getNamesMap().keySet());
         parent = parents.get(parent);
         if (parent == null) continue;
-        parentKeys = new THashSet<String>(keysUpToParent.get(parent));
+        parentKeys = new HashSet<String>(keysUpToParent.get(parent));
       }
       parentKeys.removeAll(keys);
       for (String untranslatedKey : parentKeys) {

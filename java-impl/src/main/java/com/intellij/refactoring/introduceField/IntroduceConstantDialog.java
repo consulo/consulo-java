@@ -15,33 +15,12 @@
  */
 package com.intellij.refactoring.introduceField;
 
-import gnu.trove.THashSet;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.Action;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.java.module.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
-import consulo.logging.Logger;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.help.HelpManager;
@@ -61,12 +40,7 @@ import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.introduceParameter.AbstractJavaInplaceIntroducer;
-import com.intellij.refactoring.ui.JavaVisibilityPanel;
-import com.intellij.refactoring.ui.NameSuggestionsField;
-import com.intellij.refactoring.ui.NameSuggestionsGenerator;
-import com.intellij.refactoring.ui.NameSuggestionsManager;
-import com.intellij.refactoring.ui.TypeSelector;
-import com.intellij.refactoring.ui.TypeSelectorManager;
+import com.intellij.refactoring.ui.*;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.EnumConstantsUtil;
 import com.intellij.refactoring.util.RefactoringMessageUtil;
@@ -77,6 +51,21 @@ import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ui.UIUtil;
+import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 class IntroduceConstantDialog extends DialogWrapper {
   private static final Logger LOG = Logger.getInstance(IntroduceConstantDialog.class);
@@ -393,7 +382,7 @@ class IntroduceConstantDialog extends DialogWrapper {
     else {
       UIUtil.setEnabled(myVisibilityPanel, true, true);
       // exclude all modifiers not visible from all occurences
-      final Set<String> visible = new THashSet<String>();
+      final Set<String> visible = new HashSet<String>();
       visible.add(PsiModifier.PRIVATE);
       visible.add(PsiModifier.PROTECTED);
       visible.add(PsiModifier.PACKAGE_LOCAL);

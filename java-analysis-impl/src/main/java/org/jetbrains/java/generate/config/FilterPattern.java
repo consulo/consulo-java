@@ -15,22 +15,20 @@
  */
 package org.jetbrains.java.generate.config;
 
-import consulo.logging.Logger;
-import gnu.trove.THashSet;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.java.generate.psi.PsiAdapter;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiType;
+import consulo.logging.Logger;
+import org.jetbrains.java.generate.psi.PsiAdapter;
+
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * This is a filtering pattern, used to filter unwanted fields for this action.
@@ -39,7 +37,7 @@ public class FilterPattern
 {
 
 	private static final Logger LOG = Logger.getInstance("#FilterPattern");
-	private static final Set<String> loggerNames = new THashSet<String>();
+	private static final Set<String> loggerNames = new HashSet<String>();
 
 	static
 	{

@@ -24,9 +24,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;
-import com.intellij.util.containers.hash.HashMap;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -147,7 +145,7 @@ public class FindSuperElementsHelper
 		private final PsiClass myContainingClass;
 		private final Set<PsiMethod> myRemainingMethods;
 		private final Map<PsiMethod, SiblingInfo> myResult = new HashMap<>();
-		private final Collection<PsiAnchor> myCheckedInterfaces = new THashSet<>();
+		private final Collection<PsiAnchor> myCheckedInterfaces = new HashSet<>();
 
 		SiblingInheritorSearcher(Collection<PsiMethod> methods, PsiClass containingClass)
 		{

@@ -152,7 +152,7 @@ abstract class ContractAnalysis extends Analysis<Result>
 		if(interpreter.deReferenced && controlFlow.npeTransitions.containsKey(insnIndex))
 		{
 			interpreter.deReferenced = false;
-			int npeTarget = controlFlow.npeTransitions.get(insnIndex);
+			int npeTarget = controlFlow.npeTransitions.getInt(insnIndex);
 			for(int nextInsnIndex : controlFlow.transitions[insnIndex])
 			{
 				if(!controlFlow.errorTransitions.contains(new Edge(insnIndex, nextInsnIndex)))

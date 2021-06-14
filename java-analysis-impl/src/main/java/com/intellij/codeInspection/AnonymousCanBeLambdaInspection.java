@@ -15,25 +15,6 @@
  */
 package com.intellij.codeInspection;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.UnaryOperator;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import consulo.logging.Logger;
-import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -50,15 +31,20 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.controlFlow.AnalysisCanceledException;
 import com.intellij.psi.controlFlow.ControlFlow;
 import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.RedundantCastUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.hash.LinkedHashMap;
 import com.intellij.util.text.UniqueNameGenerator;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.*;
+import java.util.function.UnaryOperator;
 
 /**
  * User: anna
@@ -483,7 +469,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 				return;
 			}
 
-			final LinkedHashMap<PsiElement, PsiElement> replacements = new LinkedHashMap<>();
+			final Map<PsiElement, PsiElement> replacements = new LinkedHashMap<>();
 			body.accept(new JavaRecursiveElementWalkingVisitor()
 			{
 				@Override

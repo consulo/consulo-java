@@ -15,12 +15,6 @@
  */
 package com.intellij.debugger.actions;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.debugger.SourcePosition;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
@@ -29,8 +23,11 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.Range;
-import com.intellij.util.containers.OrderedSet;
 import com.intellij.util.text.CharArrayUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * User: Alexander Podkhalyuzin
@@ -89,8 +86,7 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler
 			}
 			while(true);
 
-			//noinspection unchecked
-			final List<SmartStepTarget> targets = new OrderedSet<SmartStepTarget>();
+			final Set<SmartStepTarget> targets = new LinkedHashSet<SmartStepTarget>();
 
 			final Range<Integer> lines = new Range<Integer>(doc.getLineNumber(element.getTextOffset()), doc.getLineNumber(element.getTextOffset() +
 					element.getTextLength()));
@@ -101,7 +97,7 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler
 				final Stack<String> myParamNameStack = new Stack<String>();
 				private int myNextLambdaExpressionOrdinal = 0;
 
-				@javax.annotation.Nullable
+				@Nullable
 				private String getCurrentParamName()
 				{
 					return myParamNameStack.isEmpty() ? null : myParamNameStack.peek();
@@ -196,7 +192,7 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler
 				}
 				sibling.accept(methodCollector);
 			}
-			return targets;
+			return new ArrayList<>(targets);
 		}
 		return Collections.emptyList();
 	}

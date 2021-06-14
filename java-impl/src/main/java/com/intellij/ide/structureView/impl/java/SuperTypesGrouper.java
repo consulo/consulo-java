@@ -19,18 +19,18 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.smartTree.*;
-import consulo.util.dataholder.Key;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.util.ArrayUtil;
-import gnu.trove.THashMap;
+import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SuperTypesGrouper implements Grouper{
@@ -40,7 +40,7 @@ public class SuperTypesGrouper implements Grouper{
   @Nonnull
   public Collection<Group> group(final AbstractTreeNode parent, Collection<TreeElement> children) {
     if (isParentGrouped(parent)) return Collections.emptyList();
-    Map<Group, SuperTypeGroup> groups = new THashMap<Group, SuperTypeGroup>();
+    Map<Group, SuperTypeGroup> groups = new HashMap<Group, SuperTypeGroup>();
 
     for (TreeElement child : children) {
       if (child instanceof PsiMethodTreeElement) {

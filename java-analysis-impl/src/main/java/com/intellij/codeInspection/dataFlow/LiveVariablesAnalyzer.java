@@ -14,13 +14,12 @@ import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.util.PairFunction;
 import com.intellij.util.containers.Queue;
 import com.intellij.util.containers.*;
-import gnu.trove.TIntHashSet;
+import consulo.util.collection.primitive.ints.IntSet;
+import consulo.util.collection.primitive.ints.IntSets;
 import one.util.streamex.IntStreamEx;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.*;
 
 /**
@@ -275,7 +274,7 @@ public class LiveVariablesAnalyzer
 		}
 
 		int limit = myForwardMap.size() * 100;
-		Map<BitSet, TIntHashSet> processed = new HashMap<>();
+		Map<BitSet, IntSet> processed = new HashMap<>();
 		int steps = 0;
 		while(!queue.isEmpty())
 		{
@@ -293,7 +292,7 @@ public class LiveVariablesAnalyzer
 			BitSet nextVars = handleState.fun(instruction, state.second);
 			for(Instruction next : nextInstructions)
 			{
-				TIntHashSet instructionSet = processed.computeIfAbsent(nextVars, k -> new TIntHashSet());
+				IntSet instructionSet = processed.computeIfAbsent(nextVars, k -> IntSets.newHashSet());
 				int index = next.getIndex() + 1;
 				if(!instructionSet.contains(index))
 				{

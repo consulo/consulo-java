@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.scope.conflictResolvers;
 
-import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
@@ -34,11 +33,10 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.FactoryMap;
-import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TIntArrayList;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -169,7 +167,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			return conflicts.get(0);
 		}
 
-		Set<CandidateInfo> uniques = new THashSet<CandidateInfo>(conflicts);
+		Set<CandidateInfo> uniques = new HashSet<CandidateInfo>(conflicts);
 		if(uniques.size() == 1)
 		{
 			return uniques.iterator().next();
@@ -288,7 +286,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 	{
 		// candidates should go in order of class hierarchy traversal
 		// in order for this to work
-		Map<MethodSignature, CandidateInfo> signatures = new THashMap<MethodSignature, CandidateInfo>(conflicts.size());
+		Map<MethodSignature, CandidateInfo> signatures = new HashMap<MethodSignature, CandidateInfo>(conflicts.size());
 		Set<PsiMethod> superMethods = new HashSet<PsiMethod>();
 		for(CandidateInfo conflict : conflicts)
 		{
@@ -555,7 +553,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 	public boolean checkParametersNumber(@Nonnull List<CandidateInfo> conflicts, final int argumentsCount, Map<MethodCandidateInfo, PsiSubstitutor> map, boolean ignoreIfStaticsProblem)
 	{
 		boolean atLeastOneMatch = false;
-		TIntArrayList unmatchedIndices = null;
+		IntList unmatchedIndices = null;
 		for(int i = 0; i < conflicts.size(); i++)
 		{
 			ProgressManager.checkCanceled();
@@ -610,7 +608,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			{
 				if(unmatchedIndices == null)
 				{
-					unmatchedIndices = new TIntArrayList(conflicts.size() - i);
+					unmatchedIndices = IntLists.newArrayList(conflicts.size() - i);
 				}
 				unmatchedIndices.add(i);
 			}

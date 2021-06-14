@@ -17,8 +17,6 @@ package com.intellij.psi.impl;
 
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightElement;
@@ -31,12 +29,11 @@ import com.intellij.util.NotNullFunction;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ConcurrentFactoryMap;
-import com.intellij.util.containers.hash.EqualityPolicy;
-import com.intellij.util.containers.hash.LinkedHashMap;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
+import consulo.logging.Logger;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Maps;
+import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -45,9 +42,9 @@ public class PsiSuperMethodImplUtil
 {
 	private static final Logger LOG = Logger.getInstance(PsiSuperMethodImplUtil.class);
 	private static final PsiCacheKey<Map<MethodSignature, HierarchicalMethodSignature>, PsiClass> SIGNATURES_FOR_CLASS_KEY = PsiCacheKey.create("SIGNATURES_FOR_CLASS_KEY", (NotNullFunction<PsiClass,
-			Map<MethodSignature, HierarchicalMethodSignature>>) dom -> buildMethodHierarchy(dom, null, PsiSubstitutor.EMPTY, true, new THashSet<PsiClass>(), false, dom.getResolveScope()));
+			Map<MethodSignature, HierarchicalMethodSignature>>) dom -> buildMethodHierarchy(dom, null, PsiSubstitutor.EMPTY, true, new HashSet<PsiClass>(), false, dom.getResolveScope()));
 	private static final PsiCacheKey<Map<String, Map<MethodSignature, HierarchicalMethodSignature>>, PsiClass> SIGNATURES_BY_NAME_KEY = PsiCacheKey.create("SIGNATURES_BY_NAME_KEY", psiClass
-			-> ConcurrentFactoryMap.createMap(methodName -> buildMethodHierarchy(psiClass, methodName, PsiSubstitutor.EMPTY, true, new THashSet<>(), false, psiClass.getResolveScope())));
+			-> ConcurrentFactoryMap.createMap(methodName -> buildMethodHierarchy(psiClass, methodName, PsiSubstitutor.EMPTY, true, new HashSet<>(), false, psiClass.getResolveScope())));
 
 	private PsiSuperMethodImplUtil()
 	{
@@ -153,16 +150,16 @@ public class PsiSuperMethodImplUtil
 																						  GlobalSearchScope resolveScope)
 	{
 		ProgressManager.checkCanceled();
-		Map<MethodSignature, HierarchicalMethodSignature> result = new LinkedHashMap<>(new EqualityPolicy<MethodSignature>()
+		Map<MethodSignature, HierarchicalMethodSignature> result = Maps.newLinkedHashMap(new HashingStrategy<MethodSignature>()
 		{
 			@Override
-			public int getHashCode(MethodSignature object)
+			public int hashCode(MethodSignature object)
 			{
 				return object.hashCode();
 			}
 
 			@Override
-			public boolean isEqual(MethodSignature o1, MethodSignature o2)
+			public boolean equals(MethodSignature o1, MethodSignature o2)
 			{
 				if(o1.equals(o2))
 				{
@@ -190,14 +187,14 @@ public class PsiSuperMethodImplUtil
 				return false;
 			}
 		});
-		final Map<MethodSignature, List<PsiMethod>> sameParameterErasureMethods = new THashMap<>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
+		final Map<MethodSignature, List<PsiMethod>> sameParameterErasureMethods = Maps.newHashMap(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 
-		Map<MethodSignature, HierarchicalMethodSignatureImpl> map = new THashMap<>(new TObjectHashingStrategy<MethodSignature>()
+		Map<MethodSignature, HierarchicalMethodSignatureImpl> map = Maps.newHashMap(new HashingStrategy<MethodSignature>()
 		{
 			@Override
-			public int computeHashCode(MethodSignature signature)
+			public int hashCode(MethodSignature signature)
 			{
-				return MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.computeHashCode(signature);
+				return MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.hashCode(signature);
 			}
 
 			@Override

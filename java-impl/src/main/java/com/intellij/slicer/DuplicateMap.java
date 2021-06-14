@@ -19,8 +19,8 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.usageView.UsageInfo;
-import gnu.trove.THashMap;
-import gnu.trove.TObjectHashingStrategy;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Maps;
 
 import java.util.Map;
 
@@ -28,9 +28,9 @@ import java.util.Map;
 * @author cdr
 */ // rehash map on each PSI modification since SmartPsiPointer's hashCode() and equals() are changed
 public class DuplicateMap {
-  private static final TObjectHashingStrategy<SliceUsage> USAGE_INFO_EQUALITY = new TObjectHashingStrategy<SliceUsage>() {
+  private static final HashingStrategy<SliceUsage> USAGE_INFO_EQUALITY = new HashingStrategy<SliceUsage>() {
     @Override
-    public int computeHashCode(SliceUsage object) {
+    public int hashCode(SliceUsage object) {
       UsageInfo info = object.getUsageInfo();
       TextRange range = info.getRangeInElement();
       return range == null ? 0 : range.hashCode();
@@ -41,7 +41,7 @@ public class DuplicateMap {
       return o1.getUsageInfo().equals(o2.getUsageInfo());
     }
   };
-  private final Map<SliceUsage, SliceNode> myDuplicates = new THashMap<SliceUsage, SliceNode>(USAGE_INFO_EQUALITY);
+  private final Map<SliceUsage, SliceNode> myDuplicates = Maps.newHashMap(USAGE_INFO_EQUALITY);
 
   public SliceNode putNodeCheckDupe(final SliceNode node) {
     return ApplicationManager.getApplication().runReadAction(new Computable<SliceNode>() {

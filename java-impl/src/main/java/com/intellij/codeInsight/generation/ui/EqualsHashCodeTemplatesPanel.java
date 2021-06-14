@@ -15,20 +15,6 @@
  */
 package com.intellij.codeInsight.generation.ui;
 
-import gnu.trove.Equality;
-
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.java.generate.template.TemplateResource;
-import org.jetbrains.java.generate.view.GenerateTemplateConfigurable;
 import com.intellij.codeInsight.generation.EqualsHashCodeTemplatesManager;
 import com.intellij.codeInsight.generation.GenerateEqualsHelper;
 import com.intellij.openapi.options.ConfigurationException;
@@ -43,6 +29,17 @@ import com.intellij.openapi.util.Couple;
 import com.intellij.openapi.util.Factory;
 import com.intellij.ui.TitledSeparator;
 import com.intellij.util.ui.JBUI;
+import consulo.util.collection.HashingStrategy;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.java.generate.template.TemplateResource;
+import org.jetbrains.java.generate.view.GenerateTemplateConfigurable;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<TemplateResource>>
 {
@@ -106,7 +103,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
 		}
 	};
 
-	private static final Equality<Couple<TemplateResource>> COMPARER = new Equality<Couple<TemplateResource>>()
+	private static final HashingStrategy<Couple<TemplateResource>> COMPARER = new HashingStrategy<Couple<TemplateResource>>()
 	{
 		@Override
 		public boolean equals(Couple<TemplateResource> o1, Couple<TemplateResource> o2)

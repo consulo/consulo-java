@@ -15,16 +15,6 @@
  */
 package com.siyeh.ig.psiutils;
 
-import static com.intellij.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
-
-import java.util.Collections;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.MetaAnnotationUtil;
 import com.intellij.codeInsight.TestFrameworks;
@@ -36,9 +26,17 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.testIntegration.TestFramework;
 import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.hash.HashSet;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.junit.JUnitCommonClassNames;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.intellij.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
 
 public class TestUtils
 {

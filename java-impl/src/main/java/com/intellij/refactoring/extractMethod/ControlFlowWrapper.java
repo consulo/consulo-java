@@ -15,36 +15,22 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.controlFlow.Instruction;
-import com.intellij.psi.controlFlow.LocalsControlFlowPolicy;
-import com.intellij.psi.controlFlow.WriteVariableInstruction;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.RefactoringBundle;
-import java.util.HashSet;
-import com.intellij.util.containers.IntArrayList;
 import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class ControlFlowWrapper
 {
@@ -57,7 +43,7 @@ public class ControlFlowWrapper
 	private boolean myGenerateConditionalExit;
 	private Collection<PsiStatement> myExitStatements;
 	private PsiStatement myFirstExitStatementCopy;
-	private IntArrayList myExitPoints;
+	private IntList myExitPoints;
 
 	public ControlFlowWrapper(Project project, PsiElement codeFragment, PsiElement[] elements) throws PrepareFailedException
 	{
@@ -122,7 +108,7 @@ public class ControlFlowWrapper
 
 	public Collection<PsiStatement> prepareExitStatements(final PsiElement[] elements) throws ExitStatementsNotSameException
 	{
-		myExitPoints = new IntArrayList();
+		myExitPoints = IntLists.newArrayList();
 		myExitStatements = ControlFlowUtil.findExitPointsAndStatements(myControlFlow, myFlowStart, myFlowEnd, myExitPoints, ControlFlowUtil.DEFAULT_EXIT_STATEMENTS_CLASSES);
 		if(LOG.isDebugEnabled())
 		{

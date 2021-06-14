@@ -18,7 +18,6 @@ package com.intellij.ide.util.gotoByName;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.NavigationItem;
-import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiSuperMethodImplUtil;
@@ -28,11 +27,14 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.intellij.util.indexing.IdFilter;
-import gnu.trove.THashSet;
+import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class DefaultSymbolNavigationContributor implements ChooseByNameContributorEx
 {
@@ -79,7 +81,7 @@ public class DefaultSymbolNavigationContributor implements ChooseByNameContribut
 		IdFilter filter = parameters.getIdFilter();
 		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(scope.getProject());
 		//noinspection UnusedDeclaration
-		final Set<PsiMethod> collectedMethods = new THashSet<PsiMethod>();
+		final Set<PsiMethod> collectedMethods = new HashSet<PsiMethod>();
 		boolean success = cache.processFieldsWithName(name, new Processor<PsiField>()
 		{
 			@Override

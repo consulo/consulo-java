@@ -17,7 +17,6 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
-import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -25,10 +24,11 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.JavaQuickFixBundle;
-import gnu.trove.THashMap;
+import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * @author ven
@@ -144,7 +144,7 @@ public class BringVariableIntoScopeFix implements IntentionAction {
       myOutOfScopeVariable.delete();
     }
 
-    if (HighlightControlFlowUtil.checkVariableInitializedBeforeUsage(myUnresolvedReference, addedVar, new THashMap<PsiElement, Collection<PsiReferenceExpression>>(),file) != null) {
+    if (HighlightControlFlowUtil.checkVariableInitializedBeforeUsage(myUnresolvedReference, addedVar, new HashMap<PsiElement, Collection<PsiReferenceExpression>>(),file) != null) {
       initialize(addedVar);
     }
   }

@@ -17,8 +17,6 @@
 package com.intellij.codeInspection.bytecodeAnalysis;
 
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
-import com.intellij.util.SingletonSet;
-import java.util.HashSet;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
@@ -26,6 +24,9 @@ import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.FalseValue;
 import static com.intellij.codeInspection.bytecodeAnalysis.AbstractValues.TrueValue;
@@ -163,7 +164,7 @@ final class NegationAnalysis
 		}
 		else
 		{
-			result = new Pending(new SingletonSet<>(new Component(Value.Top, keys)));
+			result = new Pending(Set.of(new Component(Value.Top, keys)));
 		}
 		return new Equation(key, result);
 	}

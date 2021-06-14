@@ -24,12 +24,12 @@ import com.intellij.codeInspection.dataFlow.value.DfaInstanceofValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
-import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.util.containers.MultiMap;
-import gnu.trove.TObjectHashingStrategy;
-import javax.annotation.Nonnull;
+import consulo.logging.Logger;
+import consulo.util.collection.HashingStrategy;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -40,10 +40,10 @@ import java.util.Objects;
 public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 {
 	private static final Logger LOG = Logger.getInstance(ExpressionTypeMemoryState.class);
-	public static final TObjectHashingStrategy<PsiExpression> EXPRESSION_HASHING_STRATEGY = new TObjectHashingStrategy<PsiExpression>()
+	public static final HashingStrategy<PsiExpression> EXPRESSION_HASHING_STRATEGY = new HashingStrategy<PsiExpression>()
 	{
 		@Override
-		public int computeHashCode(PsiExpression object)
+		public int hashCode(PsiExpression object)
 		{
 			if(object instanceof PsiReferenceExpression)
 			{
@@ -61,9 +61,9 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 		{
 			if(JavaPsiEquivalenceUtil.areExpressionsEquivalent(o1, o2))
 			{
-				if(computeHashCode(o1) != computeHashCode(o2))
+				if(hashCode(o1) != hashCode(o2))
 				{
-					LOG.error("different hashCodes: " + o1 + "; " + o2 + "; " + computeHashCode(o1) + "!=" + computeHashCode(o2));
+					LOG.error("different hashCodes: " + o1 + "; " + o2 + "; " + hashCode(o1) + "!=" + hashCode(o2));
 				}
 
 				return true;

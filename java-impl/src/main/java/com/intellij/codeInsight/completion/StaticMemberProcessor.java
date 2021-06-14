@@ -26,9 +26,9 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Consumer;
 import com.intellij.util.PairConsumer;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashSet;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.util.containers.ContainerUtil.addIfNotNull;
@@ -51,7 +51,7 @@ public abstract class StaticMemberProcessor {
     myPackagedContext = JavaCompletionUtil.inSomePackage(position);
   }
 
-  public void importMembersOf(@javax.annotation.Nullable PsiClass psiClass) {
+  public void importMembersOf(@Nullable PsiClass psiClass) {
     addIfNotNull(myStaticImportedClasses, psiClass);
   }
 
@@ -59,7 +59,7 @@ public abstract class StaticMemberProcessor {
     final GlobalSearchScope scope = myPosition.getResolveScope();
     Collection<String> memberNames = JavaStaticMemberNameIndex.getInstance().getAllKeys(myProject);
     for (final String memberName : matcher.sortMatching(memberNames)) {
-      Set<PsiClass> classes = new THashSet<PsiClass>();
+      Set<PsiClass> classes = new HashSet<PsiClass>();
       for (final PsiMember member : JavaStaticMemberNameIndex.getInstance().getStaticMembers(memberName, myProject, scope)) {
         if (isStaticallyImportable(member)) {
           final PsiClass containingClass = member.getContainingClass();

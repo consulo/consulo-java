@@ -15,25 +15,6 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import consulo.logging.Logger;
-import gnu.trove.THashMap;
-import gnu.trove.TIntArrayList;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import org.junit.Assert;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.CodeInsightTestCase;
@@ -48,11 +29,7 @@ import com.intellij.codeInspection.InspectionProfileEntry;
 import com.intellij.codeInspection.InspectionToolProvider;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ModifiableModel;
-import com.intellij.codeInspection.ex.InspectionProfileImpl;
-import com.intellij.codeInspection.ex.InspectionToolRegistrar;
-import com.intellij.codeInspection.ex.InspectionToolWrapper;
-import com.intellij.codeInspection.ex.Tools;
-import com.intellij.codeInspection.ex.ToolsImpl;
+import com.intellij.codeInspection.ex.*;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.startup.StartupManagerEx;
 import com.intellij.ide.startup.impl.StartupManagerImpl;
@@ -73,24 +50,13 @@ import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.startup.StartupManager;
-import consulo.disposer.Disposable;
-import consulo.disposer.Disposer;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileFilter;
+import com.intellij.openapi.vfs.*;
 import com.intellij.profile.codeInspection.InspectionProfileManager;
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaPsiFacadeEx;
 import com.intellij.psi.impl.cache.CacheManager;
 import com.intellij.psi.impl.search.IndexPatternBuilder;
@@ -107,13 +73,29 @@ import com.intellij.testFramework.LightPlatformTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.xml.XmlSchemaProvider;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
+import consulo.logging.Logger;
 import consulo.ui.UIAccess;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import org.jetbrains.annotations.NonNls;
+import org.junit.Assert;
+
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.*;
 
 public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 {
 	private static final Logger LOGGER = Logger.getInstance(DaemonAnalyzerTestCase.class);
 
-	private final Map<String, InspectionToolWrapper> myAvailableTools = new THashMap<String, InspectionToolWrapper>();
+	private final Map<String, InspectionToolWrapper> myAvailableTools = new HashMap<String, InspectionToolWrapper>();
 	private final FileTreeAccessFilter myFileTreeAccessFilter = new FileTreeAccessFilter();
 
 	@Override
@@ -417,7 +399,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 	{
 		PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
-		TIntArrayList toIgnore = new TIntArrayList();
+		IntList toIgnore = IntLists.newArrayList();
 		if(!doTestLineMarkers())
 		{
 			toIgnore.add(Pass.LINE_MARKERS);
@@ -436,7 +418,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 		}
 
 		boolean canChange = canChangeDocumentDuringHighlighting();
-		List<HighlightInfo> infos = CodeInsightTestFixtureImpl.instantiateAndRun(getFile(), getEditor(), toIgnore.toNativeArray(), canChange);
+		List<HighlightInfo> infos = CodeInsightTestFixtureImpl.instantiateAndRun(getFile(), getEditor(), toIgnore.toArray(), canChange);
 
 		if(!canChange)
 		{

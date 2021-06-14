@@ -29,7 +29,6 @@ import com.intellij.util.graph.GraphGenerator;
 import consulo.roots.ContentFolderScopes;
 import consulo.roots.ContentFolderTypeProvider;
 import consulo.vfs.ArchiveFileSystem;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -246,7 +245,7 @@ public final class JavaModuleGraphUtil
 		{
 			String pkg = statement.getPackageName();
 			List<String> targets = statement.getModuleNames();
-			map.put(pkg, targets.isEmpty() ? Collections.emptySet() : new THashSet<>(targets));
+			map.put(pkg, targets.isEmpty() ? Collections.emptySet() : new HashSet<>(targets));
 		}
 		return map;
 	}
@@ -265,7 +264,7 @@ public final class JavaModuleGraphUtil
 	private static RequiresGraph buildRequiresGraph(Project project)
 	{
 		MultiMap<PsiJavaModule, PsiJavaModule> relations = MultiMap.create();
-		Set<String> transitiveEdges = new THashSet<>();
+		Set<String> transitiveEdges = new HashSet<>();
 
 		JavaModuleNameIndex index = JavaModuleNameIndex.getInstance();
 		GlobalSearchScope scope = ProjectScope.getAllScope(project);
@@ -442,7 +441,7 @@ public final class JavaModuleGraphUtil
 
 		private ChameleonGraph(MultiMap<N, N> edges, boolean inbound)
 		{
-			myNodes = new THashSet<>();
+			myNodes = new HashSet<>();
 			edges.entrySet().forEach(e -> {
 				myNodes.add(e.getKey());
 				myNodes.addAll(e.getValue());

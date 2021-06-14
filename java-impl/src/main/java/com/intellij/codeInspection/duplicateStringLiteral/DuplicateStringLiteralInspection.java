@@ -15,41 +15,9 @@
  */
 package com.intellij.codeInspection.duplicateStringLiteral;
 
-import consulo.logging.Logger;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TIntProcedure;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.codeInspection.SuppressManager;
+import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.lang.java.JavaLanguage;
@@ -76,6 +44,17 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
 import com.intellij.util.text.StringSearcher;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+import java.util.function.IntPredicate;
 
 public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 {
@@ -173,7 +152,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 				continue;
 			}
 			progress.checkCanceled();
-			final Set<PsiFile> files = new THashSet<PsiFile>();
+			final Set<PsiFile> files = new HashSet<PsiFile>();
 			searchHelper.processAllFilesWithWordInLiterals(word, scope, new CommonProcessors.CollectProcessor<PsiFile>
 					(files));
 			if(resultFiles == null)
@@ -208,10 +187,10 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 			CharSequence text = viewProvider.getContents();
 			StringSearcher searcher = new StringSearcher(stringToFind, true, true);
 
-			LowLevelSearchUtil.processTextOccurrences(text, 0, text.length(), searcher, progress, new TIntProcedure()
+			LowLevelSearchUtil.processTextOccurrences(text, 0, text.length(), searcher, progress, new IntPredicate()
 			{
 				@Override
-				public boolean execute(int offset)
+				public boolean test(int offset)
 				{
 					PsiElement element = file.findElementAt(offset);
 					if(element == null || !(element.getParent() instanceof PsiLiteralExpression))
@@ -232,7 +211,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 		{
 			return;
 		}
-		Set<PsiClass> classes = new THashSet<PsiClass>();
+		Set<PsiClass> classes = new HashSet<PsiClass>();
 		for(PsiElement aClass : foundExpr)
 		{
 			progress.checkCanceled();
@@ -305,7 +284,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 
 	private boolean shouldCheck(@Nonnull Project project, @Nonnull PsiLiteralExpression expression)
 	{
-		if(IGNORE_PROPERTY_KEYS && JavaI18nUtil.mustBePropertyKey(project, expression, new THashMap<String, Object>()))
+		if(IGNORE_PROPERTY_KEYS && JavaI18nUtil.mustBePropertyKey(project, expression, new HashMap<String, Object>()))
 		{
 			return false;
 		}
@@ -316,7 +295,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 			final PsiLiteralExpression originalExpression,
 			final Collection<LocalQuickFix> fixes)
 	{
-		Set<PsiField> constants = new THashSet<PsiField>();
+		Set<PsiField> constants = new HashSet<PsiField>();
 		for(Iterator<PsiExpression> iterator = foundExpr.iterator(); iterator.hasNext(); )
 		{
 			PsiExpression expression1 = iterator.next();

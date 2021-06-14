@@ -19,17 +19,6 @@
  */
 package org.jetbrains.java.generate.view;
 
-import gnu.trove.Equality;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nullable;
-import org.jetbrains.java.generate.template.TemplateResource;
-import org.jetbrains.java.generate.template.TemplatesManager;
-import org.jetbrains.java.generate.template.toString.ToStringTemplatesManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.project.Project;
@@ -39,6 +28,16 @@ import com.intellij.openapi.util.Cloner;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Factory;
 import com.intellij.psi.PsiType;
+import consulo.util.collection.HashingStrategy;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.java.generate.template.TemplateResource;
+import org.jetbrains.java.generate.template.TemplatesManager;
+import org.jetbrains.java.generate.template.toString.ToStringTemplatesManager;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class TemplatesPanel extends NamedItemsListEditor<TemplateResource>
 {
@@ -94,7 +93,7 @@ public class TemplatesPanel extends NamedItemsListEditor<TemplateResource>
 		}
 	};
 
-	private static final Equality<TemplateResource> COMPARER = new Equality<TemplateResource>()
+	private static final HashingStrategy<TemplateResource> COMPARER = new HashingStrategy<TemplateResource>()
 	{
 		@Override
 		public boolean equals(TemplateResource o1, TemplateResource o2)

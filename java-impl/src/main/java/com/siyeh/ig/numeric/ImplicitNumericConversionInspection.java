@@ -30,12 +30,12 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.module.util.JavaClassNames;
-
-import gnu.trove.TObjectIntHashMap;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 
 public class ImplicitNumericConversionInspection extends BaseInspection {
@@ -43,16 +43,16 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   /**
    * @noinspection StaticCollection
    */
-  private static final gnu.trove.TObjectIntHashMap<PsiType> typePrecisions = new TObjectIntHashMap<PsiType>(7);
+  private static final ObjectIntMap<PsiType> typePrecisions = ObjectMaps.newObjectIntHashMap(7);
 
   static {
-    typePrecisions.put(PsiType.BYTE, 1);
-    typePrecisions.put(PsiType.CHAR, 2);
-    typePrecisions.put(PsiType.SHORT, 2);
-    typePrecisions.put(PsiType.INT, 3);
-    typePrecisions.put(PsiType.LONG, 4);
-    typePrecisions.put(PsiType.FLOAT, 5);
-    typePrecisions.put(PsiType.DOUBLE, 6);
+    typePrecisions.putInt(PsiType.BYTE, 1);
+    typePrecisions.putInt(PsiType.CHAR, 2);
+    typePrecisions.putInt(PsiType.SHORT, 2);
+    typePrecisions.putInt(PsiType.INT, 3);
+    typePrecisions.putInt(PsiType.LONG, 4);
+    typePrecisions.putInt(PsiType.FLOAT, 5);
+    typePrecisions.putInt(PsiType.DOUBLE, 6);
   }
 
   @SuppressWarnings({"PublicField"})
@@ -359,8 +359,8 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   }
 
   static boolean hasLowerPrecision(PsiType expressionType, PsiType expectedType) {
-    final int operandPrecision = typePrecisions.get(expressionType);
-    final int castPrecision = typePrecisions.get(expectedType);
+    final int operandPrecision = typePrecisions.getInt(expressionType);
+    final int castPrecision = typePrecisions.getInt(expectedType);
     return operandPrecision <= castPrecision;
   }
 }

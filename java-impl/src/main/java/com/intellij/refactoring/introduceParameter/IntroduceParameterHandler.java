@@ -63,10 +63,11 @@ import com.intellij.ui.components.JBList;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ArrayUtil;
 import consulo.logging.Logger;
-import gnu.trove.TIntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -469,12 +470,12 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
                             : new TypeSelectorManagerImpl(myProject, initializerType, occurences);
     }
 
-    private TIntArrayList getParamsToRemove(PsiMethod method, PsiExpression[] occurences) {
+    private IntList getParamsToRemove(PsiMethod method, PsiExpression[] occurences) {
       PsiExpression expressionToRemoveParamFrom = myExpr;
       if (myExpr == null) {
         expressionToRemoveParamFrom = myLocalVar.getInitializer();
       }
-      return expressionToRemoveParamFrom == null ? new TIntArrayList() : Util
+      return expressionToRemoveParamFrom == null ? IntLists.newArrayList() : Util
         .findParametersToRemove(method, expressionToRemoveParamFrom, occurences);
     }
   }

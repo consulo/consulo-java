@@ -1,51 +1,54 @@
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
-import gnu.trove.TIntArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.IntConsumer;
 
-public class SortedIntSet extends TIntArrayList implements Comparable<SortedIntSet>
+public class SortedIntSet implements Comparable<SortedIntSet>
 {
-	public SortedIntSet()
+	private int[] myData;
+	private int mySize;
+
+	SortedIntSet()
 	{
+		mySize = 0;
+		myData = new int[10];
 	}
 
-	public SortedIntSet(int[] values)
+	SortedIntSet(int[] values)
 	{
-		super(values);
+		myData = values.clone();
+		Arrays.sort(myData);
+		mySize = myData.length;
 	}
 
-	@Override
+	public int size()
+	{
+		return mySize;
+	}
+
+	public boolean isEmpty()
+	{
+		return mySize == 0;
+	}
+
 	public void add(int val)
 	{
-		for(int idx = 0; idx < size(); idx++)
+		int pos = indexOf(val);
+		if(pos >= 0)
 		{
-			int data = get(idx);
-			if(data == val)
-				return;
-			if(data > val)
-			{
-				insert(idx, val);
-				return;
-			}
+			return;
 		}
-		super.add(val);
+		if(mySize == myData.length)
+		{
+			myData = Arrays.copyOf(myData, mySize * 3 / 2 + 1);
+		}
+		System.arraycopy(myData, -pos - 1, myData, -pos, mySize + pos + 1);
+		myData[-pos - 1] = val;
+		mySize++;
 	}
 
-	@Override
 	public void add(int[] vals)
 	{
 		for(int val : vals)
@@ -54,31 +57,63 @@ public class SortedIntSet extends TIntArrayList implements Comparable<SortedIntS
 		}
 	}
 
+	public boolean contains(int val)
+	{
+		return indexOf(val) >= 0;
+	}
+
 	public void removeValue(int val)
 	{
-		int offset = indexOf(val);
-		if(offset != -1)
+		int pos = indexOf(val);
+		if(pos >= 0)
 		{
-			remove(offset);
+			remove(pos);
 		}
 	}
 
-	boolean containsAll(SortedIntSet that)
+	private int indexOf(int value)
+	{
+		for(int i = 0; i < mySize; i++)
+		{
+			int datum = myData[i];
+			if(value == datum)
+			{
+				return i;
+			}
+			if(value < datum)
+			{
+				return -i - 1;
+			}
+		}
+		return -mySize - 1;
+	}
+
+	public void remove(int offset)
+	{
+		System.arraycopy(myData, offset + 1, myData, offset, mySize - offset - 1);
+		mySize--;
+	}
+
+	public boolean containsAll(SortedIntSet that)
 	{
 		int thatSize = that.size();
 		int thisSize = this.size();
 		if(thatSize > thisSize)
+		{
 			return false;
+		}
 		int thisIndex = 0;
 		for(int thatIndex = 0; thatIndex < thatSize; thatIndex++)
 		{
-			int thatValue = that._data[thatIndex];
-			while(thisIndex < thisSize && this._data[thisIndex] < thatValue)
+			int thatValue = that.myData[thatIndex];
+			while(thisIndex < thisSize && this.myData[thisIndex] < thatValue)
 			{
 				thisIndex++;
 			}
-			if(thisIndex == thisSize || this._data[thisIndex] > thatValue)
+			if(thisIndex == thisSize || this.myData[thisIndex] > thatValue)
+			{
 				return false;
+			}
 			thisIndex++;
 		}
 		return true;
@@ -88,14 +123,75 @@ public class SortedIntSet extends TIntArrayList implements Comparable<SortedIntS
 	public int compareTo(SortedIntSet t)
 	{
 		if(t == this)
+		{
 			return 0;
+		}
 		if(t.size() != size())
+		{
 			return Integer.compare(size(), t.size());
+		}
 		for(int i = 0; i < size(); i++)
 		{
-			if(_data[i] != t._data[i])
-				return Integer.compare(_data[i], t._data[i]);
+			if(myData[i] != t.myData[i])
+			{
+				return Integer.compare(myData[i], t.myData[i]);
+			}
 		}
 		return 0;
+	}
+
+	public int get(int pos)
+	{
+		if(pos >= mySize)
+		{
+			throw new IllegalArgumentException();
+		}
+		return myData[pos];
+	}
+
+	public void forValues(IntConsumer consumer)
+	{
+		for(int i = 0; i < mySize; i++)
+		{
+			consumer.accept(myData[i]);
+		}
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+		SortedIntSet set = (SortedIntSet) o;
+		if(mySize != set.mySize)
+		{
+			return false;
+		}
+		return Arrays.equals(myData, 0, mySize, set.myData, 0, mySize);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int size = mySize;
+		int result = Objects.hash(size);
+		int[] arr = myData;
+		for(int i = 0; i < size; i++)
+		{
+			int element = arr[i];
+			result = 31 * result + element;
+		}
+		return result;
+	}
+
+	protected int[] toNativeArray()
+	{
+		return Arrays.copyOf(myData, mySize);
 	}
 }

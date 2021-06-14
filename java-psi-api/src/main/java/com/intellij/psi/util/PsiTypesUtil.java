@@ -23,12 +23,12 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -36,9 +36,9 @@ import java.util.Set;
 public class PsiTypesUtil
 {
 	@NonNls
-	private static final Map<String, String> ourUnboxedTypes = new THashMap<>();
+	private static final Map<String, String> ourUnboxedTypes = new HashMap<>();
 	@NonNls
-	private static final Map<String, String> ourBoxedTypes = new THashMap<>();
+	private static final Map<String, String> ourBoxedTypes = new HashMap<>();
 
 	static
 	{

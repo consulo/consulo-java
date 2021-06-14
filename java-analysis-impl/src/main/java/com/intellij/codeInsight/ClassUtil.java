@@ -19,20 +19,13 @@
  */
 package com.intellij.codeInsight;
 
-import gnu.trove.THashSet;
-
-import java.util.List;
-import java.util.Set;
+import com.intellij.psi.*;
+import consulo.java.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
-
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.HierarchicalMethodSignature;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiResolveHelper;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ClassUtil {
   private ClassUtil() { }
@@ -53,7 +46,7 @@ public class ClassUtil {
 
   @javax.annotation.Nullable
   public static PsiMethod getAnyMethodToImplement(@Nonnull PsiClass aClass) {
-    Set<PsiMethod> alreadyImplemented = new THashSet<PsiMethod>();
+    Set<PsiMethod> alreadyImplemented = new HashSet<PsiMethod>();
     for (HierarchicalMethodSignature signatureHierarchical : aClass.getVisibleSignatures()) {
       for (PsiMethod superS : signatureHierarchical.getMethod().findSuperMethods()) {
         add(superS, alreadyImplemented);

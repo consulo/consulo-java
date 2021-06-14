@@ -16,13 +16,14 @@
  */
 package com.intellij.psi.controlFlow;
 
-import consulo.logging.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiStatement;
 import com.intellij.util.containers.Stack;
-import gnu.trove.TObjectIntHashMap;
-import javax.annotation.Nonnull;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +31,8 @@ class ControlFlowImpl implements ControlFlow {
   private static final Logger LOG = Logger.getInstance(ControlFlowImpl.class);
 
   private final List<Instruction> myInstructions = new ArrayList<Instruction>();
-  private final TObjectIntHashMap<PsiElement> myElementToStartOffsetMap = new TObjectIntHashMap<PsiElement>();
-  private final TObjectIntHashMap<PsiElement> myElementToEndOffsetMap = new TObjectIntHashMap<PsiElement>();
+  private final ObjectIntMap<PsiElement> myElementToStartOffsetMap = ObjectMaps.newObjectIntHashMap();
+  private final ObjectIntMap<PsiElement> myElementToEndOffsetMap = ObjectMaps.newObjectIntHashMap();
   private final List<PsiElement> myElementsForInstructions = new ArrayList<PsiElement>();
   private boolean myConstantConditionOccurred;
 
@@ -44,7 +45,7 @@ class ControlFlowImpl implements ControlFlow {
 
   public void startElement(PsiElement element) {
     myElementStack.push(element);
-    myElementToStartOffsetMap.put(element, myInstructions.size());
+    myElementToStartOffsetMap.putInt(element, myInstructions.size());
 
     if (LOG.isDebugEnabled()){
       if (element instanceof PsiStatement){
@@ -61,7 +62,7 @@ class ControlFlowImpl implements ControlFlow {
   public void finishElement(PsiElement element) {
     PsiElement popped = myElementStack.pop();
     LOG.assertTrue(popped.equals(element));
-    myElementToEndOffsetMap.put(element, myInstructions.size());
+    myElementToEndOffsetMap.putInt(element, myInstructions.size());
   }
 
   @Override
@@ -76,7 +77,7 @@ class ControlFlowImpl implements ControlFlow {
 
   @Override
   public int getStartOffset(@Nonnull PsiElement element) {
-    int value = myElementToStartOffsetMap.get(element);
+    int value = myElementToStartOffsetMap.getInt(element);
     if (value == 0){
       if (!myElementToStartOffsetMap.containsKey(element)) return -1;
     }
@@ -85,7 +86,7 @@ class ControlFlowImpl implements ControlFlow {
 
   @Override
   public int getEndOffset(@Nonnull PsiElement element) {
-    int value = myElementToEndOffsetMap.get(element);
+    int value = myElementToEndOffsetMap.getInt(element);
     if (value == 0){
       if (!myElementToEndOffsetMap.containsKey(element)) return -1;
     }

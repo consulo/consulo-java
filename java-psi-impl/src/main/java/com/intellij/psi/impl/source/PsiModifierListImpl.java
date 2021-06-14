@@ -20,11 +20,9 @@ import com.intellij.util.BitUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Interner;
-import com.intellij.util.containers.WeakInterner;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 import static com.intellij.psi.PsiModifier.*;
@@ -36,7 +34,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 
 	static
 	{
-		NAME_TO_KEYWORD_TYPE_MAP = new THashMap<>();
+		NAME_TO_KEYWORD_TYPE_MAP = new HashMap<>();
 		NAME_TO_KEYWORD_TYPE_MAP.put(PUBLIC, JavaTokenType.PUBLIC_KEYWORD);
 		NAME_TO_KEYWORD_TYPE_MAP.put(PROTECTED, JavaTokenType.PROTECTED_KEYWORD);
 		NAME_TO_KEYWORD_TYPE_MAP.put(PRIVATE, JavaTokenType.PRIVATE_KEYWORD);
@@ -52,7 +50,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 		NAME_TO_KEYWORD_TYPE_MAP.put(OPEN, JavaTokenType.OPEN_KEYWORD);
 		NAME_TO_KEYWORD_TYPE_MAP.put(TRANSITIVE, JavaTokenType.TRANSITIVE_KEYWORD);
 
-		KEYWORD_TYPE_TO_NAME_MAP = new THashMap<>();
+		KEYWORD_TYPE_TO_NAME_MAP = new HashMap<>();
 		for(String name : NAME_TO_KEYWORD_TYPE_MAP.keySet())
 		{
 			KEYWORD_TYPE_TO_NAME_MAP.put(NAME_TO_KEYWORD_TYPE_MAP.get(name), name);
@@ -221,7 +219,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 		PsiModifierListStub stub = getGreenStub();
 		if(stub != null)
 		{
-			return BitUtil.isSet(stub.getModifiersMask(), ModifierFlags.NAME_TO_MODIFIER_FLAG_MAP.get(name));
+			return BitUtil.isSet(stub.getModifiersMask(), ModifierFlags.NAME_TO_MODIFIER_FLAG_MAP.getInt(name));
 		}
 
 		final CompositeElement tree = (CompositeElement) getNode();
@@ -384,7 +382,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 
 	private static class ModifierCache
 	{
-		static final Interner<List<String>> ourInterner = new WeakInterner<>();
+		static final Interner<List<String>> ourInterner = Interner.createWeakInterner();
 		final PsiFile file;
 		final List<String> modifiers;
 		final long modCount;

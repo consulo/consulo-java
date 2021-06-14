@@ -3,7 +3,6 @@ package com.intellij.psi.impl.source.tree.java;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.RecursionGuard;
@@ -41,10 +40,10 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
 import consulo.psi.PsiPackage;
-import gnu.trove.THashSet;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -622,7 +621,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
 		DelegatingScopeProcessor filterProcessor = new DelegatingScopeProcessor(processor)
 		{
 			private PsiElement myResolveContext;
-			private final Set<String> myVarNames = new THashSet<>();
+			private final Set<String> myVarNames = new HashSet<>();
 
 			@Override
 			public boolean execute(@Nonnull final PsiElement element, @Nonnull final ResolveState state)

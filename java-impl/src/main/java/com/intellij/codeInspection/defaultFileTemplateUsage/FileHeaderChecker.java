@@ -15,33 +15,28 @@
  */
 package com.intellij.codeInspection.defaultFileTemplateUsage;
 
-import gnu.trove.TIntObjectHashMap;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.codeInspection.*;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.highlighter.JavaFileType;
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author cdr
@@ -52,7 +47,7 @@ public class FileHeaderChecker
 
 	static ProblemDescriptor checkFileHeader(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean onTheFly)
 	{
-		TIntObjectHashMap<String> offsetToProperty = new TIntObjectHashMap<>();
+		IntObjectMap<String> offsetToProperty = IntMaps.newIntObjectHashMap();
 		FileTemplate defaultTemplate = FileTemplateManager.getInstance(file.getProject()).getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
 		Pattern pattern = FileTemplateUtil.getTemplatePattern(defaultTemplate, file.getProject(), offsetToProperty);
 		Matcher matcher = pattern.matcher(file.getViewProvider().getContents());
@@ -73,7 +68,7 @@ public class FileHeaderChecker
 	}
 
 
-	private static Properties computeProperties(final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty, Project project)
+	private static Properties computeProperties(final Matcher matcher, final IntObjectMap<String> offsetToProperty, Project project)
 	{
 		Properties properties = new Properties(FileTemplateManager.getInstance(project).getDefaultProperties());
 
@@ -91,7 +86,7 @@ public class FileHeaderChecker
 		return properties;
 	}
 
-	private static LocalQuickFix[] createQuickFix(final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty, Project project, boolean onTheFly)
+	private static LocalQuickFix[] createQuickFix(final Matcher matcher, final IntObjectMap<String> offsetToProperty, Project project, boolean onTheFly)
 	{
 		final FileTemplate template = FileTemplateManager.getInstance(project).getPattern(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
 

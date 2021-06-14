@@ -17,20 +17,21 @@ package com.siyeh.ig.threading;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.OrderedSet;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.ui.UiUtils;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspection {
 
-  @SuppressWarnings("PublicField") public OrderedSet<String> ignoredClasses = new OrderedSet();
+  @SuppressWarnings("PublicField") public Set<String> ignoredClasses = new LinkedHashSet<>();
 
   @Override
   @Nonnull

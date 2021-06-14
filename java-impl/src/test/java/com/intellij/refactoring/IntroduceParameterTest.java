@@ -11,12 +11,13 @@ package com.intellij.refactoring;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import gnu.trove.TIntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import consulo.util.collection.primitive.ints.IntLists;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightUtil;
@@ -508,7 +509,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			initializer = expr;
 			occurences = new ExpressionOccurrenceManager(expr, method, null).findExpressionOccurrences();
 		}
-		TIntArrayList parametersToRemove = removeUnusedParameters ? Util.findParametersToRemove(method, initializer, occurences) : new TIntArrayList();
+		IntList parametersToRemove = removeUnusedParameters ? Util.findParametersToRemove(method, initializer, occurences) : IntLists.newArrayList();
 		new IntroduceParameterProcessor(getProject(), method, methodToSearchFor, initializer, expr, localVar, true, parameterName, replaceAllOccurences, replaceFieldsWithGetters, declareFinal,
 				generateDelegate, null, parametersToRemove).run();
 
@@ -536,7 +537,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 		assertNotNull(methodToSearchFor);
 		final PsiLocalVariable localVariable = (PsiLocalVariable) element;
 		final PsiExpression parameterInitializer = localVariable.getInitializer();
-		TIntArrayList parametersToRemove = removeUnusedParameters ? Util.findParametersToRemove(method, parameterInitializer, null) : new TIntArrayList();
+		IntList parametersToRemove = removeUnusedParameters ? Util.findParametersToRemove(method, parameterInitializer, null) : IntLists.newArrayList();
 
 		new IntroduceParameterProcessor(getProject(), method, methodToSearchFor, parameterInitializer, null, localVariable, removeLocalVariable, localVariable.getName(), replaceAllOccurrences,
 				IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE, declareFinal, false, null, parametersToRemove).run();

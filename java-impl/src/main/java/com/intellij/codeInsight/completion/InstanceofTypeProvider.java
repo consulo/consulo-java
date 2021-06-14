@@ -15,15 +15,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
-import gnu.trove.THashSet;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.patterns.ElementPattern;
@@ -35,6 +26,13 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
+
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
  * @author peter
@@ -50,7 +48,7 @@ class InstanceofTypeProvider implements CompletionProvider
 		final PsiElement position = parameters.getPosition();
 		final PsiType[] leftTypes = InstanceOfLeftPartTypeGetter.getLeftTypes(position);
 		final Set<PsiClassType> expectedClassTypes = new LinkedHashSet<PsiClassType>();
-		final Set<PsiClass> parameterizedTypes = new THashSet<PsiClass>();
+		final Set<PsiClass> parameterizedTypes = new HashSet<PsiClass>();
 		for(final PsiType type : leftTypes)
 		{
 			if(type instanceof PsiClassType)
@@ -58,7 +56,7 @@ class InstanceofTypeProvider implements CompletionProvider
 				final PsiClassType classType = (PsiClassType) type;
 				if(!classType.isRaw())
 				{
-					ContainerUtil.addIfNotNull(classType.resolve(), parameterizedTypes);
+					ContainerUtil.addIfNotNull(parameterizedTypes, classType.resolve());
 				}
 
 				expectedClassTypes.add(classType.rawType());

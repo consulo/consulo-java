@@ -15,11 +15,11 @@
  */
 package com.intellij.psi.controlFlow;
 
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.Arrays;
+import consulo.java.util.DelegateIntObjectMap;
+import consulo.util.collection.primitive.ints.IntMaps;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 /**
  * Stores instruction keys (such a key is offset + call stack), compares sub-stacks instead of whole stacks in the following way:
@@ -64,11 +64,11 @@ class InstructionKeySet
 	 * If the instruction key N is in the set it's represented as N->null.
 	 * If the instruction key N[A,B,C] is in the set it's represented as N->A->B->C->null.
 	 */
-	private static class Node extends TIntObjectHashMap<Node>
+	private static class Node extends DelegateIntObjectMap<Node>
 	{
 		private Node(int initialCapacity)
 		{
-			super(Math.max(initialCapacity, 2));
+			super(IntMaps.newIntObjectHashMap(Math.max(initialCapacity, 2)));
 		}
 
 		private void add(int offset, @Nonnull int[] stack, int level)

@@ -2,20 +2,18 @@
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInspection.dataFlow.value.*;
-import com.intellij.openapi.util.Ref;
 import com.intellij.util.ObjectUtils;
 import one.util.streamex.IntStreamEx;
-import javax.annotation.Nonnull;
+import one.util.streamex.StreamEx;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author peter
  */
-class EqClass extends SortedIntSet
+class EqClass extends SortedIntSet implements Iterable<DfaValue>
 {
 	private final DfaValueFactory myFactory;
 
@@ -27,7 +25,9 @@ class EqClass extends SortedIntSet
 			Comparator.nullsFirst((v1, v2) -> {
 				int result = EqClass.CANONICAL_VARIABLE_COMPARATOR.compare(v1.getQualifier(), v2.getQualifier());
 				if(result != 0)
+				{
 					return result;
+				}
 				return Integer.compare(v1.getID(), v2.getID());
 			});
 
@@ -50,7 +50,9 @@ class EqClass extends SortedIntSet
 		for(int i = 0; i < size(); i++)
 		{
 			if(i > 0)
+			{
 				buf.append(", ");
+			}
 			int value = get(i);
 			DfaValue dfaValue = myFactory.getValue(value);
 			buf.append(dfaValue);
@@ -62,7 +64,7 @@ class EqClass extends SortedIntSet
 	List<DfaVariableValue> getVariables(boolean unwrap)
 	{
 		List<DfaVariableValue> vars = new ArrayList<>();
-		forEach(id -> {
+		forValues(id -> {
 			DfaValue value = myFactory.getValue(id);
 			if(value instanceof DfaVariableValue)
 			{
@@ -72,7 +74,6 @@ class EqClass extends SortedIntSet
 			{
 				vars.add(((DfaBoxedValue) value).getWrappedValue());
 			}
-			return true;
 		});
 		return vars;
 	}
@@ -95,10 +96,9 @@ class EqClass extends SortedIntSet
 	List<DfaValue> getMemberValues()
 	{
 		final List<DfaValue> result = new ArrayList<>(size());
-		forEach(id -> {
+		forValues(id -> {
 			DfaValue value = myFactory.getValue(id);
 			result.add(value);
-			return true;
 		});
 		return result;
 	}
@@ -106,17 +106,7 @@ class EqClass extends SortedIntSet
 	@Nullable
 	DfaConstValue findConstant()
 	{
-		Ref<DfaConstValue> result = new Ref<>();
-		forEach(id -> {
-			DfaValue value = myFactory.getValue(id);
-			if(value instanceof DfaConstValue)
-			{
-				result.set((DfaConstValue) value);
-				return false;
-			}
-			return true;
-		});
-		return result.get();
+		return StreamEx.of(iterator()).map(it -> it instanceof DfaConstValue ? (DfaConstValue)it : null).filter(Objects::nonNull).findFirst().orElse(null);
 	}
 
 	boolean containsConstantsOnly()
@@ -125,4 +115,29 @@ class EqClass extends SortedIntSet
 		return size <= 1 && (size == 0 || myFactory.getValue(get(0)) instanceof DfaConstValue);
 	}
 
+	@Nonnull
+	@Override
+	public Iterator<DfaValue> iterator()
+	{
+		return new Iterator<>()
+		{
+			int pos;
+
+			@Override
+			public boolean hasNext()
+			{
+				return pos < size();
+			}
+
+			@Override
+			public DfaValue next()
+			{
+				if(pos >= size())
+				{
+					throw new NoSuchElementException();
+				}
+				return myFactory.getValue(get(pos++));
+			}
+		};
+	}
 }

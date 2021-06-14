@@ -13,51 +13,40 @@
 // limitations under the License.
 package com.intellij.codeInsight;
 
-import static com.intellij.openapi.util.Pair.pair;
-
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.AnnotatedElementsSearch;
 import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.psi.util.*;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Sets;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Stream;
+
+import static com.intellij.openapi.util.Pair.pair;
 
 /**
  * @since 2016.3
  */
 public class MetaAnnotationUtil
 {
-	private static final TObjectHashingStrategy<PsiClass> HASHING_STRATEGY = new TObjectHashingStrategy<PsiClass>()
+	private static final HashingStrategy<PsiClass> HASHING_STRATEGY = new HashingStrategy<PsiClass>()
 	{
 		@Override
-		public int computeHashCode(PsiClass object)
+		public int hashCode(PsiClass object)
 		{
 			String qualifiedName = object.getQualifiedName();
 			return qualifiedName == null ? 0 : qualifiedName.hashCode();
@@ -109,7 +98,7 @@ public class MetaAnnotationUtil
 			return Collections.emptySet();
 		}
 
-		Set<PsiClass> result = new THashSet<>(HASHING_STRATEGY);
+		Set<PsiClass> result = Sets.newHashSet(HASHING_STRATEGY);
 
 		AnnotatedElementsSearch.searchPsiClasses(psiClass, scope).forEach(processorResult ->
 		{
@@ -146,7 +135,7 @@ public class MetaAnnotationUtil
 	@Nonnull
 	private static Collection<PsiClass> getAnnotationTypesWithChildren(PsiClass annotationClass, GlobalSearchScope scope)
 	{
-		Set<PsiClass> classes = new THashSet<>(HASHING_STRATEGY);
+		Set<PsiClass> classes = Sets.newHashSet(HASHING_STRATEGY);
 		collectClassWithChildren(annotationClass, classes, scope);
 		return classes;
 	}

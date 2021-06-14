@@ -15,30 +15,11 @@
  */
 package com.intellij.codeInspection.magicConstant;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.codeInspection.*;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -50,7 +31,6 @@ import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Comparing;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -69,6 +49,13 @@ import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.util.dataholder.Key;
+import org.intellij.lang.annotations.MagicConstant;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 {
@@ -396,8 +383,8 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 			{
 				return false;
 			}
-			Set<PsiAnnotationMemberValue> v1 = new THashSet<PsiAnnotationMemberValue>(Arrays.asList(values));
-			Set<PsiAnnotationMemberValue> v2 = new THashSet<PsiAnnotationMemberValue>(Arrays.asList(a2.values));
+			Set<PsiAnnotationMemberValue> v1 = new HashSet<PsiAnnotationMemberValue>(Arrays.asList(values));
+			Set<PsiAnnotationMemberValue> v2 = new HashSet<PsiAnnotationMemberValue>(Arrays.asList(a2.values));
 			if(v1.size() != v2.size())
 			{
 				return false;
@@ -560,7 +547,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 			PsiClass aClass = (PsiClass) resolved;
 			if(visited == null)
 			{
-				visited = new THashSet<PsiClass>();
+				visited = new HashSet<PsiClass>();
 			}
 			if(!visited.add(aClass))
 			{
@@ -809,7 +796,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 		}
 		if(visited == null)
 		{
-			visited = new THashSet<PsiExpression>();
+			visited = new HashSet<PsiExpression>();
 		}
 		if(!visited.add(expression))
 		{

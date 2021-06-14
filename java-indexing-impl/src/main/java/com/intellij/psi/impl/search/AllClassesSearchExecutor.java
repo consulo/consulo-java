@@ -33,7 +33,6 @@ import com.intellij.psi.search.searches.AllClassesSearch;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 import com.intellij.util.indexing.IdFilter;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -63,7 +62,7 @@ public class AllClassesSearchExecutor implements QueryExecutor<PsiClass, AllClas
 
 	private static boolean processAllClassesInGlobalScope(@Nonnull final GlobalSearchScope scope, @Nonnull final AllClassesSearch.SearchParameters parameters, @Nonnull Processor<? super PsiClass> processor)
 	{
-		final Set<String> names = new THashSet<String>(10000);
+		final Set<String> names = new HashSet<String>(10000);
 		processClassNames(parameters.getProject(), scope, s -> {
 			if(parameters.nameMatches(s))
 			{

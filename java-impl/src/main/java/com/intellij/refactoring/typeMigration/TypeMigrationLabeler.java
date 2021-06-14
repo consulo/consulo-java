@@ -1,20 +1,10 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.refactoring.typeMigration;
 
-import gnu.trove.THashMap;
-
-import java.util.*;
-
-import javax.annotation.Nonnull;
-import javax.swing.SwingUtilities;
-
-import javax.annotation.Nullable;
-import org.jetbrains.annotations.TestOnly;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.GetterSetterPrototypeProvider;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Comparing;
@@ -37,17 +27,20 @@ import com.intellij.refactoring.typeMigration.usageInfo.OverriddenUsageInfo;
 import com.intellij.refactoring.typeMigration.usageInfo.OverriderUsageInfo;
 import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
 import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Consumer;
-import com.intellij.util.Function;
-import com.intellij.util.Functions;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Query;
+import com.intellij.util.*;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.graph.DFSTBuilder;
 import com.intellij.util.graph.GraphGenerator;
 import com.intellij.util.graph.InboundSemiGraph;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.*;
 
 /**
  * @author db
@@ -332,7 +325,7 @@ public class TypeMigrationLabeler
 			@Override
 			protected Map<PsiTypeElement, Collection<TypeMigrationUsageInfo>> createMap()
 			{
-				return new THashMap<>();
+				return new HashMap<>();
 			}
 		};
 

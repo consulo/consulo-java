@@ -15,21 +15,18 @@
  */
 package com.intellij.psi.util;
 
-import gnu.trove.TObjectHashingStrategy;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Pair;
+import com.intellij.psi.*;
+import consulo.util.collection.HashingStrategy;
+import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
 
 
 public class MethodSignatureUtil
@@ -38,10 +35,10 @@ public class MethodSignatureUtil
 	{
 	}
 
-	public static final TObjectHashingStrategy<MethodSignatureBackedByPsiMethod> METHOD_BASED_HASHING_STRATEGY = new TObjectHashingStrategy<MethodSignatureBackedByPsiMethod>()
+	public static final HashingStrategy<MethodSignatureBackedByPsiMethod> METHOD_BASED_HASHING_STRATEGY = new HashingStrategy<MethodSignatureBackedByPsiMethod>()
 	{
 		@Override
-		public int computeHashCode(final MethodSignatureBackedByPsiMethod signature)
+		public int hashCode(final MethodSignatureBackedByPsiMethod signature)
 		{
 			return signature.getMethod().hashCode();
 		}
@@ -53,10 +50,10 @@ public class MethodSignatureUtil
 		}
 	};
 
-	public static final TObjectHashingStrategy<MethodSignature> METHOD_PARAMETERS_ERASURE_EQUALITY = new TObjectHashingStrategy<MethodSignature>()
+	public static final HashingStrategy<MethodSignature> METHOD_PARAMETERS_ERASURE_EQUALITY = new HashingStrategy<MethodSignature>()
 	{
 		@Override
-		public int computeHashCode(final MethodSignature signature)
+		public int hashCode(final MethodSignature signature)
 		{
 			return signature.hashCode();
 		}

@@ -20,21 +20,6 @@
  */
 package com.intellij.compiler.cache;
 
-import consulo.logging.Logger;
-import gnu.trove.TIntHashSet;
-
-import java.io.File;
-import java.io.IOException;
-import java.rmi.Remote;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.compiler.classParsing.*;
 import com.intellij.compiler.impl.ExitException;
 import com.intellij.compiler.make.CacheCorruptedException;
@@ -54,6 +39,17 @@ import com.intellij.util.Function;
 import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.cls.ClsUtil;
 import consulo.compiler.make.DependencyCache;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntSet;
+import consulo.util.collection.primitive.ints.IntSets;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.rmi.Remote;
+import java.util.*;
 
 public class JavaDependencyCache implements DependencyCache
 {
@@ -63,12 +59,12 @@ public class JavaDependencyCache implements DependencyCache
   private volatile Cache myNewClassesCache;
 
   private static final String REMOTE_INTERFACE_NAME = Remote.class.getName();
-  private final TIntHashSet myToUpdate = new TIntHashSet(); // qName strings to be updated.
-  private final TIntHashSet myTraverseRoots = new TIntHashSet(); // Dependencies are calculated from these clasess
-  private final TIntHashSet myClassesWithSourceRemoved = new TIntHashSet();
-  private final TIntHashSet myPreviouslyRemoteClasses = new TIntHashSet();
+  private final IntSet myToUpdate = IntSets.newHashSet(); // qName strings to be updated.
+  private final IntSet myTraverseRoots = IntSets.newHashSet(); // Dependencies are calculated from these clasess
+  private final IntSet myClassesWithSourceRemoved = IntSets.newHashSet();
+  private final IntSet myPreviouslyRemoteClasses = IntSets.newHashSet();
     // classes that were Remote, but became non-Remote for some reason
-  private final TIntHashSet myMarkedInfos = new TIntHashSet(); // classes to be recompiled
+  private final IntSet myMarkedInfos = IntSets.newHashSet(); // classes to be recompiled
   private final Set<VirtualFile> myMarkedFiles = new HashSet<VirtualFile>();
 
   private volatile JavaDependencyCacheNavigator myCacheNavigator;

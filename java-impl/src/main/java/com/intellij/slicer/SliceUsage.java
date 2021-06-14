@@ -15,10 +15,6 @@
  */
 package com.intellij.slicer;
 
-import gnu.trove.TObjectHashingStrategy;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -30,6 +26,9 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.usages.UsageInfo2UsageAdapter;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
+import consulo.util.collection.HashingStrategy;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -88,11 +87,10 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 		ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
 		indicator.checkCanceled();
 
-		final Processor<SliceUsage> uniqueProcessor = new CommonProcessors.UniqueProcessor<SliceUsage>(processor,
-				new TObjectHashingStrategy<SliceUsage>()
+		final Processor<SliceUsage> uniqueProcessor = new CommonProcessors.UniqueProcessor<SliceUsage>(processor, new HashingStrategy<SliceUsage>()
 		{
 			@Override
-			public int computeHashCode(final SliceUsage object)
+			public int hashCode(final SliceUsage object)
 			{
 				return object.getUsageInfo().hashCode();
 			}

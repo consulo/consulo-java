@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInsight.completion;
 
-import consulo.logging.Logger;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.util.Processor;
-import gnu.trove.THashSet;
+import consulo.logging.Logger;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -37,7 +37,7 @@ class LimitedAccessibleClassPreprocessor implements Processor<PsiClass>
 	private final Processor<? super PsiClass> myProcessor;
 	private final int myLimit = Registry.intValue("ide.completion.variant.limit");
 	private int myCount;
-	private final Set<String> myQNames = new THashSet<>();
+	private final Set<String> myQNames = new HashSet<>();
 	private final boolean myPkgContext;
 	private final String myPackagePrefix;
 

@@ -17,7 +17,6 @@ package com.intellij.psi.controlFlow;
 
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
-import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -26,8 +25,9 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.Stack;
-import gnu.trove.THashMap;
-import gnu.trove.TIntArrayList;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -66,13 +66,13 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	private final boolean myEvaluateConstantIfCondition;
 	private final boolean myAssignmentTargetsAreElements;
 
-	private final Stack<TIntArrayList> intArrayPool = new Stack<TIntArrayList>();
-	// map: PsiElement element -> TIntArrayList instructionOffsetsToPatch with getStartOffset(element)
-	private final Map<PsiElement, TIntArrayList> offsetsAddElementStart = new THashMap<PsiElement, TIntArrayList>();
-	// map: PsiElement element -> TIntArrayList instructionOffsetsToPatch with getEndOffset(element)
-	private final Map<PsiElement, TIntArrayList> offsetsAddElementEnd = new THashMap<PsiElement, TIntArrayList>();
+	private final Stack<IntList> intArrayPool = new Stack<IntList>();
+	// map: PsiElement element -> IntList instructionOffsetsToPatch with getStartOffset(element)
+	private final Map<PsiElement, IntList> offsetsAddElementStart = new HashMap<PsiElement, IntList>();
+	// map: PsiElement element -> IntList instructionOffsetsToPatch with getEndOffset(element)
+	private final Map<PsiElement, IntList> offsetsAddElementEnd = new HashMap<PsiElement, IntList>();
 	private final ControlFlowFactory myControlFlowFactory;
-	private final Map<PsiElement, ControlFlowSubRange> mySubRanges = new THashMap<PsiElement, ControlFlowSubRange>();
+	private final Map<PsiElement, ControlFlowSubRange> mySubRanges = new HashMap<PsiElement, ControlFlowSubRange>();
 	private final PsiConstantEvaluationHelper myConstantEvaluationHelper;
 
 	ControlFlowAnalyzer(@Nonnull PsiElement codeFragment, @Nonnull ControlFlowPolicy policy, boolean enabledShortCircuit, boolean evaluateConstantIfCondition)
@@ -125,7 +125,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	private static class StatementStack
 	{
 		private final Stack<PsiElement> myStatements = new Stack<PsiElement>();
-		private final TIntArrayList myAtStart = new TIntArrayList();
+		private final IntList myAtStart = IntLists.newArrayList();
 
 		private void popStatement()
 		{
@@ -152,18 +152,18 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	}
 
 	@Nonnull
-	private TIntArrayList getEmptyIntArray()
+	private IntList getEmptyIntArray()
 	{
 		if(intArrayPool.isEmpty())
 		{
-			return new TIntArrayList(1);
+			return IntLists.newArrayList(1);
 		}
-		TIntArrayList list = intArrayPool.pop();
+		IntList list = intArrayPool.pop();
 		list.clear();
 		return list;
 	}
 
-	private void poolIntArray(@Nonnull TIntArrayList list)
+	private void poolIntArray(@Nonnull IntList list)
 	{
 		intArrayPool.add(list);
 	}
@@ -172,8 +172,8 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	//  when corresponding element offset become available
 	private void addElementOffsetLater(@Nonnull PsiElement element, boolean atStart)
 	{
-		Map<PsiElement, TIntArrayList> offsetsAddElement = atStart ? offsetsAddElementStart : offsetsAddElementEnd;
-		TIntArrayList offsets = offsetsAddElement.get(element);
+		Map<PsiElement, IntList> offsetsAddElement = atStart ? offsetsAddElementStart : offsetsAddElementEnd;
+		IntList offsets = offsetsAddElement.get(element);
 		if(offsets == null)
 		{
 			offsets = getEmptyIntArray();
@@ -196,7 +196,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		offsetsAddElementEnd.put(element, null);
 	}
 
-	private void patchInstructionOffsets(@javax.annotation.Nullable TIntArrayList offsets, int add)
+	private void patchInstructionOffsets(@javax.annotation.Nullable IntList offsets, int add)
 	{
 		if(offsets == null)
 		{
@@ -215,11 +215,11 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	private void cleanup()
 	{
 		// make all non patched goto instructions jump to the end of control flow
-		for(TIntArrayList offsets : offsetsAddElementStart.values())
+		for(IntList offsets : offsetsAddElementStart.values())
 		{
 			patchInstructionOffsets(offsets, myCurrentFlow.getEndOffset(myCodeFragment));
 		}
-		for(TIntArrayList offsets : offsetsAddElementEnd.values())
+		for(IntList offsets : offsetsAddElementEnd.values())
 		{
 			patchInstructionOffsets(offsets, myCurrentFlow.getEndOffset(myCodeFragment));
 		}

@@ -15,16 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import consulo.logging.Logger;
-import gnu.trove.THashSet;
-
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
@@ -34,6 +24,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Dmitry Batkovich
@@ -115,7 +113,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
 					LOG.assertTrue(constructors.length != 0);
 				}
 
-				Set<PsiClassType> unhandledExceptions = new THashSet<PsiClassType>(ExceptionUtil.getUnhandledExceptions(field));
+				Set<PsiClassType> unhandledExceptions = new HashSet<PsiClassType>(ExceptionUtil.getUnhandledExceptions(field));
 				for(PsiMethod constructor : constructors)
 				{
 					AddExceptionToThrowsFix.addExceptionsToThrowsList(project, constructor, unhandledExceptions);

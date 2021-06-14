@@ -20,23 +20,9 @@
  */
 package com.intellij.codeInspection.inconsistentLanguageLevel;
 
-import consulo.logging.Logger;
-import gnu.trove.THashSet;
-
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.GlobalInspectionTool;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.ProblemDescriptionsProcessor;
-import com.intellij.codeInspection.QuickFix;
+import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.RefModule;
 import com.intellij.codeInspection.unnecessaryModuleDependency.UnnecessaryModuleDependencyInspection;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
@@ -51,6 +37,13 @@ import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InconsistentLanguageLevelInspection extends GlobalInspectionTool
 {
@@ -65,7 +58,7 @@ public class InconsistentLanguageLevelInspection extends GlobalInspectionTool
 	@Override
 	public void runInspection(@Nonnull AnalysisScope scope, @Nonnull InspectionManager manager, @Nonnull GlobalInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor problemProcessor)
 	{
-		final Set<Module> modules = new THashSet<Module>();
+		final Set<Module> modules = new HashSet<Module>();
 		scope.accept(new PsiElementVisitor()
 		{
 			@Override

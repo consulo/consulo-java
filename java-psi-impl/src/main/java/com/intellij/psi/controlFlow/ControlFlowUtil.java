@@ -15,28 +15,20 @@
  */
 package com.intellij.psi.controlFlow;
 
-import gnu.trove.THashSet;
-import gnu.trove.TIntHashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.DummyHolder;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ReflectionUtil;
-import com.intellij.util.containers.IntArrayList;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.collection.primitive.ints.IntSet;
+import consulo.util.collection.primitive.ints.IntSets;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class ControlFlowUtil {
   private static final Logger LOG = Logger.getInstance(ControlFlowUtil.class);
@@ -92,7 +84,7 @@ public class ControlFlowUtil {
 
       final List<SSAInstructionState> queue = new ArrayList<SSAInstructionState>();
       queue.add(new SSAInstructionState(0, from));
-      Set<SSAInstructionState> processedStates = new THashSet<SSAInstructionState>();
+      Set<SSAInstructionState> processedStates = new HashSet<SSAInstructionState>();
 
       while (!queue.isEmpty()) {
         final SSAInstructionState state = queue.remove(0);
@@ -271,13 +263,13 @@ public class ControlFlowUtil {
     return outputVariables;
   }
 
-  public static Collection<PsiStatement> findExitPointsAndStatements(final ControlFlow flow, final int start, final int end, final IntArrayList exitPoints,
+  public static Collection<PsiStatement> findExitPointsAndStatements(final ControlFlow flow, final int start, final int end, final IntList exitPoints,
                                                                      final Class... classesFilter) {
     if (end == start) {
       exitPoints.add(end);
       return Collections.emptyList();
     }
-    final Collection<PsiStatement> exitStatements = new THashSet<PsiStatement>();
+    final Collection<PsiStatement> exitStatements = new HashSet<PsiStatement>();
     InstructionClientVisitor visitor = new InstructionClientVisitor() {
       @Override
       public void visitThrowToInstruction(ThrowToInstruction instruction, int offset, int nextOffset) {
@@ -325,7 +317,7 @@ public class ControlFlowUtil {
   }
 
   private static void processGoto(ControlFlow flow, int start, int end,
-                                  IntArrayList exitPoints,
+                                  IntList exitPoints,
                                   Collection<PsiStatement> exitStatements, BranchingInstruction instruction, Class[] classesFilter, final PsiStatement statement) {
     if (statement == null) return;
     int gotoOffset = instruction.offset;
@@ -961,14 +953,14 @@ public class ControlFlowUtil {
                                                   final List references) {
     class MyVisitor extends InstructionClientVisitor<Integer> {
       // set of exit posint reached from this offset
-      final TIntHashSet[] exitPoints = new TIntHashSet[flow.getSize()];
+      final IntSet[] exitPoints = new IntSet[flow.getSize()];
 
       @Override
       public void visitInstruction(Instruction instruction, int offset, int nextOffset) {
         if (nextOffset > flow.getSize()) nextOffset = flow.getSize();
 
         if (exitPoints[offset] == null) {
-          exitPoints[offset] = new TIntHashSet();
+          exitPoints[offset] = IntSets.newHashSet();
         }
         if (isLeaf(nextOffset)) {
           exitPoints[offset].add(offset);
@@ -984,7 +976,7 @@ public class ControlFlowUtil {
         int maxExitPoints = 0;
         nextOffset:
         for (int i = sourceOffset; i < exitPoints.length; i++) {
-          TIntHashSet exitPointSet = exitPoints[i];
+          IntSet exitPointSet = exitPoints[i];
           final int size = exitPointSet == null ? 0 : exitPointSet.size();
           if (size > maxExitPoints) {
             // this offset should be reachable from all other references
@@ -1018,15 +1010,15 @@ public class ControlFlowUtil {
   }
 
   private static void internalDepthFirstSearch(final List<Instruction> instructions, final InstructionClientVisitor clientVisitor, int offset, int endOffset) {
-    final IntArrayList oldOffsets = new IntArrayList(instructions.size() / 2);
-    final IntArrayList newOffsets = new IntArrayList(instructions.size() / 2);
+    final IntList oldOffsets = IntLists.newArrayList(instructions.size() / 2);
+    final IntList newOffsets = IntLists.newArrayList(instructions.size() / 2);
 
     oldOffsets.add(offset);
     newOffsets.add(-1);
 
     // we can change instruction internal state here (e.g. CallInstruction.stack)
     synchronized (instructions) {
-      final IntArrayList currentProcedureReturnOffsets = new IntArrayList();
+      final IntList currentProcedureReturnOffsets = IntLists.newArrayList();
       ControlFlowInstructionVisitor getNextOffsetVisitor = new ControlFlowInstructionVisitor() {
         @Override
         public void visitCallInstruction(CallInstruction instruction, int offset, int nextOffset) {
@@ -1098,8 +1090,8 @@ public class ControlFlowUtil {
         }
       };
       while (!oldOffsets.isEmpty()) {
-        offset = oldOffsets.remove(oldOffsets.size() - 1);
-        int newOffset = newOffsets.remove(newOffsets.size() - 1);
+        offset = oldOffsets.removeByIndex(oldOffsets.size() - 1);
+        int newOffset = newOffsets.removeByIndex(newOffsets.size() - 1);
 
         if (offset >= endOffset) {
           continue;

@@ -27,12 +27,11 @@ import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.*;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
-import consulo.logging.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
@@ -59,8 +58,8 @@ import consulo.application.AccessRule;
 import consulo.compiler.make.impl.CompositeDependencyCache;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -90,12 +89,12 @@ public class BackendCompilerWrapper
 	private final TranslatingCompiler myTranslatingCompiler;
 	private final Chunk<Module> myChunk;
 	private final Project myProject;
-	private final Map<Module, VirtualFile> myModuleToTempDirMap = new THashMap<>();
+	private final Map<Module, VirtualFile> myModuleToTempDirMap = new HashMap<>();
 	private final ProjectFileIndex myProjectFileIndex;
 	@NonNls
 	private static final String PACKAGE_ANNOTATION_FILE_NAME = "package-info.java";
 	private static final FileObject ourStopThreadToken = new FileObject(new File(""), new byte[0]);
-	public final Map<String, Set<CompiledClass>> myFileNameToSourceMap = new THashMap<>();
+	public final Map<String, Set<CompiledClass>> myFileNameToSourceMap = new HashMap<>();
 	private final Set<VirtualFile> myProcessedPackageInfos = new HashSet<>();
 	private final CompileStatistics myStatistics;
 	private volatile String myModuleName = null;

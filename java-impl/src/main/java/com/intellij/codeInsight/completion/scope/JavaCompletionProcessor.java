@@ -15,15 +15,9 @@
  */
 package com.intellij.codeInsight.completion.scope;
 
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInspection.SuppressManager;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstanceBase;
 import com.intellij.openapi.util.Condition;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
@@ -38,8 +32,14 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.hash.LinkedHashMap;
 import consulo.psi.PsiPackage;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -50,7 +50,6 @@ import consulo.psi.PsiPackage;
  */
 public class JavaCompletionProcessor extends BaseScopeProcessor implements ElementClassHint
 {
-
 	private final boolean myInJavaDoc;
 	private boolean myStatic;
 	private PsiElement myDeclarationHolder;

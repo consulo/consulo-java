@@ -21,9 +21,9 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.util.containers.hash.HashSet;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**

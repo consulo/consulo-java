@@ -15,16 +15,16 @@
  */
 package com.siyeh.ig.ui;
 
-import java.util.List;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.List;
 
 /**
  * Always assign instances of this class to a final field to prevent an InstantiationException
@@ -38,7 +38,6 @@ import com.intellij.util.containers.OrderedSet;
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class ExternalizableStringSet extends OrderedSet<String> implements JDOMExternalizable
 {
-
 	private static final String ITEM = "item";
 	private static final String VALUE = "value";
 

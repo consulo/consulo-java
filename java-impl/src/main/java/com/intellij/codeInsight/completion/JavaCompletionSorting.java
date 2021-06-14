@@ -35,13 +35,10 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
@@ -707,7 +704,7 @@ public class JavaCompletionSorting
 					String expectedName = ((ExpectedTypeInfoImpl) myExpectedInfo).getExpectedName();
 					if(expectedName != null)
 					{
-						final THashSet<String> set = new THashSet<>(NameUtil.nameToWordsLowerCase(truncDigits(expectedName)));
+						final Set<String> set = new HashSet<>(NameUtil.nameToWordsLowerCase(truncDigits(expectedName)));
 						set.retainAll(wordsNoDigits);
 						max = Math.max(max, set.size());
 					}

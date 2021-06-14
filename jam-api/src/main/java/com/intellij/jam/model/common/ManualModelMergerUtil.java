@@ -32,10 +32,9 @@ import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
 import com.intellij.util.xml.GenericValue;
 import com.intellij.util.xml.MergedObject;
-import gnu.trove.THashSet;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 
 /**
@@ -50,7 +49,7 @@ public class ManualModelMergerUtil {
   }
 
   public static <T, V> List<T> join(Iterable<? extends V> list, Joiner<V, T> joiner) {
-    final THashSet<T> notToBeMergedSet = new THashSet<T>();
+    final Set<T> notToBeMergedSet = new HashSet<T>();
     final LinkedHashMap<Object, T> map = new LinkedHashMap<Object,T>();
     for (final V v : list) {
       ProgressManager.checkCanceled();

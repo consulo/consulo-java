@@ -17,10 +17,12 @@
 package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph.Edge;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntIntHashMap;
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.util.collection.primitive.ints.IntIntMap;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.collection.primitive.ints.IntMaps;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,9 +34,9 @@ final class ControlFlowBuilder implements FramelessAnalyzer.EdgeCreator
 {
 	final String className;
 	final MethodNode methodNode;
-	final TIntArrayList[] transitions;
+	final IntList[] transitions;
 	final Set<ControlFlowGraph.Edge> errorTransitions;
-	final TIntIntHashMap npeTransitions;
+	final IntIntMap npeTransitions;
 	final FramelessAnalyzer myAnalyzer;
 	private final boolean[] errors;
 	private int edgeCount;
@@ -44,14 +46,14 @@ final class ControlFlowBuilder implements FramelessAnalyzer.EdgeCreator
 		myAnalyzer = jsr ? new FramelessAnalyzer(this) : new LiteFramelessAnalyzer(this);
 		this.className = className;
 		this.methodNode = methodNode;
-		transitions = new TIntArrayList[methodNode.instructions.size()];
+		transitions = new IntList[methodNode.instructions.size()];
 		errors = new boolean[methodNode.instructions.size()];
 		for(int i = 0; i < transitions.length; i++)
 		{
-			transitions[i] = new TIntArrayList();
+			transitions[i] = IntLists.newArrayList();
 		}
 		errorTransitions = new HashSet<>();
-		npeTransitions = new TIntIntHashMap();
+		npeTransitions = IntMaps.newIntIntHashMap();
 	}
 
 	final ControlFlowGraph buildCFG() throws AnalyzerException
@@ -63,7 +65,7 @@ final class ControlFlowBuilder implements FramelessAnalyzer.EdgeCreator
 		int[][] resultTransitions = new int[transitions.length][];
 		for(int i = 0; i < resultTransitions.length; i++)
 		{
-			resultTransitions[i] = transitions[i].toNativeArray();
+			resultTransitions[i] = transitions[i].toArray();
 		}
 		return new ControlFlowGraph(className, methodNode, resultTransitions, edgeCount, errors, errorTransitions, npeTransitions);
 	}
@@ -89,7 +91,7 @@ final class ControlFlowBuilder implements FramelessAnalyzer.EdgeCreator
 			errorTransitions.add(edge);
 			if(npe && !npeTransitions.containsKey(insn))
 			{
-				npeTransitions.put(insn, successor);
+				npeTransitions.putInt(insn, successor);
 			}
 			errors[successor] = true;
 		}

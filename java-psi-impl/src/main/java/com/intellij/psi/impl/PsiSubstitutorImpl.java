@@ -11,7 +11,7 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.UnmodifiableHashMap;
 import consulo.logging.Logger;
-import gnu.trove.TObjectHashingStrategy;
+import consulo.util.collection.HashingStrategy;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -27,10 +27,10 @@ public final class PsiSubstitutorImpl implements PsiSubstitutor
 {
 	private static final Logger LOG = Logger.getInstance(PsiSubstitutorImpl.class);
 
-	private static final TObjectHashingStrategy<PsiTypeParameter> PSI_EQUIVALENCE = new TObjectHashingStrategy<PsiTypeParameter>()
+	private static final HashingStrategy<PsiTypeParameter> PSI_EQUIVALENCE = new HashingStrategy<>()
 	{
 		@Override
-		public int computeHashCode(PsiTypeParameter parameter)
+		public int hashCode(PsiTypeParameter parameter)
 		{
 			return Comparing.hashcode(parameter.getName());
 		}

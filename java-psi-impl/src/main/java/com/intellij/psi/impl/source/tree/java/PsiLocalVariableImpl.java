@@ -15,35 +15,16 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
-import consulo.logging.Logger;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.CheckUtil;
-import com.intellij.psi.impl.PsiConstantEvaluationHelperImpl;
-import com.intellij.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.PsiVariableEx;
-import com.intellij.psi.impl.ResolveScopeManager;
+import com.intellij.psi.impl.*;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.JavaDummyHolder;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
-import com.intellij.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.Factory;
-import com.intellij.psi.impl.source.tree.JavaSharedImplUtil;
-import com.intellij.psi.impl.source.tree.SharedImplUtil;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
@@ -52,6 +33,12 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.CharTable;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PsiLocalVariableImpl extends CompositePsiElement implements PsiLocalVariable, PsiVariableEx, Constants {
   private static final Logger LOG = Logger.getInstance(PsiLocalVariableImpl.class);
@@ -149,7 +136,7 @@ public class PsiLocalVariableImpl extends CompositePsiElement implements PsiLoca
 
   @Override
   public Object computeConstantValue() {
-    return computeConstantValue(new THashSet<PsiVariable>());
+    return computeConstantValue(new HashSet<PsiVariable>());
   }
 
   @Override

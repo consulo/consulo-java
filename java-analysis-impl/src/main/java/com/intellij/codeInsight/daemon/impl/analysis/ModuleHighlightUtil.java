@@ -15,31 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.quickfix.AddRequiredModuleFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.MergeModuleStatementsFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.MoveFileFix;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixActionRegistrarImpl;
+import com.intellij.codeInsight.daemon.impl.quickfix.*;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -66,6 +45,16 @@ import com.intellij.util.containers.JBIterable;
 import consulo.java.JavaQuickFixBundle;
 import consulo.psi.PsiPackage;
 import consulo.vfs.ArchiveFileSystem;
+import org.jetbrains.annotations.PropertyKey;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 public class ModuleHighlightUtil
 {
@@ -211,7 +200,7 @@ public class ModuleHighlightUtil
 			@PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String key,
 			List<HighlightInfo> results)
 	{
-		Set<String> filter = ContainerUtil.newTroveSet();
+		Set<String> filter = new HashSet<>();
 		for(T statement : statements)
 		{
 			String refText = ref.apply(statement).orElse(null);
@@ -363,7 +352,7 @@ public class ModuleHighlightUtil
 	{
 		List<HighlightInfo> results = ContainerUtil.newSmartList();
 
-		Set<String> targets = ContainerUtil.newTroveSet();
+		Set<String> targets = new HashSet<>();
 		for(PsiJavaModuleReferenceElement refElement : statement.getModuleReferences())
 		{
 			String refText = refElement.getReferenceText();
@@ -421,7 +410,7 @@ public class ModuleHighlightUtil
 		PsiJavaCodeReferenceElement intRef = statement.getInterfaceReference();
 		PsiElement intTarget = intRef != null ? intRef.resolve() : null;
 
-		Set<String> filter = ContainerUtil.newTroveSet();
+		Set<String> filter = new HashSet<>();
 		for(PsiJavaCodeReferenceElement implRef : implRefList.getReferenceElements())
 		{
 			String refText = refText(implRef);

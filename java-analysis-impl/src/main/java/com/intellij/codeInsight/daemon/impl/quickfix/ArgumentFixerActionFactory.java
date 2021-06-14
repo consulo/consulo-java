@@ -15,21 +15,16 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author ven
@@ -79,7 +74,7 @@ public abstract class ArgumentFixerActionFactory {
       for (int i = 0; i < expressions.length; i++) {
         PsiExpression expression = expressions[i];
         PsiType exprType = expression.getType();
-        Set<String> suggestedCasts = new THashSet<String>();
+        Set<String> suggestedCasts = new HashSet<String>();
         // find to which type we can cast this param to get valid method call
         for (CandidateInfo candidate : methodCandidates) {
           PsiMethod method = (PsiMethod)candidate.getElement();

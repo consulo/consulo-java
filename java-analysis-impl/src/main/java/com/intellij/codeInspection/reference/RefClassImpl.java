@@ -24,15 +24,6 @@
  */
 package com.intellij.codeInspection.reference;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.application.ApplicationManager;
@@ -43,6 +34,9 @@ import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import consulo.annotation.access.RequiredReadAction;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class RefClassImpl extends RefJavaElementImpl implements RefClass
 {
@@ -363,7 +357,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 		if(myBases.size() == 1)
 		{
 			// convert from singleton
-			myBases = new THashSet<>(myBases);
+			myBases = new HashSet<>(myBases);
 		}
 		myBases.add(refClass);
 	}
@@ -389,7 +383,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 		if(mySubClasses.size() == 1)
 		{
 			// convert from singleton
-			mySubClasses = new THashSet<>(mySubClasses);
+			mySubClasses = new HashSet<>(mySubClasses);
 		}
 		mySubClasses.add(refClass);
 	}
@@ -438,7 +432,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 		{
 			if(myInTypeReferences == null)
 			{
-				myInTypeReferences = new THashSet<>(1);
+				myInTypeReferences = new HashSet<>(1);
 			}
 			myInTypeReferences.add(from);
 			((RefJavaElementImpl) from).addOutTypeRefernce(this);
@@ -461,7 +455,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 	{
 		if(myInstanceReferences == null)
 		{
-			myInstanceReferences = new THashSet<>(1);
+			myInstanceReferences = new HashSet<>(1);
 		}
 		myInstanceReferences.add(from);
 	}

@@ -51,7 +51,6 @@ import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
@@ -64,10 +63,8 @@ import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -470,7 +467,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
         return;
       }
 
-      Set<PsiModifierListOwner> nonNlsTargets = new THashSet<PsiModifierListOwner>();
+      Set<PsiModifierListOwner> nonNlsTargets = new HashSet<PsiModifierListOwner>();
       if (canBeI18ned(myManager.getProject(), expression, stringValue, nonNlsTargets)) {
         PsiField parentField = PsiTreeUtil.getParentOfType(expression, PsiField.class);
         if (parentField != null) {

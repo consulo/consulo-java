@@ -20,17 +20,6 @@
  */
 package com.intellij.codeInspection.ex;
 
-import consulo.logging.Logger;
-import gnu.trove.THashMap;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.GlobalInspectionContext;
@@ -38,12 +27,7 @@ import com.intellij.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
-import com.intellij.codeInspection.reference.RefClass;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefField;
-import com.intellij.codeInspection.reference.RefJavaManager;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.codeInspection.reference.RefMethod;
+import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.ui.InspectionToolPresentation;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.java.JavaLanguage;
@@ -52,75 +36,63 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LibraryOrderEntry;
-import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.PsiElementProcessorAdapter;
-import com.intellij.psi.search.PsiReferenceProcessor;
-import com.intellij.psi.search.PsiReferenceProcessorAdapter;
-import com.intellij.psi.search.SearchScope;
+import com.intellij.psi.search.*;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext {
   private static final Logger LOG = Logger.getInstance(GlobalJavaInspectionContextImpl.class);
 
-  private THashMap<SmartPsiElementPointer, List<DerivedMethodsProcessor>> myDerivedMethodsRequests;
-  private THashMap<SmartPsiElementPointer, List<DerivedClassesProcessor>> myDerivedClassesRequests;
-  private THashMap<SmartPsiElementPointer, List<UsagesProcessor>> myMethodUsagesRequests;
-  private THashMap<SmartPsiElementPointer, List<UsagesProcessor>> myFieldUsagesRequests;
-  private THashMap<SmartPsiElementPointer, List<UsagesProcessor>> myClassUsagesRequests;
+  private Map<SmartPsiElementPointer, List<DerivedMethodsProcessor>> myDerivedMethodsRequests;
+  private Map<SmartPsiElementPointer, List<DerivedClassesProcessor>> myDerivedClassesRequests;
+  private Map<SmartPsiElementPointer, List<UsagesProcessor>> myMethodUsagesRequests;
+  private Map<SmartPsiElementPointer, List<UsagesProcessor>> myFieldUsagesRequests;
+  private Map<SmartPsiElementPointer, List<UsagesProcessor>> myClassUsagesRequests;
 
 
   @Override
   public void enqueueClassUsagesProcessor(RefClass refClass, UsagesProcessor p) {
-    if (myClassUsagesRequests == null) myClassUsagesRequests = new THashMap<SmartPsiElementPointer, List<UsagesProcessor>>();
+    if (myClassUsagesRequests == null) myClassUsagesRequests = new HashMap<>();
     enqueueRequestImpl(refClass, myClassUsagesRequests, p);
 
   }
   @Override
   public void enqueueDerivedClassesProcessor(RefClass refClass, DerivedClassesProcessor p) {
-    if (myDerivedClassesRequests == null) myDerivedClassesRequests = new THashMap<SmartPsiElementPointer, List<DerivedClassesProcessor>>();
+    if (myDerivedClassesRequests == null) myDerivedClassesRequests = new HashMap<SmartPsiElementPointer, List<DerivedClassesProcessor>>();
     enqueueRequestImpl(refClass, myDerivedClassesRequests, p);
   }
 
   @Override
   public void enqueueDerivedMethodsProcessor(RefMethod refMethod, DerivedMethodsProcessor p) {
     if (refMethod.isConstructor() || refMethod.isStatic()) return;
-    if (myDerivedMethodsRequests == null) myDerivedMethodsRequests = new THashMap<SmartPsiElementPointer, List<DerivedMethodsProcessor>>();
+    if (myDerivedMethodsRequests == null) myDerivedMethodsRequests = new HashMap<SmartPsiElementPointer, List<DerivedMethodsProcessor>>();
     enqueueRequestImpl(refMethod, myDerivedMethodsRequests, p);
   }
 
   @Override
   public void enqueueFieldUsagesProcessor(RefField refField, UsagesProcessor p) {
-    if (myFieldUsagesRequests == null) myFieldUsagesRequests = new THashMap<SmartPsiElementPointer, List<UsagesProcessor>>();
+    if (myFieldUsagesRequests == null) myFieldUsagesRequests = new HashMap<SmartPsiElementPointer, List<UsagesProcessor>>();
     enqueueRequestImpl(refField, myFieldUsagesRequests, p);
   }
 
   @Override
   public void enqueueMethodUsagesProcessor(RefMethod refMethod, UsagesProcessor p) {
-    if (myMethodUsagesRequests == null) myMethodUsagesRequests = new THashMap<SmartPsiElementPointer, List<UsagesProcessor>>();
+    if (myMethodUsagesRequests == null) myMethodUsagesRequests = new HashMap<SmartPsiElementPointer, List<UsagesProcessor>>();
     enqueueRequestImpl(refMethod, myMethodUsagesRequests, p);
   }
 
@@ -379,7 +351,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
     return sum;
   }
 
-  private static int getRequestListSize(THashMap list) {
+  private static int getRequestListSize(Map<?, ?> list) {
     if (list == null) return 0;
     return list.size();
   }

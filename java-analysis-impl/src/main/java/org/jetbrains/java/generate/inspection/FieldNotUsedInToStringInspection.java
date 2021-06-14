@@ -15,19 +15,18 @@
  */
 package org.jetbrains.java.generate.inspection;
 
-import gnu.trove.THashSet;
-
-import java.util.Collections;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.java.generate.GenerateToStringContext;
-import org.jetbrains.java.generate.GenerateToStringUtils;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PropertyUtil;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.java.generate.GenerateToStringContext;
+import org.jetbrains.java.generate.GenerateToStringUtils;
+
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Inspection to check if the current class toString() method is out of
@@ -117,8 +116,8 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
 
   private static class FieldUsedVisitor extends JavaRecursiveElementVisitor {
 
-    private final THashSet<PsiField> myUnusedFields = new THashSet<PsiField>();
-    private final THashSet<PsiMethod> myUnusedMethods = new THashSet<PsiMethod>();
+    private final Set<PsiField> myUnusedFields = new HashSet<PsiField>();
+    private final Set<PsiMethod> myUnusedMethods = new HashSet<PsiMethod>();
 
     public FieldUsedVisitor(PsiField[] fields, PsiMethod[] methods) {
       Collections.addAll(myUnusedFields, fields);
@@ -167,11 +166,11 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
       return false;
     }
 
-    public THashSet<PsiField> getUnusedFields() {
+    public Set<PsiField> getUnusedFields() {
       return myUnusedFields;
     }
 
-    public THashSet<PsiMethod> getUnusedMethods() {
+    public Set<PsiMethod> getUnusedMethods() {
       return myUnusedMethods;
     }
   }

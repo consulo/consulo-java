@@ -42,12 +42,11 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.disposer.Disposable;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.psi.PsiPackageManager;
-import gnu.trove.THashSet;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import javax.annotation.Nonnull;
 import org.jetbrains.annotations.TestOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -246,7 +245,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@Nonnull
 	public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope)
 	{
-		Set<String> result = new THashSet<>();
+		Set<String> result = new HashSet<>();
 		for(PsiElementFinder finder : filteredFinders())
 		{
 			result.addAll(finder.getClassNames(psiPackage, scope));

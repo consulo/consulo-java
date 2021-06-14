@@ -15,13 +15,6 @@
  */
 package com.siyeh.ig.psiutils;
 
-import gnu.trove.THashSet;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -32,6 +25,11 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ExpectedTypeUtils
 {
@@ -70,13 +68,13 @@ public class ExpectedTypeUtils
 		/**
 		 * @noinspection StaticCollection
 		 */
-		private static final Set<IElementType> arithmeticOps = new THashSet<>(5);
+		private static final Set<IElementType> arithmeticOps = new HashSet<>(5);
 
-		private static final Set<IElementType> booleanOps = new THashSet<>(5);
+		private static final Set<IElementType> booleanOps = new HashSet<>(5);
 
-		private static final Set<IElementType> shiftOps = new THashSet<>(3);
+		private static final Set<IElementType> shiftOps = new HashSet<>(3);
 
-		private static final Set<IElementType> operatorAssignmentOps = new THashSet<>(11);
+		private static final Set<IElementType> operatorAssignmentOps = new HashSet<>(11);
 
 		static
 		{

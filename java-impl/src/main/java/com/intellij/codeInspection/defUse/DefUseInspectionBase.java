@@ -19,18 +19,15 @@ import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.DefUseUtil;
-import gnu.trove.THashSet;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool {
   public boolean REPORT_PREFIX_EXPRESSIONS = false;
@@ -58,7 +55,7 @@ public class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool {
                               final ProblemsHolder holder,
                               final boolean isOnTheFly) {
     if (body == null) return;
-    final Set<PsiVariable> usedVariables = new THashSet<PsiVariable>();
+    final Set<PsiVariable> usedVariables = new HashSet<PsiVariable>();
     List<DefUseUtil.Info> unusedDefs = DefUseUtil.getUnusedDefs(body, usedVariables);
 
     if (unusedDefs != null && !unusedDefs.isEmpty()) {

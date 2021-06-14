@@ -15,54 +15,36 @@
  */
 package com.intellij.codeInsight;
 
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.AnnotatedElementsSearch;
 import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.psi.util.*;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.util.JavaClassNames;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Sets;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Stream;
 
 /**
  * @since 2016.3
  */
 public class MetaAnnotationUtil
 {
-	private static final TObjectHashingStrategy<PsiClass> HASHING_STRATEGY = new TObjectHashingStrategy<PsiClass>()
+	private static final HashingStrategy<PsiClass> HASHING_STRATEGY = new HashingStrategy<PsiClass>()
 	{
-		public int computeHashCode(final PsiClass object)
+		public int hashCode(final PsiClass object)
 		{
 			final String qualifiedName = object.getQualifiedName();
 			return qualifiedName == null ? 0 : qualifiedName.hashCode();
@@ -113,7 +95,7 @@ public class MetaAnnotationUtil
 			return Collections.emptySet();
 		}
 
-		final Set<PsiClass> result = new THashSet<>(HASHING_STRATEGY);
+		final Set<PsiClass> result = Sets.newHashSet(HASHING_STRATEGY);
 
 		AnnotatedElementsSearch.searchPsiClasses(psiClass, scope).forEach(processorResult ->
 		{
@@ -150,7 +132,7 @@ public class MetaAnnotationUtil
 	@Nonnull
 	private static Collection<PsiClass> getAnnotationTypesWithChildren(PsiClass annotationClass, GlobalSearchScope scope)
 	{
-		final Set<PsiClass> classes = new THashSet<>(HASHING_STRATEGY);
+		final Set<PsiClass> classes = Sets.newHashSet(HASHING_STRATEGY);
 
 		collectClassWithChildren(annotationClass, classes, scope);
 

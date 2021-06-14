@@ -15,32 +15,14 @@
  */
 package com.intellij.find.findUsages;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import consulo.psi.PsiPackage;
 import com.intellij.CommonBundle;
 import com.intellij.find.FindBundle;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiVariable;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.impl.search.ThrowSearchUtil;
@@ -55,6 +37,11 @@ import com.intellij.refactoring.util.NonCodeSearchDescriptionLocation;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
+import consulo.psi.PsiPackage;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author peter
@@ -199,7 +186,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler
 				String fieldName = field.getName();
 				final String propertyName = JavaCodeStyleManager.getInstance(getProject()).variableNameToPropertyName
 						(fieldName, VariableKind.FIELD);
-				Set<PsiMethod> accessors = new THashSet<PsiMethod>();
+				Set<PsiMethod> accessors = new HashSet<PsiMethod>();
 				boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
 				PsiMethod getter = PropertyUtil.findPropertyGetterWithType(propertyName, isStatic, field.getType(),
 						ContainerUtil.iterate(containingClass.getMethods()));
@@ -230,7 +217,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler
 							Messages.getQuestionIcon()) == Messages.OK;
 					if(doSearch)
 					{
-						final Set<PsiElement> elements = new THashSet<PsiElement>();
+						final Set<PsiElement> elements = new HashSet<PsiElement>();
 						for(PsiMethod accessor : accessors)
 						{
 							ContainerUtil.addAll(elements, SuperMethodWarningUtil.checkSuperMethods(accessor,

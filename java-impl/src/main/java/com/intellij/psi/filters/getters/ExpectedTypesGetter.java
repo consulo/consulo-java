@@ -15,16 +15,15 @@
  */
 package com.intellij.psi.filters.getters;
 
-import gnu.trove.THashSet;
-
-import java.util.Set;
-
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -49,7 +48,7 @@ public class ExpectedTypesGetter
 
 	public static PsiType[] extractTypes(ExpectedTypeInfo[] infos, boolean defaultTypes)
 	{
-		Set<PsiType> result = new THashSet<>(infos.length);
+		Set<PsiType> result = new HashSet<>(infos.length);
 		for(ExpectedTypeInfo info : infos)
 		{
 			final PsiType type = info.getType();

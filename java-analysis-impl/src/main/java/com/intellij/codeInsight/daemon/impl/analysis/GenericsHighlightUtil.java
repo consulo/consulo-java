@@ -43,8 +43,8 @@ import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
 import consulo.logging.Logger;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
+import consulo.util.collection.Maps;
+import consulo.util.collection.Sets;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -453,9 +453,9 @@ public class GenericsHighlightUtil
 		List<HighlightInfo> result = new ArrayList<>();
 		final Collection<HierarchicalMethodSignature> signaturesWithSupers = aClass.getVisibleSignatures();
 		PsiManager manager = aClass.getManager();
-		Map<MethodSignature, MethodSignatureBackedByPsiMethod> sameErasureMethods = new THashMap<>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
+		Map<MethodSignature, MethodSignatureBackedByPsiMethod> sameErasureMethods = Maps.newHashMap(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 
-		final Set<MethodSignature> foundProblems = new THashSet<>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
+		final Set<MethodSignature> foundProblems = Sets.newHashSet(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 		for(HierarchicalMethodSignature signature : signaturesWithSupers)
 		{
 			HighlightInfo info = checkSameErasureNotSubSignatureInner(signature, manager, aClass, sameErasureMethods);
@@ -626,7 +626,7 @@ public class GenericsHighlightUtil
 		if(superClass != null && superClass.hasTypeParameters())
 		{
 			final Collection<HierarchicalMethodSignature> visibleSignatures = superClass.getVisibleSignatures();
-			final Map<MethodSignature, PsiMethod> overrideEquivalent = new THashMap<>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
+			final Map<MethodSignature, PsiMethod> overrideEquivalent = Maps.newHashMap(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 			for(HierarchicalMethodSignature hms : visibleSignatures)
 			{
 				final PsiMethod method = hms.getMethod();

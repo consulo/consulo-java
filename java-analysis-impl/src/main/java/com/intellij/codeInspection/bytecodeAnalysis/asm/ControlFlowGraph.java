@@ -17,7 +17,7 @@ package com.intellij.codeInspection.bytecodeAnalysis.asm;
 
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
-import gnu.trove.TIntIntHashMap;
+import consulo.util.collection.primitive.ints.IntIntMap;
 
 import java.util.Set;
 
@@ -64,7 +64,7 @@ public final class ControlFlowGraph
 	/**
 	 * Where execution goes if NPE occurs at given instruction
 	 */
-	public final TIntIntHashMap npeTransitions;
+	public final IntIntMap npeTransitions;
 
 	ControlFlowGraph(String className,
 					 MethodNode methodNode,
@@ -72,7 +72,7 @@ public final class ControlFlowGraph
 					 int edgeCount,
 					 boolean[] errors,
 					 Set<Edge> errorTransitions,
-					 TIntIntHashMap npeTransitions)
+					 IntIntMap npeTransitions)
 	{
 		this.className = className;
 		this.methodNode = methodNode;

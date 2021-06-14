@@ -15,13 +15,14 @@
  */
 package com.intellij.psi.impl.cache;
 
-import gnu.trove.TIntObjectHashMap;
-import gnu.trove.TObjectIntHashMap;
-
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.BitUtil;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
 
 /**
  * Constants used in Java stubs; may differ from ones used in a .class file format.
@@ -46,52 +47,52 @@ public final class ModifierFlags
 	public static final int OPEN_MASK = 0x2000;
 	public static final int TRANSITIVE_MASK = 0x4000;
 
-	public static final TObjectIntHashMap<String> NAME_TO_MODIFIER_FLAG_MAP = new TObjectIntHashMap<>();
-	public static final TIntObjectHashMap<String> MODIFIER_FLAG_TO_NAME_MAP = new TIntObjectHashMap<>();
-	public static final TObjectIntHashMap<IElementType> KEYWORD_TO_MODIFIER_FLAG_MAP = new TObjectIntHashMap<>();
+	public static final ObjectIntMap<String> NAME_TO_MODIFIER_FLAG_MAP = ObjectMaps.newObjectIntHashMap();
+	public static final IntObjectMap<String> MODIFIER_FLAG_TO_NAME_MAP = IntMaps.newIntObjectHashMap();
+	public static final ObjectIntMap<IElementType> KEYWORD_TO_MODIFIER_FLAG_MAP = ObjectMaps.newObjectIntHashMap();
 
 	static
 	{
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.PUBLIC, PUBLIC_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.PRIVATE, PRIVATE_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.PROTECTED, PROTECTED_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.STATIC, STATIC_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.FINAL, FINAL_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.SYNCHRONIZED, SYNCHRONIZED_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.VOLATILE, VOLATILE_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.TRANSIENT, TRANSIENT_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.NATIVE, NATIVE_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.DEFAULT, DEFAULT_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.ABSTRACT, ABSTRACT_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.STRICTFP, STRICTFP_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.PACKAGE_LOCAL, PACKAGE_LOCAL_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.OPEN, OPEN_MASK);
-		NAME_TO_MODIFIER_FLAG_MAP.put(PsiModifier.TRANSITIVE, TRANSITIVE_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.PUBLIC, PUBLIC_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.PRIVATE, PRIVATE_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.PROTECTED, PROTECTED_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.STATIC, STATIC_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.FINAL, FINAL_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.SYNCHRONIZED, SYNCHRONIZED_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.VOLATILE, VOLATILE_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.TRANSIENT, TRANSIENT_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.NATIVE, NATIVE_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.DEFAULT, DEFAULT_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.ABSTRACT, ABSTRACT_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.STRICTFP, STRICTFP_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.PACKAGE_LOCAL, PACKAGE_LOCAL_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.OPEN, OPEN_MASK);
+		NAME_TO_MODIFIER_FLAG_MAP.putInt(PsiModifier.TRANSITIVE, TRANSITIVE_MASK);
 
-		for(Object name : NAME_TO_MODIFIER_FLAG_MAP.keys())
+		for(Object name : NAME_TO_MODIFIER_FLAG_MAP.keySet())
 		{
-			MODIFIER_FLAG_TO_NAME_MAP.put(NAME_TO_MODIFIER_FLAG_MAP.get((String) name), (String) name);
+			MODIFIER_FLAG_TO_NAME_MAP.put(NAME_TO_MODIFIER_FLAG_MAP.getInt((String) name), (String) name);
 		}
 
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.PUBLIC_KEYWORD, PUBLIC_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.PRIVATE_KEYWORD, PRIVATE_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.PROTECTED_KEYWORD, PROTECTED_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.STATIC_KEYWORD, STATIC_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.FINAL_KEYWORD, FINAL_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.SYNCHRONIZED_KEYWORD, SYNCHRONIZED_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.VOLATILE_KEYWORD, VOLATILE_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.TRANSIENT_KEYWORD, TRANSIENT_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.NATIVE_KEYWORD, NATIVE_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.DEFAULT_KEYWORD, DEFAULT_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.ABSTRACT_KEYWORD, ABSTRACT_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.STRICTFP_KEYWORD, STRICTFP_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.OPEN_KEYWORD, OPEN_MASK);
-		KEYWORD_TO_MODIFIER_FLAG_MAP.put(JavaTokenType.TRANSITIVE_KEYWORD, TRANSITIVE_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.PUBLIC_KEYWORD, PUBLIC_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.PRIVATE_KEYWORD, PRIVATE_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.PROTECTED_KEYWORD, PROTECTED_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.STATIC_KEYWORD, STATIC_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.FINAL_KEYWORD, FINAL_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.SYNCHRONIZED_KEYWORD, SYNCHRONIZED_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.VOLATILE_KEYWORD, VOLATILE_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.TRANSIENT_KEYWORD, TRANSIENT_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.NATIVE_KEYWORD, NATIVE_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.DEFAULT_KEYWORD, DEFAULT_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.ABSTRACT_KEYWORD, ABSTRACT_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.STRICTFP_KEYWORD, STRICTFP_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.OPEN_KEYWORD, OPEN_MASK);
+		KEYWORD_TO_MODIFIER_FLAG_MAP.putInt(JavaTokenType.TRANSITIVE_KEYWORD, TRANSITIVE_MASK);
 	}
 
 	public static boolean hasModifierProperty(String name, int mask)
 	{
-		int flag = NAME_TO_MODIFIER_FLAG_MAP.get(name);
+		int flag = NAME_TO_MODIFIER_FLAG_MAP.getInt(name);
 		assert flag != 0 : name;
 		return BitUtil.isSet(mask, flag);
 	}

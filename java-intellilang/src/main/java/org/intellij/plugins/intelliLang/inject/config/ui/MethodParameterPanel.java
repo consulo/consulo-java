@@ -39,8 +39,6 @@ import com.intellij.util.containers.Convertor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.tree.TreeUtil;
 import consulo.util.dataholder.Key;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 
@@ -69,7 +67,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
   private final ReferenceEditorWithBrowseButton myClassField;
   private DefaultMutableTreeNode myRootNode;
 
-  private final THashMap<PsiMethod, MethodParameterInjection.MethodInfo> myData = new THashMap<PsiMethod, MethodParameterInjection.MethodInfo>();
+  private final Map<PsiMethod, MethodParameterInjection.MethodInfo> myData = new HashMap<PsiMethod, MethodParameterInjection.MethodInfo>();
 
   public MethodParameterPanel(MethodParameterInjection injection, final Project project) {
     super(injection, project);
@@ -186,7 +184,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
         final PsiClass[] classes = classType instanceof PsiClassType? JavaPsiFacade.getInstance(getProject()).
           findClasses(classType.getCanonicalText(), GlobalSearchScope.allScope(getProject())) : PsiClass.EMPTY_ARRAY;
         if (classes.length == 0) return;
-        final THashSet<String> visitedSignatures = new THashSet<String>();
+        final Set<String> visitedSignatures = new HashSet<String>();
         for (PsiClass psiClass : classes) {
           for (PsiMethod method : psiClass.getMethods()) {
             final PsiModifierList modifiers = method.getModifierList();
@@ -260,7 +258,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     setPsiClass(getOrigInjection().getClassName());
 
     rebuildTreeModel();
-    final THashMap<String, MethodParameterInjection.MethodInfo> map = new THashMap<String, MethodParameterInjection.MethodInfo>();
+    final Map<String, MethodParameterInjection.MethodInfo> map = new HashMap<String, MethodParameterInjection.MethodInfo>();
     for (PsiMethod method : myData.keySet()) {
       final MethodParameterInjection.MethodInfo methodInfo = myData.get(method);
       map.put(methodInfo.getMethodSignature(), methodInfo);

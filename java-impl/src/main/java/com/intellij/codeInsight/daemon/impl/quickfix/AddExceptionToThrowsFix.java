@@ -15,16 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
@@ -39,6 +29,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.JavaQuickFixBundle;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author mike
@@ -75,7 +69,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 			return;
 		}
 
-		Set<PsiClassType> unhandledExceptions = new THashSet<>(exceptions);
+		Set<PsiClassType> unhandledExceptions = new HashSet<>(exceptions);
 
 		addExceptionsToThrowsList(project, targetMethod, unhandledExceptions);
 	}

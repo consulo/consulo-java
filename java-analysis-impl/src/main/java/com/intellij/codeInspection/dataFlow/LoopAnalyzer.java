@@ -8,12 +8,13 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.graph.DFSTBuilder;
 import com.intellij.util.graph.Graph;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntObjectHashMap;
-import gnu.trove.TIntProcedure;
-import javax.annotation.Nonnull;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
 
+import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.IntConsumer;
 
 class LoopAnalyzer
 {
@@ -22,7 +23,7 @@ class LoopAnalyzer
 		@Nonnull
 		private final ControlFlow myFlow;
 		private final Instruction[] myInstructions;
-		private final TIntObjectHashMap<int[]> myIns = new TIntObjectHashMap<>();
+		private final IntObjectMap<int[]> myIns = IntMaps.newIntObjectHashMap();
 
 		private MyGraph(@Nonnull ControlFlow flow)
 		{
@@ -76,7 +77,9 @@ class LoopAnalyzer
 		private Iterator<Instruction> indicesToInstructions(int[] next)
 		{
 			if(next == null)
+			{
 				return Collections.emptyIterator();
+			}
 			List<Instruction> out = new ArrayList<>(next.length);
 			for(int i : next)
 			{
@@ -93,14 +96,14 @@ class LoopAnalyzer
 
 		MyGraph graph = new MyGraph(controlFlow);
 		final DFSTBuilder<Instruction> builder = new DFSTBuilder<>(graph);
-		TIntArrayList sccs = builder.getSCCs();
-		sccs.forEach(new TIntProcedure()
+		IntList sccs = builder.getSCCs();
+		sccs.forEach(new IntConsumer()
 		{
 			private int myTNumber;
 			private int component;
 
 			@Override
-			public boolean execute(int size)
+			public void accept(int size)
 			{
 				int value = size > 1 ? ++component : 0;
 				for(int i = 0; i < size; i++)
@@ -109,7 +112,6 @@ class LoopAnalyzer
 					loop[instruction.getIndex()] = value;
 				}
 				myTNumber += size;
-				return true;
 			}
 		});
 

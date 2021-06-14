@@ -30,11 +30,11 @@ import com.intellij.util.Consumer;
 import com.intellij.util.ui.UIUtil;
 import consulo.awt.TargetAWT;
 import consulo.ui.color.ColorValue;
-import gnu.trove.THashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -73,7 +73,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory
 		@Override
 		public void applyHeavyFilter(@Nonnull final Document copiedFragment, final int startOffset, int startLineNumber, @Nonnull final Consumer<? super AdditionalHighlight> consumer)
 		{
-			Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new THashMap<String, Trinity<TextRange, TextRange, TextRange>>();
+			Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new HashMap<String, Trinity<TextRange, TextRange, TextRange>>();
 			final Trinity<TextRange, TextRange, TextRange> emptyInfo = Trinity.create(null, null, null);
 
 			final ExceptionWorker worker = new ExceptionWorker(myCache);

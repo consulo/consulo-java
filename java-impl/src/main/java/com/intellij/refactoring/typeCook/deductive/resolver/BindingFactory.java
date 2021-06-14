@@ -15,15 +15,6 @@
  */
 package com.intellij.refactoring.typeCook.deductive.resolver;
 
-import gnu.trove.TIntObjectHashMap;
-import gnu.trove.TObjectProcedure;
-
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Set;
-
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
@@ -39,6 +30,15 @@ import com.intellij.refactoring.typeCook.deductive.builder.ReductionSystem;
 import com.intellij.refactoring.typeCook.deductive.builder.Subtype;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjConsumer;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * @author db
@@ -80,18 +80,18 @@ public class BindingFactory {
   }
 
   private class BindingImpl extends Binding {
-    private final TIntObjectHashMap<PsiType> myBindings;
+    private final IntObjectMap<PsiType> myBindings;
     private boolean myCyclic;
 
     BindingImpl(final PsiTypeVariable var, final PsiType type) {
-      myBindings = new TIntObjectHashMap<PsiType>();
+      myBindings = IntMaps.newIntObjectHashMap();
       myCyclic = type instanceof PsiTypeVariable;
 
       myBindings.put(var.getIndex(), type);
     }
 
     BindingImpl(final int index, final PsiType type) {
-      myBindings = new TIntObjectHashMap<PsiType>();
+      myBindings = IntMaps.newIntObjectHashMap();
       myCyclic = type instanceof PsiTypeVariable;
 
       myBindings.put(index, type);
@@ -108,7 +108,7 @@ public class BindingFactory {
     }
 
     BindingImpl() {
-      myBindings = new TIntObjectHashMap<PsiType>();
+      myBindings = IntMaps.newIntObjectHashMap();
       myCyclic = false;
     }
 
@@ -567,11 +567,10 @@ public class BindingFactory {
     }
 
     public int getWidth() {
-      class MyProcecure implements TObjectProcedure<PsiType> {
+      class MyProcecure implements IntObjConsumer<PsiType> {
         int width = 0;
-        public boolean execute(PsiType type) {
+        public void accept(int key, PsiType type) {
           if (substitute(type)  != null) width++;
-          return true;
         }
 
         public int getWidth() {
@@ -580,7 +579,7 @@ public class BindingFactory {
       }
 
       MyProcecure procedure = new MyProcecure();
-      myBindings.forEachValue(procedure);
+      myBindings.forEach(procedure);
       return procedure.getWidth();
     }
 

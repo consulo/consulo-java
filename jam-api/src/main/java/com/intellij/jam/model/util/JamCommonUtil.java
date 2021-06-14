@@ -16,31 +16,9 @@
 
 package com.intellij.jam.model.util;
 
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.DeleteProvider;
 import com.intellij.ide.util.treeView.AbstractTreeBuilder;
-import com.intellij.jam.JamChief;
-import com.intellij.jam.JamConverter;
-import com.intellij.jam.JamElement;
-import com.intellij.jam.JamPomTarget;
-import com.intellij.jam.JamService;
-import com.intellij.jam.JamStringAttributeElement;
+import com.intellij.jam.*;
 import com.intellij.jam.model.common.CommonDomModelElement;
 import com.intellij.jam.model.common.CommonModelElement;
 import com.intellij.jam.model.common.CommonModelTarget;
@@ -65,7 +43,6 @@ import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Factory;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.PomTarget;
@@ -74,12 +51,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.AnnotatedElementsSearch;
 import com.intellij.psi.search.searches.AnnotatedMembersSearch;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiUtilBase;
-import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.psi.util.*;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlFile;
@@ -88,15 +60,19 @@ import com.intellij.util.Processor;
 import com.intellij.util.ReflectionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomFileElement;
-import com.intellij.util.xml.DomManager;
-import com.intellij.util.xml.DomTarget;
-import com.intellij.util.xml.ElementPresentationManager;
-import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.ModelMergerUtil;
+import com.intellij.util.xml.*;
 import consulo.java.jam.util.JamCommonService;
 import consulo.java.module.util.JavaClassNames;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Sets;
+import consulo.util.dataholder.Key;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+import java.util.*;
 
 /**
  * @author Gregory.Shrago
@@ -106,9 +82,9 @@ public class JamCommonUtil
 	@NonNls
 	public static final String VALUE_PARAMETER = "value";
 
-	private static final TObjectHashingStrategy<PsiClass> HASHING_STRATEGY = new TObjectHashingStrategy<PsiClass>()
+	private static final HashingStrategy<PsiClass> HASHING_STRATEGY = new HashingStrategy<PsiClass>()
 	{
-		public int computeHashCode(final PsiClass object)
+		public int hashCode(final PsiClass object)
 		{
 			final String qualifiedName = object.getQualifiedName();
 			return qualifiedName == null ? 0 : qualifiedName.hashCode();
@@ -364,7 +340,7 @@ public class JamCommonUtil
 			{
 				public Result<Module[]> compute()
 				{
-					final Set<Module> result = addModuleDependencies(module, new THashSet<Module>(), false);
+					final Set<Module> result = addModuleDependencies(module, new HashSet<Module>(), false);
 					return new Result<Module[]>(result.toArray(new Module[result.size()]), ProjectRootManager.getInstance(module.getProject()));
 				}
 			}, false));
@@ -383,7 +359,7 @@ public class JamCommonUtil
 				public Result<Module[]> compute()
 				{
 					final Module[] modules = ModuleManager.getInstance(module.getProject()).getModules();
-					final Set<Module> result = addModuleDependents(module, new THashSet<Module>(), modules);
+					final Set<Module> result = addModuleDependents(module, new HashSet<Module>(), modules);
 					return new Result<Module[]>(result.toArray(new Module[result.size()]), ProjectRootManager.getInstance(module.getProject()));
 				}
 			}, false));
@@ -450,7 +426,7 @@ public class JamCommonUtil
 			return Collections.emptyList();
 		}
 
-		final Set<PsiClass> classes = new THashSet<PsiClass>(HASHING_STRATEGY);
+		final Set<PsiClass> classes = Sets.newHashSet(HASHING_STRATEGY);
 
 		collectClassWithChildren(psiClass, classes, scope);
 
@@ -537,7 +513,7 @@ public class JamCommonUtil
 			return Collections.emptySet();
 		}
 
-		final Set<PsiClass> result = new THashSet<PsiClass>(HASHING_STRATEGY);
+		final Set<PsiClass> result = Sets.newHashSet(HASHING_STRATEGY);
 
 		AnnotatedMembersSearch.search(psiClass, scope).forEach(new Processor<PsiMember>()
 		{

@@ -20,20 +20,6 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import gnu.trove.THashMap;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.swing.SwingUtilities;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.engine.BreakpointStepMethodFilter;
@@ -45,7 +31,6 @@ import com.intellij.debugger.impl.DebuggerManagerImpl;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.ui.JavaDebuggerSupport;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
@@ -57,7 +42,6 @@ import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.InvalidDataException;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiField;
@@ -66,12 +50,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XBreakpointAdapter;
-import com.intellij.xdebugger.breakpoints.XBreakpointManager;
-import com.intellij.xdebugger.breakpoints.XBreakpointType;
-import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xdebugger.breakpoints.XLineBreakpointType;
+import com.intellij.xdebugger.breakpoints.*;
 import com.intellij.xdebugger.impl.DebuggerSupport;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase;
@@ -80,12 +59,20 @@ import com.intellij.xdebugger.impl.breakpoints.XDependentBreakpointManager;
 import com.intellij.xdebugger.impl.breakpoints.XLineBreakpointImpl;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ThreadReference;
-import consulo.internal.com.sun.jdi.request.BreakpointRequest;
-import consulo.internal.com.sun.jdi.request.EventRequest;
-import consulo.internal.com.sun.jdi.request.EventRequestManager;
-import consulo.internal.com.sun.jdi.request.InvalidRequestStateException;
-import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
-import consulo.internal.com.sun.jdi.request.MethodExitRequest;
+import consulo.internal.com.sun.jdi.request.*;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BreakpointManager
 {
@@ -412,7 +399,7 @@ public class BreakpointManager
 			@SuppressWarnings({"HardCodedStringLiteral"})
 			public void run()
 			{
-				final Map<String, Breakpoint> nameToBreakpointMap = new THashMap<String, Breakpoint>();
+				final Map<String, Breakpoint> nameToBreakpointMap = new HashMap<String, Breakpoint>();
 				try
 				{
 					final List groups = parentNode.getChildren();

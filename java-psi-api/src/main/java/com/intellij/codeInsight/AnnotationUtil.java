@@ -15,8 +15,6 @@ import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.DeprecationInfo;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Contract;
 
@@ -385,7 +383,7 @@ public class AnnotationUtil
 				PsiMethod method = (PsiMethod) listOwner;
 				if(processed == null)
 				{
-					processed = new THashSet<>();
+					processed = new HashSet<>();
 				}
 				if(!processed.add(method))
 				{
@@ -404,7 +402,7 @@ public class AnnotationUtil
 				PsiClass clazz = (PsiClass) listOwner;
 				if(processed == null)
 				{
-					processed = new THashSet<>();
+					processed = new HashSet<>();
 				}
 				if(!processed.add(clazz))
 				{
@@ -548,7 +546,7 @@ public class AnnotationUtil
 				{
 					if(visited == null)
 					{
-						visited = new THashSet<>();
+						visited = new HashSet<>();
 					}
 					if(visited.add(superClass))
 					{
@@ -571,7 +569,7 @@ public class AnnotationUtil
 						final PsiMethod superMethod = superSignature.getMethod();
 						if(visited == null)
 						{
-							visited = new THashSet<>();
+							visited = new HashSet<>();
 						}
 						if(!visited.add(superMethod))
 						{
@@ -606,7 +604,7 @@ public class AnnotationUtil
 							final PsiMethod superMethod = superSignature.getMethod();
 							if(visited == null)
 							{
-								visited = new THashSet<>();
+								visited = new HashSet<>();
 							}
 							if(!visited.add(superMethod))
 							{
@@ -737,8 +735,8 @@ public class AnnotationUtil
 		{
 			return false;
 		}
-		final Map<String, PsiAnnotationMemberValue> valueMap1 = new THashMap<>(2);
-		final Map<String, PsiAnnotationMemberValue> valueMap2 = new THashMap<>(2);
+		final Map<String, PsiAnnotationMemberValue> valueMap1 = new HashMap<>(2);
+		final Map<String, PsiAnnotationMemberValue> valueMap2 = new HashMap<>(2);
 		if(!fillValueMap(a.getParameterList(), valueMap1) || !fillValueMap(b.getParameterList(), valueMap2) || valueMap1.size() != valueMap2.size())
 		{
 			return false;
@@ -847,7 +845,7 @@ public class AnnotationUtil
 	/**
 	 * @deprecated use {@link NullableNotNullManager} (to be removed in IDEA 2018)
 	 */
-	public static final Set<String> ALL_ANNOTATIONS = ContainerUtil.newTroveSet(NULLABLE, NOT_NULL);
+	public static final Set<String> ALL_ANNOTATIONS = Set.of(NULLABLE, NOT_NULL);
 
 	private static final String[] SIMPLE_NAMES = {
 			"NotNull",

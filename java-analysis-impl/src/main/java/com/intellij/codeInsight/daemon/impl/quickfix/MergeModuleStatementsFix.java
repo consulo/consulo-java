@@ -15,27 +15,20 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import gnu.trove.THashSet;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiPackageAccessibilityStatement;
-import com.intellij.psi.PsiProvidesStatement;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Pavel.Dolgov
@@ -99,12 +92,12 @@ public abstract class MergeModuleStatementsFix<T extends PsiElement> extends Loc
 	@Nonnull
 	protected static String joinUniqueNames(@Nonnull List<String> names)
 	{
-		final Set<String> unique = new THashSet<>();
+		final Set<String> unique = new HashSet<>();
 		return names.stream().filter(name -> unique.add(name)).collect(Collectors.joining(","));
 	}
 
-	@javax.annotation.Nullable
-	public static MergeModuleStatementsFix createFix(@javax.annotation.Nullable PsiElement statement)
+	@Nullable
+	public static MergeModuleStatementsFix createFix(@Nullable PsiElement statement)
 	{
 		if(statement instanceof PsiPackageAccessibilityStatement)
 		{

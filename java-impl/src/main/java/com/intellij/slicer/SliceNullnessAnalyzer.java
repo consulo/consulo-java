@@ -34,7 +34,7 @@ import com.intellij.util.PairProcessor;
 import com.intellij.util.WalkingState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FactoryMap;
-import gnu.trove.THashSet;
+import consulo.util.collection.Sets;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -81,7 +81,7 @@ public class SliceNullnessAnalyzer
 		SliceLeafValueClassNode valueRoot = new SliceLeafValueClassNode(root.getProject(), root, nodeName);
 		root.myCachedChildren.add(valueRoot);
 
-		Set<PsiElement> uniqueValues = new THashSet<PsiElement>(groupedByValue, SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY);
+		Set<PsiElement> uniqueValues = Sets.newHashSet(groupedByValue, SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY);
 		for(final PsiElement expression : uniqueValues)
 		{
 			SliceNode newRoot = SliceLeafAnalyzer.filterTree(oldRootStart, new NullableFunction<SliceNode, SliceNode>()
@@ -337,9 +337,9 @@ public class SliceNullnessAnalyzer
 		public static int NOT_NULLS = 1;
 		public static int UNKNOWNS = 2;
 		public final Collection<PsiElement>[] groupedByValue = new Collection[]{
-				new THashSet<PsiElement>(),
-				new THashSet<PsiElement>(),
-				new THashSet<PsiElement>()
+				new HashSet<PsiElement>(),
+				new HashSet<PsiElement>(),
+				new HashSet<PsiElement>()
 		};
 
 		public void clear()

@@ -15,33 +15,25 @@
  */
 package com.intellij.execution.testDiscovery;
 
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntHashSet;
-import gnu.trove.TIntObjectHashMap;
+import com.intellij.openapi.vfs.newvfs.persistent.FlushingDaemon;
+import com.intellij.util.io.DataOutputStream;
+import com.intellij.util.io.*;
+import consulo.util.collection.primitive.ints.*;
 
-import java.io.Closeable;
-import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.DataOutput;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.openapi.vfs.newvfs.persistent.FlushingDaemon;
-import com.intellij.util.io.*;
-
 final class TestInfoHolder
 {
-	final PersistentHashMap<Long, TIntArrayList> myMethodQNameToTestNames;
-	final PersistentHashMap<Integer, TIntObjectHashMap<TIntArrayList>> myTestNameToUsedClassesAndMethodMap;
-	final PersistentHashMap<Long, TIntArrayList> myTestNameToNearestModule;
+	final PersistentHashMap<Long, IntList> myMethodQNameToTestNames;
+	final PersistentHashMap<Integer, IntObjectMap<IntList>> myTestNameToUsedClassesAndMethodMap;
+	final PersistentHashMap<Long, IntList> myTestNameToNearestModule;
 	final PersistentStringEnumerator myClassEnumerator;
 	final CachingEnumerator<String> myClassEnumeratorCache;
 	final PersistentStringEnumerator myMethodEnumerator;
@@ -89,9 +81,9 @@ final class TestInfoHolder
 				writeVersion(versionFile);
 			}
 
-			PersistentHashMap<Long, TIntArrayList> methodQNameToTestNames;
-			PersistentHashMap<Integer, TIntObjectHashMap<TIntArrayList>> testNameToUsedClassesAndMethodMap;
-			PersistentHashMap<Long, TIntArrayList> testNameToNearestModule;
+			PersistentHashMap<Long, IntList> methodQNameToTestNames;
+			PersistentHashMap<Integer, IntObjectMap<IntList>> testNameToUsedClassesAndMethodMap;
+			PersistentHashMap<Long, IntList> testNameToNearestModule;
 			PersistentStringEnumerator classNameEnumerator;
 			PersistentStringEnumerator methodNameEnumerator;
 			PersistentStringEnumerator testNameEnumerator;
@@ -105,7 +97,7 @@ final class TestInfoHolder
 
 				try
 				{
-					methodQNameToTestNames = new PersistentHashMap<Long, TIntArrayList>(methodQNameToTestNameFile, MethodQNameSerializer.INSTANCE, new TestNamesExternalizer())
+					methodQNameToTestNames = new PersistentHashMap<Long, IntList>(methodQNameToTestNameFile, MethodQNameSerializer.INSTANCE, new TestNamesExternalizer())
 					{
 						@Override
 						protected boolean isReadOnly()
@@ -115,7 +107,7 @@ final class TestInfoHolder
 					};
 					myConstructedDataFiles.add(methodQNameToTestNames);
 
-					testNameToUsedClassesAndMethodMap = new PersistentHashMap<Integer, TIntObjectHashMap<TIntArrayList>>(testNameToUsedClassesAndMethodMapFile, EnumeratorIntegerDescriptor.INSTANCE,
+					testNameToUsedClassesAndMethodMap = new PersistentHashMap<Integer, IntObjectMap<IntList>>(testNameToUsedClassesAndMethodMapFile, EnumeratorIntegerDescriptor.INSTANCE,
 							new ClassesAndMethodsMapDataExternalizer())
 					{
 						@Override
@@ -261,9 +253,9 @@ final class TestInfoHolder
 	private static final int REMOVED_MARKER = -1;
 
 	void doUpdateFromDiff(final int testNameId,
-			@Nullable TIntObjectHashMap<TIntArrayList> classData,
-			@Nullable TIntObjectHashMap<TIntArrayList> previousClassData,
-			@Nullable Integer moduleId) throws IOException
+						  @Nullable IntObjectMap<IntList> classData,
+						  @Nullable IntObjectMap<IntList> previousClassData,
+						  @Nullable Integer moduleId) throws IOException
 	{
 		ValueDiff valueDiff = new ValueDiff(classData, previousClassData);
 
@@ -271,7 +263,7 @@ final class TestInfoHolder
 		{
 			for(int classQName : valueDiff.myRemovedClassData.keys())
 			{
-				for(int methodName : valueDiff.myRemovedClassData.get(classQName).toNativeArray())
+				for(int methodName : valueDiff.myRemovedClassData.get(classQName).toArray())
 				{
 					myMethodQNameToTestNames.appendData(createKey(classQName, methodName), dataOutput ->
 					{
@@ -286,7 +278,7 @@ final class TestInfoHolder
 		{
 			for(int classQName : valueDiff.myAddedOrChangedClassData.keys())
 			{
-				for(int methodName : valueDiff.myAddedOrChangedClassData.get(classQName).toNativeArray())
+				for(int methodName : valueDiff.myAddedOrChangedClassData.get(classQName).toArray())
 				{
 					myMethodQNameToTestNames.appendData(createKey(classQName, methodName), dataOutput -> DataInputOutputUtil.writeINT(dataOutput, testNameId));
 					if(moduleId != null)
@@ -327,19 +319,19 @@ final class TestInfoHolder
 		}
 	}
 
-	private static class TestNamesExternalizer implements DataExternalizer<TIntArrayList>
+	private static class TestNamesExternalizer implements DataExternalizer<IntList>
 	{
-		public void save(@Nonnull DataOutput dataOutput, TIntArrayList testNameIds) throws IOException
+		public void save(@Nonnull DataOutput dataOutput, IntList testNameIds) throws IOException
 		{
-			for(int testNameId : testNameIds.toNativeArray())
+			for(int testNameId : testNameIds.toArray())
 			{
 				DataInputOutputUtil.writeINT(dataOutput, testNameId);
 			}
 		}
 
-		public TIntArrayList read(@Nonnull DataInput dataInput) throws IOException
+		public IntList read(@Nonnull DataInput dataInput) throws IOException
 		{
-			TIntHashSet result = new TIntHashSet();
+			IntSet result = IntSets.newHashSet();
 
 			while(((InputStream) dataInput).available() > 0)
 			{
@@ -358,13 +350,13 @@ final class TestInfoHolder
 				}
 			}
 
-			return new TIntArrayList(result.toArray());
+			return IntLists.newArrayList(result.toArray());
 		}
 	}
 
-	private static class ClassesAndMethodsMapDataExternalizer implements DataExternalizer<TIntObjectHashMap<TIntArrayList>>
+	private static class ClassesAndMethodsMapDataExternalizer implements DataExternalizer<IntObjectMap<IntList>>
 	{
-		public void save(@Nonnull final DataOutput dataOutput, TIntObjectHashMap<TIntArrayList> classAndMethodsMap) throws IOException
+		public void save(@Nonnull final DataOutput dataOutput, IntObjectMap<IntList> classAndMethodsMap) throws IOException
 		{
 			DataInputOutputUtil.writeINT(dataOutput, classAndMethodsMap.size());
 			final int[] classNameIds = classAndMethodsMap.keys();
@@ -374,10 +366,10 @@ final class TestInfoHolder
 			for(int classNameId : classNameIds)
 			{
 				DataInputOutputUtil.writeINT(dataOutput, classNameId - prevClassNameId);
-				TIntArrayList value = classAndMethodsMap.get(classNameId);
+				IntList value = classAndMethodsMap.get(classNameId);
 				DataInputOutputUtil.writeINT(dataOutput, value.size());
 
-				final int[] methodNameIds = value.toNativeArray();
+				final int[] methodNameIds = value.toArray();
 				Arrays.sort(methodNameIds);
 				int prevMethodNameId = 0;
 				for(int methodNameId : methodNameIds)
@@ -389,17 +381,17 @@ final class TestInfoHolder
 			}
 		}
 
-		public TIntObjectHashMap<TIntArrayList> read(@Nonnull DataInput dataInput) throws IOException
+		public IntObjectMap<IntList> read(@Nonnull DataInput dataInput) throws IOException
 		{
 			int numberOfClasses = DataInputOutputUtil.readINT(dataInput);
-			TIntObjectHashMap<TIntArrayList> result = new TIntObjectHashMap<>();
+			IntObjectMap<IntList> result = IntMaps.newIntObjectHashMap();
 			int prevClassNameId = 0;
 
 			while(numberOfClasses-- > 0)
 			{
 				int classNameId = DataInputOutputUtil.readINT(dataInput) + prevClassNameId;
 				int numberOfMethods = DataInputOutputUtil.readINT(dataInput);
-				TIntArrayList methodNameIds = new TIntArrayList(numberOfMethods);
+				IntList methodNameIds = IntLists.newArrayList(numberOfMethods);
 
 				int prevMethodNameId = 0;
 				while(numberOfMethods-- > 0)
@@ -431,18 +423,6 @@ final class TestInfoHolder
 		{
 			return in.readLong();
 		}
-
-		@Override
-		public int getHashCode(Long value)
-		{
-			return value.hashCode();
-		}
-
-		@Override
-		public boolean isEqual(Long val1, Long val2)
-		{
-			return val1.equals(val2);
-		}
 	}
 
 	@Nonnull
@@ -458,25 +438,25 @@ final class TestInfoHolder
 
 	static class ValueDiff
 	{
-		final TIntObjectHashMap<TIntArrayList> myAddedOrChangedClassData;
-		final TIntObjectHashMap<TIntArrayList> myRemovedClassData;
+		final IntObjectMap<IntList> myAddedOrChangedClassData;
+		final IntObjectMap<IntList> myRemovedClassData;
 
-		ValueDiff(@Nullable TIntObjectHashMap<TIntArrayList> classData, @Nullable TIntObjectHashMap<TIntArrayList> previousClassData)
+		ValueDiff(@Nullable IntObjectMap<IntList> classData, @Nullable IntObjectMap<IntList> previousClassData)
 		{
-			TIntObjectHashMap<TIntArrayList> addedOrChangedClassData = classData;
-			TIntObjectHashMap<TIntArrayList> removedClassData = previousClassData;
+			IntObjectMap<IntList> addedOrChangedClassData = classData;
+			IntObjectMap<IntList> removedClassData = previousClassData;
 
 			if(previousClassData != null && !previousClassData.isEmpty())
 			{
-				removedClassData = new TIntObjectHashMap<>();
-				addedOrChangedClassData = new TIntObjectHashMap<>();
+				removedClassData = IntMaps.newIntObjectHashMap();
+				addedOrChangedClassData = IntMaps.newIntObjectHashMap();
 
 				if(classData != null)
 				{
 					for(int classQName : classData.keys())
 					{
-						TIntArrayList currentMethods = classData.get(classQName);
-						TIntArrayList previousMethods = previousClassData.get(classQName);
+						IntList currentMethods = classData.get(classQName);
+						IntList previousMethods = previousClassData.get(classQName);
 
 						if(previousMethods == null)
 						{
@@ -484,20 +464,20 @@ final class TestInfoHolder
 							continue;
 						}
 
-						final int[] previousMethodIds = previousMethods.toNativeArray();
-						TIntHashSet previousMethodsSet = new TIntHashSet(previousMethodIds);
-						final int[] currentMethodIds = currentMethods.toNativeArray();
-						TIntHashSet currentMethodsSet = new TIntHashSet(currentMethodIds);
+						final int[] previousMethodIds = previousMethods.toArray();
+						IntSet previousMethodsSet = IntSets.newHashSet(previousMethodIds);
+						final int[] currentMethodIds = currentMethods.toArray();
+						IntSet currentMethodsSet = IntSets.newHashSet(currentMethodIds);
 						currentMethodsSet.removeAll(previousMethodIds);
 						previousMethodsSet.removeAll(currentMethodIds);
 
 						if(!currentMethodsSet.isEmpty())
 						{
-							addedOrChangedClassData.put(classQName, new TIntArrayList(currentMethodsSet.toArray()));
+							addedOrChangedClassData.put(classQName, IntLists.newArrayList(currentMethodsSet.toArray()));
 						}
 						if(!previousMethodsSet.isEmpty())
 						{
-							removedClassData.put(classQName, new TIntArrayList(previousMethodsSet.toArray()));
+							removedClassData.put(classQName, IntLists.newArrayList(previousMethodsSet.toArray()));
 						}
 					}
 				}
@@ -510,7 +490,7 @@ final class TestInfoHolder
 							continue;
 						}
 
-						TIntArrayList previousMethods = previousClassData.get(classQName);
+						IntList previousMethods = previousClassData.get(classQName);
 						removedClassData.put(classQName, previousMethods);
 					}
 				}

@@ -15,19 +15,16 @@
  */
 package com.intellij.psi.util;
 
-import gnu.trove.THashSet;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.util.Processor;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class InheritanceUtil
 {
@@ -63,7 +60,7 @@ public class InheritanceUtil
 			return false;
 		}
 
-		return processSupers(aClass, superProcessor, new THashSet<>());
+		return processSupers(aClass, superProcessor, new HashSet<>());
 	}
 
 	private static boolean processSupers(@Nonnull PsiClass aClass, @Nonnull Processor<PsiClass> superProcessor, @Nonnull Set<PsiClass> visited)
@@ -145,7 +142,7 @@ public class InheritanceUtil
 	 */
 	public static void getSuperClasses(@Nonnull PsiClass aClass, @Nonnull Set<PsiClass> results, boolean includeNonProject)
 	{
-		getSuperClassesOfList(aClass.getSuperTypes(), results, includeNonProject, new THashSet<>(), aClass.getManager());
+		getSuperClassesOfList(aClass.getSuperTypes(), results, includeNonProject, new HashSet<>(), aClass.getManager());
 	}
 
 	public static LinkedHashSet<PsiClass> getSuperClasses(@Nonnull PsiClass aClass)

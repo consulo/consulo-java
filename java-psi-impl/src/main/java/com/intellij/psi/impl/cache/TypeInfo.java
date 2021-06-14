@@ -14,10 +14,11 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IElementType;
-import gnu.trove.TObjectIntHashMap;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +35,7 @@ public class TypeInfo
 	public static final TypeInfo[] EMPTY_ARRAY = {};
 
 	private static final String[] ourIndexFrequentType;
-	private static final TObjectIntHashMap<String> ourFrequentTypeIndex;
+	private static final ObjectIntMap<String> ourFrequentTypeIndex;
 
 	static
 	{
@@ -56,10 +57,10 @@ public class TypeInfo
 				CommonClassNames.JAVA_LANG_STRING
 		};
 
-		ourFrequentTypeIndex = new TObjectIntHashMap<>();
+		ourFrequentTypeIndex = ObjectMaps.newObjectIntHashMap();
 		for(int i = 0; i < ourIndexFrequentType.length; i++)
 		{
-			ourFrequentTypeIndex.put(ourIndexFrequentType[i], i);
+			ourFrequentTypeIndex.putInt(ourIndexFrequentType[i], i);
 		}
 		assert ourFrequentTypeIndex.size() == ourIndexFrequentType.length;
 		assert ourFrequentTypeIndex.size() < FREQUENT_INDEX_MASK;
@@ -310,7 +311,7 @@ public class TypeInfo
 
 		String text = typeInfo.text;
 		byte arrayCount = typeInfo.arrayCount;
-		int frequentIndex = ourFrequentTypeIndex.get(text);
+		int frequentIndex = ourFrequentTypeIndex.getInt(text);
 		boolean hasTypeAnnotations = typeInfo.myTypeAnnotations != null && !typeInfo.myTypeAnnotations.isEmpty();
 		int flags = (typeInfo.isEllipsis ? HAS_ELLIPSIS : 0) | (arrayCount != 0 ? HAS_ARRAY_COUNT : 0) |
 				(hasTypeAnnotations ? HAS_TYPE_ANNOTATIONS : 0) | frequentIndex;
@@ -367,7 +368,7 @@ public class TypeInfo
 	@Nonnull
 	public static String internFrequentType(@Nonnull String type)
 	{
-		int frequentIndex = ourFrequentTypeIndex.get(type);
+		int frequentIndex = ourFrequentTypeIndex.getInt(type);
 		return frequentIndex == 0 ? StringUtil.internEmptyString(type) : ourIndexFrequentType[frequentIndex];
 	}
 }

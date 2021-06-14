@@ -35,9 +35,9 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.ui.UiUtils;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -47,7 +47,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   public boolean ignoreNegations = false;
 
   @SuppressWarnings("PublicField")
-  public OrderedSet<String> ignoredTypes = new OrderedSet();
+  public OrderedSet<String> ignoredTypes = new OrderedSet<>();
 
   @Override
   @Nonnull

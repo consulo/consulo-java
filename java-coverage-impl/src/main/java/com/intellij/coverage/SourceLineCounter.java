@@ -22,7 +22,8 @@ import consulo.internal.org.objectweb.asm.ClassVisitor;
 import consulo.internal.org.objectweb.asm.Label;
 import consulo.internal.org.objectweb.asm.MethodVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
-import gnu.trove.TIntObjectHashMap;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class SourceLineCounter extends ClassVisitor
 	private final ClassData myClassData;
 	private final ProjectData myProjectData;
 
-	private final TIntObjectHashMap myNSourceLines = new TIntObjectHashMap();
+	private final IntObjectMap myNSourceLines = IntMaps.newIntObjectHashMap();
 	private final Set myMethodsWithSourceCode = new HashSet();
 	private int myCurrentLine;
 	private boolean myInterface;
@@ -241,7 +242,7 @@ public class SourceLineCounter extends ClassVisitor
 		return myNSourceLines.size();
 	}
 
-	public TIntObjectHashMap getSourceLines()
+	public IntObjectMap getSourceLines()
 	{
 		return myNSourceLines;
 	}

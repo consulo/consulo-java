@@ -24,7 +24,6 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.MultiMap;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import gnu.trove.THashSet;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 import javax.annotation.Nonnull;
@@ -585,7 +584,7 @@ public class DataFlowRunner
 			return;
 
 		// now remove obsolete memory states
-		final Set<BranchingInstruction> mayRemoveStatesFor = new THashSet<>();
+		final Set<BranchingInstruction> mayRemoveStatesFor = new HashSet<>();
 		for(Instruction instruction : myInstructions)
 		{
 			if(inSameLoop(prevInstruction, instruction, loopNumber) && instruction instanceof BranchingInstruction)

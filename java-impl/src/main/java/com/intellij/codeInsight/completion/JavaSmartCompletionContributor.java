@@ -15,20 +15,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
-
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -48,24 +34,29 @@ import com.intellij.psi.filters.types.AssignableToFilter;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.proximity.ReferenceListWeigher;
-import com.intellij.util.Consumer;
-import com.intellij.util.Function;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.ReflectionUtil;
-import com.intellij.util.SmartList;
+import com.intellij.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.completion.CompletionProvider;
 import consulo.java.module.util.JavaClassNames;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Sets;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 
 /**
  * @author peter
  */
 public class JavaSmartCompletionContributor extends CompletionContributor
 {
-	private static final TObjectHashingStrategy<ExpectedTypeInfo> EXPECTED_TYPE_INFO_STRATEGY = new TObjectHashingStrategy<ExpectedTypeInfo>()
+	private static final HashingStrategy<ExpectedTypeInfo> EXPECTED_TYPE_INFO_STRATEGY = new HashingStrategy<ExpectedTypeInfo>()
 	{
 		@Override
-		public int computeHashCode(final ExpectedTypeInfo object)
+		public int hashCode(final ExpectedTypeInfo object)
 		{
 			return object.getType().hashCode();
 		}
@@ -196,7 +187,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 
 				Consumer<LookupElement> noTypeCheck = decorateWithoutTypeCheck(result, _infos);
 
-				THashSet<ExpectedTypeInfo> mergedInfos = new THashSet<>(_infos, EXPECTED_TYPE_INFO_STRATEGY);
+				Set<ExpectedTypeInfo> mergedInfos = Sets.newHashSet(_infos, EXPECTED_TYPE_INFO_STRATEGY);
 				List<Runnable> chainedEtc = new ArrayList<>();
 				for(final ExpectedTypeInfo info : mergedInfos)
 				{
@@ -258,7 +249,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 		return lookupElement -> result.addElement(decorate(lookupElement, infos));
 	}
 
-	private static void addExpectedTypeMembers(CompletionParameters params, THashSet<ExpectedTypeInfo> mergedInfos, boolean quick, Consumer<LookupElement> consumer)
+	private static void addExpectedTypeMembers(CompletionParameters params, Set<ExpectedTypeInfo> mergedInfos, boolean quick, Consumer<LookupElement> consumer)
 	{
 		PsiElement position = params.getPosition();
 		if(!JavaKeywordCompletion.AFTER_DOT.accepts(position))

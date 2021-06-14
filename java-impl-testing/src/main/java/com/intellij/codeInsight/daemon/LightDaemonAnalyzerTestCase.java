@@ -15,14 +15,6 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import gnu.trove.TIntArrayList;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerImpl;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -36,15 +28,17 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl;
-import com.intellij.testFramework.ExpectedHighlightingData;
-import com.intellij.testFramework.FileTreeAccessFilter;
-import com.intellij.testFramework.HighlightTestInfo;
-import com.intellij.testFramework.LightCodeInsightTestCase;
-import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
-import com.intellij.testFramework.LightPlatformTestCase;
-import com.intellij.testFramework.UsefulTestCase;
+import com.intellij.testFramework.*;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ArrayUtil;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCase {
   private final FileTreeAccessFilter myJavaFilesFilter = new FileTreeAccessFilter();
@@ -159,14 +153,14 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
   protected List<HighlightInfo> doHighlighting() {
     PsiDocumentManager.getInstance(LightPlatformTestCase.getProject()).commitAllDocuments();
 
-    TIntArrayList toIgnoreList = new TIntArrayList();
+    IntList toIgnoreList = IntLists.newArrayList();
     if (!doFolding()) {
       toIgnoreList.add(Pass.UPDATE_FOLDING);
     }
     if (!doInspections()) {
       toIgnoreList.add(Pass.LOCAL_INSPECTIONS);
     }
-    int[] toIgnore = toIgnoreList.isEmpty() ? ArrayUtil.EMPTY_INT_ARRAY : toIgnoreList.toNativeArray();
+    int[] toIgnore = toIgnoreList.isEmpty() ? ArrayUtil.EMPTY_INT_ARRAY : toIgnoreList.toArray();
     Editor editor = LightPlatformCodeInsightTestCase.getEditor();
     PsiFile file = LightPlatformCodeInsightTestCase.getFile();
     if (editor instanceof EditorWindow) {

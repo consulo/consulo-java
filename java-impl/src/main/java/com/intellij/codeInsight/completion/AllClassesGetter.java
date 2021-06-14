@@ -2,7 +2,6 @@
 package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.CodeInsightUtilCore;
-import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -15,9 +14,10 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
-import gnu.trove.THashSet;
-import javax.annotation.Nonnull;
+import consulo.logging.Logger;
 
+import javax.annotation.Nonnull;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -161,7 +161,7 @@ public class AllClassesGetter
 										  @Nonnull GlobalSearchScope scope,
 										  @Nonnull Processor<? super PsiClass> processor)
 	{
-		final Set<String> names = new THashSet<>(10000);
+		final Set<String> names = new HashSet<>(10000);
 		AllClassesSearchExecutor.processClassNames(project, scope, s -> {
 			if(prefixMatcher.prefixMatches(s))
 			{

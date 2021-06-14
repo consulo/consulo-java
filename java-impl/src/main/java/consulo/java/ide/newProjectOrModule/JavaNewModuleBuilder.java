@@ -43,9 +43,11 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 	@Override
 	public void setupContext(@Nonnull NewModuleContext context)
 	{
-		NewModuleContextGroup group = context.addGroup("java", LocalizeValue.localizeTODO("Java"));
+		NewModuleContextGroup jvmGroup = context.addGroup("jvm", LocalizeValue.localizeTODO("Java Platform"));
 
-		group.add(LocalizeValue.localizeTODO("Empty"), AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>()
+		NewModuleContextGroup javaGroup = jvmGroup.addGroup("jvm.java", LocalizeValue.localizeTODO("Java"));
+
+		javaGroup.add(LocalizeValue.localizeTODO("Empty"), AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>()
 		{
 			@Nonnull
 			@Override
@@ -68,7 +70,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 			}
 		});
 
-		group.add(LocalizeValue.localizeTODO("Console Application"), AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip")
+		javaGroup.add(LocalizeValue.localizeTODO("Console Application"), AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip")
 		{
 			@Nonnull
 			@Override

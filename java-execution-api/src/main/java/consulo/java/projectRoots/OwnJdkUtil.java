@@ -28,7 +28,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkType;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.util.text.StringUtil;
@@ -40,8 +39,8 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.execution.ParametersListUtil;
 import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.platform.Platform;
+import consulo.util.dataholder.Key;
 import consulo.util.nodep.classloader.UrlClassLoader;
-import gnu.trove.THashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -289,7 +288,7 @@ public class OwnJdkUtil
 			{
 				classpath.add(PathUtil.getJarPathForClass(UrlClassLoader.class));
 				classpath.add(PathUtil.getJarPathForClass(StringUtilRt.class));
-				classpath.add(PathUtil.getJarPathForClass(THashMap.class));
+				//classpath.add(PathUtil.getJarPathForClass(THashMap.class));
 			}
 			commandLine.addParameter("-classpath");
 			commandLine.addParameter(StringUtil.join(classpath, File.pathSeparator));

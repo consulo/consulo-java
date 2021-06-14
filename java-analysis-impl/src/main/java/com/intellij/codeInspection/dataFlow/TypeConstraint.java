@@ -4,12 +4,11 @@ package com.intellij.codeInspection.dataFlow;
 import com.intellij.codeInspection.dataFlow.value.DfaPsiType;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import gnu.trove.THashSet;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 
 /**
@@ -253,7 +252,7 @@ public abstract class TypeConstraint {
         }
       }
 
-      Set<DfaPsiType> newInstanceof = new THashSet<>(myInstanceofValues);
+      Set<DfaPsiType> newInstanceof = new HashSet<>(myInstanceofValues);
       newInstanceof.removeAll(moreGeneric);
       newInstanceof.add(type);
       return create(newInstanceof, myNotInstanceofValues);
@@ -278,7 +277,7 @@ public abstract class TypeConstraint {
         }
       }
 
-      Set<DfaPsiType> newNotInstanceof = new THashSet<>(myNotInstanceofValues);
+      Set<DfaPsiType> newNotInstanceof = new HashSet<>(myNotInstanceofValues);
       newNotInstanceof.removeAll(moreSpecific);
       newNotInstanceof.add(type);
       return create(myInstanceofValues, newNotInstanceof);
@@ -288,12 +287,12 @@ public abstract class TypeConstraint {
     @Nonnull
     TypeConstraint withoutType(@Nonnull DfaPsiType type) {
       if (myInstanceofValues.contains(type)) {
-        Set<DfaPsiType> newInstanceof = new THashSet<>(myInstanceofValues);
+        Set<DfaPsiType> newInstanceof = new HashSet<>(myInstanceofValues);
         newInstanceof.remove(type);
         return create(newInstanceof, myNotInstanceofValues);
       }
       if (myNotInstanceofValues.contains(type)) {
-        Set<DfaPsiType> newNotInstanceof = new THashSet<>(myNotInstanceofValues);
+        Set<DfaPsiType> newNotInstanceof = new HashSet<>(myNotInstanceofValues);
         newNotInstanceof.remove(type);
         return create(myInstanceofValues, newNotInstanceof);
       }
@@ -359,7 +358,7 @@ public abstract class TypeConstraint {
     }
 
     private TypeConstraint unite(@Nonnull Constrained other) {
-      Set<DfaPsiType> notTypes = new THashSet<>(this.myNotInstanceofValues);
+      Set<DfaPsiType> notTypes = new HashSet<>(this.myNotInstanceofValues);
       notTypes.retainAll(other.myNotInstanceofValues);
       Set<DfaPsiType> instanceOfTypes;
       if (this.myInstanceofValues.containsAll(other.myInstanceofValues)) {

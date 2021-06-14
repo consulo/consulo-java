@@ -25,7 +25,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.SmartList;
 import consulo.psi.PsiPackage;
-import gnu.trove.THashSet;
 import one.util.streamex.StreamEx;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,7 +36,7 @@ import static com.intellij.util.ObjectUtils.tryCast;
 
 public class SideEffectChecker
 {
-	private static final Set<String> ourSideEffectFreeClasses = new THashSet<>(Arrays.asList(
+	private static final Set<String> ourSideEffectFreeClasses = new HashSet<>(Arrays.asList(
 			Object.class.getName(),
 			Short.class.getName(),
 			Character.class.getName(),

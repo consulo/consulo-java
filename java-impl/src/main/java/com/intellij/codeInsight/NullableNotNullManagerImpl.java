@@ -20,12 +20,11 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.psi.PsiPackage;
-import gnu.trove.THashSet;
+import jakarta.inject.Singleton;
 import org.jdom.Element;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import jakarta.inject.Singleton;
 import java.util.*;
 
 import static com.intellij.codeInsight.AnnotationUtil.NOT_NULL;
@@ -432,7 +431,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 	protected Set<String> getAllNullabilityAnnotationsWithNickNames()
 	{
 		return CachedValuesManager.getManager(myProject).getCachedValue(myProject, () -> {
-			Set<String> result = new THashSet<>();
+			Set<String> result = new HashSet<>();
 			result.addAll(getNotNulls());
 			result.addAll(getNullables());
 			result.addAll(ContainerUtil.mapNotNull(getAllNullabilityNickNames(), PsiClass::getQualifiedName));

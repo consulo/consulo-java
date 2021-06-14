@@ -45,7 +45,6 @@ import com.intellij.util.NullableFunction;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.psi.injection.AbstractLanguageInjectionSupport;
-import gnu.trove.THashSet;
 import org.intellij.plugins.intelliLang.AdvancedSettingsUI;
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.inject.EditInjectionSettingsAction;
@@ -438,7 +437,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     result.setClassName(className);
     final ArrayList<MethodInfo> infos = new ArrayList<MethodInfo>();
     if (classes.length > 0) {
-      final THashSet<String> visitedSignatures = new THashSet<String>();
+      final Set<String> visitedSignatures = new HashSet<String>();
       final PatternCompiler<PsiElement> compiler = injection.getCompiler();
       for (PsiClass psiClass : classes) {
         for (PsiMethod method : psiClass.getMethods()) {

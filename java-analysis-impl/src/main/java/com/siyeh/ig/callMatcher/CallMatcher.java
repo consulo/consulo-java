@@ -7,13 +7,12 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.ObjectUtils;
-import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -128,7 +127,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 	@Contract(pure = true)
 	static Simple instanceCall(@Nonnull String className, String... methodNames)
 	{
-		return new Simple(className, ContainerUtil.newTroveSet(methodNames), null, CallType.INSTANCE);
+		return new Simple(className, Set.of(methodNames), null, CallType.INSTANCE);
 	}
 
 	/**
@@ -141,7 +140,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 	@Contract(pure = true)
 	static Simple exactInstanceCall(@Nonnull String className, String... methodNames)
 	{
-		return new Simple(className, ContainerUtil.newTroveSet(methodNames), null, CallType.EXACT_INSTANCE);
+		return new Simple(className, Set.of(methodNames), null, CallType.EXACT_INSTANCE);
 	}
 
 	/**
@@ -154,7 +153,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression>
 	@Contract(pure = true)
 	static Simple staticCall(@Nonnull String className, String... methodNames)
 	{
-		return new Simple(className, ContainerUtil.newTroveSet(methodNames), null, CallType.STATIC);
+		return new Simple(className, Set.of(methodNames), null, CallType.STATIC);
 	}
 
 	static Simple enumValues()

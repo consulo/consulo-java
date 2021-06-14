@@ -15,28 +15,8 @@
  */
 package com.intellij.codeInspection.magicConstant;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.annotation.access.RequiredReadAction;
 import com.intellij.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResult;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.completion.JavaKeywordCompletion;
-import com.intellij.codeInsight.completion.JavaSmartCompletionContributor;
-import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupItemUtil;
@@ -49,6 +29,18 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Sets;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class MagicCompletionContributor extends CompletionContributor
 {
@@ -237,10 +229,10 @@ public class MagicCompletionContributor extends CompletionContributor
 			PsiElement pos,
 			MagicConstantInspection.AllowedValues allowedValues)
 	{
-		final Set<PsiElement> allowed = new THashSet<PsiElement>(new TObjectHashingStrategy<PsiElement>()
+		final Set<PsiElement> allowed = Sets.newHashSet(new HashingStrategy<PsiElement>()
 		{
 			@Override
-			public int computeHashCode(PsiElement object)
+			public int hashCode(PsiElement object)
 			{
 				return 0;
 			}

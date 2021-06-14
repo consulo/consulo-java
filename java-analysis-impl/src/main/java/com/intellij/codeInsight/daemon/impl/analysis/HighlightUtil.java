@@ -63,14 +63,12 @@ import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
-import com.intellij.util.containers.hash.HashSet;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.psi.PsiPackage;
-import gnu.trove.THashMap;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -92,59 +90,59 @@ public class HighlightUtil extends HighlightUtilBase
 
 	private static final QuickFixFactory QUICK_FIX_FACTORY = QuickFixFactory.getInstance();
 
-	private static final Map<String, Set<String>> ourInterfaceIncompatibleModifiers = new THashMap<>(7);
-	private static final Map<String, Set<String>> ourMethodIncompatibleModifiers = new THashMap<>(11);
-	private static final Map<String, Set<String>> ourFieldIncompatibleModifiers = new THashMap<>(8);
-	private static final Map<String, Set<String>> ourClassIncompatibleModifiers = new THashMap<>(8);
-	private static final Map<String, Set<String>> ourClassInitializerIncompatibleModifiers = new THashMap<>(1);
-	private static final Map<String, Set<String>> ourModuleIncompatibleModifiers = new THashMap<>(1);
-	private static final Map<String, Set<String>> ourRequiresIncompatibleModifiers = new THashMap<>(2);
+	private static final Map<String, Set<String>> ourInterfaceIncompatibleModifiers = new HashMap<>(7);
+	private static final Map<String, Set<String>> ourMethodIncompatibleModifiers = new HashMap<>(11);
+	private static final Map<String, Set<String>> ourFieldIncompatibleModifiers = new HashMap<>(8);
+	private static final Map<String, Set<String>> ourClassIncompatibleModifiers = new HashMap<>(8);
+	private static final Map<String, Set<String>> ourClassInitializerIncompatibleModifiers = new HashMap<>(1);
+	private static final Map<String, Set<String>> ourModuleIncompatibleModifiers = new HashMap<>(1);
+	private static final Map<String, Set<String>> ourRequiresIncompatibleModifiers = new HashMap<>(2);
 
-	private static final Set<String> ourConstructorNotAllowedModifiers = ContainerUtil.newTroveSet(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.NATIVE, PsiModifier.FINAL, PsiModifier
+	private static final Set<String> ourConstructorNotAllowedModifiers = ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.NATIVE, PsiModifier.FINAL, PsiModifier
 			.STRICTFP, PsiModifier.SYNCHRONIZED);
 
 	private static final String SERIAL_PERSISTENT_FIELDS_FIELD_NAME = "serialPersistentFields";
 
 	static
 	{
-		ourClassIncompatibleModifiers.put(PsiModifier.ABSTRACT, ContainerUtil.newTroveSet(PsiModifier.FINAL));
-		ourClassIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newTroveSet(PsiModifier.ABSTRACT));
-		ourClassIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newTroveSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourClassIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourClassIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-		ourClassIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+		ourClassIncompatibleModifiers.put(PsiModifier.ABSTRACT, ContainerUtil.newHashSet(PsiModifier.FINAL));
+		ourClassIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
+		ourClassIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourClassIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourClassIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+		ourClassIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
 		ourClassIncompatibleModifiers.put(PsiModifier.STRICTFP, Collections.emptySet());
 		ourClassIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
 
 		ourInterfaceIncompatibleModifiers.put(PsiModifier.ABSTRACT, Collections.emptySet());
-		ourInterfaceIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newTroveSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourInterfaceIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourInterfaceIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-		ourInterfaceIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+		ourInterfaceIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourInterfaceIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourInterfaceIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+		ourInterfaceIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
 		ourInterfaceIncompatibleModifiers.put(PsiModifier.STRICTFP, Collections.emptySet());
 		ourInterfaceIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
 
-		ourMethodIncompatibleModifiers.put(PsiModifier.ABSTRACT, ContainerUtil.newTroveSet(PsiModifier.NATIVE, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE, PsiModifier.STRICTFP,
+		ourMethodIncompatibleModifiers.put(PsiModifier.ABSTRACT, ContainerUtil.newHashSet(PsiModifier.NATIVE, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE, PsiModifier.STRICTFP,
 				PsiModifier.SYNCHRONIZED, PsiModifier.DEFAULT));
-		ourMethodIncompatibleModifiers.put(PsiModifier.NATIVE, ContainerUtil.newTroveSet(PsiModifier.ABSTRACT, PsiModifier.STRICTFP));
-		ourMethodIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newTroveSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourMethodIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourMethodIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-		ourMethodIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
-		ourMethodIncompatibleModifiers.put(PsiModifier.STATIC, ContainerUtil.newTroveSet(PsiModifier.ABSTRACT, PsiModifier.DEFAULT, PsiModifier.FINAL));
-		ourMethodIncompatibleModifiers.put(PsiModifier.DEFAULT, ContainerUtil.newTroveSet(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE));
-		ourMethodIncompatibleModifiers.put(PsiModifier.SYNCHRONIZED, ContainerUtil.newTroveSet(PsiModifier.ABSTRACT));
-		ourMethodIncompatibleModifiers.put(PsiModifier.STRICTFP, ContainerUtil.newTroveSet(PsiModifier.ABSTRACT));
-		ourMethodIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newTroveSet(PsiModifier.ABSTRACT));
+		ourMethodIncompatibleModifiers.put(PsiModifier.NATIVE, ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.STRICTFP));
+		ourMethodIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourMethodIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourMethodIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+		ourMethodIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+		ourMethodIncompatibleModifiers.put(PsiModifier.STATIC, ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.DEFAULT, PsiModifier.FINAL));
+		ourMethodIncompatibleModifiers.put(PsiModifier.DEFAULT, ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE));
+		ourMethodIncompatibleModifiers.put(PsiModifier.SYNCHRONIZED, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
+		ourMethodIncompatibleModifiers.put(PsiModifier.STRICTFP, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
+		ourMethodIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
 
-		ourFieldIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newTroveSet(PsiModifier.VOLATILE));
-		ourFieldIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newTroveSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourFieldIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-		ourFieldIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-		ourFieldIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newTroveSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+		ourFieldIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newHashSet(PsiModifier.VOLATILE));
+		ourFieldIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourFieldIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+		ourFieldIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+		ourFieldIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
 		ourFieldIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
 		ourFieldIncompatibleModifiers.put(PsiModifier.TRANSIENT, Collections.emptySet());
-		ourFieldIncompatibleModifiers.put(PsiModifier.VOLATILE, ContainerUtil.newTroveSet(PsiModifier.FINAL));
+		ourFieldIncompatibleModifiers.put(PsiModifier.VOLATILE, ContainerUtil.newHashSet(PsiModifier.FINAL));
 
 		ourClassInitializerIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
 

@@ -227,7 +227,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
 			PsiModifierListStub modList = stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
 			if(modList != null)
 			{
-				return BitUtil.isSet(modList.getModifiersMask(), ModifierFlags.NAME_TO_MODIFIER_FLAG_MAP.get(PsiModifier.STATIC));
+				return BitUtil.isSet(modList.getModifiersMask(), ModifierFlags.NAME_TO_MODIFIER_FLAG_MAP.getInt(PsiModifier.STATIC));
 			}
 		}
 		return false;

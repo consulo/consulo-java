@@ -6,7 +6,6 @@ import com.intellij.codeInspection.dataFlow.instructions.*;
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.codeInspection.dataFlow.value.*;
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
-import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -16,10 +15,10 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ThreeState;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import gnu.trove.THashSet;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 
 import static com.intellij.util.ObjectUtils.tryCast;
@@ -32,9 +31,9 @@ public class StandardInstructionVisitor extends InstructionVisitor
 	private static final Logger LOG = Logger.getInstance(StandardInstructionVisitor.class);
 	private final boolean myStopAnalysisOnNpe;
 
-	private final Set<InstanceofInstruction> myReachable = new THashSet<>();
-	private final Set<InstanceofInstruction> myCanBeNullInInstanceof = new THashSet<>();
-	private final Set<InstanceofInstruction> myUsefulInstanceofs = new THashSet<>();
+	private final Set<InstanceofInstruction> myReachable = new HashSet<>();
+	private final Set<InstanceofInstruction> myCanBeNullInInstanceof = new HashSet<>();
+	private final Set<InstanceofInstruction> myUsefulInstanceofs = new HashSet<>();
 
 	public StandardInstructionVisitor()
 	{

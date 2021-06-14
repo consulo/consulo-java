@@ -24,40 +24,24 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
-import gnu.trove.TIntArrayList;
-
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.List;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import javax.annotation.Nonnull;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLocalVariable;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiNameHelper;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.NameSuggestionsField;
-import com.intellij.refactoring.ui.NameSuggestionsGenerator;
-import com.intellij.refactoring.ui.NameSuggestionsManager;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.ui.TypeSelector;
-import com.intellij.refactoring.ui.TypeSelectorManager;
+import com.intellij.refactoring.ui.*;
 import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.usageView.UsageInfo;
+import consulo.util.collection.primitive.ints.IntList;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 public class IntroduceParameterDialog extends RefactoringDialog {
   private TypeSelector myTypeSelector;
@@ -94,7 +78,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
                            @Nonnull TypeSelectorManager typeSelectorManager,
                            @Nonnull PsiMethod methodToSearchFor,
                            @Nonnull PsiMethod methodToReplaceIn,
-                           @Nonnull TIntArrayList parametersToRemove,
+                           @Nonnull IntList parametersToRemove,
                            final boolean mustBeFinal) {
     super(project, true);
     myPanel = new IntroduceParameterSettingsPanel(onLocalVariable, onExpression, methodToReplaceIn, parametersToRemove);
@@ -313,7 +297,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
   private class IntroduceParameterSettingsPanel extends IntroduceParameterSettingsUI {
     public IntroduceParameterSettingsPanel(PsiLocalVariable onLocalVariable,
                                            PsiExpression onExpression,
-                                           PsiMethod methodToReplaceIn, TIntArrayList parametersToRemove) {
+                                           PsiMethod methodToReplaceIn, IntList parametersToRemove) {
       super(onLocalVariable, onExpression, methodToReplaceIn, parametersToRemove);
     }
 

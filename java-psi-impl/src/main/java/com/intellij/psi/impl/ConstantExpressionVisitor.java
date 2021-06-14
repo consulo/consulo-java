@@ -15,20 +15,20 @@
  */
 package com.intellij.psi.impl;
 
-import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.psi.util.ConstantExpressionUtil;
-import com.intellij.util.containers.StringInterner;
-import gnu.trove.THashSet;
+import com.intellij.util.containers.Interner;
+import consulo.util.dataholder.Key;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstantEvaluationHelper.AuxEvaluator {
   
-  private final StringInterner myInterner = new StringInterner();
+  private final Interner<String> myInterner = Interner.createStringInterner();
 
   private Set<PsiVariable> myVisitedVars;
   private final boolean myThrowExceptionOnOverflow;
@@ -530,7 +530,7 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
       }
 
       Set<PsiVariable> oldVisitedVars = myVisitedVars;
-      if (myVisitedVars == null) { myVisitedVars = new THashSet<PsiVariable>(); }
+      if (myVisitedVars == null) { myVisitedVars = new HashSet<PsiVariable>(); }
 
       myVisitedVars.add(variable);
       try {

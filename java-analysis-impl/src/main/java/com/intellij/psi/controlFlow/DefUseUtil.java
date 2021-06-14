@@ -15,28 +15,21 @@
  */
 package com.intellij.psi.controlFlow;
 
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ExceptionUtil;
-import com.intellij.util.containers.IntArrayList;
 import com.intellij.util.containers.Queue;
 import com.intellij.util.containers.Stack;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author max
@@ -124,7 +117,7 @@ public class DefUseUtil
 		{
 			if(myUsed == null)
 			{
-				myUsed = new THashSet<>();
+				myUsed = new HashSet<>();
 			}
 		}
 
@@ -185,8 +178,8 @@ public class DefUseUtil
 			LOG.debug(flow.toString());
 		}
 
-		Set<PsiVariable> assignedVariables = new THashSet<>();
-		Set<PsiVariable> readVariables = new THashSet<>();
+		Set<PsiVariable> assignedVariables = new HashSet<>();
+		Set<PsiVariable> readVariables = new HashSet<>();
 		for(int i = 0; i < instructions.size(); i++)
 		{
 			Instruction instruction = instructions.get(i);
@@ -337,7 +330,7 @@ public class DefUseUtil
 		{
 			RefsDefs refsDefs = new RefsDefs(body)
 			{
-				private final IntArrayList[] myBackwardTraces = getBackwardTraces(instructions);
+				private final IntList[] myBackwardTraces = getBackwardTraces(instructions);
 
 				@Override
 				protected int nNext(int index)
@@ -507,7 +500,7 @@ public class DefUseUtil
 					elem += 1;
 				}
 
-				final Set<PsiElement> res = new THashSet<>();
+				final Set<PsiElement> res = new HashSet<>();
 				class Inner
 				{
 
@@ -572,12 +565,12 @@ public class DefUseUtil
 
 
 	@Nonnull
-	private static IntArrayList[] getBackwardTraces(final List<Instruction> instructions)
+	private static IntList[] getBackwardTraces(final List<Instruction> instructions)
 	{
-		final IntArrayList[] states = new IntArrayList[instructions.size()];
+		final IntList[] states = new IntList[instructions.size()];
 		for(int i = 0; i < states.length; i++)
 		{
-			states[i] = new IntArrayList();
+			states[i] = IntLists.newArrayList();
 		}
 
 		for(int i = 0; i < instructions.size(); i++)
@@ -656,7 +649,7 @@ public class DefUseUtil
 
 		private InstructionStateWalker(List<Instruction> instructions)
 		{
-			myStates = new THashMap<>(instructions.size());
+			myStates = new HashMap<>(instructions.size());
 			myWalkThroughStack = new WalkThroughStack(instructions.size() / 2);
 			myInstructions = instructions;
 		}

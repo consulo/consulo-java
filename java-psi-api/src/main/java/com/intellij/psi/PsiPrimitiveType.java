@@ -15,25 +15,24 @@
  */
 package com.intellij.psi;
 
-import gnu.trove.THashMap;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents primitive types of Java language.
  */
 public class PsiPrimitiveType extends PsiType.Stub
 {
-	private static final Map<String, PsiPrimitiveType> ourQNameToUnboxed = new THashMap<>();
-	private static final Map<PsiPrimitiveType, String> ourUnboxedToQName = new THashMap<>();
+	private static final Map<String, PsiPrimitiveType> ourQNameToUnboxed = new HashMap<>();
+	private static final Map<PsiPrimitiveType, String> ourUnboxedToQName = new HashMap<>();
 
 	private final String myName;
 

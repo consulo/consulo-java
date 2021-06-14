@@ -25,12 +25,11 @@ import com.intellij.patterns.compiler.PatternCompiler;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.util.IncorrectOperationException;
-import gnu.trove.THashMap;
 import org.intellij.plugins.intelliLang.inject.java.JavaLanguageInjectionSupport;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class MethodParameterInjection extends BaseInjection {
@@ -38,7 +37,7 @@ public class MethodParameterInjection extends BaseInjection {
   private String myClassName = "";
 
   @Nonnull
-  private final Map<String, MethodInfo> myParameterMap = new THashMap<String, MethodInfo>();
+  private final Map<String, MethodInfo> myParameterMap = new HashMap<String, MethodInfo>();
 
   public MethodParameterInjection() {
     super(JavaLanguageInjectionSupport.JAVA_SUPPORT_ID);
@@ -82,7 +81,7 @@ public class MethodParameterInjection extends BaseInjection {
       setClassName(JDOMExternalizer.readString(e, "CLASS"));
       //setApplyInHierarchy(JDOMExternalizer.readBoolean(e, "APPLY_IN_HIERARCHY"));
       readOldFormat(e);
-      final THashMap<String, String> map = new THashMap<String, String>();
+      final Map<String, String> map = new HashMap<String, String>();
       JDOMExternalizer.readMap(e, map, null, "SIGNATURES");
       for (String s : map.keySet()) {
         final String fixedSignature = fixSignature(s, false);

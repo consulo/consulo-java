@@ -33,12 +33,12 @@ import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Stack;
 import consulo.java.module.util.JavaClassNames;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
 import java.util.Set;
 
 public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, ClassInheritorsSearch.SearchParameters>
@@ -57,14 +57,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 		if(progress != null)
 		{
 			progress.pushState();
-			String className = ApplicationManager.getApplication().runReadAction(new Computable<String>()
-			{
-				@Override
-				public String compute()
-				{
-					return baseClass.getName();
-				}
-			});
+			String className = ApplicationManager.getApplication().runReadAction((Computable<String>) () -> baseClass.getName());
 			progress.setText(className != null ? PsiBundle.message("psi.search.inheritors.of.class.progress", className) : PsiBundle.message("psi.search.inheritors.progress"));
 		}
 
@@ -103,7 +96,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 
 		final Ref<PsiClass> currentBase = Ref.create(null);
 		final Stack<PsiAnchor> stack = new Stack<PsiAnchor>();
-		final Set<PsiAnchor> processed = ContainerUtil.newTroveSet();
+		final Set<PsiAnchor> processed = new HashSet<>();
 
 		final Processor<PsiClass> processor = new ReadActionProcessor<PsiClass>()
 		{

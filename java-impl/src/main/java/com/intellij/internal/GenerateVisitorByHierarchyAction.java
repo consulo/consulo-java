@@ -20,25 +20,6 @@
  */
 package com.intellij.internal;
 
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-
 import com.intellij.codeInsight.editorActions.SelectWordUtil;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.GenerationInfo;
@@ -72,6 +53,13 @@ import com.intellij.ui.EditorTextField;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class GenerateVisitorByHierarchyAction extends AnAction {
   public GenerateVisitorByHierarchyAction() {
@@ -190,7 +178,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
                                            final PsiDirectory directory,
                                            final GlobalSearchScope scope) {
 
-    final THashMap<PsiClass, Set<PsiClass>> classes = new THashMap<PsiClass, Set<PsiClass>>();
+    final Map<PsiClass, Set<PsiClass>> classes = new HashMap<PsiClass, Set<PsiClass>>();
     for (PsiClass aClass : ClassInheritorsSearch.search(baseClass, scope, true).findAll()) {
       if (aClass.hasModifierProperty(PsiModifier.ABSTRACT) == baseClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
         final List<PsiClass> implementors =
@@ -199,10 +187,10 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
               return !psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
             }
           });
-        classes.put(aClass, new THashSet<PsiClass>(implementors));
+        classes.put(aClass, new HashSet<PsiClass>(implementors));
       }
     }
-    final THashMap<PsiClass, Set<PsiClass>> pathMap = new THashMap<PsiClass, Set<PsiClass>>();
+    final Map<PsiClass, Set<PsiClass>> pathMap = new HashMap<PsiClass, Set<PsiClass>>();
     for (PsiClass aClass : classes.keySet()) {
       final Set<PsiClass> superClasses = new LinkedHashSet<PsiClass>();
       for (PsiClass superClass : aClass.getSupers()) {
@@ -271,7 +259,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
   }
 
   private static void generateVisitorClass(final PsiClass visitorClass, final Map<PsiClass, Set<PsiClass>> classes,
-                                           final THashMap<PsiClass, Set<PsiClass>> pathMap, int classPrefix) throws Throwable {
+                                           final Map<PsiClass, Set<PsiClass>> pathMap, int classPrefix) throws Throwable {
     final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(visitorClass.getProject()).getElementFactory();
     for (PsiClass psiClass : classes.keySet()) {
       final PsiMethod method = elementFactory.createMethodFromText(
@@ -281,7 +269,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       }
     }
 
-    final THashSet<PsiClass> visitedClasses = new THashSet<PsiClass>();
+    final Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
     final LinkedList<PsiClass> toProcess = new LinkedList<PsiClass>(classes.keySet());
     while (!toProcess.isEmpty()) {
       final PsiClass psiClass = toProcess.removeFirst();

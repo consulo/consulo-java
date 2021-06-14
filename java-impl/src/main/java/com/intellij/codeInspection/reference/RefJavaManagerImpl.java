@@ -15,41 +15,31 @@
  */
 package com.intellij.codeInspection.reference;
 
-import gnu.trove.THashMap;
-
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jdom.Element;
 import com.intellij.codeInspection.BatchSuppressManager;
 import com.intellij.codeInspection.InspectionProfileEntry;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
-import com.intellij.codeInspection.ex.EntryPointsManager;
-import com.intellij.codeInspection.ex.EntryPointsManagerBase;
-import com.intellij.codeInspection.ex.EntryPointsManagerImpl;
-import com.intellij.codeInspection.ex.GlobalInspectionContextImpl;
-import com.intellij.codeInspection.ex.InspectionToolWrapper;
-import com.intellij.codeInspection.ex.Tools;
-import consulo.logging.Logger;
+import com.intellij.codeInspection.ex.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
-import consulo.disposer.Disposer;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.UserDataCache;
+import com.intellij.openapi.util.*;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.disposer.Disposer;
+import consulo.logging.Logger;
+import org.jdom.Element;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * @author anna
@@ -67,7 +57,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 	private PsiClass myApplet;
 	private PsiClass myServlet;
 	private RefPackage myDefaultPackage;
-	private THashMap<String, RefPackage> myPackages;
+	private Map<String, RefPackage> myPackages;
 	private final RefManagerImpl myRefManager;
 	private PsiElementVisitor myProjectIterator;
 	private EntryPointsManager myEntryPointsManager;
@@ -98,7 +88,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 	{
 		if(myPackages == null)
 		{
-			myPackages = new THashMap<String, RefPackage>();
+			myPackages = new HashMap<String, RefPackage>();
 		}
 
 		RefPackage refPackage = myPackages.get(packageName);

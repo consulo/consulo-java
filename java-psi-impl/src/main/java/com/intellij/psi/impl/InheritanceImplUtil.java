@@ -15,13 +15,6 @@
  */
 package com.intellij.psi.impl;
 
-import gnu.trove.THashSet;
-
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
@@ -29,6 +22,11 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.JavaClassSupers;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InheritanceImplUtil
 {
@@ -179,7 +177,7 @@ public class InheritanceImplUtil
 
 		if(checkedClasses == null)
 		{
-			checkedClasses = new THashSet<PsiClass>();
+			checkedClasses = new HashSet<PsiClass>();
 		}
 		checkedClasses.add(aClass);
 
@@ -223,7 +221,7 @@ public class InheritanceImplUtil
 		Set<PsiClass> checkedClasses = null;
 		if(classToByPass != null)
 		{
-			checkedClasses = new THashSet<PsiClass>();
+			checkedClasses = new HashSet<PsiClass>();
 			checkedClasses.add(classToByPass);
 		}
 		return isInheritor(candidateClass.getManager(), candidateClass, baseClass, true, checkedClasses);

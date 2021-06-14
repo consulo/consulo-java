@@ -9,7 +9,6 @@ import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
-import consulo.logging.Logger;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -31,11 +30,11 @@ import com.intellij.ui.SimpleListCellRenderer;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
-import gnu.trove.THashSet;
+import consulo.logging.Logger;
 import org.jdom.Element;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -177,7 +176,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.openStream(), StandardCharsets.UTF_8)))
 		{
-			return new THashSet<>(FileUtil.loadLines(reader));
+			return new HashSet<>(FileUtil.loadLines(reader));
 		}
 		catch(IOException ex)
 		{

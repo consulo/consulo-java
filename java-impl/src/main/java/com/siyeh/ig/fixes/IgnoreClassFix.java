@@ -3,28 +3,27 @@
  */
 package com.siyeh.ig.fixes;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.command.undo.BasicUndoableAction;
 import com.intellij.openapi.command.undo.UndoManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.containers.OrderedSet;
 import com.siyeh.ig.InspectionGadgetsFix;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
 
 /**
  * @author Bas Leijdekkers
  */
 public class IgnoreClassFix extends InspectionGadgetsFix
 {
-
-	final OrderedSet<String> myIgnoredClasses;
+	final Set<String> myIgnoredClasses;
 	final String myQualifiedName;
 	private final String myFixName;
 
-	public IgnoreClassFix(String qualifiedName, OrderedSet<String> ignoredClasses, String fixName)
+	public IgnoreClassFix(String qualifiedName, Set<String> ignoredClasses, String fixName)
 	{
 		myIgnoredClasses = ignoredClasses;
 		myQualifiedName = qualifiedName;

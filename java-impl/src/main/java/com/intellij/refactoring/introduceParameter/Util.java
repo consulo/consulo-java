@@ -34,13 +34,15 @@ import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntHashSet;
-import gnu.trove.TIntIterator;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.collection.primitive.ints.IntSet;
+import consulo.util.collection.primitive.ints.IntSets;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
+import java.util.PrimitiveIterator;
 
 public class Util {
 
@@ -114,16 +116,16 @@ public class Util {
 
   // returns parameters that are used solely in specified expression
   @Nonnull
-  public static TIntArrayList findParametersToRemove(@Nonnull PsiMethod method,
-                                                     @Nonnull final PsiExpression expr,
-                                                     @Nullable final PsiExpression[] occurences) {
+  public static IntList findParametersToRemove(@Nonnull PsiMethod method,
+											   @Nonnull final PsiExpression expr,
+											   @Nullable final PsiExpression[] occurences) {
     final PsiParameter[] parameters = method.getParameterList().getParameters();
-    if (parameters.length == 0) return new TIntArrayList();
+    if (parameters.length == 0) return IntLists.newArrayList();
 
     PsiMethod[] overridingMethods = OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY);
     final PsiMethod[] allMethods = ArrayUtil.append(overridingMethods, method);
 
-    final TIntHashSet suspects = new TIntHashSet();
+    final IntSet suspects = IntSets.newHashSet();
     expr.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitReferenceExpression(final PsiReferenceExpression expression) {
         super.visitReferenceExpression(expression);
@@ -137,9 +139,9 @@ public class Util {
       }
     });
 
-    final TIntIterator iterator = suspects.iterator();
+    final PrimitiveIterator.OfInt iterator = suspects.iterator();
     while(iterator.hasNext()) {
-      final int paramNum = iterator.next();
+      final int paramNum = iterator.nextInt();
       for (PsiMethod psiMethod : allMethods) {
         PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
         if (paramNum >= psiParameters.length) continue;
@@ -169,6 +171,6 @@ public class Util {
       }
     }
 
-    return new TIntArrayList(suspects.toArray());
+    return IntLists.newArrayList(suspects.toArray());
   }
 }

@@ -15,12 +15,6 @@
  */
 package com.intellij.debugger.ui;
 
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.impl.DebuggerSession;
@@ -37,12 +31,18 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.util.ui.MessageCategory;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class HotSwapProgressImpl extends HotSwapProgress
 {
 	static final NotificationGroup NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("HotSwap", ToolWindowId.DEBUG, true);
 
-	TIntObjectHashMap<List<String>> myMessages = new TIntObjectHashMap<>();
+	IntObjectMap<List<String>> myMessages = IntMaps.newIntObjectHashMap();
 	private final ProgressWindow myProgressWindow;
 	private String myTitle = DebuggerBundle.message("progress.hot.swap.title");
 

@@ -19,23 +19,18 @@
  */
 package com.intellij.debugger.jdi;
 
-import consulo.logging.Logger;
-import gnu.trove.THashMap;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.jdi.StackFrameProxy;
 import consulo.internal.com.sun.jdi.*;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 {
@@ -419,7 +414,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 			try
 			{
 				StackFrame stackFrame = getStackFrame();
-				myAllValues = new THashMap<LocalVariable, Value>(stackFrame.getValues(stackFrame.visibleVariables()));
+				myAllValues = new HashMap<LocalVariable, Value>(stackFrame.getValues(stackFrame.visibleVariables()));
 			}
 			catch(InconsistentDebugInfoException ignored)
 			{

@@ -55,11 +55,6 @@ public class FunctionalInterfaceSuggester
 			"org.apache.commons.collections.Factory",
 			"org.apache.commons.collections.Predicate",
 			"org.apache.commons.collections.Transformer",
-
-			//trove
-			"gnu.trove.TObjectFunction",
-			"gnu.trove.TObjectProcedure",
-			"gnu.trove.TObjectObjectProcedure",
 	};
 
 	public static Collection<? extends PsiType> suggestFunctionalInterfaces(final @Nonnull PsiFunctionalExpression expression)

@@ -19,23 +19,6 @@
  */
 package com.intellij.codeInspection.i18n;
 
-import gnu.trove.THashMap;
-
-import java.awt.BorderLayout;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -59,6 +42,19 @@ import com.intellij.ui.EditorComboBox;
 import com.intellij.ui.HyperlinkLabel;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.awt.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog
 {
@@ -298,7 +294,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog
 		String templateName = getTemplateName();
 		LOG.assertTrue(templateName != null);
 		FileTemplate template = FileTemplateManager.getInstance(myProject).getCodeTemplate(templateName);
-		Map<String, String> attributes = new THashMap<String, String>();
+		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.put(PROPERTY_KEY_OPTION_KEY, propertyKey);
 		attributes.put(RESOURCE_BUNDLE_OPTION_KEY, getResourceBundleText());
 		attributes.put(PROPERTY_VALUE_ATTR, StringUtil.escapeStringCharacters(myDefaultPropertyValue));

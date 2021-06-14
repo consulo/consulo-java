@@ -15,25 +15,6 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
-import consulo.logging.Logger;
-import gnu.trove.THashSet;
-
-import java.beans.Introspector;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.application.options.CodeStyle;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
@@ -41,28 +22,26 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.codeStyle.NameUtil;
-import com.intellij.psi.codeStyle.ReferenceAdjuster;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.psi.codeStyle.*;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.impl.search.MethodDeepestSuperSearcher;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.statistics.JavaStatisticsManager;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiElementFilter;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.beans.Introspector;
+import java.util.*;
 
 /**
  * @author max
@@ -225,7 +204,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 			return null;
 		}
 
-		Set<PsiImportStatementBase> allImports = new THashSet<PsiImportStatementBase>(Arrays.asList(imports));
+		Set<PsiImportStatementBase> allImports = new HashSet<PsiImportStatementBase>(Arrays.asList(imports));
 		final Collection<PsiImportStatementBase> redundant;
 		/*if(FileTypeUtils.isInServerPageFile(file))
 		{

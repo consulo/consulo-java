@@ -18,8 +18,6 @@ package com.intellij.codeInspection.bytecodeAnalysis;
 
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ASMUtils;
 import com.intellij.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph;
-import com.intellij.util.SingletonSet;
-import java.util.HashSet;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
@@ -30,6 +28,7 @@ import one.util.streamex.EntryStream;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -120,7 +119,7 @@ final class CombinedAnalysis
 				{
 					keys.add(new EKey(pk.method, new Direction.In(pk.i, false), pk.stable));
 				}
-				result = new Pending(new SingletonSet<>(new Component(Value.Top, keys)));
+				result = new Pending(Set.of(new Component(Value.Top, keys)));
 			}
 		}
 		return new Equation(key, result);
@@ -198,7 +197,7 @@ final class CombinedAnalysis
 			}
 			else
 			{
-				result = new Pending(new SingletonSet<>(new Component(Value.Top, keys)));
+				result = new Pending(Set.of(new Component(Value.Top, keys)));
 			}
 		}
 		else
@@ -221,7 +220,7 @@ final class CombinedAnalysis
 		{
 			Set<EKey> keys =
 					interpreter.calls.stream().map(call -> new EKey(call.method, Throw, call.stableCall)).collect(Collectors.toSet());
-			result = new Pending(new SingletonSet<>(new Component(Value.Top, keys)));
+			result = new Pending(Set.of(new Component(Value.Top, keys)));
 		}
 		else
 		{
@@ -248,7 +247,7 @@ final class CombinedAnalysis
 				keys.addAll(call.getKeysForParameter(i, direction));
 				keys.add(new EKey(call.method, Throw, call.stableCall));
 			}
-			result = new Pending(new SingletonSet<>(new Component(Value.Top, keys)));
+			result = new Pending(Set.of(new Component(Value.Top, keys)));
 		}
 		else
 		{
@@ -301,8 +300,8 @@ final class CombinedAnalysis
 		{
 			TrackableCallValue call = (TrackableCallValue) returnValue;
 			EKey callKey = new EKey(call.method, Out, call.stableCall);
-			Set<EKey> keys = new SingletonSet<>(callKey);
-			result = new Pending(new SingletonSet<>(new Component(Value.Top, keys)));
+			Set<EKey> keys = Set.of(callKey);
+			result = new Pending(Set.of(new Component(Value.Top, keys)));
 		}
 		else
 		{
@@ -324,8 +323,8 @@ final class CombinedAnalysis
 		{
 			TrackableCallValue call = (TrackableCallValue) returnValue;
 			EKey callKey = new EKey(call.method, NullableOut, call.stableCall || call.thisCall);
-			Set<EKey> keys = new SingletonSet<>(callKey);
-			result = new Pending(new SingletonSet<>(new Component(Value.Null, keys)));
+			Set<EKey> keys = Set.of(callKey);
+			result = new Pending(Set.of(new Component(Value.Null, keys)));
 		}
 		else if(returnValue instanceof TrackableNullValue)
 		{

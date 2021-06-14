@@ -30,13 +30,11 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.BidirectionalMap;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.logging.Logger;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import java.util.*;
 
@@ -115,7 +113,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
   }
 
   public CommonProblemDescriptor[] checkElement(@Nonnull final PsiElement psiElement, @Nonnull final InspectionManager manager, @Nonnull Project project) {
-    final Map<PsiElement, Collection<String>> suppressedScopes = new THashMap<PsiElement, Collection<String>>();
+    final Map<PsiElement, Collection<String>> suppressedScopes = new HashMap<PsiElement, Collection<String>>();
     psiElement.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitModifierList(PsiModifierList list) {
         super.visitModifierList(list);
@@ -160,7 +158,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool{
 
     if (suppressedScopes.values().isEmpty()) return null;
     // have to visit all file from scratch since inspections can be written in any perversive way including checkFile() overriding
-    Collection<InspectionToolWrapper> suppressedTools = new THashSet<InspectionToolWrapper>();
+    Collection<InspectionToolWrapper> suppressedTools = new HashSet<InspectionToolWrapper>();
     InspectionToolWrapper[] toolWrappers = getInspectionTools(psiElement, manager);
     for (Collection<String> ids : suppressedScopes.values()) {
       for (Iterator<String> iterator = ids.iterator(); iterator.hasNext(); ) {

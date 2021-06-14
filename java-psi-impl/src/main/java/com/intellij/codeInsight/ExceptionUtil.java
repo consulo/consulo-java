@@ -15,26 +15,9 @@
  */
 package com.intellij.codeInsight;
 
-import gnu.trove.THashSet;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.impl.PsiClassImplUtil;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.infos.MethodCandidateInfo;
@@ -42,18 +25,17 @@ import com.intellij.psi.scope.MethodProcessorSetupFailedException;
 import com.intellij.psi.scope.processor.MethodResolverProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.BitUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.codeInsight.ExtraExceptionHandler;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author mike
@@ -391,7 +373,7 @@ public class ExceptionUtil
 			if(aClass != null)
 			{
 				final PsiClassInitializer[] initializers = aClass.getInitializers();
-				final Set<PsiClassType> thrownByInitializer = new THashSet<>();
+				final Set<PsiClassType> thrownByInitializer = new HashSet<>();
 				for(PsiClassInitializer initializer : initializers)
 				{
 					if(initializer.hasModifierProperty(PsiModifier.STATIC))
@@ -424,7 +406,7 @@ public class ExceptionUtil
 		{
 			if(foundExceptions == null)
 			{
-				foundExceptions = new THashSet<>();
+				foundExceptions = new HashSet<>();
 			}
 			foundExceptions.addAll(unhandledExceptions);
 		}

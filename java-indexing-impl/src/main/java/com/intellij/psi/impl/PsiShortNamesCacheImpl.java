@@ -32,8 +32,8 @@ import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.indexing.IdFilter;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Sets;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.NonNls;
 
@@ -280,10 +280,10 @@ public class PsiShortNamesCacheImpl extends PsiShortNamesCache
 	private <T extends PsiMember> List<T> filterMembers(Collection<T> members, final GlobalSearchScope scope)
 	{
 		List<T> result = new ArrayList<T>(members.size());
-		Set<PsiMember> set = new THashSet<PsiMember>(members.size(), new TObjectHashingStrategy<PsiMember>()
+		Set<PsiMember> set = Sets.newHashSet(members.size(), new HashingStrategy<PsiMember>()
 		{
 			@Override
-			public int computeHashCode(PsiMember member)
+			public int hashCode(PsiMember member)
 			{
 				int code = 0;
 				final PsiClass clazz = member.getContainingClass();

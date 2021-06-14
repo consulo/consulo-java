@@ -15,23 +15,11 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import static com.intellij.util.ObjectUtil.assertNotNull;
-
-import gnu.trove.THashSet;
-
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.util.AtomicNotNullLazyValue;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.openapi.util.NullableLazyValue;
-import com.intellij.openapi.util.VolatileNullableLazyValue;
+import com.intellij.openapi.util.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiClassImplUtil;
 import com.intellij.psi.impl.PsiConstantEvaluationHelperImpl;
@@ -44,6 +32,13 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.intellij.util.ObjectUtil.assertNotNull;
 
 public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiField, PsiVariableEx, ClsModifierListOwner
 {
@@ -131,7 +126,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 	@Override
 	public Object computeConstantValue()
 	{
-		return computeConstantValue(new THashSet<>());
+		return computeConstantValue(new HashSet<>());
 	}
 
 	@Override

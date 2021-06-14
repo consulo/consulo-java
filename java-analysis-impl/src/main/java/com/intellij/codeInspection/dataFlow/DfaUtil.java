@@ -19,7 +19,6 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FList;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -623,8 +622,8 @@ public class DfaUtil
 		static class PlaceResult
 		{
 			final MultiValuesMap<PsiVariable, FList<PsiExpression>> myValues = new MultiValuesMap<>(true);
-			final Set<PsiVariable> myNulls = new THashSet<>();
-			final Set<PsiVariable> myNotNulls = new THashSet<>();
+			final Set<PsiVariable> myNulls = new HashSet<>();
+			final Set<PsiVariable> myNotNulls = new HashSet<>();
 		}
 
 		@Override

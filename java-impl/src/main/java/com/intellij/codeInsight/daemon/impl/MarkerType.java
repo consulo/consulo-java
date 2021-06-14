@@ -30,9 +30,8 @@ import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashSet;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -184,7 +183,7 @@ public class MarkerType
 	@Nonnull
 	private static <E extends PsiElement> PsiElementProcessor.CollectElementsWithLimit<E> getProcessor(int limit, boolean set)
 	{
-		return set ? new PsiElementProcessor.CollectElementsWithLimit<>(limit, new THashSet<>())
+		return set ? new PsiElementProcessor.CollectElementsWithLimit<>(limit, new HashSet<>())
 				: new PsiElementProcessor.CollectElementsWithLimit<>(limit);
 	}
 

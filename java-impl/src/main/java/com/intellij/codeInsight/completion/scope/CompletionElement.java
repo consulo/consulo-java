@@ -15,18 +15,15 @@
  */
 package com.intellij.codeInsight.completion.scope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiVariable;
+import com.intellij.psi.*;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureUtil;
 import consulo.psi.PsiPackage;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -120,7 +117,7 @@ public class CompletionElement
 	{
 		if(myEqualityObject instanceof MethodSignature)
 		{
-			return MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.computeHashCode((MethodSignature) myEqualityObject);
+			return MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.hashCode((MethodSignature) myEqualityObject);
 		}
 		return myEqualityObject != null ? myEqualityObject.hashCode() : 0;
 	}

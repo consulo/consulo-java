@@ -17,7 +17,6 @@ package com.intellij.psi.impl;
 
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.components.ServiceManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.Comparing;
@@ -44,12 +43,10 @@ import com.intellij.psi.util.*;
 import com.intellij.util.*;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
-import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import consulo.util.dataholder.UserDataHolderEx;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -416,7 +413,7 @@ public class PsiClassImplUtil
 	private static ConcurrentMap<MemberType, Map<String, PsiMember[]>> createMembersMap(PsiClass psiClass, GlobalSearchScope scope)
 	{
 		return ConcurrentFactoryMap.createMap(key -> {
-			final Map<String, List<PsiMember>> map = new THashMap<>();
+			final Map<String, List<PsiMember>> map = new HashMap<>();
 
 			final List<PsiMember> allMembers = new ArrayList<>();
 			map.put(ALL, allMembers);
@@ -450,7 +447,7 @@ public class PsiClassImplUtil
 			};
 
 			processDeclarationsInClassNotCached(psiClass, processor, ResolveState.initial(), null, null, psiClass, false, PsiUtil.getLanguageLevel(psiClass), scope);
-			Map<String, PsiMember[]> result = new THashMap<>();
+			Map<String, PsiMember[]> result = new HashMap<>();
 			for(Map.Entry<String, List<PsiMember>> entry : map.entrySet())
 			{
 				result.put(entry.getKey(), entry.getValue().toArray(PsiMember.EMPTY_ARRAY));
@@ -755,7 +752,7 @@ public class PsiClassImplUtil
 	{
 		if(visited == null)
 		{
-			visited = new THashSet<PsiClass>();
+			visited = new HashSet<PsiClass>();
 		}
 		if(!visited.add(aClass))
 		{

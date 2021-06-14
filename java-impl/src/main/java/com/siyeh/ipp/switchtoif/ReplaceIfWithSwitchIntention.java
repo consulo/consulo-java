@@ -18,15 +18,15 @@ package com.siyeh.ipp.switchtoif;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.ipp.psiutils.ControlFlowUtils;
 import com.siyeh.ipp.psiutils.EquivalenceChecker;
 import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 

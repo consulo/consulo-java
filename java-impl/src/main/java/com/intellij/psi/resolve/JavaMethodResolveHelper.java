@@ -15,23 +15,8 @@
  */
 package com.intellij.psi.resolve;
 
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaResolveResult;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.scope.PsiConflictResolver;
@@ -45,12 +30,16 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
 /**
  * @author peter
  */
 public class JavaMethodResolveHelper
 {
-	private final Set<MethodSignature> myDuplicates = new THashSet<MethodSignature>();
+	private final Set<MethodSignature> myDuplicates = new HashSet<MethodSignature>();
 
 	private final MethodCandidatesProcessor myProcessor;
 	@Nullable

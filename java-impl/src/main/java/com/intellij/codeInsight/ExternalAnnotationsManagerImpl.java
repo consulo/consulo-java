@@ -56,7 +56,6 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Comparing;
-import consulo.disposer.Disposer;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.*;
@@ -73,9 +72,9 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.messages.MessageBusConnection;
 import com.intellij.util.ui.OptionsMessageDialog;
+import consulo.disposer.Disposer;
 import consulo.logging.Logger;
 import consulo.ui.image.Image;
-import gnu.trove.THashSet;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
@@ -85,10 +84,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author anna
@@ -361,7 +358,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 			return;
 		}
 
-		final Set<PsiFile> annotationFiles = xmlFiles == null ? new THashSet<PsiFile>() : new THashSet<PsiFile>(xmlFiles);
+		final Set<PsiFile> annotationFiles = xmlFiles == null ? new HashSet<PsiFile>() : new HashSet<PsiFile>(xmlFiles);
 
 		new WriteCommandAction(project)
 		{

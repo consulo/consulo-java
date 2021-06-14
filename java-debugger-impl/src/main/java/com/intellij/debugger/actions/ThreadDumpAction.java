@@ -21,13 +21,6 @@
  */
 package com.intellij.debugger.actions;
 
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -48,6 +41,13 @@ import com.intellij.unscramble.ThreadState;
 import com.intellij.util.SmartList;
 import com.intellij.xdebugger.XDebugSession;
 import consulo.internal.com.sun.jdi.*;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ThreadDumpAction extends AnAction implements AnAction.TransparentUpdate
 {
@@ -208,7 +208,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 				final List<StackFrame> frames = threadReference.frames();
 				hasEmptyStack = frames.size() == 0;
 
-				final TIntObjectHashMap<List<ObjectReference>> lockedAt = new TIntObjectHashMap<List<ObjectReference>>();
+				final IntObjectMap<List<ObjectReference>> lockedAt = IntMaps.newIntObjectHashMap();
 				if(vmProxy.canGetMonitorFrameInfo())
 				{
 					for(MonitorInfo info : threadReference.ownedMonitorsAndFrames())
@@ -217,7 +217,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 						List<ObjectReference> monitors;
 						if((monitors = lockedAt.get(stackDepth)) == null)
 						{
-							lockedAt.put(stackDepth, monitors = new SmartList<ObjectReference>());
+							lockedAt.put(stackDepth, monitors = new SmartList<>());
 						}
 						monitors.add(info.monitor());
 					}

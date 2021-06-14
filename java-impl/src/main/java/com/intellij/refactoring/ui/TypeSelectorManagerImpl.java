@@ -15,16 +15,6 @@
  */
 package com.intellij.refactoring.ui;
 
-import gnu.trove.THashMap;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeUtil;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -39,6 +29,9 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.util.ArrayUtil;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author dsl
@@ -364,7 +357,7 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager
 	{
 		myTypeSelector.setTypes(types);
 
-		Map<String, PsiType> map = new THashMap<String, PsiType>();
+		Map<String, PsiType> map = new HashMap<String, PsiType>();
 		for(final PsiType type : types)
 		{
 			map.put(serialize(type), type);

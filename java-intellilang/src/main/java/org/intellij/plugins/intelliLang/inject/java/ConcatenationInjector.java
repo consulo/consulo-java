@@ -40,8 +40,6 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.psi.injection.LanguageInjectionSupport;
 import consulo.psi.injection.impl.ProjectInjectionConfiguration;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
 import org.intellij.plugins.intelliLang.inject.InjectorUtils;
@@ -74,7 +72,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
     mySupport = InjectorUtils.findNotNullInjectionSupport(JavaLanguageInjectionSupport.JAVA_SUPPORT_ID);
     myXmlIndex = CachedValuesManager.getManager(myProject).createCachedValue(new CachedValueProvider<Collection<String>>() {
       public Result<Collection<String>> compute() {
-        final Map<ElementPattern<?>, BaseInjection> map = new THashMap<ElementPattern<?>, BaseInjection>();
+        final Map<ElementPattern<?>, BaseInjection> map = new HashMap<ElementPattern<?>, BaseInjection>();
         for (BaseInjection injection : myConfiguration.getInjections(JavaLanguageInjectionSupport.JAVA_SUPPORT_ID)) {
           for (InjectionPlace place : injection.getInjectionPlaces()) {
             if (!place.isEnabled() || place.getElementPattern() == null) continue;
@@ -88,7 +86,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
     myAnnoIndex = CachedValuesManager.getManager(myProject).createCachedValue(new CachedValueProvider<Collection<String>>() {
       public Result<Collection<String>> compute() {
         final String annotationClass = myConfiguration.getAdvancedConfiguration().getLanguageAnnotationClass();
-        final Collection<String> result = new THashSet<String>();
+        final Collection<String> result = new HashSet<String>();
         final ArrayList<String> annoClasses = new ArrayList<String>(3);
         annoClasses.add(StringUtil.getShortName(annotationClass));
         for (int cursor = 0; cursor < annoClasses.size(); cursor++) {
@@ -194,7 +192,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
       final PsiElement topBlock = PsiUtil.getTopLevelEnclosingCodeBlock(firstOperand, null);
       final LocalSearchScope searchScope = new LocalSearchScope(new PsiElement[]{topBlock instanceof PsiCodeBlock
                                                                                  ? topBlock : firstOperand.getContainingFile()}, "", true);
-      final THashSet<PsiModifierListOwner> visitedVars = new THashSet<PsiModifierListOwner>();
+      final Set<PsiModifierListOwner> visitedVars = new HashSet<PsiModifierListOwner>();
       final LinkedList<PsiElement> places = new LinkedList<PsiElement>();
       places.add(firstOperand);
       final AnnotationUtilEx.AnnotatedElementVisitor visitor = new AnnotationUtilEx.AnnotatedElementVisitor() {

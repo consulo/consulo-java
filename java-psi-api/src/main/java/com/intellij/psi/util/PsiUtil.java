@@ -15,13 +15,11 @@
  */
 package com.intellij.psi.util;
 
-import consulo.logging.Logger;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JavaVersionService;
 import com.intellij.openapi.util.Comparing;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -40,15 +38,16 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.TimeoutUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.EmptyIterable;
-import java.util.HashMap;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
 import consulo.vfs.ArchiveFileSystem;
-import gnu.trove.THashSet;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NonNls;import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -65,8 +64,7 @@ public final class PsiUtil extends PsiUtilCore
 	public static final Key<Boolean> VALID_VOID_TYPE_IN_CODE_FRAGMENT = Key.create("VALID_VOID_TYPE_IN_CODE_FRAGMENT");
 
 
-	private static final Set<String> IGNORED_NAMES = ContainerUtil.newTroveSet("ignore", "ignore1", "ignore2", "ignore3", "ignore4", "ignore5", "ignored", "ignored1", "ignored2", "ignored3",
-			"ignored4", "ignored5");
+	private static final Set<String> IGNORED_NAMES = Set.of("ignore", "ignore1", "ignore2", "ignore3", "ignore4", "ignore5", "ignored", "ignored1", "ignored2", "ignored3", "ignored4", "ignored5");
 
 	private PsiUtil()
 	{
@@ -1409,7 +1407,7 @@ public final class PsiUtil extends PsiUtilCore
 			}
 			if(visited == null)
 			{
-				visited = new THashSet<PsiClass>();
+				visited = new HashSet<PsiClass>();
 			}
 			if(!visited.add(clazz))
 			{

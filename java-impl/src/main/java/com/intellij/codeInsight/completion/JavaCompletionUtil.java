@@ -50,7 +50,6 @@ import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.psi.PsiPackage;
 import consulo.ui.style.StandardColors;
 import consulo.util.dataholder.Key;
-import gnu.trove.THashSet;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -88,7 +87,7 @@ public class JavaCompletionUtil
 		final PsiExpression expr = PsiTreeUtil.getContextOfType(parameters.getPosition(), PsiExpression.class, true);
 		if(expr != null)
 		{
-			final Set<PsiType> set = new THashSet<>();
+			final Set<PsiType> set = new HashSet<>();
 			for(final ExpectedTypeInfo expectedInfo : JavaSmartCompletionContributor.getExpectedTypes(parameters))
 			{
 				set.add(expectedInfo.getType());
@@ -370,7 +369,7 @@ public class JavaCompletionUtil
 
 		Set<PsiType> expectedTypes = ObjectUtils.coalesce(getExpectedTypes(parameters), Collections.emptySet());
 
-		final Set<PsiMember> mentioned = new THashSet<>();
+		final Set<PsiMember> mentioned = new HashSet<>();
 		for(CompletionElement completionElement : processor.getResults())
 		{
 			for(LookupElement item : createLookupElements(completionElement, javaReference))

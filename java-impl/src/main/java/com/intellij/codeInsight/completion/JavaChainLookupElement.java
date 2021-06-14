@@ -15,26 +15,24 @@
  */
 package com.intellij.codeInsight.completion;
 
-import gnu.trove.THashSet;
-
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementDecorator;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.TypedLookupItem;
-import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.ClassConditionKey;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.text.CharArrayUtil;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author peter
@@ -68,7 +66,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 	public Set<String> getAllLookupStrings()
 	{
 		final Set<String> strings = getDelegate().getAllLookupStrings();
-		final THashSet<String> result = new THashSet<String>();
+		final Set<String> result = new HashSet<String>();
 		result.addAll(strings);
 		result.add(getLookupString());
 		return result;

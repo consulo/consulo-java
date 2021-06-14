@@ -15,23 +15,17 @@
  */
 package com.intellij.psi.impl;
 
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import jakarta.inject.Singleton;
-
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.JavaClassSupers;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author peter
@@ -48,7 +42,7 @@ public class JavaClassSupersImpl extends JavaClassSupers
 			return PsiSubstitutor.EMPTY;
 		}
 
-		return derivedClass instanceof PsiTypeParameter ? processTypeParameter((PsiTypeParameter) derivedClass, scope, superClass, ContainerUtil.<PsiTypeParameter>newTroveSet(),
+		return derivedClass instanceof PsiTypeParameter ? processTypeParameter((PsiTypeParameter) derivedClass, scope, superClass, new HashSet<>(),
 				derivedSubstitutor) : getSuperSubstitutorWithCaching(superClass, derivedClass, scope, derivedSubstitutor);
 	}
 

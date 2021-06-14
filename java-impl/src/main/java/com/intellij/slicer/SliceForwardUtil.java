@@ -15,15 +15,6 @@
  */
 package com.intellij.slicer;
 
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
@@ -34,6 +25,9 @@ import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.Processor;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author cdr
@@ -128,13 +122,13 @@ public class SliceForwardUtil
 		{
 			PsiParameter parameter = (PsiParameter) from;
 			PsiElement scope = parameter.getDeclarationScope();
-			Collection<PsiParameter> parametersToAnalyze = new THashSet<PsiParameter>();
+			Collection<PsiParameter> parametersToAnalyze = new HashSet<PsiParameter>();
 			if(scope instanceof PsiMethod)
 			{
 				final PsiMethod method = (PsiMethod) scope;
 				int index = method.getParameterList().getParameterIndex(parameter);
 
-				Collection<PsiMethod> superMethods = new THashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
+				Collection<PsiMethod> superMethods = new HashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
 				superMethods.add(method);
 				for(Iterator<PsiMethod> iterator = superMethods.iterator(); iterator.hasNext(); )
 				{
@@ -146,7 +140,7 @@ public class SliceForwardUtil
 					}
 				}
 
-				final THashSet<PsiMethod> implementors = new THashSet<PsiMethod>(superMethods);
+				final Set<PsiMethod> implementors = new HashSet<PsiMethod>(superMethods);
 				for(PsiMethod superMethod : superMethods)
 				{
 					ProgressManager.checkCanceled();
@@ -207,9 +201,9 @@ public class SliceForwardUtil
 		{
 			PsiMethod method = (PsiMethod) from;
 
-			Collection<PsiMethod> superMethods = new THashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
+			Collection<PsiMethod> superMethods = new HashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
 			superMethods.add(method);
-			final Set<PsiReference> processed = new THashSet<PsiReference>(); //usages of super method and overridden method can overlap
+			final Set<PsiReference> processed = new HashSet<PsiReference>(); //usages of super method and overridden method can overlap
 			for(final PsiMethod containingMethod : superMethods)
 			{
 				if(!MethodReferencesSearch.search(containingMethod, parent.getScope().toSearchScope(), true).forEach(new Processor<PsiReference>()

@@ -15,22 +15,6 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import consulo.logging.Logger;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.diff.DiffContentFactory;
 import com.intellij.diff.DiffManager;
@@ -60,15 +44,24 @@ import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.text.UniqueNameGenerator;
 import com.intellij.util.ui.JBUI;
+import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Maps;
+import consulo.util.collection.Sets;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class ExtractMethodSignatureSuggester
 {
 	private static final Logger LOG = Logger.getInstance(ExtractMethodSignatureSuggester.class);
-	private static final TObjectHashingStrategy<PsiExpression> ourEquivalenceStrategy = new TObjectHashingStrategy<PsiExpression>()
+	private static final HashingStrategy<PsiExpression> ourEquivalenceStrategy = new HashingStrategy<PsiExpression>()
 	{
 		@Override
-		public int computeHashCode(PsiExpression object)
+		public int hashCode(PsiExpression object)
 		{
 			return RefactoringUtil.unparenthesizeExpression(object).getClass().hashCode();
 		}
@@ -200,7 +193,7 @@ public class ExtractMethodSignatureSuggester
 		for(int i = strongParamsCound; i < variableDatum.size(); i++)
 		{
 			VariableData variableData = variableDatum.get(i);
-			final THashSet<PsiExpression> map = new THashSet<PsiExpression>(ourEquivalenceStrategy);
+			final Set<PsiExpression> map = Sets.newHashSet(ourEquivalenceStrategy);
 			if(!collectParamValues(duplicates, variableData, map))
 			{
 				continue;
@@ -282,7 +275,7 @@ public class ExtractMethodSignatureSuggester
 		}
 	}
 
-	private static boolean collectParamValues(List<Match> duplicates, VariableData variableData, THashSet<PsiExpression> map)
+	private static boolean collectParamValues(List<Match> duplicates, VariableData variableData, Set<PsiExpression> map)
 	{
 		for(Match duplicate : duplicates)
 		{
@@ -411,7 +404,7 @@ public class ExtractMethodSignatureSuggester
 		{
 			uniqueNameGenerator.addExistingName(parameter.getName());
 		}
-		final THashMap<PsiExpression, String> unique = new THashMap<PsiExpression, String>(ourEquivalenceStrategy);
+		final Map<PsiExpression, String> unique = Maps.newHashMap(ourEquivalenceStrategy);
 		final Map<PsiExpression, String> replacement = new HashMap<PsiExpression, String>();
 		for(PsiExpression expr : exprs)
 		{

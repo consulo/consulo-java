@@ -15,15 +15,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.ExpectedTypeInfo;
@@ -39,6 +30,12 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.psi.util.TypeConversionUtil;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author peter
@@ -176,7 +173,7 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement>
 			return false;
 		}
 
-		final Set<PsiTypeParameter> set = new THashSet<PsiTypeParameter>(Arrays.asList(typeParameters));
+		final Set<PsiTypeParameter> set = new HashSet<PsiTypeParameter>(Arrays.asList(typeParameters));
 		final PsiTypeVisitor<Boolean> typeParamSearcher = new PsiTypeVisitor<Boolean>()
 		{
 			@Override

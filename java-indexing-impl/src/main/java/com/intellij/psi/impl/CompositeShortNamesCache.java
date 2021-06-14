@@ -27,7 +27,6 @@ import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IdFilter;
-import gnu.trove.THashSet;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
@@ -391,7 +390,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache
 			if(myAllItems == null)
 			{
 				T[] elements = mySingleItem;
-				myAllItems = ContainerUtil.addAll(new THashSet<T>(elements.length), elements);
+				myAllItems = ContainerUtil.addAll(new HashSet<T>(elements.length), elements);
 			}
 			ContainerUtil.addAll(myAllItems, items);
 		}

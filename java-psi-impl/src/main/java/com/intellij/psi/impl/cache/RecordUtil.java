@@ -15,8 +15,6 @@
  */
 package com.intellij.psi.impl.cache;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.LighterASTTokenNode;
@@ -35,6 +33,8 @@ import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -99,7 +99,7 @@ public class RecordUtil
 		int packed = 0;
 		for(final LighterASTNode child : tree.getChildren(modList))
 		{
-			packed |= ModifierFlags.KEYWORD_TO_MODIFIER_FLAG_MAP.get(child.getTokenType());
+			packed |= ModifierFlags.KEYWORD_TO_MODIFIER_FLAG_MAP.getInt(child.getTokenType());
 		}
 		return packed;
 	}

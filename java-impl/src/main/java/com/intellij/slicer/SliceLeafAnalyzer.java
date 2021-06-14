@@ -36,7 +36,8 @@ import com.intellij.util.PairProcessor;
 import com.intellij.util.WalkingState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FactoryMap;
-import gnu.trove.TObjectHashingStrategy;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.collection.Sets;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -45,9 +46,9 @@ import java.util.*;
  * @author cdr
  */
 public class SliceLeafAnalyzer {
-  public static final TObjectHashingStrategy<PsiElement> LEAF_ELEMENT_EQUALITY = new TObjectHashingStrategy<PsiElement>() {
+  public static final HashingStrategy<PsiElement> LEAF_ELEMENT_EQUALITY = new HashingStrategy<PsiElement>() {
     @Override
-    public int computeHashCode(final PsiElement element) {
+    public int hashCode(final PsiElement element) {
       if (element == null) return 0;
       String text = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
         @Override
@@ -243,13 +244,8 @@ public class SliceLeafAnalyzer {
 
           Collection<? extends AbstractTreeNode> children = element.getChildren();
           if (children.isEmpty()) {
-            PsiElement value = ApplicationManager.getApplication().runReadAction(new Computable<PsiElement>() {
-              @Override
-              public PsiElement compute() {
-                return sliceUsage.getElement();
-              }
-            });
-            node(element, map).addAll(ContainerUtil.singleton(value, LEAF_ELEMENT_EQUALITY));
+            PsiElement value = ApplicationManager.getApplication().runReadAction((Computable<PsiElement>) sliceUsage::getElement);
+            node(element, map).addAll(Sets.newHashSet(Set.of(value), LEAF_ELEMENT_EQUALITY));
           }
           super.visit(element);
         }

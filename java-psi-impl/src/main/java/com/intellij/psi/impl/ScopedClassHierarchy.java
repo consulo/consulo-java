@@ -30,7 +30,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.TObjectHashingStrategy;
+import consulo.util.collection.HashingStrategy;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -45,10 +45,10 @@ import static com.intellij.util.ObjectUtil.assertNotNull;
  */
 class ScopedClassHierarchy
 {
-	private static final TObjectHashingStrategy<PsiClass> CLASS_HASHING_STRATEGY = new TObjectHashingStrategy<PsiClass>()
+	private static final HashingStrategy<PsiClass> CLASS_HASHING_STRATEGY = new HashingStrategy<PsiClass>()
 	{
 		@Override
-		public int computeHashCode(PsiClass object)
+		public int hashCode(PsiClass object)
 		{
 			return StringUtil.notNullize(object.getQualifiedName()).hashCode();
 		}

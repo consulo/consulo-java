@@ -15,12 +15,6 @@
  */
 package com.intellij.psi.codeStyle.arrangement;
 
-import gnu.trove.TObjectIntHashMap;
-
-import java.util.*;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
@@ -28,6 +22,12 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.ContainerUtilRt;
 import com.intellij.util.containers.Stack;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author Denis Zhdanov
@@ -205,15 +205,8 @@ public class JavaArrangementParseInfo
 	public List<JavaArrangementOverriddenMethodsInfo> getOverriddenMethods()
 	{
 		List<JavaArrangementOverriddenMethodsInfo> result = new ArrayList<JavaArrangementOverriddenMethodsInfo>();
-		final TObjectIntHashMap<PsiMethod> weights = new TObjectIntHashMap<PsiMethod>();
-		Comparator<Pair<PsiMethod, PsiMethod>> comparator = new Comparator<Pair<PsiMethod, PsiMethod>>()
-		{
-			@Override
-			public int compare(Pair<PsiMethod, PsiMethod> o1, Pair<PsiMethod, PsiMethod> o2)
-			{
-				return weights.get(o1.first) - weights.get(o2.first);
-			}
-		};
+		final ObjectIntMap<PsiMethod> weights = ObjectMaps.newObjectIntHashMap();
+		Comparator<Pair<PsiMethod, PsiMethod>> comparator = (o1, o2) -> weights.getInt(o1.first) - weights.getInt(o2.first);
 		for(Map.Entry<PsiClass, List<Pair<PsiMethod, PsiMethod>>> entry : myOverriddenMethods.entrySet())
 		{
 			JavaArrangementOverriddenMethodsInfo info = new JavaArrangementOverriddenMethodsInfo(entry.getKey().getName());
@@ -221,7 +214,7 @@ public class JavaArrangementParseInfo
 			int i = 0;
 			for(PsiMethod method : entry.getKey().getMethods())
 			{
-				weights.put(method, i++);
+				weights.putInt(method, i++);
 			}
 			ContainerUtil.sort(entry.getValue(), comparator);
 			for(Pair<PsiMethod, PsiMethod> pair : entry.getValue())

@@ -17,13 +17,13 @@ package com.intellij.psi;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.event.EditorEventMulticaster;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.source.PsiFileImpl;
@@ -37,10 +37,10 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.FileContentUtil;
-import gnu.trove.THashSet;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @PlatformTestCase.WrapInCommand
@@ -350,7 +350,7 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
     ctrlD();
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
-    Set<PsiReferenceExpression> refs = new THashSet<PsiReferenceExpression>();
+    Set<PsiReferenceExpression> refs = new HashSet<PsiReferenceExpression>();
     int offset=0;
     while (true) {
       offset = getEditor().getDocument().getText().indexOf("foo();", offset+1);

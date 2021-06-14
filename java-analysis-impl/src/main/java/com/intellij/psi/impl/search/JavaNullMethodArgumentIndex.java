@@ -19,7 +19,6 @@ import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaTokenType;
@@ -31,13 +30,14 @@ import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.IntArrayList;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import com.intellij.util.text.StringSearcher;
-import gnu.trove.THashMap;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,10 +87,10 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 				return Collections.emptyMap();
 			}
 
-			Map<MethodCallData, Void> result = new THashMap<>();
+			Map<MethodCallData, Void> result = new HashMap<>();
 			for(LighterASTNode element : calls)
 			{
-				final IntArrayList indices = getNullParameterIndices(lighterAst, element);
+				final IntList indices = getNullParameterIndices(lighterAst, element);
 				if(indices != null)
 				{
 					final String name = getMethodName(lighterAst, element, element.getTokenType());
@@ -127,8 +127,8 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 		return calls;
 	}
 
-	@javax.annotation.Nullable
-	private static IntArrayList getNullParameterIndices(LighterAST lighterAst, @Nonnull LighterASTNode methodCall)
+	@Nullable
+	private static IntList getNullParameterIndices(LighterAST lighterAst, @Nonnull LighterASTNode methodCall)
 	{
 		final LighterASTNode node = LightTreeUtil.firstChildOfType(lighterAst, methodCall, EXPRESSION_LIST);
 		if(node == null)
@@ -136,7 +136,7 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 			return null;
 		}
 		final List<LighterASTNode> parameters = JavaLightTreeUtil.getExpressionChildren(lighterAst, node);
-		IntArrayList indices = new IntArrayList(1);
+		IntList indices = IntLists.newArrayList(1);
 		for(int idx = 0; idx < parameters.size(); idx++)
 		{
 			if(isNullLiteral(lighterAst, parameters.get(idx)))
@@ -147,12 +147,12 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 		return indices;
 	}
 
-	private static boolean isNullLiteral(LighterAST lighterAst, @javax.annotation.Nullable LighterASTNode expr)
+	private static boolean isNullLiteral(LighterAST lighterAst, @Nullable LighterASTNode expr)
 	{
 		return expr != null && expr.getTokenType() == LITERAL_EXPRESSION && lighterAst.getChildren(expr).get(0).getTokenType() == JavaTokenType.NULL_KEYWORD;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getMethodName(LighterAST lighterAst, @Nonnull LighterASTNode call, IElementType elementType)
 	{
 		if(elementType == NEW_EXPRESSION || elementType == ANONYMOUS_CLASS)
@@ -181,18 +181,6 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
 	{
 		return new KeyDescriptor<MethodCallData>()
 		{
-			@Override
-			public int getHashCode(MethodCallData value)
-			{
-				return value.hashCode();
-			}
-
-			@Override
-			public boolean isEqual(MethodCallData val1, MethodCallData val2)
-			{
-				return val1.equals(val2);
-			}
-
 			@Override
 			public void save(@Nonnull DataOutput out, MethodCallData value) throws IOException
 			{

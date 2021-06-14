@@ -15,22 +15,6 @@
  */
 package com.intellij.codeInsight.slice;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import gnu.trove.THashMap;
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -49,13 +33,20 @@ import com.intellij.slicer.SliceAnalysisParams;
 import com.intellij.slicer.SliceHandler;
 import com.intellij.slicer.SliceUsage;
 import com.intellij.util.CommonProcessors;
-import com.intellij.util.containers.IntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author cdr
  */
 public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
-  private final TIntObjectHashMap<IntArrayList> myFlownOffsets = new TIntObjectHashMap<IntArrayList>();
+  private final IntObjectMap<IntList> myFlownOffsets = IntMaps.newIntObjectHashMap();
 
   private void dotest() throws Exception {
     configureByFile("/codeInsight/slice/backward/"+getTestName(false)+".java");
@@ -74,7 +65,7 @@ public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
     checkUsages(usage, true, myFlownOffsets);
   }
 
-  static void checkUsages(final SliceUsage usage, final boolean dataFlowToThis, final TIntObjectHashMap<IntArrayList> flownOffsets) {
+  static void checkUsages(final SliceUsage usage, final boolean dataFlowToThis, final IntObjectMap<IntList> flownOffsets) {
     final List<SliceUsage> children = new ArrayList<SliceUsage>();
     boolean b = ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
       @Override
@@ -84,7 +75,7 @@ public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
     }, "Expanding", true, usage.getElement().getProject());
     assertTrue(b);
     int startOffset = usage.getElement().getTextOffset();
-    IntArrayList list = flownOffsets.get(startOffset);
+    IntList list = flownOffsets.get(startOffset);
     int[] offsets = list == null ? new int[0] : list.toArray();
     Arrays.sort(offsets);
 
@@ -115,12 +106,12 @@ public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
   }
 
   static void calcRealOffsets(PsiElement startElement, Map<String, RangeMarker> sliceUsageName2Offset,
-                               final TIntObjectHashMap<IntArrayList> flownOffsets) {
+                               final IntObjectMap<IntList> flownOffsets) {
     fill(sliceUsageName2Offset, "", startElement.getTextOffset(), flownOffsets);
   }
 
   static Map<String, RangeMarker> extractSliceOffsetsFromDocument(final Document document) {
-    Map<String, RangeMarker> sliceUsageName2Offset = new THashMap<String, RangeMarker>();
+    Map<String, RangeMarker> sliceUsageName2Offset = new HashMap<String, RangeMarker>();
 
     extract(document, sliceUsageName2Offset, "");
     assertTrue(!document.getText().contains("<flown"));
@@ -129,14 +120,14 @@ public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
   }
 
   private static void fill(Map<String, RangeMarker> sliceUsageName2Offset, String name, int offset,
-                    final TIntObjectHashMap<IntArrayList> flownOffsets) {
+                    final IntObjectMap<IntList> flownOffsets) {
     for (int i=1;i<9;i++) {
       String newName = name + i;
       RangeMarker marker = sliceUsageName2Offset.get(newName);
       if (marker == null) break;
-      IntArrayList offsets = flownOffsets.get(offset);
+      IntList offsets = flownOffsets.get(offset);
       if (offsets == null) {
-        offsets = new IntArrayList();
+        offsets = IntLists.newArrayList();
         flownOffsets.put(offset, offsets);
       }
       int newStartOffset = marker.getStartOffset();

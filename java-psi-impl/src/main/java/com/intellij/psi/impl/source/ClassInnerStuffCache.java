@@ -143,7 +143,7 @@ public final class ClassInnerStuffCache
 			Pair<Long, Interner<PsiMember>> pair = myInterner.get();
 			if(pair == null || pair.first.longValue() != modCount)
 			{
-				myInterner.set(pair = Pair.create(modCount, new WeakInterner<>()));
+				myInterner.set(pair = Pair.create(modCount, Interner.createWeakInterner()));
 			}
 			//noinspection unchecked
 			return (T) pair.second.intern(m);

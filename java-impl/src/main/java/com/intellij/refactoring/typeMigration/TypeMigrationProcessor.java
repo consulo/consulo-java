@@ -39,13 +39,9 @@ import com.intellij.util.Functions;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.intellij.util.ObjectUtil.assertNotNull;
 
@@ -132,7 +128,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor
 				if(optimizeImports)
 				{
 					final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(myProject);
-					final Set<PsiFile> affectedFiles = new THashSet<>();
+					final Set<PsiFile> affectedFiles = new HashSet<>();
 					for(UsageInfo usage : usages)
 					{
 						final PsiFile usageFile = usage.getFile();

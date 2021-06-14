@@ -40,14 +40,10 @@ import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.PsiJavaPatterns.psiClass;
@@ -79,7 +75,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 		}
 
 		PsiElement position = parameters.getPosition();
-		final Set<LookupElement> lookupSet = new THashSet<>();
+		final Set<LookupElement> lookupSet = new HashSet<>();
 		if(psiElement(PsiIdentifier.class).andNot(INSIDE_TYPE_PARAMS_PATTERN).withParent(or(psiElement(PsiLocalVariable.class), psiElement(PsiParameter.class))).accepts(position))
 		{
 			completeLocalVariableName(lookupSet, result.getPrefixMatcher(), (PsiVariable) parameters.getPosition().getParent(), parameters.getInvocationCount() >= 1);

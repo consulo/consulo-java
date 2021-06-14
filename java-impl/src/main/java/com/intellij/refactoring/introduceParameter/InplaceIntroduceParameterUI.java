@@ -15,10 +15,12 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
-import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiLocalVariable;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.IntroduceParameterRefactoring;
@@ -27,8 +29,9 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.introduce.inplace.KeyboardComboSwitcher;
 import com.intellij.refactoring.ui.TypeSelectorManager;
 import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.util.ui.UIUtil;
-import gnu.trove.TIntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,7 +52,7 @@ public abstract class InplaceIntroduceParameterUI extends IntroduceParameterSett
                                      PsiLocalVariable onLocalVariable,
                                      PsiExpression onExpression,
                                      PsiMethod methodToReplaceIn,
-                                     TIntArrayList parametersToRemove,
+                                     IntList parametersToRemove,
                                      TypeSelectorManager typeSelectorManager,
                                      PsiExpression[] occurrences) {
     super(onLocalVariable, onExpression, methodToReplaceIn, parametersToRemove);

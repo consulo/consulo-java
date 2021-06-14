@@ -18,10 +18,10 @@ package com.intellij.cyclicDependencies;
 import com.intellij.util.Chunk;
 import com.intellij.util.graph.DFSTBuilder;
 import com.intellij.util.graph.Graph;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntProcedure;
+import consulo.util.collection.primitive.ints.IntList;
 
 import java.util.*;
+import java.util.function.IntConsumer;
 
 /**
  * User: anna
@@ -30,18 +30,17 @@ import java.util.*;
 public class CyclicDependenciesUtil{
   public static <Node> List<Chunk<Node>> buildChunks(Graph<Node> graph) {
     final DFSTBuilder<Node> dfstBuilder = new DFSTBuilder<Node>(graph);
-    final TIntArrayList sccs = dfstBuilder.getSCCs();
+    final IntList sccs = dfstBuilder.getSCCs();
     final List<Chunk<Node>> chunks = new ArrayList<Chunk<Node>>();
-    sccs.forEach(new TIntProcedure() {
+    sccs.forEach(new IntConsumer() {
       int myTNumber = 0;
-      public boolean execute(int size) {
+      public void accept(int size) {
         Set<Node> packs = new LinkedHashSet<Node>();
         for (int j = 0; j < size; j++) {
           packs.add(dfstBuilder.getNodeByTNumber(myTNumber + j));
         }
         chunks.add(new Chunk<Node>(packs));
         myTNumber += size;
-        return true;
       }
     });
 

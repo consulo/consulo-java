@@ -16,10 +16,10 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.impl.search.JavaNullMethodArgumentUtil;
 import com.intellij.util.SmartList;
-import gnu.trove.THashSet;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -42,9 +42,9 @@ class NullParameterConstraintChecker extends DataFlowRunner
 	private NullParameterConstraintChecker(Collection<PsiParameter> parameters)
 	{
 		super(false, null);
-		myPossiblyViolatedParameters = new THashSet<>(parameters);
-		myParametersWithSuccessfulExecutionInNotNullState = new THashSet<>();
-		myUsedParameters = new THashSet<>();
+		myPossiblyViolatedParameters = new HashSet<>(parameters);
+		myParametersWithSuccessfulExecutionInNotNullState = new HashSet<>();
+		myUsedParameters = new HashSet<>();
 	}
 
 	@Nonnull

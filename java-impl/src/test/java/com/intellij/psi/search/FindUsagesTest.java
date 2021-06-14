@@ -15,14 +15,6 @@
  */
 package com.intellij.psi.search;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.find.findUsages.JavaFindUsagesHandler;
 import com.intellij.find.findUsages.JavaFindUsagesHandlerFactory;
@@ -43,7 +35,16 @@ import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Processor;
-import com.intellij.util.containers.IntArrayList;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public abstract class FindUsagesTest extends PsiTestCase{
 
@@ -68,8 +69,8 @@ public abstract class FindUsagesTest extends PsiTestCase{
     int[] starts = new int[]{};
     int[] ends = new int[]{};
     final ArrayList<PsiFile> filesList = new ArrayList<PsiFile>();
-    final IntArrayList startsList = new IntArrayList();
-    final IntArrayList endsList = new IntArrayList();
+    final IntList startsList = IntLists.newArrayList();
+    final IntList endsList = IntLists.newArrayList();
     PsiReference[] refs =
       MethodReferencesSearch.search((PsiMethod)superExpr.resolve(), GlobalSearchScope.projectScope(myProject), false).toArray(PsiReference.EMPTY_ARRAY);
     for (PsiReference ref : refs) {
@@ -108,7 +109,7 @@ public abstract class FindUsagesTest extends PsiTestCase{
     assertEquals(1, ReferencesSearch.search(usedMethod).findAll().size());
   }
 
-  private static void addReference(PsiReference ref, ArrayList<PsiFile> filesList, IntArrayList startsList, IntArrayList endsList) {
+  private static void addReference(PsiReference ref, ArrayList<PsiFile> filesList, IntList startsList, IntList endsList) {
     PsiElement element = ref.getElement();
     filesList.add(element.getContainingFile());
     TextRange range = element.getTextRange();
@@ -188,8 +189,8 @@ public abstract class FindUsagesTest extends PsiTestCase{
 
   public static void doTest(PsiElement element, String[] fileNames, int[] starts, int[] ends) throws Exception {
     final ArrayList<PsiFile> filesList = new ArrayList<PsiFile>();
-    final IntArrayList startsList = new IntArrayList();
-    final IntArrayList endsList = new IntArrayList();
+    final IntList startsList = IntLists.newArrayList();
+    final IntList endsList = IntLists.newArrayList();
     ReferencesSearch.search(element, GlobalSearchScope.projectScope(element.getProject()), false).forEach(new PsiReferenceProcessorAdapter(new PsiReferenceProcessor() {
         @Override
         public boolean execute(PsiReference ref) {
@@ -242,7 +243,7 @@ public abstract class FindUsagesTest extends PsiTestCase{
     }
   }
 
-  private static void checkResult(String[] fileNames, final ArrayList<PsiFile> filesList, int[] starts, final IntArrayList startsList, int[] ends, final IntArrayList endsList) {
+  private static void checkResult(String[] fileNames, final ArrayList<PsiFile> filesList, int[] starts, final IntList startsList, int[] ends, final IntList endsList) {
     List<SearchResult> expected = new ArrayList<SearchResult>();
     for (int i = 0; i < fileNames.length; i++) {
       String fileName = fileNames[i];

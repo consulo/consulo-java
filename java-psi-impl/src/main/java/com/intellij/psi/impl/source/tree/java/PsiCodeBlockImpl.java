@@ -30,11 +30,11 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import consulo.logging.Logger;
-import gnu.trove.THashSet;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCodeBlock {
@@ -97,8 +97,8 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
     Set<String> set2 = myVariablesSet;
     boolean wasConflict = myConflict;
     if (set1 == null || set2 == null) {
-      final Set<String> localsSet = new THashSet<String>();
-      final Set<String> classesSet = new THashSet<String>();
+      final Set<String> localsSet = new HashSet<String>();
+      final Set<String> classesSet = new HashSet<String>();
       final Ref<Boolean> conflict = new Ref<Boolean>(Boolean.FALSE);
       PsiScopesUtil.walkChildrenScopes(this, new BaseScopeProcessor() {
         @Override

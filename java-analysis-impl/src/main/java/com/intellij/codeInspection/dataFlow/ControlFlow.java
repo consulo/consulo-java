@@ -23,7 +23,8 @@ import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiVariable;
-import gnu.trove.TObjectIntHashMap;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
 import one.util.streamex.StreamEx;
 
 import javax.annotation.Nullable;
@@ -34,8 +35,8 @@ import java.util.stream.Stream;
 public class ControlFlow
 {
 	private final List<Instruction> myInstructions = new ArrayList<>();
-	private final TObjectIntHashMap<PsiElement> myElementToStartOffsetMap = new TObjectIntHashMap<>();
-	private final TObjectIntHashMap<PsiElement> myElementToEndOffsetMap = new TObjectIntHashMap<>();
+	private final ObjectIntMap<PsiElement> myElementToStartOffsetMap = ObjectMaps.newObjectIntHashMap();
+	private final ObjectIntMap<PsiElement> myElementToEndOffsetMap = ObjectMaps.newObjectIntHashMap();
 	private final DfaValueFactory myFactory;
 
 	public ControlFlow(final DfaValueFactory factory)
@@ -60,12 +61,12 @@ public class ControlFlow
 
 	public void startElement(PsiElement psiElement)
 	{
-		myElementToStartOffsetMap.put(psiElement, myInstructions.size());
+		myElementToStartOffsetMap.putInt(psiElement, myInstructions.size());
 	}
 
 	public void finishElement(PsiElement psiElement)
 	{
-		myElementToEndOffsetMap.put(psiElement, myInstructions.size());
+		myElementToEndOffsetMap.putInt(psiElement, myInstructions.size());
 	}
 
 	public void addInstruction(Instruction instruction)
@@ -99,7 +100,7 @@ public class ControlFlow
 			@Override
 			public int getInstructionOffset()
 			{
-				return myElementToStartOffsetMap.get(element);
+				return myElementToStartOffsetMap.getInt(element);
 			}
 		};
 	}
@@ -111,7 +112,7 @@ public class ControlFlow
 			@Override
 			public int getInstructionOffset()
 			{
-				return myElementToEndOffsetMap.get(element);
+				return myElementToEndOffsetMap.getInt(element);
 			}
 		};
 	}

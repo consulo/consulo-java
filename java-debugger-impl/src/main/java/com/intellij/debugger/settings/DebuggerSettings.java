@@ -23,7 +23,6 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.EventDispatcher;
-import com.intellij.util.containers.hash.LinkedHashMap;
 import com.intellij.util.xmlb.SkipDefaultsSerializationFilter;
 import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.annotations.AbstractCollection;

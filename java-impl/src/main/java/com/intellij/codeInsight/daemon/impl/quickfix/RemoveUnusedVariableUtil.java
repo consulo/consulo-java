@@ -15,11 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import gnu.trove.THashSet;
-
-import java.util.*;
-
-import javax.annotation.Nonnull;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PropertyUtil;
@@ -27,11 +22,14 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.psi.PsiPackage;
 
+import javax.annotation.Nonnull;
+import java.util.*;
+
 public class RemoveUnusedVariableUtil {
   public static final int MAKE_STATEMENT = 1;
   public static final int DELETE_ALL = 2;
   public static final int CANCEL = 0;
-  private static final Set<String> ourSideEffectFreeClasses = new THashSet<String>();
+  private static final Set<String> ourSideEffectFreeClasses = new HashSet<String>();
   static {
     ourSideEffectFreeClasses.add(Object.class.getName());
     ourSideEffectFreeClasses.add(Short.class.getName());

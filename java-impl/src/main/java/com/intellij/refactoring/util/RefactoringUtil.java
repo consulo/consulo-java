@@ -21,7 +21,6 @@ import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.lang.java.JavaLanguage;
-import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.colors.EditorColors;
@@ -57,12 +56,10 @@ import com.intellij.refactoring.PackageWrapper;
 import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.IncorrectOperationException;
-import java.util.HashMap;
-import java.util.HashSet;
 import consulo.java.module.util.JavaClassNames;
-import gnu.trove.THashMap;
-import javax.annotation.Nonnull;
+import consulo.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -527,7 +524,7 @@ public class RefactoringUtil
 	{
 		LOG.assertTrue(variable instanceof PsiLocalVariable || variable instanceof PsiParameter);
 		final boolean isReassigned = HighlightControlFlowUtil
-				.isReassigned(variable, new THashMap<PsiElement, Collection<ControlFlowUtil.VariableInfo>>());
+				.isReassigned(variable, new HashMap<PsiElement, Collection<ControlFlowUtil.VariableInfo>>());
 		return !isReassigned;
 	}
 

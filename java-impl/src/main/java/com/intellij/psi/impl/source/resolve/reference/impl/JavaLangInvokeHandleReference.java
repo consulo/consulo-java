@@ -26,12 +26,12 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -159,7 +159,7 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
 
 	private Object[] lookupFields(@Nonnull PsiClass psiClass, Predicate<? super PsiField> filter)
 	{
-		final Set<String> uniqueNames = new THashSet<>();
+		final Set<String> uniqueNames = new HashSet<>();
 		return Arrays.stream(psiClass.getAllFields()).filter(field -> field != null && (field.getContainingClass() == psiClass || !field.hasModifierProperty(PsiModifier.PRIVATE)) && field.getName()
 				!= null && uniqueNames.add(field.getName())).filter(filter).sorted(Comparator.comparing((PsiField field) -> isPublic(field) ? 0 : 1).thenComparing(PsiField::getName)).map(field ->
 				withPriority(JavaLookupElementBuilder.forField(field).withInsertHandler(this), isPublic(field))).toArray();

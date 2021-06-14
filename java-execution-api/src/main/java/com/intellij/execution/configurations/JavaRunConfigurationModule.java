@@ -15,16 +15,6 @@
  */
 package com.intellij.execution.configurations;
 
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.openapi.module.Module;
@@ -35,6 +25,13 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.search.GlobalSearchScope;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author spleaner
@@ -68,7 +65,7 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
     PsiDocumentManager.getInstance(project).commitAllDocuments();
     final PsiClass[] possibleClasses = JavaPsiFacade.getInstance(project).findClasses(className, GlobalSearchScope.projectScope(project));
 
-    final Set<Module> modules = new THashSet<Module>();
+    final Set<Module> modules = new HashSet<Module>();
     for (PsiClass aClass : possibleClasses) {
       Module module = ModuleUtil.findModuleForPsiElement(aClass);
       if (module != null) {

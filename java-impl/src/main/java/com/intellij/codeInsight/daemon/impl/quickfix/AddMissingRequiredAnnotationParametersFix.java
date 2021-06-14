@@ -15,17 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import consulo.logging.Logger;
-import gnu.trove.TObjectIntHashMap;
-
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.annotation.Nonnull;
-
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
 import com.intellij.codeInsight.template.TemplateManager;
@@ -37,6 +26,15 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.objects.ObjectIntMap;
+import consulo.util.collection.primitive.objects.ObjectMaps;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author Dmitry Batkovich
@@ -91,17 +89,9 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
 	{
 		final PsiNameValuePair[] addedParameters = myAnnotation.getParameterList().getAttributes();
 
-		final TObjectIntHashMap<String> annotationsOrderMap = getAnnotationsOrderMap();
+		final ObjectIntMap<String> annotationsOrderMap = getAnnotationsOrderMap();
 		final SortedSet<Pair<String, PsiAnnotationMemberValue>> newParameters = new TreeSet<Pair<String,
-				PsiAnnotationMemberValue>>(new Comparator<Pair<String, PsiAnnotationMemberValue>>()
-		{
-			@Override
-			public int compare(final Pair<String, PsiAnnotationMemberValue> o1,
-					final Pair<String, PsiAnnotationMemberValue> o2)
-			{
-				return annotationsOrderMap.get(o1.getFirst()) - annotationsOrderMap.get(o2.getFirst());
-			}
-		});
+				PsiAnnotationMemberValue>>((o1, o2) -> annotationsOrderMap.getInt(o1.getFirst()) - annotationsOrderMap.getInt(o2.getFirst()));
 		final boolean order = isAlreadyAddedOrdered(annotationsOrderMap, addedParameters);
 		if(order)
 		{
@@ -162,27 +152,26 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
 		return true;
 	}
 
-	private TObjectIntHashMap<String> getAnnotationsOrderMap()
+	private ObjectIntMap<String> getAnnotationsOrderMap()
 	{
-		final TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+		final ObjectIntMap<String> map = ObjectMaps.newObjectIntHashMap();
 		for(int i = 0; i < myAnnotationMethods.length; i++)
 		{
-			map.put(myAnnotationMethods[i].getName(), i);
+			map.putInt(myAnnotationMethods[i].getName(), i);
 		}
 		return map;
 	}
 
-	private static boolean isAlreadyAddedOrdered(final TObjectIntHashMap<String> orderMap,
-			final PsiNameValuePair[] addedParameters)
+	private static boolean isAlreadyAddedOrdered(final ObjectIntMap<String> orderMap, final PsiNameValuePair[] addedParameters)
 	{
 		if(addedParameters.length <= 1)
 		{
 			return true;
 		}
-		int previousOrder = orderMap.get(addedParameters[0].getName());
+		int previousOrder = orderMap.getInt(addedParameters[0].getName());
 		for(int i = 1; i < addedParameters.length; i++)
 		{
-			final int currentOrder = orderMap.get(addedParameters[i].getName());
+			final int currentOrder = orderMap.getInt(addedParameters[i].getName());
 			if(currentOrder < previousOrder)
 			{
 				return false;

@@ -26,11 +26,11 @@ import com.intellij.psi.*;
 import com.intellij.util.containers.Stack;
 import consulo.fileTypes.impl.VfsIconUtil;
 import consulo.ui.image.Image;
-import gnu.trove.THashSet;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class RefJavaElementImpl extends RefElementImpl implements RefJavaElement
@@ -94,7 +94,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
 	{
 		if(myOutTypeReferences == null)
 		{
-			myOutTypeReferences = new THashSet<RefClass>();
+			myOutTypeReferences = new HashSet<RefClass>();
 		}
 		myOutTypeReferences.add(refClass);
 	}

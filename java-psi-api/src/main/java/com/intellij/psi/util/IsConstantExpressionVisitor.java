@@ -19,13 +19,12 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import consulo.java.module.util.JavaClassNames;
 
-import gnu.trove.THashMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class IsConstantExpressionVisitor extends JavaElementVisitor {
   protected boolean myIsConstant;
-  private final Map<PsiVariable, Boolean> varIsConst = new THashMap<PsiVariable, Boolean>();
+  private final Map<PsiVariable, Boolean> varIsConst = new HashMap<PsiVariable, Boolean>();
 
   public boolean isConstant() {
     return myIsConstant;

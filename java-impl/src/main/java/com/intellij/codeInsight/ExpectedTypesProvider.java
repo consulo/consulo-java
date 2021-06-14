@@ -42,7 +42,6 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Stack;
 import consulo.java.module.util.JavaClassNames;
 import consulo.logging.Logger;
-import gnu.trove.THashSet;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
@@ -1667,7 +1666,7 @@ public class ExpectedTypesProvider
 			final JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
 			final PsiMethod[] methods = myClassProvider.findDeclaredMethods(reference.getManager(),
 					reference.getReferenceName());
-			Set<ExpectedTypeInfo> types = new THashSet<ExpectedTypeInfo>();
+			Set<ExpectedTypeInfo> types = new HashSet<ExpectedTypeInfo>();
 			for(PsiMethod method : methods)
 			{
 				final PsiClass aClass = method.getContainingClass();

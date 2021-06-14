@@ -15,33 +15,22 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl.providers;
 
-import gnu.trove.THashMap;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.project.Project;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.ClassKind;
-import com.intellij.psi.util.ParameterizedCachedValue;
-import com.intellij.psi.util.ParameterizedCachedValueProvider;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.*;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.psi.PsiPackage;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -100,7 +89,7 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
 	{
 		if(myOptions == null)
 		{
-			myOptions = new THashMap<CustomizationKey, Object>();
+			myOptions = new HashMap<CustomizationKey, Object>();
 		}
 		option.putValue(myOptions, value);
 	}

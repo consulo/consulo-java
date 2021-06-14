@@ -21,16 +21,6 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import gnu.trove.THashMap;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import jakarta.inject.Inject;
-
 import com.intellij.CommonBundle;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.ModuleCompilerUtil;
@@ -40,14 +30,8 @@ import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.compiler.TranslatingCompiler;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
-import consulo.logging.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -59,6 +43,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
 import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
+import consulo.logging.Logger;
+import jakarta.inject.Inject;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class AnnotationProcessingCompiler implements TranslatingCompiler
 {
@@ -119,7 +108,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 		wrapper.setForceCompileTestsSeparately(true);
 		try
 		{
-			wrapper.compile(new THashMap<>());
+			wrapper.compile(new HashMap<>());
 		}
 		catch(CompilerException e)
 		{

@@ -15,37 +15,28 @@
  */
 package com.intellij.execution.testDiscovery;
 
-import gnu.trove.THashSet;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntObjectHashMap;
-
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import consulo.disposer.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupManager;
-import com.intellij.openapi.util.Ref;
 import com.intellij.util.ThrowableConvertor;
 import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.io.IOUtil;
 import com.intellij.util.io.PathKt;
+import consulo.disposer.Disposable;
+import consulo.logging.Logger;
+import consulo.util.collection.primitive.ints.IntList;
+import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * @author Maxim.Mossienko on 7/9/2015.
@@ -136,10 +127,10 @@ public class TestDiscoveryIndex implements Disposable
 			@Override
 			public Collection<String> convert(TestInfoHolder localHolder) throws IOException
 			{
-				TIntArrayList remoteList = myRemoteTestRunDataController.withTestDataHolder(remoteHolder -> remoteHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(remoteHolder
+				IntList remoteList = myRemoteTestRunDataController.withTestDataHolder(remoteHolder -> remoteHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(remoteHolder
 						.myClassEnumerator.enumerate(classFQName), remoteHolder.myMethodEnumerator.enumerate(methodName))));
 
-				final TIntArrayList localList = localHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(localHolder.myClassEnumerator.enumerate(classFQName), localHolder.myMethodEnumerator
+				final IntList localList = localHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(localHolder.myClassEnumerator.enumerate(classFQName), localHolder.myMethodEnumerator
 						.enumerate(methodName)));
 
 				if(remoteList == null)
@@ -153,9 +144,9 @@ public class TestDiscoveryIndex implements Disposable
 				{
 					return testsFromRemote;
 				}
-				THashSet<String> setOfStrings = new THashSet<>(testsFromRemote);
+				Set<String> setOfStrings = new HashSet<>(testsFromRemote);
 
-				for(int testNameId : localList.toNativeArray())
+				for(int testNameId : localList.toArray())
 				{
 					if(testNameId < 0)
 					{
@@ -168,7 +159,7 @@ public class TestDiscoveryIndex implements Disposable
 				return setOfStrings;
 			}
 
-			private Collection<String> testIdsToTestNames(TIntArrayList localList, TestInfoHolder localHolder) throws IOException
+			private Collection<String> testIdsToTestNames(IntList localList, TestInfoHolder localHolder) throws IOException
 			{
 				if(localList == null)
 				{
@@ -176,7 +167,7 @@ public class TestDiscoveryIndex implements Disposable
 				}
 
 				final ArrayList<String> result = new ArrayList<>(localList.size());
-				for(int testNameId : localList.toNativeArray())
+				for(int testNameId : localList.toArray())
 				{
 					if(testNameId < 0)
 					{
@@ -200,7 +191,7 @@ public class TestDiscoveryIndex implements Disposable
 			{
 				List<String> modules = getTestModules(localHolder);
 				List<String> modulesFromRemote = myRemoteTestRunDataController.withTestDataHolder(this::getTestModules);
-				THashSet<String> modulesSet = new THashSet<>(modules);
+				Set<String> modulesSet = new HashSet<>(modules);
 				if(modulesFromRemote != null)
 				{
 					modulesSet.addAll(modulesFromRemote);
@@ -211,14 +202,14 @@ public class TestDiscoveryIndex implements Disposable
 			private List<String> getTestModules(TestInfoHolder holder) throws IOException
 			{
 				// todo merging with remote
-				final TIntArrayList list = holder.myTestNameToNearestModule.get(TestInfoHolder.createKey(holder.myClassEnumerator.enumerate(classFQName), holder.myMethodEnumerator.enumerate
+				final IntList list = holder.myTestNameToNearestModule.get(TestInfoHolder.createKey(holder.myClassEnumerator.enumerate(classFQName), holder.myMethodEnumerator.enumerate
 						(methodName)));
 				if(list == null)
 				{
 					return Collections.emptyList();
 				}
 				final ArrayList<String> result = new ArrayList<>(list.size());
-				for(int moduleNameId : list.toNativeArray())
+				for(int moduleNameId : list.toArray())
 				{
 					final String moduleNameWithPrefix = holder.myModuleNameEnumerator.valueOf(moduleNameId);
 					if(moduleNameWithPrefix != null && moduleNameWithPrefix.startsWith(prefix))
@@ -364,41 +355,30 @@ public class TestDiscoveryIndex implements Disposable
 		myLocalTestRunDataController.withTestDataHolder((ThrowableConvertor<TestInfoHolder, Void, IOException>) localHolder ->
 		{
 			final int testNameId = localHolder.myTestNameEnumerator.enumerate(testName);
-			TIntObjectHashMap<TIntArrayList> classData = loadClassAndMethodsMap(file, localHolder);
-			TIntObjectHashMap<TIntArrayList> previousClassData = localHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId);
+			IntObjectMap<IntList> classData = loadClassAndMethodsMap(file, localHolder);
+			IntObjectMap<IntList> previousClassData = localHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId);
 			if(previousClassData == null)
 			{
 				previousClassData = myRemoteTestRunDataController.withTestDataHolder(remoteDataHolder ->
 				{
-					TIntObjectHashMap<TIntArrayList> remoteClassData = remoteDataHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId);
+					IntObjectMap<IntList> remoteClassData = remoteDataHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId);
 					if(remoteClassData == null)
 					{
 						return null;
 					}
-					TIntObjectHashMap<TIntArrayList> result = new TIntObjectHashMap<>(remoteClassData.size());
-					Ref<IOException> exceptionRef = new Ref<>();
-					boolean processingResult = remoteClassData.forEachEntry((remoteClassKey, remoteClassMethodIds) ->
+					IntObjectMap<IntList> result = IntMaps.newIntObjectHashMap(remoteClassData.size());
+					for(IntObjectMap.IntObjectEntry<IntList> entry : remoteClassData.entrySet())
 					{
-						try
+						int remoteClassKey = entry.getKey();
+						IntList remoteClassMethodIds = entry.getValue();
+
+						int localClassKey = localHolder.myClassEnumeratorCache.enumerate(remoteDataHolder.myClassEnumeratorCache.valueOf(remoteClassKey));
+						IntList localClassIds = IntLists.newArrayList(remoteClassMethodIds.size());
+						for(int methodId : remoteClassMethodIds.toArray())
 						{
-							int localClassKey = localHolder.myClassEnumeratorCache.enumerate(remoteDataHolder.myClassEnumeratorCache.valueOf(remoteClassKey));
-							TIntArrayList localClassIds = new TIntArrayList(remoteClassMethodIds.size());
-							for(int methodId : remoteClassMethodIds.toNativeArray())
-							{
-								localClassIds.add(localHolder.myMethodEnumeratorCache.enumerate(remoteDataHolder.myMethodEnumeratorCache.valueOf(methodId)));
-							}
-							result.put(localClassKey, localClassIds);
-							return true;
+							localClassIds.add(localHolder.myMethodEnumeratorCache.enumerate(remoteDataHolder.myMethodEnumeratorCache.valueOf(methodId)));
 						}
-						catch(IOException ex)
-						{
-							exceptionRef.set(ex);
-							return false;
-						}
-					});
-					if(!processingResult)
-					{
-						throw exceptionRef.get();
+						result.put(localClassKey, localClassIds);
 					}
 					return result;
 				});
@@ -410,7 +390,7 @@ public class TestDiscoveryIndex implements Disposable
 	}
 
 	@Nonnull
-	private static TIntObjectHashMap<TIntArrayList> loadClassAndMethodsMap(File file, TestInfoHolder holder) throws IOException
+	private static IntObjectMap<IntList> loadClassAndMethodsMap(File file, TestInfoHolder holder) throws IOException
 	{
 		DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(file), 64 * 1024));
 		byte[] buffer = IOUtil.allocReadWriteUTFBuffer();
@@ -418,13 +398,13 @@ public class TestDiscoveryIndex implements Disposable
 		try
 		{
 			int numberOfClasses = DataInputOutputUtil.readINT(inputStream);
-			TIntObjectHashMap<TIntArrayList> classData = new TIntObjectHashMap<>(numberOfClasses);
+			IntObjectMap<IntList> classData = IntMaps.newIntObjectHashMap(numberOfClasses);
 			while(numberOfClasses-- > 0)
 			{
 				String classQName = IOUtil.readUTFFast(buffer, inputStream);
 				int classId = holder.myClassEnumeratorCache.enumerate(classQName);
 				int numberOfMethods = DataInputOutputUtil.readINT(inputStream);
-				TIntArrayList methodsList = new TIntArrayList(numberOfMethods);
+				IntList methodsList = IntLists.newArrayList(numberOfMethods);
 
 				while(numberOfMethods-- > 0)
 				{

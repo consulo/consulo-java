@@ -15,17 +15,6 @@
  */
 package com.intellij.slicer;
 
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.Flow;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.DfaUtil;
 import com.intellij.openapi.progress.ProgressManager;
@@ -33,7 +22,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiSubstitutorImpl;
 import com.intellij.psi.impl.source.DummyHolder;
 import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.psi.search.SearchScope;
@@ -44,8 +32,13 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.Processor;
+import consulo.util.collection.ArrayUtil;
+import org.intellij.lang.annotations.Flow;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author cdr
@@ -137,7 +130,7 @@ public class SliceUtil
 				SliceUsage stopUsage = createTooComplexDFAUsage(expression, parent, parentSubstitutor);
 				return processor.process(stopUsage);
 			}
-			final Set<PsiExpression> expressions = new THashSet<PsiExpression>(values);
+			final Set<PsiExpression> expressions = new HashSet<PsiExpression>(values);
 			PsiExpression initializer = variable.getInitializer();
 			if(initializer != null && expressions.isEmpty())
 			{
@@ -334,7 +327,7 @@ public class SliceUtil
 
 		final PsiType parentType = parentSubstitutor.substitute(methodCallExpr.getType());
 		final PsiSubstitutor substitutor = resolved.getSubstitutor().putAll(parentSubstitutor);
-		Collection<PsiMethod> overrides = new THashSet<PsiMethod>(OverridingMethodsSearch.search(methodCalled, parent.getScope().toSearchScope(),
+		Collection<PsiMethod> overrides = new HashSet<PsiMethod>(OverridingMethodsSearch.search(methodCalled, parent.getScope().toSearchScope(),
 				true).findAll());
 		overrides.add(methodCalled);
 
@@ -514,13 +507,13 @@ public class SliceUtil
 		final PsiType actualParameterType = parameter.getType();
 
 		final PsiParameter[] actualParameters = method.getParameterList().getParameters();
-		final int paramSeqNo = ArrayUtilRt.find(actualParameters, parameter);
+		final int paramSeqNo = ArrayUtil.find(actualParameters, parameter);
 		assert paramSeqNo != -1;
 
-		Collection<PsiMethod> superMethods = new THashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
+		Collection<PsiMethod> superMethods = new HashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
 		superMethods.add(method);
 
-		final Set<PsiReference> processed = new THashSet<PsiReference>(); //usages of super method and overridden method can overlap
+		final Set<PsiReference> processed = new HashSet<PsiReference>(); //usages of super method and overridden method can overlap
 		for(final PsiMethod superMethod : superMethods)
 		{
 			if(!MethodReferencesSearch.search(superMethod, parent.getScope().toSearchScope(), true).forEach(new Processor<PsiReference>()
@@ -829,7 +822,7 @@ public class SliceUtil
 			{
 				if(map == null)
 				{
-					map = new THashMap<PsiTypeParameter, PsiType>();
+					map = new HashMap<PsiTypeParameter, PsiType>();
 				}
 				map.put(entry.getKey(), entry.getValue());
 			}
@@ -838,15 +831,15 @@ public class SliceUtil
 		{
 			return substitutor;
 		}
-		Map<PsiTypeParameter, PsiType> newMap = new THashMap<PsiTypeParameter, PsiType>(substitutor.getSubstitutionMap());
+		Map<PsiTypeParameter, PsiType> newMap = new HashMap<PsiTypeParameter, PsiType>(substitutor.getSubstitutionMap());
 		newMap.keySet().removeAll(map.keySet());
-		return PsiSubstitutorImpl.createSubstitutor(newMap);
+		return PsiSubstitutor.createSubstitutor(newMap);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiSubstitutor unify(@Nonnull PsiSubstitutor substitutor, @Nonnull PsiSubstitutor parentSubstitutor, @Nonnull Project project)
 	{
-		Map<PsiTypeParameter, PsiType> newMap = new THashMap<PsiTypeParameter, PsiType>(substitutor.getSubstitutionMap());
+		Map<PsiTypeParameter, PsiType> newMap = new HashMap<PsiTypeParameter, PsiType>(substitutor.getSubstitutionMap());
 
 		for(Map.Entry<PsiTypeParameter, PsiType> entry : substitutor.getSubstitutionMap().entrySet())
 		{
