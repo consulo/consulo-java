@@ -2,9 +2,9 @@
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInspection.dataFlow.value.*;
-import com.intellij.util.ObjectUtils;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.ref.SimpleReference;
 import one.util.streamex.IntStreamEx;
-import one.util.streamex.StreamEx;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * @author peter
  */
-class EqClass extends SortedIntSet implements Iterable<DfaValue>
+class EqClass extends SortedIntSet
 {
 	private final DfaValueFactory myFactory;
 
@@ -64,7 +64,7 @@ class EqClass extends SortedIntSet implements Iterable<DfaValue>
 	List<DfaVariableValue> getVariables(boolean unwrap)
 	{
 		List<DfaVariableValue> vars = new ArrayList<>();
-		forValues(id -> {
+		forEach(id -> {
 			DfaValue value = myFactory.getValue(id);
 			if(value instanceof DfaVariableValue)
 			{
@@ -74,6 +74,7 @@ class EqClass extends SortedIntSet implements Iterable<DfaValue>
 			{
 				vars.add(((DfaBoxedValue) value).getWrappedValue());
 			}
+			return true;
 		});
 		return vars;
 	}
@@ -87,7 +88,7 @@ class EqClass extends SortedIntSet implements Iterable<DfaValue>
 	{
 		if(size() == 1)
 		{
-			return ObjectUtils.tryCast(myFactory.getValue(get(0)), DfaVariableValue.class);
+			return ObjectUtil.tryCast(myFactory.getValue(get(0)), DfaVariableValue.class);
 		}
 		return IntStreamEx.range(size()).mapToObj(idx -> myFactory.getValue(get(idx)))
 				.select(DfaVariableValue.class).min(CANONICAL_VARIABLE_COMPARATOR).orElse(null);
@@ -96,9 +97,10 @@ class EqClass extends SortedIntSet implements Iterable<DfaValue>
 	List<DfaValue> getMemberValues()
 	{
 		final List<DfaValue> result = new ArrayList<>(size());
-		forValues(id -> {
+		forEach(id -> {
 			DfaValue value = myFactory.getValue(id);
 			result.add(value);
+			return true;
 		});
 		return result;
 	}
@@ -106,38 +108,22 @@ class EqClass extends SortedIntSet implements Iterable<DfaValue>
 	@Nullable
 	DfaConstValue findConstant()
 	{
-		return StreamEx.of(iterator()).map(it -> it instanceof DfaConstValue ? (DfaConstValue)it : null).filter(Objects::nonNull).findFirst().orElse(null);
+		SimpleReference<DfaConstValue> result = SimpleReference.create();
+		forEach(id -> {
+			DfaValue value = myFactory.getValue(id);
+			if(value instanceof DfaConstValue)
+			{
+				result.set((DfaConstValue) value);
+				return false;
+			}
+			return true;
+		});
+		return result.get();
 	}
 
 	boolean containsConstantsOnly()
 	{
 		int size = size();
 		return size <= 1 && (size == 0 || myFactory.getValue(get(0)) instanceof DfaConstValue);
-	}
-
-	@Nonnull
-	@Override
-	public Iterator<DfaValue> iterator()
-	{
-		return new Iterator<>()
-		{
-			int pos;
-
-			@Override
-			public boolean hasNext()
-			{
-				return pos < size();
-			}
-
-			@Override
-			public DfaValue next()
-			{
-				if(pos >= size())
-				{
-					throw new NoSuchElementException();
-				}
-				return myFactory.getValue(get(pos++));
-			}
-		};
 	}
 }

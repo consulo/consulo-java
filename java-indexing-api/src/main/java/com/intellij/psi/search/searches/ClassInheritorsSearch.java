@@ -15,8 +15,6 @@
  */
 package com.intellij.psi.search.searches;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.util.Computable;
@@ -28,7 +26,9 @@ import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.Function;
 import com.intellij.util.Query;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.HashingStrategy;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -111,19 +111,12 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 
 	public static Query<PsiClass> search(@Nonnull SearchParameters parameters)
 	{
-		return INSTANCE.createUniqueResultsQuery(parameters, ContainerUtil.<SmartPsiElementPointer<PsiClass>>canonicalStrategy(), new Function<PsiClass, SmartPsiElementPointer<PsiClass>>()
+		return INSTANCE.createUniqueResultsQuery(parameters, HashingStrategy.canonical(), new Function<PsiClass, SmartPsiElementPointer<PsiClass>>()
 		{
 			@Override
 			public SmartPsiElementPointer<PsiClass> fun(final PsiClass psiClass)
 			{
-				return ApplicationManager.getApplication().runReadAction(new Computable<SmartPsiElementPointer<PsiClass>>()
-				{
-					@Override
-					public SmartPsiElementPointer<PsiClass> compute()
-					{
-						return SmartPointerManager.getInstance(psiClass.getProject()).createSmartPsiElementPointer(psiClass);
-					}
-				});
+				return ApplicationManager.getApplication().runReadAction((Computable<SmartPsiElementPointer<PsiClass>>) () -> SmartPointerManager.getInstance(psiClass.getProject()).createSmartPsiElementPointer(psiClass));
 			}
 		});
 	}

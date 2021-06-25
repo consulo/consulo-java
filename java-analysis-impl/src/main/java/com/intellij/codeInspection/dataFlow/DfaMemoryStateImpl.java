@@ -20,7 +20,6 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Stack;
-import consulo.java.util.DelegateIntObjectMap;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
@@ -31,7 +30,6 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -48,7 +46,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 
 	private final List<EqClass> myEqClasses;
 	// dfa value id -> indices in myEqClasses list of the classes which contain the id
-	private final MyIdMap myIdToEqClassesIndices;
+	private final IntObjectMap<Integer> myIdToEqClassesIndices;
 	private final Stack<DfaValue> myStack;
 	private final DistinctPairSet myDistinctClasses;
 	private final LinkedHashMap<DfaVariableValue, DfaVariableState> myVariableStates;
@@ -63,7 +61,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 		myVariableStates = new LinkedHashMap<>();
 		myDistinctClasses = new DistinctPairSet(this);
 		myStack = new Stack<>();
-		myIdToEqClassesIndices = new MyIdMap();
+		myIdToEqClassesIndices = IntMaps.newIntObjectHashMap();
 	}
 
 	protected DfaMemoryStateImpl(DfaMemoryStateImpl toCopy)
@@ -76,7 +74,9 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 		myDistinctClasses = new DistinctPairSet(this, toCopy.myDistinctClasses);
 
 		myEqClasses = new ArrayList<>(toCopy.myEqClasses);
-		myIdToEqClassesIndices = (MyIdMap) toCopy.myIdToEqClassesIndices.clone();
+		myIdToEqClassesIndices = IntMaps.newIntObjectHashMap();
+		toCopy.myIdToEqClassesIndices.forEach(myIdToEqClassesIndices::put);
+
 		myVariableStates = new LinkedHashMap<>(toCopy.myVariableStates);
 
 		myCachedNonTrivialEqClasses = toCopy.myCachedNonTrivialEqClasses;
@@ -377,10 +377,11 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 			myEqClasses.add(eqClass);
 		}
 
-		for(int id : eqClass.toNativeArray())
+		eqClass.forEach(id ->
 		{
 			myIdToEqClassesIndices.put(id, resultIndex);
-		}
+			return true;
+		});
 		return resultIndex;
 	}
 
@@ -2596,36 +2597,5 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 		}
 		groupsInClasses.values().forEach(groups::add);
 		return groups;
-	}
-
-	private class MyIdMap extends DelegateIntObjectMap<Integer>
-	{
-		public MyIdMap()
-		{
-			super(IntMaps.newIntObjectHashMap());
-		}
-
-		private MyIdMap(IntObjectMap<Integer> delegate)
-		{
-			super(delegate);
-		}
-
-		@Override
-		public String toString()
-		{
-			final StringBuilder s = new StringBuilder("{");
-			forEach((int id, Integer index) ->
-			{
-				DfaValue value = myFactory.getValue(id);
-				s.append(value).append(" -> ").append(index).append(", ");
-			});
-			s.append("}");
-			return s.toString();
-		}
-
-		public MyIdMap clone()
-		{
-			return new MyIdMap(getDelegate());
-		}
 	}
 }

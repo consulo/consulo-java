@@ -3,7 +3,7 @@ package com.intellij.codeInspection.dataFlow;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 
 public class SortedIntSet implements Comparable<SortedIntSet>
 {
@@ -149,11 +149,15 @@ public class SortedIntSet implements Comparable<SortedIntSet>
 		return myData[pos];
 	}
 
-	public void forValues(IntConsumer consumer)
+	public void forEach(IntPredicate predicate)
 	{
 		for(int i = 0; i < mySize; i++)
 		{
-			consumer.accept(myData[i]);
+			int value = myData[i];
+			if(!predicate.test(value))
+			{
+				break;
+			}
 		}
 	}
 
