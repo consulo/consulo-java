@@ -36,7 +36,6 @@ import com.intellij.psi.util.*;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
-import java.util.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
@@ -50,6 +49,8 @@ import static com.intellij.util.containers.ContainerUtilRt.newHashSet;
 
 public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters>
 {
+	private static record ClassLambdaInfo(Project project, GlobalSearchScope scope, int expectedFunExprParamsCount) {}
+
 	private static final Logger LOG = Logger.getInstance(JavaFunctionalExpressionSearcher.class);
 	/**
 	 * The least number of candidate files with functional expressions that directly scanning them becomes expensive
@@ -62,37 +63,38 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 	@Override
 	public void processQuery(@Nonnull FunctionalExpressionSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiFunctionalExpression> consumer)
 	{
-		final GlobalSearchScope useScope;
-		final PsiClass aClass;
-		final Project project;
-		final int expectedFunExprParamsCount;
+		final PsiClass aClass = queryParameters.getElementToSearch();
 
-		AccessToken token = ReadAction.start();
-		try
+		ClassLambdaInfo classLambdaInfo = ReadAction.compute(() ->
 		{
-			aClass = queryParameters.getElementToSearch();
 			if(!aClass.isValid() || !LambdaUtil.isFunctionalClass(aClass))
 			{
-				return;
+				return null;
 			}
 
-			project = aClass.getProject();
+			Project project = aClass.getProject();
 			final Set<Module> highLevelModules = getJava8Modules(project);
 			if(highLevelModules.isEmpty())
 			{
-				return;
+				return null;
 			}
 
-			useScope = convertToGlobalScope(project, queryParameters.getEffectiveSearchScope());
+			GlobalSearchScope useScope = convertToGlobalScope(project, queryParameters.getEffectiveSearchScope());
 
 			final MethodSignature functionalInterfaceMethod = LambdaUtil.getFunction(aClass);
 			LOG.assertTrue(functionalInterfaceMethod != null);
-			expectedFunExprParamsCount = functionalInterfaceMethod.getParameterTypes().length;
-		}
-		finally
+			int expectedFunExprParamsCount = functionalInterfaceMethod.getParameterTypes().length;
+			return new ClassLambdaInfo(project, useScope, expectedFunExprParamsCount);
+		});
+
+		if(classLambdaInfo == null)
 		{
-			token.finish();
+			return;
 		}
+
+		final Project project = classLambdaInfo.project();
+		final GlobalSearchScope useScope = classLambdaInfo.scope();
+		final int expectedFunExprParamsCount = classLambdaInfo.expectedFunExprParamsCount();
 
 		//collect all files with '::' and '->' in useScope
 		Set<VirtualFile> candidateFiles = getFilesWithFunctionalExpressionsScope(project, new JavaSourceFilterScope(useScope));
@@ -266,14 +268,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 		else if(useScope instanceof LocalSearchScope)
 		{
 			final Set<VirtualFile> files = new HashSet<VirtualFile>();
-			addAllNotNull(files, map(((LocalSearchScope) useScope).getScope(), new Function<PsiElement, VirtualFile>()
-			{
-				@Override
-				public VirtualFile fun(PsiElement element)
-				{
-					return PsiUtilCore.getVirtualFile(element);
-				}
-			}));
+			addAllNotNull(files, map(((LocalSearchScope) useScope).getScope(), element -> PsiUtilCore.getVirtualFile(element)));
 			scope = GlobalSearchScope.filesScope(project, files);
 		}
 		else

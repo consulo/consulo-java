@@ -27,24 +27,17 @@ import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.ui.EditorEvaluationCommand;
-import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author peter
@@ -138,15 +131,7 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 
 	private static PsiType findPsiType(Project project, Type type)
 	{
-		AccessToken token = ReadAction.start();
-		try
-		{
-			return DebuggerUtils.getType(type.name().replace('$', '.'), project);
-		}
-		finally
-		{
-			token.finish();
-		}
+		return ReadAction.compute(() -> DebuggerUtils.getType(type.name().replace('$', '.'), project));
 	}
 
 	public static boolean isSubtypeable(PsiExpression expr)
