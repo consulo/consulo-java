@@ -41,7 +41,6 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 	private final ControlFlowPolicy myPolicy;
 
 	private ControlFlowImpl myCurrentFlow;
-	private final ControlFlowStack myStack = new ControlFlowStack();
 	private final Stack<PsiParameter> myCatchParameters = new Stack<PsiParameter>();// stack of PsiParameter for catch
 	private final Stack<PsiElement> myCatchBlocks = new Stack<PsiElement>();
 
@@ -478,7 +477,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 			{
 				// go out of finally, use return
 				CallInstruction callInstruction = (CallInstruction) myCurrentFlow.getInstructions().get(finallyStartOffset - 2);
-				instruction = new ReturnInstruction(0, myStack, callInstruction);
+				instruction = new ReturnInstruction(0, callInstruction);
 			}
 			else
 			{
@@ -548,7 +547,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 			{
 				// go out of finally, use return
 				CallInstruction callInstruction = (CallInstruction) myCurrentFlow.getInstructions().get(finallyStartOffset - 2);
-				instruction = new ReturnInstruction(0, myStack, callInstruction);
+				instruction = new ReturnInstruction(0, callInstruction);
 			}
 			else
 			{
@@ -1302,16 +1301,16 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 		if(finallyBlock != null)
 		{
 			// normal completion, call finally block and proceed
-			myCurrentFlow.addInstruction(new CallInstruction(0, 0, myStack));
+			myCurrentFlow.addInstruction(new CallInstruction(0, 0));
 			addElementOffsetLater(finallyBlock, true);
 			myCurrentFlow.addInstruction(new GoToInstruction(0));
 			addElementOffsetLater(statement, false);
 			// return completion, call finally block and return
-			myCurrentFlow.addInstruction(new CallInstruction(0, 0, myStack));
+			myCurrentFlow.addInstruction(new CallInstruction(0, 0));
 			addElementOffsetLater(finallyBlock, true);
 			addReturnInstruction(statement);
 			// throw exception completion, call finally block and rethrow
-			myCurrentFlow.addInstruction(new CallInstruction(0, 0, myStack));
+			myCurrentFlow.addInstruction(new CallInstruction(0, 0));
 			addElementOffsetLater(finallyBlock, true);
 			final GoToInstruction gotoUncheckedRethrow = new GoToInstruction(0);
 			myCurrentFlow.addInstruction(gotoUncheckedRethrow);
@@ -1338,13 +1337,13 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 			// first three return instructions are for normal completion, return statement call completion and unchecked exception throwing completion resp.
 
 			// normal completion
-			myCurrentFlow.addInstruction(new ReturnInstruction(0, myStack, callInstruction));
+			myCurrentFlow.addInstruction(new ReturnInstruction(0, callInstruction));
 
 			// return statement call completion
-			myCurrentFlow.addInstruction(new ReturnInstruction(procStart - 3, myStack, callInstruction));
+			myCurrentFlow.addInstruction(new ReturnInstruction(procStart - 3, callInstruction));
 
 			// unchecked exception throwing completion
-			myCurrentFlow.addInstruction(new ReturnInstruction(procStart - 1, myStack, callInstruction));
+			myCurrentFlow.addInstruction(new ReturnInstruction(procStart - 1, callInstruction));
 
 			// checked exception throwing completion. need to dispatch to the correct catch clause
 			final List<PsiElement> unhandledExceptionCatchBlocks = finallyBlockToUnhandledExceptions.remove(finallyBlock);
@@ -1353,7 +1352,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 				ProgressManager.checkCanceled();
 				PsiElement catchBlock = unhandledExceptionCatchBlocks.get(i);
 
-				final ReturnInstruction returnInstruction = new ReturnInstruction(0, myStack, callInstruction);
+				final ReturnInstruction returnInstruction = new ReturnInstruction(0, callInstruction);
 				returnInstruction.setRethrowFromFinally();
 				myCurrentFlow.addInstruction(returnInstruction);
 				if(catchBlock == null)

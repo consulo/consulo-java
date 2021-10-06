@@ -15,39 +15,22 @@
  */
 package com.intellij.psi.controlFlow;
 
-import javax.annotation.Nonnull;
-
 import consulo.logging.Logger;
 
 
 public class ReturnInstruction extends GoToInstruction {
   private static final Logger LOG = Logger.getInstance(ReturnInstruction.class);
 
-  private final ControlFlowStack myStack;
   private CallInstruction myCallInstruction;
   private boolean myRethrowFromFinally = false;
 
-  public ReturnInstruction(int offset, @Nonnull ControlFlowStack stack, CallInstruction callInstruction) {
+  public ReturnInstruction(int offset, CallInstruction callInstruction) {
     super(offset, Role.END, false);
-    myStack = stack;
     myCallInstruction = callInstruction;
   }
 
   public String toString() {
     return "RETURN FROM " + getProcBegin() + (offset == 0 ? "" : " TO "+offset);
-  }
-
-  public int execute(boolean pushBack) {
-    synchronized (myStack) {
-      int jumpTo = -1;
-      if (myStack.size() != 0) {
-        jumpTo = myStack.pop(pushBack);
-      }
-      if (offset != 0) {
-        jumpTo = offset;
-      }
-      return jumpTo;
-    }
   }
 
   public int[] getPossibleReturnOffsets() {
@@ -103,10 +86,6 @@ public class ReturnInstruction extends GoToInstruction {
   @Override
   public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
     visitor.visitReturnInstruction(this, offset, nextOffset);
-  }
-
-  public ControlFlowStack getStack() {
-    return myStack;
   }
 
   public void setRethrowFromFinally() {
