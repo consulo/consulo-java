@@ -15,24 +15,17 @@
  */
 package com.intellij.psi.impl.light;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiIdentifier;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
+import consulo.annotation.access.RequiredReadAction;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class LightField extends LightElement implements PsiField {
   private final PsiField myField;
@@ -127,6 +120,7 @@ public class LightField extends LightElement implements PsiField {
     return myField.hasModifierProperty(name);
   }
 
+  @RequiredReadAction
   @Override
   public String getText() {
     return myField.getText();
@@ -137,9 +131,11 @@ public class LightField extends LightElement implements PsiField {
     return new LightField(myManager, (PsiField)myField.copy(), myContainingClass);
   }
 
+  @RequiredReadAction
+  @Nonnull
   @Override
   public TextRange getTextRange() {
-    return new TextRange(-1, -1);
+    return myField.getTextRange();
   }
 
   @Override
