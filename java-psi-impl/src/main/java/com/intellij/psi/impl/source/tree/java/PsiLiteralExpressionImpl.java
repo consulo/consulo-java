@@ -15,13 +15,6 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
@@ -32,12 +25,18 @@ import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.impl.PsiLiteralStub;
 import com.intellij.psi.impl.source.JavaStubPsiElement;
 import com.intellij.psi.impl.source.tree.CompositeElement;
+import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.impl.source.tree.injected.StringLiteralEscaper;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.text.LiteralFormatUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Locale;
 
 public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub> implements PsiLiteralExpression, PsiLanguageInjectionHost, ContributedReferenceHost
 {
@@ -277,13 +276,13 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 			{
 				return null;
 			}
-			return Character.valueOf(chars.charAt(0));
+			return chars.charAt(0);
 		}
 
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getInnerText()
 	{
 		String text = getCanonicalText();
@@ -335,7 +334,7 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 		return integer;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String internedParseStringCharacters(final String chars)
 	{
 		final StringBuilder outChars = new StringBuilder(chars.length());
@@ -370,7 +369,7 @@ public class PsiLiteralExpressionImpl extends JavaStubPsiElement<PsiLiteralStub>
 	@Override
 	public boolean isValidHost()
 	{
-		return getLiteralElementType() == JavaTokenType.STRING_LITERAL;
+		return ElementType.TEXT_LITERALS.contains(getLiteralElementType());
 	}
 
 	@Override
