@@ -20,7 +20,6 @@ import com.intellij.openapi.components.ServiceManager;
 
 public abstract class JavaCodeFoldingSettings
 {
-
 	public static JavaCodeFoldingSettings getInstance()
 	{
 		return ServiceManager.getService(JavaCodeFoldingSettings.class);

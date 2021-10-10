@@ -19,12 +19,15 @@ package consulo.java.application.options;
 import com.intellij.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.options.Configurable;
+import consulo.disposer.Disposable;
 import consulo.java.JavaBundle;
 import consulo.options.SimpleConfigurableByProperties;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -36,14 +39,22 @@ import java.util.function.Supplier;
  */
 public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties implements Configurable
 {
+	private Provider<JavaCodeFoldingSettings> myJavaCodeFoldingSettingsProvider;
+
+	@Inject
+	public JavaCodeFoldingConfigurable(Provider<JavaCodeFoldingSettings> javaCodeFoldingSettingsProvider)
+	{
+		myJavaCodeFoldingSettingsProvider = javaCodeFoldingSettingsProvider;
+	}
+
 	@RequiredUIAccess
 	@Nonnull
 	@Override
-	protected Component createLayout(PropertyBuilder propertyBuilder)
+	protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable uiDisposable)
 	{
 		VerticalLayout layout = VerticalLayout.create();
 
-		JavaCodeFoldingSettings settings = JavaCodeFoldingSettings.getInstance();
+		JavaCodeFoldingSettings settings = myJavaCodeFoldingSettingsProvider.get();
 
 		checkBox(JavaBundle.message("checkbox.collapse.one.line.methods"), layout, propertyBuilder, settings::isCollapseOneLineMethods, settings::setCollapseOneLineMethods);
 
