@@ -19,12 +19,16 @@ package consulo.java.debugger.settings;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.settings.ThreadsViewSettings;
 import com.intellij.openapi.options.Configurable;
+import consulo.disposer.Disposable;
+import consulo.localize.LocalizeValue;
 import consulo.options.SimpleConfigurableByProperties;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.LabeledLayout;
 import consulo.ui.layout.VerticalLayout;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import javax.annotation.Nonnull;
 
@@ -34,17 +38,25 @@ import javax.annotation.Nonnull;
  */
 public class ThreadsViewConfigurable extends SimpleConfigurableByProperties implements Configurable
 {
+	private final Provider<ThreadsViewSettings> myThreadsViewSettingsProvider;
+
+	@Inject
+	public ThreadsViewConfigurable(Provider<ThreadsViewSettings> threadsViewSettingsProvider)
+	{
+		myThreadsViewSettingsProvider = threadsViewSettingsProvider;
+	}
+
 	@RequiredUIAccess
 	@Nonnull
 	@Override
-	protected Component createLayout(PropertyBuilder propertyBuilder)
+	protected Component createLayout(PropertyBuilder propertyBuilder, @Nonnull Disposable uiDisposable)
 	{
-		ThreadsViewSettings settings = ThreadsViewSettings.getInstance();
+		ThreadsViewSettings settings = myThreadsViewSettingsProvider.get();
 
 		VerticalLayout rootLayout = VerticalLayout.create();
 
 		VerticalLayout viewLayout = VerticalLayout.create();
-		rootLayout.add(LabeledLayout.create("View", viewLayout));
+		rootLayout.add(LabeledLayout.create(LocalizeValue.localizeTODO("View"), viewLayout));
 
 		CheckBox showThreadGroups = CheckBox.create(DebuggerBundle.message("label.threads.view.configurable.show.thread.groups"));
 		propertyBuilder.add(showThreadGroups, () -> settings.SHOW_THREAD_GROUPS, value -> settings.SHOW_THREAD_GROUPS = value);
@@ -59,7 +71,7 @@ public class ThreadsViewConfigurable extends SimpleConfigurableByProperties impl
 		viewLayout.add(moveCurrentThreadToTop);
 
 		VerticalLayout presentationView = VerticalLayout.create();
-		rootLayout.add(LabeledLayout.create("Presentation", presentationView));
+		rootLayout.add(LabeledLayout.create(LocalizeValue.localizeTODO("Presentation"), presentationView));
 
 		CheckBox showLineNumbers = CheckBox.create(DebuggerBundle.message("label.threads.view.configurable.show.line.number"));
 		propertyBuilder.add(showLineNumbers, () -> settings.SHOW_LINE_NUMBER, value -> settings.SHOW_LINE_NUMBER = value);

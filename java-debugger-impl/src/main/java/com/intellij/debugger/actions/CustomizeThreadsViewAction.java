@@ -15,16 +15,17 @@
  */
 package com.intellij.debugger.actions;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.debugger.DebuggerBundle;
+import com.intellij.debugger.settings.ThreadsViewSettings;
 import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.java.debugger.settings.ThreadsViewConfigurable;
+import consulo.ui.annotation.RequiredUIAccess;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: lex
@@ -39,7 +40,7 @@ public class CustomizeThreadsViewAction extends DebuggerAction
 	{
 		Project project = e.getData(CommonDataKeys.PROJECT);
 
-		ShowSettingsUtil.getInstance().editConfigurable(DebuggerBundle.message("threads.view.configurable.display.name"), project, new ThreadsViewConfigurable());
+		ShowSettingsUtil.getInstance().editConfigurable(DebuggerBundle.message("threads.view.configurable.display.name"), project, new ThreadsViewConfigurable(ThreadsViewSettings::getInstance));
 	}
 
 	@RequiredUIAccess
