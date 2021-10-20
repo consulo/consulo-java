@@ -15,9 +15,6 @@
  */
 package com.intellij.spellchecker;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.TextRange;
@@ -31,49 +28,60 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.spellchecker.inspections.IdentifierSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
+import consulo.annotation.access.RequiredReadAction;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
  *
  * @author shkate@jetbrains.com
  */
-public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement> {
+public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement>
+{
+	@Override
+	@RequiredReadAction
+	public void tokenize(@Nonnull PsiTypeElement element, TokenConsumer consumer)
+	{
+		final PsiType type = element.getType();
+		if(type instanceof PsiDisjunctionType)
+		{
+			tokenizeComplexType(element, consumer);
+			return;
+		}
 
-  @Override
-  public void tokenize(@Nonnull PsiTypeElement element, TokenConsumer consumer) {
-    final PsiType type = element.getType();
-    if (type instanceof PsiDisjunctionType) {
-      tokenizeComplexType(element, consumer);
-      return;
-    }
+		final PsiClass psiClass = PsiUtil.resolveClassInType(type);
 
-    final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+		if(psiClass == null || psiClass.getContainingFile() == null || psiClass.getContainingFile().getVirtualFile() == null)
+		{
+			return;
+		}
 
-    if (psiClass == null || psiClass.getContainingFile() == null || psiClass.getContainingFile().getVirtualFile() == null) {
-      return;
-    }
+		final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
 
-    final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
+		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(element.getProject()).getFileIndex();
 
-    final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(element.getProject()).getFileIndex();
+		final boolean isInSource = (virtualFile != null) && fileIndex.isInContent(virtualFile);
+		if(isInSource)
+		{
+			consumer.consumeToken(element, element.getText(), true, 0, getRangeToCheck(element.getText(), psiClass.getName()), IdentifierSplitter.getInstance());
+		}
+	}
 
-    final boolean isInSource = (virtualFile != null) && fileIndex.isInContent(virtualFile);
-    if (isInSource) {
-      consumer.consumeToken(element, element.getText(), true, 0, getRangeToCheck(element.getText(), psiClass.getName()),
-                            IdentifierSplitter.getInstance());
-    }
-  }
+	private void tokenizeComplexType(PsiTypeElement element, TokenConsumer consumer)
+	{
+		final List<PsiTypeElement> subTypes = PsiTreeUtil.getChildrenOfTypeAsList(element, PsiTypeElement.class);
+		for(PsiTypeElement subType : subTypes)
+		{
+			tokenize(subType, consumer);
+		}
+	}
 
-  private void tokenizeComplexType(PsiTypeElement element, TokenConsumer consumer) {
-    final List<PsiTypeElement> subTypes = PsiTreeUtil.getChildrenOfTypeAsList(element, PsiTypeElement.class);
-    for (PsiTypeElement subType : subTypes) {
-      tokenize(subType, consumer);
-    }
-  }
-
-  @Nonnull
-  private static TextRange getRangeToCheck(@Nonnull String text, @Nonnull String name) {
-    final int i = text.indexOf(name);
-    return new TextRange(i, i + name.length());
-  }
+	@Nonnull
+	private static TextRange getRangeToCheck(@Nonnull String text, @Nonnull String name)
+	{
+		final int i = text.indexOf(name);
+		return new TextRange(i, i + name.length());
+	}
 }
