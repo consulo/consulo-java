@@ -143,7 +143,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor
 
 		private void popStatement()
 		{
-			myAtStart.remove(myAtStart.size() - 1);
+			myAtStart.removeByIndex(myAtStart.size() - 1);
 			myStatements.pop();
 		}
 
