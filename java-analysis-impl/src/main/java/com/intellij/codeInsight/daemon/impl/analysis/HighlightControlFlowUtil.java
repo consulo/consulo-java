@@ -15,13 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
@@ -31,18 +24,20 @@ import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.AllVariablesControlFlowPolicy;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Processor;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author cdr
@@ -56,8 +51,8 @@ public class HighlightControlFlowUtil
 	{
 	}
 
-	@javax.annotation.Nullable
-	static HighlightInfo checkMissingReturnStatement(@javax.annotation.Nullable PsiCodeBlock body, @javax.annotation.Nullable PsiType returnType)
+	@Nullable
+	static HighlightInfo checkMissingReturnStatement(@Nullable PsiCodeBlock body, @Nullable PsiType returnType)
 	{
 		if(body == null || returnType == null || PsiType.VOID.equals(returnType.getDeepComponentType()))
 		{
@@ -294,7 +289,7 @@ public class HighlightControlFlowUtil
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	static HighlightInfo checkFinalFieldInitialized(@Nonnull PsiField field)
 	{
 		if(!field.hasModifierProperty(PsiModifier.FINAL))
@@ -321,7 +316,7 @@ public class HighlightControlFlowUtil
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static HighlightInfo checkVariableInitializedBeforeUsage(@Nonnull PsiReferenceExpression expression,
 			@Nonnull PsiVariable variable,
 			@Nonnull Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems,
@@ -536,7 +531,7 @@ public class HighlightControlFlowUtil
 		return null;
 	}
 
-	private static boolean inInnerClass(@Nonnull PsiElement psiElement, @javax.annotation.Nullable PsiClass containingClass, @Nonnull PsiFile containingFile)
+	private static boolean inInnerClass(@Nonnull PsiElement psiElement, @Nullable PsiClass containingClass, @Nonnull PsiFile containingFile)
 	{
 		PsiElement element = psiElement;
 		while(element != null)
@@ -576,7 +571,7 @@ public class HighlightControlFlowUtil
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static HighlightInfo checkFinalVariableMightAlreadyHaveBeenAssignedTo(@Nonnull PsiVariable variable,
 			@Nonnull PsiReferenceExpression expression,
 			@Nonnull Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems)
@@ -719,7 +714,7 @@ public class HighlightControlFlowUtil
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	static HighlightInfo checkFinalVariableInitializedInLoop(@Nonnull PsiReferenceExpression expression, @Nonnull PsiElement resolved)
 	{
 		if(ControlFlowUtil.isVariableAssignedInLoop(expression, resolved))
@@ -899,7 +894,7 @@ public class HighlightControlFlowUtil
 		return null;
 	}
 
-	public static boolean isEffectivelyFinal(@Nonnull PsiVariable variable, @Nonnull PsiElement scope, @javax.annotation.Nullable PsiJavaCodeReferenceElement context)
+	public static boolean isEffectivelyFinal(@Nonnull PsiVariable variable, @Nonnull PsiElement scope, @Nullable PsiJavaCodeReferenceElement context)
 	{
 		boolean effectivelyFinal;
 		if(variable instanceof PsiParameter)
@@ -955,7 +950,7 @@ public class HighlightControlFlowUtil
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiElement getInnerClassVariableReferencedFrom(@Nonnull PsiVariable variable, @Nonnull PsiElement context)
 	{
 		final PsiElement[] scope;
