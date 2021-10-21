@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,84 +15,110 @@
  */
 package com.intellij.psi.controlFlow;
 
-import consulo.logging.Logger;
+import com.intellij.openapi.diagnostic.Logger;
+import javax.annotation.Nonnull;
 
 
-public class ReturnInstruction extends GoToInstruction {
-  private static final Logger LOG = Logger.getInstance(ReturnInstruction.class);
+public class ReturnInstruction extends GoToInstruction
+{
+	private static final Logger LOG = Logger.getInstance(ReturnInstruction.class);
 
-  private CallInstruction myCallInstruction;
-  private boolean myRethrowFromFinally = false;
+	@Nonnull
+	private CallInstruction myCallInstruction;
+	private boolean myRethrowFromFinally;
 
-  public ReturnInstruction(int offset, CallInstruction callInstruction) {
-    super(offset, Role.END, false);
-    myCallInstruction = callInstruction;
-  }
+	public ReturnInstruction(int offset, @Nonnull CallInstruction callInstruction)
+	{
+		super(offset, Role.END, false);
+		myCallInstruction = callInstruction;
+	}
 
-  public String toString() {
-    return "RETURN FROM " + getProcBegin() + (offset == 0 ? "" : " TO "+offset);
-  }
+	public String toString()
+	{
+		return "RETURN FROM " + getProcBegin() + (offset == 0 ? "" : " TO " + offset);
+	}
 
-  public int[] getPossibleReturnOffsets() {
-    return offset == 0 ?
-        new int[]{
-          getProcBegin() - 5, // call normal
-          getProcBegin() - 3, // call return
-          getProcBegin() - 1, // call throw
-        }
-        :
-        new int[]{
-          offset,    // exit from middle of the finally
-        };
+	@Nonnull
+	int[] getPossibleReturnOffsets()
+	{
+		return offset == 0 ?
+				new int[]{
+						getProcBegin() - 5,
+						// call normal
+						getProcBegin() - 3,
+						// call return
+						getProcBegin() - 1,
+						// call throw
+				}
+				:
+				new int[]{
+						offset,
+						// exit from middle of the finally
+				};
 
-  }
+	}
 
-  public int getProcBegin() {
-    return myCallInstruction.procBegin;
-  }
+	int getProcBegin()
+	{
+		return myCallInstruction.procBegin;
+	}
 
-  public int getProcEnd() {
-    return myCallInstruction.procEnd;
-  }
+	int getProcEnd()
+	{
+		return myCallInstruction.procEnd;
+	}
 
-  public void setCallInstruction(CallInstruction callInstruction) {
-    myCallInstruction = callInstruction;
-  }
+	void setCallInstruction(@Nonnull CallInstruction callInstruction)
+	{
+		myCallInstruction = callInstruction;
+	}
 
 
-  @Override
-  public int nNext() { return offset == 0 ? 3 : 1; }
+	@Override
+	public int nNext()
+	{
+		return offset == 0 ? 3 : 1;
+	}
 
-  @Override
-  public int getNext(int index, int no) {
-    if (offset == 0)
-      switch (no) {
-        case 0: return getProcBegin() - 5; // call normal
-        case 1: return getProcBegin() - 3; // call return
-        case 2: return getProcBegin() - 1; // call throw
-        default:
-          LOG.assertTrue (false);
-          return -1;
-      }
-    else
-      switch (no) {
-        case 0: return offset; // call normal
-        default:
-          LOG.assertTrue (false);
-          return -1;
-      }
-  }
+	@Override
+	public int getNext(int index, int no)
+	{
+		if(offset == 0)
+		{
+			switch(no)
+			{
+				case 0:
+					return getProcBegin() - 5; // call normal
+				case 1:
+					return getProcBegin() - 3; // call return
+				case 2:
+					return getProcBegin() - 1; // call throw
+				default:
+					LOG.assertTrue(false);
+					return -1;
+			}
+		}
+		if(no == 0)
+		{
+			return offset; // call normal
+		}
+		LOG.assertTrue(false);
+		return -1;
+	}
 
-  @Override
-  public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
-    visitor.visitReturnInstruction(this, offset, nextOffset);
-  }
+	@Override
+	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	{
+		visitor.visitReturnInstruction(this, offset, nextOffset);
+	}
 
-  public void setRethrowFromFinally() {
-    myRethrowFromFinally = true;
-  }
+	void setRethrowFromFinally()
+	{
+		myRethrowFromFinally = true;
+	}
 
-  public boolean isRethrowFromFinally() {
-    return myRethrowFromFinally;
-  }
+	boolean isRethrowFromFinally()
+	{
+		return myRethrowFromFinally;
+	}
 }

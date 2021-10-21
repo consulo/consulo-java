@@ -15,18 +15,10 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowPolicy;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.java.stubs.FunctionalExpressionStub;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -37,6 +29,9 @@ import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
+
+import javax.annotation.Nonnull;
+import java.util.Map;
 
 public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpressionStub<PsiLambdaExpression>> implements PsiLambdaExpression
 {
@@ -134,7 +129,8 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
 		{
 			try
 			{
-				ControlFlow controlFlow = ControlFlowFactory.getInstance(getProject()).getControlFlow(body, ourPolicy, false, false);
+				ControlFlow controlFlow = ControlFlowFactory.getControlFlow(body, ourPolicy, ControlFlowOptions.NO_CONST_EVALUATE);
+
 				int startOffset = controlFlow.getStartOffset(body);
 				int endOffset = controlFlow.getEndOffset(body);
 				if(startOffset != -1 && endOffset != -1 && ControlFlowUtil.canCompleteNormally(controlFlow, startOffset, endOffset))

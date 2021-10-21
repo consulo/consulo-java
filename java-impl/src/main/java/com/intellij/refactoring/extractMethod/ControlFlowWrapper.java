@@ -16,7 +16,6 @@
 package com.intellij.refactoring.extractMethod;
 
 import com.intellij.codeInsight.PsiEquivalenceUtil;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.*;
@@ -45,11 +44,11 @@ public class ControlFlowWrapper
 	private PsiStatement myFirstExitStatementCopy;
 	private IntList myExitPoints;
 
-	public ControlFlowWrapper(Project project, PsiElement codeFragment, PsiElement[] elements) throws PrepareFailedException
+	public ControlFlowWrapper(PsiElement codeFragment, PsiElement[] elements) throws PrepareFailedException
 	{
 		try
 		{
-			myControlFlow = ControlFlowFactory.getInstance(project).getControlFlow(codeFragment, new LocalsControlFlowPolicy(codeFragment), false, false);
+			myControlFlow = ControlFlowFactory.getControlFlow(codeFragment, new LocalsControlFlowPolicy(codeFragment), ControlFlowOptions.NO_CONST_EVALUATE);
 		}
 		catch(AnalysisCanceledException e)
 		{

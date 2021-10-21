@@ -15,30 +15,14 @@
  */
 package com.intellij.codeInspection.canBeFinal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInspection.reference.*;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassInitializer;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiVariable;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
+import com.intellij.psi.*;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.util.containers.ContainerUtil;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * User: anna
@@ -197,7 +181,7 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
                 }
               }
               List<PsiMethod> redirectedConstructors = JavaHighlightUtil.getChainedConstructors(psiMethod);
-              if (redirectedConstructors == null || redirectedConstructors.isEmpty()) {
+              if (redirectedConstructors.isEmpty()) {
                 List<PsiVariable> ssaVariables = ControlFlowUtil.getSSAVariables(flow);
                 ArrayList<PsiVariable> good = new ArrayList<PsiVariable>(ssaVariables);
                 good.addAll(instanceInitializerInitializedFields);

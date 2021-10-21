@@ -20,8 +20,10 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiVariable;
 
+import javax.annotation.Nullable;
+
 public interface ControlFlowPolicy {
-  @javax.annotation.Nullable
+  @Nullable
   PsiVariable getUsedVariable(PsiReferenceExpression refExpr);
 
   boolean isParameterAccepted(PsiParameter psiParameter);

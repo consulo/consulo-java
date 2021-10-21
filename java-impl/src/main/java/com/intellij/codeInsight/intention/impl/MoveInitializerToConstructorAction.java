@@ -27,66 +27,65 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import javax.annotation.Nonnull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @author cdr
  */
-public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction {
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
+public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction
+{
+	@Override
+	@Nonnull
+	public String getFamilyName()
+	{
+		return getText();
+	}
 
-  @Override
-  @Nonnull
-  public String getText() {
-    return CodeInsightBundle.message("intention.move.initializer.to.constructor");
-  }
+	@Override
+	@Nonnull
+	public String getText()
+	{
+		return CodeInsightBundle.message("intention.move.initializer.to.constructor");
+	}
 
-  @Nonnull
-  @Override
-  protected Collection<String> getUnsuitableModifiers() {
-    return Arrays.asList(PsiModifier.STATIC);
-  }
+	@Nonnull
+	@Override
+	protected Collection<String> getUnsuitableModifiers()
+	{
+		return Arrays.asList(PsiModifier.STATIC);
+	}
 
-  @Nonnull
-  @Override
-  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
-    final Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
-    if (constructors.isEmpty()) {
-      return createConstructor(project, editor, file, aClass);
-    }
+	@Nonnull
+	@Override
+	protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass)
+	{
+		final Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
+		if(constructors.isEmpty())
+		{
+			return createConstructor(project, editor, file, aClass);
+		}
 
-    return removeChainedConstructors(constructors);
-  }
+		return removeChainedConstructors(constructors);
+	}
 
-  @Nonnull
-  private static Collection<PsiMethod> removeChainedConstructors(@Nonnull Collection<PsiMethod> constructors) {
-    final List<PsiMethod> result = new ArrayList<PsiMethod>(constructors);
+	@Nonnull
+	private static Collection<PsiMethod> removeChainedConstructors(@Nonnull Collection<PsiMethod> constructors)
+	{
+		constructors.removeIf(constructor -> !JavaHighlightUtil.getChainedConstructors(constructor).isEmpty());
+		return constructors;
+	}
 
-    final Iterator<PsiMethod> iterator = result.iterator();
-    //noinspection ForLoopThatDoesntUseLoopVariable
-    for (PsiMethod constructor = iterator.next(); iterator.hasNext(); constructor = iterator.next()) {
-      final List<PsiMethod> chained = JavaHighlightUtil.getChainedConstructors(constructor);
-      if (chained != null) {
-        iterator.remove();
-      }
-    }
-
-    return result;
-  }
-
-  @Nonnull
-  private static Collection<PsiMethod> createConstructor(@Nonnull Project project,
-                                                         @Nonnull Editor editor,
-                                                         PsiFile file,
-                                                         @Nonnull PsiClass aClass) {
-    final IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
-    final int offset = editor.getCaretModel().getOffset();
-    addDefaultConstructorFix.invoke(project, editor, file);
-    editor.getCaretModel().moveToOffset(offset); //restore caret
-    return Arrays.asList(aClass.getConstructors());
-  }
+	@Nonnull
+	private static Collection<PsiMethod> createConstructor(@Nonnull Project project,
+														   @Nonnull Editor editor,
+														   PsiFile file,
+														   @Nonnull PsiClass aClass)
+	{
+		final IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
+		final int offset = editor.getCaretModel().getOffset();
+		addDefaultConstructorFix.invoke(project, editor, file);
+		editor.getCaretModel().moveToOffset(offset); //restore caret
+		return Arrays.asList(aClass.getConstructors());
+	}
 }

@@ -15,10 +15,6 @@
  */
 package com.intellij.refactoring.extractMethodObject;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -26,11 +22,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowFactory;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
+import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.extractMethod.AbstractExtractDialog;
@@ -43,6 +35,10 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ExtractLightMethodObjectHandler
 {
@@ -185,7 +181,7 @@ public class ExtractLightMethodObjectHandler
 		final ControlFlow controlFlow;
 		try
 		{
-			controlFlow = ControlFlowFactory.getInstance(project).getControlFlow(container, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(), false, false);
+			controlFlow = ControlFlowFactory.getInstance(project).getControlFlow(container, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(), ControlFlowOptions.NO_CONST_EVALUATE);
 		}
 		catch(AnalysisCanceledException e)
 		{

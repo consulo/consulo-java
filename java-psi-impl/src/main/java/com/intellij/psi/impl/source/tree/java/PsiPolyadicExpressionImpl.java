@@ -30,9 +30,10 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
-import com.intellij.util.NullableFunction;
 import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements PsiPolyadicExpression
 {
@@ -71,16 +72,9 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
 		return JavaResolveCache.getInstance(getProject()).getType(this, MY_TYPE_EVALUATOR);
 	}
 
-	private static final Function<PsiPolyadicExpressionImpl, PsiType> MY_TYPE_EVALUATOR = new NullableFunction<PsiPolyadicExpressionImpl, PsiType>()
-	{
-		@Override
-		public PsiType fun(PsiPolyadicExpressionImpl expression)
-		{
-			return doGetType(expression);
-		}
-	};
+	private static final Function<PsiPolyadicExpressionImpl, PsiType> MY_TYPE_EVALUATOR = PsiPolyadicExpressionImpl::doGetType;
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiType doGetType(PsiPolyadicExpressionImpl param)
 	{
 		PsiExpression[] operands = param.getOperands();

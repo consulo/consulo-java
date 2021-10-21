@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-/**
- * @author cdr
- */
 package com.intellij.psi.controlFlow;
 
 import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
 
-public abstract class InstructionBase implements Instruction, Cloneable{
-  @Override
-  public Instruction clone() {
-    try {
-      return (Instruction)super.clone();
-    }
-    catch (CloneNotSupportedException e) {
-      return null;
-    }
-  }
+public abstract class InstructionBase implements Instruction, Cloneable
+{
+	@Nonnull
+	@Override
+	public Instruction clone()
+	{
+		try
+		{
+			return (Instruction) super.clone();
+		}
+		catch(CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 
-  @NonNls
-  public abstract String toString();
-
+	@NonNls
+	public abstract String toString();
 }

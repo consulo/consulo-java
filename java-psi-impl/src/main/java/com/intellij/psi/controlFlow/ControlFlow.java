@@ -20,24 +20,22 @@ import javax.annotation.Nonnull;
 
 import java.util.List;
 
-/**
- * @author cdr
- */
-public interface ControlFlow {
-  ControlFlow EMPTY = new ControlFlowImpl();
+public interface ControlFlow
+{
+	ControlFlow EMPTY = new ControlFlowImpl();
 
-  @Nonnull
-  List<Instruction> getInstructions();
+	@Nonnull
+	List<Instruction> getInstructions();
 
-  int getSize();
+	int getSize();
 
-  int getStartOffset(@Nonnull PsiElement element);
+	int getStartOffset(@Nonnull PsiElement element);
 
-  int getEndOffset(@Nonnull PsiElement element);
+	int getEndOffset(@Nonnull PsiElement element);
 
-  PsiElement getElement(int offset);
+	PsiElement getElement(int offset);
 
-  // true means there is at least one place where control flow has been short-circuited due to constant condition
-  // false means no constant conditions were detected affecting control flow
-  boolean isConstantConditionOccurred();
+	// true means there is at least one place where control flow has been short-circuited due to constant condition
+	// false means no constant conditions were detected affecting control flow
+	boolean isConstantConditionOccurred();
 }

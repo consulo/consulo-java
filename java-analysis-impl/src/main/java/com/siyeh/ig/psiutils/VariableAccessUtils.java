@@ -16,8 +16,11 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.psi.*;
+import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.ObjectUtils;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
@@ -89,6 +92,33 @@ public class VariableAccessUtils
 		final VariableAssignedVisitor visitor = new VariableAssignedVisitor(variable, true);
 		context.accept(visitor);
 		return visitor.isAssigned();
+	}
+
+	/**
+	 * This method will return true if the specified variable is a field with greater than private visibility with a common name.
+	 * Finding usages for such fields is too expensive.
+	 *
+	 * @param variable the variable to check assignments for
+	 * @return true, if the variable is assigned or too expensive to search. False otherwise.
+	 */
+	public static boolean variableIsAssigned(@Nonnull PsiVariable variable)
+	{
+		if(variable instanceof PsiField)
+		{
+			if(variable.hasModifierProperty(PsiModifier.PRIVATE))
+			{
+				final PsiClass aClass = PsiUtil.getTopLevelClass(variable);
+				return variableIsAssigned(variable, aClass);
+			}
+			return DeclarationSearchUtils.isTooExpensiveToSearch(variable, false) || ReferencesSearch.search(variable).anyMatch(reference -> {
+				final PsiExpression expression = ObjectUtils.tryCast(reference.getElement(), PsiExpression.class);
+				return expression != null && PsiUtil.isAccessedForWriting(expression);
+			});
+		}
+		final PsiElement context =
+				PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class, PsiMethod.class, PsiLambdaExpression.class,
+						PsiCatchSection.class, PsiForStatement.class, PsiForeachStatement.class);
+		return variableIsAssigned(variable, context);
 	}
 
 	public static boolean variableIsAssigned(@Nonnull PsiVariable variable, @Nullable PsiElement context, boolean recurseIntoClasses)

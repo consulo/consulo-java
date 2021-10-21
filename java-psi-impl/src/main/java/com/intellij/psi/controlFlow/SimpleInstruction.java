@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,31 @@
  * limitations under the License.
  */
 
-/**
- * @author cdr
- */
 package com.intellij.psi.controlFlow;
 
-import consulo.logging.Logger;
+import com.intellij.openapi.diagnostic.Logger;
+import javax.annotation.Nonnull;
 
-public abstract class SimpleInstruction extends InstructionBase {
-  private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);
+public abstract class SimpleInstruction extends InstructionBase
+{
+	private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);
 
-  @Override
-  public int nNext() { return 1; }
+	@Override
+	public int nNext()
+	{
+		return 1;
+	}
 
-  @Override
-  public int getNext(int index, int no) {
-    LOG.assertTrue(no == 0);
-    return index + 1;
-  }
+	@Override
+	public int getNext(int index, int no)
+	{
+		LOG.assertTrue(no == 0);
+		return index + 1;
+	}
 
-  @Override
-  public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
-    visitor.visitSimpleInstruction(this, offset, nextOffset);
-  }
+	@Override
+	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	{
+		visitor.visitSimpleInstruction(this, offset, nextOffset);
+	}
 }

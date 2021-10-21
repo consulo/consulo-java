@@ -15,41 +15,53 @@
  */
 package com.intellij.psi.controlFlow;
 
-import consulo.logging.Logger;
+import com.intellij.openapi.diagnostic.Logger;
+import javax.annotation.Nonnull;
 
-public class GoToInstruction extends BranchingInstruction {
-  private static final Logger LOG = Logger.getInstance(GoToInstruction.class);
+public class GoToInstruction extends BranchingInstruction
+{
+	private static final Logger LOG = Logger.getInstance(GoToInstruction.class);
 
-  public final boolean isReturn; //true if goto has been generated as a result of return statement
+	public final boolean isReturn; //true if goto has been generated as a result of return statement
 
-  public GoToInstruction(int offset) {
-    this(offset, BranchingInstruction.Role.END);
-  }
-  public GoToInstruction(int offset, Role role) {
-    this (offset,role,false);
-  }
-  public GoToInstruction(int offset, Role role, boolean isReturn) {
-    super(offset, role);
-    this.isReturn = isReturn;
-  }
+	GoToInstruction(int offset)
+	{
+		this(offset, BranchingInstruction.Role.END);
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public String toString() {
-    final String sRole = "["+role.toString()+"]";
-    return "GOTO " + sRole + " " + offset + (isReturn ? " RETURN" : "");
-  }
+	GoToInstruction(int offset, @Nonnull Role role)
+	{
+		this(offset, role, false);
+	}
 
-  @Override
-  public int nNext() { return 1; }
+	GoToInstruction(int offset, @Nonnull Role role, boolean isReturn)
+	{
+		super(offset, role);
+		this.isReturn = isReturn;
+	}
 
-  @Override
-  public int getNext(int index, int no) {
-    LOG.assertTrue(no == 0);
-    return offset;
-  }
+	public String toString()
+	{
+		final String sRole = "[" + role.toString() + "]";
+		return "GOTO " + sRole + " " + offset + (isReturn ? " RETURN" : "");
+	}
 
-  @Override
-  public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
-    visitor.visitGoToInstruction(this, offset, nextOffset);
-  }
+	@Override
+	public int nNext()
+	{
+		return 1;
+	}
+
+	@Override
+	public int getNext(int index, int no)
+	{
+		LOG.assertTrue(no == 0);
+		return offset;
+	}
+
+	@Override
+	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	{
+		visitor.visitGoToInstruction(this, offset, nextOffset);
+	}
 }

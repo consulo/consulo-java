@@ -15,37 +15,49 @@
  */
 package com.intellij.psi.controlFlow;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiExpression;
-import consulo.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Author: msk
  */
-public abstract class ConditionalBranchingInstruction extends BranchingInstruction {
-  protected static final Logger LOG = Logger.getInstance("#com.intellij.psi.controlFlow.ConditionalGoToInstruction");
-  public final PsiExpression expression;
+public abstract class ConditionalBranchingInstruction extends BranchingInstruction
+{
+	protected static final Logger LOG = Logger.getInstance(ConditionalGoToInstruction.class);
+	public final PsiExpression expression;
 
-  public ConditionalBranchingInstruction(int offset, final PsiExpression expression, Role role) {
-    super(offset, role);
-    this.expression = expression;
-  }
+	ConditionalBranchingInstruction(int offset, @Nullable PsiExpression expression, @Nonnull Role role)
+	{
+		super(offset, role);
+		this.expression = expression;
+	}
 
-  @Override
-  public int nNext() { return 2; }
+	@Override
+	public int nNext()
+	{
+		return 2;
+	}
 
-  @Override
-  public int getNext(int index, int no) {
-    switch (no) {
-      case 0: return offset;
-      case 1: return index + 1;
-      default:
-        LOG.assertTrue (false);
-        return -1;
-    }
-  }
+	@Override
+	public int getNext(int index, int no)
+	{
+		switch(no)
+		{
+			case 0:
+				return offset;
+			case 1:
+				return index + 1;
+			default:
+				LOG.assertTrue(false);
+				return -1;
+		}
+	}
 
-  @Override
-  public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
-    visitor.visitConditionalBranchingInstruction(this, offset, nextOffset);
-  }
+	@Override
+	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	{
+		visitor.visitConditionalBranchingInstruction(this, offset, nextOffset);
+	}
 }

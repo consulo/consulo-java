@@ -404,7 +404,7 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction
 		}
 		boolean created = false;
 		// do not introduce assignment in chanined constructor
-		if(JavaHighlightUtil.getChainedConstructors(constructor) == null)
+		if(JavaHighlightUtil.getChainedConstructors(constructor).isEmpty())
 		{
 			for(PsiField field : fields.keySet())
 			{

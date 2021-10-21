@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-/**
- * @author cdr
- */
 package com.intellij.psi.controlFlow;
 
 import com.intellij.psi.PsiElement;
@@ -26,99 +23,118 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControlFlowSubRange implements ControlFlow {
-  private final ControlFlowImpl myControlFlow;
-  private final int myStart;
-  private final int myEnd;
-  private List<Instruction> myInstructions;
+public class ControlFlowSubRange implements ControlFlow
+{
+	private final ControlFlow myControlFlow;
+	private final int myStart;
+	private final int myEnd;
+	private List<Instruction> myInstructions;
 
-  public ControlFlowSubRange(ControlFlowImpl controlFlow, int start, int end) {
-    myControlFlow = controlFlow;
-    myStart = start;
-    myEnd = end;
-  }
+	public ControlFlowSubRange(ControlFlow controlFlow, int start, int end)
+	{
+		myControlFlow = controlFlow;
+		myStart = start;
+		myEnd = end;
+	}
 
-  @Override
-  @Nonnull
-  public List<Instruction> getInstructions() {
-    if (myInstructions == null) {
-      final List<Instruction> list = new ArrayList<Instruction>(myEnd - myStart);
-      final List<Instruction> oldList = myControlFlow.getInstructions();
-      for (int i = myStart; i < myEnd; i++) {
-        Instruction instruction = oldList.get(i).clone();
-        if (instruction instanceof BranchingInstruction) {
-          BranchingInstruction branchingInstruction = (BranchingInstruction)instruction;
-          branchingInstruction.offset = patchOffset(branchingInstruction.offset);
-        }
-        if (instruction instanceof CallInstruction) {
-          final CallInstruction callInstruction = (CallInstruction)instruction;
-          callInstruction.procBegin = patchOffset(callInstruction.procBegin);
-          callInstruction.procEnd = patchOffset(callInstruction.procEnd);
-        }
-        if (instruction instanceof ReturnInstruction) {
-          final ReturnInstruction returnInstruction = (ReturnInstruction)instruction;
-          CallInstruction callInstruction = new CallInstruction(patchOffset(returnInstruction.getProcBegin()), patchOffset(returnInstruction.getProcEnd()));
-          returnInstruction.setCallInstruction(callInstruction);
-        }
-        list.add(instruction);
-      }
-      myInstructions = list;
-    }
-    return myInstructions;
-  }
+	@Override
+	@Nonnull
+	public List<Instruction> getInstructions()
+	{
+		if(myInstructions == null)
+		{
+			final List<Instruction> list = new ArrayList<>(myEnd - myStart);
+			final List<Instruction> oldList = myControlFlow.getInstructions();
+			for(int i = myStart; i < myEnd; i++)
+			{
+				Instruction instruction = oldList.get(i).clone();
+				if(instruction instanceof BranchingInstruction)
+				{
+					BranchingInstruction branchingInstruction = (BranchingInstruction) instruction;
+					branchingInstruction.offset = patchOffset(branchingInstruction.offset);
+				}
+				if(instruction instanceof CallInstruction)
+				{
+					final CallInstruction callInstruction = (CallInstruction) instruction;
+					callInstruction.procBegin = patchOffset(callInstruction.procBegin);
+					callInstruction.procEnd = patchOffset(callInstruction.procEnd);
+				}
+				if(instruction instanceof ReturnInstruction)
+				{
+					final ReturnInstruction returnInstruction = (ReturnInstruction) instruction;
+					CallInstruction callInstruction = new CallInstruction(patchOffset(returnInstruction.getProcBegin()), patchOffset(returnInstruction.getProcEnd()));
+					returnInstruction.setCallInstruction(callInstruction);
+				}
+				list.add(instruction);
+			}
+			myInstructions = list;
+		}
+		return myInstructions;
+	}
 
-  private int patchOffset(int offset) {
-    if (offset < myStart) offset = myStart;
-    else if (offset > myEnd) offset = myEnd;
-    offset -= myStart;
-    return offset;
-  }
+	private int patchOffset(int offset)
+	{
+		if(offset < myStart)
+		{
+			offset = myStart;
+		}
+		else if(offset > myEnd)
+		{
+			offset = myEnd;
+		}
+		offset -= myStart;
+		return offset;
+	}
 
-  @Override
-  public int getSize() {
-    return myEnd - myStart;
-  }
+	@Override
+	public int getSize()
+	{
+		return myEnd - myStart;
+	}
 
-  @Override
-  public int getStartOffset(@Nonnull PsiElement element) {
-    return patchOffset(myControlFlow.getStartOffset(element));
-    //return (myControlFlow.getStartOffset(element));
-  }
+	@Override
+	public int getStartOffset(@Nonnull PsiElement element)
+	{
+		return patchOffset(myControlFlow.getStartOffset(element));
+		//return (myControlFlow.getStartOffset(element));
+	}
 
-  @Override
-  public int getEndOffset(@Nonnull PsiElement element) {
-    return patchOffset(myControlFlow.getEndOffset(element));
-    //return myControlFlow.getEndOffset(element);
-  }
+	@Override
+	public int getEndOffset(@Nonnull PsiElement element)
+	{
+		return patchOffset(myControlFlow.getEndOffset(element));
+		//return myControlFlow.getEndOffset(element);
+	}
 
-  @Override
-  public PsiElement getElement(int offset) {
-    return myControlFlow.getElement(myStart + offset);
-  }
+	@Override
+	public PsiElement getElement(int offset)
+	{
+		return myControlFlow.getElement(myStart + offset);
+	}
 
-  @Override
-  public boolean isConstantConditionOccurred() {
-    return myControlFlow.isConstantConditionOccurred();
-  }
+	@Override
+	public boolean isConstantConditionOccurred()
+	{
+		return myControlFlow.isConstantConditionOccurred();
+	}
 
-  public String toString() {
-    @NonNls StringBuilder buffer = new StringBuilder();
-    buffer.
-      append("CF range:[").
-      append(myStart).
-      append("-").
-      append(myEnd).
-      append("]\n");
+	public String toString()
+	{
+		@NonNls StringBuilder buffer = new StringBuilder();
+		buffer.
+				append("CF range:[").
+				append(myStart).
+				append("-").
+				append(myEnd).
+				append("]\n");
 
-    final List<Instruction> instructions = getInstructions();
-    for(int i = 0; i < instructions.size(); i++){
-      Instruction instruction = instructions.get(i);
-      buffer.append(Integer.toString(i));
-      buffer.append(": ");
-      buffer.append(instruction.toString());
-      buffer.append("\n");
-    }
-    return buffer.toString();
-  }
+		final List<Instruction> instructions = getInstructions();
+		for(int i = 0; i < instructions.size(); i++)
+		{
+			Instruction instruction = instructions.get(i);
+			buffer.append(i).append(": ").append(instruction.toString()).append("\n");
+		}
+		return buffer.toString();
+	}
 }
 

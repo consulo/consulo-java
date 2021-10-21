@@ -1,120 +1,138 @@
-
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.controlFlow;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiStatement;
 import com.intellij.util.containers.Stack;
-import consulo.logging.Logger;
-import consulo.util.collection.primitive.objects.ObjectIntMap;
-import consulo.util.collection.primitive.objects.ObjectMaps;
-
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
-class ControlFlowImpl implements ControlFlow {
-  private static final Logger LOG = Logger.getInstance(ControlFlowImpl.class);
+import java.util.*;
 
-  private final List<Instruction> myInstructions = new ArrayList<Instruction>();
-  private final ObjectIntMap<PsiElement> myElementToStartOffsetMap = ObjectMaps.newObjectIntHashMap();
-  private final ObjectIntMap<PsiElement> myElementToEndOffsetMap = ObjectMaps.newObjectIntHashMap();
-  private final List<PsiElement> myElementsForInstructions = new ArrayList<PsiElement>();
-  private boolean myConstantConditionOccurred;
+class ControlFlowImpl extends AbstractControlFlow
+{
+	private static final Logger LOG = Logger.getInstance(ControlFlowImpl.class);
 
-  private final Stack<PsiElement> myElementStack = new Stack<PsiElement>();
+	private final List<Instruction> myInstructions = new ArrayList<>();
+	private final List<PsiElement> myElementsForInstructions = new ArrayList<>();
+	private boolean myConstantConditionOccurred;
+	private final Map<Instruction, Instruction> myInstructionCache = new HashMap<>();
+	private final Stack<PsiElement> myElementStack = new Stack<>();
 
-  public void addInstruction(Instruction instruction) {
-    myInstructions.add(instruction);
-    myElementsForInstructions.add(myElementStack.peek());
-  }
+	protected ControlFlowImpl()
+	{
+		super(new HashMap<>());
+	}
 
-  public void startElement(PsiElement element) {
-    myElementStack.push(element);
-    myElementToStartOffsetMap.putInt(element, myInstructions.size());
+	void addInstruction(Instruction instruction)
+	{
+		if(instruction instanceof ReadVariableInstruction || instruction instanceof WriteVariableInstruction)
+		{
+			Instruction oldInstruction = myInstructionCache.putIfAbsent(instruction, instruction);
+			if(oldInstruction != null)
+			{
+				instruction = oldInstruction;
+			}
+		}
+		myInstructions.add(instruction);
+		myElementsForInstructions.add(myElementStack.peek());
+	}
 
-    if (LOG.isDebugEnabled()){
-      if (element instanceof PsiStatement){
-        String text = element.getText();
-        int index = Math.min(text.indexOf('\n'), text.indexOf('\r'));
-        if (index >= 0){
-          text = text.substring(0, index);
-        }
-        addInstruction(new CommentInstruction(text));
-      }
-    }
-  }
+	public void startElement(PsiElement element)
+	{
+		myElementStack.push(element);
+		myElementToOffsetMap.put(element, new int[]{myInstructions.size(), -1});
+		assert getStartOffset(element) == myInstructions.size();
+	}
 
-  public void finishElement(PsiElement element) {
-    PsiElement popped = myElementStack.pop();
-    LOG.assertTrue(popped.equals(element));
-    myElementToEndOffsetMap.putInt(element, myInstructions.size());
-  }
+	void finishElement(PsiElement element)
+	{
+		PsiElement popped = myElementStack.pop();
+		LOG.assertTrue(popped.equals(element));
+		myElementToOffsetMap.get(element)[1] = myInstructions.size();
+		assert getEndOffset(element) == myInstructions.size();
+	}
 
-  @Override
-  @Nonnull
-  public List<Instruction> getInstructions() {
-    return myInstructions;
-  }
-  @Override
-  public int getSize() {
-    return myInstructions.size();
-  }
+	@Override
+	@Nonnull
+	public List<Instruction> getInstructions()
+	{
+		return myInstructions;
+	}
 
-  @Override
-  public int getStartOffset(@Nonnull PsiElement element) {
-    int value = myElementToStartOffsetMap.getInt(element);
-    if (value == 0){
-      if (!myElementToStartOffsetMap.containsKey(element)) return -1;
-    }
-    return value;
-  }
+	@Override
+	public int getSize()
+	{
+		return myInstructions.size();
+	}
 
-  @Override
-  public int getEndOffset(@Nonnull PsiElement element) {
-    int value = myElementToEndOffsetMap.getInt(element);
-    if (value == 0){
-      if (!myElementToEndOffsetMap.containsKey(element)) return -1;
-    }
-    return value;
-  }
+	ControlFlow immutableCopy()
+	{
+		return new ImmutableControlFlow(myInstructions.toArray(new Instruction[0]),
+				new HashMap<>(myElementToOffsetMap),
+				myElementsForInstructions.toArray(PsiElement.EMPTY_ARRAY),
+				myConstantConditionOccurred);
+	}
 
-  @Override
-  public PsiElement getElement(int offset) {
-    return myElementsForInstructions.get(offset);
-  }
+	@Override
+	public PsiElement getElement(int offset)
+	{
+		return myElementsForInstructions.get(offset);
+	}
 
-  @Override
-  public boolean isConstantConditionOccurred() {
-    return myConstantConditionOccurred;
-  }
-  public void setConstantConditionOccurred(boolean constantConditionOccurred) {
-    myConstantConditionOccurred = constantConditionOccurred;
-  }
+	@Override
+	public boolean isConstantConditionOccurred()
+	{
+		return myConstantConditionOccurred;
+	}
 
-  public String toString() {
-    StringBuilder buffer = new StringBuilder();
-    for(int i = 0; i < myInstructions.size(); i++){
-      Instruction instruction = myInstructions.get(i);
-      buffer.append(Integer.toString(i));
-      buffer.append(": ");
-      buffer.append(instruction.toString());
-      buffer.append("\n");
-    }
-    return buffer.toString();
-  }
+	void setConstantConditionOccurred(boolean constantConditionOccurred)
+	{
+		myConstantConditionOccurred = constantConditionOccurred;
+	}
+
+	private static final class ImmutableControlFlow extends AbstractControlFlow
+	{
+		private final
+		@Nonnull
+		List<Instruction> myInstructions;
+		private final
+		@Nonnull
+		PsiElement[] myElementsForInstructions;
+		private final boolean myConstantConditionOccurred;
+
+		private ImmutableControlFlow(@Nonnull Instruction[] instructions,
+									 @Nonnull HashMap<PsiElement, int[]> myElementToOffsetMap,
+									 @Nonnull PsiElement [] elementsForInstructions, boolean occurred)
+		{
+			super(myElementToOffsetMap);
+			myInstructions = Arrays.asList(instructions);
+			myElementsForInstructions = elementsForInstructions;
+			myConstantConditionOccurred = occurred;
+		}
+
+		@Override
+		@Nonnull
+		public List<Instruction> getInstructions()
+		{
+			return myInstructions;
+		}
+
+		@Override
+		public int getSize()
+		{
+			return myInstructions.size();
+		}
+
+		@Override
+		public PsiElement getElement(int offset)
+		{
+			return myElementsForInstructions[offset];
+		}
+
+		@Override
+		public boolean isConstantConditionOccurred()
+		{
+			return myConstantConditionOccurred;
+		}
+	}
 }
