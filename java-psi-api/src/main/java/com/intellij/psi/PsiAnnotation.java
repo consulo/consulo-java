@@ -15,14 +15,14 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.psi.meta.PsiMetaData;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.jvm.JvmAnnotation;
+import com.intellij.psi.meta.PsiMetaData;
 import com.intellij.psi.meta.PsiMetaOwner;
 import com.intellij.util.ArrayFactory;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java annotation.
@@ -126,6 +126,15 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 	 */
 	@Nullable
 	PsiAnnotationOwner getOwner();
+
+	/**
+	 * @return whether the annotation has the given qualified name. Specific languages may provide efficient implementation
+	 * that doesn't always create/resolve annotation reference.
+	 */
+	default boolean hasQualifiedName(@Nonnull String qualifiedName)
+	{
+		return qualifiedName.equals(getQualifiedName());
+	}
 
 	@Nonnull
 	@Override

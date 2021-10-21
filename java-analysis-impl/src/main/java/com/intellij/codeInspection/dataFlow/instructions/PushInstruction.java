@@ -16,31 +16,31 @@
 
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.psi.PsiExpression;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class PushInstruction extends Instruction implements ExpressionPushingInstruction
+/**
+ * An instruction that pushes given value to the stack
+ */
+public class PushInstruction extends EvalInstruction
 {
-	private final DfaValue myValue;
-	private final PsiExpression myPlace;
+	private final
+	@Nonnull
+	DfaValue myValue;
 	private final boolean myReferenceWrite;
 
-	public PushInstruction(@Nullable DfaValue value, PsiExpression place)
+	public PushInstruction(@Nonnull DfaValue value, PsiExpression place)
 	{
 		this(value, place, false);
 	}
 
-	public PushInstruction(@Nullable DfaValue value, PsiExpression place, final boolean isReferenceWrite)
+	public PushInstruction(@Nonnull DfaValue value, PsiExpression place, final boolean isReferenceWrite)
 	{
-		myValue = value != null ? value : DfaUnknownValue.getInstance();
-		myPlace = place;
+		super(place, 0);
+		myValue = value;
 		myReferenceWrite = isReferenceWrite;
 	}
 
@@ -56,15 +56,11 @@ public class PushInstruction extends Instruction implements ExpressionPushingIns
 	}
 
 	@Override
-	public PsiExpression getExpression()
+	public
+	@Nonnull
+	DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue ... arguments)
 	{
-		return myPlace;
-	}
-
-	@Override
-	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
-	{
-		return visitor.visitPush(this, runner, stateBefore);
+		return myValue;
 	}
 
 	public String toString()

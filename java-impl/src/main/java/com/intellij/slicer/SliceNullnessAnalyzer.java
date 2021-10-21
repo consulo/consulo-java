@@ -15,28 +15,26 @@
  */
 package com.intellij.slicer;
 
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.codeInsight.Nullability;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
-import com.intellij.codeInspection.dataFlow.DfaUtil;
-import com.intellij.codeInspection.dataFlow.Nullness;
+import com.intellij.codeInspection.dataFlow.NullabilityUtil;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.AbstractTreeStructure;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Ref;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.WalkingState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FactoryMap;
 import consulo.util.collection.Sets;
-
 import javax.annotation.Nonnull;
+
 import java.util.*;
 
 /**
@@ -187,10 +185,10 @@ public class SliceNullnessAnalyzer
 														final Map<SliceNode, NullAnalysisResult> map)
 	{
 		final SliceLeafAnalyzer.SliceNodeGuide guide = new SliceLeafAnalyzer.SliceNodeGuide(treeStructure);
-		WalkingState<SliceNode> walkingState = new WalkingState<SliceNode>(guide)
+		WalkingState<SliceNode> walkingState = new WalkingState<>(guide)
 		{
 			@Override
-			public void visit(@Nonnull SliceNode element)
+			public void visit(final @Nonnull SliceNode element)
 			{
 				element.calculateDupNode();
 				node(element, map).clear();
@@ -201,27 +199,19 @@ public class SliceNullnessAnalyzer
 				}
 				else
 				{
-					SliceUsage sliceUsage = element.getValue();
-					final PsiElement value = sliceUsage.getElement();
-					Nullness nullness = ApplicationManager.getApplication().runReadAction(new Computable<Nullness>()
-					{
-						@Override
-						public Nullness compute()
-						{
-							return checkNullness(value);
-						}
-					});
-					if(nullness == Nullness.NULLABLE)
+					final PsiElement value = ReadAction.compute(() -> element.getValue().getElement());
+					Nullability nullability = ReadAction.compute(() -> checkNullability(value));
+					if(nullability == Nullability.NULLABLE)
 					{
 						group(element, map, NullAnalysisResult.NULLS).add(value);
 					}
-					else if(nullness == Nullness.NOT_NULL)
+					else if(nullability == Nullability.NOT_NULL)
 					{
 						group(element, map, NullAnalysisResult.NOT_NULLS).add(value);
 					}
 					else
 					{
-						Collection<? extends AbstractTreeNode> children = element.getChildren();
+						Collection<? extends AbstractTreeNode<?>> children = ReadAction.compute(element::getChildren);
 						if(children.isEmpty())
 						{
 							group(element, map, NullAnalysisResult.UNKNOWNS).add(value);
@@ -247,88 +237,13 @@ public class SliceNullnessAnalyzer
 	}
 
 	@Nonnull
-	private static Nullness checkNullness(final PsiElement element)
+	private static Nullability checkNullability(PsiElement element)
 	{
-		// null
-		PsiElement value = element;
-		if(value instanceof PsiExpression)
+		if(element instanceof PsiExpression)
 		{
-			value = PsiUtil.deparenthesizeExpression((PsiExpression) value);
+			return NullabilityUtil.getExpressionNullability((PsiExpression) element, true);
 		}
-		if(value instanceof PsiLiteralExpression)
-		{
-			return ((PsiLiteralExpression) value).getValue() == null ? Nullness.NULLABLE : Nullness.NOT_NULL;
-		}
-
-		// not null
-		if(value instanceof PsiNewExpression)
-		{
-			return Nullness.NOT_NULL;
-		}
-		if(value instanceof PsiThisExpression)
-		{
-			return Nullness.NOT_NULL;
-		}
-		if(value instanceof PsiMethodCallExpression)
-		{
-			PsiMethod method = ((PsiMethodCallExpression) value).resolveMethod();
-			if(method != null && NullableNotNullManager.isNotNull(method))
-			{
-				return Nullness.NOT_NULL;
-			}
-			if(method != null && NullableNotNullManager.isNullable(method))
-			{
-				return Nullness.NULLABLE;
-			}
-		}
-		if(value instanceof PsiPolyadicExpression && ((PsiPolyadicExpression) value).getOperationTokenType() == JavaTokenType.PLUS)
-		{
-			return Nullness.NOT_NULL; // "xxx" + var
-		}
-
-		// unfortunately have to resolve here, since there can be no subnodes
-		PsiElement context = value;
-		if(value instanceof PsiReference)
-		{
-			PsiElement resolved = ((PsiReference) value).resolve();
-			if(resolved instanceof PsiCompiledElement)
-			{
-				resolved = resolved.getNavigationElement();
-			}
-			value = resolved;
-		}
-		if(value instanceof PsiParameter && ((PsiParameter) value).getDeclarationScope() instanceof PsiCatchSection)
-		{
-			// exception thrown is always not null
-			return Nullness.NOT_NULL;
-		}
-
-		if(value instanceof PsiLocalVariable || value instanceof PsiParameter)
-		{
-			Nullness result = DfaUtil.checkNullness((PsiVariable) value, context);
-			if(result != Nullness.UNKNOWN)
-			{
-				return result;
-			}
-		}
-
-		if(value instanceof PsiModifierListOwner)
-		{
-			if(NullableNotNullManager.isNotNull((PsiModifierListOwner) value))
-			{
-				return Nullness.NOT_NULL;
-			}
-			if(NullableNotNullManager.isNullable((PsiModifierListOwner) value))
-			{
-				return Nullness.NULLABLE;
-			}
-		}
-
-		if(value instanceof PsiEnumConstant)
-		{
-			return Nullness.NOT_NULL;
-		}
-		return Nullness.UNKNOWN;
+		return Nullability.UNKNOWN;
 	}
 
 	public static class NullAnalysisResult

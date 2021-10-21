@@ -18,7 +18,8 @@ package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 
-import java.util.Collections;
+import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +44,14 @@ public class InstructionTransfer implements TransferTarget
 		{
 			state.flushVariable(toFlush);
 		}
-		return Collections.singletonList(new DfaInstructionState(runner.getInstruction(offset.getInstructionOffset()), state));
+		return List.of(new DfaInstructionState(runner.getInstruction(offset.getInstructionOffset()), state));
+	}
+
+	@Nonnull
+	@Override
+	public Collection<Integer> getPossibleTargets()
+	{
+		return List.of(offset.getInstructionOffset());
 	}
 
 	public ControlFlow.ControlFlowOffset getControlFlowOffset()

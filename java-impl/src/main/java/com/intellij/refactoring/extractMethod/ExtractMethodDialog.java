@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.extractMethod;
 
+import com.intellij.codeInsight.Nullability;
 import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
@@ -47,6 +47,7 @@ import consulo.java.refactoring.JavaRefactoringBundle;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
@@ -68,7 +69,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 	private final PsiType[] myExceptions;
 	private final boolean myStaticFlag;
 	private final boolean myCanBeStatic;
-	private final Nullness myNullness;
+	private final Nullability myNullability;
 	private final PsiElement[] myElementsToExtract;
 	private final String myHelpId;
 
@@ -93,18 +94,18 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 	private TypeSelector mySelector;
 
 	public ExtractMethodDialog(Project project,
-			PsiClass targetClass,
-			final InputVariables inputVariables,
-			PsiType returnType,
-			PsiTypeParameterList typeParameterList,
-			PsiType[] exceptions,
-			boolean isStatic,
-			boolean canBeStatic,
-			final boolean canBeChainedConstructor,
-			String title,
-			String helpId,
-			Nullness nullness,
-			final PsiElement[] elementsToExtract)
+							   PsiClass targetClass,
+							   final InputVariables inputVariables,
+							   PsiType returnType,
+							   PsiTypeParameterList typeParameterList,
+							   PsiType[] exceptions,
+							   boolean isStatic,
+							   boolean canBeStatic,
+							   final boolean canBeChainedConstructor,
+							   String title,
+							   String helpId,
+							   Nullability nullability,
+							   final PsiElement[] elementsToExtract)
 	{
 		super(project, true);
 		myProject = project;
@@ -114,7 +115,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 		myExceptions = exceptions;
 		myStaticFlag = isStatic;
 		myCanBeStatic = canBeStatic;
-		myNullness = nullness;
+		myNullability = nullability;
 		myElementsToExtract = elementsToExtract;
 		myVariableData = inputVariables;
 		myHelpId = helpId;
@@ -288,10 +289,10 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private JPanel createReturnTypePanel()
 	{
-		if(TypeConversionUtil.isPrimitiveWrapper(myReturnType) && myNullness == Nullness.NULLABLE)
+		if(TypeConversionUtil.isPrimitiveWrapper(myReturnType) && myNullability == Nullability.NULLABLE)
 		{
 			return null;
 		}
@@ -427,7 +428,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 			optionsPanel.add(myMakeVarargs);
 		}
 
-		if(myNullness != null && myNullness != Nullness.UNKNOWN)
+		if(myNullability != null && myNullability != Nullability.UNKNOWN)
 		{
 			final boolean isSelected = PropertiesComponent.getInstance(myProject).getBoolean(EXTRACT_METHOD_GENERATE_ANNOTATIONS, true);
 			myGenerateAnnotations = new JCheckBox(JavaRefactoringBundle.message("declare.generated.annotations"), isSelected);
@@ -636,7 +637,8 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 		{
 			final NullableNotNullManager nullManager = NullableNotNullManager.getInstance(myProject);
 			buffer.append("@");
-			buffer.append(StringUtil.getShortName(myNullness == Nullness.NULLABLE ? nullManager.getDefaultNullable() : nullManager.getDefaultNotNull()));
+			buffer.append(
+					StringUtil.getShortName(myNullability == Nullability.NULLABLE ? nullManager.getDefaultNullable() : nullManager.getDefaultNotNull()));
 			buffer.append("\n");
 		}
 		final String visibilityString = VisibilityUtil.getVisibilityString(getVisibility());

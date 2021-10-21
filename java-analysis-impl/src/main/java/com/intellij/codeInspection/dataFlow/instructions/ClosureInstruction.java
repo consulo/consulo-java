@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,37 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.intellij.codeInspection.dataFlow.instructions;
 
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.psi.PsiLambdaExpression;
+import com.intellij.psi.PsiElement;
+import javax.annotation.Nonnull;
 
-public class LambdaInstruction extends Instruction
+/**
+ * Indicates the closure (lambda or class) inside the analyzed code block
+ */
+public class ClosureInstruction extends Instruction
 {
-	private final PsiLambdaExpression myLambdaExpression;
+	@Nonnull
+	private final PsiElement myClosure;
 
-	public LambdaInstruction(PsiLambdaExpression lambdaExpression)
+	public ClosureInstruction(@Nonnull PsiElement closure)
 	{
-		myLambdaExpression = lambdaExpression;
+		myClosure = closure;
 	}
 
-	public PsiLambdaExpression getLambdaExpression()
+	@Nonnull
+	public PsiElement getClosureElement()
 	{
-		return myLambdaExpression;
+		return myClosure;
 	}
 
 	@Override
 	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
 	{
-		return visitor.visitLambdaExpression(this, runner, stateBefore);
+		return visitor.visitClosureInstruction(this, runner, stateBefore);
 	}
 
-	@Override
 	public String toString()
 	{
-		return "LambdaInstruction";
+		return "CLOSURE";
 	}
 }

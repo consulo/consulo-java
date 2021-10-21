@@ -1,4 +1,4 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
@@ -20,14 +20,16 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import java.util.List;
 
-public class NullabilityUtil
+public final class NullabilityUtil
 {
 
-	static DfaNullability calcCanBeNull(DfaVariableValue value)
+	@Nonnull
+	public static DfaNullability calcCanBeNull(DfaVariableValue value)
 	{
 		if(value.getDescriptor() instanceof DfaExpressionFactory.ThisDescriptor)
 		{
@@ -40,7 +42,7 @@ public class NullabilityUtil
 		PsiModifierListOwner var = value.getPsiVariable();
 		if(value.getType() instanceof PsiPrimitiveType)
 		{
-			return null;
+			return DfaNullability.UNKNOWN;
 		}
 		Nullability nullability = DfaPsiUtil.getElementNullabilityIgnoringParameterInference(value.getType(), var);
 		if(nullability != Nullability.UNKNOWN)
@@ -48,7 +50,9 @@ public class NullabilityUtil
 			return DfaNullability.fromNullability(nullability);
 		}
 		if(var == null)
-			return null;
+		{
+			return DfaNullability.UNKNOWN;
+		}
 
 		Nullability defaultNullability = value.getFactory().suggestNullabilityForNonAnnotatedMember(var);
 
@@ -100,7 +104,7 @@ public class NullabilityUtil
 
 			if(DfaPsiUtil.isInitializedNotNull(field))
 			{
-				return Pair.create(ContainerUtil.getOnlyItem(initializers, null), Nullability.NOT_NULL);
+				return Pair.create(ContainerUtil.getOnlyItem(initializers), Nullability.NOT_NULL);
 			}
 		}
 		else if(isOnlyImplicitlyInitialized(field))
@@ -125,11 +129,15 @@ public class NullabilityUtil
 	private static boolean weAreSureThereAreNoExplicitWrites(PsiField field)
 	{
 		String name = field.getName();
-		if(name == null || field.getInitializer() != null)
+		if(field.getInitializer() != null)
+		{
 			return false;
+		}
 
 		if(!isCheapEnoughToSearch(field, name))
+		{
 			return false;
+		}
 
 		return ReferencesSearch.search(field).allMatch(
 				reference -> reference instanceof PsiReferenceExpression && !PsiUtil.isAccessedForWriting((PsiReferenceExpression) reference));
@@ -139,7 +147,9 @@ public class NullabilityUtil
 	{
 		SearchScope scope = field.getUseScope();
 		if(!(scope instanceof GlobalSearchScope))
+		{
 			return true;
+		}
 
 		PsiSearchHelper helper = PsiSearchHelper.getInstance(field.getProject());
 		PsiSearchHelper.SearchCostResult result =
@@ -164,9 +174,13 @@ public class NullabilityUtil
 	{
 		expression = PsiUtil.skipParenthesizedExprDown(expression);
 		if(expression == null)
+		{
 			return Nullability.UNKNOWN;
+		}
 		if(PsiType.NULL.equals(expression.getType()))
+		{
 			return Nullability.NULLABLE;
+		}
 		if(expression instanceof PsiNewExpression ||
 				expression instanceof PsiLiteralExpression ||
 				expression instanceof PsiPolyadicExpression ||
@@ -180,7 +194,9 @@ public class NullabilityUtil
 			PsiExpression thenExpression = ((PsiConditionalExpression) expression).getThenExpression();
 			PsiExpression elseExpression = ((PsiConditionalExpression) expression).getElseExpression();
 			if(thenExpression == null || elseExpression == null)
+			{
 				return Nullability.UNKNOWN;
+			}
 			PsiExpression condition = ((PsiConditionalExpression) expression).getCondition();
 			// simple cases like x == null ? something : x
 			PsiReferenceExpression ref = ExpressionUtils.getReferenceExpressionFromNullComparison(condition, true);
@@ -196,11 +212,13 @@ public class NullabilityUtil
 			}
 			if(useDataflow)
 			{
-				return DfaNullability.toNullability(CommonDataflow.getExpressionFact(expression, DfaFactType.NULLABILITY));
+				return DfaNullability.toNullability(DfaNullability.fromDfType(CommonDataflow.getDfType(expression)));
 			}
 			Nullability left = getExpressionNullability(thenExpression, false);
 			if(left == Nullability.UNKNOWN)
+			{
 				return Nullability.UNKNOWN;
+			}
 			Nullability right = getExpressionNullability(elseExpression, false);
 			return left == right ? left : Nullability.UNKNOWN;
 		}
@@ -219,19 +237,25 @@ public class NullabilityUtil
 		}
 		if(useDataflow)
 		{
-			return DfaNullability.toNullability(CommonDataflow.getExpressionFact(expression, DfaFactType.NULLABILITY));
+			return DfaNullability.toNullability(DfaNullability.fromDfType(CommonDataflow.getDfType(expression)));
 		}
 		if(expression instanceof PsiReferenceExpression)
 		{
 			PsiReferenceExpression ref = (PsiReferenceExpression) expression;
 			PsiElement target = (ref).resolve();
+			if(target instanceof PsiPatternVariable)
+			{
+				return Nullability.NOT_NULL; // currently all pattern variables are not-null
+			}
 			if(target instanceof PsiLocalVariable || target instanceof PsiParameter)
 			{
 				PsiElement block = PsiUtil.getVariableCodeBlock((PsiVariable) target, null);
 				// Do not trust the declared nullability of local variable/parameter if it's reassigned as nullability designates
 				// only initial nullability
 				if(block == null || !HighlightControlFlowUtil.isEffectivelyFinal((PsiVariable) target, block, ref))
+				{
 					return Nullability.UNKNOWN;
+				}
 			}
 			return DfaPsiUtil.getElementNullabilityIgnoringParameterInference(expression.getType(), (PsiModifierListOwner) target);
 		}

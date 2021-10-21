@@ -240,7 +240,7 @@ public class MethodSignatureUtil
 		{
 			return false;
 		}
-		final PsiSubstitutor superSubstitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(superClassCandidate, derivedClass, PsiSubstitutor.EMPTY, null);
+		final PsiSubstitutor superSubstitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(superClassCandidate, derivedClass, PsiSubstitutor.EMPTY);
 		if(superSubstitutor == null)
 		{
 			return false;

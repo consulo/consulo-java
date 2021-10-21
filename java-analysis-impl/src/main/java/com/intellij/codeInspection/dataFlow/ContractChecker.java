@@ -1,15 +1,15 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.dataFlow.StandardMethodContract.ValueConstraint;
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.ReturnInstruction;
-import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
-import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.codeInspection.dataFlow.value.RelationType;
+import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * @author peter
  */
-class ContractChecker
+final class ContractChecker
 {
 	private static class ContractCheckerVisitor extends StandardInstructionVisitor
 	{
@@ -35,6 +35,7 @@ class ContractChecker
 
 		ContractCheckerVisitor(PsiMethod method, StandardMethodContract contract, boolean ownContract)
 		{
+			super(true);
 			myMethod = method;
 			myContract = contract;
 			myOwnContract = ownContract;
@@ -86,8 +87,8 @@ class ContractChecker
 			return super.visitMethodCall(instruction, runner, memState);
 		}
 
-		@Nonnull
 		@Override
+		@Nonnull
 		public DfaInstructionState[] visitControlTransfer(@Nonnull ControlTransferInstruction instruction,
 														  @Nonnull DataFlowRunner runner,
 														  @Nonnull DfaMemoryState state)
@@ -110,7 +111,7 @@ class ContractChecker
 			{
 				if(!myNonViolations.contains(element))
 				{
-					errors.put(element, "Contract clause '" + myContract + "' is violated");
+					errors.put(element, JavaAnalysisBundle.message("inspection.contract.checker.contract.violated", myContract));
 				}
 			}
 
@@ -121,16 +122,22 @@ class ContractChecker
 				{
 					for(PsiElement element : myFailures)
 					{
-						errors.put(element, "Return value of clause '" + myContract + "' could be replaced with 'fail' as method always fails" +
-								(myContract.isTrivial() ? "" : " in this case"));
+						if(myContract.isTrivial())
+						{
+							errors.put(element, JavaAnalysisBundle.message("inspection.contract.checker.method.always.fails.trivial", myContract));
+						}
+						else
+						{
+							errors.put(element, JavaAnalysisBundle.message("inspection.contract.checker.method.always.fails.nontrivial", myContract));
+						}
 					}
 				}
 			}
-			else if(myFailures.isEmpty() && errors.isEmpty())
+			else if(myFailures.isEmpty() && errors.isEmpty() && myMayReturnNormally)
 			{
 				PsiIdentifier nameIdentifier = myMethod.getNameIdentifier();
 				errors.put(nameIdentifier != null ? nameIdentifier : myMethod,
-						"Contract clause '" + myContract + "' is violated: no exception is thrown");
+						JavaAnalysisBundle.message("inspection.contract.checker.no.exception.thrown", myContract));
 			}
 
 			return errors;
@@ -151,7 +158,7 @@ class ContractChecker
 			return Collections.emptyMap();
 		}
 
-		DataFlowRunner runner = new StandardDataFlowRunner(false, null);
+		DataFlowRunner runner = new DataFlowRunner(method.getProject(), null);
 
 		PsiParameter[] parameters = method.getParameterList().getParameters();
 		final DfaMemoryState initialState = runner.createMemoryState();
@@ -159,17 +166,17 @@ class ContractChecker
 		for(int i = 0; i < contract.getParameterCount(); i++)
 		{
 			ValueConstraint constraint = contract.getParameterConstraint(i);
-			DfaConstValue comparisonValue = constraint.getComparisonValue(factory);
+			DfaValue comparisonValue = constraint.getComparisonValue(factory);
 			if(comparisonValue != null)
 			{
 				boolean negated = constraint.shouldUseNonEqComparison();
 				DfaVariableValue dfaParam = factory.getVarFactory().createVariableValue(parameters[i]);
-				initialState.applyCondition(factory.createCondition(dfaParam, RelationType.equivalence(!negated), comparisonValue));
+				initialState.applyCondition(dfaParam.cond(RelationType.equivalence(!negated), comparisonValue));
 			}
 		}
 
 		ContractCheckerVisitor visitor = new ContractCheckerVisitor(method, contract, ownContract);
-		runner.analyzeMethod(body, visitor, false, Collections.singletonList(initialState));
+		runner.analyzeMethod(body, visitor, Collections.singletonList(initialState));
 		return visitor.getErrors();
 	}
 }

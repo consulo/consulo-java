@@ -15,10 +15,16 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInspection.dataFlow.value.*;
-import org.jetbrains.annotations.Contract;
+import com.intellij.codeInspection.dataFlow.types.DfType;
+import com.intellij.codeInspection.dataFlow.value.DfaCondition;
+import com.intellij.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.codeInspection.dataFlow.value.RelationType;
+import com.intellij.psi.PsiType;
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
+import java.util.Set;
 
 public interface DfaMemoryState
 {
@@ -68,15 +74,6 @@ public interface DfaMemoryState
 	void setVarValue(DfaVariableValue var, DfaValue value);
 
 	/**
-	 * Ensures that top-of-stack value is either null or belongs to the supplied type
-	 *
-	 * @param type the type to cast to
-	 * @return true if cast is successful; false if top-of-stack value type is incompatible with supplied type
-	 * @throws java.util.EmptyStackException if stack is empty
-	 */
-	boolean castTopOfStack(@Nonnull DfaPsiType type);
-
-	/**
 	 * Returns a relation between given values within this state, if known
 	 *
 	 * @param left  first value
@@ -84,9 +81,9 @@ public interface DfaMemoryState
 	 * @return a relation (EQ, NE, GT, LT), or null if not known.
 	 */
 	@Nullable
-	DfaRelationValue.RelationType getRelation(DfaValue left, DfaValue right);
+	RelationType getRelation(DfaValue left, DfaValue right);
 
-	boolean applyCondition(DfaValue dfaCond);
+	boolean applyCondition(DfaCondition dfaCond);
 
 	/**
 	 * Returns true if given two values are known to be equal
@@ -97,64 +94,50 @@ public interface DfaMemoryState
 	 */
 	boolean areEqual(@Nonnull DfaValue value1, @Nonnull DfaValue value2);
 
-	boolean applyContractCondition(DfaValue dfaCond);
+	boolean applyContractCondition(DfaCondition dfaCond);
 
 	/**
-	 * Returns a value fact about supplied value within the context of current memory state.
-	 * Returns null if the fact of given type is not known or not applicable to a given value.
+	 * Updates value dfType if it's compatible with current value state.
+	 * Depending on value passed and memory state implementation the new fact may or may not be memoized.
 	 *
-	 * @param <T>      a type of the fact value
-	 * @param value    a value to get the fact about
-	 * @param factType a type of the fact to get
-	 * @return a fact about value, if known
+	 * @param value  value to update
+	 * @param dfType wanted type
+	 * @return true if update was successful. If false was returned the memory state may be in inconsistent state.
 	 */
-	@Nullable
-	<T> T getValueFact(@Nonnull DfaValue value, @Nonnull DfaFactType<T> factType);
+	boolean meetDfType(@Nonnull DfaValue value, @Nonnull DfType dfType);
 
 	/**
-	 * Forgets given fact if it was known for the supplied value
+	 * Forcibly sets the supplied dfType to given value if given value state can be memoized.
+	 * This is necessary to override some knowledge about the variable state. In most of the cases
+	 * {@link #meetDfType(DfaValue, DfType)} should be used as it narrows existing type.
 	 *
-	 * @param value    a value to drop fact for
-	 * @param factType a type of the fact to drop
+	 * @param value  value to update.
+	 * @param dfType type to assign to value. Note that type might be adjusted, e.g. to be compatible with value declared PsiType.
 	 */
-	void dropFact(@Nonnull DfaValue value, @Nonnull DfaFactType<?> factType);
+	void setDfType(@Nonnull DfaValue value, @Nonnull DfType dfType);
 
 	/**
-	 * Updates value fact if it's compatible with current value state. Depending on value passed and memory state implementation
-	 * the new fact may or may not be memoized.
-	 *
-	 * @param <T>      a type of the fact value
-	 * @param var      a value to update its state
-	 * @param factType a type of the fact to set
-	 * @param value    a new fact value
-	 * @return true if update was successful; false if current state contradicts with the wanted fact value
-	 */
-	<T> boolean applyFact(@Nonnull DfaValue var, @Nonnull DfaFactType<T> factType, @Nullable T value);
-
-	/**
-	 * Forces variable to have given fact (ignoring current value of this fact and flushing existing relations with this variable).
-	 * This might be useful if state is proven to be invalid, but we want to continue analysis to discover subsequent
-	 * problems under assumption that the state is still valid.
-	 * <p>
-	 * E.g. if it's proven that nullable variable is dereferenced, for the sake of subsequent analysis one might call
-	 * {@code forceVariableFact(var, NULLABILITY, NOT_NULL)}
-	 * </p>
-	 *
-	 * @param var      the variable to modify
-	 * @param factType the type of the fact
-	 * @param value    the new variable value
-	 * @param <T>      type of fact value
-	 */
-	<T> void forceVariableFact(@Nonnull DfaVariableValue var, @Nonnull DfaFactType<T> factType, @Nullable T value);
-
-	/**
-	 * Returns a map of known facts associated with given variable
-	 *
-	 * @param variable a variable to query the facts from
-	 * @return facts map
+	 * @param value value to get the type of
+	 * @return the DfType of the value within this memory state
 	 */
 	@Nonnull
-	DfaFactMap getFacts(@Nonnull DfaVariableValue variable);
+	DfType getDfType(@Nonnull DfaValue value);
+
+	/**
+	 * @param value value to get the type of; if value is a primitive wrapper, it will be unboxed before fetching the DfType
+	 * @return the DfType of the value within this memory state
+	 */
+	@Nonnull
+	DfType getUnboxedDfType(@Nonnull DfaValue value);
+
+	/**
+	 * @param value value to get the type of
+	 * @return the PsiType of given value, could be more precise than the declared type. May return null if not known.
+	 */
+	@Nullable
+	PsiType getPsiType(@Nonnull DfaValue value);
+
+	void flushFieldsQualifiedBy(@Nonnull Set<DfaValue> qualifiers);
 
 	void flushFields();
 
@@ -162,27 +145,25 @@ public interface DfaMemoryState
 
 	boolean isNull(DfaValue dfaVar);
 
-	boolean checkNotNullable(DfaValue value);
+	boolean checkNotNullable(@Nonnull DfaValue value);
 
 	boolean isNotNull(DfaValue dfaVar);
 
 	/**
-	 * Returns a constant value which equals to given value, if such.
-	 *
-	 * @param value a value to find a corresponding constant
-	 * @return found constant or null
-	 */
-	@Nullable
-	@Contract("null -> null")
-	DfaConstValue getConstantValue(@Nullable DfaValue value);
-
-	/**
-	 * Ephemeral means a state that was created when considering a method contract and checking if one of its arguments is null.
-	 * With explicit null check, that would result in any non-annotated variable being treated as nullable and producing possible NPE warnings later.
-	 * With contracts, we don't want this. So the state where this variable is null is marked ephemeral and no NPE warnings are issued for such states.
+	 * Mark this state as ephemeral. See {@link #isEphemeral()} for details.
 	 */
 	void markEphemeral();
 
+	/**
+	 * Ephemeral means a state that could be unreachable under normal program execution. Examples of ephemeral states include:
+	 * <ul>
+	 * <li>State created by method contract processing that checks for null (otherwise, if argument has unknown nullity, this would make it nullable)</li>
+	 * <li>State that appears on VM exception path (e.g. catching NPE or CCE)</li>
+	 * <li>State that appears when {@linkplain com.intellij.codeInspection.dataFlow.types.DfEphemeralReferenceType an ephemeral value} is stored on the stack</li>
+	 * </ul>
+	 * The "unsound" warnings (e.g. possible NPE) are not reported if they happen only in ephemeral states, and there's a non-ephemeral state
+	 * where the same problem doesn't happen.
+	 */
 	boolean isEphemeral();
 
 	boolean isEmptyStack();

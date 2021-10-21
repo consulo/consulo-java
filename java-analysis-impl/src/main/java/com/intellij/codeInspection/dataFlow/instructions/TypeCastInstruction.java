@@ -21,12 +21,11 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeCastExpression;
-import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 
-public class TypeCastInstruction extends Instruction implements ExpressionPushingInstruction
+public class TypeCastInstruction extends ExpressionPushingInstruction<PsiTypeCastExpression>
 {
-	private final PsiTypeCastExpression myCastExpression;
 	private final PsiExpression myCasted;
 	private final PsiType myCastTo;
 	private final
@@ -38,8 +37,8 @@ public class TypeCastInstruction extends Instruction implements ExpressionPushin
 							   PsiType castTo,
 							   @Nullable DfaControlTransferValue value)
 	{
+		super(castExpression);
 		assert !(castTo instanceof PsiPrimitiveType);
-		myCastExpression = castExpression;
 		myCasted = casted;
 		myCastTo = castTo;
 		myTransferValue = value;
@@ -71,12 +70,5 @@ public class TypeCastInstruction extends Instruction implements ExpressionPushin
 	public String toString()
 	{
 		return "CAST_TO " + myCastTo.getCanonicalText();
-	}
-
-	@Nonnull
-	@Override
-	public PsiTypeCastExpression getExpression()
-	{
-		return myCastExpression;
 	}
 }

@@ -15,11 +15,9 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -31,6 +29,10 @@ import com.intellij.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.psi.meta.PsiMetaData;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PairFunction;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
 
 /**
  * @author ven
@@ -57,6 +59,28 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 		return PsiTreeUtil.getChildOfType(stub != null ? stub.getPsiElement() : this, PsiJavaCodeReferenceElement.class);
 	}
 
+	@Nullable
+	private String getShortName()
+	{
+		PsiAnnotationStub stub = getStub();
+		if(stub != null)
+		{
+			return getAnnotationShortName(stub.getText());
+		}
+
+		PsiJavaCodeReferenceElement nameRef = getNameReferenceElement();
+		return nameRef == null ? null : nameRef.getReferenceName();
+	}
+
+	@Nonnull
+	public static String getAnnotationShortName(@Nonnull String annoText)
+	{
+		int at = annoText.indexOf('@');
+		int paren = annoText.indexOf('(');
+		String qualified = PsiNameHelper.getQualifiedClassName(annoText.substring(at + 1, paren > 0 ? paren : annoText.length()), true);
+		return StringUtil.getShortName(qualified);
+	}
+
 	@Override
 	public PsiAnnotationMemberValue findAttributeValue(String attributeName)
 	{
@@ -64,14 +88,14 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName)
 	{
 		return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
 	}
 
 	@Override
-	public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, @javax.annotation.Nullable T value)
+	public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, @Nullable T value)
 	{
 		@SuppressWarnings("unchecked") T t = (T) PsiImplUtil.setDeclaredAttributeValue(this, attributeName, value, ANNOTATION_CREATOR);
 		return t;
@@ -90,7 +114,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public String getQualifiedName()
 	{
 		final PsiJavaCodeReferenceElement nameRef = getNameReferenceElement();
@@ -120,7 +144,13 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 		return MetaRegistry.getMetaBase(this);
 	}
 
-	@javax.annotation.Nullable
+	@Override
+	public boolean hasQualifiedName(@Nonnull String qualifiedName)
+	{
+		return StringUtil.getShortName(qualifiedName).equals(getShortName()) && PsiAnnotation.super.hasQualifiedName(qualifiedName);
+	}
+
+	@Nullable
 	@Override
 	public PsiAnnotationOwner getOwner()
 	{

@@ -45,6 +45,7 @@ import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import consulo.vfs.ArchiveFileSystem;
 import org.intellij.lang.annotations.MagicConstant;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -1802,5 +1803,15 @@ public final class PsiUtil extends PsiUtilCore
 	{
 		return psiClass != null && psiClass.getManager().areElementsEquivalent(
 				psiClass, JavaPsiFacade.getElementFactory(psiClass.getProject()).getArrayClass(getLanguageLevel(psiClass)));
+	}
+
+	/**
+	 * @param variable variable to test
+	 * @return true if variable corresponds to JVM local variable defined inside the method
+	 */
+	@Contract("null -> false")
+	public static boolean isJvmLocalVariable(PsiElement variable)
+	{
+		return variable instanceof PsiLocalVariable || variable instanceof PsiParameter;
 	}
 }

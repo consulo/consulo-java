@@ -1,19 +1,19 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInspection.dataFlow.value.*;
-import consulo.util.lang.ObjectUtil;
-import consulo.util.lang.ref.SimpleReference;
-import one.util.streamex.IntStreamEx;
-
+import com.intellij.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
+import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+import one.util.streamex.StreamEx;
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.util.*;
 
 /**
  * @author peter
  */
-class EqClass extends SortedIntSet
+class EqClass extends SortedIntSet implements Iterable<DfaVariableValue>
 {
 	private final DfaValueFactory myFactory;
 
@@ -61,19 +61,20 @@ class EqClass extends SortedIntSet
 		return buf.toString();
 	}
 
-	List<DfaVariableValue> getVariables(boolean unwrap)
+	DfaVariableValue getVariable(int index)
 	{
-		List<DfaVariableValue> vars = new ArrayList<>();
+		return (DfaVariableValue) myFactory.getValue(get(index));
+	}
+
+	/**
+	 * @return copy of variables from this class as a list. Use this method if you expect
+	 * class updates during the iteration.
+	 */
+	List<DfaVariableValue> asList()
+	{
+		List<DfaVariableValue> vars = new ArrayList<>(size());
 		forEach(id -> {
-			DfaValue value = myFactory.getValue(id);
-			if(value instanceof DfaVariableValue)
-			{
-				vars.add((DfaVariableValue) value);
-			}
-			else if(unwrap && value instanceof DfaBoxedValue)
-			{
-				vars.add(((DfaBoxedValue) value).getWrappedValue());
-			}
+			vars.add((DfaVariableValue) myFactory.getValue(id));
 			return true;
 		});
 		return vars;
@@ -88,42 +89,34 @@ class EqClass extends SortedIntSet
 	{
 		if(size() == 1)
 		{
-			return ObjectUtil.tryCast(myFactory.getValue(get(0)), DfaVariableValue.class);
+			return getVariable(0);
 		}
-		return IntStreamEx.range(size()).mapToObj(idx -> myFactory.getValue(get(idx)))
-				.select(DfaVariableValue.class).min(CANONICAL_VARIABLE_COMPARATOR).orElse(null);
+		return StreamEx.of(iterator()).min(CANONICAL_VARIABLE_COMPARATOR).orElse(null);
 	}
 
-	List<DfaValue> getMemberValues()
+	@Nonnull
+	@Override
+	public Iterator<DfaVariableValue> iterator()
 	{
-		final List<DfaValue> result = new ArrayList<>(size());
-		forEach(id -> {
-			DfaValue value = myFactory.getValue(id);
-			result.add(value);
-			return true;
-		});
-		return result;
-	}
+		return new Iterator<>()
+		{
+			int pos;
 
-	@Nullable
-	DfaConstValue findConstant()
-	{
-		SimpleReference<DfaConstValue> result = SimpleReference.create();
-		forEach(id -> {
-			DfaValue value = myFactory.getValue(id);
-			if(value instanceof DfaConstValue)
+			@Override
+			public boolean hasNext()
 			{
-				result.set((DfaConstValue) value);
-				return false;
+				return pos < size();
 			}
-			return true;
-		});
-		return result.get();
-	}
 
-	boolean containsConstantsOnly()
-	{
-		int size = size();
-		return size <= 1 && (size == 0 || myFactory.getValue(get(0)) instanceof DfaConstValue);
+			@Override
+			public DfaVariableValue next()
+			{
+				if(pos >= size())
+				{
+					throw new NoSuchElementException();
+				}
+				return (DfaVariableValue) myFactory.getValue(get(pos++));
+			}
+		};
 	}
 }

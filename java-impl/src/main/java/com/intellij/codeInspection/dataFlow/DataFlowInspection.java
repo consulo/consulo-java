@@ -99,7 +99,7 @@ public class DataFlowInspection extends DataFlowInspectionBase
 	}
 
 	@Override
-	protected LocalQuickFix createIntroduceVariableFix(final PsiExpression expression)
+	protected LocalQuickFix createIntroduceVariableFix()
 	{
 		return new IntroduceVariableFix(true);
 	}
@@ -215,7 +215,7 @@ public class DataFlowInspection extends DataFlowInspectionBase
 			ContainerUtil.addIfNotNull(fixes, ReplaceComputeWithComputeIfPresentFix.makeFix(qualifier));
 			if(isVolatileFieldReference(qualifier))
 			{
-				ContainerUtil.addIfNotNull(fixes, createIntroduceVariableFix(qualifier));
+				ContainerUtil.addIfNotNull(fixes, createIntroduceVariableFix());
 			}
 			else if(!ExpressionUtils.isNullLiteral(qualifier) && !SideEffectChecker.mayHaveSideEffects(qualifier))
 			{

@@ -26,10 +26,9 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiVariable;
 import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.Contract;
-
 import javax.annotation.Nullable;
 
-public class AssignInstruction extends Instruction implements ExpressionPushingInstruction
+public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmentExpression>
 {
 	private final PsiExpression myRExpression;
 	private final PsiExpression myLExpression;
@@ -43,6 +42,7 @@ public class AssignInstruction extends Instruction implements ExpressionPushingI
 
 	public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @Nullable DfaValue assignedValue)
 	{
+		super(rExpression == null ? null : ObjectUtils.tryCast(rExpression.getParent(), PsiAssignmentExpression.class));
 		myLExpression = lExpression;
 		myRExpression = rExpression;
 		myAssignedValue = assignedValue;
@@ -80,17 +80,6 @@ public class AssignInstruction extends Instruction implements ExpressionPushingI
 	public String toString()
 	{
 		return "ASSIGN";
-	}
-
-	@Nullable
-	@Override
-	public PsiAssignmentExpression getExpression()
-	{
-		if(myRExpression == null)
-		{
-			return null;
-		}
-		return ObjectUtils.tryCast(myRExpression.getParent(), PsiAssignmentExpression.class);
 	}
 
 	@Contract("null -> null")

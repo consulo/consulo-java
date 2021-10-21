@@ -17,7 +17,7 @@ public class NullabilityAnnotationInfo
 	Nullability myNullability;
 	private final boolean myContainer;
 
-	NullabilityAnnotationInfo(@Nonnull PsiAnnotation annotation, @Nonnull Nullability nullability, boolean container)
+	public NullabilityAnnotationInfo(@Nonnull PsiAnnotation annotation, @Nonnull Nullability nullability, boolean container)
 	{
 		myAnnotation = annotation;
 		myNullability = nullability;

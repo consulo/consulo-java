@@ -1,8 +1,8 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInsight.Nullability;
-import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTypesUtil;
@@ -21,8 +21,9 @@ import org.jetbrains.annotations.PropertyKey;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-import static consulo.java.codeInsight.JavaInspectionsBundle.BUNDLE;
+import static com.intellij.java.analysis.JavaAnalysisBundle.BUNDLE;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION;
 import static com.intellij.util.ObjectUtils.tryCast;
@@ -32,14 +33,14 @@ import static com.intellij.util.ObjectUtils.tryCast;
  *
  * @param <T> a type of anchor element which could be associated with given nullability problem kind
  */
-public class NullabilityProblemKind<T extends PsiElement>
+public final class NullabilityProblemKind<T extends PsiElement>
 {
 	private static final String NPE = JAVA_LANG_NULL_POINTER_EXCEPTION;
 	private static final String RE = JAVA_LANG_RUNTIME_EXCEPTION;
 
 	private final String myName;
-	private final String myAlwaysNullMessage;
-	private final String myNormalMessage;
+	private final Supplier<String> myAlwaysNullMessage;
+	private final Supplier<String> myNormalMessage;
 	private final
 	@Nullable
 	String myException;
@@ -64,8 +65,8 @@ public class NullabilityProblemKind<T extends PsiElement>
 	{
 		myException = exception;
 		myName = name;
-		myAlwaysNullMessage = InspectionsBundle.message(alwaysNullMessage);
-		myNormalMessage = InspectionsBundle.message(normalMessage);
+		myAlwaysNullMessage = JavaAnalysisBundle.messagePointer(alwaysNullMessage);
+		myNormalMessage = JavaAnalysisBundle.messagePointer(normalMessage);
 	}
 
 	public static final NullabilityProblemKind<PsiMethodCallExpression> callNPE =
@@ -96,6 +97,8 @@ public class NullabilityProblemKind<T extends PsiElement>
 	public static final NullabilityProblemKind<PsiExpression> passingToNotNullParameter =
 			new NullabilityProblemKind<>(RE, "passingToNotNullParameter", "dataflow.message.passing.null.argument",
 					"dataflow.message.passing.nullable.argument");
+	public static final NullabilityProblemKind<PsiMethodReferenceExpression> unboxingMethodRefParameter =
+			new NullabilityProblemKind<>(NPE, "unboxingMethodRefParameter", "dataflow.message.passing.nullable.argument.methodref");
 	public static final NullabilityProblemKind<PsiMethodReferenceExpression> passingToNotNullMethodRefParameter =
 			new NullabilityProblemKind<>(RE, "passingToNotNullMethodRefParameter", "dataflow.message.passing.nullable.argument.methodref");
 	public static final NullabilityProblemKind<PsiExpression> passingToNonAnnotatedParameter =
@@ -234,8 +237,16 @@ public class NullabilityProblemKind<T extends PsiElement>
 		{
 			return getArrayInitializerProblem((PsiArrayInitializerExpression) parent, expression, context);
 		}
-		if(parent instanceof PsiIfStatement || parent instanceof PsiWhileStatement || parent instanceof PsiDoWhileStatement ||
-				parent instanceof PsiUnaryExpression || parent instanceof PsiConditionalExpression || parent instanceof PsiTypeCastExpression ||
+		if(parent instanceof PsiTypeCastExpression)
+		{
+			if(TypeConversionUtil.isAssignableFromPrimitiveWrapper(context.getType()))
+			{
+				// Only casts to primitives are here; casts to objects were already traversed by findTopExpression
+				return unboxingNullable.problem(context, expression);
+			}
+		}
+		else if(parent instanceof PsiIfStatement || parent instanceof PsiWhileStatement || parent instanceof PsiDoWhileStatement ||
+				parent instanceof PsiUnaryExpression || parent instanceof PsiConditionalExpression ||
 				(parent instanceof PsiForStatement && ((PsiForStatement) parent).getCondition() == context) ||
 				(parent instanceof PsiAssertStatement && ((PsiAssertStatement) parent).getAssertCondition() == context))
 		{
@@ -464,7 +475,9 @@ public class NullabilityProblemKind<T extends PsiElement>
 																		@Nonnull PsiExpression expression)
 	{
 		if(!TypeConversionUtil.isPrimitiveWrapper(context.getType()))
+		{
 			return null;
+		}
 		return unboxingNullable.problem(context, expression);
 	}
 
@@ -611,7 +624,7 @@ public class NullabilityProblemKind<T extends PsiElement>
 		}
 
 		@Nonnull
-		public String getMessage(Map<PsiExpression, DataFlowInstructionVisitor.ConstantResult> expressions)
+		public String getMessage(Map<PsiExpression, DataFlowInspectionBase.ConstantResult> expressions)
 		{
 			if(myKind.myAlwaysNullMessage == null || myKind.myNormalMessage == null)
 			{
@@ -620,12 +633,12 @@ public class NullabilityProblemKind<T extends PsiElement>
 			PsiExpression expression = PsiUtil.skipParenthesizedExprDown(getDereferencedExpression());
 			if(expression != null)
 			{
-				if(ExpressionUtils.isNullLiteral(expression) || expressions.get(expression) == DataFlowInstructionVisitor.ConstantResult.NULL)
+				if(ExpressionUtils.isNullLiteral(expression) || expressions.get(expression) == DataFlowInspectionBase.ConstantResult.NULL)
 				{
-					return myKind.myAlwaysNullMessage;
+					return myKind.myAlwaysNullMessage.get();
 				}
 			}
-			return myKind.myNormalMessage;
+			return myKind.myNormalMessage.get();
 		}
 
 		@Nonnull
@@ -638,9 +651,13 @@ public class NullabilityProblemKind<T extends PsiElement>
 		public boolean equals(Object o)
 		{
 			if(this == o)
+			{
 				return true;
+			}
 			if(!(o instanceof NullabilityProblem))
+			{
 				return false;
+			}
 			NullabilityProblem<?> problem = (NullabilityProblem<?>) o;
 			return myKind.equals(problem.myKind) && myAnchor.equals(problem.myAnchor) &&
 					Objects.equals(myDereferencedExpression, problem.myDereferencedExpression);

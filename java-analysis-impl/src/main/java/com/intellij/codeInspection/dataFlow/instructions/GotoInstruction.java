@@ -16,14 +16,10 @@
 
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import com.intellij.codeInspection.dataFlow.ControlFlow;
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
+import com.intellij.codeInspection.dataFlow.*;
 
 
-public class GotoInstruction extends Instruction implements JumpInstruction
+public class GotoInstruction extends Instruction
 {
 	private ControlFlow.ControlFlowOffset myOffset;
 
@@ -32,7 +28,6 @@ public class GotoInstruction extends Instruction implements JumpInstruction
 		this.myOffset = myOffset;
 	}
 
-	@Override
 	public int getOffset()
 	{
 		return myOffset.getInstructionOffset();
@@ -50,17 +45,8 @@ public class GotoInstruction extends Instruction implements JumpInstruction
 		return "GOTO: " + getOffset();
 	}
 
-	@Override
 	public void setOffset(final int offset)
 	{
-		myOffset = new ControlFlow.ControlFlowOffset()
-		{
-			@Override
-			public int getInstructionOffset()
-			{
-				return offset;
-			}
-		};
+		myOffset = new ControlFlow.FixedOffset(offset);
 	}
-
 }

@@ -15,29 +15,15 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import java.util.*;
-
-import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.jetbrains.annotations.TestOnly;
-import com.intellij.codeInsight.ChangeContextUtil;
-import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.codeInsight.*;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.daemon.impl.quickfix.AnonymousTargetClassPreselectionUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
-import com.intellij.codeInsight.intention.impl.AddNullableNotNullAnnotationFix;
+import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.codeInsight.navigation.NavigationUtil;
-import com.intellij.codeInspection.dataFlow.DfaUtil;
-import com.intellij.codeInspection.dataFlow.Nullness;
-import com.intellij.codeInspection.dataFlow.RunnerResult;
-import com.intellij.codeInspection.dataFlow.StandardDataFlowRunner;
-import com.intellij.codeInspection.dataFlow.StandardInstructionVisitor;
-import com.intellij.codeInspection.dataFlow.instructions.BranchingInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.Instruction;
+import com.intellij.codeInspection.dataFlow.*;
+import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.PsiClassListCellRenderer;
@@ -52,18 +38,13 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Pass;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.psi.codeStyle.*;
 import com.intellij.psi.controlFlow.ControlFlowUtil;
 import com.intellij.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl;
 import com.intellij.psi.scope.processor.VariablesProcessor;
@@ -74,37 +55,27 @@ import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.psi.util.RedundantCastUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.psi.util.*;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectHandler;
 import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.refactoring.util.InlineUtil;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
-import com.intellij.refactoring.util.RefactoringMessageDialog;
-import com.intellij.refactoring.util.RefactoringUtil;
-import com.intellij.refactoring.util.VariableData;
+import com.intellij.refactoring.util.*;
 import com.intellij.refactoring.util.classMembers.ElementNeedsThis;
-import com.intellij.refactoring.util.duplicates.DuplicatesFinder;
-import com.intellij.refactoring.util.duplicates.Match;
-import com.intellij.refactoring.util.duplicates.MatchProvider;
-import com.intellij.refactoring.util.duplicates.MatchUtil;
-import com.intellij.refactoring.util.duplicates.VariableReturnValue;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.refactoring.util.duplicates.*;
+import com.intellij.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
+import consulo.logging.Logger;
+import org.jetbrains.annotations.NonNls;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static com.intellij.codeInsight.AnnotationUtil.CHECK_TYPE;
 
 public class ExtractMethodProcessor implements MatchProvider
 {
@@ -162,7 +133,7 @@ public class ExtractMethodProcessor implements MatchProvider
 	private PsiMethodCallExpression myMethodCall;
 	protected boolean myNullConditionalCheck = false;
 	protected boolean myNotNullConditionalCheck = false;
-	private Nullness myNullness;
+	protected Nullability myNullability;
 
 	public ExtractMethodProcessor(Project project, Editor editor, PsiElement[] elements, PsiType forcedReturnType, String refactoringName, String initialMethodName, String helpId)
 	{
@@ -490,28 +461,37 @@ public class ExtractMethodProcessor implements MatchProvider
 		{
 			block.add(element);
 		}
-		final PsiIfStatement statementFromText = (PsiIfStatement) myElementFactory.createStatementFromText("if (" + exprText + " == null);", null);
-		block.add(statementFromText);
+		PsiReturnStatement statementFromText = (PsiReturnStatement) myElementFactory.createStatementFromText("return " + exprText + ";", null);
+		statementFromText = (PsiReturnStatement) block.add(statementFromText);
 
-		final StandardDataFlowRunner dfaRunner = new StandardDataFlowRunner();
-		final StandardInstructionVisitor visitor = new StandardInstructionVisitor();
-		final RunnerResult rc = dfaRunner.analyzeMethod(block, visitor);
-		if(rc == RunnerResult.OK)
+		return inferNullability(block, Objects.requireNonNull(statementFromText.getReturnValue())) == Nullability.NOT_NULL;
+	}
+
+	private static Nullability inferNullability(@Nonnull PsiCodeBlock block, @Nonnull PsiExpression expr)
+	{
+		final DataFlowRunner dfaRunner = new DataFlowRunner(block.getProject());
+
+		class Visitor extends StandardInstructionVisitor
 		{
-			final Pair<Set<Instruction>, Set<Instruction>> expressions = dfaRunner.getConstConditionalExpressions();
-			final Set<Instruction> set = trueSet ? expressions.getFirst() : expressions.getSecond();
-			for(Instruction instruction : set)
+			DfaNullability myNullability = DfaNullability.NOT_NULL;
+			boolean myVisited = false;
+
+			@Override
+			protected void beforeExpressionPush(@Nonnull DfaValue value,
+												@Nonnull PsiExpression expression,
+												@Nullable TextRange range,
+												@Nonnull DfaMemoryState state)
 			{
-				if(instruction instanceof BranchingInstruction)
+				if(expression == expr && range == null)
 				{
-					if(((BranchingInstruction) instruction).getPsiAnchor().getText().equals(statementFromText.getCondition().getText()))
-					{
-						return true;
-					}
+					myVisited = true;
+					myNullability = myNullability.unite(DfaNullability.fromDfType(state.getDfType(value)));
 				}
 			}
 		}
-		return false;
+		Visitor visitor = new Visitor();
+		final RunnerResult rc = dfaRunner.analyzeMethod(block, visitor);
+		return rc == RunnerResult.OK && visitor.myVisited ? DfaNullability.toNullability(visitor.myNullability) : Nullability.UNKNOWN;
 	}
 
 	protected boolean checkOutputVariablesCount()
@@ -680,11 +660,11 @@ public class ExtractMethodProcessor implements MatchProvider
 	{
 		final List<VariableData> variables = myInputVariables.getInputVariables();
 		myVariableDatum = variables.toArray(new VariableData[variables.size()]);
-		myNullness = initNullness();
+		myNullability = initNullability();
 		myArtificialOutputVariable = PsiType.VOID.equals(myReturnType) ? getArtificialOutputVariable() : null;
 		final PsiType returnType = myArtificialOutputVariable != null ? myArtificialOutputVariable.getType() : myReturnType;
 		return new ExtractMethodDialog(myProject, myTargetClass, myInputVariables, returnType, getTypeParameterList(), getThrownExceptions(), isStatic(), isCanBeStatic(), myCanBeChainedConstructor,
-				myRefactoringName, myHelpId, myNullness, myElements)
+				myRefactoringName, myHelpId, myNullability, myElements)
 		{
 			@Override
 			protected boolean areTypesDirected()
@@ -782,14 +762,15 @@ public class ExtractMethodProcessor implements MatchProvider
 		return map.toArray(new PsiExpression[map.size()]);
 	}
 
-	private Nullness initNullness()
+	private Nullability initNullability()
 	{
 		if(!PsiUtil.isLanguageLevel5OrHigher(myElements[0]) || PsiUtil.resolveClassInType(myReturnType) == null)
 		{
 			return null;
 		}
 		final NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
-		final PsiClass nullableAnnotationClass = JavaPsiFacade.getInstance(myProject).findClass(manager.getDefaultNullable(), myElements[0].getResolveScope());
+		final PsiClass nullableAnnotationClass = JavaPsiFacade.getInstance(myProject)
+				.findClass(manager.getDefaultNullable(), myElements[0].getResolveScope());
 		if(nullableAnnotationClass != null)
 		{
 			final PsiElement elementInCopy = myTargetClass.getContainingFile().copy().findElementAt(myTargetClass.getTextOffset());
@@ -798,13 +779,13 @@ public class ExtractMethodProcessor implements MatchProvider
 			{
 				return null;
 			}
-			final PsiMethod emptyMethod = (PsiMethod) classCopy.addAfter(generateEmptyMethod("name"), classCopy.getLBrace());
+			final PsiMethod emptyMethod = (PsiMethod) classCopy.addAfter(generateEmptyMethod("name", null), classCopy.getLBrace());
 			prepareMethodBody(emptyMethod, false);
 			if(myNotNullConditionalCheck || myNullConditionalCheck)
 			{
-				return Nullness.NULLABLE;
+				return Nullability.NULLABLE;
 			}
-			return DfaUtil.inferMethodNullity(emptyMethod);
+			return DfaUtil.inferMethodNullability(emptyMethod);
 		}
 		return null;
 	}
@@ -893,7 +874,7 @@ public class ExtractMethodProcessor implements MatchProvider
 	@TestOnly
 	public void testNullness()
 	{
-		myNullness = initNullness();
+		myNullability = initNullability();
 	}
 
 	@TestOnly
@@ -1231,26 +1212,20 @@ public class ExtractMethodProcessor implements MatchProvider
 			}
 		}
 
-		if(myNullness != null &&
+		if(myNullability != null &&
 				PsiUtil.resolveClassInType(newMethod.getReturnType()) != null &&
 				PropertiesComponent.getInstance(myProject).getBoolean(ExtractMethodDialog.EXTRACT_METHOD_GENERATE_ANNOTATIONS, true))
 		{
-			final NullableNotNullManager notNullManager = NullableNotNullManager.getInstance(myProject);
-			AddNullableNotNullAnnotationFix annotationFix;
-			switch(myNullness)
+			NullableNotNullManager nullManager = NullableNotNullManager.getInstance(myProject);
+			switch(myNullability)
 			{
 				case NOT_NULL:
-					annotationFix = new AddNullableNotNullAnnotationFix(notNullManager.getDefaultNotNull(), newMethod);
+					updateAnnotations(newMethod, nullManager.getNullables(), nullManager.getDefaultNotNull(), nullManager.getNotNulls());
 					break;
 				case NULLABLE:
-					annotationFix = new AddNullableNotNullAnnotationFix(notNullManager.getDefaultNullable(), newMethod);
+					updateAnnotations(newMethod, nullManager.getNotNulls(), nullManager.getDefaultNullable(), nullManager.getNullables());
 					break;
 				default:
-					annotationFix = null;
-			}
-			if(annotationFix != null)
-			{
-				annotationFix.invoke(myProject, myTargetClass.getContainingFile(), newMethod, newMethod);
 			}
 		}
 
@@ -1262,6 +1237,20 @@ public class ExtractMethodProcessor implements MatchProvider
 			{
 				final PsiReferenceExpression methodExpression = myMethodCall.getMethodExpression();
 				methodExpression.setQualifierExpression(RefactoringChangeUtil.createThisExpression(myManager, myTargetClass));
+			}
+		}
+	}
+
+	private void updateAnnotations(PsiModifierListOwner owner, List<String> toRemove, String toAdd, List<String> toKeep)
+	{
+		AddAnnotationPsiFix.removePhysicalAnnotations(owner, ArrayUtilRt.toStringArray(toRemove));
+		PsiModifierList modifierList = owner.getModifierList();
+		if(modifierList != null && !AnnotationUtil.isAnnotated(owner, toKeep, CHECK_TYPE))
+		{
+			PsiAnnotation annotation = AddAnnotationPsiFix.addPhysicalAnnotationIfAbsent(toAdd, PsiNameValuePair.EMPTY_ARRAY, modifierList);
+			if(annotation != null)
+			{
+				JavaCodeStyleManager.getInstance(myProject).shortenClassReferences(annotation);
 			}
 		}
 	}
@@ -1623,10 +1612,10 @@ public class ExtractMethodProcessor implements MatchProvider
 
 	private PsiMethod generateEmptyMethod() throws IncorrectOperationException
 	{
-		return generateEmptyMethod(myMethodName);
+		return generateEmptyMethod(myMethodName, null);
 	}
 
-	public PsiMethod generateEmptyMethod(String methodName) throws IncorrectOperationException
+	public PsiMethod generateEmptyMethod(String methodName, PsiElement context) throws IncorrectOperationException
 	{
 		PsiMethod newMethod;
 		if(myIsChainedConstructor)
@@ -1635,7 +1624,7 @@ public class ExtractMethodProcessor implements MatchProvider
 		}
 		else
 		{
-			newMethod = myElementFactory.createMethod(methodName, myReturnType);
+			newMethod = context != null ? myElementFactory.createMethod(methodName, myReturnType, context) : myElementFactory.createMethod(methodName, myReturnType);
 			PsiUtil.setModifierProperty(newMethod, PsiModifier.STATIC, isStatic());
 		}
 		PsiUtil.setModifierProperty(newMethod, myMethodVisibility, true);

@@ -13,8 +13,9 @@ import com.intellij.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Contract;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -192,6 +193,13 @@ public class SuspiciousMethodCallUtil
 			addMethod(invalidate, 0, patternMethods, 0);
 		}
 	}
+
+	@Contract(value = "null -> false", pure = true)
+	static boolean isCollectionAcceptingMethod(@Nullable String name)
+	{
+		return "removeAll".equals(name) || "retainAll".equals(name) || "containsAll".equals(name);
+	}
+
 
 	private static void addSingleParameterMethod(List<? super PatternMethod> patternMethods,
 												 PsiClass methodClass, String methodName, PsiClassType parameterType)

@@ -17,11 +17,17 @@
 package com.intellij.codeInspection.dataFlow.value;
 
 import com.intellij.codeInsight.Nullability;
-import com.intellij.codeInspection.dataFlow.DfaFactMap;
-import com.intellij.codeInspection.dataFlow.DfaFactType;
 import com.intellij.codeInspection.dataFlow.DfaNullability;
+import com.intellij.codeInspection.dataFlow.Mutability;
+import com.intellij.codeInspection.dataFlow.NullabilityUtil;
+import com.intellij.codeInspection.dataFlow.SpecialField;
+import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
+import com.intellij.codeInspection.dataFlow.types.DfReferenceType;
+import com.intellij.codeInspection.dataFlow.types.DfType;
+import com.intellij.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
+import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.SmartList;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;
@@ -33,6 +39,7 @@ import java.util.Map;
 
 public final class DfaVariableValue extends DfaValue
 {
+
 	public static class Factory
 	{
 		private final Map<Pair<VariableDescriptor, DfaVariableValue>, DfaVariableValue> myExistingVars = new HashMap<>();
@@ -64,7 +71,9 @@ public final class DfaVariableValue extends DfaValue
 		public DfaVariableValue createThisValue(@Nullable PsiClass aClass)
 		{
 			if(aClass == null)
+			{
 				return null;
+			}
 			return createVariableValue(new DfaExpressionFactory.ThisDescriptor(aClass));
 		}
 
@@ -98,15 +107,19 @@ public final class DfaVariableValue extends DfaValue
 	private final PsiType myVarType;
 	@Nullable
 	private final DfaVariableValue myQualifier;
-	private DfaFactMap myInherentFacts;
+	private DfType myInherentType;
 	private final List<DfaVariableValue> myDependents = new SmartList<>();
 
-	private DfaVariableValue(@Nonnull VariableDescriptor descriptor, DfaValueFactory factory, @Nullable DfaVariableValue qualifier)
+	private DfaVariableValue(@Nonnull VariableDescriptor descriptor, @Nonnull DfaValueFactory factory, @Nullable DfaVariableValue qualifier)
 	{
 		super(factory);
 		myDescriptor = descriptor;
 		myQualifier = qualifier;
 		myVarType = descriptor.getType(qualifier);
+		if(myDescriptor instanceof DfaExpressionFactory.AssertionDisabledDescriptor)
+		{
+			myFactory.setAssertionDisabled(this);
+		}
 	}
 
 	@Nullable
@@ -126,12 +139,6 @@ public final class DfaVariableValue extends DfaValue
 	public PsiType getType()
 	{
 		return myVarType;
-	}
-
-	@Override
-	public DfaValue createNegated()
-	{
-		return myFactory.createCondition(this, DfaRelationValue.RelationType.EQ, myFactory.getBoolean(false));
 	}
 
 	@Override
@@ -179,20 +186,51 @@ public final class DfaVariableValue extends DfaValue
 		return myQualifier;
 	}
 
-	public DfaFactMap getInherentFacts()
+	public DfType getInherentType()
 	{
-		if(myInherentFacts == null)
+		if(myInherentType == null)
 		{
-			myInherentFacts = DfaFactMap.calcFromVariable(this);
+			myInherentType = calcInherentType();
 		}
+		return myInherentType;
+	}
 
-		return myInherentFacts;
+	private DfType calcInherentType()
+	{
+		PsiType type = getType();
+		DfType dfType = DfTypes.typedObject(type, Nullability.UNKNOWN);
+		if(myDescriptor instanceof SpecialField)
+		{
+			return dfType.meet(((SpecialField) myDescriptor).getDefaultValue(false));
+		}
+		PsiModifierListOwner psi = getPsiVariable();
+		if(type instanceof PsiPrimitiveType)
+		{
+			if(TypeConversionUtil.isIntegralNumberType(type))
+			{
+				LongRangeSet fromType = LongRangeSet.fromType(type);
+				if(fromType != null)
+				{
+					LongRangeSet range = LongRangeSet.fromPsiElement(psi).intersect(fromType);
+					return type.equals(PsiType.LONG) ? DfTypes.longRange(range) : DfTypes.intRange(range);
+				}
+			}
+		}
+		if(dfType instanceof DfReferenceType)
+		{
+			if(psi != null)
+			{
+				dfType = dfType.meet(Mutability.getMutability(psi).asDfType());
+			}
+			dfType = dfType.meet(NullabilityUtil.calcCanBeNull(this).asDfType());
+		}
+		return dfType;
 	}
 
 	@Nonnull
 	public Nullability getInherentNullability()
 	{
-		return DfaNullability.toNullability(getInherentFacts().get(DfaFactType.NULLABILITY));
+		return DfaNullability.toNullability(DfaNullability.fromDfType(getInherentType()));
 	}
 
 	public boolean isFlushableByCalls()

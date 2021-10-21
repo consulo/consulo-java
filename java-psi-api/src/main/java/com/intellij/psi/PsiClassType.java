@@ -15,13 +15,6 @@
  */
 package com.intellij.psi;
 
-import java.util.Arrays;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.jvm.JvmTypeDeclaration;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmSubstitutor;
@@ -33,6 +26,11 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayFactory;
 import consulo.java.module.util.JavaClassNames;
+import org.jetbrains.annotations.Contract;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
 
 /**
  * Represents a class type.
@@ -307,6 +305,17 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType
 	public String getName()
 	{
 		return getClassName();
+	}
+
+	/**
+	 * If class-type is created from the explicit reference in the code returns that reference.
+	 *
+	 * @return reference which the type is created from. Returns null if not applicable.
+	 */
+	@Nullable
+	public PsiElement getPsiContext()
+	{
+		return null;
 	}
 
 	@Nullable

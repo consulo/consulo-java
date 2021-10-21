@@ -22,11 +22,12 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.IncorrectOperationException;
 import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -386,13 +387,33 @@ public class PsiTypesUtil
 		return Comparing.equal(leftType, rightType);
 	}
 
-	public static boolean isDenotableType(PsiType type)
+	/**
+	 * @deprecated not compliant to specification, use {@link PsiTypesUtil#isDenotableType(PsiType, PsiElement)} instead
+	 */
+	@Deprecated
+	public static boolean isDenotableType(@Nullable PsiType type)
 	{
-		if(type instanceof PsiWildcardType || type instanceof PsiCapturedWildcardType)
+		return !(type instanceof PsiWildcardType || type instanceof PsiCapturedWildcardType);
+	}
+
+	/**
+	 * @param context in which type should be checked
+	 * @return false if type is null or has no explicit canonical type representation (e. g. intersection type)
+	 */
+	public static boolean isDenotableType(@Nullable PsiType type, @Nonnull PsiElement context)
+	{
+		if(type == null || type instanceof PsiWildcardType)
+			return false;
+		PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(context.getProject());
+		try
+		{
+			PsiType typeAfterReplacement = elementFactory.createTypeElementFromText(type.getCanonicalText(), context).getType();
+			return type.equals(typeAfterReplacement);
+		}
+		catch(IncorrectOperationException e)
 		{
 			return false;
 		}
-		return true;
 	}
 
 	public static boolean hasUnresolvedComponents(@Nonnull PsiType type)

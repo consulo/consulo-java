@@ -1,4 +1,4 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInsight.Nullability;
@@ -10,14 +10,15 @@ import com.intellij.codeInspection.dataFlow.instructions.ReturnInstruction;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.impl.search.JavaNullMethodArgumentUtil;
 import com.intellij.util.SmartList;
-
 import javax.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,25 +34,27 @@ import java.util.Set;
  * <p>
  * All remaining violated parameters is required to be not-null for successful method execution.
  */
-class NullParameterConstraintChecker extends DataFlowRunner
+final class NullParameterConstraintChecker extends DataFlowRunner
 {
 	private final Set<PsiParameter> myPossiblyViolatedParameters;
 	private final Set<PsiParameter> myUsedParameters;
 	private final Set<PsiParameter> myParametersWithSuccessfulExecutionInNotNullState;
 
-	private NullParameterConstraintChecker(Collection<PsiParameter> parameters)
+	private NullParameterConstraintChecker(Project project, Collection<PsiParameter> parameters)
 	{
-		super(false, null);
+		super(project);
 		myPossiblyViolatedParameters = new HashSet<>(parameters);
 		myParametersWithSuccessfulExecutionInNotNullState = new HashSet<>();
 		myUsedParameters = new HashSet<>();
 	}
 
 	@Nonnull
-	static PsiParameter[] checkMethodParameters(PsiMethod method)
+	static PsiParameter [] checkMethodParameters(PsiMethod method)
 	{
 		if(method.getBody() == null)
+		{
 			return PsiParameter.EMPTY_ARRAY;
+		}
 
 		final Collection<PsiParameter> nullableParameters = new SmartList<>();
 		final PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -66,9 +69,11 @@ class NullParameterConstraintChecker extends DataFlowRunner
 			}
 		}
 		if(nullableParameters.isEmpty())
+		{
 			return PsiParameter.EMPTY_ARRAY;
+		}
 
-		NullParameterConstraintChecker checker = new NullParameterConstraintChecker(nullableParameters);
+		NullParameterConstraintChecker checker = new NullParameterConstraintChecker(method.getProject(), nullableParameters);
 		checker.analyzeMethod(method.getBody(), new StandardInstructionVisitor());
 
 		return checker.myPossiblyViolatedParameters
@@ -78,9 +83,9 @@ class NullParameterConstraintChecker extends DataFlowRunner
 				.toArray(PsiParameter[]::new);
 	}
 
-	@Nonnull
 	@Override
-	protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState)
+	@Nonnull
+	protected DfaInstructionState  [] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState)
 	{
 		Instruction instruction = instructionState.getInstruction();
 		if(instruction instanceof PushInstruction)
@@ -144,8 +149,8 @@ class NullParameterConstraintChecker extends DataFlowRunner
 			super(factory);
 			for(PsiParameter parameter : myPossiblyViolatedParameters)
 			{
-				setVariableState(getFactory().getVarFactory().createVariableValue(parameter),
-						new DfaVariableState(DfaFactMap.EMPTY.with(DfaFactType.NULLABILITY, DfaNullability.NULLABLE)));
+				recordVariableType(getFactory().getVarFactory().createVariableValue(parameter),
+						DfaNullability.NULLABLE.asDfType());
 			}
 		}
 
@@ -159,7 +164,9 @@ class NullParameterConstraintChecker extends DataFlowRunner
 		{
 			final PsiModifierListOwner psi = variable.getPsiVariable();
 			if(psi instanceof PsiParameter && myPossiblyViolatedParameters.contains(psi))
+			{
 				return;
+			}
 			super.flushVariable(variable, shouldMarkFlushed);
 		}
 

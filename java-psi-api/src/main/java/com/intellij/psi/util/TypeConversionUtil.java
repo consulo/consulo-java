@@ -33,8 +33,8 @@ import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.Contract;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -469,7 +469,7 @@ public class TypeConversionUtil
 			}
 			else
 			{
-				PsiSubstitutor toSubstitutor = getMaybeSuperClassSubstitutor(fromClass, toClass, toResult.getSubstitutor(), null);
+				PsiSubstitutor toSubstitutor = getMaybeSuperClassSubstitutor(fromClass, toClass, toResult.getSubstitutor());
 				return toSubstitutor != null && areSameArgumentTypes(fromClass, fromResult.getSubstitutor(), toSubstitutor);
 			}
 		}
@@ -557,7 +557,7 @@ public class TypeConversionUtil
 		}
 		else
 		{
-			PsiSubstitutor baseSubstitutor = getMaybeSuperClassSubstitutor(derived, base, baseResult.getSubstitutor(), null);
+			PsiSubstitutor baseSubstitutor = getMaybeSuperClassSubstitutor(derived, base, baseResult.getSubstitutor());
 			if(baseSubstitutor != null)
 			{
 				derivedSubstitutor = getSuperClassSubstitutor(derived, derived, derivedSubstitutor);
@@ -1543,7 +1543,7 @@ public class TypeConversionUtil
 			}
 			return derivedSubstitutor;
 		}
-		return getMaybeSuperClassSubstitutor(superClassCandidate, derivedClassCandidate, derivedSubstitutor, null);
+		return getMaybeSuperClassSubstitutor(superClassCandidate, derivedClassCandidate, derivedSubstitutor);
 	}
 
 	private static final Set<String> ourReportedSuperClassSubstitutorExceptions = ContainerUtil.newConcurrentSet();
@@ -1567,14 +1567,13 @@ public class TypeConversionUtil
 			return PsiSubstitutor.EMPTY; //optimization and protection against EJB queer hierarchy
 		}
 
-		Set<PsiClass> visited = new HashSet<PsiClass>();
-		PsiSubstitutor substitutor = getMaybeSuperClassSubstitutor(superClass, derivedClass, derivedSubstitutor, visited);
+		PsiSubstitutor substitutor = getMaybeSuperClassSubstitutor(superClass, derivedClass, derivedSubstitutor);
 
 		if(substitutor == null)
 		{
 			if(ourReportedSuperClassSubstitutorExceptions.add(derivedClass.getQualifiedName() + "/" + superClass.getQualifiedName()))
 			{
-				reportHierarchyInconsistency(superClass, derivedClass, visited);
+				reportHierarchyInconsistency(superClass, derivedClass, new HashSet<>());
 			}
 			return PsiSubstitutor.EMPTY;
 		}
@@ -1585,8 +1584,7 @@ public class TypeConversionUtil
 	@Nullable
 	public static PsiSubstitutor getMaybeSuperClassSubstitutor(@Nonnull PsiClass superClass,
 															   @Nonnull PsiClass derivedClass,
-															   @Nonnull PsiSubstitutor derivedSubstitutor,
-															   @Nullable Set<PsiClass> visited)
+															   @Nonnull PsiSubstitutor derivedSubstitutor)
 	{
 		return JavaClassSupers.getInstance().getSuperClassSubstitutor(superClass, derivedClass, derivedClass.getResolveScope(), derivedSubstitutor);
 	}

@@ -15,23 +15,10 @@
  */
 package com.intellij.psi.impl;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageParserDefinitions;
-import com.intellij.lang.ParserDefinition;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.PsiBuilderFactory;
+import com.intellij.lang.*;
+import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
-import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
@@ -39,19 +26,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
-import com.intellij.psi.impl.light.LightClassReference;
-import com.intellij.psi.impl.light.LightClassReferenceExpression;
-import com.intellij.psi.impl.light.LightIdentifier;
-import com.intellij.psi.impl.light.LightKeyword;
-import com.intellij.psi.impl.light.LightPackageReference;
-import com.intellij.psi.impl.light.LightPackageReferenceExpression;
-import com.intellij.psi.impl.light.LightTypeElement;
-import com.intellij.psi.impl.source.DummyHolder;
-import com.intellij.psi.impl.source.DummyHolderFactory;
-import com.intellij.psi.impl.source.JavaDummyElement;
-import com.intellij.psi.impl.source.PsiClassReferenceType;
-import com.intellij.psi.impl.source.PsiImmediateClassType;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import com.intellij.psi.impl.light.*;
+import com.intellij.psi.impl.source.*;
 import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.TreeElement;
@@ -60,9 +36,16 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import java.util.HashMap;
 import consulo.java.module.util.JavaClassNames;
 import consulo.java.psi.JavaLanguageVersion;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements PsiElementFactory
@@ -190,15 +173,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 	@Override
 	public PsiJavaCodeReferenceElement createReferenceElementByType(@Nonnull final PsiClassType type)
 	{
-		if(type instanceof PsiClassReferenceType)
-		{
-			return ((PsiClassReferenceType) type).getReference();
-		}
-
-		final PsiClassType.ClassResolveResult resolveResult = type.resolveGenerics();
-		final PsiClass refClass = resolveResult.getElement();
-		assert refClass != null : type;
-		return new LightClassReference(myManager, type.getPresentableText(), refClass, resolveResult.getSubstitutor());
+		return type instanceof PsiClassReferenceType ? ((PsiClassReferenceType) type).getReference() : new LightClassTypeReference(myManager, type);
 	}
 
 	@Nonnull
@@ -897,7 +872,9 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 
 	@Nonnull
 	@Override
-	public PsiCatchSection createCatchSection(@Nonnull final PsiType exceptionType, @Nonnull final String exceptionName, @javax.annotation.Nullable final PsiElement context) throws IncorrectOperationException
+	public PsiCatchSection createCatchSection(@Nonnull final PsiType exceptionType,
+											  @Nonnull final String exceptionName,
+											  @javax.annotation.Nullable final PsiElement context) throws IncorrectOperationException
 	{
 		if(!(exceptionType instanceof PsiClassType || exceptionType instanceof PsiDisjunctionType))
 		{

@@ -17,7 +17,8 @@ package com.intellij.psi.impl.source;
 
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.diagnostic.Attachment;
+import com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -30,9 +31,10 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.containers.JBIterable;
 import org.jetbrains.annotations.NonNls;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -268,42 +270,122 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 	}
 
 	@Nonnull
-	private Computable<PsiJavaCodeReferenceElement> getReferenceComputable(@Nonnull PsiJavaCodeReferenceElement ref)
+	private static ClassReferencePointer getReferenceComputable(@Nonnull PsiJavaCodeReferenceElement ref)
 	{
-		final PsiElement parent = getParent();
-		if(parent instanceof PsiMethod || parent instanceof PsiVariable)
+		PsiTypeElement rootType = getRootTypeElement(ref);
+		if(rootType != null)
 		{
-			return computeFromTypeOwner(parent, new WeakReference<>(ref));
+			PsiElement parent = rootType.getParent();
+			if(parent instanceof PsiMethod || parent instanceof PsiVariable)
+			{
+				int index = allReferencesInside(rootType).indexOf(ref::equals);
+				if(index < 0)
+				{
+					throw new AssertionError(rootType.getClass());
+				}
+				return computeFromTypeOwner(parent, index, new WeakReference<>(ref));
+			}
 		}
+		return ClassReferencePointer.constant(ref);
+	}
 
-		return new Computable.PredefinedValueComputable<>(ref);
+	@Nullable
+	private static PsiTypeElement getRootTypeElement(@Nonnull PsiJavaCodeReferenceElement ref)
+	{
+		PsiElement root = SyntaxTraverser.psiApi()
+				.parents(ref.getParent())
+				.takeWhile(it -> it instanceof PsiTypeElement || it instanceof PsiReferenceParameterList || it instanceof PsiJavaCodeReferenceElement)
+				.last();
+		return ObjectUtil.tryCast(root, PsiTypeElement.class);
 	}
 
 	@Nonnull
-	private static Computable<PsiJavaCodeReferenceElement> computeFromTypeOwner(final PsiElement parent, @Nonnull WeakReference<PsiJavaCodeReferenceElement> ref)
+	private static ClassReferencePointer computeFromTypeOwner(PsiElement parent, int index,
+															  @Nonnull WeakReference<PsiJavaCodeReferenceElement> ref)
 	{
-		return new Computable<PsiJavaCodeReferenceElement>()
+		return new ClassReferencePointer()
 		{
 			volatile WeakReference<PsiJavaCodeReferenceElement> myCache = ref;
 
 			@Override
-			public PsiJavaCodeReferenceElement compute()
+			public
+			@Nullable
+			PsiJavaCodeReferenceElement retrieveReference()
 			{
 				PsiJavaCodeReferenceElement result = myCache.get();
 				if(result == null)
 				{
-					myCache = new WeakReference<>(result = getParentTypeElement().getReferenceElement());
+					PsiType type = calcTypeByParent();
+					if(type instanceof PsiClassReferenceType)
+					{
+						result = findReferenceByIndex((PsiClassReferenceType) type);
+					}
+					myCache = new WeakReference<>(result);
 				}
 				return result;
 			}
 
-			@Nonnull
-			private PsiTypeElementImpl getParentTypeElement()
+			@Nullable
+			private PsiJavaCodeReferenceElement findReferenceByIndex(PsiClassReferenceType type)
 			{
-				PsiTypeElement typeElement = parent instanceof PsiMethod ? ((PsiMethod) parent).getReturnTypeElement() : ((PsiVariable) parent).getTypeElement();
-				return (PsiTypeElementImpl) ObjectUtil.assertNotNull(typeElement);
+				PsiTypeElement root = getRootTypeElement(type.getReference());
+				return root == null ? null : allReferencesInside(root).get(index);
+			}
+
+			@Nullable
+			private PsiType calcTypeByParent()
+			{
+				if(!parent.isValid())
+				{
+					return null;
+				}
+
+				PsiType type = parent instanceof PsiMethod ? ((PsiMethod) parent).getReturnType() : ((PsiVariable) parent).getType();
+				if(type instanceof PsiArrayType)
+				{ //also, for c-style array, e.g. String args[]
+					return type.getDeepComponentType();
+				}
+				return type;
+			}
+
+			@Override
+			public
+			@Nonnull
+			PsiJavaCodeReferenceElement retrieveNonNullReference()
+			{
+				PsiJavaCodeReferenceElement result = retrieveReference();
+				if(result == null)
+				{
+					PsiType type = calcTypeByParent();
+					if(!(type instanceof PsiClassReferenceType))
+					{
+						PsiUtilCore.ensureValid(parent);
+						throw new IllegalStateException("No reference type for " + parent.getClass() + "; type: " + (type != null ? type.getClass() : "null"));
+					}
+					result = findReferenceByIndex((PsiClassReferenceType) type);
+					if(result == null)
+					{
+						PsiUtilCore.ensureValid(parent);
+						throw new RuntimeExceptionWithAttachments("Can't retrieve reference by index " + index + " for " + parent.getClass() + "; type: " + type.getClass(),
+								new Attachment("memberType.txt", type.getCanonicalText()));
+					}
+				}
+				return result;
+			}
+
+			@Override
+			public String toString()
+			{
+				String msg = "Type element reference of " + parent.getClass() + " #" + parent.getClass().getSimpleName() + ", index=" + index;
+				return parent.isValid() ? msg + " #" + parent.getLanguage() : msg + ", invalid";
 			}
 		};
+	}
+
+	@Nonnull
+	private static JBIterable<PsiJavaCodeReferenceElement> allReferencesInside(@Nonnull PsiTypeElement rootType)
+	{
+		return SyntaxTraverser.psiTraverser(rootType).filter(PsiJavaCodeReferenceElement.class);
 	}
 
 	@Nonnull

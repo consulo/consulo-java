@@ -15,7 +15,7 @@
  */
 package com.intellij.psi;
 
-import consulo.logging.Logger;
+import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
@@ -27,9 +27,10 @@ import com.intellij.psi.util.*;
 import com.intellij.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -749,18 +750,18 @@ public class LambdaUtil
 	}
 
 	public static boolean isValidQualifier4InterfaceStaticMethodCall(@Nonnull PsiMethod method,
-			@Nonnull PsiReferenceExpression methodReferenceExpression,
-			@Nullable PsiElement scope,
-			@Nonnull LanguageLevel languageLevel)
+																	 @Nonnull PsiReferenceExpression methodReferenceExpression,
+																	 @Nullable PsiElement scope,
+																	 @Nonnull LanguageLevel languageLevel)
 	{
 		return getInvalidQualifier4StaticInterfaceMethodMessage(method, methodReferenceExpression, scope, languageLevel) == null;
 	}
 
 	@Nullable
 	public static String getInvalidQualifier4StaticInterfaceMethodMessage(@Nonnull PsiMethod method,
-			@Nonnull PsiReferenceExpression methodReferenceExpression,
-			@Nullable PsiElement scope,
-			@Nonnull LanguageLevel languageLevel)
+																		  @Nonnull PsiReferenceExpression methodReferenceExpression,
+																		  @Nullable PsiElement scope,
+																		  @Nonnull LanguageLevel languageLevel)
 	{
 		final PsiExpression qualifierExpression = methodReferenceExpression.getQualifierExpression();
 		final PsiClass containingClass = method.getContainingClass();
@@ -1190,6 +1191,88 @@ public class LambdaUtil
 				.createExpressionFromText(exprText, context);
 		//ensure refs to inner classes are collapsed to avoid raw types (container type would be raw in qualified text)
 		return (PsiExpression) JavaCodeStyleManager.getInstance(context.getProject()).shortenClassReferences(expr);
+	}
+
+	public static
+	@Nullable
+	String createLambdaParameterListWithFormalTypes(PsiType functionalInterfaceType,
+													PsiLambdaExpression lambdaExpression,
+													boolean checkApplicability)
+	{
+		final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
+		final StringBuilder buf = new StringBuilder();
+		buf.append("(");
+		final PsiMethod interfaceMethod = getFunctionalInterfaceMethod(functionalInterfaceType);
+		if(interfaceMethod == null)
+		{
+			return null;
+		}
+		final PsiParameter[] parameters = interfaceMethod.getParameterList().getParameters();
+		final PsiParameter[] lambdaParameters = lambdaExpression.getParameterList().getParameters();
+		if(parameters.length != lambdaParameters.length)
+		{
+			return null;
+		}
+		final PsiSubstitutor substitutor = getSubstitutor(interfaceMethod, resolveResult);
+		for(int i = 0; i < parameters.length; i++)
+		{
+			PsiParameter lambdaParameter = lambdaParameters[i];
+			PsiTypeElement origTypeElement = lambdaParameter.getTypeElement();
+
+			PsiType psiType;
+			if(origTypeElement != null && !origTypeElement.isInferredType())
+			{
+				psiType = origTypeElement.getType();
+			}
+			else
+			{
+				psiType = substitutor.substitute(parameters[i].getType());
+				if(!PsiTypesUtil.isDenotableType(psiType, lambdaExpression))
+				{
+					return null;
+				}
+			}
+
+			PsiAnnotation[] annotations = lambdaParameter.getAnnotations();
+			for(PsiAnnotation annotation : annotations)
+			{
+				if(AnnotationTargetUtil.isTypeAnnotation(annotation))
+				{
+					continue;
+				}
+				buf.append(annotation.getText()).append(' ');
+			}
+			buf.append(checkApplicability ? psiType.getPresentableText(true) : psiType.getCanonicalText(true))
+					.append(" ")
+					.append(lambdaParameter.getName());
+			if(i < parameters.length - 1)
+			{
+				buf.append(", ");
+			}
+		}
+		buf.append(")");
+		return buf.toString();
+	}
+
+	@Nullable
+	public static PsiParameterList specifyLambdaParameterTypes(PsiLambdaExpression lambdaExpression)
+	{
+		return specifyLambdaParameterTypes(lambdaExpression.getFunctionalInterfaceType(), lambdaExpression);
+	}
+
+	@Nullable
+	public static PsiParameterList specifyLambdaParameterTypes(PsiType functionalInterfaceType,
+															   @Nonnull PsiLambdaExpression lambdaExpression)
+	{
+		String typedParamList = createLambdaParameterListWithFormalTypes(functionalInterfaceType, lambdaExpression, false);
+		if(typedParamList != null)
+		{
+			PsiParameterList paramListWithFormalTypes = JavaPsiFacade.getElementFactory(lambdaExpression.getProject())
+					.createMethodFromText("void foo" + typedParamList, lambdaExpression).getParameterList();
+			return (PsiParameterList) JavaCodeStyleManager.getInstance(lambdaExpression.getProject())
+					.shortenClassReferences(lambdaExpression.getParameterList().replace(paramListWithFormalTypes));
+		}
+		return null;
 	}
 
 	public static class TypeParamsChecker extends PsiTypeVisitor<Boolean>

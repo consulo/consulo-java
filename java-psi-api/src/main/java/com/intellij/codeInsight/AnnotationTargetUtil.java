@@ -15,16 +15,16 @@
  */
 package com.intellij.codeInsight;
 
-import java.util.Collections;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.PsiAnnotation.TargetType;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import javax.annotation.Nonnull;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author peter
@@ -282,5 +282,43 @@ public class AnnotationTargetUtil
 		}
 
 		return extractRequiredAnnotationTargets(target.findAttributeValue(null));
+	}
+
+	/**
+	 * @param modifierListOwner modifier list owner
+	 * @param annotation        the qualified name of the annotation to add
+	 * @return a target annotation owner to add the annotation (either modifier list or type element depending on the annotation target)
+	 * Returns null if {@code modifierListOwner.getModifierList()} is null.
+	 */
+	@Nullable
+	public static PsiAnnotationOwner getTarget(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String annotation)
+	{
+		PsiModifierList list = modifierListOwner.getModifierList();
+		if(list == null)
+		{
+			return null;
+		}
+		PsiClass annotationClass = JavaPsiFacade.getInstance(modifierListOwner.getProject())
+				.findClass(annotation, modifierListOwner.getResolveScope());
+		if(annotationClass != null && findAnnotationTarget(annotationClass, TargetType.TYPE_USE) != null &&
+				// External annotations for types are not supported
+				!(modifierListOwner instanceof PsiCompiledElement))
+		{
+			PsiElement parent = list.getParent();
+			PsiTypeElement type = null;
+			if(parent instanceof PsiMethod)
+			{
+				type = ((PsiMethod) parent).getReturnTypeElement();
+			}
+			else if(parent instanceof PsiVariable)
+			{
+				type = ((PsiVariable) parent).getTypeElement();
+			}
+			if(type != null && !type.getType().equals(PsiType.VOID))
+			{
+				return type;
+			}
+		}
+		return list;
 	}
 }

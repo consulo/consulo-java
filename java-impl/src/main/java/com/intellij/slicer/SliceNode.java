@@ -15,14 +15,6 @@
  */
 package com.intellij.slicer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.JTree;
-
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.application.ApplicationManager;
@@ -35,6 +27,13 @@ import com.intellij.ui.DuplicateNodeRenderer;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author cdr
@@ -66,7 +65,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 
 	@Override
 	@Nonnull
-	public Collection<? extends AbstractTreeNode> getChildren()
+	public Collection<? extends AbstractTreeNode<?>> getChildren()
 	{
 		ProgressIndicator current = ProgressManager.getInstance().getProgressIndicator();
 		ProgressIndicator indicator = current == null ? new ProgressIndicatorBase() : current;

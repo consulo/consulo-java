@@ -16,7 +16,6 @@
 
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInspection.dataFlow.value.DfaPsiType;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.psi.PsiCatchSection;
 import com.intellij.psi.PsiDisjunctionType;
@@ -27,9 +26,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FList;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -93,7 +90,7 @@ class ControlTransferHandler
 		return runner;
 	}
 
-	public List<DfaInstructionState> processCatches(@Nullable DfaPsiType thrownValue, Map<PsiCatchSection, ControlFlow.ControlFlowOffset> catches)
+	public List<DfaInstructionState> processCatches(@Nonnull TypeConstraint thrownValue, Map<PsiCatchSection, ControlFlow.ControlFlowOffset> catches)
 	{
 		List<DfaInstructionState> result = new ArrayList<>();
 
@@ -110,28 +107,26 @@ class ControlTransferHandler
 
 			if(throwableType == null)
 			{
-				throwableType = thrownValue != null ? thrownValue.asConstraint() : TypeConstraint.empty();
+				throwableType = thrownValue;
 			}
 
-			for(DfaPsiType cautchType : allCaughtTypes(param))
+			for(TypeConstraint caughtType : allCaughtTypes(param))
 			{
-				if(throwableType != null)
-				{
-					TypeConstraint withInstanceofValue = throwableType.withInstanceofValue(cautchType);
-					if(withInstanceofValue != null)
-					{
-						result.add(new DfaInstructionState(runner.getInstruction(jumpOffset.getInstructionOffset()), stateForCatchClause(param, withInstanceofValue)));
-					}
+				TypeConstraint caught = thrownValue.meet(caughtType);
 
-					throwableType = throwableType.withNotInstanceofValue(cautchType);
-					if(throwableType == null)
+				if(caught != TypeConstraints.BOTTOM)
+				{
+					result.add(new DfaInstructionState(runner.getInstruction(jumpOffset.getInstructionOffset()), stateForCatchClause(param, caught)));
+				}
+
+				TypeConstraint negated = caughtType.tryNegate();
+				if(negated != null)
+				{
+					throwableType = throwableType == null ? null : throwableType.meet(negated);
+					if(throwableType == TypeConstraints.BOTTOM)
 					{
 						return result;
 					}
-				}
-				else
-				{
-					return result;
 				}
 			}
 		}
@@ -140,19 +135,12 @@ class ControlTransferHandler
 	}
 
 	@Nonnull
-	private List<DfaPsiType> allCaughtTypes(PsiParameter param)
+	private List<TypeConstraint> allCaughtTypes(PsiParameter param)
 	{
 		PsiType type = param.getType();
 		List<PsiType> psiTypes;
-		if(type instanceof PsiDisjunctionType)
-		{
-			psiTypes = ((PsiDisjunctionType) type).getDisjunctions();
-		}
-		else
-		{
-			psiTypes = Collections.singletonList(type);
-		}
-		return psiTypes.stream().map(it -> runner.getFactory().createDfaType(it)).collect(Collectors.toList());
+		psiTypes = type instanceof PsiDisjunctionType ? ((PsiDisjunctionType) type).getDisjunctions() : List.of(type);
+		return psiTypes.stream().map(TypeConstraints::instanceOf).collect(Collectors.toList());
 	}
 
 	@Nonnull
@@ -161,8 +149,7 @@ class ControlTransferHandler
 		DfaMemoryState catchingCopy = state.createCopy();
 		DfaVariableValue value = runner.getFactory().getVarFactory().createVariableValue(param);
 
-		catchingCopy.applyFact(value, DfaFactType.TYPE_CONSTRAINT, constraint);
-		catchingCopy.applyFact(value, DfaFactType.NULLABILITY, DfaNullability.NOT_NULL);
+		catchingCopy.meetDfType(value, constraint.asDfType().meet(DfaNullability.NOT_NULL.asDfType()));
 		return catchingCopy;
 	}
 }

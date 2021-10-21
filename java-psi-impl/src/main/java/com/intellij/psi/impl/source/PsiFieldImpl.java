@@ -35,8 +35,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.util.IncorrectOperationException;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.lang.ref.Reference;
 import java.util.*;
@@ -291,6 +291,17 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
 		}
 
 		return initializer;
+	}
+
+	/**
+	 * Avoids stub-to-AST switch if possible.
+	 *
+	 * @return Light generated initializer literal expression if it was stored in stubs, the regular initializer otherwise
+	 */
+	@Nullable
+	public static PsiExpression getDetachedInitializer(@Nonnull PsiVariable variable)
+	{
+		return variable instanceof PsiFieldImpl ? ((PsiFieldImpl) variable).getDetachedInitializer() : variable.getInitializer();
 	}
 
 	@Override

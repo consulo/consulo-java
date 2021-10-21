@@ -61,6 +61,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.*;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.impl.PsiModificationTrackerImpl;
 import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlFile;
@@ -78,14 +79,15 @@ import consulo.ui.image.Image;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
-
 import javax.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * @author anna
@@ -144,7 +146,10 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	@Override
-	public void annotateExternally(@Nonnull final PsiModifierListOwner listOwner, @Nonnull final String annotationFQName, @Nonnull final PsiFile fromFile, @javax.annotation.Nullable final PsiNameValuePair[] value)
+	public void annotateExternally(@Nonnull final PsiModifierListOwner listOwner,
+								   @Nonnull final String annotationFQName,
+								   @Nonnull final PsiFile fromFile,
+								   @javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		Application application = ApplicationManager.getApplication();
 		application.assertIsDispatchThread();
@@ -222,12 +227,12 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	private boolean setupRootAndAnnotateExternally(@Nonnull final OrderEntry entry,
-			@Nonnull final Project project,
-			@Nonnull final PsiModifierListOwner listOwner,
-			@Nonnull final String annotationFQName,
-			@Nonnull final PsiFile fromFile,
-			@Nonnull final String packageName,
-			@javax.annotation.Nullable final PsiNameValuePair[] value)
+												   @Nonnull final Project project,
+												   @Nonnull final PsiModifierListOwner listOwner,
+												   @Nonnull final String annotationFQName,
+												   @Nonnull final PsiFile fromFile,
+												   @Nonnull final String packageName,
+												   @javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
 		descriptor.setTitle(ProjectBundle.message("external.annotations.root.chooser.title", entry.getPresentableName()));
@@ -290,12 +295,12 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	private void chooseRootAndAnnotateExternally(@Nonnull final PsiModifierListOwner listOwner,
-			@Nonnull final String annotationFQName,
-			@Nonnull final PsiFile fromFile,
-			@Nonnull final Project project,
-			@Nonnull final String packageName,
-			@Nonnull VirtualFile[] roots,
-			@javax.annotation.Nullable final PsiNameValuePair[] value)
+												 @Nonnull final String annotationFQName,
+												 @Nonnull final PsiFile fromFile,
+												 @Nonnull final Project project,
+												 @Nonnull final String packageName,
+												 @Nonnull VirtualFile[] roots,
+												 @javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		if(roots.length > 1)
 		{
@@ -342,12 +347,12 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	private void annotateExternally(@Nonnull final VirtualFile root,
-			@Nonnull final PsiModifierListOwner listOwner,
-			@Nonnull final Project project,
-			@Nonnull final String packageName,
-			@Nonnull final String annotationFQName,
-			@Nonnull final PsiFile fromFile,
-			@javax.annotation.Nullable final PsiNameValuePair[] value)
+									@Nonnull final PsiModifierListOwner listOwner,
+									@Nonnull final Project project,
+									@Nonnull final String packageName,
+									@Nonnull final String annotationFQName,
+									@Nonnull final PsiFile fromFile,
+									@javax.annotation.Nullable final PsiNameValuePair[] value)
 	{
 		List<XmlFile> xmlFiles = findExternalAnnotationsXmlFiles(listOwner);
 
@@ -521,50 +526,40 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	public AnnotationPlace chooseAnnotationsPlace(@Nonnull final PsiElement element)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
-		if(!element.isPhysical())
-		{
-			return AnnotationPlace.IN_CODE; //element just created
-		}
-		if(!element.getManager().isInProject(element))
-		{
-			return AnnotationPlace.EXTERNAL;
-		}
-		final Project project = myPsiManager.getProject();
-		final PsiFile containingFile = element.getContainingFile();
-		final VirtualFile virtualFile = containingFile.getVirtualFile();
-		LOG.assertTrue(virtualFile != null);
-		final List<OrderEntry> entries = ProjectRootManager.getInstance(project).getFileIndex().getOrderEntriesForFile(virtualFile);
-		if(!entries.isEmpty())
-		{
-			for(OrderEntry entry : entries)
-			{
-				if(!(entry instanceof ModuleOrderEntry))
-				{
-					if(AnnotationOrderRootType.getUrls(entry).length > 0)
-					{
-						return AnnotationPlace.EXTERNAL;
-					}
-					break;
-				}
-			}
-		}
-		final MyExternalPromptDialog dialog = ApplicationManager.getApplication().isUnitTestMode() || ApplicationManager.getApplication().isHeadlessEnvironment() ? null : new MyExternalPromptDialog
-				(project);
+		return chooseAnnotationsPlace(element, () -> confirmNewExternalAnnotationRoot(element));
+	}
+
+	@Nonnull
+	private static AnnotationPlace confirmNewExternalAnnotationRoot(@Nonnull PsiElement element)
+	{
+		PsiFile containingFile = element.getContainingFile();
+		Project project = containingFile.getProject();
+		final MyExternalPromptDialog dialog = ApplicationManager.getApplication().isUnitTestMode() ||
+				ApplicationManager.getApplication().isHeadlessEnvironment()
+				? null
+				: new MyExternalPromptDialog(project);
 		if(dialog != null && dialog.isToBeShown())
 		{
-			final PsiElement highlightElement = element instanceof PsiNameIdentifierOwner ? ((PsiNameIdentifierOwner) element).getNameIdentifier() : element.getNavigationElement();
+			final PsiElement highlightElement = element instanceof PsiNameIdentifierOwner
+					? ((PsiNameIdentifierOwner) element).getNameIdentifier()
+					: element.getNavigationElement();
 			LOG.assertTrue(highlightElement != null);
 			final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-			final List<RangeHighlighter> highlighters = new ArrayList<RangeHighlighter>();
-			final boolean highlight = editor != null && editor.getDocument() == PsiDocumentManager.getInstance(project).getDocument(containingFile);
+			final List<RangeHighlighter> highlighters = new ArrayList<>();
+			final boolean highlight =
+					editor != null && editor.getDocument() == PsiDocumentManager.getInstance(project).getDocument(containingFile);
 			try
 			{
 				if(highlight)
-				{ //do not highlight for batch inspections
+				{
 					final EditorColorsManager colorsManager = EditorColorsManager.getInstance();
 					final TextAttributes attributes = colorsManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
+
+					//do not highlight for batch inspections
 					final TextRange textRange = highlightElement.getTextRange();
-					HighlightManager.getInstance(project).addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), attributes, true, highlighters);
+					HighlightManager.getInstance(project).addRangeHighlight(editor,
+							textRange.getStartOffset(), textRange.getEndOffset(),
+							attributes, true, highlighters);
 					final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(textRange.getStartOffset());
 					editor.getScrollingModel().scrollTo(logicalPosition, ScrollType.CENTER);
 				}
@@ -578,7 +573,6 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 				{
 					return AnnotationPlace.NOWHERE;
 				}
-
 			}
 			finally
 			{
@@ -593,6 +587,55 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 			dialog.close(DialogWrapper.OK_EXIT_CODE);
 		}
 		return AnnotationPlace.IN_CODE;
+	}
+
+	@Nonnull
+	private AnnotationPlace chooseAnnotationsPlace(@Nonnull PsiElement element,
+												   @Nonnull Supplier<? extends AnnotationPlace> confirmNewExternalAnnotationRoot)
+	{
+		if(!element.isPhysical() && !(element.getOriginalElement() instanceof PsiCompiledElement))
+		{
+			return AnnotationPlace.IN_CODE; //element just created
+		}
+		if(!element.getManager().isInProject(element))
+		{
+			return AnnotationPlace.EXTERNAL;
+		}
+		final Project project = myPsiManager.getProject();
+
+		//choose external place iff USE_EXTERNAL_ANNOTATIONS option is on,
+		//otherwise external annotations should be read-only
+		final PsiFile containingFile = element.getContainingFile();
+		if(containingFile != null && JavaCodeStyleSettings.getInstance(containingFile).USE_EXTERNAL_ANNOTATIONS)
+		{
+			final VirtualFile virtualFile = containingFile.getVirtualFile();
+			LOG.assertTrue(virtualFile != null);
+			final List<OrderEntry> entries = ProjectRootManager.getInstance(project).getFileIndex().getOrderEntriesForFile(virtualFile);
+			if(!entries.isEmpty())
+			{
+				for(OrderEntry entry : entries)
+				{
+					if(!(entry instanceof ModuleOrderEntry))
+					{
+						if(AnnotationOrderRootType.getUrls(entry).length > 0)
+						{
+							return AnnotationPlace.EXTERNAL;
+						}
+						break;
+					}
+				}
+			}
+
+			return confirmNewExternalAnnotationRoot.get();
+		}
+		return AnnotationPlace.IN_CODE;
+	}
+
+	@Override
+	@Nonnull
+	public AnnotationPlace chooseAnnotationsPlaceNoUi(@Nonnull PsiElement element)
+	{
+		return chooseAnnotationsPlace(element, () -> AnnotationPlace.NEED_ASK_USER);
 	}
 
 	private void appendChosenAnnotationsRoot(@Nonnull final OrderEntry entry, @Nonnull final VirtualFile vFile)
@@ -617,10 +660,10 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 	}
 
 	private void annotateExternally(@Nonnull final PsiModifierListOwner listOwner,
-			@Nonnull final String annotationFQName,
-			@javax.annotation.Nullable final XmlFile xmlFile,
-			@Nonnull final PsiFile codeUsageFile,
-			@javax.annotation.Nullable final PsiNameValuePair[] values)
+									@Nonnull final String annotationFQName,
+									@javax.annotation.Nullable final XmlFile xmlFile,
+									@Nonnull final PsiFile codeUsageFile,
+									@javax.annotation.Nullable final PsiNameValuePair[] values)
 	{
 		if(xmlFile == null)
 		{

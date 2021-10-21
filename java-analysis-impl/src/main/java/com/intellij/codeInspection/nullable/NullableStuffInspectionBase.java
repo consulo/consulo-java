@@ -1055,7 +1055,7 @@ public class NullableStuffInspectionBase extends AbstractBaseJavaLocalInspection
 								: superMethodApplicable ? null : createChangeDefaultNotNullFix(nullableManager, method);
 
 						PsiElement psiElement = annotation;
-						if(!annotation.isPhysical())
+						if(annotation != null && !annotation.isPhysical())
 						{
 							psiElement = identifier;
 							if(psiElement == null)

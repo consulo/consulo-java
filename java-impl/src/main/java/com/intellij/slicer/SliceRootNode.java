@@ -15,17 +15,16 @@
  */
 package com.intellij.slicer;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.JTree;
-
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author cdr
@@ -59,7 +58,7 @@ public class SliceRootNode extends SliceNode
 
 	@Override
 	@Nonnull
-	public Collection<? extends AbstractTreeNode> getChildren()
+	public Collection<? extends AbstractTreeNode<?>> getChildren()
 	{
 		if(myCachedChildren == null)
 		{

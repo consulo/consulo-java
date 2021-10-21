@@ -1,24 +1,11 @@
-/*
- * Copyright 2000-2017 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
+import com.intellij.codeInspection.CommonQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.dataFlow.value.DfaValue;
-import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
+import com.intellij.codeInspection.dataFlow.types.DfType;
+import com.intellij.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.codeInspection.util.OptionalUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -31,7 +18,7 @@ import javax.annotation.Nullable;
 /**
  * @author anet, peter
  */
-public class DfaOptionalSupport
+public final class DfaOptionalSupport
 {
 
 	@Nullable
@@ -89,19 +76,16 @@ public class DfaOptionalSupport
 	}
 
 	/**
-	 * Creates a DfaValue which represents present or absent optional (non-null)
+	 * Creates a DfType which represents present or absent optional (non-null)
 	 *
-	 * @param factory a value factory to use
 	 * @param present whether the value should be present
-	 * @return a DfaValue representing an Optional
+	 * @return a DfType representing an Optional
 	 */
 	@Nonnull
-	public static DfaValue getOptionalValue(DfaValueFactory factory, boolean present)
+	public static DfType getOptionalValue(boolean present)
 	{
-		DfaValue value = present ? factory.getFactValue(DfaFactType.NULLABILITY, DfaNullability.NOT_NULL) : factory.getConstFactory().getNull();
-		DfaFactMap facts = DfaFactMap.EMPTY.with(DfaFactType.NULLABILITY, DfaNullability.NOT_NULL)
-				.with(DfaFactType.SPECIAL_FIELD_VALUE, SpecialField.OPTIONAL_VALUE.withValue(value));
-		return factory.getFactFactory().createValue(facts);
+		DfType valueType = present ? DfTypes.NOT_NULL_OBJECT : DfTypes.NULL;
+		return SpecialField.OPTIONAL_VALUE.asDfType(valueType);
 	}
 
 	private static class ReplaceOptionalCallFix implements LocalQuickFix
@@ -119,7 +103,7 @@ public class DfaOptionalSupport
 		@Override
 		public String getFamilyName()
 		{
-			return "Replace with '." + myTargetMethodName + "()'";
+			return CommonQuickFixBundle.message("fix.replace.with.x", "." + myTargetMethodName + "()");
 		}
 
 		@Override

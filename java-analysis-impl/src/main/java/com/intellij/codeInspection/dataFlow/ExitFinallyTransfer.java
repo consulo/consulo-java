@@ -32,4 +32,40 @@ public class ExitFinallyTransfer implements TransferTarget
 		DfaControlTransferValue pop = (DfaControlTransferValue) state.pop();
 		return pop.dispatch(state, runner);
 	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+
+		ExitFinallyTransfer that = (ExitFinallyTransfer) o;
+
+		if(enterFinally != null ? !enterFinally.equals(that.enterFinally) : that.enterFinally != null)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return enterFinally != null ? enterFinally.hashCode() : 0;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ExitFinallyTransfer{" +
+				"enterFinally=" + enterFinally +
+				'}';
+	}
 }

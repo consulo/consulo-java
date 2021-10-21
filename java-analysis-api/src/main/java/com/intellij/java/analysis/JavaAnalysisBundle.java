@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import org.jetbrains.annotations.PropertyKey;
 
+import java.util.function.Supplier;
+
 public final class JavaAnalysisBundle extends AbstractBundle
 {
 	@NonNls
@@ -21,5 +23,11 @@ public final class JavaAnalysisBundle extends AbstractBundle
 	public static String message(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, @Nonnull Object  ...params)
 	{
 		return INSTANCE.getMessage(key, params);
+	}
+
+	@Nonnull
+	public static Supplier<String> messagePointer(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, Object... params)
+	{
+		return () -> INSTANCE.getMessage(key, params);
 	}
 }

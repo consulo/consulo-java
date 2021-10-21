@@ -4,20 +4,29 @@
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.codeInspection.dataFlow.inference.JavaSourceInference;
+import com.intellij.codeInspection.dataFlow.types.DfReferenceType;
+import com.intellij.codeInspection.dataFlow.types.DfType;
+import com.intellij.codeInspection.dataFlow.types.DfTypes;
+import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.openapi.project.Project;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightElement;
+import com.intellij.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.util.*;
 import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.util.dataholder.Key;
 import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.PropertyKey;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,22 +36,22 @@ public enum Mutability
 	/**
 	 * Mutability is not known; probably value can be mutated
 	 */
-	UNKNOWN("unknown", null),
+	UNKNOWN("mutability.unknown", null),
 	/**
 	 * A value is known to be mutable (e.g. elements are sometimes added to the collection)
 	 */
-	MUTABLE("modifiable", null),
-	/**
-	 * A value is known to be immutable. For collection no elements could be added, removed or altered (though if collection
-	 * contains mutable elements, they still could be mutated).
-	 */
-	UNMODIFIABLE("unmodifiable", "org.jetbrains.annotations.Unmodifiable"),
+	MUTABLE("mutability.modifiable", null),
 	/**
 	 * A value is known to be an immutable view over a possibly mutable value: it cannot be mutated directly using this
 	 * reference; however subsequent reads (e.g. {@link java.util.Collection#size}) may return different results if the
 	 * underlying value is mutated by somebody else.
 	 */
-	UNMODIFIABLE_VIEW("unmodifiable view", "org.jetbrains.annotations.UnmodifiableView");
+	UNMODIFIABLE_VIEW("mutability.unmodifiable.view", "org.jetbrains.annotations.UnmodifiableView"),
+	/**
+	 * A value is known to be immutable. For collection no elements could be added, removed or altered (though if collection
+	 * contains mutable elements, they still could be mutated).
+	 */
+	UNMODIFIABLE("mutability.unmodifiable", "org.jetbrains.annotations.Unmodifiable");
 
 	public static final
 	@Nonnull
@@ -50,21 +59,30 @@ public enum Mutability
 	public static final
 	@Nonnull
 	String UNMODIFIABLE_VIEW_ANNOTATION = UNMODIFIABLE_VIEW.myAnnotation;
-	private final String myName;
+	private final
+	@PropertyKey(resourceBundle = JavaAnalysisBundle.BUNDLE)
+	String myResourceKey;
 	private final String myAnnotation;
 	private final Key<CachedValue<PsiAnnotation>> myKey;
 
-	Mutability(String name, String annotation)
+	Mutability(@PropertyKey(resourceBundle = JavaAnalysisBundle.BUNDLE) String resourceKey, String annotation)
 	{
-		myName = name;
+		myResourceKey = resourceKey;
 		myAnnotation = annotation;
 		myKey = annotation == null ? null : Key.create(annotation);
 	}
 
-	@Override
-	public String toString()
+	public DfReferenceType asDfType()
 	{
-		return myName;
+		return DfTypes.customObject(TypeConstraints.TOP, DfaNullability.UNKNOWN, this, null, DfTypes.BOTTOM);
+	}
+
+	public
+	@Nonnull
+	@Nls
+	String getPresentationName()
+	{
+		return JavaAnalysisBundle.message(myResourceKey);
 	}
 
 	public boolean isUnmodifiable()
@@ -79,19 +97,41 @@ public enum Mutability
 		{
 			return this;
 		}
-		if(this == MUTABLE || other == MUTABLE)
-		{
-			return MUTABLE;
-		}
 		if(this == UNKNOWN || other == UNKNOWN)
 		{
 			return UNKNOWN;
+		}
+		if(this == MUTABLE || other == MUTABLE)
+		{
+			return MUTABLE;
 		}
 		if(this == UNMODIFIABLE_VIEW || other == UNMODIFIABLE_VIEW)
 		{
 			return UNMODIFIABLE_VIEW;
 		}
 		return UNMODIFIABLE;
+	}
+
+	@Nonnull
+	public Mutability intersect(Mutability other)
+	{
+		if(this == other)
+		{
+			return this;
+		}
+		if(this == UNMODIFIABLE || other == UNMODIFIABLE)
+		{
+			return UNMODIFIABLE;
+		}
+		if(this == UNMODIFIABLE_VIEW || other == UNMODIFIABLE_VIEW)
+		{
+			return UNMODIFIABLE_VIEW;
+		}
+		if(this == MUTABLE || other == MUTABLE)
+		{
+			return MUTABLE;
+		}
+		return UNKNOWN;
 	}
 
 	@Nullable
@@ -125,11 +165,11 @@ public enum Mutability
 			return UNKNOWN;
 		}
 		return CachedValuesManager.getCachedValue(owner, () ->
-				CachedValueProvider.Result.create(calcMutability(owner), owner, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
+				CachedValueProvider.Result.create(calcMutability(owner), owner, PsiModificationTracker.MODIFICATION_COUNT));
 	}
 
 	@Nonnull
-	public static Mutability calcMutability(@Nonnull PsiModifierListOwner owner)
+	private static Mutability calcMutability(@Nonnull PsiModifierListOwner owner)
 	{
 		if(owner instanceof PsiParameter && owner.getParent() instanceof PsiParameterList)
 		{
@@ -138,17 +178,21 @@ public enum Mutability
 			if(method != null)
 			{
 				int index = list.getParameterIndex((PsiParameter) owner);
-				MutationSignature signature = MutationSignature.fromMethod(method);
-				if(signature.mutatesArg(index))
+				JavaMethodContractUtil.ContractInfo contractInfo = JavaMethodContractUtil.getContractInfo(method);
+				if(contractInfo.isExplicit())
 				{
-					return MUTABLE;
-				}
-				else if(signature.preservesArg(index) &&
-						PsiTreeUtil.findChildOfAnyType(method.getBody(), PsiLambdaExpression.class, PsiClass.class) == null)
-				{
-					// If method preserves argument, it still may return a lambda which captures an argument and changes it
-					// TODO: more precise check (at least differentiate parameters which are captured by lambdas or not)
-					return UNMODIFIABLE_VIEW;
+					MutationSignature signature = contractInfo.getMutationSignature();
+					if(signature.mutatesArg(index))
+					{
+						return MUTABLE;
+					}
+					else if(signature.preservesArg(index) &&
+							PsiTreeUtil.findChildOfAnyType(method.getBody(), PsiLambdaExpression.class, PsiClass.class) == null)
+					{
+						// If method preserves argument, it still may return a lambda which captures an argument and changes it
+						// TODO: more precise check (at least differentiate parameters which are captured by lambdas or not)
+						return UNMODIFIABLE_VIEW;
+					}
 				}
 				return UNKNOWN;
 			}
@@ -201,7 +245,11 @@ public enum Mutability
 			}
 			return mutability;
 		}
-		return /*owner instanceof PsiMethodImpl ? JavaSourceInference.inferMutability((PsiMethodImpl) owner) : */UNKNOWN;
+		return owner instanceof PsiMethodImpl ? JavaSourceInference.inferMutability((PsiMethodImpl) owner) : UNKNOWN;
 	}
 
+	public static Mutability fromDfType(DfType dfType)
+	{
+		return dfType instanceof DfReferenceType ? ((DfReferenceType) dfType).getMutability() : UNKNOWN;
+	}
 }

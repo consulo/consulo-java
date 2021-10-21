@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
+import com.intellij.codeInspection.dataFlow.value.RelationType;
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;

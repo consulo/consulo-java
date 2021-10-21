@@ -29,7 +29,9 @@ public class ClassMethodsInliner implements CallInliner
 	{
 		PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
 		if(qualifier == null)
+		{
 			return false;
+		}
 		if(IS_ASSIGNABLE_FROM.matches(call))
 		{
 			PsiExpression arg = call.getArgumentList().getExpressions()[0];
@@ -39,16 +41,16 @@ public class ClassMethodsInliner implements CallInliner
 			if(getClassQualifier != null)
 			{
 				builder.pushExpression(qualifier)
-						.pushExpression(getClassQualifier);
+						.pushExpression(getClassQualifier)
+						.swap()
+						.isInstance(call);
 			}
 			else
 			{
 				builder.pushExpression(qualifier)
 						.pushExpression(arg)
-						.objectOf();
+						.isAssignableFrom(call);
 			}
-			builder.swap()
-					.isInstance(call);
 			return true;
 		}
 		else if(IS_INSTANCE.matches(call))

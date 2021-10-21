@@ -15,22 +15,26 @@
  */
 package com.intellij.codeInspection.dataFlow.value;
 
-import com.intellij.codeInspection.dataFlow.DfaFactMap;
+import com.intellij.codeInspection.dataFlow.DfaMemoryState;
+import com.intellij.codeInspection.dataFlow.types.DfType;
+import com.intellij.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.psi.PsiType;
-
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class DfaValue
 {
 	private final int myID;
+	@Nonnull
 	protected final DfaValueFactory myFactory;
 
-	protected DfaValue(final DfaValueFactory factory)
+	protected DfaValue(@Nonnull final DfaValueFactory factory)
 	{
 		myFactory = factory;
-		myID = factory == null ? 0 : factory.registerValue(this);
+		myID = factory.registerValue(this);
 	}
 
+	@Nonnull
 	public DfaValueFactory getFactory()
 	{
 		return myFactory;
@@ -51,6 +55,15 @@ public abstract class DfaValue
 	}
 
 	/**
+	 * @return a DfType this value belongs under any possible memory state
+	 */
+	@Nonnull
+	public DfType getDfType()
+	{
+		return DfTypes.TOP;
+	}
+
+	/**
 	 * Produces a value which describes a union of this value and other value
 	 *
 	 * @param other other value to unite with
@@ -59,15 +72,36 @@ public abstract class DfaValue
 	public DfaValue unite(DfaValue other)
 	{
 		if(this == other)
+		{
 			return this;
-		if(this == DfaUnknownValue.getInstance() || other == DfaUnknownValue.getInstance())
-			return DfaUnknownValue.getInstance();
-		return myFactory.getFactFactory().createValue(DfaFactMap.fromDfaValue(this).unite(DfaFactMap.fromDfaValue(other)));
+		}
+		return myFactory.fromDfType(getDfType().join(other.getDfType()));
 	}
 
-	public DfaValue createNegated()
+	/**
+	 * Creates an equivalence condition (suitable to pass into {@link DfaMemoryState#applyCondition(DfaCondition)})
+	 * between this and other value.
+	 *
+	 * @param other other value that is tested to be equal to this
+	 * @return a condition
+	 */
+	public final DfaCondition eq(DfaValue other)
 	{
-		return DfaUnknownValue.getInstance();
+		return this.cond(RelationType.EQ, other);
+	}
+
+	/**
+	 * Create condition (suitable to pass into {@link DfaMemoryState#applyCondition(DfaCondition)}),
+	 * evaluating it statically if possible.
+	 *
+	 * @param relationType relation
+	 * @param other        other condition operand
+	 * @return resulting condition between this value and other operand
+	 */
+	@Nonnull
+	public final DfaCondition cond(@Nonnull RelationType relationType, @Nonnull DfaValue other)
+	{
+		return DfaCondition.createCondition(this, relationType, other);
 	}
 
 	public boolean dependsOn(DfaVariableValue other)

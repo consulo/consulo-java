@@ -36,12 +36,12 @@ import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.text.CharSequenceReader;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
+import javax.annotation.Nonnull;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -276,8 +276,15 @@ public abstract class BaseExternalAnnotationsManager extends ExternalAnnotations
 		return result;
 	}
 
+	@Nonnull
 	@Override
-	@javax.annotation.Nullable
+	public AnnotationPlace chooseAnnotationsPlaceNoUi(@Nonnull PsiElement element)
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	@Nullable
 	public List<PsiFile> findExternalAnnotationsFiles(@Nonnull PsiModifierListOwner listOwner)
 	{
 		final PsiFile containingFile = preferCompiledElement(listOwner).getContainingFile();
@@ -397,7 +404,7 @@ public abstract class BaseExternalAnnotationsManager extends ExternalAnnotations
 	}
 
 	@Override
-	public void annotateExternally(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQName, @Nonnull PsiFile fromFile, @javax.annotation.Nullable PsiNameValuePair[] value)
+	public void annotateExternally(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQName, @Nonnull PsiFile fromFile, @Nullable PsiNameValuePair[] value)
 	{
 		throw new UnsupportedOperationException();
 	}

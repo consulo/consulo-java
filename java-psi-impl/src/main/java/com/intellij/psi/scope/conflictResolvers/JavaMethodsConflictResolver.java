@@ -430,8 +430,8 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 
 					if(currentClass != null && existingClass != null && class1 != null)
 					{
-						final PsiSubstitutor eSubstitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(existingClass, currentClass, PsiSubstitutor.EMPTY, null);
-						final PsiSubstitutor cSubstitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(class1, currentClass, PsiSubstitutor.EMPTY, null);
+						final PsiSubstitutor eSubstitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(existingClass, currentClass, PsiSubstitutor.EMPTY);
+						final PsiSubstitutor cSubstitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(class1, currentClass, PsiSubstitutor.EMPTY);
 						if(eSubstitutor != null && cSubstitutor != null &&
 								MethodSignatureUtil.areSignaturesEqual(existingMethod.getSignature(eSubstitutor), method.getSignature(cSubstitutor)))
 						{

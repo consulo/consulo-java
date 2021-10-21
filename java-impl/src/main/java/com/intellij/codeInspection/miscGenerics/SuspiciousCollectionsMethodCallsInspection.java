@@ -1,21 +1,20 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.miscGenerics;
 
-import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.dataFlow.CommonDataflow;
-import com.intellij.codeInspection.dataFlow.DfaFactType;
 import com.intellij.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ObjectUtils;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
 	@Nullable
 	public JComponent createOptionsPanel()
 	{
-		return new SingleCheckboxOptionsPanel(InspectionsBundle.message("report.suspicious.but.possibly.correct.method.calls"), this, "REPORT_CONVERTIBLE_METHOD_CALLS");
+		return new SingleCheckboxOptionsPanel(JavaAnalysisBundle.message("report.suspicious.but.possibly.correct.method.calls"), this, "REPORT_CONVERTIBLE_METHOD_CALLS");
 	}
 
 	@Override
@@ -87,16 +86,9 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
 
 	@Override
 	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
-	}
-
-	@Override
-	@Nonnull
 	public String getGroupDisplayName()
 	{
-		return GroupNames.BUGS_GROUP_NAME;
+		return InspectionsBundle.message("group.names.probable.bugs");
 	}
 
 	@Override
@@ -106,11 +98,12 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
 		return "SuspiciousMethodCalls";
 	}
 
-	private static String getSuspiciousMethodCallMessage(PsiMethodCallExpression methodCall,
-														 boolean reportConvertibleMethodCalls,
-														 List<SuspiciousMethodCallUtil.PatternMethod> patternMethods,
-														 PsiExpression arg,
-														 int i)
+	private static
+	String getSuspiciousMethodCallMessage(PsiMethodCallExpression methodCall,
+										  boolean reportConvertibleMethodCalls,
+										  List<SuspiciousMethodCallUtil.PatternMethod> patternMethods,
+										  PsiExpression arg,
+										  int i)
 	{
 		PsiType argType = arg.getType();
 		boolean exactType = arg instanceof PsiNewExpression;
@@ -118,14 +111,17 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
 				.getSuspiciousMethodCallMessage(methodCall, arg, argType, exactType || reportConvertibleMethodCalls, patternMethods, i);
 		if(plainMessage != null && !exactType)
 		{
-			TypeConstraint constraint = CommonDataflow.getExpressionFact(arg, DfaFactType.TYPE_CONSTRAINT);
-			if(constraint != null)
+			String methodName = methodCall.getMethodExpression().getReferenceName();
+			if(SuspiciousMethodCallUtil.isCollectionAcceptingMethod(methodName))
 			{
-				PsiType type = constraint.getPsiType();
-				if(type != null && SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(methodCall, arg, type, reportConvertibleMethodCalls, patternMethods, i) == null)
-				{
-					return null;
-				}
+				// DFA works on raw types, so anyway we cannot narrow the argument type
+				return plainMessage;
+			}
+			TypeConstraint constraint = TypeConstraint.fromDfType(CommonDataflow.getDfType(arg));
+			PsiType type = constraint.getPsiType(methodCall.getProject());
+			if(type != null && SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(methodCall, arg, type, reportConvertibleMethodCalls, patternMethods, i) == null)
+			{
+				return null;
 			}
 		}
 
