@@ -68,9 +68,6 @@ public class NewJavaRunner
 
 		socket.open();
 
-		System.out.println("options");
-		System.out.println(options);
-
 		if(outputDir == null)
 		{
 			throw new IllegalArgumentException("output dir not set");
@@ -178,6 +175,11 @@ public class NewJavaRunner
 		}
 
 		Set<File> files = new LinkedHashSet<File>();
+
+		if(!pathWithAt.startsWith("@"))
+		{
+			return Collections.singleton(new File(pathWithAt));
+		}
 
 		String path = pathWithAt.substring(1);
 

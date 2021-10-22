@@ -34,7 +34,6 @@ public class OracleJavacLogHack
 
 			if("wrote.file".equals(key))
 			{
-				System.out.println("hacked " + args[0]);
 				// may string or java file object
 				Object arg = args[0];
 				if(arg instanceof String)

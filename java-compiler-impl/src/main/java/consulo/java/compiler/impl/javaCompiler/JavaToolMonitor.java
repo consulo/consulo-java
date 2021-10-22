@@ -3,13 +3,17 @@ package consulo.java.compiler.impl.javaCompiler;
 import com.intellij.compiler.impl.javaCompiler.BackendCompilerWrapper;
 import com.intellij.compiler.impl.javaCompiler.FileObject;
 import com.intellij.compiler.make.CacheCorruptedException;
+import com.intellij.execution.process.ProcessAdapter;
+import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.compiler.CompileContext;
+import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.concurrency.AppExecutorUtil;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
+import consulo.util.dataholder.Key;
 import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
@@ -74,6 +78,31 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
 	public void handleProcessStart(ProcessHandler process)
 	{
 		myProcess = process;
+		process.addProcessListener(new ProcessAdapter()
+		{
+			@Override
+			public void onTextAvailable(ProcessEvent event, Key outputType)
+			{
+				String text = event.getText().trim();
+				if(text.startsWith("SLF4J"))
+				{
+					return;
+				}
+
+				if(text.isEmpty())
+				{
+					return;
+				}
+
+				if(text.startsWith("java.lang.OutOfMemoryError"))
+				{
+					log(CompilerMessageCategory.ERROR, CompilerBundle.message("error.javac.out.of.memory"), null, -1, -1);
+					return;
+				}
+
+				log(CompilerMessageCategory.INFORMATION, text, null, -1, 1);
+			}
+		});
 	}
 
 	@Override
