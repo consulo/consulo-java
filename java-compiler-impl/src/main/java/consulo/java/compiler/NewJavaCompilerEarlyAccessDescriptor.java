@@ -16,11 +16,4 @@ public class NewJavaCompilerEarlyAccessDescriptor extends EarlyAccessProgramDesc
 	{
 		return "New Java Compiler (java 8+)";
 	}
-
-	@Nonnull
-	@Override
-	public String getGroupName()
-	{
-		return "Java";
-	}
 }
