@@ -24,6 +24,7 @@ import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotation.access.RequiredReadAction;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -119,10 +120,15 @@ public class AnnotationUtilEx {
   }
 
   public interface AnnotatedElementVisitor {
+    @RequiredReadAction
     boolean visitMethodParameter(PsiExpression expression, PsiCallExpression psiCallExpression);
+    @RequiredReadAction
     boolean visitMethodReturnStatement(PsiReturnStatement parent, PsiMethod method);
+    @RequiredReadAction
     boolean visitVariable(PsiVariable variable);
+    @RequiredReadAction
     boolean visitAnnotationParameter(PsiNameValuePair nameValuePair, PsiAnnotation psiAnnotation);
+    @RequiredReadAction
     boolean visitReference(PsiReferenceExpression expression);
   }
 
@@ -133,6 +139,7 @@ public class AnnotationUtilEx {
     }
   }
 
+  @RequiredReadAction
   private static boolean visitAnnotatedElementInner(PsiElement element, AnnotatedElementVisitor visitor) {
     final PsiElement parent = element.getParent();
 
