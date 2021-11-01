@@ -27,6 +27,11 @@
 	<depends>com.intellij.xml</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 
+	<permissions>
+		<permission type="SOCKET"/>
+		<permission type="PROCESS"/>
+	</permissions>
+
 	<import path="/META-INF/JvmByteCodeViewer.xml"/>
 	<import path="/META-INF/Coverage.xml"/>
 	<import path="/META-INF/InspectionGadgets.xml"/>
