@@ -27,6 +27,11 @@
 	<depends>com.intellij.xml</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 
+	<tags>
+		<tag>custom.language</tag>
+		<tag>software.framework</tag>
+	</tags>
+
 	<permissions>
 		<permission type="SOCKET"/>
 		<permission type="PROCESS"/>
