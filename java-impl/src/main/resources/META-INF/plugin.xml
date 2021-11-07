@@ -33,8 +33,10 @@
 	</tags>
 
 	<permissions>
-		<permission type="SOCKET"/>
-		<permission type="PROCESS"/>
+		<permission type="SOCKET_BIND"/>
+		<permission type="SOCKET_CONNECT"/>
+		<permission type="GET_ENV"/>
+		<permission type="PROCESS_CREATE"/>
 	</permissions>
 
 	<import path="/META-INF/JvmByteCodeViewer.xml"/>
