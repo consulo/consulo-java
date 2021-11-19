@@ -32,12 +32,12 @@ import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.impl.source.PsiFieldImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import java.util.HashMap;
 import consulo.ui.color.ColorValue;
 import consulo.ui.image.ImageEffects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 
 /**
  * @author peter
@@ -228,7 +228,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 					ref.bindToElementViaStaticImport(((PsiField) variable).getContainingClass());
 					PostprocessReformattingAspect.getInstance(ref.getProject()).doPostponedFormatting();
 				}
-				if(toDelete.isValid())
+				if(toDelete != null && toDelete.isValid())
 				{
 					document.deleteString(toDelete.getStartOffset(), toDelete.getEndOffset());
 				}
