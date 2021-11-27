@@ -476,7 +476,24 @@ public class JavacCompiler implements BackendCompiler
 			if(isAnnotationProcessingMode)
 			{
 				final int currentSourcesMode = chunk.getSourcesFilter();
-				commandLine.add(chunk.getSourcePath(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode));
+				if(EarlyAccessProgramManager.is(NewJavaCompilerEarlyAccessDescriptor.class))
+				{
+					String sourcePath = chunk.getSourcePath(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode);
+					if(!sourcePath.isEmpty())
+					{
+						// TODO [VISTALL] use #getSourceRoots after migration to new api
+						String[] files = sourcePath.split(File.pathSeparator);
+						addClassPathValue(jdk, version, commandLine, Arrays.asList(files), "javac_sp", tempFiles);
+					}
+					else
+					{
+						commandLine.add("\"\"");
+					}
+				}
+				else
+				{
+					commandLine.add(chunk.getSourcePath(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode));
+				}
 			}
 			else
 			{

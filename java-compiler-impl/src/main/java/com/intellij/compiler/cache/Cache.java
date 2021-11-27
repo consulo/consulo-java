@@ -51,7 +51,7 @@ public class Cache
 	{
 		protected MyMapIndexStorage(@Nonnull File storageFile, @Nonnull KeyDescriptor<Integer> keyDescriptor, int cacheSize) throws IOException
 		{
-			super(storageFile, keyDescriptor, MyDataExternalizer.INSTANCE, cacheSize, false);
+			super(storageFile, keyDescriptor, MyDataExternalizer.INSTANCE, cacheSize, true);
 		}
 
 		@Override
