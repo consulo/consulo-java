@@ -5,21 +5,21 @@ import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.jdi.VirtualMachineProxy;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ReflectionUtil;
 import com.intellij.util.ThrowableConsumer;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.*;
-import consulo.java.PatchesEx;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -55,115 +55,105 @@ public class MethodBytecodeUtil
 		}
 	}
 
-	public static byte[] getConstantPool(ReferenceType type)
-	{
-		if(PatchesEx.JDK_BUG_ID_6822627)
-		{
-			try
-			{
-				return type.constantPool();
-			}
-			catch(NullPointerException e)
-			{ // workaround for JDK bug 6822627
-				ReflectionUtil.resetField(type, "constantPoolInfoGotten");
-				return type.constantPool();
-			}
-		}
-		else
-		{
-			return type.constantPool();
-		}
-	}
-
 	private static void visit(Method method, byte[] bytecodes, MethodVisitor methodVisitor, boolean withLineNumbers)
 	{
 		ReferenceType type = method.declaringType();
-		byte[] constantPool = getConstantPool(type);
-		try(ByteArrayBuilderOutputStream bos = new ByteArrayBuilderOutputStream(constantPool.length + 24);
-			DataOutputStream dos = new DataOutputStream(bos))
+
+		BufferExposingByteArrayOutputStream bytes = new BufferExposingByteArrayOutputStream();
+		try (DataOutputStream dos = new DataOutputStream(bytes))
 		{
-			writeClassHeader(dos, type.constantPoolCount(), constantPool);
-
-			ClassReader reader = new ClassReader(bos.getBuffer());
-			ClassWriter writer = new ClassWriter(reader, 0);
-
-			String superName = null;
-			String[] interfaces = null;
-			if(type instanceof ClassType)
-			{
-				ClassType classType = (ClassType) type;
-				ClassType superClass = classType.superclass();
-				superName = superClass != null ? superClass.name() : null;
-				interfaces = classType.interfaces().stream().map(ReferenceType::name).toArray(String[]::new);
-			}
-			else if(type instanceof InterfaceType)
-			{
-				interfaces = ((InterfaceType) type).superinterfaces().stream().map(ReferenceType::name).toArray(String[]::new);
-			}
-
-			writer.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, type.name(), type.signature(), superName, interfaces);
-			Attribute bootstrapMethods = createBootstrapMethods(reader, writer);
-			if(bootstrapMethods != null)
-			{
-				writer.visitAttribute(bootstrapMethods);
-			}
-
-			MethodVisitor mv = writer.visitMethod(Opcodes.ACC_PUBLIC, method.name(), method.signature(), method.signature(), null);
-			mv.visitAttribute(createCode(writer, method, bytecodes, withLineNumbers));
-
-			new ClassReader(writer.toByteArray()).accept(new ClassVisitor(Opcodes.API_VERSION)
-			{
-				@Override
-				public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
-				{
-					assert name.equals(method.name());
-					return methodVisitor;
-				}
-			}, 0);
+			writeClassHeader(dos, type.constantPoolCount(), type.constantPool());
 		}
-		catch(IOException ignored)
+		catch(IOException e)
 		{
+			throw new RuntimeException(e);
 		}
+		ClassReader reader = new ClassReader(bytes.getInternalBuffer(), 0, bytes.size());
+
+		ClassWriter writer = new ClassWriter(reader, 0);
+		String superName = null;
+		String[] interfaces = null;
+		if(type instanceof ClassType)
+		{
+			ClassType superClass = ((ClassType) type).superclass();
+			superName = superClass != null ? superClass.name() : null;
+			interfaces = ((ClassType) type).interfaces().stream().map(ReferenceType::name).toArray(String[]::new);
+		}
+		else if(type instanceof InterfaceType)
+		{
+			interfaces = ((InterfaceType) type).superinterfaces().stream().map(ReferenceType::name).toArray(String[]::new);
+		}
+		writer.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, type.name(), type.signature(), superName, interfaces);
+		Attribute bootstrapMethods = createBootstrapMethods(reader, writer);
+		if(bootstrapMethods != null)
+		{
+			writer.visitAttribute(bootstrapMethods);
+		}
+		MethodVisitor mv = writer.visitMethod(Opcodes.ACC_PUBLIC, method.name(), method.signature(), method.signature(), null);
+		mv.visitAttribute(createCode(writer, method, bytecodes, withLineNumbers));
+
+		new ClassReader(writer.toByteArray()).accept(new ClassVisitor(Opcodes.API_VERSION)
+		{
+			@Override
+			public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
+			{
+				assert name.equals(method.name());
+				return methodVisitor;
+			}
+		}, 0);
 	}
 
 	@Nonnull
-	private static Attribute createAttribute(String name, ThrowableConsumer<DataOutputStream, IOException> generator) throws IOException
+	private static Attribute createAttribute(String name, ThrowableConsumer<DataOutputStream, IOException> generator)
 	{
-		try(ByteArrayOutputStream bos = new ByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(bos))
+		BufferExposingByteArrayOutputStream bytes = new BufferExposingByteArrayOutputStream();
+		int start, end;
+
+		try (DataOutputStream dos = new DataOutputStream(bytes))
 		{
 			writeClassHeader(dos, 0, ArrayUtil.EMPTY_BYTE_ARRAY);
-			// we generate and put attribute right after the constant pool
-			int start = dos.size();
+			start = dos.size();
 			generator.consume(dos);
-			int end = dos.size();
-			ClassReader cr = new ClassReader(bos.toByteArray());
-			return new Attribute(name)
-			{
-				public Attribute read()
-				{
-					return read(cr, start, end - start, null, 0, null);
-				}
-			}.read();
+			end = dos.size();
 		}
+		catch(IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+
+		ClassReader reader = new ClassReader(bytes.getInternalBuffer(), 0, bytes.size());
+		return new Attribute(name)
+		{
+			public Attribute read()
+			{
+				return read(reader, start, end - start, null, 0, null);
+			}
+		}.read();
 	}
 
 	private static void writeClassHeader(DataOutputStream dos, int constantPoolCount, byte[] constantPool) throws IOException
 	{
 		dos.writeInt(0xCAFEBABE);
 		dos.writeInt(Opcodes.V1_8);
-		dos.writeShort(constantPoolCount);
+		dos.writeShort(constantPoolCount + 1);
 		dos.write(constantPool);
-		dos.writeShort(0);  // access_flags;
-		dos.writeShort(0);  // this_class;
-		dos.writeShort(0);  // super_class;
-		dos.writeShort(0);  // interfaces_count;
-		dos.writeShort(0);  // fields_count;
-		dos.writeShort(0);  // methods_count;
-		dos.writeShort(0);  // attributes_count;
+		byte[] utfStr = "BootstrapMethods".getBytes(StandardCharsets.UTF_8);
+		dos.writeByte(1);  // name string for the fake "BootstrapMethods" attribute
+		dos.writeShort(utfStr.length);
+		dos.write(utfStr);
+		dos.writeShort(0);  // access_flags
+		dos.writeShort(0);  // this_class
+		dos.writeShort(0);  // super_class
+		dos.writeShort(0);  // interfaces_count
+		dos.writeShort(0);  // fields_count
+		dos.writeShort(0);  // methods_count
+		dos.writeShort(1);  // attributes_count
+		dos.writeShort(constantPoolCount);  // fake "BootstrapMethods" attribute
+		dos.writeInt(0);
 	}
 
 	@Nullable
-	private static Attribute createBootstrapMethods(ClassReader classReader, ClassWriter classWriter) throws IOException
+	private static Attribute createBootstrapMethods(ClassReader classReader, ClassWriter classWriter)
 	{
 		Set<Short> bootstrapMethods = new HashSet<>();
 		// scan class pool for indy calls
@@ -173,14 +163,14 @@ public class MethodBytecodeUtil
 			int tag = classReader.readByte(index - 1);
 			switch(tag)
 			{
-				case 5: // ClassWriter.LONG
-				case 6: // ClassWriter.DOUBLE
+				case 5:  // Symbol.CONSTANT_LONG_TAG
+				case 6:  // Symbol.CONSTANT_DOUBLE_TAG
 					//noinspection AssignmentToForLoopParameter
 					++i;
 					break;
-				case 18: // ClassWriter.INDY
+				case 17:  // Symbol.CONSTANT_DYNAMIC_TAG
+				case 18:  // Symbol.CONSTANT_INVOKE_DYNAMIC_TAG
 					bootstrapMethods.add(classReader.readShort(index));
-					classReader.readShort(index + 2);
 			}
 		}
 
@@ -201,7 +191,7 @@ public class MethodBytecodeUtil
 	}
 
 	@Nonnull
-	private static Attribute createCode(ClassWriter cw, Method method, byte[] bytecodes, boolean withLineNumbers) throws IOException
+	private static Attribute createCode(ClassWriter cw, Method method, byte[] bytecodes, boolean withLineNumbers)
 	{
 		return createAttribute("Code", dos -> {
 			dos.writeShort(0); // max_stack
@@ -209,7 +199,7 @@ public class MethodBytecodeUtil
 			dos.writeInt(bytecodes.length);  // code_length
 			dos.write(bytecodes); // code
 			dos.writeShort(0); // exception_table_length
-			List<Location> locations = withLineNumbers ? DebuggerUtilsEx.allLineLocations(method) : Collections.emptyList();
+			List<Location> locations = withLineNumbers ? DebuggerUtilsEx.allLineLocations(method) : null;
 			if(!ContainerUtil.isEmpty(locations))
 			{
 				dos.writeShort(1); // attributes_count

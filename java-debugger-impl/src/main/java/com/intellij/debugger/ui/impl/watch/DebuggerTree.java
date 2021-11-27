@@ -20,20 +20,6 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.TreePath;
-
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -65,9 +51,7 @@ import com.intellij.debugger.ui.tree.render.ClassRenderer;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.SimpleTextAttributes;
@@ -79,7 +63,22 @@ import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
+import consulo.logging.Logger;
 import consulo.ui.image.Image;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvider
 {
@@ -494,7 +493,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 
 	public abstract class BuildNodeCommand extends DebuggerContextCommandImpl
 	{
-		private final DebuggerTreeNodeImpl myNode;
+		protected final DebuggerTreeNodeImpl myNode;
 
 		protected final List<DebuggerTreeNodeImpl> myChildren = new LinkedList<>();
 
@@ -807,12 +806,14 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		@Override
 		public void threadAction()
 		{
-			ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl) getNode().getDescriptor());
+			ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl) myNode.getDescriptor());
 			ThreadReferenceProxyImpl threadProxy = threadDescriptor.getThreadReference();
 			if(!threadProxy.isCollected() && getDebuggerContext().getDebugProcess().getSuspendManager().isSuspended(threadProxy))
 			{
 				int status = threadProxy.status();
-				if(!(status == ThreadReference.THREAD_STATUS_UNKNOWN) && !(status == ThreadReference.THREAD_STATUS_NOT_STARTED) && !(status == ThreadReference.THREAD_STATUS_ZOMBIE))
+				if(!(status == ThreadReference.THREAD_STATUS_UNKNOWN) &&
+						!(status == ThreadReference.THREAD_STATUS_NOT_STARTED) &&
+						!(status == ThreadReference.THREAD_STATUS_ZOMBIE))
 				{
 					try
 					{
@@ -820,7 +821,8 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 						{
 							//Method method = stackFrame.location().method();
 							//ToDo :check whether is synthetic if (shouldDisplay(method)) {
-							myChildren.add(myNodeManager.createNode(myNodeManager.getStackFrameDescriptor(threadDescriptor, stackFrame), getDebuggerContext().createEvaluationContext()));
+							myChildren.add(myNodeManager.createNode(myNodeManager.getStackFrameDescriptor(threadDescriptor, stackFrame),
+									getDebuggerContext().createEvaluationContext()));
 						}
 					}
 					catch(EvaluateException e)
@@ -834,7 +836,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 						//    try {
 						//      Thread.sleep(100000);
 						//    } catch (InterruptedException e) {
-						//      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+						//      e.printStackTrace();
 						//    }
 						//  }
 					}

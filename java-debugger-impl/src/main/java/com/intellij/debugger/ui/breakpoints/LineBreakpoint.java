@@ -20,16 +20,6 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.SourcePosition;
@@ -39,16 +29,15 @@ import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.debugger.jdi.MethodBytecodeUtil;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ReadAction;
-import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex;
@@ -62,8 +51,20 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointType;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.logging.Logger;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.ui.image.Image;
+import consulo.util.dataholder.Key;
+import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class LineBreakpoint<P extends JavaBreakpointProperties> extends BreakpointWithHighlighter<P>
 {
@@ -128,7 +129,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 	@Override
 	protected void createRequestForPreparedClass(final DebugProcessImpl debugProcess, final ReferenceType classType)
 	{
-		if(!isInScopeOf(debugProcess, classType.name()))
+		if(!ReadAction.compute(() -> isInScopeOf(debugProcess, classType.name())))
 		{
 			if(LOG.isDebugEnabled())
 			{
@@ -141,17 +142,18 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 			List<Location> locations = debugProcess.getPositionManager().locationsOfLine(classType, getSourcePosition());
 			if(!locations.isEmpty())
 			{
-				for(Location loc : locations)
-				{
+				locations = StreamEx.of(locations).peek(loc -> {
 					if(LOG.isDebugEnabled())
 					{
-						LOG.debug("Found location [codeIndex=" + loc.codeIndex() + "] for reference type " + classType.name() + " at line " + getLineIndex() + "; isObsolete: " + (debugProcess
-								.getVirtualMachineProxy().versionHigher("1.4") && loc.method().isObsolete()));
+						LOG.debug("Found location [codeIndex=" + loc.codeIndex() +
+								"] for reference type " + classType.name() +
+								" at line " + getLineIndex() +
+								"; isObsolete: " + (debugProcess.getVirtualMachineProxy().versionHigher("1.4") && loc.method().isObsolete()));
 					}
-					if(!acceptLocation(debugProcess, classType, loc))
-					{
-						continue;
-					}
+				}).filter(l -> acceptLocation(debugProcess, classType, l)).toList();
+				locations = MethodBytecodeUtil.removeSameLineLocations(locations);
+				for(Location loc : locations)
+				{
 					createLocationBreakpointRequest(this, loc, debugProcess);
 					if(LOG.isDebugEnabled())
 					{
@@ -159,10 +161,22 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 					}
 				}
 			}
+			else if(DebuggerUtilsEx.allLineLocations(classType) == null)
+			{
+				// there's no line info in this class
+				debugProcess.getRequestsManager()
+						.setInvalid(this, DebuggerBundle.message("error.invalid.breakpoint.no.line.info", classType.name()));
+				if(LOG.isDebugEnabled())
+				{
+					LOG.debug("No line number info in " + classType.name());
+				}
+			}
 			else
 			{
 				// there's no executable code in this class
-				debugProcess.getRequestsManager().setInvalid(this, DebuggerBundle.message("error.invalid.breakpoint.no.executable.code", (getLineIndex() + 1), classType.name()));
+				debugProcess.getRequestsManager().setInvalid(this, DebuggerBundle.message(
+						"error.invalid.breakpoint.no.executable.code", (getLineIndex() + 1), classType.name())
+				);
 				if(LOG.isDebugEnabled())
 				{
 					LOG.debug("No locations of type " + classType.name() + " found at line " + getLineIndex());
@@ -184,14 +198,6 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 				LOG.debug("ObjectCollectedException: " + ex.getMessage());
 			}
 			// there's a chance to add a breakpoint when the class is prepared
-		}
-		catch(InvalidLineNumberException ex)
-		{
-			if(LOG.isDebugEnabled())
-			{
-				LOG.debug("InvalidLineNumberException: " + ex.getMessage());
-			}
-			debugProcess.getRequestsManager().setInvalid(this, DebuggerBundle.message("error.invalid.breakpoint.bad.line.number"));
 		}
 		catch(Exception ex)
 		{
