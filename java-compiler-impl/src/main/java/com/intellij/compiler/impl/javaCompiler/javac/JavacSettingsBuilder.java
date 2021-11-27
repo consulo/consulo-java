@@ -22,7 +22,6 @@ import com.intellij.util.Chunk;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -37,8 +36,8 @@ public class JavacSettingsBuilder {
     return myOptions;
   }
 
-  public Collection<String> getOptions(Chunk<Module> chunk) {
-    List<String> options = new ArrayList<String>();
+  public List<String> getOptions(Chunk<Module> chunk) {
+    List<String> options = new ArrayList<>();
     if (getOptions().DEBUGGING_INFO) {
       options.add("-g");
     }

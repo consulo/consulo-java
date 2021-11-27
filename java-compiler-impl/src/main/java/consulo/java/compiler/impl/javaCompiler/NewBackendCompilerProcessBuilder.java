@@ -3,6 +3,7 @@ package consulo.java.compiler.impl.javaCompiler;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler;
+import com.intellij.compiler.impl.javaCompiler.javac.JavacSettingsBuilder;
 import com.intellij.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
@@ -146,6 +147,10 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		JavaCompilerUtil.addLocaleOptions(javaParameters.getVMParametersList(), false);
 
 		ParametersList params = javaParameters.getProgramParametersList();
+
+		JavacSettingsBuilder javacSettingsBuilder = new JavacSettingsBuilder(myJavaCompilerOptions);
+
+		params.addAll(javacSettingsBuilder.getOptions(chunk));
 
 		JavacCompiler.addCommandLineOptions(compileContext, chunk, params, outputPath, jdk, version, myTempFiles, true, myAnnotationProcessorsEnabled);
 
