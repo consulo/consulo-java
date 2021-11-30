@@ -108,7 +108,7 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 
 		parametersList.add(JAVAC_MAIN_CLASS);
 
-		JavacCompiler.addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, myAnnotationProcessorsEnabled);
+		JavacCompiler.addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, myAnnotationProcessorsEnabled, false);
 
 		parametersList.addAll(additionalOptions);
 

@@ -152,7 +152,7 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 
 		params.addAll(javacSettingsBuilder.getOptions(chunk));
 
-		JavacCompiler.addCommandLineOptions(compileContext, chunk, params, outputPath, jdk, version, myTempFiles, true, myAnnotationProcessorsEnabled);
+		JavacCompiler.addCommandLineOptions(compileContext, chunk, params, outputPath, jdk, version, myTempFiles, true, myAnnotationProcessorsEnabled, true);
 
 		File sourcesFile = File.createTempFile("javac", ".tmp");
 		sourcesFile.deleteOnExit();

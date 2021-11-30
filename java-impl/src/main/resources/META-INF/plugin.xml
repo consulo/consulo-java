@@ -2065,8 +2065,6 @@
 		<codeStyleIndentHelperExtension implementation="com.intellij.psi.impl.source.codeStyle.JavaIndentHelper"/>
 
 		<projectService serviceImplementation="com.intellij.codeInsight.ConcurrencyAnnotationsManager"/>
-
-		<eapDescriptor implementation="consulo.java.compiler.NewJavaCompilerEarlyAccessDescriptor"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

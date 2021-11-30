@@ -54,10 +54,8 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AccessRule;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.compiler.roots.CompilerPathsImpl;
-import consulo.ide.eap.EarlyAccessProgramManager;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
-import consulo.java.compiler.NewJavaCompilerEarlyAccessDescriptor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.java.compiler.impl.javaCompiler.JavaToolMonitor;
@@ -218,7 +216,7 @@ public class JavacCompiler implements BackendCompiler
 
 			JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
 
-			if(version != null && version.isAtLeast(JavaSdkVersion.JDK_1_8) && EarlyAccessProgramManager.is(NewJavaCompilerEarlyAccessDescriptor.class))
+			if(version != null && version.isAtLeast(JavaSdkVersion.JDK_1_8))
 			{
 				return new NewBackendCompilerProcessBuilder(chunk, outputDir, compileContext, javaCompilerOptions, javaCompilerConfiguration.isAnnotationProcessorsEnabled());
 			}
@@ -329,7 +327,8 @@ public class JavacCompiler implements BackendCompiler
 											 JavaSdkVersion version,
 											 List<File> tempFiles,
 											 boolean addSourcePath,
-											 boolean isAnnotationProcessingMode) throws IOException
+											 boolean isAnnotationProcessingMode,
+											 boolean newCompiler) throws IOException
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(chunk.getModule(), JavaModuleExtension.class);
 		LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
@@ -476,19 +475,10 @@ public class JavacCompiler implements BackendCompiler
 			if(isAnnotationProcessingMode)
 			{
 				final int currentSourcesMode = chunk.getSourcesFilter();
-				if(EarlyAccessProgramManager.is(NewJavaCompilerEarlyAccessDescriptor.class))
+				if(newCompiler)
 				{
-					String sourcePath = chunk.getSourcePath(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode);
-					if(!sourcePath.isEmpty())
-					{
-						// TODO [VISTALL] use #getSourceRoots after migration to new api
-						String[] files = sourcePath.split(File.pathSeparator);
-						addClassPathValue(jdk, version, commandLine, Arrays.asList(files), "javac_sp", tempFiles);
-					}
-					else
-					{
-						commandLine.add("\"\"");
-					}
+					VirtualFile[] sourcePaths = chunk.getSourceRoots(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode);
+					addClassPathValue(jdk, version, commandLine, toStringList(Set.of(sourcePaths)), "javac_sp", tempFiles);
 				}
 				else
 				{
