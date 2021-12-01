@@ -781,7 +781,7 @@
 							 instance="com.intellij.compiler.options.AnnotationProcessorsConfigurable"/>
 
 		<projectConfigurable bundle="messages.JavaBundle" key="javac.name" parentId="project.propCompiler.java"
-							 instance="com.intellij.compiler.impl.javaCompiler.javac.JavacConfigurable"/>
+							 instance="consulo.java.compiler.impl.javaCompiler.ui.JavacConfigurable"/>
 
 		<lang.syntaxHighlighterFactory key="JAVA" implementationClass="com.intellij.lang.java.JavaSyntaxHighlighterFactory"/>
 
