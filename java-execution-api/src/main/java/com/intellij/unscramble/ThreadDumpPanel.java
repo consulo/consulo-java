@@ -232,7 +232,7 @@ public class ThreadDumpPanel extends JPanel {
 
     @Override
     public void update(AnActionEvent e) {
-      e.getPresentation().setIcon(COMPARATOR == BY_TYPE ? AllIcons.ObjectBrowser.SortByType : AllIcons.Icons.Inspector.SortByName);
+      e.getPresentation().setIcon(COMPARATOR == BY_TYPE ? AllIcons.ObjectBrowser.SortByType : AllIcons.ObjectBrowser.Sorted);
       e.getPresentation().setText(COMPARATOR == BY_TYPE ? TYPE_LABEL : NAME_LABEL);
     }
   }
