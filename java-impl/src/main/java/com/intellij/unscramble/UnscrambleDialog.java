@@ -15,26 +15,6 @@
  */
 package com.intellij.unscramble;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
@@ -44,7 +24,6 @@ import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Comparing;
@@ -61,6 +40,19 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
 import consulo.java.unscramble.UnscrambleManager;
 import consulo.ui.image.Image;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author cdr
@@ -169,7 +161,7 @@ public class UnscrambleDialog extends DialogWrapper
 		if(ProjectLevelVcsManager.getInstance(myProject).hasActiveVcss())
 		{
 			myConfigurable = new VcsContentAnnotationConfigurable(myProject);
-			myBottomPanel.add(myConfigurable.createComponent(), BorderLayout.CENTER);
+			myBottomPanel.add(myConfigurable.createComponent(getDisposable()), BorderLayout.CENTER);
 			myConfigurable.reset();
 		}
 	}
@@ -179,7 +171,7 @@ public class UnscrambleDialog extends DialogWrapper
 		return PropertiesComponent.getInstance().getValue(PROPERTY_LOG_FILE_LAST_URL);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static UnscrambleSupport getSavedUnscrambler()
 	{
 		final List<UnscrambleSupport> registeredUnscramblers = getRegisteredUnscramblers();
@@ -207,7 +199,7 @@ public class UnscrambleDialog extends DialogWrapper
 		return res;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private UnscrambleSupport getSelectedUnscrambler()
 	{
 		if(!myUseUnscrambler.isSelected())
@@ -430,15 +422,7 @@ public class UnscrambleDialog extends DialogWrapper
 	{
 		if(myConfigurable != null && myConfigurable.isModified())
 		{
-			try
-			{
-				myConfigurable.apply();
-			}
-			catch(ConfigurationException e)
-			{
-				setText(e.getMessage());
-				return;
-			}
+			myConfigurable.apply();
 		}
 		if(performUnscramble())
 		{
@@ -460,7 +444,7 @@ public class UnscrambleDialog extends DialogWrapper
 	}
 
 	@Nullable
-	static RunContentDescriptor showUnscrambledText(@javax.annotation.Nullable UnscrambleSupport unscrambleSupport, String logName, Project project, String textToUnscramble)
+	static RunContentDescriptor showUnscrambledText(@Nullable UnscrambleSupport unscrambleSupport, String logName, Project project, String textToUnscramble)
 	{
 		String unscrambledTrace = unscrambleSupport == null ? textToUnscramble : unscrambleSupport.unscramble(project, textToUnscramble, logName);
 		if(unscrambledTrace == null)
@@ -538,7 +522,7 @@ public class UnscrambleDialog extends DialogWrapper
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getExceptionAbbreviation(String line)
 	{
 		int lastDelimiter = 0;
