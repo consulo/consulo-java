@@ -15,41 +15,14 @@
  */
 package com.intellij.debugger.memory.ui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Nonnull;
-import javax.swing.BorderFactory;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableRowSorter;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.debugger.memory.component.InstancesTracker;
 import com.intellij.debugger.memory.tracking.TrackerForNewInstances;
 import com.intellij.debugger.memory.tracking.TrackingType;
 import com.intellij.debugger.memory.utils.AbstractTableColumnDescriptor;
 import com.intellij.debugger.memory.utils.AbstractTableModelWithColumns;
 import com.intellij.debugger.memory.utils.InstancesProvider;
-import com.intellij.icons.AllIcons;
-import consulo.disposer.Disposable;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
 import com.intellij.psi.codeStyle.NameUtil;
@@ -61,8 +34,22 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.util.containers.FList;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
+import consulo.disposer.Disposable;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.util.dataholder.Key;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClassesTable extends JBTable implements DataProvider, Disposable
 {
@@ -585,7 +572,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 			TrackingType trackingType = getTrackingType(row);
 			if(trackingType != null)
 			{
-				setIcon(AllIcons.Debugger.MemoryView.ClassTracked);
+				setIcon(PlatformIconGroup.debuggerWatch());
 				setTransparentIconBackground(true);
 			}
 

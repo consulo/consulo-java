@@ -15,22 +15,12 @@
  */
 package com.intellij.debugger.memory.ui;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.memory.component.InstancesTracker;
 import com.intellij.debugger.memory.component.MemoryViewDebugProcessData;
 import com.intellij.debugger.memory.event.InstancesTrackerListener;
 import com.intellij.debugger.memory.tracking.TrackingType;
 import com.intellij.debugger.memory.utils.StackFrameItem;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -40,6 +30,13 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.xdebugger.XDebugSession;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.platform.base.icon.PlatformIconGroup;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 class InstancesWithStackFrameView
 {
@@ -66,7 +63,7 @@ class InstancesWithStackFrameView
 		}
 		else
 		{
-			ActionLink actionLink = new ActionLink("Enable tracking for new instances", AllIcons.Debugger.MemoryView.ClassTracked, new AnAction()
+			ActionLink actionLink = new ActionLink("Enable tracking for new instances", PlatformIconGroup.debuggerWatch(), new AnAction()
 			{
 				@Override
 				public void actionPerformed(AnActionEvent e)
