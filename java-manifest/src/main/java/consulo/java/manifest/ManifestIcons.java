@@ -13,5 +13,5 @@ import consulo.ui.image.Image;
 public interface ManifestIcons
 {
 	Image ManifestFileType = JavaPsiImplIconGroup.fileTypesManifest();
-	Image BndFileType = ManifestFileType; //TODO [VISTALL] unique icon
+	Image BndFileType = JavaPsiImplIconGroup.fileTypesBnd();
 }

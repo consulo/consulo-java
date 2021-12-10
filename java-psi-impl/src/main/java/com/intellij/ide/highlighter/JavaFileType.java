@@ -15,14 +15,15 @@
  */
 package com.intellij.ide.highlighter;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.ide.IdeBundle;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import consulo.java.JavaIcons;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public class JavaFileType extends LanguageFileType {
   @NonNls public static final String DEFAULT_EXTENSION = "java";
@@ -41,8 +42,8 @@ public class JavaFileType extends LanguageFileType {
 
   @Override
   @Nonnull
-  public String getDescription() {
-    return IdeBundle.message("filetype.description.java");
+  public LocalizeValue getDescription() {
+    return IdeLocalize.filetypeDescriptionJava();
   }
 
   @Override

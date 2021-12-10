@@ -15,12 +15,13 @@
  */
 package com.intellij.ide.highlighter;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.fileTypes.FileType;
 import consulo.java.JavaIcons;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
 
 public class JavaClassFileType implements FileType {
 
@@ -37,8 +38,8 @@ public class JavaClassFileType implements FileType {
 
   @Override
   @Nonnull
-  public String getDescription() {
-    return IdeBundle.message("filetype.description.class");
+  public LocalizeValue getDescription() {
+    return IdeLocalize.filetypeDescriptionClass();
   }
 
   @Override

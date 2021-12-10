@@ -23,6 +23,7 @@ import com.intellij.openapi.fileTypes.UnknownFileType;
 import com.intellij.openapi.fileTypes.ex.FileTypeIdentifiableByVirtualFile;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
+import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
@@ -66,16 +67,9 @@ public class SPIFileType extends LanguageFileType implements FileTypeIdentifiabl
 
 	@Nonnull
 	@Override
-	public String getDescription()
+	public LocalizeValue getDescription()
 	{
-		return "Service Provider Interface";
-	}
-
-	@Nonnull
-	@Override
-	public String getDefaultExtension()
-	{
-		return "";
+		return LocalizeValue.localizeTODO("Service Provider Interface");
 	}
 
 	@Nonnull
