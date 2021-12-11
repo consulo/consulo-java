@@ -15,10 +15,6 @@
  */
 package consulo.java.spi;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -29,6 +25,10 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.LanguageSubstitutor;
 import consulo.java.roots.SpecialDirUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author VISTALL
@@ -55,7 +55,7 @@ public class SPILanguageSubstitutor extends LanguageSubstitutor {
           return null;
         }
 
-        for (Condition<VirtualFile> condition : VETO_EP_NAME.getExtensions()) {
+        for (Condition<VirtualFile> condition : VETO_EP_NAME.getExtensionList()) {
           if (condition.value(file)) {
             return null;
           }

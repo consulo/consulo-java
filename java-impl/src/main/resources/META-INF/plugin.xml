@@ -1972,6 +1972,7 @@
 		<applicationService serviceInterface="com.intellij.psi.impl.file.PsiPackageImplementationHelper"
 							serviceImplementation="com.intellij.psi.impl.file.PsiPackageImplementationHelperImpl"/>
 		<sdkType implementation="com.intellij.openapi.projectRoots.impl.JavaSdkImpl"/>
+		<predefinedBundlesProvider implementation="consulo.java.bundle.JavaHomePredefinedBundleProvider"/>
 		<applicationService serviceInterface="com.intellij.openapi.projectRoots.OwnJdkVersionDetector"
 							serviceImplementation="com.intellij.openapi.projectRoots.OwnJdkVersionDetectorImpl"/>
 

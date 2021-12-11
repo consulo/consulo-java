@@ -30,7 +30,7 @@ public abstract class JavaSdk extends SdkType implements JavaSdkType
 
 	public static JavaSdk getInstance()
 	{
-		return EP_NAME.findExtension(JavaSdk.class);
+		return EP_NAME.findExtensionOrFail(JavaSdk.class);
 	}
 
 	public final Sdk createJdk(@Nonnull String jdkName, @Nonnull String jreHome)
