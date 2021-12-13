@@ -15,10 +15,12 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import consulo.ide.projectView.impl.nodes.PackageElement;
 
+import javax.annotation.Nullable;
+
 /**
  * @author yole
  */
-public class CoverageProjectViewClassNodeDecorator extends AbstractCoverageProvejctViewNodeDecorator
+public class CoverageProjectViewClassNodeDecorator extends AbstractCoverageProjectViewNodeDecorator
 {
 	@Inject
 	public CoverageProjectViewClassNodeDecorator(final CoverageDataManager coverageDataManager)
@@ -104,7 +106,7 @@ public class CoverageProjectViewClassNodeDecorator extends AbstractCoverageProve
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static JavaCoverageAnnotator getCovAnnotator(final CoverageSuitesBundle currentSuite, Project project)
 	{
 		if(currentSuite != null)
