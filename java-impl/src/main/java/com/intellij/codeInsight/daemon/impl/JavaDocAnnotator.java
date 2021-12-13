@@ -15,14 +15,15 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
-import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.javadoc.PsiDocTagValue;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Dmitry Avdeev
@@ -36,8 +37,7 @@ public class JavaDocAnnotator implements Annotator {
       if ("param".equals(name)) {
         PsiDocTagValue tagValue = ((PsiDocTag)element).getValueElement();
         if (tagValue != null) {
-          Annotation annotation = holder.createInfoAnnotation(tagValue, null);
-          annotation.setTextAttributes(JavaHighlightingColors.DOC_COMMENT_TAG_VALUE);
+          holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(tagValue).textAttributes(JavaHighlightingColors.DOC_COMMENT_TAG_VALUE).create();
         }
       }
     }
