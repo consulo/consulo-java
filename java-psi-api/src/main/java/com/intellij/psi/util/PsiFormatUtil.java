@@ -15,13 +15,13 @@
  */
 package com.intellij.psi.util;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PsiFormatUtil extends PsiFormatUtilBase {
@@ -58,14 +58,14 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
     return builder.toString();
   }
 
+  @RequiredReadAction
   private static void formatTypeParameter(PsiTypeParameter typeParameter, StringBuilder builder, @FormatTypeParameterOptions int options){
     builder.append(typeParameter.getName());
-    if((options & SHOW_TYPE_PARAMETER_EXTENDS) != 0)
-    {
-      String referenceList = formatReferenceList(typeParameter.getExtendsList(), options);
-      if(!referenceList.isEmpty()){
+    if((options & SHOW_TYPE_PARAMETER_EXTENDS) != 0) {
+       PsiClassType[] extendsListTypes = typeParameter.getExtendsListTypes();
+       if(extendsListTypes.length > 0) {
         builder.append(":");
-        builder.append(referenceList);
+        builder.append(StringUtil.join(extendsListTypes, it -> formatType(it, options, PsiSubstitutor.EMPTY), "&"));
       }
     }
   }
