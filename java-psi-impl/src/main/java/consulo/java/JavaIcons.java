@@ -2,6 +2,7 @@ package consulo.java;
 
 import consulo.annotation.DeprecationInfo;
 import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
 @Deprecated
@@ -11,7 +12,7 @@ public interface JavaIcons
 	interface FileTypes
 	{
 		Image Java = JavaPsiImplIconGroup.fileTypesJava();
-		Image JavaClass = JavaPsiImplIconGroup.fileTypesJavaClass();
+		Image JavaClass = PlatformIconGroup.fileTypesBinary();
 		Image JavaOutsideSource = JavaPsiImplIconGroup.fileTypesJavaOutsideSource();
 	}
 
