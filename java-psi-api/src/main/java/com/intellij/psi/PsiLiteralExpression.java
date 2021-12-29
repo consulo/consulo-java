@@ -18,5 +18,10 @@ package com.intellij.psi;
 /**
  * Represents a Java literal expression.
  */
-public interface PsiLiteralExpression extends PsiExpression, PsiLiteral {
+public interface PsiLiteralExpression extends PsiExpression, PsiLiteral
+{
+	default boolean isTextBlock()
+	{
+		return false;
+	}
 }
