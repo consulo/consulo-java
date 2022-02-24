@@ -15,6 +15,8 @@
  */
 package com.intellij.rt.execution.application;
 
+import consulo.java.rt.execution.application.AppMainV2Constants;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -24,8 +26,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.Socket;
 import java.util.Locale;
-
-import consulo.java.rt.execution.application.AppMainV2Constants;
 
 /**
  * @author ven
@@ -44,7 +44,18 @@ public class AppMainV2 implements AppMainV2Constants
 		if(osName.startsWith("windows"))
 		{
 			String arch = System.getProperty("os.arch").toLowerCase(Locale.US);
-			File libFile = new File(binPath, arch.equals("amd64") ? "breakgen64.dll" : "breakgen.dll");
+
+			String libraryName = "breakgen.dll";
+			if("amd64".equals(arch) || "x86_64".equals(arch))
+			{
+				libraryName = "breakgen64.dll";
+			}
+			else if("aarch64".equals(arch) || "arm64".equals(arch))
+			{
+				libraryName = "breakgen-aarch64.dll";
+			}
+
+			File libFile = new File(binPath, libraryName);
 			if(libFile.isFile())
 			{
 				System.load(libFile.getAbsolutePath());
