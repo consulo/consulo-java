@@ -15,19 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.DaemonBundle;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
@@ -36,8 +23,8 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.quickfix.*;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
+import com.intellij.codeInsight.quickfix.UnresolvedReferenceQuickFixProvider;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
-import consulo.logging.Logger;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.util.Comparing;
@@ -59,6 +46,14 @@ import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * Highlight method problems
@@ -864,6 +859,10 @@ public class HighlightMethodUtil
 		PermuteArgumentsFix.registerFix(info, methodCall, candidates, fixRange);
 		WrapExpressionFix.registerWrapAction(candidates, list.getExpressions(), info);
 		registerChangeParameterClassFix(methodCall, list, info);
+		if(candidates.length == 0 && info != null)
+		{
+			UnresolvedReferenceQuickFixProvider.registerReferenceFixes(methodCall.getMethodExpression(), new QuickFixActionRegistrarImpl(info));
+		}
 		return info;
 	}
 
