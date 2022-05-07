@@ -22,7 +22,6 @@ import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.OrderRootType;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -31,7 +30,6 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.jrt.JrtFileSystem;
-import com.intellij.util.SmartList;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.fileTypes.ZipArchiveFileType;
@@ -44,6 +42,7 @@ import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.DocumentationOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
 import consulo.ui.image.Image;
+import consulo.util.dataholder.Key;
 import consulo.vfs.util.ArchiveVfsUtil;
 import org.jetbrains.annotations.NonNls;
 
@@ -179,7 +178,7 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public Collection<String> suggestHomePaths()
 	{
-		List<String> list = new SmartList<>();
+		List<String> list = new ArrayList<>();
 		if(SystemInfo.isMac)
 		{
 			collectJavaPathsAtMac(list, "/Library/Java/JavaVirtualMachines");
@@ -200,7 +199,6 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			collectJavaPathsAtWindows(list, "ProgramFiles");
 			collectJavaPathsAtWindows(list, "ProgramFiles(x86)");
-			ContainerUtil.addIfNotNull(list, SystemProperties.getJavaHome());
 		}
 
 		// JDKs in SDKMan located at $HOME/.sdkman/candidates/java/
@@ -215,11 +213,15 @@ public class JavaSdkImpl extends JavaSdk
 
 	private void collectJavaPathsAtSdkman(List<String> list, File sdkmanJavaDir)
 	{
-		for(File dir : Objects.requireNonNull(sdkmanJavaDir.listFiles()))
+		File[] files = sdkmanJavaDir.listFiles();
+		if(files != null)
 		{
-			if(!dir.getName().equals("current")) // skip "current" directory, because it's link
+			for(File dir : files)
 			{
-				list.add(dir.getAbsolutePath());
+				if(!dir.getName().equals("current")) // skip "current" directory, because it's link
+				{
+					list.add(dir.getAbsolutePath());
+				}
 			}
 		}
 	}
