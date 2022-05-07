@@ -174,6 +174,9 @@ public class JavaSdkImpl extends JavaSdk
 		return path;
 	}
 
+	/**
+	 * @implNote do not chech JAVA_HOME, since it sdk will be created by own provider {@link consulo.java.bundle.JavaHomePredefinedBundleProvider}
+	 */
 	@Nonnull
 	@Override
 	public Collection<String> suggestHomePaths()
