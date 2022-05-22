@@ -1,19 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.formatter.java;
 
-import static com.intellij.openapi.util.Pair.pair;
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.END_OF_LINE;
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.NEXT_LINE;
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.NEXT_LINE_IF_WRAPPED;
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.NEXT_LINE_SHIFTED;
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.NEXT_LINE_SHIFTED2;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Spacing;
 import com.intellij.formatting.blocks.CStyleCommentBlock;
@@ -23,7 +10,6 @@ import com.intellij.lang.java.JavaLanguage;
 import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
@@ -36,13 +22,7 @@ import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.codeStyle.ImportHelper;
 import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
-import com.intellij.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.StdTokenSets;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.impl.source.tree.java.EnumConstantElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
@@ -53,6 +33,15 @@ import com.intellij.psi.tree.java.IJavaElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
+
+import static com.intellij.openapi.util.Pair.pair;
+import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.*;
 
 public class JavaSpacePropertyProcessor extends JavaElementVisitor
 {
@@ -1540,6 +1529,27 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		}
 	}
 
+	@Override
+	public void visitRecordHeader(PsiRecordHeader recordHeader)
+	{
+		if(myType2 == JavaTokenType.RPARENTH)
+		{
+			createParenthSpace(myJavaSettings.RPAREN_ON_NEW_LINE_IN_RECORD_HEADER, myJavaSettings.SPACE_WITHIN_RECORD_HEADER);
+		}
+		else if(myType1 == JavaTokenType.LPARENTH)
+		{
+			createParenthSpace(myJavaSettings.NEW_LINE_AFTER_LPAREN_IN_RECORD_HEADER, myJavaSettings.SPACE_WITHIN_RECORD_HEADER);
+		}
+		else if(myChild1.getElementType() == JavaTokenType.COMMA)
+		{
+			createSpaceInCode(mySettings.SPACE_AFTER_COMMA);
+		}
+		else if(myChild2.getElementType() == JavaTokenType.COMMA)
+		{
+			createSpaceInCode(mySettings.SPACE_BEFORE_COMMA);
+		}
+	}
+
 	private void createParenthSpace(boolean onNewLine, boolean space)
 	{
 		createParenthSpace(onNewLine, space, myParent.getTextRange());
@@ -2295,6 +2305,19 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 	public void visitParameter(PsiParameter parameter)
 	{
 		if(myRole1 == ChildRole.TYPE || myRole1 == ChildRole.MODIFIER_LIST)
+		{
+			createSpaceInCode(true);
+		}
+	}
+
+	@Override
+	public void visitRecordComponent(PsiRecordComponent recordComponent)
+	{
+		if(myType1 == JavaElementType.TYPE && myType2 == JavaTokenType.IDENTIFIER)
+		{
+			createSpaceInCode(true);
+		}
+		else if(myType1 == JavaElementType.MODIFIER_LIST && myType2 == JavaElementType.TYPE)
 		{
 			createSpaceInCode(true);
 		}

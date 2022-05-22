@@ -147,6 +147,17 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
 	public PackageEntryTable PACKAGES_TO_USE_IMPORT_ON_DEMAND = new PackageEntryTable();
 	public PackageEntryTable IMPORT_LAYOUT_TABLE = new PackageEntryTable();
 
+	public int RECORD_COMPONENTS_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
+	public boolean ALIGN_MULTILINE_RECORDS = true;
+	public boolean NEW_LINE_AFTER_LPAREN_IN_RECORD_HEADER = false;
+	public boolean RPAREN_ON_NEW_LINE_IN_RECORD_HEADER = false;
+	/**
+	 * "record R( String s )"
+	 * or
+	 * "record R(String s)"
+	 */
+	public boolean SPACE_WITHIN_RECORD_HEADER = false;
+
 	// region JavaDoc
 	public boolean ENABLE_JAVADOC_FORMATTING = true;
 	public boolean JD_ALIGN_PARAM_COMMENTS = true;

@@ -58,6 +58,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 		TYPE_USE,
 		TYPE_PARAMETER,
 		MODULE,
+		RECORD_COMPONENT,
 		// auxiliary value, used when it's impossible to determine annotation's targets
 		UNKNOWN;
 

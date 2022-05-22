@@ -31,10 +31,11 @@ import java.util.Set;
  */
 public class AnnotationTargetUtil
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.AnnotationUtil");
+	private static final Logger LOG = Logger.getInstance(AnnotationTargetUtil.class);
 
-	public static final Set<TargetType> DEFAULT_TARGETS = ContainerUtil.immutableSet(TargetType.PACKAGE, TargetType.TYPE, TargetType.ANNOTATION_TYPE, TargetType.FIELD, TargetType.METHOD,
-			TargetType.CONSTRUCTOR, TargetType.PARAMETER, TargetType.LOCAL_VARIABLE);
+	public static final Set<TargetType> DEFAULT_TARGETS = Set.of(
+			TargetType.PACKAGE, TargetType.TYPE, TargetType.ANNOTATION_TYPE, TargetType.FIELD, TargetType.METHOD, TargetType.CONSTRUCTOR,
+			TargetType.PARAMETER, TargetType.LOCAL_VARIABLE, TargetType.MODULE, TargetType.RECORD_COMPONENT);
 
 	private static final TargetType[] PACKAGE_TARGETS = {TargetType.PACKAGE};
 	private static final TargetType[] TYPE_USE_TARGETS = {TargetType.TYPE_USE};
@@ -63,6 +64,13 @@ public class AnnotationTargetUtil
 			TargetType.FIELD,
 			TargetType.TYPE_USE
 	};
+	private static final TargetType[] RECORD_COMPONENT_TARGETS = {
+			TargetType.RECORD_COMPONENT,
+			TargetType.FIELD,
+			TargetType.METHOD,
+			TargetType.PARAMETER,
+			TargetType.TYPE_USE
+	};
 	private static final TargetType[] PARAMETER_TARGETS = {
 			TargetType.PARAMETER,
 			TargetType.TYPE_USE
@@ -71,9 +79,10 @@ public class AnnotationTargetUtil
 			TargetType.LOCAL_VARIABLE,
 			TargetType.TYPE_USE
 	};
+	private static final TargetType[] MODULE_TARGETS = {TargetType.MODULE};
 
 	@Nonnull
-	public static TargetType[] getTargetsForLocation(@javax.annotation.Nullable PsiAnnotationOwner owner)
+	public static TargetType[] getTargetsForLocation(@Nullable PsiAnnotationOwner owner)
 	{
 		if(owner == null)
 		{
@@ -99,6 +108,10 @@ public class AnnotationTargetUtil
 			}
 			if(element instanceof PsiClass)
 			{
+				if(((PsiClass) element).getModifierList() != owner)
+				{
+					return TargetType.EMPTY_ARRAY;
+				}
 				if(((PsiClass) element).isAnnotationType())
 				{
 					return ANNOTATION_TARGETS;
@@ -107,6 +120,10 @@ public class AnnotationTargetUtil
 				{
 					return TYPE_TARGETS;
 				}
+			}
+			if(element instanceof PsiRecordComponent)
+			{
+				return RECORD_COMPONENT_TARGETS;
 			}
 			if(element instanceof PsiMethod)
 			{
@@ -128,7 +145,7 @@ public class AnnotationTargetUtil
 				// PARAMETER applies only to formal parameters (methods & lambdas) and catch parameters
 				// see https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.6.4.1
 				PsiElement scope = element.getParent();
-				if(scope instanceof PsiForeachStatement)
+				if(scope instanceof PsiForeachStatement || element instanceof PsiPatternVariable)
 				{
 					return LOCAL_VARIABLE_TARGETS;
 				}
@@ -147,6 +164,10 @@ public class AnnotationTargetUtil
 			if(element instanceof PsiReceiverParameter)
 			{
 				return TYPE_USE_TARGETS;
+			}
+			if(element instanceof PsiJavaModule)
+			{
+				return MODULE_TARGETS;
 			}
 		}
 
@@ -184,7 +205,7 @@ public class AnnotationTargetUtil
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static TargetType translateTargetRef(@Nonnull PsiReference reference)
 	{
 		PsiElement field = reference.resolve();
@@ -215,7 +236,7 @@ public class AnnotationTargetUtil
 	 * From given targets, returns first where the annotation may be applied. Returns {@code null} when the annotation is not applicable
 	 * at any of the targets, or {@linkplain TargetType#UNKNOWN} if the annotation does not resolve to a valid annotation type.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static TargetType findAnnotationTarget(@Nonnull PsiAnnotation annotation, @Nonnull TargetType... types)
 	{
 		if(types.length != 0)
