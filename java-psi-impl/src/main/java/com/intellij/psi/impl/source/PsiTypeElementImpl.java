@@ -19,6 +19,7 @@ import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Attachment;
 import com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments;
+import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -33,8 +34,8 @@ import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -213,11 +214,16 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 			{
 				if(e instanceof PsiExpression)
 				{
-					if(!(e instanceof PsiArrayInitializerExpression) && !isSelfReferenced((PsiExpression) e, parent))
+					if(!(e instanceof PsiArrayInitializerExpression))
 					{
 						PsiExpression expression = (PsiExpression) e;
+						RecursionGuard.StackStamp stamp = RecursionManager.markStack();
 						PsiType type = RecursionManager.doPreventingRecursion(expression, true, () -> expression.getType());
-						return type == null ? null : JavaVarTypeUtil.getUpwardProjection(type);
+						if(stamp.mayCacheNow())
+						{
+							return type == null ? null : JavaVarTypeUtil.getUpwardProjection(type);
+						}
+						return null;
 					}
 					return null;
 				}

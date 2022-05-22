@@ -15,15 +15,15 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nullable;
 import com.intellij.psi.*;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * User: anna
@@ -171,8 +171,21 @@ public class PsiPolyExpressionUtil
 		return PsiUtil.isCondition(expr, context) ||
 				context instanceof PsiReturnStatement ||
 				context instanceof PsiAssignmentExpression && ((PsiAssignmentExpression) context).getOperationTokenType() == JavaTokenType.EQ ||
-				context instanceof PsiVariable ||
+				context instanceof PsiVariable && !isVarContext((PsiVariable) context) ||
 				context instanceof PsiLambdaExpression;
+	}
+
+	private static boolean isVarContext(PsiVariable variable)
+	{
+		if(PsiUtil.isLanguageLevel10OrHigher(variable))
+		{
+			PsiTypeElement typeElement = variable.getTypeElement();
+			if(typeElement != null && typeElement.isInferredType())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static boolean isExpressionOfPrimitiveType(@Nullable PsiExpression arg)

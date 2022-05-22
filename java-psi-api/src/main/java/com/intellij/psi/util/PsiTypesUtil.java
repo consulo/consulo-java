@@ -303,6 +303,11 @@ public class PsiTypesUtil
 		{
 			if(PsiUtil.checkSameExpression(element, ((PsiVariable) parent).getInitializer()))
 			{
+				PsiTypeElement typeElement = ((PsiVariable) parent).getTypeElement();
+				if(typeElement != null && typeElement.isInferredType())
+				{
+					return null;
+				}
 				return ((PsiVariable) parent).getType();
 			}
 		}

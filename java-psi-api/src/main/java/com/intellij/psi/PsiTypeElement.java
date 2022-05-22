@@ -15,9 +15,10 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.util.ArrayFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents the occurrence of a type in Java source code, for example, as a return
@@ -54,7 +55,7 @@ public interface PsiTypeElement extends PsiElement, PsiAnnotationOwner
 	 * @return the referenced element instance, or null if the type element references
 	 * a primitive type.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiJavaCodeReferenceElement getInnermostComponentReferenceElement();
 
 

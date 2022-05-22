@@ -183,8 +183,17 @@ public class LambdaUtil
 
 	private static boolean isAssignmentContext(PsiElement context)
 	{
-		return context instanceof PsiLambdaExpression || context instanceof PsiReturnStatement || context instanceof PsiAssignmentExpression || context instanceof PsiVariable || context instanceof
-				PsiArrayInitializerExpression;
+		return context instanceof PsiLambdaExpression ||
+				context instanceof PsiReturnStatement ||
+				context instanceof PsiAssignmentExpression ||
+				context instanceof PsiVariable && !withInferredType((PsiVariable) context) ||
+				context instanceof PsiArrayInitializerExpression;
+	}
+
+	private static boolean withInferredType(PsiVariable variable)
+	{
+		PsiTypeElement typeElement = variable.getTypeElement();
+		return typeElement != null && typeElement.isInferredType();
 	}
 
 	public static boolean isLambdaFullyInferred(PsiLambdaExpression expression, PsiType functionalInterfaceType)
@@ -1193,9 +1202,8 @@ public class LambdaUtil
 		return (PsiExpression) JavaCodeStyleManager.getInstance(context.getProject()).shortenClassReferences(expr);
 	}
 
-	public static
 	@Nullable
-	String createLambdaParameterListWithFormalTypes(PsiType functionalInterfaceType,
+	public static String createLambdaParameterListWithFormalTypes(PsiType functionalInterfaceType,
 													PsiLambdaExpression lambdaExpression,
 													boolean checkApplicability)
 	{
