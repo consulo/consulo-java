@@ -396,6 +396,10 @@ public class MethodCandidateInfo extends CandidateInfo
 		return !ourOverloadGuard.currentStack().isEmpty();
 	}
 
+	public static boolean isOverloadCheck(PsiElement argumentList)
+	{
+		return ourOverloadGuard.currentStack().contains(argumentList);
+	}
 
 	public boolean isTypeArgumentsApplicable()
 	{

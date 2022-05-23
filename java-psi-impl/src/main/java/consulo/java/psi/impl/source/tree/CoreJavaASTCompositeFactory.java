@@ -15,20 +15,20 @@
  */
 package consulo.java.psi.impl.source.tree;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.javadoc.CorePsiDocTagValueImpl;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.tree.IElementType;
 import consulo.psi.tree.ASTCompositeFactory;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author VISTALL
  * @since 2:32/02.04.13
  */
 public class CoreJavaASTCompositeFactory implements ASTCompositeFactory, Constants {
-	@Nonnull
+  @Nonnull
   @Override
   public CompositeElement createComposite(IElementType type) {
     return new CorePsiDocTagValueImpl();

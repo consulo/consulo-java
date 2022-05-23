@@ -74,15 +74,7 @@ public class MethodReferenceElementType extends FunctionalExpressionElementType<
 			@Override
 			public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
 			{
-				if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) && ElementType.EXPRESSION_BIT_SET.contains(newElement.getElementType()))
-				{
-					boolean needParenth = ReplaceExpressionUtil.isNeedParenthesis(child, newElement);
-					if(needParenth)
-					{
-						newElement = JavaSourceUtil.addParenthToReplacedChild(JavaElementType.PARENTH_EXPRESSION, newElement, getManager());
-					}
-				}
-				super.replaceChildInternal(child, newElement);
+				super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
 			}
 
 

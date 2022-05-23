@@ -21,8 +21,6 @@ import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -51,6 +49,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PairFunction;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -712,6 +712,22 @@ public class PsiImplUtil
 			element = element.getTreeNext();
 		}
 		return element;
+	}
+
+	@Nullable
+	public static PsiSwitchExpression findEnclosingSwitchExpression(@Nonnull PsiElement start)
+	{
+		for(PsiElement e = start; !isCodeBoundary(e); e = e.getParent())
+		{
+			if(e instanceof PsiSwitchExpression)
+				return (PsiSwitchExpression) e;
+		}
+		return null;
+	}
+
+	private static boolean isCodeBoundary(@Nullable PsiElement e)
+	{
+		return e == null || e instanceof PsiMethod || e instanceof PsiClassInitializer || e instanceof PsiLambdaExpression;
 	}
 
 	public static boolean isWhitespaceOrComment(ASTNode element)

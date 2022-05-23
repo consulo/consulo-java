@@ -15,27 +15,19 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.impl.cache.RecordUtil;
-import com.intellij.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.JavaSourceUtil;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.impl.source.tree.java.PsiLambdaExpressionImpl;
-import com.intellij.psi.impl.source.tree.java.ReplaceExpressionUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ObjectUtil;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public class LambdaExpressionElementType extends FunctionalExpressionElementType<PsiLambdaExpression>
 {
@@ -65,15 +57,7 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
 			@Override
 			public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
 			{
-				if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) && ElementType.EXPRESSION_BIT_SET.contains(newElement.getElementType()))
-				{
-					boolean needParenth = ReplaceExpressionUtil.isNeedParenthesis(child, newElement);
-					if(needParenth)
-					{
-						newElement = JavaSourceUtil.addParenthToReplacedChild(JavaElementType.PARENTH_EXPRESSION, newElement, getManager());
-					}
-				}
-				super.replaceChildInternal(child, newElement);
+				super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
 			}
 
 			@Override

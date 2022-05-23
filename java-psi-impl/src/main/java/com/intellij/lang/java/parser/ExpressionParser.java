@@ -409,10 +409,10 @@ public class ExpressionParser
 			typeCast.done(JavaElementType.TYPE_CAST_EXPRESSION);
 			return typeCast;
 		}
-		//		else if(tokenType == JavaTokenType.SWITCH_KEYWORD)
-		//		{
-		//			return myParser.getStatementParser().parseExprInParenthWithBlock(builder, JavaElementType.SWITCH_EXPRESSION, true);
-		//		}
+		else if(tokenType == JavaTokenType.SWITCH_KEYWORD)
+		{
+			return myParser.getStatementParser().parseExprInParenthWithBlock(builder, JavaElementType.SWITCH_EXPRESSION, true);
+		}
 		else
 		{
 			return parsePostfix(builder);

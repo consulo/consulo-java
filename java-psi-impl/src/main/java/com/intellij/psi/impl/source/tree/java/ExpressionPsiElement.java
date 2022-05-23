@@ -15,15 +15,13 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.JavaSourceUtil;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
@@ -41,15 +39,7 @@ public class ExpressionPsiElement extends CompositePsiElement
 	@Override
 	public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
 	{
-		if(ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) && ElementType.EXPRESSION_BIT_SET.contains(newElement.getElementType()))
-		{
-			boolean needParenth = ReplaceExpressionUtil.isNeedParenthesis(child, newElement);
-			if(needParenth)
-			{
-				newElement = JavaSourceUtil.addParenthToReplacedChild(JavaElementType.PARENTH_EXPRESSION, newElement, getManager());
-			}
-		}
-		super.replaceChildInternal(child, newElement);
+		super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
 	}
 
 	@Override

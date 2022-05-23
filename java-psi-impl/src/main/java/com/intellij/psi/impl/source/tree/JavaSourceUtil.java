@@ -15,30 +15,22 @@
  */
 package com.intellij.psi.impl.source.tree;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiJavaParserFacade;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.DummyHolder;
 import com.intellij.psi.impl.source.SourceJavaCodeReference;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.impl.source.tree.java.ReplaceExpressionUtil;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.CharTable;
 import com.intellij.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import javax.annotation.Nonnull;
 
 public class JavaSourceUtil
 {
@@ -149,14 +141,19 @@ public class JavaSourceUtil
 		return LightTreeUtil.toFilteredString(tree, node, REF_FILTER);
 	}
 
-	public static TreeElement addParenthToReplacedChild(@Nonnull IElementType parenthType,
-			@Nonnull TreeElement newChild,
-			@Nonnull PsiManager manager)
+	@Nonnull
+	public static TreeElement addParenthToReplacedChild(@Nonnull ASTNode child, @Nonnull TreeElement newChild, @Nonnull PsiManager manager)
 	{
-		CompositeElement parenthExpr = ASTFactory.composite(parenthType);
+		boolean needParenth = ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) &&
+				ElementType.EXPRESSION_BIT_SET.contains(newChild.getElementType()) &&
+				ReplaceExpressionUtil.isNeedParenthesis(child, newChild);
+		if(!needParenth)
+			return newChild;
+
+		CompositeElement parenthExpr = ASTFactory.composite(JavaElementType.PARENTH_EXPRESSION);
 
 		TreeElement dummyExpr = (TreeElement) newChild.clone();
-		final CharTable charTableByTree = SharedImplUtil.findCharTableByTree(newChild);
+		CharTable charTableByTree = SharedImplUtil.findCharTableByTree(newChild);
 		new DummyHolder(manager, parenthExpr, null, charTableByTree);
 		parenthExpr.putUserData(CharTable.CHAR_TABLE_KEY, charTableByTree);
 		parenthExpr.rawAddChildren(ASTFactory.leaf(JavaTokenType.LPARENTH, "("));
