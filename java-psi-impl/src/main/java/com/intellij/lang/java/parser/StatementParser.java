@@ -1,7 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lang.java.parser;
 
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.core.JavaPsiBundle;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.WhitespacesBinders;
@@ -169,19 +169,19 @@ public class StatementParser
 			builder.advanceLexer();
 			if(tokenType == JavaTokenType.ELSE_KEYWORD)
 			{
-				error.error(JavaErrorMessages.message("else.without.if"));
+				error.error(JavaErrorBundle.message("else.without.if"));
 			}
 			else if(tokenType == JavaTokenType.CATCH_KEYWORD)
 			{
-				error.error(JavaErrorMessages.message("catch.without.try"));
+				error.error(JavaErrorBundle.message("catch.without.try"));
 			}
 			else if(tokenType == JavaTokenType.FINALLY_KEYWORD)
 			{
-				error.error(JavaErrorMessages.message("finally.without.try"));
+				error.error(JavaErrorBundle.message("finally.without.try"));
 			}
 			else
 			{
-				error.error(JavaErrorMessages.message("unexpected.token"));
+				error.error(JavaErrorBundle.message("unexpected.token"));
 			}
 		}
 	}
@@ -423,14 +423,14 @@ public class StatementParser
 			PsiBuilder.Marker thenStatement = parseStatement(builder);
 			if(thenStatement == null)
 			{
-				error(builder, JavaErrorMessages.message("expected.statement"));
+				error(builder, JavaErrorBundle.message("expected.statement"));
 			}
 			else if(expect(builder, JavaTokenType.ELSE_KEYWORD))
 			{
 				PsiBuilder.Marker elseStatement = parseStatement(builder);
 				if(elseStatement == null)
 				{
-					error(builder, JavaErrorMessages.message("expected.statement"));
+					error(builder, JavaErrorBundle.message("expected.statement"));
 				}
 			}
 		}
@@ -453,7 +453,7 @@ public class StatementParser
 
 		if(!expect(builder, JavaTokenType.LPARENTH))
 		{
-			error(builder, JavaErrorMessages.message("expected.lparen"));
+			error(builder, JavaErrorBundle.message("expected.lparen"));
 			done(statement, JavaElementType.FOR_STATEMENT);
 			return statement;
 		}
@@ -477,7 +477,7 @@ public class StatementParser
 	{
 		if(parseStatement(builder) == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.statement"));
+			error(builder, JavaErrorBundle.message("expected.statement"));
 			if(!expect(builder, JavaTokenType.RPARENTH))
 			{
 				done(statement, JavaElementType.FOR_STATEMENT);
@@ -499,7 +499,7 @@ public class StatementParser
 			{
 				if(!missingSemicolon)
 				{
-					error(builder, JavaErrorMessages.message("expected.semicolon"));
+					error(builder, JavaErrorBundle.message("expected.semicolon"));
 				}
 				if(!expect(builder, JavaTokenType.RPARENTH))
 				{
@@ -512,7 +512,7 @@ public class StatementParser
 				parseForUpdateExpressions(builder);
 				if(!expect(builder, JavaTokenType.RPARENTH))
 				{
-					error(builder, JavaErrorMessages.message("expected.rparen"));
+					error(builder, JavaErrorBundle.message("expected.rparen"));
 					done(statement, JavaElementType.FOR_STATEMENT);
 					return statement;
 				}
@@ -522,7 +522,7 @@ public class StatementParser
 		PsiBuilder.Marker bodyStatement = parseStatement(builder);
 		if(bodyStatement == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.statement"));
+			error(builder, JavaErrorBundle.message("expected.statement"));
 		}
 
 		done(statement, JavaElementType.FOR_STATEMENT);
@@ -565,7 +565,7 @@ public class StatementParser
 				PsiBuilder.Marker nextExpression = myParser.getExpressionParser().parse(builder);
 				if(nextExpression == null)
 				{
-					error(builder, JavaErrorMessages.message("expected.expression"));
+					error(builder, JavaErrorBundle.message("expected.expression"));
 				}
 			}
 			while(builder.getTokenType() == JavaTokenType.COMMA);
@@ -584,12 +584,12 @@ public class StatementParser
 
 		if(myParser.getExpressionParser().parse(builder) == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.expression"));
+			error(builder, JavaErrorBundle.message("expected.expression"));
 		}
 
 		if(expectOrError(builder, JavaTokenType.RPARENTH, "expected.rparen") && parseStatement(builder) == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.statement"));
+			error(builder, JavaErrorBundle.message("expected.statement"));
 		}
 
 		done(statement, JavaElementType.FOREACH_STATEMENT);
@@ -605,11 +605,11 @@ public class StatementParser
 		PsiBuilder.Marker body = parseStatement(builder);
 		if(body == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.statement"));
+			error(builder, JavaErrorBundle.message("expected.statement"));
 		}
 		else if(!expect(builder, JavaTokenType.WHILE_KEYWORD))
 		{
-			error(builder, JavaErrorMessages.message("expected.while"));
+			error(builder, JavaErrorBundle.message("expected.while"));
 		}
 		else if(parseExprInParenth(builder))
 		{
@@ -640,7 +640,7 @@ public class StatementParser
 				PsiBuilder.Marker nextExpression = myParser.getExpressionParser().parseCaseLabel(builder);
 				if(nextExpression == null)
 				{
-					error(builder, JavaErrorMessages.message("expected.expression"));
+					error(builder, JavaErrorBundle.message("expected.expression"));
 				}
 			}
 			while(expect(builder, JavaTokenType.COMMA));
@@ -752,7 +752,7 @@ public class StatementParser
 
 		if(myParser.getExpressionParser().parse(builder) == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.expression"));
+			error(builder, JavaErrorBundle.message("expected.expression"));
 		}
 		else
 		{
@@ -784,11 +784,11 @@ public class StatementParser
 		PsiBuilder.Marker tryBlock = parseCodeBlock(builder, true);
 		if(tryBlock == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.lbrace"));
+			error(builder, JavaErrorBundle.message("expected.lbrace"));
 		}
 		else if(!hasResourceList && !TRY_CLOSERS_SET.contains(builder.getTokenType()))
 		{
-			error(builder, JavaErrorMessages.message("expected.catch.or.finally"));
+			error(builder, JavaErrorBundle.message("expected.catch.or.finally"));
 		}
 		else
 		{
@@ -805,7 +805,7 @@ public class StatementParser
 				PsiBuilder.Marker finallyBlock = parseCodeBlock(builder, true);
 				if(finallyBlock == null)
 				{
-					error(builder, JavaErrorMessages.message("expected.lbrace"));
+					error(builder, JavaErrorBundle.message("expected.lbrace"));
 				}
 			}
 		}
@@ -822,7 +822,7 @@ public class StatementParser
 
 		if(!expect(builder, JavaTokenType.LPARENTH))
 		{
-			error(builder, JavaErrorMessages.message("expected.lparen"));
+			error(builder, JavaErrorBundle.message("expected.lparen"));
 			done(section, JavaElementType.CATCH_SECTION);
 			return false;
 		}
@@ -830,12 +830,12 @@ public class StatementParser
 		PsiBuilder.Marker param = myParser.getDeclarationParser().parseParameter(builder, false, true, false);
 		if(param == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.parameter"));
+			error(builder, JavaErrorBundle.message("expected.parameter"));
 		}
 
 		if(!expect(builder, JavaTokenType.RPARENTH))
 		{
-			error(builder, JavaErrorMessages.message("expected.rparen"));
+			error(builder, JavaErrorBundle.message("expected.rparen"));
 			done(section, JavaElementType.CATCH_SECTION);
 			return false;
 		}
@@ -843,7 +843,7 @@ public class StatementParser
 		PsiBuilder.Marker body = parseCodeBlock(builder, true);
 		if(body == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.lbrace"));
+			error(builder, JavaErrorBundle.message("expected.lbrace"));
 			done(section, JavaElementType.CATCH_SECTION);
 			return false;
 		}
@@ -860,11 +860,11 @@ public class StatementParser
 
 		if(myParser.getExpressionParser().parse(builder) == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.boolean.expression"));
+			error(builder, JavaErrorBundle.message("expected.boolean.expression"));
 		}
 		else if(expect(builder, JavaTokenType.COLON) && myParser.getExpressionParser().parse(builder) == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.expression"));
+			error(builder, JavaErrorBundle.message("expected.expression"));
 		}
 		else
 		{
@@ -895,7 +895,7 @@ public class StatementParser
 			PsiBuilder.Marker body = block ? parseCodeBlock(builder, true) : parseStatement(builder);
 			if(body == null)
 			{
-				error(builder, JavaErrorMessages.message(block ? "expected.lbrace" : "expected.statement"));
+				error(builder, JavaErrorBundle.message(block ? "expected.lbrace" : "expected.statement"));
 			}
 		}
 
@@ -907,7 +907,7 @@ public class StatementParser
 	{
 		if(!expect(builder, JavaTokenType.LPARENTH))
 		{
-			error(builder, JavaErrorMessages.message("expected.lparen"));
+			error(builder, JavaErrorBundle.message("expected.lparen"));
 			return false;
 		}
 
@@ -916,7 +916,7 @@ public class StatementParser
 		if(expr == null || builder.getTokenType() == JavaTokenType.SEMICOLON)
 		{
 			beforeExpr.rollbackTo();
-			error(builder, JavaErrorMessages.message("expected.expression"));
+			error(builder, JavaErrorBundle.message("expected.expression"));
 			if(builder.getTokenType() != JavaTokenType.RPARENTH)
 			{
 				return false;
@@ -927,7 +927,7 @@ public class StatementParser
 			beforeExpr.drop();
 			if(builder.getTokenType() != JavaTokenType.RPARENTH)
 			{
-				error(builder, JavaErrorMessages.message("expected.rparen"));
+				error(builder, JavaErrorBundle.message("expected.rparen"));
 				return false;
 			}
 		}

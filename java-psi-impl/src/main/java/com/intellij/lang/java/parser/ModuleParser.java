@@ -24,7 +24,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiKeyword;
@@ -74,7 +74,7 @@ public class ModuleParser
 		else
 		{
 			module.drop();
-			parseExtras(builder, JavaErrorMessages.message("expected.module.declaration"));
+			parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
 			return module;
 		}
 
@@ -83,11 +83,11 @@ public class ModuleParser
 			module.drop();
 			if(builder.getTokenType() != null)
 			{
-				parseExtras(builder, JavaErrorMessages.message("expected.module.declaration"));
+				parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
 			}
 			else
 			{
-				error(builder, JavaErrorMessages.message("expected.identifier"));
+				error(builder, JavaErrorBundle.message("expected.identifier"));
 			}
 			return module;
 		}
@@ -96,11 +96,11 @@ public class ModuleParser
 		{
 			if(builder.getTokenType() != null)
 			{
-				parseExtras(builder, JavaErrorMessages.message("expected.module.declaration"));
+				parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
 			}
 			else
 			{
-				error(builder, JavaErrorMessages.message("expected.lbrace"));
+				error(builder, JavaErrorBundle.message("expected.lbrace"));
 			}
 		}
 		else
@@ -112,7 +112,7 @@ public class ModuleParser
 
 		if(builder.getTokenType() != null)
 		{
-			parseExtras(builder, JavaErrorMessages.message("unexpected.tokens"));
+			parseExtras(builder, JavaErrorBundle.message("unexpected.tokens"));
 		}
 
 		return module;
@@ -131,7 +131,7 @@ public class ModuleParser
 			{
 				if(!idExpected)
 				{
-					error(builder, JavaErrorMessages.message("expected.dot"));
+					error(builder, JavaErrorBundle.message("expected.dot"));
 				}
 				idExpected = false;
 			}
@@ -139,7 +139,7 @@ public class ModuleParser
 			{
 				if(idExpected)
 				{
-					error(builder, JavaErrorMessages.message("expected.identifier"));
+					error(builder, JavaErrorBundle.message("expected.identifier"));
 				}
 				idExpected = true;
 			}
@@ -155,7 +155,7 @@ public class ModuleParser
 		{
 			if(idExpected)
 			{
-				error(builder, JavaErrorMessages.message("expected.identifier"));
+				error(builder, JavaErrorBundle.message("expected.identifier"));
 			}
 			nameElement.done(JavaElementType.MODULE_REFERENCE);
 			return nameElement;
@@ -183,7 +183,7 @@ public class ModuleParser
 			{
 				if(invalid != null)
 				{
-					invalid.error(JavaErrorMessages.message("expected.module.statement"));
+					invalid.error(JavaErrorBundle.message("expected.module.statement"));
 					invalid = null;
 				}
 				builder.advanceLexer();
@@ -201,19 +201,19 @@ public class ModuleParser
 			}
 			else if(invalid != null)
 			{
-				invalid.errorBefore(JavaErrorMessages.message("expected.module.statement"), statement);
+				invalid.errorBefore(JavaErrorBundle.message("expected.module.statement"), statement);
 				invalid = null;
 			}
 		}
 
 		if(invalid != null)
 		{
-			invalid.error(JavaErrorMessages.message("expected.module.statement"));
+			invalid.error(JavaErrorBundle.message("expected.module.statement"));
 		}
 
 		if(!expect(builder, JavaTokenType.RBRACE) && invalid == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.rbrace"));
+			error(builder, JavaErrorBundle.message("expected.rbrace"));
 		}
 	}
 
@@ -318,7 +318,7 @@ public class ModuleParser
 		}
 		else
 		{
-			error(builder, JavaErrorMessages.message("expected.package.reference"));
+			error(builder, JavaErrorBundle.message("expected.package.reference"));
 			hasError = true;
 		}
 
@@ -346,7 +346,7 @@ public class ModuleParser
 		}
 		else
 		{
-			error(builder, JavaErrorMessages.message("expected.class.reference"));
+			error(builder, JavaErrorBundle.message("expected.class.reference"));
 			expect(builder, JavaTokenType.SEMICOLON);
 		}
 
@@ -362,7 +362,7 @@ public class ModuleParser
 
 		if(parseClassOrPackageRef(builder) == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.class.reference"));
+			error(builder, JavaErrorBundle.message("expected.class.reference"));
 			hasError = true;
 		}
 
@@ -378,11 +378,11 @@ public class ModuleParser
 			{
 				PsiBuilder.Marker marker = builder.mark();
 				builder.advanceLexer();
-				marker.error(JavaErrorMessages.message("expected.with"));
+				marker.error(JavaErrorBundle.message("expected.with"));
 			}
 			else
 			{
-				error(builder, JavaErrorMessages.message("expected.with"));
+				error(builder, JavaErrorBundle.message("expected.with"));
 			}
 			hasError = true;
 		}
@@ -405,7 +405,7 @@ public class ModuleParser
 		PsiBuilder.Marker name = parseName(builder);
 		if(name == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.identifier"));
+			error(builder, JavaErrorBundle.message("expected.identifier"));
 		}
 		return name;
 	}

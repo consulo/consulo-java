@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.source.javadoc;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -40,13 +40,13 @@ class ExceptionTagInfo implements JavadocTagInfo {
 
   @Override
   public String checkTagValue(PsiDocTagValue value) {
-    if (value == null) return JavaErrorMessages.message("javadoc.exception.tag.exception.class.expected");
+    if (value == null) return JavaErrorBundle.message("javadoc.exception.tag.exception.class.expected");
     final PsiElement firstChild = value.getFirstChild();
-    if (firstChild == null) return JavaErrorMessages.message("javadoc.exception.tag.exception.class.expected");
+    if (firstChild == null) return JavaErrorBundle.message("javadoc.exception.tag.exception.class.expected");
 
     final PsiElement psiElement = firstChild.getFirstChild();
     if (!(psiElement instanceof PsiJavaCodeReferenceElement)) {
-      return JavaErrorMessages.message("javadoc.exception.tag.wrong.tag.value");
+      return JavaErrorBundle.message("javadoc.exception.tag.wrong.tag.value");
     }
 
     final PsiJavaCodeReferenceElement ref = ((PsiJavaCodeReferenceElement)psiElement);
@@ -60,7 +60,7 @@ class ExceptionTagInfo implements JavadocTagInfo {
 
     if (throwable != null) {
       if (!exceptionClass.equals(throwable) && !exceptionClass.isInheritor(throwable, true)) {
-        return JavaErrorMessages.message("javadoc.exception.tag.class.is.not.throwable", exceptionClass.getQualifiedName());
+        return JavaErrorBundle.message("javadoc.exception.tag.class.is.not.throwable", exceptionClass.getQualifiedName());
       }
     }
 
@@ -91,7 +91,7 @@ class ExceptionTagInfo implements JavadocTagInfo {
       if (exceptionClass.isInheritor(psiClass, true) || exceptionClass.equals(psiClass)) return null;
     }
 
-    return JavaErrorMessages.message("javadoc.exception.tag.exception.is.not.thrown", exceptionClass.getName(), method.getName());
+    return JavaErrorBundle.message("javadoc.exception.tag.exception.is.not.thrown", exceptionClass.getName(), method.getName());
   }
 
   @Override

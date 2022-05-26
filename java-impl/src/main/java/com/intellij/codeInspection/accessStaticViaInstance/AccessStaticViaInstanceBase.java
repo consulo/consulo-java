@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection.accessStaticViaInstance;
 
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
@@ -88,7 +88,7 @@ public class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionToo
     }
     if (!((PsiMember)resolved).hasModifierProperty(PsiModifier.STATIC)) return;
 
-    String description = JavaErrorMessages.message("static.member.accessed.via.instance.reference",
+    String description = JavaErrorBundle.message("static.member.accessed.via.instance.reference",
                                                    JavaHighlightUtil.formatType(qualifierExpression.getType()),
                                                    HighlightMessageUtil.getSymbolName(resolved, result.getSubstitutor()));
     if (!onTheFly) {

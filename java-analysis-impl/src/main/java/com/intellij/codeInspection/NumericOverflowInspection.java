@@ -16,7 +16,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.openapi.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
@@ -64,7 +64,7 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
       public void visitExpression(PsiExpression expression) {
         boolean info = hasOverflow(expression, holder.getProject());
         if (info) {
-          holder.registerProblem(expression, JavaErrorMessages.message("numeric.overflow.in.expression"), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          holder.registerProblem(expression, JavaErrorBundle.message("numeric.overflow.in.expression"), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
       }
     };

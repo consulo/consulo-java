@@ -27,7 +27,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.daemon.impl.quickfix.VariableArrayTypeFix;
@@ -281,7 +281,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 			}
 			if(JavaGenericsUtil.isUncheckedCast(castType, exprType))
 			{
-				final String description = JavaErrorMessages.message("generics.unchecked.cast", JavaHighlightUtil.formatType(exprType), JavaHighlightUtil.formatType(castType));
+				final String description = JavaErrorBundle.message("generics.unchecked.cast", JavaHighlightUtil.formatType(exprType), JavaHighlightUtil.formatType(castType));
 				registerProblem(description, operand, expression, myGenerifyFixes);
 			}
 		}
@@ -460,7 +460,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 				}
 				if(JavaGenericsUtil.isRawToGeneric(componentType, itemType))
 				{
-					String description = JavaErrorMessages.message("generics.unchecked.assignment", JavaHighlightUtil.formatType(itemType), JavaHighlightUtil.formatType(componentType));
+					String description = JavaErrorBundle.message("generics.unchecked.assignment", JavaHighlightUtil.formatType(itemType), JavaHighlightUtil.formatType(componentType));
 					if(!arrayTypeFixChecked)
 					{
 						final PsiType checkResult = JavaHighlightUtil.sameType(initializers);
@@ -493,7 +493,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 			}
 			if(JavaGenericsUtil.isRawToGeneric(parameterType, itemType))
 			{
-				String description = JavaErrorMessages.message("generics.unchecked.assignment", JavaHighlightUtil.formatType(itemType), JavaHighlightUtil.formatType(parameterType));
+				String description = JavaErrorBundle.message("generics.unchecked.assignment", JavaHighlightUtil.formatType(itemType), JavaHighlightUtil.formatType(parameterType));
 				registerProblem(description, expression, parameter, quickFixes);
 			}
 		}
@@ -532,7 +532,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 						}
 						if(JavaGenericsUtil.isRawToGeneric(baseReturnType, overriderReturnType))
 						{
-							final String message = JavaErrorMessages.message("unchecked.overriding.incompatible.return.type", JavaHighlightUtil.formatType(overriderReturnType), JavaHighlightUtil
+							final String message = JavaErrorBundle.message("unchecked.overriding.incompatible.return.type", JavaHighlightUtil.formatType(overriderReturnType), JavaHighlightUtil
 									.formatType(baseReturnType));
 
 							final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
@@ -618,7 +618,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 							{
 								if(JavaGenericsUtil.isRawToGeneric(substitutor.substitute(classType), subst))
 								{
-									return JavaErrorMessages.message("generics.unchecked.call", JavaHighlightUtil.formatMethod(method));
+									return JavaErrorBundle.message("generics.unchecked.call", JavaHighlightUtil.formatMethod(method));
 								}
 							}
 						}
@@ -692,7 +692,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 				{
 					final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
 					PsiType type = elementFactory.createType(method.getContainingClass(), substitutor);
-					return JavaErrorMessages.message("generics.unchecked.call.to.member.of.raw.type", JavaHighlightUtil.formatMethod(method), JavaHighlightUtil.formatType(type));
+					return JavaErrorBundle.message("generics.unchecked.call.to.member.of.raw.type", JavaHighlightUtil.formatMethod(method), JavaHighlightUtil.formatType(type));
 				}
 			}
 			return null;

@@ -21,17 +21,17 @@ import com.intellij.AbstractBundle;
 /**
  * @author max
  */
-public class JavaErrorMessages extends AbstractBundle
+public class JavaErrorBundle extends AbstractBundle
 {
-	public static final String BUNDLE = "messages.JavaErrorMessages";
-	private static final JavaErrorMessages ourInstance = new JavaErrorMessages();
+	public static final String BUNDLE = "messages.JavaErrorBundle";
+	private static final JavaErrorBundle ourInstance = new JavaErrorBundle();
 
-	public static JavaErrorMessages getInstance()
+	public static JavaErrorBundle getInstance()
 	{
 		return ourInstance;
 	}
 
-	private JavaErrorMessages()
+	private JavaErrorBundle()
 	{
 		super(BUNDLE);
 	}

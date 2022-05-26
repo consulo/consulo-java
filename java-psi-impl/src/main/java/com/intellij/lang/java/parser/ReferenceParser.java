@@ -11,7 +11,7 @@ import static com.intellij.util.BitUtil.set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
@@ -78,7 +78,7 @@ public class ReferenceParser
 					IElementType tokenType = builder.getTokenType();
 					if(tokenType != JavaTokenType.IDENTIFIER && tokenType != JavaTokenType.AT)
 					{
-						error(builder, JavaErrorMessages.message("expected.identifier"));
+						error(builder, JavaErrorBundle.message("expected.identifier"));
 					}
 					parseTypeInfo(builder, flags, false);
 				}
@@ -150,7 +150,7 @@ public class ReferenceParser
 			}
 			else
 			{
-				error(builder, JavaErrorMessages.message("expected.identifier"));
+				error(builder, JavaErrorBundle.message("expected.identifier"));
 				typeInfo.hasErrors = true;
 			}
 			type.done(JavaElementType.TYPE);
@@ -162,7 +162,7 @@ public class ReferenceParser
 			type.drop();
 			if(anno != null && isSet(flags, INCOMPLETE_ANNO))
 			{
-				error(builder, JavaErrorMessages.message("expected.type"));
+				error(builder, JavaErrorBundle.message("expected.type"));
 				typeInfo.marker = anno;
 				typeInfo.hasErrors = true;
 				return typeInfo;
@@ -210,7 +210,7 @@ public class ReferenceParser
 		{
 			if(parseTypeInfo(builder, EAT_LAST_DOT) == null)
 			{
-				error(builder, JavaErrorMessages.message("expected.type"));
+				error(builder, JavaErrorBundle.message("expected.type"));
 			}
 		}
 
@@ -220,7 +220,7 @@ public class ReferenceParser
 		}
 		else
 		{
-			type.error(JavaErrorMessages.message("wildcard.not.expected"));
+			type.error(JavaErrorBundle.message("wildcard.not.expected"));
 		}
 	}
 
@@ -256,7 +256,7 @@ public class ReferenceParser
 			refElement.rollbackTo();
 			if(isImport)
 			{
-				error(builder, JavaErrorMessages.message("expected.identifier"));
+				error(builder, JavaErrorBundle.message("expected.identifier"));
 			}
 			typeInfo.hasErrors = true;
 			return null;
@@ -301,11 +301,11 @@ public class ReferenceParser
 				typeInfo.hasErrors = true;
 				if(isImport)
 				{
-					error(builder, JavaErrorMessages.message("import.statement.identifier.or.asterisk.expected."));
+					error(builder, JavaErrorBundle.message("import.statement.identifier.or.asterisk.expected."));
 				}
 				else
 				{
-					error(builder, JavaErrorMessages.message("expected.identifier"));
+					error(builder, JavaErrorBundle.message("expected.identifier"));
 				}
 				dotPos.drop();
 				return refElement;
@@ -343,7 +343,7 @@ public class ReferenceParser
 		{
 			if(parseTypeInfo(builder, flags, true) == null)
 			{
-				error(builder, JavaErrorMessages.message("expected.identifier"));
+				error(builder, JavaErrorBundle.message("expected.identifier"));
 			}
 			else
 			{
@@ -385,7 +385,7 @@ public class ReferenceParser
 			PsiBuilder.Marker param = parseTypeParameter(builder);
 			if(param == null)
 			{
-				error(builder, JavaErrorMessages.message("expected.type.parameter"));
+				error(builder, JavaErrorBundle.message("expected.type.parameter"));
 			}
 		}
 		while(expect(builder, JavaTokenType.COMMA));
@@ -399,17 +399,17 @@ public class ReferenceParser
 				{
 					PsiBuilder.Marker errorElement = builder.mark();
 					builder.advanceLexer();
-					errorElement.error(JavaErrorMessages.message("unexpected.identifier"));
+					errorElement.error(JavaErrorBundle.message("unexpected.identifier"));
 					builder.advanceLexer();
 				}
 				else
 				{
-					error(builder, JavaErrorMessages.message("expected.gt"));
+					error(builder, JavaErrorBundle.message("expected.gt"));
 				}
 			}
 			else
 			{
-				error(builder, JavaErrorMessages.message("expected.gt"));
+				error(builder, JavaErrorBundle.message("expected.gt"));
 			}
 		}
 
@@ -444,7 +444,7 @@ public class ReferenceParser
 		}
 		else
 		{
-			param.error(JavaErrorMessages.message("wildcard.not.expected"));
+			param.error(JavaErrorBundle.message("wildcard.not.expected"));
 		}
 		return param;
 	}
@@ -462,7 +462,7 @@ public class ReferenceParser
 				PsiBuilder.Marker classReference = parseJavaCodeReference(builder, false, true, false, false);
 				if(classReference == null)
 				{
-					error(builder, JavaErrorMessages.message("expected.identifier"));
+					error(builder, JavaErrorBundle.message("expected.identifier"));
 					endsWithError = true;
 				}
 			}
@@ -475,7 +475,7 @@ public class ReferenceParser
 		}
 		else
 		{
-			element.error(JavaErrorMessages.message("bound.not.expected"));
+			element.error(JavaErrorBundle.message("bound.not.expected"));
 		}
 		return endsWithError;
 	}

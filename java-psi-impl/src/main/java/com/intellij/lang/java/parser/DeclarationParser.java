@@ -1,7 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lang.java.parser;
 
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilderUtil;
 import com.intellij.openapi.util.Pair;
@@ -90,7 +90,7 @@ public class DeclarationParser
 			{
 				// skipping record kw and identifier
 				PsiBuilderUtil.advance(builder, 2);
-				error(builder, JavaErrorMessages.message("expected.lt.or.lparen"));
+				error(builder, JavaErrorBundle.message("expected.lt.or.lparen"));
 				declaration.drop();
 				return null;
 			}
@@ -103,7 +103,7 @@ public class DeclarationParser
 
 		if(!expect(builder, JavaTokenType.IDENTIFIER))
 		{
-			error(builder, JavaErrorMessages.message("expected.identifier"));
+			error(builder, JavaErrorBundle.message("expected.identifier"));
 			declaration.drop();
 			return null;
 		}
@@ -134,7 +134,7 @@ public class DeclarationParser
 			{
 				builder.advanceLexer();
 			}
-			error.error(JavaErrorMessages.message("expected.lbrace"));
+			error.error(JavaErrorBundle.message("expected.lbrace"));
 		}
 
 		if(builder.getTokenType() == JavaTokenType.LBRACE)
@@ -154,7 +154,7 @@ public class DeclarationParser
 				{
 					if(!declarationsAfterEnd)
 					{
-						error(builder, JavaErrorMessages.message("expected.class.or.interface"), extra);
+						error(builder, JavaErrorBundle.message("expected.class.or.interface"), extra);
 					}
 					declarationsAfterEnd = true;
 					position.drop();
@@ -188,7 +188,7 @@ public class DeclarationParser
 
 			if(builder.getTokenType() == JavaTokenType.PRIVATE_KEYWORD || builder.getTokenType() == JavaTokenType.PROTECTED_KEYWORD)
 			{
-				error(builder, JavaErrorMessages.message("expected.semicolon"));
+				error(builder, JavaErrorBundle.message("expected.semicolon"));
 				return;
 			}
 
@@ -198,7 +198,7 @@ public class DeclarationParser
 				IElementType next = builder.lookAhead(1);
 				if(next != JavaTokenType.SEMICOLON && next != JavaTokenType.RBRACE)
 				{
-					error(builder, JavaErrorMessages.message("expected.identifier"));
+					error(builder, JavaErrorBundle.message("expected.identifier"));
 				}
 			}
 
@@ -208,7 +208,7 @@ public class DeclarationParser
 					builder.getTokenType() != null &&
 					builder.getTokenType() != JavaTokenType.SEMICOLON)
 			{
-				error(builder, JavaErrorMessages.message("expected.comma.or.semicolon"));
+				error(builder, JavaErrorBundle.message("expected.comma.or.semicolon"));
 				return;
 			}
 		}
@@ -266,7 +266,7 @@ public class DeclarationParser
 			{
 				if(invalidElements != null)
 				{
-					invalidElements.error(JavaErrorMessages.message("unexpected.token"));
+					invalidElements.error(JavaErrorBundle.message("unexpected.token"));
 					invalidElements = null;
 				}
 				builder.advanceLexer();
@@ -278,7 +278,7 @@ public class DeclarationParser
 			{
 				if(invalidElements != null)
 				{
-					invalidElements.errorBefore(JavaErrorMessages.message("unexpected.token"), declaration);
+					invalidElements.errorBefore(JavaErrorBundle.message("unexpected.token"), declaration);
 					invalidElements = null;
 				}
 				continue;
@@ -299,7 +299,7 @@ public class DeclarationParser
 
 		if(invalidElements != null)
 		{
-			invalidElements.error(JavaErrorMessages.message("unexpected.token"));
+			invalidElements.error(JavaErrorBundle.message("unexpected.token"));
 		}
 	}
 
@@ -372,7 +372,7 @@ public class DeclarationParser
 
 		if(context == Context.FILE)
 		{
-			error(builder, JavaErrorMessages.message("expected.class.or.interface"), typeParams);
+			error(builder, JavaErrorBundle.message("expected.class.or.interface"), typeParams);
 			declaration.drop();
 			return modList;
 		}
@@ -381,7 +381,7 @@ public class DeclarationParser
 		{
 			if(context == Context.CODE_BLOCK)
 			{
-				error(builder, JavaErrorMessages.message("expected.identifier.or.type"), null);
+				error(builder, JavaErrorBundle.message("expected.identifier.or.type"), null);
 				declaration.drop();
 				return modList;
 			}
@@ -392,7 +392,7 @@ public class DeclarationParser
 			if(typeParams != null)
 			{
 				PsiBuilder.Marker error = typeParams.precede();
-				error.errorBefore(JavaErrorMessages.message("unexpected.token"), codeBlock);
+				error.errorBefore(JavaErrorBundle.message("unexpected.token"), codeBlock);
 			}
 
 			done(declaration, JavaElementType.CLASS_INITIALIZER);
@@ -436,7 +436,7 @@ public class DeclarationParser
 				{
 					PsiBuilder.Marker primitive = builder.mark();
 					builder.advanceLexer();
-					primitive.error(JavaErrorMessages.message("expected.identifier"));
+					primitive.error(JavaErrorBundle.message("expected.identifier"));
 				}
 
 				if(builder.getTokenType() == JavaTokenType.LPARENTH)
@@ -458,7 +458,7 @@ public class DeclarationParser
 		if(type == null)
 		{
 			PsiBuilder.Marker error = typeParams != null ? typeParams.precede() : builder.mark();
-			error.error(JavaErrorMessages.message("expected.identifier.or.type"));
+			error.error(JavaErrorBundle.message("expected.identifier.or.type"));
 			declaration.drop();
 			return modList;
 		}
@@ -471,9 +471,9 @@ public class DeclarationParser
 			{
 				if(typeParams != null)
 				{
-					typeParams.precede().errorBefore(JavaErrorMessages.message("unexpected.token"), type.marker);
+					typeParams.precede().errorBefore(JavaErrorBundle.message("unexpected.token"), type.marker);
 				}
-				builder.error(JavaErrorMessages.message("expected.identifier"));
+				builder.error(JavaErrorBundle.message("expected.identifier"));
 				declaration.drop();
 				return modList;
 			}
@@ -498,7 +498,7 @@ public class DeclarationParser
 
 		if(typeParams != null)
 		{
-			typeParams.precede().errorBefore(JavaErrorMessages.message("unexpected.token"), type.marker);
+			typeParams.precede().errorBefore(JavaErrorBundle.message("unexpected.token"), type.marker);
 		}
 		return parseFieldOrLocalVariable(builder, declaration, declarationStart, context);
 	}
@@ -620,7 +620,7 @@ public class DeclarationParser
 					break;
 				}
 			}
-			error.error(JavaErrorMessages.message("expected.lbrace.or.semicolon"));
+			error.error(JavaErrorBundle.message("expected.lbrace.or.semicolon"));
 		}
 
 		if(!expect(builder, JavaTokenType.SEMICOLON))
@@ -697,7 +697,7 @@ public class DeclarationParser
 				if(noLastElement)
 				{
 					final String key = lambda ? "expected.parameter" : "expected.identifier.or.type";
-					error(builder, JavaErrorMessages.message(key));
+					error(builder, JavaErrorBundle.message(key));
 				}
 				if(tokenType == JavaTokenType.RPARENTH)
 				{
@@ -719,7 +719,7 @@ public class DeclarationParser
 						invalidElements = null;
 						if(leftParenth)
 						{
-							error(builder, JavaErrorMessages.message("expected.rparen"));
+							error(builder, JavaErrorBundle.message("expected.rparen"));
 						}
 					}
 				}
@@ -763,7 +763,7 @@ public class DeclarationParser
 			{
 				if(builder.getTokenType() == delimiter)
 				{
-					error(builder, JavaErrorMessages.message(noElementMsg));
+					error(builder, JavaErrorBundle.message(noElementMsg));
 					builder.advanceLexer();
 					if(noElements && resources)
 					{
@@ -774,7 +774,7 @@ public class DeclarationParser
 				else
 				{
 					invalidElements = builder.mark();
-					errorMessage = JavaErrorMessages.message(delimiterExpected ? noDelimiterMsg : noElementMsg);
+					errorMessage = JavaErrorBundle.message(delimiterExpected ? noDelimiterMsg : noElementMsg);
 				}
 			}
 
@@ -869,7 +869,7 @@ public class DeclarationParser
 				}
 				else
 				{
-					error(builder, JavaErrorMessages.message("expected.type"));
+					error(builder, JavaErrorBundle.message("expected.type"));
 					emptyElement(builder, JavaElementType.TYPE);
 				}
 			}
@@ -905,7 +905,7 @@ public class DeclarationParser
 		}
 		else
 		{
-			error(builder, JavaErrorMessages.message("expected.identifier"));
+			error(builder, JavaErrorBundle.message("expected.identifier"));
 			param.drop();
 			return modListInfo.first;
 		}
@@ -914,7 +914,7 @@ public class DeclarationParser
 		{
 			if(myParser.getExpressionParser().parse(builder) == null)
 			{
-				error(builder, JavaErrorMessages.message("expected.expression"));
+				error(builder, JavaErrorBundle.message("expected.expression"));
 			}
 		}
 
@@ -964,7 +964,7 @@ public class DeclarationParser
 				}
 				else
 				{
-					error(builder, JavaErrorMessages.message("expected.expression"));
+					error(builder, JavaErrorBundle.message("expected.expression"));
 					unclosed = true;
 					break;
 				}
@@ -979,7 +979,7 @@ public class DeclarationParser
 
 			if(builder.getTokenType() != JavaTokenType.IDENTIFIER)
 			{
-				error(builder, JavaErrorMessages.message("expected.identifier"));
+				error(builder, JavaErrorBundle.message("expected.identifier"));
 				unclosed = true;
 				eatSemicolon = false;
 				openMarker = false;
@@ -1014,7 +1014,7 @@ public class DeclarationParser
 
 			if(!unclosed)
 			{
-				error(builder, JavaErrorMessages.message("expected.semicolon"));
+				error(builder, JavaErrorBundle.message("expected.semicolon"));
 			}
 		}
 
@@ -1026,7 +1026,7 @@ public class DeclarationParser
 		return declaration;
 	}
 
-	private boolean eatBrackets(PsiBuilder builder, @Nullable @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String errorKey)
+	private boolean eatBrackets(PsiBuilder builder, @Nullable @PropertyKey(resourceBundle = JavaErrorBundle.BUNDLE) String errorKey)
 	{
 		IElementType tokenType = builder.getTokenType();
 		if(tokenType != JavaTokenType.LBRACKET && tokenType != JavaTokenType.AT)
@@ -1061,7 +1061,7 @@ public class DeclarationParser
 
 		if(errorKey != null)
 		{
-			marker.error(JavaErrorMessages.message(errorKey));
+			marker.error(JavaErrorBundle.message(errorKey));
 		}
 		else
 		{
@@ -1071,7 +1071,7 @@ public class DeclarationParser
 		boolean paired = count % 2 == 0;
 		if(!paired)
 		{
-			error(builder, JavaErrorMessages.message("expected.rbracket"));
+			error(builder, JavaErrorBundle.message("expected.rbracket"));
 		}
 		return paired;
 	}
@@ -1107,7 +1107,7 @@ public class DeclarationParser
 		}
 		if(classRef == null)
 		{
-			error(builder, JavaErrorMessages.message("expected.class.reference"));
+			error(builder, JavaErrorBundle.message("expected.class.reference"));
 		}
 
 		parseAnnotationParameterList(builder);
@@ -1141,7 +1141,7 @@ public class DeclarationParser
 			final IElementType tokenType = builder.getTokenType();
 			if(tokenType == null)
 			{
-				error(builder, JavaErrorMessages.message("expected.parameter"));
+				error(builder, JavaErrorBundle.message("expected.parameter"));
 				break;
 			}
 			else if(expect(builder, JavaTokenType.RPARENTH))
@@ -1156,7 +1156,7 @@ public class DeclarationParser
 				final boolean hasParamName = parseAnnotationParameter(builder, false);
 				if(!isFirstParamNamed && hasParamName && !isFirstParamWarned)
 				{
-					errorStart.errorBefore(JavaErrorMessages.message("annotation.name.is.missing"), errorEnd);
+					errorStart.errorBefore(JavaErrorBundle.message("annotation.name.is.missing"), errorEnd);
 					isFirstParamWarned = true;
 				}
 				else
@@ -1167,7 +1167,7 @@ public class DeclarationParser
 			}
 			else if(!afterBad)
 			{
-				error(builder, JavaErrorMessages.message("expected.comma.or.rparen"));
+				error(builder, JavaErrorBundle.message("expected.comma.or.rparen"));
 				builder.advanceLexer();
 				afterBad = true;
 			}
@@ -1216,7 +1216,7 @@ public class DeclarationParser
 		if(result == null)
 		{
 			result = builder.mark();
-			result.error(JavaErrorMessages.message("expected.value"));
+			result.error(JavaErrorBundle.message("expected.value"));
 		}
 	}
 

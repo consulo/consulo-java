@@ -1,4 +1,4 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.lang.java.lexer;
 
 import com.intellij.lexer.LexerBase;
@@ -10,8 +10,8 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
-
 import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.Set;
 
 import static com.intellij.psi.PsiKeyword.*;
 
-public class JavaLexer extends LexerBase
+public final class JavaLexer extends LexerBase
 {
 	private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(
 			ABSTRACT, BOOLEAN, BREAK, BYTE, CASE, CATCH, CHAR, CLASS, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, EXTENDS, FINAL, FINALLY,
@@ -44,16 +44,15 @@ public class JavaLexer extends LexerBase
 		return id != null &&
 				(level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id) ||
 						level.isAtLeast(LanguageLevel.JDK_10) && VAR.contentEquals(id) ||
-						level.isAtLeast(LanguageLevel.JDK_15_PREVIEW) && RECORD.contentEquals(id) ||
+						level.isAtLeast(LanguageLevel.JDK_16) && RECORD.contentEquals(id) ||
 						level.isAtLeast(LanguageLevel.JDK_14) && YIELD.contentEquals(id) ||
-						(level.isAtLeast(LanguageLevel.JDK_15_PREVIEW) && (level == LanguageLevel.JDK_X || level.isPreview()) && (SEALED.contentEquals(id) || PERMITS.contentEquals(id))));
+						(level.isAtLeast(LanguageLevel.JDK_17) && (SEALED.contentEquals(id) || PERMITS.contentEquals(id))));
 	}
 
 	private final _JavaLexer myFlexLexer;
 	private CharSequence myBuffer;
-	private
 	@Nullable
-	char[] myBufferArray;
+	private char[] myBufferArray;
 	private int myBufferIndex;
 	private int myBufferEndOffset;
 	private int myTokenEndOffset;  // positioned after the last symbol of the current token
@@ -65,7 +64,7 @@ public class JavaLexer extends LexerBase
 	}
 
 	@Override
-	public final void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState)
+	public void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState)
 	{
 		myBuffer = buffer;
 		myBufferArray = CharArrayUtil.fromSequenceWithoutCopying(buffer);
@@ -83,27 +82,27 @@ public class JavaLexer extends LexerBase
 	}
 
 	@Override
-	public final IElementType getTokenType()
+	public IElementType getTokenType()
 	{
 		locateToken();
 		return myTokenType;
 	}
 
 	@Override
-	public final int getTokenStart()
+	public int getTokenStart()
 	{
 		return myBufferIndex;
 	}
 
 	@Override
-	public final int getTokenEnd()
+	public int getTokenEnd()
 	{
 		locateToken();
 		return myTokenEndOffset;
 	}
 
 	@Override
-	public final void advance()
+	public void advance()
 	{
 		locateToken();
 		myTokenType = null;
@@ -112,7 +111,9 @@ public class JavaLexer extends LexerBase
 	private void locateToken()
 	{
 		if(myTokenType != null)
+		{
 			return;
+		}
 
 		if(myTokenEndOffset == myBufferEndOffset)
 		{
@@ -171,15 +172,33 @@ public class JavaLexer extends LexerBase
 				}
 				break;
 
-			case '"':
+			case '#':
+				if(myBufferIndex == 0 && myBufferIndex + 1 < myBufferEndOffset && charAt(myBufferIndex + 1) == '!')
+				{
+					myTokenType = JavaTokenType.END_OF_LINE_COMMENT;
+					myTokenEndOffset = getLineTerminator(myBufferIndex + 2);
+				}
+				else
+				{
+					flexLocateToken();
+				}
+				break;
 			case '\'':
-				myTokenType = c == '"' ? JavaTokenType.STRING_LITERAL : JavaTokenType.CHARACTER_LITERAL;
+				myTokenType = JavaTokenType.CHARACTER_LITERAL;
 				myTokenEndOffset = getClosingQuote(myBufferIndex + 1, c);
 				break;
 
-			case '`':
-				myTokenType = JavaTokenType.RAW_STRING_LITERAL;
-				myTokenEndOffset = getRawLiteralEnd(myBufferIndex);
+			case '"':
+				if(myBufferIndex + 2 < myBufferEndOffset && charAt(myBufferIndex + 2) == '"' && charAt(myBufferIndex + 1) == '"')
+				{
+					myTokenType = JavaTokenType.TEXT_BLOCK_LITERAL;
+					myTokenEndOffset = getTextBlockEnd(myBufferIndex + 2);
+				}
+				else
+				{
+					myTokenType = JavaTokenType.STRING_LITERAL;
+					myTokenEndOffset = getClosingQuote(myBufferIndex + 1, c);
+				}
 				break;
 
 			default:
@@ -206,7 +225,9 @@ public class JavaLexer extends LexerBase
 		{
 			pos++;
 			if(pos == myBufferEndOffset)
+			{
 				return pos;
+			}
 			c = charAt(pos);
 		}
 
@@ -241,7 +262,9 @@ public class JavaLexer extends LexerBase
 			{
 				pos++;
 				if(pos >= myBufferEndOffset)
+				{
 					return myBufferEndOffset;
+				}
 				c = charAt(pos);
 			}
 
@@ -249,13 +272,37 @@ public class JavaLexer extends LexerBase
 			{
 				pos++;
 				if(pos >= myBufferEndOffset)
+				{
 					return myBufferEndOffset;
+				}
 				c = charAt(pos);
 				if(c == '\n' || c == '\r')
+				{
 					continue;
-				pos++;
+				}
+				if(c == 'u')
+				{
+					do
+					{
+						pos++;
+					}
+					while(pos < myBufferEndOffset && charAt(pos) == 'u');
+					if(pos + 3 >= myBufferEndOffset)
+					{
+						return myBufferEndOffset;
+					}
+					boolean isBackSlash = charAt(pos) == '0' && charAt(pos + 1) == '0' && charAt(pos + 2) == '5' && charAt(pos + 3) == 'c';
+					// on encoded backslash we also need to skip escaped symbol (e.g. \\u005c" is translated to \")
+					pos += (isBackSlash ? 5 : 4);
+				}
+				else
+				{
+					pos++;
+				}
 				if(pos >= myBufferEndOffset)
+				{
 					return myBufferEndOffset;
+				}
 				c = charAt(pos);
 			}
 			else if(c == quoteChar)
@@ -297,31 +344,32 @@ public class JavaLexer extends LexerBase
 		{
 			char c = charAt(pos);
 			if(c == '\r' || c == '\n')
+			{
 				break;
+			}
 			pos++;
 		}
 
 		return pos;
 	}
 
-	private int getRawLiteralEnd(int offset)
+	private int getTextBlockEnd(int offset)
 	{
 		int pos = offset;
 
-		while(pos < myBufferEndOffset && charAt(pos) == '`')
-			pos++;
-		int quoteLen = pos - offset;
-
-		int start;
-		do
+		while((pos = getClosingQuote(pos + 1, '"')) < myBufferEndOffset)
 		{
-			while(pos < myBufferEndOffset && charAt(pos) != '`')
+			char current = charAt(pos);
+			if(current == '\\')
+			{
 				pos++;
-			start = pos;
-			while(pos < myBufferEndOffset && charAt(pos) == '`')
-				pos++;
+			}
+			else if(current == '"' && pos + 1 < myBufferEndOffset && charAt(pos + 1) == '"')
+			{
+				pos += 2;
+				break;
+			}
 		}
-		while(pos - start != quoteLen && pos < myBufferEndOffset);
 
 		return pos;
 	}
@@ -339,7 +387,7 @@ public class JavaLexer extends LexerBase
 	}
 
 	@Override
-	public final int getBufferEnd()
+	public int getBufferEnd()
 	{
 		return myBufferEndOffset;
 	}

@@ -28,7 +28,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -1409,7 +1409,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 			// if operand type can not be resolved in current context - leave it for runtime checks
 			if(operandType != null && !TypeConversionUtil.areTypesConvertible(operandType, castType) && PsiUtil.resolveClassInType(operandType) != null)
 			{
-				throw new EvaluateRuntimeException(new EvaluateException(JavaErrorMessages.message("inconvertible.type.cast", JavaHighlightUtil.formatType(operandType), JavaHighlightUtil.formatType
+				throw new EvaluateRuntimeException(new EvaluateException(JavaErrorBundle.message("inconvertible.type.cast", JavaHighlightUtil.formatType(operandType), JavaHighlightUtil.formatType
 						(castType))));
 			}
 

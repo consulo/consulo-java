@@ -17,7 +17,7 @@
 package com.intellij.codeInspection.suspiciousNameCombination;
 
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
@@ -178,7 +178,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
       String nameGroup1 = findNameGroup(name);
       String nameGroup2 = findNameGroup(referenceName);
       if (nameGroup1 != null && nameGroup2 != null && !nameGroup1.equals(nameGroup2)) {
-        myProblemsHolder.registerProblem(location, JavaErrorMessages.message(key, referenceName, name));
+        myProblemsHolder.registerProblem(location, JavaErrorBundle.message(key, referenceName, name));
       }
     }
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
@@ -82,7 +82,7 @@ public class GenericsHighlightUtil
 			@NonNls String messageKey = boundClass == null || typeParameter.isInterface() == boundClass.isInterface() ? "generics.inferred.type.for.type.parameter.is.not.within.its.bound.extend" :
 					"generics.inferred.type.for.type.parameter.is.not.within.its.bound.implement";
 
-			String description = JavaErrorMessages.message(messageKey, HighlightUtil.formatClass(typeParameter), JavaHighlightUtil.formatType(extendsType), JavaHighlightUtil.formatType(substitutor
+			String description = JavaErrorBundle.message(messageKey, HighlightUtil.formatClass(typeParameter), JavaHighlightUtil.formatType(extendsType), JavaHighlightUtil.formatType(substitutor
 					.substitute(typeParameter)));
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(call).descriptionAndTooltip(description).create();
 		}
@@ -120,7 +120,7 @@ public class GenericsHighlightUtil
 			{
 				if(!typeParameterListOwner.hasTypeParameters())
 				{
-					final String description = JavaErrorMessages.message("generics.diamond.not.applicable");
+					final String description = JavaErrorBundle.message("generics.diamond.not.applicable");
 					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(referenceParameterList).descriptionAndTooltip(description).create();
 				}
 				inferenceResult = ((PsiDiamondType) referenceElements[0].getType()).resolveInferredTypes();
@@ -152,13 +152,13 @@ public class GenericsHighlightUtil
 				}
 				else
 				{
-					description = JavaErrorMessages.message("generics.type.or.method.does.not.have.type.parameters", typeParameterListOwnerCategoryDescription(typeParameterListOwner),
+					description = JavaErrorBundle.message("generics.type.or.method.does.not.have.type.parameters", typeParameterListOwnerCategoryDescription(typeParameterListOwner),
 							typeParameterListOwnerDescription(typeParameterListOwner));
 				}
 			}
 			else
 			{
-				description = JavaErrorMessages.message("generics.wrong.number.of.type.arguments", refParametersNum, targetParametersNum);
+				description = JavaErrorBundle.message("generics.wrong.number.of.type.arguments", refParametersNum, targetParametersNum);
 			}
 
 			if(description != null)
@@ -309,7 +309,7 @@ public class GenericsHighlightUtil
 				@NonNls final String messageKey = boundClass == null || referenceClass == null || referenceClass.isInterface() == boundClass.isInterface() ? "generics.type.parameter.is.not.within" +
 						".its.bound.extend" : "generics.type.parameter.is.not.within.its.bound.implement";
 
-				String description = JavaErrorMessages.message(messageKey, referenceClass != null ? HighlightUtil.formatClass(referenceClass) : type.getPresentableText(), JavaHighlightUtil
+				String description = JavaErrorBundle.message(messageKey, referenceClass != null ? HighlightUtil.formatClass(referenceClass) : type.getPresentableText(), JavaHighlightUtil
 						.formatType(bound));
 
 				final HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement2Highlight).descriptionAndTooltip(description).create();
@@ -344,11 +344,11 @@ public class GenericsHighlightUtil
 	{
 		if(typeParameterListOwner instanceof PsiClass)
 		{
-			return JavaErrorMessages.message("generics.holder.type");
+			return JavaErrorBundle.message("generics.holder.type");
 		}
 		else if(typeParameterListOwner instanceof PsiMethod)
 		{
-			return JavaErrorMessages.message("generics.holder.method");
+			return JavaErrorBundle.message("generics.holder.method");
 		}
 		else
 		{
@@ -372,14 +372,14 @@ public class GenericsHighlightUtil
 		HighlightInfo errorResult = null;
 		if(!extendFrom.isInterface() && referenceElements.length != 0 && element != referenceElements[0])
 		{
-			String description = JavaErrorMessages.message("interface.expected");
+			String description = JavaErrorBundle.message("interface.expected");
 			errorResult = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(element).descriptionAndTooltip(description).create();
 			PsiClassType type = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createType(extendFrom, resolveResult.getSubstitutor());
 			QuickFixAction.registerQuickFixAction(errorResult, QUICK_FIX_FACTORY.createMoveBoundClassToFrontFix(aClass, type), null);
 		}
 		else if(referenceElements.length != 0 && element != referenceElements[0] && referenceElements[0].resolve() instanceof PsiTypeParameter)
 		{
-			final String description = JavaErrorMessages.message("type.parameter.cannot.be.followed.by.other.bounds");
+			final String description = JavaErrorBundle.message("type.parameter.cannot.be.followed.by.other.bounds");
 			errorResult = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(element).descriptionAndTooltip(description).create();
 			PsiClassType type = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createType(extendFrom, resolveResult.getSubstitutor());
 			QuickFixAction.registerQuickFixAction(errorResult, QUICK_FIX_FACTORY.createExtendsListFix(aClass, type, false), null);
@@ -428,7 +428,7 @@ public class GenericsHighlightUtil
 
 					if(!Comparing.equal(type1, type2))
 					{
-						String description = JavaErrorMessages.message("generics.cannot.be.inherited.with.different.type.arguments", HighlightUtil.formatClass(superClass), JavaHighlightUtil
+						String description = JavaErrorBundle.message("generics.cannot.be.inherited.with.different.type.arguments", HighlightUtil.formatClass(superClass), JavaHighlightUtil
 								.formatType(type1), JavaHighlightUtil.formatType(type2));
 						return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(textRange).descriptionAndTooltip(description).create();
 					}
@@ -561,7 +561,7 @@ public class GenericsHighlightUtil
 						continue;
 					}
 					final String key = aClass instanceof PsiEnumConstantInitializer ? "enum.constant.should.implement.method" : "class.must.be.abstract";
-					final String message = JavaErrorMessages.message(key, HighlightUtil.formatClass(aClass, false), JavaHighlightUtil.formatMethod(abstracts.get(0)), HighlightUtil.formatClass
+					final String message = JavaErrorBundle.message(key, HighlightUtil.formatClass(aClass, false), JavaHighlightUtil.formatMethod(abstracts.get(0)), HighlightUtil.formatClass
 							(unrelatedMethodContainingClass, false));
 					final HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(classIdentifier).descriptionAndTooltip(message).create();
 					QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createImplementMethodsFix(aClass));
@@ -831,7 +831,7 @@ public class GenericsHighlightUtil
 	{
 		@NonNls final String key = sameClass ? "generics.methods.have.same.erasure" : method.hasModifierProperty(PsiModifier.STATIC) ? "generics.methods.have.same.erasure.hide" : "generics.methods" +
 				".have.same.erasure.override";
-		String description = JavaErrorMessages.message(key, HighlightMethodUtil.createClashMethodMessage(method, superMethod, !sameClass));
+		String description = JavaErrorBundle.message(key, HighlightMethodUtil.createClashMethodMessage(method, superMethod, !sameClass));
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(textRange).descriptionAndTooltip(description).create();
 	}
 
@@ -846,7 +846,7 @@ public class GenericsHighlightUtil
 		final PsiElement element = result.getElement();
 		if(element instanceof PsiTypeParameter)
 		{
-			String description = JavaErrorMessages.message("generics.type.parameter.cannot.be.instantiated", HighlightUtil.formatClass((PsiTypeParameter) element));
+			String description = JavaErrorBundle.message("generics.type.parameter.cannot.be.instantiated", HighlightUtil.formatClass((PsiTypeParameter) element));
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(classReference).descriptionAndTooltip(description).create();
 		}
 		return null;
@@ -871,7 +871,7 @@ public class GenericsHighlightUtil
 					PsiNewExpression newExpression = (PsiNewExpression) refParent;
 					if(!(newExpression.getType() instanceof PsiArrayType))
 					{
-						String description = JavaErrorMessages.message("wildcard.type.cannot.be.instantiated", JavaHighlightUtil.formatType(type));
+						String description = JavaErrorBundle.message("wildcard.type.cannot.be.instantiated", JavaHighlightUtil.formatType(type));
 						return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(description).create();
 					}
 				}
@@ -880,14 +880,14 @@ public class GenericsHighlightUtil
 					PsiElement refPParent = refParent.getParent();
 					if(!(refPParent instanceof PsiTypeParameter) || refParent != ((PsiTypeParameter) refPParent).getExtendsList())
 					{
-						String description = JavaErrorMessages.message("generics.wildcard.not.expected");
+						String description = JavaErrorBundle.message("generics.wildcard.not.expected");
 						return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(description).create();
 					}
 				}
 			}
 			else
 			{
-				String description = JavaErrorMessages.message("generics.wildcards.may.be.used.only.as.reference.parameters");
+				String description = JavaErrorBundle.message("generics.wildcards.may.be.used.only.as.reference.parameters");
 				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(description).create();
 			}
 		}
@@ -912,7 +912,7 @@ public class GenericsHighlightUtil
 				return null;
 			}
 
-			String text = JavaErrorMessages.message("generics.type.argument.cannot.be.of.primitive.type");
+			String text = JavaErrorBundle.message("generics.type.argument.cannot.be.of.primitive.type");
 			HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(text).create();
 
 			PsiType toConvert = type;
@@ -944,7 +944,7 @@ public class GenericsHighlightUtil
 		final PsiType itemType = JavaGenericsUtil.getCollectionItemType(expression);
 		if(itemType == null)
 		{
-			String description = JavaErrorMessages.message("foreach.not.applicable", JavaHighlightUtil.formatType(expression.getType()));
+			String description = JavaErrorBundle.message("foreach.not.applicable", JavaHighlightUtil.formatType(expression.getType()));
 			final HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(description).create();
 			QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createNotIterableForEachLoopFix(expression));
 			return highlightInfo;
@@ -1031,7 +1031,7 @@ public class GenericsHighlightUtil
 			return null;
 		}
 
-		String description = JavaErrorMessages.message("illegal.to.access.static.member.from.enum.constructor.or.instance.initializer", HighlightMessageUtil.getSymbolName(resolved, result
+		String description = JavaErrorBundle.message("illegal.to.access.static.member.from.enum.constructor.or.instance.initializer", HighlightMessageUtil.getSymbolName(resolved, result
 				.getSubstitutor()));
 
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expr).descriptionAndTooltip(description).create();
@@ -1043,7 +1043,7 @@ public class GenericsHighlightUtil
 		if(aClass != null && aClass.isEnum() &&
 				(!(expression instanceof PsiNewExpression) || ((PsiNewExpression) expression).getArrayDimensions().length == 0 && ((PsiNewExpression) expression).getArrayInitializer() == null))
 		{
-			String description = JavaErrorMessages.message("enum.types.cannot.be.instantiated");
+			String description = JavaErrorBundle.message("enum.types.cannot.be.instantiated");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(description).create();
 		}
 		return null;
@@ -1056,7 +1056,7 @@ public class GenericsHighlightUtil
 		{
 			if(!JavaGenericsUtil.isReifiableType(((PsiArrayType) type).getComponentType()))
 			{
-				String description = JavaErrorMessages.message("generic.array.creation");
+				String description = JavaErrorBundle.message("generic.array.creation");
 				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(element).descriptionAndTooltip(description).create();
 			}
 		}
@@ -1083,17 +1083,17 @@ public class GenericsHighlightUtil
 		final PsiElement parent = list.getParent();
 		if(parent instanceof PsiClass && ((PsiClass) parent).isEnum())
 		{
-			String description = JavaErrorMessages.message("generics.enum.may.not.have.type.parameters");
+			String description = JavaErrorBundle.message("generics.enum.may.not.have.type.parameters");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(list).descriptionAndTooltip(description).create();
 		}
 		if(PsiUtil.isAnnotationMethod(parent))
 		{
-			String description = JavaErrorMessages.message("generics.annotation.members.may.not.have.type.parameters");
+			String description = JavaErrorBundle.message("generics.annotation.members.may.not.have.type.parameters");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(list).descriptionAndTooltip(description).create();
 		}
 		if(parent instanceof PsiClass && ((PsiClass) parent).isAnnotationType())
 		{
-			String description = JavaErrorMessages.message("annotation.may.not.have.type.parameters");
+			String description = JavaErrorBundle.message("annotation.may.not.have.type.parameters");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(list).descriptionAndTooltip(description).create();
 		}
 
@@ -1112,7 +1112,7 @@ public class GenericsHighlightUtil
 				String name2 = typeParameter2.getName();
 				if(Comparing.strEqual(name1, name2))
 				{
-					String message = JavaErrorMessages.message("generics.duplicate.type.parameter", name1);
+					String message = JavaErrorBundle.message("generics.duplicate.type.parameter", name1);
 					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeParameter2).descriptionAndTooltip(message).create();
 				}
 			}
@@ -1146,7 +1146,7 @@ public class GenericsHighlightUtil
 			final PsiClass aClass = PsiUtil.resolveClassInClassTypeOnly(typeElement.getType());
 			if(aClass instanceof PsiTypeParameter)
 			{
-				final String message = JavaErrorMessages.message("generics.cannot.catch.type.parameters");
+				final String message = JavaErrorBundle.message("generics.cannot.catch.type.parameters");
 				result.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(message).create());
 			}
 		}
@@ -1173,13 +1173,13 @@ public class GenericsHighlightUtil
 		final PsiClass resolved = PsiUtil.resolveClassInClassTypeOnly(type);
 		if(resolved instanceof PsiTypeParameter)
 		{
-			String description = JavaErrorMessages.message("generics.cannot.instanceof.type.parameters");
+			String description = JavaErrorBundle.message("generics.cannot.instanceof.type.parameters");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(description).create();
 		}
 
 		if(!JavaGenericsUtil.isReifiableType(type))
 		{
-			String description = JavaErrorMessages.message("illegal.generic.type.for.instanceof");
+			String description = JavaErrorBundle.message("illegal.generic.type.for.instanceof");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(description).create();
 		}
 
@@ -1211,7 +1211,7 @@ public class GenericsHighlightUtil
 		PsiClass aClass = type.resolve();
 		if(aClass instanceof PsiTypeParameter)
 		{
-			String description = JavaErrorMessages.message("cannot.select.dot.class.from.type.variable");
+			String description = JavaErrorBundle.message("cannot.select.dot.class.from.type.variable");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(operand).descriptionAndTooltip(description).create();
 		}
 		if(type.getParameters().length > 0)
@@ -1240,7 +1240,7 @@ public class GenericsHighlightUtil
 			}
 			if(superMethod == null)
 			{
-				String description = JavaErrorMessages.message("method.does.not.override.super");
+				String description = JavaErrorBundle.message("method.does.not.override.super");
 				HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(overrideAnnotation).descriptionAndTooltip(description).create();
 				QUICK_FIX_FACTORY.registerPullAsAbstractUpFixes(method, new QuickFixActionRegistrarImpl(highlightInfo));
 				return highlightInfo;
@@ -1250,7 +1250,7 @@ public class GenericsHighlightUtil
 					superClass != null &&
 					superClass.isInterface())
 			{
-				String description = JavaErrorMessages.message("override.not.allowed.in.interfaces");
+				String description = JavaErrorBundle.message("override.not.allowed.in.interfaces");
 				HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(overrideAnnotation).descriptionAndTooltip(description).create();
 				QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createIncreaseLanguageLevelFix(LanguageLevel.JDK_1_6));
 				return info;
@@ -1357,7 +1357,7 @@ public class GenericsHighlightUtil
 				final PsiClass aClass = constructor.getContainingClass();
 				if(aClass != null && aClass.isEnum())
 				{
-					final String message = JavaErrorMessages.message("call.to.super.is.not.allowed.in.enum.constructor");
+					final String message = JavaErrorBundle.message("call.to.super.is.not.allowed.in.enum.constructor");
 					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expr).descriptionAndTooltip(message).create();
 				}
 			}
@@ -1374,7 +1374,7 @@ public class GenericsHighlightUtil
 			PsiParameter[] params = ((PsiMethod) declarationScope).getParameterList().getParameters();
 			if(params[params.length - 1] != parameter)
 			{
-				String description = JavaErrorMessages.message("vararg.not.last.parameter");
+				String description = JavaErrorBundle.message("vararg.not.last.parameter");
 				HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(parameter).descriptionAndTooltip(description).create();
 				QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createMakeVarargParameterLastFix(parameter));
 				return info;
@@ -1396,7 +1396,7 @@ public class GenericsHighlightUtil
 				{
 					list = new ArrayList<>();
 				}
-				String description = JavaErrorMessages.message("modifiers.for.enum.constants");
+				String description = JavaErrorBundle.message("modifiers.for.enum.constants");
 				list.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(child).descriptionAndTooltip(description).create());
 			}
 		}
@@ -1412,7 +1412,7 @@ public class GenericsHighlightUtil
 			final PsiElement grandParent = parent.getParent();
 			if(!(grandParent instanceof PsiMethodCallExpression) && !(parent instanceof PsiMethodReferenceExpression))
 			{
-				final String message = JavaErrorMessages.message("generics.reference.parameters.not.allowed");
+				final String message = JavaErrorBundle.message("generics.reference.parameters.not.allowed");
 				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(refParamList).descriptionAndTooltip(message).create();
 			}
 		}
@@ -1502,7 +1502,7 @@ public class GenericsHighlightUtil
 						}
 					}
 				}
-				final String message = element instanceof PsiClass ? JavaErrorMessages.message("generics.type.arguments.on.raw.type") : JavaErrorMessages.message("generics.type.arguments.on.raw" +
+				final String message = element instanceof PsiClass ? JavaErrorBundle.message("generics.type.arguments.on.raw.type") : JavaErrorBundle.message("generics.type.arguments.on.raw" +
 						".method");
 
 				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(refParamList).descriptionAndTooltip(message).create();
@@ -1516,7 +1516,7 @@ public class GenericsHighlightUtil
 		HighlightInfo errorResult = null;
 		if(Comparing.strEqual("java.lang.Enum", superClass.getQualifiedName()))
 		{
-			String message = JavaErrorMessages.message("classes.extends.enum");
+			String message = JavaErrorBundle.message("classes.extends.enum");
 			errorResult = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(elementToHighlight).descriptionAndTooltip(message).create();
 		}
 		return errorResult;
@@ -1550,7 +1550,7 @@ public class GenericsHighlightUtil
 			}
 			if(InheritanceUtil.isInheritorOrSelf((PsiClass) resolved, throwableClass, true))
 			{
-				String message = JavaErrorMessages.message("generic.extend.exception");
+				String message = JavaErrorBundle.message("generic.extend.exception");
 				HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(referenceElement).descriptionAndTooltip(message).create();
 				PsiClassType classType = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createType((PsiClass) resolved);
 				QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createExtendsListFix(aClass, classType, false));
@@ -1569,7 +1569,7 @@ public class GenericsHighlightUtil
 		PsiElement parent = aClass.getParent();
 		if(!(parent instanceof PsiClass || parent instanceof PsiFile || parent instanceof PsiClassLevelDeclarationStatement))
 		{
-			String description = JavaErrorMessages.message("local.enum");
+			String description = JavaErrorBundle.message("local.enum");
 			TextRange textRange = HighlightNamesUtil.getClassDeclarationTextRange(aClass);
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(textRange).descriptionAndTooltip(description).create();
 		}
@@ -1611,7 +1611,7 @@ public class GenericsHighlightUtil
 				final PsiReferenceParameterList parameterList = ((PsiJavaCodeReferenceElement) qualifier).getParameterList();
 				if(parameterList != null && parameterList.getTypeArguments().length > 0)
 				{
-					final String message = JavaErrorMessages.message("generics.select.static.class.from.parameterized.type", HighlightUtil.formatClass((PsiClass) resolved));
+					final String message = JavaErrorBundle.message("generics.select.static.class.from.parameterized.type", HighlightUtil.formatClass((PsiClass) resolved));
 					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(parameterList).descriptionAndTooltip(message).create();
 				}
 			}
@@ -1623,7 +1623,7 @@ public class GenericsHighlightUtil
 	{
 		if(superClass instanceof PsiTypeParameter)
 		{
-			String description = JavaErrorMessages.message("class.cannot.inherit.from.its.type.parameter");
+			String description = JavaErrorBundle.message("class.cannot.inherit.from.its.type.parameter");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(toHighlight).descriptionAndTooltip(description).create();
 		}
 		return null;

@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.analysis;
 
 import com.intellij.codeHighlighting.Pass;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.*;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil.Feature;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
@@ -972,7 +972,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 		final PsiElement referenceNameElement = ref.getReferenceNameElement();
 		if(results.length == 0)
 		{
-			final String description = JavaErrorMessages.message("cannot.resolve.symbol", refName);
+			final String description = JavaErrorBundle.message("cannot.resolve.symbol", refName);
 			assert referenceNameElement != null : ref;
 			final HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(referenceNameElement).descriptionAndTooltip(description).create();
 			QuickFixAction.registerQuickFixAction(info, QuickFixFactory.getInstance().createSetupJDKFix());
@@ -993,8 +993,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 					if(aClass != null && !manager.areElementsEquivalent(aClass, element))
 					{
 						//noinspection ConditionalExpressionWithIdenticalBranches
-						description = imported.first == null ? JavaErrorMessages.message("single.import.class.conflict", refName) : imported.first.equals(ref) ? JavaErrorMessages.message("class.is" +
-								".ambiguous.in.single.static.import", refName) : JavaErrorMessages.message("class.is.already.defined.in.single.static.import", refName);
+						description = imported.first == null ? JavaErrorBundle.message("single.import.class.conflict", refName) : imported.first.equals(ref) ? JavaErrorBundle.message("class.is" +
+								".ambiguous.in.single.static.import", refName) : JavaErrorBundle.message("class.is.already.defined.in.single.static.import", refName);
 					}
 					mySingleImportedClasses.put(refName, Pair.create(ref, (PsiClass) element));
 				}
@@ -1005,7 +1005,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 					if(field != null && !manager.areElementsEquivalent(field, element))
 					{
 						//noinspection ConditionalExpressionWithIdenticalBranches
-						description = imported.first.equals(ref) ? JavaErrorMessages.message("field.is.ambiguous.in.single.static.import", refName) : JavaErrorMessages.message("field.is.already" +
+						description = imported.first.equals(ref) ? JavaErrorBundle.message("field.is.ambiguous.in.single.static.import", refName) : JavaErrorBundle.message("field.is.already" +
 								".defined.in.single.static.import", refName);
 					}
 					mySingleImportedFields.put(refName, Pair.create(ref, (PsiField) element));
@@ -1719,7 +1719,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
 		if(parent instanceof PsiNewExpression && !(resolved instanceof PsiClass) && resolved instanceof PsiNamedElement && ((PsiNewExpression) parent).getClassOrAnonymousClassReference() == ref)
 		{
-			String text = JavaErrorMessages.message("cannot.resolve.symbol", ((PsiNamedElement) resolved).getName());
+			String text = JavaErrorBundle.message("cannot.resolve.symbol", ((PsiNamedElement) resolved).getName());
 			myHolder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(ref).descriptionAndTooltip(text).create());
 		}
 
@@ -2099,13 +2099,13 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 						if(!myHolder.add(HighlightClassUtil.checkInstantiationOfAbstractClass(containingClass, expression)) && !myHolder.add(GenericsHighlightUtil.checkEnumInstantiation(expression,
 								containingClass)) && containingClass.isPhysical() && description == null)
 						{
-							description = JavaErrorMessages.message("cannot.resolve.constructor", containingClass.getName());
+							description = JavaErrorBundle.message("cannot.resolve.constructor", containingClass.getName());
 						}
 					}
 				}
 				else if(description == null)
 				{
-					description = JavaErrorMessages.message("cannot.resolve.method", expression.getReferenceName());
+					description = JavaErrorBundle.message("cannot.resolve.method", expression.getReferenceName());
 				}
 
 				if(description != null)

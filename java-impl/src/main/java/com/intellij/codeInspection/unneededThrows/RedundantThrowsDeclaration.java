@@ -17,7 +17,7 @@ package com.intellij.codeInspection.unneededThrows;
 
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInspection.*;
 import com.intellij.psi.*;
@@ -118,7 +118,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
 
     if (JavaHighlightUtil.isSerializationRelatedMethod(method, containingClass)) return null;
 
-    String description = JavaErrorMessages.message("exception.is.never.thrown", JavaHighlightUtil.formatType(exceptionType));
+    String description = JavaErrorBundle.message("exception.is.never.thrown", JavaHighlightUtil.formatType(exceptionType));
     LocalQuickFix quickFixes = new DeleteThrowsFix(method, exceptionType);
     return inspectionManager.createProblemDescriptor(referenceElement, description, quickFixes, ProblemHighlightType.LIKE_UNUSED_SYMBOL, onTheFly);
   }

@@ -24,7 +24,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulator;
 import com.intellij.psi.ElementManipulators;
@@ -84,7 +84,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 	@Override
 	public String getUnresolvedMessagePattern()
 	{
-		return JavaErrorMessages.message("cannot.resolve.package");
+		return JavaErrorBundle.message("cannot.resolve.package");
 	}
 
 	@Override

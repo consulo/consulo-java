@@ -16,7 +16,7 @@
 package com.intellij.codeInspection.deprecation;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
@@ -322,7 +322,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool
 			}
 			if(superMethod.isDeprecated())
 			{
-				String description = JavaErrorMessages.message("overrides.deprecated.method", HighlightMessageUtil.getSymbolName(aClass,
+				String description = JavaErrorBundle.message("overrides.deprecated.method", HighlightMessageUtil.getSymbolName(aClass,
 						PsiSubstitutor.EMPTY));
 				holder.registerProblem(methodName, description, ProblemHighlightType.LIKE_DEPRECATED);
 			}
@@ -383,12 +383,12 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool
 		if(annotation != null)
 		{
 			String value = AnnotationUtil.getStringAttributeValue(annotation, PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);
-			description = JavaErrorMessages.message("deprecated.symbol.0", symbolName, value);
+			description = JavaErrorBundle.message("deprecated.symbol.0", symbolName, value);
 		}
 
 		if(description == null)
 		{
-			description = JavaErrorMessages.message("deprecated.symbol", symbolName);
+			description = JavaErrorBundle.message("deprecated.symbol", symbolName);
 		}
 		holder.registerProblem(elementToHighlight, description, ProblemHighlightType.LIKE_DEPRECATED, rangeInElement);
 	}

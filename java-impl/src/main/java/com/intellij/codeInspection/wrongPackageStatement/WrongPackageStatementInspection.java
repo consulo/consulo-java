@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -67,7 +67,7 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
 
       String packageName = dirPackage.getQualifiedName();
       if (!Comparing.strEqual(packageName, "", true) && packageStatement == null) {
-        String description = JavaErrorMessages.message("missing.package.statement", packageName);
+        String description = JavaErrorBundle.message("missing.package.statement", packageName);
 
         return new ProblemDescriptor[]{manager.createProblemDescriptor(classes[0].getNameIdentifier(), description,
                                                                        new AdjustPackageNameFix(packageName),
@@ -85,7 +85,7 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
           }
         }
         if (!availableFixes.isEmpty()){
-          String description = JavaErrorMessages.message("package.name.file.path.mismatch",
+          String description = JavaErrorBundle.message("package.name.file.path.mismatch",
                                                          packageReference.getQualifiedName(),
                                                          dirPackage.getQualifiedName());
           LocalQuickFix[] fixes = availableFixes.toArray(new LocalQuickFix[availableFixes.size()]);
