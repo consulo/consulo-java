@@ -29,7 +29,6 @@ import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerContextListener;
 import com.intellij.debugger.impl.DebuggerManagerImpl;
 import com.intellij.debugger.impl.DebuggerSession;
-import com.intellij.debugger.ui.JavaDebuggerSupport;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -53,6 +52,7 @@ import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.*;
 import com.intellij.xdebugger.impl.DebuggerSupport;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
+import com.intellij.xdebugger.impl.XDebuggerSupport;
 import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase;
 import com.intellij.xdebugger.impl.breakpoints.XBreakpointManagerImpl;
 import com.intellij.xdebugger.impl.breakpoints.XDependentBreakpointManager;
@@ -185,7 +185,7 @@ public class BreakpointManager
 						GutterIconRenderer renderer = highlighter.getGutterIconRenderer();
 						if(renderer != null)
 						{
-							DebuggerSupport.getDebuggerSupport(JavaDebuggerSupport.class).getEditBreakpointAction().editBreakpoint(myProject, editor, breakpoint.myXBreakpoint, renderer);
+							DebuggerSupport.getDebuggerSupport(XDebuggerSupport.class).getEditBreakpointAction().editBreakpoint(myProject, editor, breakpoint.myXBreakpoint, renderer);
 						}
 					}
 				}

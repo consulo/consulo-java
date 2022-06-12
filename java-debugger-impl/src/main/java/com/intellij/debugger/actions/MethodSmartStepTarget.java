@@ -15,15 +15,21 @@
  */
 package com.intellij.debugger.actions;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiSubstitutor;
+import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.util.Range;
+import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: 10/25/13
+ * Date: 10/25/13
  */
 public class MethodSmartStepTarget extends SmartStepTarget
 {
@@ -31,13 +37,35 @@ public class MethodSmartStepTarget extends SmartStepTarget
 
 	public MethodSmartStepTarget(
 			@Nonnull PsiMethod method,
-			@javax.annotation.Nullable String label,
-			@javax.annotation.Nullable PsiElement highlightElement,
+			@Nullable String label,
+			@Nullable PsiElement highlightElement,
 			boolean needBreakpointRequest,
 			Range<Integer> lines)
 	{
 		super(label, highlightElement, needBreakpointRequest, lines);
 		myMethod = method;
+	}
+
+	@Nullable
+	@Override
+	public Image getIcon()
+	{
+		return IconDescriptorUpdaters.getIcon(myMethod, 0);
+	}
+
+	@Nonnull
+	@Override
+	public String getPresentation()
+	{
+		String label = getLabel();
+		String formatted = PsiFormatUtil.formatMethod(
+				myMethod,
+				PsiSubstitutor.EMPTY,
+				PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
+				PsiFormatUtilBase.SHOW_TYPE,
+				999
+		);
+		return label != null ? label + formatted : formatted;
 	}
 
 	@Nonnull

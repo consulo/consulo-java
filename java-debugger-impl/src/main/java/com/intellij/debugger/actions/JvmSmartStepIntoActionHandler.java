@@ -1,62 +1,89 @@
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.debugger.actions;
 
-import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
-import com.intellij.debugger.engine.SuspendContextImpl;
-import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerSession;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.TextEditor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.xdebugger.impl.actions.DebuggerActionHandler;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
+import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.frame.XSuspendContext;
+import com.intellij.xdebugger.stepping.XSmartStepIntoHandler;
+import com.intellij.xdebugger.stepping.XSmartStepIntoVariant;
+import consulo.ui.image.Image;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
-public class JvmSmartStepIntoActionHandler extends DebuggerActionHandler {
-  public void perform(@Nonnull final Project project, final AnActionEvent event) {
-    final DebuggerContextImpl debuggerContext = (DebuggerManagerEx.getInstanceEx(project)).getContext();
-    final DebuggerSession session = debuggerContext.getDebuggerSession();
-    if (session != null) {
-      doStep(project, debuggerContext.getSourcePosition(), session);
-    }
-  }
+public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmartStepIntoActionHandler.JvmSmartStepIntoVariant>
+{
+	private final DebuggerSession mySession;
 
-  private static void doStep(final @Nonnull Project project, final @Nullable SourcePosition position, final @Nonnull DebuggerSession session) {
-    final VirtualFile file = position != null ? position.getFile().getVirtualFile() : null;
-    final FileEditor fileEditor = file != null? FileEditorManager.getInstance(project).getSelectedEditor(file) : null;
-    if (fileEditor instanceof TextEditor) {
-      for (JvmSmartStepIntoHandler handler : Extensions.getExtensions(JvmSmartStepIntoHandler.EP_NAME)) {
-        if (handler.isAvailable(position) && handler.doSmartStep(position, session, (TextEditor)fileEditor)) return;
-      }
-    }
-    session.stepInto(true, null);
-  }
+	public JvmSmartStepIntoActionHandler(@Nonnull DebuggerSession session)
+	{
+		mySession = session;
+	}
 
-  public boolean isEnabled(@Nonnull final Project project, final AnActionEvent event) {
-    final DebuggerContextImpl context = (DebuggerManagerEx.getInstanceEx(project)).getContext();
-    DebuggerSession debuggerSession = context.getDebuggerSession();
-    final boolean isPaused = debuggerSession != null && debuggerSession.isPaused();
-    final SuspendContextImpl suspendContext = context.getSuspendContext();
-    final boolean hasCurrentThread = suspendContext != null && suspendContext.getThread() != null;
-    return isPaused && hasCurrentThread;
-  }
+	@Nonnull
+	@Override
+	public List<JvmSmartStepIntoVariant> computeSmartStepVariants(@Nonnull XSourcePosition xPosition)
+	{
+		SourcePosition pos = DebuggerUtilsEx.toSourcePosition(xPosition, mySession.getProject());
+		JvmSmartStepIntoHandler handler = JvmSmartStepIntoHandler.EP_NAME.findFirstSafe(h -> h.isAvailable(pos));
+		if(handler != null)
+		{
+			List<SmartStepTarget> targets = handler.findSmartStepTargets(pos);
+			return ContainerUtil.map(targets, target -> new JvmSmartStepIntoVariant(target, handler));
+		}
+
+		return List.of();
+	}
+
+	@Override
+	public String getPopupTitle(@Nonnull XSourcePosition position)
+	{
+		return DebuggerBundle.message("title.smart.step.popup");
+	}
+
+	@Override
+	public void startStepInto(@Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context)
+	{
+		mySession.stepInto(true, variant.myHandler.createMethodFilter(variant.myTarget));
+	}
+
+	static class JvmSmartStepIntoVariant extends XSmartStepIntoVariant
+	{
+		private final SmartStepTarget myTarget;
+		private final JvmSmartStepIntoHandler myHandler;
+
+		JvmSmartStepIntoVariant(SmartStepTarget target, JvmSmartStepIntoHandler handler)
+		{
+			myTarget = target;
+			myHandler = handler;
+		}
+
+		@Override
+		public String getText()
+		{
+			return myTarget.getPresentation();
+		}
+
+		@Nullable
+		@Override
+		public Image getIcon()
+		{
+			return myTarget.getIcon();
+		}
+
+		@Nullable
+		//@Override
+		public TextRange getHighlightRange()
+		{
+			PsiElement element = myTarget.getHighlightElement();
+			return element != null ? element.getTextRange() : null;
+		}
+	}
 }

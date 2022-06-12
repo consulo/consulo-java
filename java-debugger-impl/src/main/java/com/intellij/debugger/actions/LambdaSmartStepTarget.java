@@ -15,11 +15,14 @@
  */
 package com.intellij.debugger.actions;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.util.Range;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -50,6 +53,13 @@ public class LambdaSmartStepTarget extends SmartStepTarget
 	public int getOrdinal()
 	{
 		return myOrdinal;
+	}
+
+	@Nullable
+	@Override
+	public Image getIcon()
+	{
+		return PlatformIconGroup.nodesLambda();
 	}
 
 	@Override

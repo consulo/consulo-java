@@ -15,23 +15,13 @@
  */
 package com.intellij.debugger.engine;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.actions.DebuggerActions;
+import com.intellij.debugger.actions.JvmSmartStepIntoActionHandler;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
-import com.intellij.debugger.impl.DebuggerContextImpl;
-import com.intellij.debugger.impl.DebuggerContextListener;
-import com.intellij.debugger.impl.DebuggerContextUtil;
-import com.intellij.debugger.impl.DebuggerSession;
-import com.intellij.debugger.impl.DebuggerStateManager;
-import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.debugger.impl.*;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.memory.component.InstancesTracker;
 import com.intellij.debugger.memory.component.MemoryViewDebugProcessData;
@@ -52,15 +42,7 @@ import com.intellij.execution.ui.ExecutionConsoleEx;
 import com.intellij.execution.ui.RunnerLayoutUi;
 import com.intellij.execution.ui.layout.PlaceInGrid;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.AnSeparator;
-import com.intellij.openapi.actionSystem.Anchor;
-import com.intellij.openapi.actionSystem.Constraints;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
@@ -69,13 +51,7 @@ import com.intellij.ui.EditorNotifications;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManagerAdapter;
 import com.intellij.ui.content.ContentManagerEvent;
-import com.intellij.xdebugger.XDebugProcess;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebugSessionAdapter;
-import com.intellij.xdebugger.XDebugSessionListener;
-import com.intellij.xdebugger.XDebuggerBundle;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.*;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
@@ -83,9 +59,16 @@ import com.intellij.xdebugger.frame.XStackFrame;
 import com.intellij.xdebugger.frame.XValueMarkerProvider;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.XDebuggerUtilImpl;
+import com.intellij.xdebugger.stepping.XSmartStepIntoHandler;
 import com.intellij.xdebugger.ui.XDebugTabLayouter;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.internal.com.sun.jdi.event.Event;
+import consulo.ui.annotation.RequiredUIAccess;
+import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author egor
@@ -95,6 +78,7 @@ public class JavaDebugProcess extends XDebugProcess
 	private final DebuggerSession myJavaSession;
 	private final JavaDebuggerEditorsProvider myEditorsProvider;
 	private final XBreakpointHandler<?>[] myBreakpointHandlers;
+	private final JvmSmartStepIntoActionHandler mySmartStepIntoActionHandler;
 	private final NodeManagerImpl myNodeManager;
 
 	public static JavaDebugProcess create(@Nonnull final XDebugSession session, final DebuggerSession javaSession)
@@ -118,7 +102,9 @@ public class JavaDebugProcess extends XDebugProcess
 		handlers.add(new JavaBreakpointHandler.JavaMethodBreakpointHandler(process));
 		handlers.add(new JavaBreakpointHandler.JavaWildcardBreakpointHandler(process));
 
-		for(JavaBreakpointHandlerFactory factory : Extensions.getExtensions(JavaBreakpointHandlerFactory.EP_NAME))
+		mySmartStepIntoActionHandler = new JvmSmartStepIntoActionHandler(myJavaSession);
+
+		for(JavaBreakpointHandlerFactory factory : JavaBreakpointHandlerFactory.EP_NAME.getExtensionList())
 		{
 			handlers.add(factory.createHandler(process));
 		}
@@ -597,5 +583,12 @@ public class JavaDebugProcess extends XDebugProcess
 	public XValueMarkerProvider<?, ?> createValueMarkerProvider()
 	{
 		return new JavaValueMarker();
+	}
+
+	@Nullable
+	@Override
+	public XSmartStepIntoHandler<?> getSmartStepIntoHandler()
+	{
+		return mySmartStepIntoActionHandler;
 	}
 }

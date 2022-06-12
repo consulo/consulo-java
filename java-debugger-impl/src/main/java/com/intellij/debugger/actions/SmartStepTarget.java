@@ -15,13 +15,17 @@
  */
 package com.intellij.debugger.actions;
 
-import javax.annotation.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.Range;
+import consulo.ui.image.Image;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: 10/25/13
+ * Date: 10/25/13
  */
 public abstract class SmartStepTarget
 {
@@ -31,7 +35,7 @@ public abstract class SmartStepTarget
 	private final Range<Integer> myExpressionLines;
 
 	protected SmartStepTarget(
-			@javax.annotation.Nullable String label,
+			@Nullable String label,
 			@Nullable PsiElement highlightElement,
 			boolean needBreakpointRequest,
 			Range<Integer> expressionLines)
@@ -42,13 +46,13 @@ public abstract class SmartStepTarget
 		myExpressionLines = expressionLines;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiElement getHighlightElement()
 	{
 		return myHighlightElement;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getLabel()
 	{
 		return myLabel;
@@ -62,5 +66,17 @@ public abstract class SmartStepTarget
 	public Range<Integer> getCallingExpressionLines()
 	{
 		return myExpressionLines;
+	}
+
+	@Nullable
+	public Image getIcon()
+	{
+		return null;
+	}
+
+	@Nonnull
+	public String getPresentation()
+	{
+		return StringUtil.notNullize(getLabel());
 	}
 }
