@@ -15,6 +15,7 @@ import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.Factory;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.BitUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -134,11 +135,19 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 			{
 				implicitModifiers.add(ABSTRACT);
 
-				// nested interface is implicitly static
-				if(grandParent instanceof PsiClass)
+				// nested or local interface is implicitly static
+				if(!(grandParent instanceof PsiFile))
 				{
 					implicitModifiers.add(STATIC);
 				}
+			}
+			if(((PsiClass) parent).isRecord())
+			{
+				if(!(grandParent instanceof PsiFile))
+				{
+					implicitModifiers.add(STATIC);
+				}
+				implicitModifiers.add(FINAL);
 			}
 			if(((PsiClass) parent).isEnum())
 			{
@@ -149,7 +158,11 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 				List<PsiField> fields = parent instanceof PsiExtensibleClass ? ((PsiExtensibleClass) parent).getOwnFields()
 						: Arrays.asList(((PsiClass) parent).getFields());
 				boolean hasSubClass = ContainerUtil.find(fields, field -> field instanceof PsiEnumConstant && ((PsiEnumConstant) field).getInitializingClass() != null) != null;
-				if(!hasSubClass)
+				if(hasSubClass)
+				{
+					implicitModifiers.add(SEALED);
+				}
+				else
 				{
 					implicitModifiers.add(FINAL);
 				}
@@ -185,6 +198,10 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 				implicitModifiers.add(PRIVATE);
 			}
 		}
+		else if(parent instanceof PsiRecordComponent)
+		{
+			implicitModifiers.add(FINAL);
+		}
 		else if(parent instanceof PsiField)
 		{
 			if(parent instanceof PsiEnumConstant)
@@ -207,6 +224,10 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 			Collections.addAll(implicitModifiers, FINAL);
 		}
 		else if(parent instanceof PsiResourceVariable)
+		{
+			Collections.addAll(implicitModifiers, FINAL);
+		}
+		else if(parent instanceof PsiPatternVariable && !PsiUtil.isLanguageLevel16OrHigher(parent))
 		{
 			Collections.addAll(implicitModifiers, FINAL);
 		}

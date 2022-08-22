@@ -37,6 +37,8 @@ public interface PsiModifier
 	String DEFAULT = "default";
 	String OPEN = "open";
 	String TRANSITIVE = "transitive";
+	String SEALED = "sealed";
+	String NON_SEALED = "non-sealed";
 
 	String[] MODIFIERS = {
 			PUBLIC,
@@ -52,7 +54,9 @@ public interface PsiModifier
 			VOLATILE,
 			DEFAULT,
 			OPEN,
-			TRANSITIVE
+			TRANSITIVE,
+			SEALED,
+			NON_SEALED
 	};
 
 	@MagicConstant(stringValues = {
@@ -70,7 +74,9 @@ public interface PsiModifier
 			DEFAULT,
 			OPEN,
 			TRANSITIVE,
-			PACKAGE_LOCAL
+			PACKAGE_LOCAL,
+			SEALED,
+			NON_SEALED
 	})
 	@interface ModifierConstant
 	{

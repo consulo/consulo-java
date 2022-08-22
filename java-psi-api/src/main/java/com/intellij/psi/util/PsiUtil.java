@@ -47,8 +47,9 @@ import consulo.vfs.ArchiveFileSystem;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
@@ -117,12 +118,12 @@ public final class PsiUtil extends PsiUtilCore
 				.getOperationTokenType() != JavaTokenType.EQ;
 	}
 
-	public static boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @javax.annotation.Nullable PsiClass accessObjectClass)
+	public static boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass)
 	{
 		return isAccessible(place.getProject(), member, place, accessObjectClass);
 	}
 
-	public static boolean isAccessible(@Nonnull Project project, @Nonnull PsiMember member, @Nonnull PsiElement place, @javax.annotation.Nullable PsiClass accessObjectClass)
+	public static boolean isAccessible(@Nonnull Project project, @Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass)
 	{
 		return JavaPsiFacade.getInstance(project).getResolveHelper().isAccessible(member, place, accessObjectClass);
 	}
@@ -181,7 +182,7 @@ public final class PsiUtil extends PsiUtilCore
 		addException(method, exceptionClass, exceptionClass.getQualifiedName());
 	}
 
-	private static void addException(@Nonnull PsiMethod method, @Nullable PsiClass exceptionClass, @javax.annotation.Nullable String exceptionName) throws IncorrectOperationException
+	private static void addException(@Nonnull PsiMethod method, @Nullable PsiClass exceptionClass, @Nullable String exceptionName) throws IncorrectOperationException
 	{
 		assert exceptionClass != null || exceptionName != null : "One of exceptionName, exceptionClass must be not null";
 		PsiReferenceList throwsList = method.getThrowsList();
@@ -267,7 +268,7 @@ public final class PsiUtil extends PsiUtilCore
 	/**
 	 * @return enclosing outermost (method or class initializer) body but not higher than scope
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiElement getTopLevelEnclosingCodeBlock(@Nullable PsiElement element, PsiElement scope)
 	{
 		PsiElement blockSoFar = null;
@@ -485,7 +486,7 @@ public final class PsiUtil extends PsiUtilCore
 	}
 
 	@PsiModifier.ModifierConstant
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getAccessModifier(@AccessLevel int accessLevel)
 	{
 		@SuppressWarnings("UnnecessaryLocalVariable") @PsiModifier.ModifierConstant final String modifier = accessLevel > accessModifiers.length ? null : accessModifiers[accessLevel - 1];
@@ -573,7 +574,7 @@ public final class PsiUtil extends PsiUtilCore
 		return element instanceof PsiCodeBlock;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiElement getEnclosingStatement(PsiElement element)
 	{
 		while(element != null)
@@ -603,7 +604,7 @@ public final class PsiUtil extends PsiUtilCore
 		return psiElement;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass resolveClassInType(@Nullable PsiType type)
 	{
 		if(type instanceof PsiClassType)
@@ -631,7 +632,7 @@ public final class PsiUtil extends PsiUtilCore
 		return type instanceof PsiClassType ? ((PsiClassType) type).resolve() : null;
 	}
 
-	public static PsiClassType.ClassResolveResult resolveGenericsClassInType(@javax.annotation.Nullable PsiType type)
+	public static PsiClassType.ClassResolveResult resolveGenericsClassInType(@Nullable PsiType type)
 	{
 		if(type instanceof PsiClassType)
 		{
@@ -988,7 +989,7 @@ public final class PsiUtil extends PsiUtilCore
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass getTopLevelClass(@Nonnull PsiElement element)
 	{
 		final PsiFile file = element.getContainingFile();
@@ -1012,7 +1013,7 @@ public final class PsiUtil extends PsiUtilCore
 	 * @return element with static modifier enclosing place and enclosed by aClass (if not null)
 	 */
 	@Nullable
-	public static PsiModifierListOwner getEnclosingStaticElement(@Nonnull PsiElement place, @javax.annotation.Nullable PsiClass aClass)
+	public static PsiModifierListOwner getEnclosingStaticElement(@Nonnull PsiElement place, @Nullable PsiClass aClass)
 	{
 		LOG.assertTrue(aClass == null || !place.isPhysical() || PsiTreeUtil.isContextAncestor(aClass, place, false));
 		PsiElement parent = place;
@@ -1190,7 +1191,7 @@ public final class PsiUtil extends PsiUtilCore
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static VirtualFile getJarFile(@Nonnull PsiElement candidate)
 	{
 		VirtualFile file = candidate.getContainingFile().getVirtualFile();
@@ -1301,7 +1302,7 @@ public final class PsiUtil extends PsiUtilCore
 		return result;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiMember findEnclosingConstructorOrInitializer(PsiElement expression)
 	{
 		PsiMember parent = PsiTreeUtil.getParentOfType(expression, PsiClassInitializer.class, PsiEnumConstantInitializer.class, PsiMethod.class, PsiField.class);
@@ -1373,9 +1374,29 @@ public final class PsiUtil extends PsiUtilCore
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_10);
 	}
 
-	public static boolean isLanguageLevel11OrHigher(@Nonnull final PsiElement element)
+	public static boolean isLanguageLevel11OrHigher(@Nonnull PsiElement element)
 	{
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_11);
+	}
+
+	public static boolean isLanguageLevel14OrHigher(@Nonnull PsiElement element)
+	{
+		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_14);
+	}
+
+	public static boolean isLanguageLevel16OrHigher(@Nonnull PsiElement element)
+	{
+		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_16);
+	}
+
+	public static boolean isLanguageLevel17OrHigher(@Nonnull PsiElement element)
+	{
+		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_17);
+	}
+
+	public static boolean isLanguageLevel18OrHigher(@NotNull PsiElement element)
+	{
+		return getLanguageLevel(element).isAtLeast(Nonnull.JDK_18);
 	}
 
 	@Nonnull
@@ -1468,7 +1489,7 @@ public final class PsiUtil extends PsiUtilCore
 		return type != null ? type : substituteTypeParameter(psiType, JavaClassNames.JAVA_UTIL_COLLECTION, 0, eraseTypeParameter);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiType substituteTypeParameter(@Nullable final PsiType psiType, @Nonnull final String superClass, final int typeParamIndex, final boolean eraseTypeParameter)
 	{
 		if(psiType == null)
@@ -1551,7 +1572,7 @@ public final class PsiUtil extends PsiUtilCore
 		return parent instanceof PsiIfStatement && element == ((PsiIfStatement) parent).getElseBranch();
 	}
 
-	public static boolean isJavaToken(@javax.annotation.Nullable PsiElement element, IElementType type)
+	public static boolean isJavaToken(@Nullable PsiElement element, IElementType type)
 	{
 		return element instanceof PsiJavaToken && ((PsiJavaToken) element).getTokenType() == type;
 	}
@@ -1561,12 +1582,12 @@ public final class PsiUtil extends PsiUtilCore
 		return element instanceof PsiJavaToken && types.contains(((PsiJavaToken) element).getTokenType());
 	}
 
-	public static boolean isCatchParameter(@javax.annotation.Nullable final PsiElement element)
+	public static boolean isCatchParameter(@Nullable final PsiElement element)
 	{
 		return element instanceof PsiParameter && element.getParent() instanceof PsiCatchSection;
 	}
 
-	public static boolean isIgnoredName(@javax.annotation.Nullable final String name)
+	public static boolean isIgnoredName(@Nullable final String name)
 	{
 		return name != null && IGNORED_NAMES.contains(name);
 	}
@@ -1643,7 +1664,7 @@ public final class PsiUtil extends PsiUtilCore
 		return closes.length == 1 ? resourceClass.findMethodBySignature(closes[0], true) : null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiExpression skipParenthesizedExprDown(PsiExpression initializer)
 	{
 		while(initializer instanceof PsiParenthesizedExpression)
@@ -1667,7 +1688,7 @@ public final class PsiUtil extends PsiUtilCore
 		ensureValidType(type, null);
 	}
 
-	public static void ensureValidType(@Nonnull PsiType type, @javax.annotation.Nullable String customMessage)
+	public static void ensureValidType(@Nonnull PsiType type, @Nullable String customMessage)
 	{
 		if(!type.isValid())
 		{
@@ -1696,7 +1717,7 @@ public final class PsiUtil extends PsiUtilCore
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getMemberQualifiedName(@Nonnull PsiMember member)
 	{
 		if(member instanceof PsiClass)
