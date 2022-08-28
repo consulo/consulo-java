@@ -15,9 +15,10 @@
  */
 package com.intellij.psi;
 
+import com.intellij.lang.jvm.JvmTypeParametersOwner;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.lang.jvm.JvmTypeParametersOwner;
 
 /**
  * Represents a PSI element (class, interface, method or constructor) which can own a type
@@ -25,7 +26,7 @@ import com.intellij.lang.jvm.JvmTypeParametersOwner;
  *
  * @author dsl
  */
-public interface PsiTypeParameterListOwner extends PsiMember, JvmTypeParametersOwner
+public interface PsiTypeParameterListOwner extends PsiMember, JvmTypeParametersOwner, PsiJvmModifiersOwner
 {
 	/**
 	 * Checks if the element has any type parameters.

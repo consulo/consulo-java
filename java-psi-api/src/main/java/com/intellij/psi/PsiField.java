@@ -15,16 +15,16 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.jvm.JvmField;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
 /**
  * Represents a Java field or enum constant.
  */
-public interface PsiField extends PsiMember, PsiVariable, PsiDocCommentOwner, JvmField
+public interface PsiField extends PsiMember, PsiVariable, PsiDocCommentOwner, JvmField, PsiJvmModifiersOwner
 {
 	/**
 	 * The empty array of PSI fields which can be reused to avoid unnecessary allocations.

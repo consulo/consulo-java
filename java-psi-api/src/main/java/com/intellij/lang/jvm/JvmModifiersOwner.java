@@ -15,8 +15,6 @@
  */
 package com.intellij.lang.jvm;
 
-import static com.intellij.util.ArrayUtil.contains;
-
 import javax.annotation.Nonnull;
 
 /**
@@ -24,18 +22,11 @@ import javax.annotation.Nonnull;
  */
 public interface JvmModifiersOwner extends JvmAnnotatedElement
 {
-
-	@Nonnull
-	JvmModifier[] getModifiers();
-
 	/**
 	 * Checks if the element effectively has the specified modifier.
 	 *
 	 * @param modifier the modifier to check
 	 * @return true if the element has the modifier, false otherwise
 	 */
-	default boolean hasModifier(@Nonnull JvmModifier modifier)
-	{
-		return contains(modifier, getModifiers());
-	}
+	boolean hasModifier(@Nonnull JvmModifier modifier);
 }

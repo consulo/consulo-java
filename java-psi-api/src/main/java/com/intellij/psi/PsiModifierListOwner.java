@@ -16,20 +16,18 @@
 package com.intellij.psi;
 
 import com.intellij.lang.jvm.JvmModifier;
-import com.intellij.lang.jvm.JvmModifiersOwner;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.intellij.psi.PsiJvmConversionHelper.getListAnnotations;
-import static com.intellij.psi.PsiJvmConversionHelper.getListModifiers;
 
 /**
  * Represents a PSI element which has a list of modifiers (public/private/protected/etc.)
  * and annotations.
  */
-public interface PsiModifierListOwner extends PsiElement, JvmModifiersOwner
+public interface PsiModifierListOwner extends PsiElement
 {
 	/**
 	 * Returns the list of modifiers for the element.
@@ -50,17 +48,14 @@ public interface PsiModifierListOwner extends PsiElement, JvmModifiersOwner
 	boolean hasModifierProperty(@PsiModifier.ModifierConstant @NonNls @Nonnull String name);
 
 	@Nonnull
-	@Override
 	default PsiAnnotation[] getAnnotations()
 	{
 		return getListAnnotations(this);
 	}
 
-	@Nonnull
-	@Override
-	default JvmModifier[] getModifiers()
+	default boolean hasModifier(@Nonnull JvmModifier modifier)
 	{
-		return getListModifiers(this);
+		return PsiJvmConversionHelper.hasListModifier(this, modifier);
 	}
 
 	@Nullable
@@ -72,12 +67,5 @@ public interface PsiModifierListOwner extends PsiElement, JvmModifiersOwner
 	default boolean hasAnnotation(@Nonnull String fqn)
 	{
 		return PsiJvmConversionHelper.hasListAnnotation(this, fqn);
-	}
-
-	@Nonnull
-	@Override
-	default PsiElement getSourceElement()
-	{
-		return this;
 	}
 }

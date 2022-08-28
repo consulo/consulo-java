@@ -15,28 +15,48 @@
  */
 package com.intellij.psi;
 
-import static com.intellij.psi.PsiType.getJavaLangObject;
-import static com.intellij.psi.PsiType.getTypeByName;
-
-import java.util.EnumSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.JvmTypeParameter;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmSubstitutor;
 import com.intellij.lang.jvm.types.JvmType;
-import consulo.logging.Logger;
 import consulo.java.module.util.JavaClassNames;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
+
+import static com.intellij.psi.PsiType.getJavaLangObject;
+import static com.intellij.psi.PsiType.getTypeByName;
 
 class PsiJvmConversionHelper
 {
-
 	private static final Logger LOG = Logger.getInstance(PsiJvmConversionHelper.class);
+
+	private static final Map<JvmModifier, String> MODIFIERS;
+
+	static
+	{
+		Map<JvmModifier, String> modifiers = new EnumMap<>(JvmModifier.class);
+		modifiers.put(JvmModifier.PUBLIC, PsiModifier.PUBLIC);
+		modifiers.put(JvmModifier.PROTECTED, PsiModifier.PROTECTED);
+		modifiers.put(JvmModifier.PRIVATE, PsiModifier.PRIVATE);
+		modifiers.put(JvmModifier.PACKAGE_LOCAL, PsiModifier.PACKAGE_LOCAL);
+		modifiers.put(JvmModifier.STATIC, PsiModifier.STATIC);
+		modifiers.put(JvmModifier.ABSTRACT, PsiModifier.ABSTRACT);
+		modifiers.put(JvmModifier.FINAL, PsiModifier.FINAL);
+		modifiers.put(JvmModifier.NATIVE, PsiModifier.NATIVE);
+		modifiers.put(JvmModifier.SYNCHRONIZED, PsiModifier.SYNCHRONIZED);
+		modifiers.put(JvmModifier.STRICTFP, PsiModifier.STRICTFP);
+		modifiers.put(JvmModifier.TRANSIENT, PsiModifier.TRANSIENT);
+		modifiers.put(JvmModifier.VOLATILE, PsiModifier.VOLATILE);
+		modifiers.put(JvmModifier.TRANSITIVE, PsiModifier.TRANSITIVE);
+		MODIFIERS = Collections.unmodifiableMap(modifiers);
+	}
 
 	@Nonnull
 	static PsiAnnotation[] getListAnnotations(@Nonnull PsiModifierListOwner modifierListOwner)
@@ -45,24 +65,9 @@ class PsiJvmConversionHelper
 		return list == null ? PsiAnnotation.EMPTY_ARRAY : list.getAnnotations();
 	}
 
-	@Nonnull
-	static JvmModifier[] getListModifiers(@Nonnull PsiModifierListOwner modifierListOwner)
+	static boolean hasListModifier(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull JvmModifier modifier)
 	{
-		final Set<JvmModifier> result = EnumSet.noneOf(JvmModifier.class);
-		for(@NonNls String modifier : PsiModifier.MODIFIERS)
-		{
-			if(modifierListOwner.hasModifierProperty(modifier))
-			{
-				String jvmName = modifier.toUpperCase();
-				JvmModifier jvmModifier = JvmModifier.valueOf(jvmName);
-				result.add(jvmModifier);
-			}
-		}
-		if(modifierListOwner.hasModifierProperty(PsiModifier.PACKAGE_LOCAL))
-		{
-			result.add(JvmModifier.PACKAGE_LOCAL);
-		}
-		return result.toArray(JvmModifier.EMPTY_ARRAY);
+		return modifierListOwner.hasModifierProperty(MODIFIERS.get(modifier));
 	}
 
 	@Nonnull
@@ -83,7 +88,7 @@ class PsiJvmConversionHelper
 		return JvmClassKind.CLASS;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	static JvmReferenceType getClassSuperType(@Nonnull PsiClass psiClass)
 	{
 		if(psiClass.isInterface())
@@ -171,7 +176,7 @@ class PsiJvmConversionHelper
 			mySubstitutor = substitutor;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public JvmType substitute(@Nonnull JvmTypeParameter typeParameter)
 		{

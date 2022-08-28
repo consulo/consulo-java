@@ -15,18 +15,19 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ArrayFactory;
 import consulo.psi.PsiPackage;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java package.
  */
-public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
+public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
 {
   @NonNls String PACKAGE_INFO_CLASS = "package-info";
   @NonNls String PACKAGE_INFO_FILE = PACKAGE_INFO_CLASS + ".java";
@@ -41,7 +42,7 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
     }
   };
 
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaPackage getParentPackage();
 
   /**
@@ -85,7 +86,7 @@ public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
    * @return the list of annotations, or null if the package does not have any package-level annotations.
    * @since 5.1
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiModifierList getAnnotationList();
 
   /**

@@ -15,15 +15,16 @@
  */
 package com.intellij.psi;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.jvm.JvmParameter;
 import com.intellij.util.ArrayFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents the parameter of a Java method, foreach (enhanced for) statement or catch block.
  */
-public interface PsiParameter extends PsiVariable, JvmParameter
+public interface PsiParameter extends PsiVariable, JvmParameter, PsiJvmModifiersOwner
 {
 	/**
 	 * The empty array of PSI parameters which can be reused to avoid unnecessary allocations.
@@ -52,7 +53,7 @@ public interface PsiParameter extends PsiVariable, JvmParameter
 	 * {@inheritDoc}
 	 */
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	PsiTypeElement getTypeElement();
 
 	/* This explicit declaration is required to force javac generate bridge method 'JvmType getType()'; without it calling
@@ -60,11 +61,4 @@ public interface PsiParameter extends PsiVariable, JvmParameter
 	@Nonnull
 	@Override
 	PsiType getType();
-
-	@Nonnull
-	@Override
-	default PsiAnnotation[] getAnnotations()
-	{
-		return PsiVariable.super.getAnnotations();
-	}
 }

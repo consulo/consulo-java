@@ -25,7 +25,6 @@ public enum JvmModifier
 	STATIC,
 	ABSTRACT,
 	FINAL,
-	DEFAULT,
 
 	NATIVE,
 	SYNCHRONIZED,

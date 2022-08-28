@@ -50,6 +50,8 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 		NAME_TO_KEYWORD_TYPE_MAP.put(DEFAULT, JavaTokenType.DEFAULT_KEYWORD);
 		NAME_TO_KEYWORD_TYPE_MAP.put(OPEN, JavaTokenType.OPEN_KEYWORD);
 		NAME_TO_KEYWORD_TYPE_MAP.put(TRANSITIVE, JavaTokenType.TRANSITIVE_KEYWORD);
+		NAME_TO_KEYWORD_TYPE_MAP.put(SEALED, JavaTokenType.SEALED_KEYWORD);
+		NAME_TO_KEYWORD_TYPE_MAP.put(NON_SEALED, JavaTokenType.NON_SEALED_KEYWORD);
 
 		KEYWORD_TYPE_TO_NAME_MAP = new HashMap<>();
 		for(String name : NAME_TO_KEYWORD_TYPE_MAP.keySet())
@@ -263,7 +265,11 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 		if(parent instanceof PsiMethod)
 		{
 			PsiMethod method = (PsiMethod) parent;
-			CodeEditUtil.markToReformat(method.getParameterList().getNode(), true);
+			ASTNode node = method.getParameterList().getNode();
+			if(node != null)
+			{ // could be a compact constructor parameter list
+				CodeEditUtil.markToReformat(node, true);
+			}
 		}
 
 		if(value)
@@ -288,6 +294,22 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 				if(type == null)
 				{
 					return;
+				}
+			}
+
+			if(type == JavaTokenType.SEALED_KEYWORD || type == JavaTokenType.FINAL_KEYWORD || type == JavaTokenType.NON_SEALED_KEYWORD)
+			{
+				if(type != JavaTokenType.SEALED_KEYWORD)
+				{
+					setModifierProperty(SEALED, false);
+				}
+				if(type != JavaTokenType.NON_SEALED_KEYWORD)
+				{
+					setModifierProperty(NON_SEALED, false);
+				}
+				if(type != JavaTokenType.FINAL_KEYWORD)
+				{
+					setModifierProperty(FINAL, false);
 				}
 			}
 
