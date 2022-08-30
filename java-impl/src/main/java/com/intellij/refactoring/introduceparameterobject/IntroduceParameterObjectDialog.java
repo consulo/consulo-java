@@ -52,7 +52,7 @@ import com.intellij.refactoring.move.moveClassesOrPackages.DestinationFolderComb
 import com.intellij.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.refactoring.ui.RefactoringDialog;
 import com.intellij.refactoring.util.ParameterTablePanel;
-import com.intellij.refactoring.util.VariableData;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.ui.ComboboxWithBrowseButton;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.RecentsManager;

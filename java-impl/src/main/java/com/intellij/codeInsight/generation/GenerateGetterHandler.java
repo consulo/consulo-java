@@ -17,7 +17,7 @@ package com.intellij.codeInsight.generation;
 
 import javax.swing.JComponent;
 
-import consulo.java.codeInsight.JavaCodeInsightBundle;
+import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;

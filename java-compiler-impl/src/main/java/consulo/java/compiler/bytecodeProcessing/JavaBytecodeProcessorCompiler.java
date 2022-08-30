@@ -28,11 +28,11 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.compiler.cache.Cache;
-import com.intellij.compiler.cache.JavaDependencyCache;
+import com.intellij.java.compiler.cache.Cache;
+import com.intellij.java.compiler.cache.JavaDependencyCache;
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.FileObject;
-import com.intellij.compiler.impl.javaCompiler.JavaCompiler;
+import com.intellij.java.compiler.impl.javaCompiler.FileObject;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompiler;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.openapi.compiler.ClassInstrumentingCompiler;

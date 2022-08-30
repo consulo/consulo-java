@@ -17,7 +17,7 @@ package com.intellij.execution.jar;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.debugger.impl.GenericDebuggerRunner;
+import com.intellij.java.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 

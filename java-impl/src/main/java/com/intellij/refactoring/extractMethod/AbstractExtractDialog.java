@@ -22,7 +22,7 @@ package com.intellij.refactoring.extractMethod;
 
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiType;
-import com.intellij.refactoring.util.VariableData;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 
 public interface AbstractExtractDialog
 {

@@ -26,9 +26,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.intellij.find.FindBundle;
+import com.intellij.java.analysis.impl.find.findUsages.JavaThrowFindUsagesOptions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.search.ThrowSearchUtil;
+import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.util.ui.UIUtil;

@@ -16,7 +16,7 @@
 
 package consulo.java.module.extension.ui;
 
-import com.intellij.compiler.impl.javaCompiler.TargetOptionsComponent;
+import com.intellij.java.compiler.impl.javaCompiler.TargetOptionsComponent;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;

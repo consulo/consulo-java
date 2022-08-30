@@ -43,15 +43,15 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionProfile;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.codeInspection.reference.RefJavaUtil;
+import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;

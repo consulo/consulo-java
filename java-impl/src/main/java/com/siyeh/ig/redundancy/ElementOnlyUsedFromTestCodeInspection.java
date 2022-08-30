@@ -19,6 +19,7 @@ import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
+import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.openapi.roots.ProjectRootManager;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.vfs.VirtualFile;

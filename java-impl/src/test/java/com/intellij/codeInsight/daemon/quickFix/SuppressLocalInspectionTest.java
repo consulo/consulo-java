@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.localCanBeFinal.LocalCanBeFinal;
+import com.intellij.java.analysis.impl.codeInspection.localCanBeFinal.LocalCanBeFinal;
 
 public abstract class SuppressLocalInspectionTest extends LightQuickFixTestCase {
   @Override

@@ -2,9 +2,9 @@ package consulo.java.compiler.impl.javaCompiler;
 
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler;
-import com.intellij.compiler.impl.javaCompiler.javac.JavacSettingsBuilder;
-import com.intellij.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JavacSettingsBuilder;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;

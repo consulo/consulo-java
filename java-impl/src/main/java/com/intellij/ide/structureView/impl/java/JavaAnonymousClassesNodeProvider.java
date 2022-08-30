@@ -15,7 +15,7 @@ import com.intellij.openapi.util.PropertyOwner;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiElement;
-import consulo.java.codeInsight.JavaCodeInsightBundle;
+import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

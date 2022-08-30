@@ -15,6 +15,7 @@
  */
 package com.intellij.ide.highlighter;
 
+import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lexer.JavaHighlightingLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.HighlighterColors;

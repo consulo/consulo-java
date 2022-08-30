@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion.scope;
 
-import com.intellij.codeInspection.SuppressManager;
+import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstanceBase;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;

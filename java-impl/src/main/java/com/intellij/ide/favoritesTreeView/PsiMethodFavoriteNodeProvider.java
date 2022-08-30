@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
-import com.intellij.codeInspection.reference.RefMethodImpl;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import com.intellij.ide.favoritesTreeView.smartPointerPsiNodes.MethodSmartPointerNode;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.util.treeView.AbstractTreeNode;

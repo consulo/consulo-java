@@ -16,13 +16,14 @@
 package com.intellij.refactoring.util.duplicates;
 
 import com.intellij.codeInsight.PsiEquivalenceUtil;
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -90,8 +91,8 @@ public class MatchUtil {
     if (expressionType == null && match.myChangedParams.isEmpty()) return;
     final List<ParameterInfoImpl> newParameters = patchParams(match.myChangedParams, psiMethod);
     final ChangeSignatureProcessor csp = new ChangeSignatureProcessor(psiMethod.getProject(), psiMethod, false, null, psiMethod.getName(),
-                                                                      expressionType != null ? expressionType : psiMethod.getReturnType(),
-                                                                      newParameters.toArray(new ParameterInfoImpl[newParameters.size()]));
+        expressionType != null ? expressionType : psiMethod.getReturnType(),
+        newParameters.toArray(new ParameterInfoImpl[newParameters.size()]));
 
     csp.run();
   }

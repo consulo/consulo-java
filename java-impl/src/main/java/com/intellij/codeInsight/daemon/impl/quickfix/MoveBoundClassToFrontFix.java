@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.openapi.command.undo.UndoUtil;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -30,7 +30,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceList;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class MoveBoundClassToFrontFix extends ExtendsListFix {
   private static final Logger LOG = Logger.getInstance(MoveBoundClassToFrontFix.class);

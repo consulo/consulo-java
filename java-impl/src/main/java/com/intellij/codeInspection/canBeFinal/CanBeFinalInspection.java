@@ -29,6 +29,11 @@ import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.analysis.impl.codeInspection.canBeFinal.CanBeFinalHandler;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -44,7 +49,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 
-public class CanBeFinalInspection extends GlobalJavaInspectionTool {
+public class CanBeFinalInspection extends GlobalJavaInspectionTool
+{
   private static final Logger LOG = Logger.getInstance(CanBeFinalInspection.class);
 
   public boolean REPORT_CLASSES = false;

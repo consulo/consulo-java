@@ -16,7 +16,7 @@
 package com.intellij.slicer;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInspection.dataFlow.DfaUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;

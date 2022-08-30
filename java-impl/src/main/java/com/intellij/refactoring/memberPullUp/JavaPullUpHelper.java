@@ -27,7 +27,7 @@ import java.util.Set;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
-import com.intellij.codeInsight.intention.AddAnnotationFix;
+import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.lang.Language;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;

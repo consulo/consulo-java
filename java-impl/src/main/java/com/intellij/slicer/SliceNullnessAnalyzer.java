@@ -17,7 +17,7 @@ package com.intellij.slicer;
 
 import com.intellij.codeInsight.Nullability;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
-import com.intellij.codeInspection.dataFlow.NullabilityUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.AbstractTreeStructure;
 import com.intellij.openapi.application.ReadAction;

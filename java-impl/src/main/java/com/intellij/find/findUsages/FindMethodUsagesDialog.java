@@ -16,6 +16,7 @@
 package com.intellij.find.findUsages;
 
 import com.intellij.find.FindBundle;
+import com.intellij.java.analysis.impl.find.findUsages.JavaMethodFindUsagesOptions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.ui.IdeBorderFactory;

@@ -19,6 +19,11 @@ import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import com.intellij.java.analysis.codeInspection.reference.RefParameter;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
@@ -41,7 +46,8 @@ import java.util.List;
 /**
  * @author max
  */
-public class SameParameterValueInspection extends GlobalJavaInspectionTool {
+public class SameParameterValueInspection extends GlobalJavaInspectionTool
+{
   private static final Logger LOG = Logger.getInstance(SameParameterValueInspection.class);
 
   @Override

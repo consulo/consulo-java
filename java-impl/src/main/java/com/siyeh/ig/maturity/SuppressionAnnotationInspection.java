@@ -17,7 +17,7 @@ package com.siyeh.ig.maturity;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.SuppressManager;
+import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiAnnotation;

@@ -49,7 +49,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassKind;
 import com.intellij.psi.util.CreateClassUtil;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
  * @author peter

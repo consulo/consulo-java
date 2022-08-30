@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
+import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
 
 public abstract class LambdaRedundantCastTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/redundantCast";

@@ -35,7 +35,7 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiReferenceList;
 import com.intellij.psi.PsiTypeParameter;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(ExtendsListFix.class);

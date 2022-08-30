@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.codeStyle.arrangement;
 
-import com.intellij.ide.highlighter.JavaHighlightingColors;
+import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.colors.EditorColors;

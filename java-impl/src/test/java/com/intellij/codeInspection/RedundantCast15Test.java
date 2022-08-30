@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
-import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
+import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class RedundantCast15Test extends InspectionTestCase {

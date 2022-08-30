@@ -32,6 +32,10 @@ import com.intellij.analysis.AnalysisUIOptions;
 import com.intellij.analysis.BaseAnalysisActionDialog;
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.ReturnValue;
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.VariableReturnValue;
 import com.intellij.lang.ContextAwareActionHandler;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
@@ -58,7 +62,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.extractMethod.InputVariables;
+import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 
 /**

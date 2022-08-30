@@ -24,6 +24,8 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.reference.RefManager;
+import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.psi.PsiElement;
 
 public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool implements BatchSuppressableTool {

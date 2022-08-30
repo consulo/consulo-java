@@ -1,7 +1,7 @@
 package consulo.java.compiler.impl.javaCompiler;
 
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ProcessHandler;

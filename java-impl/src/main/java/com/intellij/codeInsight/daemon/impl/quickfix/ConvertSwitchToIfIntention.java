@@ -17,7 +17,7 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.*;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

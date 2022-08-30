@@ -20,7 +20,7 @@ import com.intellij.codeInspection.CommonProblemDescriptor;
 import com.intellij.codeInspection.GlobalInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefPackage;
+import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.util.ui.RegExFormatter;

@@ -17,6 +17,12 @@ package com.intellij.codeInspection.reference;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
+import com.intellij.java.analysis.codeInspection.reference.RefField;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
@@ -29,7 +35,8 @@ import com.intellij.psi.util.PsiUtil;
  * @author max
  * Date: Oct 21, 2001
  */
-public class RefFieldImpl extends RefJavaElementImpl implements RefField {
+public class RefFieldImpl extends RefJavaElementImpl implements RefField
+{
   private static final int USED_FOR_READING_MASK = 0x10000;
   private static final int USED_FOR_WRITING_MASK = 0x20000;
   private static final int ASSIGNED_ONLY_IN_INITIALIZER = 0x40000;

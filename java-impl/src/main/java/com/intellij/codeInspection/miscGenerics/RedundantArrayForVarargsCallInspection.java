@@ -20,6 +20,7 @@ import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
+import com.intellij.java.analysis.impl.codeInspection.miscGenerics.GenericsInspectionToolBase;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
@@ -35,7 +36,8 @@ import java.util.List;
 /**
  * @author ven
  */
-public class RedundantArrayForVarargsCallInspection extends GenericsInspectionToolBase {
+public class RedundantArrayForVarargsCallInspection extends GenericsInspectionToolBase
+{
   private static final Logger LOG = Logger.getInstance(RedundantArrayForVarargsCallInspection.class);
   private final LocalQuickFix myQuickFixAction = new MyQuickFix();
 

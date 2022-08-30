@@ -1,6 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
+import com.intellij.java.analysis.impl.codeInspection.NumericOverflowInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class NumericOverflowTest extends InspectionTestCase {

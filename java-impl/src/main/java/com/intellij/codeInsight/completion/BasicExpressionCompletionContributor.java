@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.guess.GuessManager;
+import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.codeInsight.lookup.KeywordLookupItem;
 import com.intellij.codeInsight.lookup.LookupElement;

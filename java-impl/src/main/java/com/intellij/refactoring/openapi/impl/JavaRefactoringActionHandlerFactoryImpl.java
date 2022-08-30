@@ -17,7 +17,7 @@ package com.intellij.refactoring.openapi.impl;
 
 import jakarta.inject.Singleton;
 
-import com.intellij.refactoring.JavaRefactoringActionHandlerFactory;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.anonymousToInner.AnonymousToInnerHandler;
 import com.intellij.refactoring.changeSignature.JavaChangeSignatureHandler;

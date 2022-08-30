@@ -16,10 +16,10 @@
 package com.intellij.codeInsight.daemon.impl;
 
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.SuppressManager;
+import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;

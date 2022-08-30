@@ -19,8 +19,8 @@ import java.util.Arrays;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
-import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;

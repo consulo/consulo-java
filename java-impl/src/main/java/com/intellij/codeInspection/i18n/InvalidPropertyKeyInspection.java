@@ -20,6 +20,7 @@ import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
+import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.lang.properties.PropertiesReferenceManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.module.Module;
@@ -40,7 +41,8 @@ import java.util.*;
  * @author max
  * @author Konstantin Bulenkov
  */
-public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
+public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool
+{
   @Override
   @Nonnull
   public String getGroupDisplayName() {

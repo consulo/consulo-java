@@ -15,13 +15,15 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
+import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.diff.DiffContentFactory;
 import com.intellij.diff.DiffManager;
 import com.intellij.diff.DiffRequestPanel;
 import com.intellij.diff.contents.DocumentContent;
 import com.intellij.diff.requests.SimpleDiffRequest;
 import com.intellij.diff.util.DiffUserDataKeys;
+import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
+import com.intellij.java.analysis.impl.refactoring.extractMethod.ParametersFolder;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
@@ -37,9 +39,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.refactoring.util.RefactoringUtil;
-import com.intellij.refactoring.util.VariableData;
-import com.intellij.refactoring.util.duplicates.DuplicatesFinder;
-import com.intellij.refactoring.util.duplicates.Match;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.text.UniqueNameGenerator;

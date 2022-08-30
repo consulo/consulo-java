@@ -21,8 +21,8 @@
 package com.intellij.codeInspection;
 
 import com.intellij.codeInspection.lang.HTMLComposerExtension;
-import com.intellij.codeInspection.reference.RefClass;
-import com.intellij.codeInspection.reference.RefMethod;
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import consulo.util.dataholder.Key;

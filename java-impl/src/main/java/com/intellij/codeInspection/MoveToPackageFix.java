@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;

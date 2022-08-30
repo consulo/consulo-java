@@ -18,8 +18,9 @@ package com.intellij.codeInspection.unneededThrows;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInspection.*;
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -32,7 +33,8 @@ import java.util.Set;
  * @author anna
  * @since 15-Nov-2005
  */
-public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool {
+public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
+{
   @Override
   @Nonnull
   public String getGroupDisplayName() {

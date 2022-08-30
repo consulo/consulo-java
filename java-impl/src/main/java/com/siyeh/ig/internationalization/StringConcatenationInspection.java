@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.intention.AddAnnotationFix;
+import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;

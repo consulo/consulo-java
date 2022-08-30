@@ -1,7 +1,7 @@
 package consulo.java.compiler.impl.javaCompiler;
 
-import com.intellij.compiler.impl.javaCompiler.BackendCompilerWrapper;
-import com.intellij.compiler.impl.javaCompiler.FileObject;
+import com.intellij.java.compiler.impl.javaCompiler.BackendCompilerWrapper;
+import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;

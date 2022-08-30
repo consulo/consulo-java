@@ -17,7 +17,7 @@ package com.intellij.codeInspection;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.MethodThrowsFix;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClassType;

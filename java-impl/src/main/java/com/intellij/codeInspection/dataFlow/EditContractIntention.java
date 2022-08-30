@@ -2,13 +2,16 @@
 package com.intellij.codeInspection.dataFlow;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.DefaultInferredAnnotationProvider;
+import com.intellij.java.analysis.impl.codeInsight.DefaultInferredAnnotationProvider;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
 import com.intellij.codeInsight.ExternalAnnotationsManagerImpl;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
+import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.MutationSignature;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;

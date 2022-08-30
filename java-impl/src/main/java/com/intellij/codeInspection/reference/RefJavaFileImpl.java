@@ -20,6 +20,8 @@
  */
 package com.intellij.codeInspection.reference;
 
+import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefPackageImpl;
 import com.intellij.psi.PsiJavaFile;
 
 public class RefJavaFileImpl extends RefFileImpl {

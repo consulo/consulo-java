@@ -10,8 +10,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.jdom.Element;
-import com.intellij.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
-import com.intellij.debugger.settings.DebuggerSettings;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
+import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;

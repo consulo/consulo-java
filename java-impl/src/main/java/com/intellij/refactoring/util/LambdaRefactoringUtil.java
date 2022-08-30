@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
+import com.intellij.java.analysis.impl.codeInspection.RedundantLambdaCodeBlockInspection;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.Messages;

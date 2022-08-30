@@ -16,14 +16,14 @@
 
 <consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij">
-		<applicationService serviceInterface="com.intellij.jam.JamClassGenerator" serviceImplementation="consulo.java.jam.JamClassGeneratorImpl"/>
+		<applicationService serviceInterface="com.intellij.jam.JamClassGenerator" serviceImplementation="consulo.java.jam.impl.JamClassGeneratorImpl"/>
 
-		<applicationService serviceInterface="consulo.java.jam.util.JamCommonService" serviceImplementation="consulo.java.jam.util.impl.JamCommonServiceImpl"/>
+		<applicationService serviceInterface="consulo.java.jam.util.JamCommonService" serviceImplementation="consulo.java.jam.impl.JamCommonServiceImpl"/>
 
 		<projectService serviceInterface="com.intellij.jam.JamService" serviceImplementation="com.intellij.jam.JamService"/>
 
 		<psi.referenceContributor language="JAVA" implementation="com.intellij.jam.JamReferenceContributor"/>
 
-		<semContributor implementation="consulo.java.jam.JamToSemContributor"/>
+		<semContributor implementation="consulo.java.jam.impl.JamToSemContributor"/>
 	</extensions>
 </consulo-plugin>

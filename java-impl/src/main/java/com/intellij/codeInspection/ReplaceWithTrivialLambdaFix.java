@@ -24,7 +24,7 @@ import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMethodReferenceExpression;
 import com.intellij.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.util.ObjectUtil;
-import consulo.java.codeInsight.JavaInspectionsBundle;
+import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 
 /**
  * @author Tagir Valeev

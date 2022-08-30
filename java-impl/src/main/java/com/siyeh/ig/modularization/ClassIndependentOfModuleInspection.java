@@ -21,6 +21,8 @@ import com.intellij.codeInspection.GlobalInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.reference.*;
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
+import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;

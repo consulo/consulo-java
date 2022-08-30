@@ -42,7 +42,7 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
 
 public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElement {

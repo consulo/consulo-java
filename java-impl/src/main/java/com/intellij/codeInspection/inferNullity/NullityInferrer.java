@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.codeInsight.intention.AddAnnotationFix;
+import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.*;

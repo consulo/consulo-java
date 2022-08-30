@@ -20,6 +20,10 @@ import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.WriteExternalException;
@@ -41,7 +45,8 @@ import java.util.List;
 /**
  * @author max
  */
-public class UnusedReturnValue extends GlobalJavaInspectionTool{
+public class UnusedReturnValue extends GlobalJavaInspectionTool
+{
   private MakeVoidQuickFix myQuickFix;
 
   public boolean IGNORE_BUILDER_PATTERN = false;

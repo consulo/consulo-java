@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.ClassWriter;
 import consulo.java.module.extension.JavaModuleExtension;
-import com.intellij.compiler.PsiClassWriter;
+import com.intellij.java.compiler.PsiClassWriter;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.ClassInstrumentingCompiler;

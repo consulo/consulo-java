@@ -17,6 +17,7 @@ package com.intellij.refactoring.introduceparameterobject;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.PackageUtil;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.util.Ref;
@@ -72,13 +73,13 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
   private PsiMethod myExistingClassCompatibleConstructor;
 
   public IntroduceParameterObjectProcessor(String className,
-                                           String packageName,
-                                           MoveDestination moveDestination,
-                                           PsiMethod method,
-                                           VariableData[] parameters, boolean keepMethodAsDelegate, final boolean useExistingClass,
-                                           final boolean createInnerClass,
-                                           String newVisibility,
-                                           boolean generateAccessors) {
+										   String packageName,
+										   MoveDestination moveDestination,
+										   PsiMethod method,
+										   VariableData[] parameters, boolean keepMethodAsDelegate, final boolean useExistingClass,
+										   final boolean createInnerClass,
+										   String newVisibility,
+										   boolean generateAccessors) {
     super(method.getProject());
     myMoveDestination = moveDestination;
     this.method = method;

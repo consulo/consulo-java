@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
-import com.intellij.codeInsight.daemon.impl.UnusedSymbolUtil;
-import com.intellij.codeInspection.dataFlow.Mutability;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.UnusedSymbolUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
 import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.psi.*;

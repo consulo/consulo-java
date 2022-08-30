@@ -38,7 +38,7 @@ import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   public ImplementMethodsFix(PsiElement aClass) {

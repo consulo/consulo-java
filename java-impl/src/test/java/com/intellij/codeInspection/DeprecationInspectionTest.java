@@ -5,7 +5,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.deprecation.DeprecationInspection;
+import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**

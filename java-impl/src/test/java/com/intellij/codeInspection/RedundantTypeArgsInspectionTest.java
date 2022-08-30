@@ -5,7 +5,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.miscGenerics.RedundantTypeArgsInspection;
+import com.intellij.java.analysis.impl.codeInspection.miscGenerics.RedundantTypeArgsInspection;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 

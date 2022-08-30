@@ -147,25 +147,25 @@
 			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="MemberPushDown"/>
 		</group>
 
-		<action id="Hotswap" class="com.intellij.debugger.actions.HotSwapAction">
+		<action id="Hotswap" class="com.intellij.java.debugger.impl.actions.HotSwapAction">
 			<add-to-group group-id="DebugMainMenu" anchor="before" relative-to-action="StepOver"/>
 		</action>
 
-		<action id="Debugger.PopFrame" class="com.intellij.debugger.actions.PopFrameAction" icon="consulo.platform.base.PlatformIconGroup@actions.popframe">
+		<action id="Debugger.PopFrame" class="com.intellij.java.debugger.impl.actions.PopFrameAction" icon="consulo.platform.base.PlatformIconGroup@actions.popframe">
 			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ForceRunToCursor"/>
 		</action>
 
 		<group id="ToggleBreakpointAction">
-			<action id="ToggleMethodBreakpoint" class="com.intellij.debugger.actions.ToggleMethodBreakpointAction"/>
-			<action id="ToggleFieldBreakpoint" class="com.intellij.debugger.actions.ToggleFieldBreakpointAction"/>
+			<action id="ToggleMethodBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleMethodBreakpointAction"/>
+			<action id="ToggleFieldBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleFieldBreakpointAction"/>
 			<!--Moved to XDebugger <action id="ToggleBreakpointEnabled" class="com.intellij.debugger.actions.ToggleBreakpointEnabledAction"/>-->
 			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ToggleLineBreakpoint"/>
 		</group>
 
-		<action id="ExportThreads" class="com.intellij.debugger.actions.ExportThreadsAction" icon="consulo.platform.base.PlatformIconGroup@actions.export">
+		<action id="ExportThreads" class="com.intellij.java.debugger.impl.actions.ExportThreadsAction" icon="consulo.platform.base.PlatformIconGroup@actions.export">
 			<add-to-group group-id="RunMenu" anchor="last"/>
 		</action>
-		<action id="DumpThreads" class="com.intellij.debugger.actions.ThreadDumpAction" text="Take a thread dump" icon="consulo.platform.base.PlatformIconGroup@actions.dump">
+		<action id="DumpThreads" class="com.intellij.java.debugger.impl.actions.ThreadDumpAction" text="Take a thread dump" icon="consulo.platform.base.PlatformIconGroup@actions.dump">
 			<add-to-group group-id="RunMenu" anchor="last"/>
 		</action>
 
@@ -193,31 +193,31 @@
 		</action>
 
 		<group id="JavaDebuggerActions">
-			<action id="Debugger.CustomizeContextView" class="com.intellij.debugger.actions.CustomizeContextViewAction">
+			<action id="Debugger.CustomizeContextView" class="com.intellij.java.debugger.impl.actions.CustomizeContextViewAction">
 				<add-to-group group-id="XDebugger.Variables.Tree.Popup" anchor="last"/>
 				<add-to-group group-id="XDebugger.Watches.Tree.Popup" anchor="last"/>
 			</action>
-			<action id="Debugger.CustomizeThreadsView" class="com.intellij.debugger.actions.CustomizeThreadsViewAction">
+			<action id="Debugger.CustomizeThreadsView" class="com.intellij.java.debugger.impl.actions.CustomizeThreadsViewAction">
 				<add-to-group group-id="XDebugger.Frames.Tree.Popup" anchor="last"/>
 			</action>
-			<action id="Debugger.EditFrameSource" class="com.intellij.debugger.actions.EditFrameSourceAction"/>
-			<action id="Debugger.EditNodeSource" class="com.intellij.debugger.actions.EditSourceAction"/>
-			<action id="Debugger.EditTypeSource" class="com.intellij.debugger.actions.JumpToObjectAction"/>
+			<action id="Debugger.EditFrameSource" class="com.intellij.java.debugger.impl.actions.EditFrameSourceAction"/>
+			<action id="Debugger.EditNodeSource" class="com.intellij.java.debugger.impl.actions.EditSourceAction"/>
+			<action id="Debugger.EditTypeSource" class="com.intellij.java.debugger.impl.actions.JumpToObjectAction"/>
 			<reference ref="Debugger.PopFrame"/>
-			<action id="Debugger.ViewAsGroup" class="com.intellij.debugger.actions.ViewAsGroup">
+			<action id="Debugger.ViewAsGroup" class="com.intellij.java.debugger.impl.actions.ViewAsGroup">
 				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
 			</action>
-			<action id="Debugger.AdjustArrayRange" class="com.intellij.debugger.actions.ArrayAction$AdjustArrayRangeAction">
+			<action id="Debugger.AdjustArrayRange" class="com.intellij.java.debugger.impl.actions.ArrayAction$AdjustArrayRangeAction">
 				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
 			</action>
 			<!--<action id="Debugger.SetValue" class="com.intellij.debugger.actions.SetValueAction"/>-->
 			<!--<action id="Debugger.ShowAsHex" class="com.intellij.debugger.actions.ShowAsHexAction" text="Show as Hex"/>-->
-			<action id="Debugger.ResumeThread" class="com.intellij.debugger.actions.ResumeThreadAction"/>
-			<action id="Debugger.FreezeThread" class="com.intellij.debugger.actions.FreezeThreadAction"/>
-			<action id="Debugger.InterruptThread" class="com.intellij.debugger.actions.InterruptThreadAction"/>
-			<action id="Debugger.CreateRenderer" class="com.intellij.debugger.actions.CreateRendererAction" text="Create..."/>
-			<action id="Debugger.AutoRenderer" class="com.intellij.debugger.actions.AutoRendererAction"/>
-			<action id="Debugger.MuteRenderers" class="com.intellij.debugger.ui.tree.actions.ForceOnDemandRenderersAction" text="Mute Renderers">
+			<action id="Debugger.ResumeThread" class="com.intellij.java.debugger.impl.actions.ResumeThreadAction"/>
+			<action id="Debugger.FreezeThread" class="com.intellij.java.debugger.impl.actions.FreezeThreadAction"/>
+			<action id="Debugger.InterruptThread" class="com.intellij.java.debugger.impl.actions.InterruptThreadAction"/>
+			<action id="Debugger.CreateRenderer" class="com.intellij.java.debugger.impl.actions.CreateRendererAction" text="Create..."/>
+			<action id="Debugger.AutoRenderer" class="com.intellij.java.debugger.impl.actions.AutoRendererAction"/>
+			<action id="Debugger.MuteRenderers" class="com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction" text="Mute Renderers">
 				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
 			</action>
 
@@ -268,52 +268,52 @@
 
 
 		<group id="MemoryView.SettingsPopupActionGroup">
-			<action class="com.intellij.debugger.memory.action.ShowClassesWithInstanceAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowClassesWithInstanceAction"
 					id="MemoryView.ShowOnlyWithInstances"
 					text="Show With Instances Only"/>
 
-			<action class="com.intellij.debugger.memory.action.ShowClassesWithDiffAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowClassesWithDiffAction"
 					id="MemoryView.ShowOnlyWithDiff"
 					text="Show Non-Zero Diff Only"/>
 
-			<action class="com.intellij.debugger.memory.action.ShowTrackedAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowTrackedAction"
 					id="MemoryView.ShowOnlyTracked"
 					text="Show Tracked Classes Only"/>
 
 			<separator/>
 
-			<action class="com.intellij.debugger.memory.action.EnableBackgroundTrackingAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.EnableBackgroundTrackingAction"
 					id="MemoryView.EnableTrackingWithClosedWindow"
 					text="Enable Tracking With Hidden Memory View"/>
 		</group>
 
 		<group id="MemoryView.ClassesPopupActionGroup">
-			<action class="com.intellij.debugger.memory.action.ShowInstancesFromClassesViewAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowInstancesFromClassesViewAction"
 					id="MemoryView.ShowInstances"
 					text="Show Instances"/>
 
-			<action class="com.intellij.debugger.memory.action.ShowNewInstancesAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowNewInstancesAction"
 					id="MemoryView.ShowNewInstances"
 					text="Show New Instances"/>
 
-			<action class="com.intellij.debugger.memory.action.JumpToTypeSourceAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.JumpToTypeSourceAction"
 					id="MemoryView.JumpToTypeSource"
 					text="Jump To Type Source"/>
 			<separator/>
 
-			<action class="com.intellij.debugger.memory.action.tracking.TrackInstancesToggleAction"
+			<action class="com.intellij.java.debugger.impl.memory.action.tracking.TrackInstancesToggleAction"
 					id="MemoryView.TrackingAction.NewInstancesTracking"
 					text="Track New Instances"/>
 		</group>
 
-		<action class="com.intellij.debugger.memory.action.ShowInstancesByClassAction"
+		<action class="com.intellij.java.debugger.impl.memory.action.ShowInstancesByClassAction"
 				id="MemoryView.ShowInstancesFromDebuggerTree"
 				text="Show Instances">
 			<add-to-group group-id="XDebugger.ValueGroup" anchor="after"
 						  relative-to-action="Debugger.ShowReferring"/>
 		</action>
 
-		<action class="com.intellij.debugger.memory.action.tracking.JumpToAllocationSourceAction"
+		<action class="com.intellij.java.debugger.impl.memory.action.tracking.JumpToAllocationSourceAction"
 				id="MemoryView.ShowAllocationStackTrace"
 				text="Jump To Allocation Position">
 			<add-to-group group-id="XDebugger.ValueGroup" anchor="after"
@@ -460,7 +460,7 @@
 						interface="com.intellij.execution.runners.JavaProgramPatcher"/>
 
 		<extensionPoint name="codeInsight.changeVariableTypeQuickFixProvider"
-						interface="com.intellij.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider"/>
+						interface="com.intellij.java.analysis.impl.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider"/>
 		<extensionPoint name="conversion.rule"
 						interface="com.intellij.refactoring.typeMigration.rules.TypeConversionRule"/>
 
@@ -477,7 +477,7 @@
 
 
 		<extensionPoint name="canBeFinal"
-						interface="com.intellij.codeInspection.canBeFinal.CanBeFinalHandler"/>
+						interface="com.intellij.java.analysis.impl.codeInspection.canBeFinal.CanBeFinalHandler"/>
 		<!-- PsiMember -->
 		<extensionPoint name="javaDocNotNecessary"
 						interface="com.intellij.openapi.util.Condition"/>
@@ -502,32 +502,32 @@
 						interface="com.intellij.refactoring.migration.PredefinedMigrationProvider"/>
 
 		<extensionPoint name="debugger.codeFragmentFactory"
-						interface="com.intellij.debugger.engine.evaluation.CodeFragmentFactory"/>
+						interface="com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory"/>
 
-		<extensionPoint name="debugger.nodeRenderer" interface="com.intellij.debugger.ui.tree.render.NodeRenderer"/>
+		<extensionPoint name="debugger.nodeRenderer" interface="com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer"/>
 
-		<extensionPoint name="debugger.managerListener" interface="com.intellij.debugger.impl.DebuggerManagerListener" area="PROJECT"/>
+		<extensionPoint name="debugger.managerListener" interface="com.intellij.java.debugger.impl.DebuggerManagerListener" area="PROJECT"/>
 
-		<extensionPoint name="debugger.sourcePositionProvider" interface="com.intellij.debugger.engine.SourcePositionProvider"/>
+		<extensionPoint name="debugger.sourcePositionProvider" interface="com.intellij.java.debugger.impl.engine.SourcePositionProvider"/>
 
-		<extensionPoint name="debugger.nodeNameAdjuster" interface="com.intellij.debugger.ui.tree.NodeDescriptorNameAdjuster"/>
+		<extensionPoint name="debugger.nodeNameAdjuster" interface="com.intellij.java.debugger.ui.tree.NodeDescriptorNameAdjuster"/>
 
-		<extensionPoint name="debugger.jvmSteppingCommandProvider" interface="com.intellij.debugger.impl.JvmSteppingCommandProvider"/>
+		<extensionPoint name="debugger.jvmSteppingCommandProvider" interface="com.intellij.java.debugger.impl.JvmSteppingCommandProvider"/>
 
-		<extensionPoint name="debugger.syntheticProvider" interface="com.intellij.debugger.engine.SyntheticTypeComponentProvider"/>
+		<extensionPoint name="debugger.syntheticProvider" interface="com.intellij.java.debugger.engine.SyntheticTypeComponentProvider"/>
 
-		<extensionPoint name="debugger.sourcePositionHighlighter" interface="com.intellij.debugger.engine.SourcePositionHighlighter"/>
-		<extensionPoint name="debugger.extraSteppingFilter" interface="com.intellij.debugger.engine.ExtraSteppingFilter"/>
-		<extensionPoint name="debugger.simplePropertyGetterProvider" interface="com.intellij.debugger.engine.SimplePropertyGetterProvider"/>
-		<extensionPoint name="debugger.frameExtraVarsProvider" interface="com.intellij.debugger.engine.FrameExtraVariablesProvider"/>
+		<extensionPoint name="debugger.sourcePositionHighlighter" interface="com.intellij.java.debugger.engine.SourcePositionHighlighter"/>
+		<extensionPoint name="debugger.extraSteppingFilter" interface="com.intellij.java.debugger.impl.engine.ExtraSteppingFilter"/>
+		<extensionPoint name="debugger.simplePropertyGetterProvider" interface="com.intellij.java.debugger.engine.SimplePropertyGetterProvider"/>
+		<extensionPoint name="debugger.frameExtraVarsProvider" interface="com.intellij.java.debugger.impl.engine.FrameExtraVariablesProvider"/>
 
 		<extensionPoint name="debugger.positionManagerFactory"
-						interface="com.intellij.debugger.PositionManagerFactory"
+						interface="com.intellij.java.debugger.PositionManagerFactory"
 						area="PROJECT"/>
 		<extensionPoint name="debugger.javaBreakpointHandlerFactory"
-						interface="com.intellij.debugger.engine.JavaBreakpointHandlerFactory"/>
+						interface="com.intellij.java.debugger.impl.engine.JavaBreakpointHandlerFactory"/>
 		<extensionPoint name="debugger.jvmSmartStepIntoHandler"
-						interface="com.intellij.debugger.actions.JvmSmartStepIntoHandler"/>
+						interface="com.intellij.java.debugger.impl.actions.JvmSmartStepIntoHandler"/>
 
 		<extensionPoint name="testFramework"
 						interface="com.intellij.testIntegration.TestFramework"/>
@@ -540,11 +540,11 @@
 		<extensionPoint name="mainMethodProvider" interface="com.intellij.codeInsight.runner.JavaMainMethodProvider"/>
 		<extensionPoint name="psi.classFileDecompiler" interface="com.intellij.psi.compiled.ClassFileDecompilers$Decompiler"/>
 
-		<extensionPoint name="debuggerClassFilterProvider" interface="com.intellij.ui.classFilter.DebuggerClassFilterProvider"/>
-		<extensionPoint name="topLevelClassProvider" interface="com.intellij.debugger.engine.TopLevelParentClassProvider"/>
+		<extensionPoint name="debuggerClassFilterProvider" interface="com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider"/>
+		<extensionPoint name="topLevelClassProvider" interface="com.intellij.java.debugger.engine.TopLevelParentClassProvider"/>
 
 		<extensionPoint name="debuggerEditorTextProvider" beanClass="com.intellij.lang.LanguageExtensionPoint">
-			<with attribute="implementationClass" implements="com.intellij.debugger.impl.EditorTextProvider"/>
+			<with attribute="implementationClass" implements="com.intellij.java.debugger.impl.EditorTextProvider"/>
 		</extensionPoint>
 
 		<extensionPoint name="javadocTagInfo" area="PROJECT" interface="com.intellij.psi.javadoc.JavadocTagInfo"/>
@@ -624,12 +624,12 @@
 		<extensionPoint name="extraExceptionHandler" interface="consulo.java.codeInsight.ExtraExceptionHandler"/>
 
 		<extensionPoint name="backendCompiler" beanClass="consulo.java.compiler.impl.javaCompiler.BackendCompilerEP" area="PROJECT">
-			<with attribute="implementationClass" implements="com.intellij.compiler.impl.javaCompiler.BackendCompiler"/>
+			<with attribute="implementationClass" implements="com.intellij.java.compiler.impl.javaCompiler.BackendCompiler"/>
 		</extensionPoint>
 
 		<extensionPoint name="bytecodeCompilerProcessor" interface="consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor"/>
 
-		<extensionPoint name="compiler.makeDependencyProcessor" interface="com.intellij.compiler.cache.DependencyProcessor"/>
+		<extensionPoint name="compiler.makeDependencyProcessor" interface="com.intellij.java.compiler.cache.DependencyProcessor"/>
 		<extensionPoint name="runConfigurationExtension" interface="com.intellij.execution.RunConfigurationExtension"/>
 		<extensionPoint name="jreProvider" interface="com.intellij.execution.ui.JreProvider"/>
 		<extensionPoint name="vetoSPICondition" interface="com.intellij.openapi.util.Condition"/>
@@ -651,7 +651,7 @@
 
 		<expressionSurrounder implementation="com.intellij.debugger.codeinsight.JavaWithRuntimeCastSurrounder"/>
 
-		<inferredAnnotationProvider implementation="com.intellij.codeInsight.DefaultInferredAnnotationProvider"/>
+		<inferredAnnotationProvider implementation="com.intellij.java.analysis.impl.codeInsight.DefaultInferredAnnotationProvider"/>
 
 		<superMethodsSearch implementation="com.intellij.psi.impl.search.MethodSuperSearcher"/>
 		<annotatedElementsSearch implementation="com.intellij.psi.impl.search.AnnotatedElementsSearcher"/>
@@ -687,7 +687,7 @@
 
 		<java.shortNamesCache implementation="com.intellij.psi.impl.PsiShortNamesCacheImpl"/>
 
-		<debuggerEditorTextProvider language="JAVA" implementationClass="com.intellij.debugger.impl.JavaEditorTextProviderImpl"/>
+		<debuggerEditorTextProvider language="JAVA" implementationClass="com.intellij.java.debugger.impl.JavaEditorTextProviderImpl"/>
 
 		<constructorBodyGenerator language="JAVA"
 								  implementationClass="com.intellij.codeInsight.generation.JavaConstructorBodyWithSuperCallGenerator"/>
@@ -713,37 +713,37 @@
 
 		<testGenerator language="JAVA" implementationClass="com.intellij.testIntegration.createTest.JavaTestGenerator"/>
 
-		<debugger.jvmSmartStepIntoHandler implementation="com.intellij.debugger.actions.JavaSmartStepIntoHandler"/>
+		<debugger.jvmSmartStepIntoHandler implementation="com.intellij.java.debugger.impl.actions.JavaSmartStepIntoHandler"/>
 
-		<debugger.syntheticProvider implementation="com.intellij.debugger.engine.DefaultSyntheticProvider"/>
+		<debugger.syntheticProvider implementation="com.intellij.java.debugger.impl.engine.DefaultSyntheticProvider"/>
 
-		<debugger.sourcePositionProvider implementation="com.intellij.debugger.engine.DefaultSourcePositionProvider" order="last"/>
-		<debugger.sourcePositionHighlighter implementation="com.intellij.debugger.engine.JavaSourcePositionHighlighter"/>
+		<debugger.sourcePositionProvider implementation="com.intellij.java.debugger.impl.engine.DefaultSourcePositionProvider" order="last"/>
+		<debugger.sourcePositionHighlighter implementation="com.intellij.java.debugger.impl.engine.JavaSourcePositionHighlighter"/>
 
-		<debugger.managerListener implementation="com.intellij.debugger.impl.HotSwapManager$Listener"/>
-		<debugger.managerListener implementation="com.intellij.debugger.ui.HotSwapUIImpl$Listener"/>
+		<debugger.managerListener implementation="com.intellij.java.debugger.impl.HotSwapManager$Listener"/>
+		<debugger.managerListener implementation="com.intellij.java.debugger.impl.ui.HotSwapUIImpl$Listener"/>
 
-		<debugger.simplePropertyGetterProvider implementation="com.intellij.debugger.engine.JavaSimpleGetterProvider"/>
+		<debugger.simplePropertyGetterProvider implementation="com.intellij.java.debugger.impl.engine.JavaSimpleGetterProvider"/>
 
 		<generation.topLevelFactory language="JAVA" implementationClass="com.intellij.psi.impl.JavaFactoryProvider"/>
 
 		<elementFinder implementation="com.intellij.psi.impl.migration.MigrationElementFinder"/>
-		<elementFinder implementation="com.intellij.debugger.impl.AlternativeJreClassFinder" order="last"/>
+		<elementFinder implementation="com.intellij.java.debugger.impl.AlternativeJreClassFinder" order="last"/>
 
-		<backendCompiler implementationClass="com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler"/>
+		<backendCompiler implementationClass="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler"/>
 
 		<bytecodeCompilerProcessor implementation="consulo.java.compiler.bytecodeProcessing.impl.NotNullJavaBytecodeProcessorCompiler"/>
 
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.ColorObjectRenderer"/>
-		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.BinaryRenderer"/>
-		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.TimestampRenderer"/>
-		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.FileObjectRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.BinaryRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.TimestampRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.FileObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.StackTraceElementObjectRenderer"/>
 
 		<augmentProvider implementation="consulo.java.psi.augment.JavaEnumAugmentProvider"/>
 		<augmentProvider implementation="com.intellij.psi.impl.RecordAugmentProvider"/>
 
-		<typeAnnotationModifier implementation="com.intellij.codeInsight.NullityAnnotationModifier"/>
+		<typeAnnotationModifier implementation="com.intellij.java.analysis.impl.codeInsight.NullityAnnotationModifier"/>
 
 		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
@@ -753,32 +753,32 @@
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
-		<projectService serviceInterface="com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration"
-						serviceImplementation="com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration"/>
+		<projectService serviceInterface="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration"
+						serviceImplementation="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration"/>
 
 		<projectService serviceInterface="com.intellij.psi.JavaPsiFacade"
 						serviceImplementation="com.intellij.psi.impl.JavaPsiFacadeImpl"/>
 
-		<projectService serviceInterface="com.intellij.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"
-						serviceImplementation="com.intellij.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"/>
+		<projectService serviceInterface="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"
+						serviceImplementation="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"/>
 
 		<projectService serviceInterface="com.intellij.debugger.ui.DebuggerRecents"
 						serviceImplementation="com.intellij.debugger.ui.DebuggerRecents"/>
 
-		<projectService serviceImplementation="com.intellij.debugger.impl.HotSwapManager"/>
-		<projectService serviceInterface="com.intellij.debugger.ui.HotSwapUI" serviceImplementation="com.intellij.debugger.ui.HotSwapUIImpl"/>
+		<projectService serviceImplementation="com.intellij.java.debugger.impl.HotSwapManager"/>
+		<projectService serviceInterface="com.intellij.java.debugger.impl.ui.HotSwapUI" serviceImplementation="com.intellij.java.debugger.impl.ui.HotSwapUIImpl"/>
 
-		<compiler implementation="com.intellij.compiler.impl.javaCompiler.AnnotationProcessingCompiler" id="java-annotation-processor"
+		<compiler implementation="com.intellij.java.compiler.impl.javaCompiler.AnnotationProcessingCompiler" id="java-annotation-processor"
 				  order="before java-compiler"/>
-		<compiler implementation="com.intellij.compiler.impl.javaCompiler.JavaCompiler" id="java-compiler"/>
+		<compiler implementation="com.intellij.java.compiler.impl.javaCompiler.JavaCompiler" id="java-compiler"/>
 		<compiler implementation="consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessorCompiler" id="java-bytecode-processor"/>
-		<compiler.dependencyCache implementationClass="com.intellij.compiler.cache.JavaDependencyCache"/>
+		<compiler.dependencyCache implementationClass="com.intellij.java.compiler.cache.JavaDependencyCache"/>
 
 		<projectConfigurable id="project.propCompiler.java" bundle="messages.JavaCoreBundle" key="java" parentId="project.propCompiler"
-							 instance="com.intellij.compiler.impl.javaCompiler.JavaCompilerConfigurable"/>
+							 instance="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfigurable"/>
 
 		<projectConfigurable bundle="messages.JavaBundle" key="annotation.processor.name" parentId="project.propCompiler.java"
-							 instance="com.intellij.compiler.options.AnnotationProcessorsConfigurable"/>
+							 instance="com.intellij.java.compiler.options.AnnotationProcessorsConfigurable"/>
 
 		<projectConfigurable bundle="messages.JavaBundle" key="javac.name" parentId="project.propCompiler.java"
 							 instance="consulo.java.compiler.impl.javaCompiler.ui.JavacConfigurable"/>
@@ -877,8 +877,8 @@
 		<applicationService serviceInterface="com.intellij.util.xml.converters.values.ClassValueConverter"
 							serviceImplementation="com.intellij.util.xml.converters.ClassValueConverterImpl"/>
 
-		<applicationService serviceImplementation="com.intellij.debugger.memory.component.MemoryViewManager"/>
-		<projectService serviceImplementation="com.intellij.debugger.memory.component.InstancesTracker"/>
+		<applicationService serviceImplementation="com.intellij.java.debugger.impl.memory.component.MemoryViewManager"/>
+		<projectService serviceImplementation="com.intellij.java.debugger.impl.memory.component.InstancesTracker"/>
 
 		<applicationService serviceInterface="com.intellij.util.xml.converters.values.ClassArrayConverter"
 							serviceImplementation="com.intellij.util.xml.converters.ClassArrayConverterImpl"/>
@@ -886,16 +886,16 @@
 		<applicationService serviceInterface="com.intellij.psi.util.JavaClassSupers"
 							serviceImplementation="com.intellij.psi.impl.JavaClassSupersImpl"/>
 
-		<applicationService serviceInterface="com.intellij.debugger.engine.DebuggerUtils"
-							serviceImplementation="com.intellij.debugger.impl.DebuggerUtilsImpl"/>
+		<applicationService serviceInterface="com.intellij.java.debugger.engine.DebuggerUtils"
+							serviceImplementation="com.intellij.java.debugger.impl.DebuggerUtilsImpl"/>
 
-		<applicationService serviceInterface="com.intellij.codeInspection.reference.RefJavaUtil"
+		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.reference.RefJavaUtil"
 							serviceImplementation="com.intellij.codeInspection.reference.RefJavaUtilImpl"/>
 
 		<applicationService serviceInterface="com.intellij.psi.PsiSubstitutorFactory"
 							serviceImplementation="com.intellij.psi.impl.PsiSubstitutorFactoryImpl"/>
 
-		<applicationService serviceInterface="com.intellij.codeInsight.intention.QuickFixFactory"
+		<applicationService serviceInterface="com.intellij.java.analysis.codeInsight.intention.QuickFixFactory"
 							serviceImplementation="com.intellij.codeInsight.intention.impl.config.QuickFixFactoryImpl"/>
 
 		<applicationService serviceInterface="com.intellij.codeInsight.TestFrameworks"
@@ -917,20 +917,20 @@
 		<applicationService serviceInterface="org.jetbrains.java.generate.GenerateToStringContext"
 							serviceImplementation="org.jetbrains.java.generate.GenerateToStringContext"/>
 
-		<applicationService serviceInterface="com.intellij.debugger.settings.NodeRendererSettings"
-							serviceImplementation="com.intellij.debugger.settings.NodeRendererSettings"/>
-		<applicationService serviceInterface="com.intellij.debugger.settings.ViewsGeneralSettings"
-							serviceImplementation="com.intellij.debugger.settings.ViewsGeneralSettings"/>
-		<applicationService serviceInterface="com.intellij.debugger.settings.DebuggerSettings"
-							serviceImplementation="com.intellij.debugger.settings.DebuggerSettings"/>
-		<applicationService serviceInterface="com.intellij.debugger.settings.ThreadsViewSettings"
-							serviceImplementation="com.intellij.debugger.settings.ThreadsViewSettings"/>
+		<applicationService serviceInterface="com.intellij.java.debugger.impl.settings.NodeRendererSettings"
+							serviceImplementation="com.intellij.java.debugger.impl.settings.NodeRendererSettings"/>
+		<applicationService serviceInterface="com.intellij.java.debugger.impl.settings.ViewsGeneralSettings"
+							serviceImplementation="com.intellij.java.debugger.impl.settings.ViewsGeneralSettings"/>
+		<applicationService serviceInterface="com.intellij.java.debugger.impl.settings.DebuggerSettings"
+							serviceImplementation="com.intellij.java.debugger.impl.settings.DebuggerSettings"/>
+		<applicationService serviceInterface="com.intellij.java.debugger.impl.settings.ThreadsViewSettings"
+							serviceImplementation="com.intellij.java.debugger.impl.settings.ThreadsViewSettings"/>
 		<applicationService serviceImplementation="consulo.java.codeInsight.JavaCodeInsightSettings"/>
 
 		<projectService serviceInterface="com.intellij.ide.util.TreeClassChooserFactory"
 						serviceImplementation="com.intellij.ide.util.TreeClassChooserFactoryImpl"/>
-		<projectService serviceInterface="com.intellij.codeInsight.guess.GuessManager"
-						serviceImplementation="com.intellij.codeInsight.guess.impl.GuessManagerImpl"/>
+		<projectService serviceInterface="com.intellij.java.analysis.codeInsight.guess.GuessManager"
+						serviceImplementation="com.intellij.java.analysis.impl.codeInsight.guess.impl.GuessManagerImpl"/>
 		<projectService serviceInterface="com.intellij.psi.impl.source.resolve.JavaResolveCache"
 						serviceImplementation="com.intellij.psi.impl.source.resolve.JavaResolveCache"/>
 		<projectService serviceInterface="com.intellij.psi.PsiElementFactory"
@@ -961,7 +961,7 @@
 		<applicationService serviceInterface="com.intellij.openapi.projectRoots.JavaVersionService"
 							serviceImplementation="com.intellij.openapi.projectRoots.JavaVersionServiceImpl"/>
 
-		<applicationService serviceInterface="com.intellij.refactoring.JavaRefactoringActionHandlerFactory"
+		<applicationService serviceInterface="com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory"
 							serviceImplementation="com.intellij.refactoring.openapi.impl.JavaRefactoringActionHandlerFactoryImpl"/>
 		<changeSignatureDetector language="JAVA" implementationClass="com.intellij.refactoring.changeSignature.JavaChangeSignatureDetector"/>
 
@@ -1001,7 +1001,7 @@
 		<projectService serviceInterface="com.intellij.slicer.SliceManager"
 						serviceImplementation="com.intellij.slicer.SliceManager"/>
 
-		<projectService serviceInterface="com.intellij.codeInspection.ex.EntryPointsManager"
+		<projectService serviceInterface="com.intellij.java.analysis.codeInspection.ex.EntryPointsManager"
 						serviceImplementation="com.intellij.codeInspection.ex.EntryPointsManagerImpl"/>
 
 		<projectService serviceInterface="com.intellij.codeInsight.NullableNotNullManager"
@@ -1017,13 +1017,13 @@
 		<lang.foldingBuilder language="JAVA" implementationClass="com.intellij.codeInsight.daemon.impl.actions.SuppressWarningsFoldingBuilder"/>
 
 		<externalProjectDataService implementation="com.intellij.externalSystem.JavaProjectDataService"/>
-		<programRunner implementation="com.intellij.openapi.externalSystem.service.execution.ExternalSystemTaskDebugRunner"/>
+		<programRunner implementation="com.intellij.java.debugger.impl.externalSystem.ExternalSystemTaskDebugRunner"/>
 
-		<daemon.highlightInfoFilter implementation="com.intellij.debugger.engine.evaluation.DebuggerHighlightFilter"/>
+		<daemon.highlightInfoFilter implementation="com.intellij.java.debugger.impl.engine.evaluation.DebuggerHighlightFilter"/>
 
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.AttachSourcesNotificationProvider"/>
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.SetupJDKNotificationProvider"/>
-		<editorNotificationProvider implementation="com.intellij.debugger.ui.AlternativeSourceNotificationProvider"/>
+		<editorNotificationProvider implementation="com.intellij.java.debugger.impl.ui.AlternativeSourceNotificationProvider"/>
 
 		<programRunner id="defaultRunRunner" implementation="com.intellij.execution.impl.DefaultJavaProgramRunner"/>
 		<programRunner implementation="com.intellij.execution.jar.JarApplicationDebuggerRunner"/>
@@ -1072,15 +1072,15 @@
 						 level="WARNING" implementationClass="com.intellij.codeInspection.defUse.DefUseInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="NumericOverflow" displayName="Numeric overflow" groupName="Numeric issues"
 						 enabledByDefault="true"
-						 level="WARNING" implementationClass="com.intellij.codeInspection.NumericOverflowInspection"/>
+						 level="WARNING" implementationClass="com.intellij.java.analysis.impl.codeInspection.NumericOverflowInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="RedundantCast" displayName="Redundant type cast"
 						 groupName="Verbose or redundant code constructs"
 						 enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.redundantCast.RedundantCastInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="RedundantTypeArguments" bundle="messages.InspectionsBundle"
 						 key="inspection.redundant.type.display.name"
 						 groupName="Verbose or redundant code constructs" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.miscGenerics.RedundantTypeArgsInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.miscGenerics.RedundantTypeArgsInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="RedundantArrayCreation" bundle="messages.InspectionsBundle"
 						 key="inspection.redundant.array.creation.display.name" groupName="Verbose or redundant code constructs"
 						 enabledByDefault="true" level="WARNING"
@@ -1092,7 +1092,7 @@
 		<localInspection language="JAVA" groupPath="Java" shortName="LocalCanBeFinal" bundle="messages.InspectionsBundle"
 						 key="inspection.local.can.be.final.display.name"
 						 groupName="Code style issues" enabledByDefault="false" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.localCanBeFinal.LocalCanBeFinal"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.localCanBeFinal.LocalCanBeFinal"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="JavaDoc" bundle="messages.InspectionsBundle" key="inspection.javadoc.display.name"
 						 groupKey="group.names.javadoc.issues" enabledByDefault="true" level="WARNING"
 						 implementationClass="com.intellij.codeInspection.javaDoc.JavaDocLocalInspection"/>
@@ -1102,16 +1102,16 @@
 						 implementationClass="com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection"/>
 		<localInspection language="JAVA" groupPath="Java" suppressId="deprecation" shortName="Deprecation" displayName="Deprecated API usage" groupName="General"
 						 enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.deprecation.DeprecationInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection"/>
 		<localInspection language="XML" shortName="DeprecatedClassUsageInspection" displayName="Deprecated API usage in XML" groupName="XML"
 						 enabledByDefault="true" level="WARNING" implementationClass="com.intellij.util.xml.DeprecatedClassUsageInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="EqualsAndHashcode" bundle="messages.InspectionsBundle"
 						 key="inspection.equals.hashcode.display.name"
 						 groupName="General" enabledByDefault="false" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.equalsAndHashcode.EqualsAndHashcode"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.equalsAndHashcode.EqualsAndHashcode"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="Since15" bundle="messages.InspectionsBundle" key="inspection.1.5.display.name"
 						 groupName="Language level migration aids" enabledByDefault="false" level="ERROR"
-						 implementationClass="com.intellij.codeInspection.java15api.Java15APIUsageInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.java15api.Java15APIUsageInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="Dependency" displayName="Illegal package dependencies" groupName="General" enabledByDefault="true"
 						 level="ERROR"
 						 implementationClass="com.intellij.codeInspection.dependencyViolation.DependencyInspection"/>
@@ -1164,7 +1164,7 @@
 
 		<localInspection language="JAVA" groupPath="Java" shortName="UNUSED_IMPORT" displayName="Unused import (editor light)" groupName="Imports"
 						 enabledByDefault="true"
-						 level="WARNING" implementationClass="com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection"
+						 level="WARNING" implementationClass="com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection"
 						 unfair="true"/>
 
 		<localInspection language="JAVA" groupPath="Java" suppressId="unchecked" shortName="UNCHECKED_WARNING" displayName="Unchecked warning" groupName="General"
@@ -1203,16 +1203,16 @@
 						 implementationClass="com.intellij.codeInspection.ExplicitTypeCanBeDiamondInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="Convert2Lambda" displayName="Anonymous type can be replaced with lambda"
 						 groupName="Language level migration aids" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.AnonymousCanBeLambdaInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.AnonymousCanBeLambdaInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="Anonymous2MethodRef" displayName="Anonymous type can be replaced with method reference"
 						 groupName="Language level migration aids" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.AnonymousCanBeMethodReferenceInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.AnonymousCanBeMethodReferenceInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="Convert2MethodRef" displayName="Lambda can be replaced with method reference"
 						 groupName="Language level migration aids" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.LambdaCanBeMethodReferenceInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.LambdaCanBeMethodReferenceInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="CodeBlock2Expr" displayName="Lambda code block can be replaced with expression"
 						 groupName="Language level migration aids" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.RedundantLambdaCodeBlockInspection"/>
+						 implementationClass="com.intellij.java.analysis.impl.codeInspection.RedundantLambdaCodeBlockInspection"/>
 		<localInspection language="JAVA" groupPath="Java" suppressId="unchecked" shortName="SafeVarargsDetector"
 						 displayName="Possible heap pollution from parameterized vararg type" groupName="Language level migration aids"
 						 enabledByDefault="true" level="WARNING"
@@ -1663,10 +1663,10 @@
 		<copyPastePostProcessor implementation="com.intellij.codeInsight.editorActions.JavaCopyPasteReferenceProcessor"/>
 
 
-		<applicationService serviceInterface="com.intellij.codeInspection.SuppressManager"
+		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.SuppressManager"
 							serviceImplementation="com.intellij.codeInspection.SuppressManagerImpl"/>
-		<applicationService serviceInterface="com.intellij.codeInspection.BatchSuppressManager"
-							serviceImplementation="com.intellij.codeInspection.BatchSuppressManagerImpl"/>
+		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.BatchSuppressManager"
+							serviceImplementation="com.intellij.java.analysis.impl.codeInspection.BatchSuppressManagerImpl"/>
 
 		<declarationRangeHandler key="com.intellij.psi.PsiMethod"
 								 implementationClass="com.intellij.codeInsight.hint.MethodDeclarationRangeHandler"/>
@@ -1861,8 +1861,8 @@
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaMethodParameterTypesIndex"/>
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex"/>
 
-		<fileBasedIndex implementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
-		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaNullMethodArgumentIndex"/>
+		<fileBasedIndex implementation="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
+		<fileBasedIndex implementation="com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentIndex"/>
 
 		<stubElementTypeHolder class="com.intellij.psi.impl.java.stubs.JavaStubElementTypes"/>
 
@@ -1906,7 +1906,7 @@
 		<inlineActionHandler implementation="com.intellij.refactoring.inline.InlineStaticImportHandler"/>
 
 		<previewHintProvider implementation="com.intellij.codeInsight.preview.JavaPreviewHintProvider"/>
-		<filePropertyPusher implementation="com.intellij.openapi.roots.impl.JavaLanguageLevelPusher"/>
+		<filePropertyPusher implementation="com.intellij.java.analysis.impl.JavaLanguageLevelPusher"/>
 
 		<psiViewerExtension implementation="com.intellij.internal.psiView.PsiViewerMethodExtension"/>
 		<psiViewerExtension implementation="com.intellij.internal.psiView.PsiViewerCodeFragmentExtension"/>
@@ -1914,15 +1914,15 @@
 
 		<resolveScopeEnlarger implementation="com.intellij.psi.NonClasspathResolveScopeEnlarger"/>
 
-		<xdebugger.settings implementation="com.intellij.debugger.settings.JavaDebuggerSettings"/>
+		<xdebugger.settings implementation="com.intellij.java.debugger.impl.settings.JavaDebuggerSettings"/>
 
-		<xdebugger.breakpointType implementation="com.intellij.debugger.ui.breakpoints.JavaMethodBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.debugger.ui.breakpoints.JavaWildcardMethodBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.debugger.ui.breakpoints.JavaFieldBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.debugger.ui.breakpoints.JavaExceptionBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.debugger.ui.breakpoints.JavaLineBreakpointType"/>
+		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaMethodBreakpointType"/>
+		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaWildcardMethodBreakpointType"/>
+		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaFieldBreakpointType"/>
+		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaExceptionBreakpointType"/>
+		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointType"/>
 
-		<programRunner id="defaultDebugRunner" implementation="com.intellij.debugger.impl.GenericDebuggerRunner" order="last"/>
+		<programRunner id="defaultDebugRunner" implementation="com.intellij.java.debugger.impl.GenericDebuggerRunner" order="last"/>
 
 		<itemPresentationProvider forClass="com.intellij.psi.PsiJavaPackage"
 								  implementationClass="com.intellij.psi.presentation.java.PackagePresentationProvider"/>
@@ -1956,8 +1956,8 @@
 		<projectService serviceInterface="com.intellij.codeInsight.InferredAnnotationsManager"
 						serviceImplementation="com.intellij.codeInsight.InferredAnnotationsManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"
-						serviceImplementation="com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"/>
+		<projectService serviceInterface="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"
+						serviceImplementation="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"/>
 
 		<projectService serviceInterface="com.intellij.psi.PsiNameHelper"
 						serviceImplementation="com.intellij.psi.impl.PsiNameHelperImpl"/>
@@ -1999,8 +1999,8 @@
 		<annotator language="JAVA-SPI" implementationClass="com.intellij.spi.SPIAnnotator"/>
 		<lang.substitutor language="TEXT" implementationClass="consulo.java.spi.SPILanguageSubstitutor"/>
 
-		<packaging.artifactType implementation="com.intellij.packaging.impl.artifacts.JarArtifactType" order="after zip-artifact"/>
-		<packaging.elementType implementation="consulo.java.packaging.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
+		<packaging.artifactType implementation="com.intellij.java.compiler.artifact.impl.artifacts.JarArtifactType" order="after zip-artifact"/>
+		<packaging.elementType implementation="com.intellij.java.compiler.artifact.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
 		<moduleExtensionProvider key="java"
 								 icon="consulo.java.psi.impl.JavaPsiImplIconGroup@java"
 								 name="Java"
@@ -2035,8 +2035,8 @@
 		<fileBasedIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaAutoModuleNameIndex"/>
 		<fileBasedIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaSourceModuleNameIndex"/>
 
-		<xdebugger.lineBreakpointTypeResolver filetype="CLASS" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>
-		<xdebugger.lineBreakpointTypeResolver filetype="JAVA" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>
+		<xdebugger.lineBreakpointTypeResolver filetype="CLASS" implementationClass="consulo.java.debugger.impl.JavaLineBreakpointTypeResolver"/>
+		<xdebugger.lineBreakpointTypeResolver filetype="JAVA" implementationClass="consulo.java.debugger.impl.JavaLineBreakpointTypeResolver"/>
 
 		<projectService serviceInterface="com.intellij.openapi.roots.JavaProjectModelModificationService"
 						serviceImplementation="com.intellij.openapi.roots.impl.JavaProjectModelModificationServiceImpl"/>
@@ -2045,7 +2045,7 @@
 		<orderRootTypeEditor key="javaNative"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.NativeLibraryOrderRootTypeUIFactory"/>
 
-		<textEditorHighlightingPassFactory implementation="com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory"/>
+		<textEditorHighlightingPassFactory implementation="com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory"/>
 
 		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jar.JarFileSystemImpl"/>
 		<virtualFileSystem implementation="com.intellij.openapi.vfs.impl.jrt.JrtFileSystemImpl"/>
@@ -2057,9 +2057,9 @@
 		<applicationService serviceImplementation="consulo.java.JavaDummyHolderComponent" lazy="false"/>
 		<applicationService serviceImplementation="consulo.java.unscramble.UnscrambleManager" lazy="false"/>
 
-		<projectService serviceImplementation="com.intellij.debugger.ui.DebuggerPanelsManager" lazy="false"/>
+		<projectService serviceImplementation="com.intellij.java.debugger.impl.ui.DebuggerPanelsManager" lazy="false"/>
 		<projectService serviceImplementation="com.intellij.execution.testDiscovery.TestDiscoveryIndex" lazy="false"/>
-		<projectService serviceInterface="com.intellij.debugger.DebuggerManager" serviceImplementation="com.intellij.debugger.impl.DebuggerManagerImpl" lazy="false"/>
+		<projectService serviceInterface="com.intellij.java.debugger.DebuggerManager" serviceImplementation="com.intellij.java.debugger.impl.DebuggerManagerImpl" lazy="false"/>
 		<projectService serviceInterface="com.intellij.pom.java.PomJavaAspect" serviceImplementation="com.intellij.pom.java.impl.PomJavaAspectImpl" lazy="false"/>
 
 		<codeStyleIndentHelperExtension implementation="com.intellij.psi.impl.source.codeStyle.JavaIndentHelper"/>

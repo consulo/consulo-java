@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.AnonymousCanBeLambdaInspection;
+import com.intellij.java.analysis.impl.codeInspection.AnonymousCanBeLambdaInspection;
 import com.intellij.codeInspection.LocalInspectionTool;
 
 

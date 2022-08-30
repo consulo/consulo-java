@@ -31,7 +31,7 @@ import com.intellij.refactoring.extractMethod.ExtractMethodProcessor;
 import com.intellij.refactoring.ui.TypeSelectorManager;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.refactoring.util.ParameterTablePanel;
-import com.intellij.refactoring.util.VariableData;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

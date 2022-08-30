@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nls;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.XmlSuppressableInspectionTool;
-import com.intellij.codeInspection.deprecation.DeprecationInspection;
+import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;

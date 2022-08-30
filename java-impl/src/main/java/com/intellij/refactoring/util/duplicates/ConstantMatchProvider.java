@@ -17,6 +17,7 @@ package com.intellij.refactoring.util.duplicates;
 
 import java.util.List;
 
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;

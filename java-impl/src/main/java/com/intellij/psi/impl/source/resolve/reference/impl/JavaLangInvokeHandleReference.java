@@ -35,203 +35,171 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
+import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 
 /**
  * @author Pavel.Dolgov
  */
-public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralExpression> implements InsertHandler<LookupElement>
-{
+public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralExpression> implements InsertHandler<LookupElement> {
 
-	private final PsiExpression myContext;
+  private final PsiExpression myContext;
 
-	public JavaLangInvokeHandleReference(@Nonnull PsiLiteralExpression literal, @Nonnull PsiExpression context)
-	{
-		super(literal);
-		myContext = context;
-	}
+  public JavaLangInvokeHandleReference(@Nonnull PsiLiteralExpression literal, @Nonnull PsiExpression context) {
+    super(literal);
+    myContext = context;
+  }
 
-	@Override
-	public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
-	{
-		return element;
-	}
+  @Override
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+    return element;
+  }
 
-	@Nullable
-	@Override
-	public PsiElement resolve()
-	{
-		final Object value = myElement.getValue();
-		if(value instanceof String)
-		{
-			final String name = (String) value;
-			final String type = getMemberType(myElement);
+  @Nullable
+  @Override
+  public PsiElement resolve() {
+    final Object value = myElement.getValue();
+    if (value instanceof String) {
+      final String name = (String) value;
+      final String type = getMemberType(myElement);
 
-			if(type != null)
-			{
-				final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
-				if(reflectiveClass != null)
-				{
-					switch(type)
-					{
-						case FIND_GETTER:
-						case FIND_SETTER:
-							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
+      if (type != null) {
+        final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
+        if (reflectiveClass != null) {
+          switch (type) {
+            case FIND_GETTER:
+            case FIND_SETTER:
+              return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
 
-						case FIND_STATIC_GETTER:
-						case FIND_STATIC_SETTER:
-							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
+            case FIND_STATIC_GETTER:
+            case FIND_STATIC_SETTER:
+              return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
 
-						case FIND_VIRTUAL:
-							return resolveMethod(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticMethod);
-						case FIND_STATIC:
-							return resolveMethod(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticMethod);
+            case FIND_VIRTUAL:
+              return resolveMethod(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticMethod);
+            case FIND_STATIC:
+              return resolveMethod(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticMethod);
 
-						case FIND_VAR_HANDLE:
-							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
+            case FIND_VAR_HANDLE:
+              return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
 
-						case FIND_STATIC_VAR_HANDLE:
-							return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
-					}
-				}
-			}
-		}
-		return null;
-	}
+            case FIND_STATIC_VAR_HANDLE:
+              return resolveField(name, reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
+          }
+        }
+      }
+    }
+    return null;
+  }
 
-	private static PsiElement resolveField(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiField> filter)
-	{
-		final PsiField field = psiClass.findFieldByName(name, true);
-		return field != null && filter.value(field) ? field : null;
-	}
+  private static PsiElement resolveField(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiField> filter) {
+    final PsiField field = psiClass.findFieldByName(name, true);
+    return field != null && filter.value(field) ? field : null;
+  }
 
-	private static PsiElement resolveMethod(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiMethod> filter)
-	{
-		final PsiMethod[] methods = psiClass.findMethodsByName(name, true);
-		return ContainerUtil.find(methods, filter);
-	}
+  private static PsiElement resolveMethod(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiMethod> filter) {
+    final PsiMethod[] methods = psiClass.findMethodsByName(name, true);
+    return ContainerUtil.find(methods, filter);
+  }
 
-	@Nonnull
-	@Override
-	public Object[] getVariants()
-	{
-		final Object value = myElement.getValue();
-		if(value instanceof String)
-		{
-			final String type = getMemberType(myElement);
+  @Nonnull
+  @Override
+  public Object[] getVariants() {
+    final Object value = myElement.getValue();
+    if (value instanceof String) {
+      final String type = getMemberType(myElement);
 
-			if(type != null)
-			{
-				final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
-				if(reflectiveClass != null)
-				{
-					switch(type)
-					{
-						case FIND_GETTER:
-						case FIND_SETTER:
-							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
-						case FIND_STATIC_GETTER:
-						case FIND_STATIC_SETTER:
-							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
+      if (type != null) {
+        final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
+        if (reflectiveClass != null) {
+          switch (type) {
+            case FIND_GETTER:
+            case FIND_SETTER:
+              return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
+            case FIND_STATIC_GETTER:
+            case FIND_STATIC_SETTER:
+              return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
 
-						case FIND_VIRTUAL:
-							return lookupMethods(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticMethod);
-						case FIND_STATIC:
-							return lookupMethods(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticMethod);
+            case FIND_VIRTUAL:
+              return lookupMethods(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticMethod);
+            case FIND_STATIC:
+              return lookupMethods(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticMethod);
 
-						case FIND_VAR_HANDLE:
-							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
-						case FIND_STATIC_VAR_HANDLE:
-							return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
-					}
-				}
-			}
-		}
-		return ArrayUtil.EMPTY_OBJECT_ARRAY;
-	}
+            case FIND_VAR_HANDLE:
+              return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isNonStaticField);
+            case FIND_STATIC_VAR_HANDLE:
+              return lookupFields(reflectiveClass.getPsiClass(), JavaLangInvokeHandleReference::isStaticField);
+          }
+        }
+      }
+    }
+    return ArrayUtil.EMPTY_OBJECT_ARRAY;
+  }
 
-	private Object[] lookupMethods(@Nonnull PsiClass psiClass, Predicate<? super PsiMethod> filter)
-	{
-		return psiClass.getVisibleSignatures().stream().map(MethodSignatureBackedByPsiMethod::getMethod).filter(filter).sorted(Comparator.comparingInt((PsiMethod method) -> getMethodSortOrder
-				(method)).thenComparing(PsiMethod::getName)).map(method -> withPriority(JavaLookupElementBuilder.forMethod(method, PsiSubstitutor.EMPTY).withInsertHandler(this), -getMethodSortOrder
-				(method))).toArray();
-	}
+  private Object[] lookupMethods(@Nonnull PsiClass psiClass, Predicate<? super PsiMethod> filter) {
+    return psiClass.getVisibleSignatures().stream().map(MethodSignatureBackedByPsiMethod::getMethod).filter(filter).sorted(Comparator.comparingInt((PsiMethod method) -> getMethodSortOrder
+        (method)).thenComparing(PsiMethod::getName)).map(method -> withPriority(JavaLookupElementBuilder.forMethod(method, PsiSubstitutor.EMPTY).withInsertHandler(this), -getMethodSortOrder
+        (method))).toArray();
+  }
 
-	private Object[] lookupFields(@Nonnull PsiClass psiClass, Predicate<? super PsiField> filter)
-	{
-		final Set<String> uniqueNames = new HashSet<>();
-		return Arrays.stream(psiClass.getAllFields()).filter(field -> field != null && (field.getContainingClass() == psiClass || !field.hasModifierProperty(PsiModifier.PRIVATE)) && field.getName()
-				!= null && uniqueNames.add(field.getName())).filter(filter).sorted(Comparator.comparing((PsiField field) -> isPublic(field) ? 0 : 1).thenComparing(PsiField::getName)).map(field ->
-				withPriority(JavaLookupElementBuilder.forField(field).withInsertHandler(this), isPublic(field))).toArray();
-	}
+  private Object[] lookupFields(@Nonnull PsiClass psiClass, Predicate<? super PsiField> filter) {
+    final Set<String> uniqueNames = new HashSet<>();
+    return Arrays.stream(psiClass.getAllFields()).filter(field -> field != null && (field.getContainingClass() == psiClass || !field.hasModifierProperty(PsiModifier.PRIVATE)) && field.getName()
+        != null && uniqueNames.add(field.getName())).filter(filter).sorted(Comparator.comparing((PsiField field) -> isPublic(field) ? 0 : 1).thenComparing(PsiField::getName)).map(field ->
+        withPriority(JavaLookupElementBuilder.forField(field).withInsertHandler(this), isPublic(field))).toArray();
+  }
 
-	private static boolean isNonStaticField(PsiField field)
-	{
-		return field != null && !field.hasModifierProperty(PsiModifier.STATIC);
-	}
+  private static boolean isNonStaticField(PsiField field) {
+    return field != null && !field.hasModifierProperty(PsiModifier.STATIC);
+  }
 
-	private static boolean isStaticField(PsiField field)
-	{
-		return field != null && field.hasModifierProperty(PsiModifier.STATIC);
-	}
+  private static boolean isStaticField(PsiField field) {
+    return field != null && field.hasModifierProperty(PsiModifier.STATIC);
+  }
 
-	private static boolean isNonStaticMethod(@Nullable PsiMethod method)
-	{
-		return isRegularMethod(method) && !method.hasModifierProperty(PsiModifier.STATIC);
-	}
+  private static boolean isNonStaticMethod(@Nullable PsiMethod method) {
+    return isRegularMethod(method) && !method.hasModifierProperty(PsiModifier.STATIC);
+  }
 
-	private static boolean isStaticMethod(@Nullable PsiMethod method)
-	{
-		return isRegularMethod(method) && method.hasModifierProperty(PsiModifier.STATIC);
-	}
+  private static boolean isStaticMethod(@Nullable PsiMethod method) {
+    return isRegularMethod(method) && method.hasModifierProperty(PsiModifier.STATIC);
+  }
 
-	@Override
-	public void handleInsert(@Nonnull InsertionContext context, @Nonnull LookupElement item)
-	{
-		final Object object = item.getObject();
+  @Override
+  public void handleInsert(@Nonnull InsertionContext context, @Nonnull LookupElement item) {
+    final Object object = item.getObject();
 
-		if(object instanceof PsiMethod)
-		{
-			final ReflectiveSignature signature = getMethodSignature((PsiMethod) object);
-			if(signature != null)
-			{
-				final String text = ", " + getMethodTypeExpressionText(signature);
-				replaceText(context, text);
-			}
-		}
-		else if(object instanceof PsiField)
-		{
-			final PsiField field = (PsiField) object;
-			final String typeText = getTypeText(field.getType());
-			final String text = ", " + typeText + ".class";
-			replaceText(context, text);
-		}
-	}
+    if (object instanceof PsiMethod) {
+      final ReflectiveSignature signature = getMethodSignature((PsiMethod) object);
+      if (signature != null) {
+        final String text = ", " + getMethodTypeExpressionText(signature);
+        replaceText(context, text);
+      }
+    } else if (object instanceof PsiField) {
+      final PsiField field = (PsiField) object;
+      final String typeText = getTypeText(field.getType());
+      final String text = ", " + typeText + ".class";
+      replaceText(context, text);
+    }
+  }
 
-	static class JavaLangInvokeHandleReferenceProvider extends PsiReferenceProvider
-	{
-		@Nonnull
-		@Override
-		public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context)
-		{
-			if(element instanceof PsiLiteralExpression)
-			{
-				final PsiLiteralExpression literal = (PsiLiteralExpression) element;
-				if(literal.getValue() instanceof String)
-				{
-					final PsiElement parent = element.getParent();
-					if(parent instanceof PsiExpressionList)
-					{
-						final PsiExpression[] expressions = ((PsiExpressionList) parent).getExpressions();
-						final PsiExpression qualifier = expressions.length != 0 ? expressions[0] : null;
-						if(qualifier != null)
-						{
-							return new PsiReference[]{new JavaLangInvokeHandleReference(literal, qualifier)};
-						}
-					}
-				}
-			}
-			return PsiReference.EMPTY_ARRAY;
-		}
-	}
+  static class JavaLangInvokeHandleReferenceProvider extends PsiReferenceProvider {
+    @Nonnull
+    @Override
+    public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+      if (element instanceof PsiLiteralExpression) {
+        final PsiLiteralExpression literal = (PsiLiteralExpression) element;
+        if (literal.getValue() instanceof String) {
+          final PsiElement parent = element.getParent();
+          if (parent instanceof PsiExpressionList) {
+            final PsiExpression[] expressions = ((PsiExpressionList) parent).getExpressions();
+            final PsiExpression qualifier = expressions.length != 0 ? expressions[0] : null;
+            if (qualifier != null) {
+              return new PsiReference[]{new JavaLangInvokeHandleReference(literal, qualifier)};
+            }
+          }
+        }
+      }
+      return PsiReference.EMPTY_ARRAY;
+    }
+  }
 }

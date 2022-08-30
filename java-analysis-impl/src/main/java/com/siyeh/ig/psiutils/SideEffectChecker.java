@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
-import com.intellij.codeInspection.dataFlow.ContractValue;
-import com.intellij.codeInspection.dataFlow.JavaMethodContractUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractValue;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.InheritanceUtil;

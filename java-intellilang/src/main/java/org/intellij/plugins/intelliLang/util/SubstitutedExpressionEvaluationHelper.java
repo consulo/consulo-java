@@ -16,8 +16,8 @@
 package org.intellij.plugins.intelliLang.util;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInspection.dataFlow.DfaPsiUtil;
-import com.intellij.codeInspection.dataFlow.DfaUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.intellij.plugins.intelliLang.Configuration;

@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.style;
 
-import com.intellij.codeInspection.canBeFinal.CanBeFinalHandler;
+import com.intellij.java.analysis.impl.codeInspection.canBeFinal.CanBeFinalHandler;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;

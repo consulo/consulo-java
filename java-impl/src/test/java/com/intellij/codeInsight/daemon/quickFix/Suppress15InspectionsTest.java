@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
-import com.intellij.codeInspection.deprecation.DeprecationInspection;
+import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
 import com.intellij.codeInspection.ex.GlobalInspectionToolWrapper;
 import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.codeInspection.sillyAssignment.SillyAssignmentInspection;

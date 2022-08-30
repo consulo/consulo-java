@@ -18,11 +18,16 @@ package com.intellij.codeInspection.emptyMethod;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
-import consulo.java.JavaQuickFixBundle;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
-import com.intellij.codeInspection.util.SpecialAnnotationsUtilBase;
+import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -50,7 +55,8 @@ import java.util.List;
 /**
  * @author max
  */
-public class EmptyMethodInspection extends GlobalJavaInspectionTool {
+public class EmptyMethodInspection extends GlobalJavaInspectionTool
+{
   private static final ExtensionPointName<Condition<RefMethod>> EP_NAME = ExtensionPointName.create("consulo.java.canBeEmpty");
 
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.empty.method.display.name");

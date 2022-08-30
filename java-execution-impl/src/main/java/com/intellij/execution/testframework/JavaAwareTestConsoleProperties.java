@@ -23,8 +23,8 @@ import javax.annotation.Nonnull;
 import javax.swing.tree.TreeSelectionModel;
 
 import javax.annotation.Nullable;
-import com.intellij.debugger.DebuggerManagerEx;
-import com.intellij.debugger.impl.DebuggerSession;
+import com.intellij.java.debugger.impl.DebuggerManagerEx;
+import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.Executor;
 import com.intellij.execution.Location;

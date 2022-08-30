@@ -16,7 +16,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.SyntaxTraverser;
-import consulo.java.codeInsight.JavaCodeInsightBundle;
+import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;

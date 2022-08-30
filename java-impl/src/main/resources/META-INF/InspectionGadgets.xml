@@ -768,7 +768,7 @@
 		<globalInspection shortName="BooleanMethodIsAlwaysInverted" bundle="messages.InspectionsBundle"
 						  key="boolean.method.is.always.inverted.display.name" groupBundle="messages.InspectionsBundle"
 						  groupKey="group.names.data.flow.issues" enabledByDefault="true" level="WARNING"
-						  implementationClass="com.intellij.codeInspection.booleanIsAlwaysInverted.BooleanMethodIsAlwaysInvertedInspection"/>
+						  implementationClass="com.intellij.java.analysis.impl.codeInspection.booleanIsAlwaysInverted.BooleanMethodIsAlwaysInvertedInspection"/>
 
 		<!--group.names.dependency.issues-->
 		<globalInspection shortName="ClassWithTooManyDependencies" bundle="com.siyeh.InspectionGadgetsBundle"

@@ -21,9 +21,9 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightMethodUtil;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMethodUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.QuickFixFactory;
+import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInsight.intention.impl.PriorityIntentionActionWrapper;
 import com.intellij.codeInsight.quickfix.UnresolvedReferenceQuickFixProvider;
 import com.intellij.openapi.util.TextRange;

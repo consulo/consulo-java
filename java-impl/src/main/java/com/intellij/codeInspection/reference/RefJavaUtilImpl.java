@@ -20,6 +20,10 @@
  */
 package com.intellij.codeInspection.reference;
 
+import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import jakarta.inject.Singleton;
 
 import com.intellij.codeInspection.InspectionsBundle;

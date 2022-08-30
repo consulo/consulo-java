@@ -17,6 +17,7 @@ package com.intellij.codeInspection.varScopeCanBeNarrowed;
 
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
+import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.*;
@@ -34,7 +35,8 @@ import java.util.*;
 /**
  * @author Danila Ponomarenko
  */
-public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
+public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool
+{
 
   @NonNls public static final String SHORT_NAME = "ParameterCanBeLocal";
 

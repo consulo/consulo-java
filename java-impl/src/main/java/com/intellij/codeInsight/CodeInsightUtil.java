@@ -26,6 +26,7 @@ import com.intellij.codeInsight.completion.AllClassesGetter;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.completion.PrefixMatcher;
+import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
@@ -46,7 +47,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.Query;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBTreeTraverser;
-import consulo.java.codeInsight.JavaCodeInsightUtilCore;
+import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
 import consulo.java.module.util.JavaClassNames;
 import consulo.logging.Logger;
 

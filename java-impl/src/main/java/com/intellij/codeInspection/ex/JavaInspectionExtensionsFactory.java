@@ -21,7 +21,7 @@
 package com.intellij.codeInspection.ex;
 
 import com.intellij.codeInspection.HTMLComposer;
-import com.intellij.codeInspection.SuppressManager;
+import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.codeInspection.lang.GlobalInspectionContextExtension;
 import com.intellij.codeInspection.lang.HTMLComposerExtension;
 import com.intellij.codeInspection.lang.InspectionExtensionsFactory;

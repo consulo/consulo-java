@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.AnnotateMethodFix;
+import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.nullable.NullableStuffInspection;
 import com.intellij.openapi.project.Project;

@@ -18,7 +18,7 @@ package com.siyeh.ig.classlayout;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefMethod;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;

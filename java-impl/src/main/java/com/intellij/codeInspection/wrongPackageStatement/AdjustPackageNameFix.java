@@ -17,7 +17,7 @@ package com.intellij.codeInspection.wrongPackageStatement;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
+import com.intellij.java.analysis.impl.codeInspection.RedundantLambdaCodeBlockInspection;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;

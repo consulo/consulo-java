@@ -17,6 +17,7 @@ package com.intellij.refactoring.util.duplicates;
 
 import java.util.List;
 
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 import consulo.logging.Logger;

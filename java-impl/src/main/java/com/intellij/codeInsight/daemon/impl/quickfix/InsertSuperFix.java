@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.FileModificationService;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.undo.UndoUtil;
@@ -27,7 +27,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiMatcherImpl;
-import com.intellij.psi.util.PsiMatchers;
+import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
 import com.intellij.util.IncorrectOperationException;
 
 public class InsertSuperFix implements IntentionAction, HighPriorityAction {

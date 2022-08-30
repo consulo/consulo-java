@@ -4,6 +4,7 @@ import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
+import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.psi.*;
 import consulo.java.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
@@ -16,7 +17,8 @@ import java.util.List;
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
-public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLocalInspectionTool {
+public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLocalInspectionTool
+{
   private final static int MIN_PERCENT_RATIO = 5;
   public final static int MAX_QUICK_FIX_COUNTS = 4;
 

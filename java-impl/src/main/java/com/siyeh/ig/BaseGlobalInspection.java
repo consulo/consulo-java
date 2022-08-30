@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
 
 public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool {
 

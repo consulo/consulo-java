@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.localCanBeFinal.LocalCanBeFinal;
+import com.intellij.java.analysis.impl.codeInspection.localCanBeFinal.LocalCanBeFinal;
 import com.intellij.testFramework.InspectionTestCase;
 
 

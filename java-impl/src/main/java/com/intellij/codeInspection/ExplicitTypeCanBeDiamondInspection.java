@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.HighPriorityAction;
+import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiDiamondTypeUtil;
@@ -29,7 +30,8 @@ import org.jetbrains.annotations.Nls;
  * User: anna
  * Date: 1/28/11
  */
-public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool {
+public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool
+{
   public static final Logger LOG = Logger.getInstance(ExplicitTypeCanBeDiamondInspection.class);
 
   @Nls

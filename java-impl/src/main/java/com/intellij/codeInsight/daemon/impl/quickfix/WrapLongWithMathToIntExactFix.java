@@ -18,6 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ArgumentFixerActionFactory;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MethodArgumentFix;
 import org.jetbrains.annotations.Nls;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -32,7 +34,7 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
  * @author Dmitry Batkovich

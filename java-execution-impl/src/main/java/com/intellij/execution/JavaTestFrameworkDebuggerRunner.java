@@ -25,12 +25,12 @@ import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
 import javax.annotation.Nullable;
-import com.intellij.debugger.DebugEnvironment;
-import com.intellij.debugger.DebuggerManager;
-import com.intellij.debugger.DefaultDebugEnvironment;
-import com.intellij.debugger.engine.DebugProcess;
-import com.intellij.debugger.engine.DebugProcessImpl;
-import com.intellij.debugger.impl.GenericDebuggerRunner;
+import com.intellij.java.debugger.impl.DebugEnvironment;
+import com.intellij.java.debugger.DebuggerManager;
+import com.intellij.java.debugger.impl.DefaultDebugEnvironment;
+import com.intellij.java.debugger.engine.DebugProcess;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;

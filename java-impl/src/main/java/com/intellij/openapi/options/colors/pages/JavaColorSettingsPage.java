@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.application.options.colors.InspectionColorSettingsPage;
 import com.intellij.codeHighlighting.RainbowHighlighter;
 import com.intellij.ide.highlighter.JavaFileHighlighter;
-import com.intellij.ide.highlighter.JavaHighlightingColors;
+import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;

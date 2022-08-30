@@ -15,6 +15,7 @@
  */
 package com.intellij.find.findUsages;
 
+import com.intellij.java.analysis.impl.find.findUsages.JavaVariableFindUsagesOptions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;

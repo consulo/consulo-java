@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.psiutils;
 
-import com.intellij.codeInspection.reference.RefMethod;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 
 import java.util.Collection;
 import java.util.HashSet;

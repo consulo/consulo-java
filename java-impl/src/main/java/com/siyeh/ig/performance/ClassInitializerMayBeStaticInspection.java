@@ -19,7 +19,7 @@ package com.siyeh.ig.performance;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nls;
-import consulo.java.codeInspection.JavaExtensionPoints;
+import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassInitializer;

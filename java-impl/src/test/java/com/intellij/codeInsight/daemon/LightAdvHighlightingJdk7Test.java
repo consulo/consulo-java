@@ -20,7 +20,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.codeInspection.defUse.DefUseInspection;
-import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
+import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
 import com.intellij.codeInspection.reference.EntryPoint;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
@@ -32,7 +32,7 @@ import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.IdeaTestUtil;
-import consulo.java.codeInspection.JavaExtensionPoints;
+import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 

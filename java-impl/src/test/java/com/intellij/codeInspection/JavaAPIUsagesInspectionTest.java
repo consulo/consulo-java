@@ -22,7 +22,7 @@ package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
-import com.intellij.codeInspection.java15api.Java15APIUsageInspection;
+import com.intellij.java.analysis.impl.codeInspection.java15api.Java15APIUsageInspection;
 import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.*;

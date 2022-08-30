@@ -19,13 +19,18 @@ import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.psi.PsiMethod;
 import javax.annotation.Nonnull;
 
 /**
  * @author max
  */
-public class SameReturnValueInspection extends GlobalJavaInspectionTool {
+public class SameReturnValueInspection extends GlobalJavaInspectionTool
+{
   @Override
   @javax.annotation.Nullable
   public CommonProblemDescriptor[] checkElement(RefEntity refEntity, AnalysisScope scope, InspectionManager manager, GlobalInspectionContext globalContext,

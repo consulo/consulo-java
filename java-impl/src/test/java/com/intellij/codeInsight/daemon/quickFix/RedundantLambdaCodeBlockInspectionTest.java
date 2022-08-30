@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.RedundantLambdaCodeBlockInspection;
+import com.intellij.java.analysis.impl.codeInspection.RedundantLambdaCodeBlockInspection;
 
 
 public abstract class RedundantLambdaCodeBlockInspectionTest extends LightQuickFixTestCase {

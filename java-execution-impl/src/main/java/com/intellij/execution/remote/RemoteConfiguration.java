@@ -25,10 +25,10 @@ import javax.annotation.Nonnull;
 
 import org.jdom.Element;
 import com.intellij.compiler.options.CompileStepBeforeRun;
-import com.intellij.debugger.engine.RemoteStateState;
+import com.intellij.java.debugger.impl.engine.RemoteStateState;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
-import com.intellij.debugger.impl.GenericDebuggerRunnerSettings;
-import com.intellij.debugger.settings.DebuggerSettings;
+import com.intellij.java.debugger.impl.GenericDebuggerRunnerSettings;
+import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;

@@ -17,7 +17,7 @@ package com.siyeh.ig.performance;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.daemon.impl.quickfix.ChangeToAppendFix;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ChangeToAppendFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;

@@ -2,6 +2,6 @@
 	<extensions defaultExtensionNs="consulo.java">
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.ImageObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.IconObjectRenderer"/>
-		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.GraphicsObjectRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.GraphicsObjectRenderer"/>
 	</extensions>
 </consulo-plugin>

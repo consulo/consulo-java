@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.guess.GuessManager;
+import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.codeInsight.template.Expression;

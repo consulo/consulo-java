@@ -16,7 +16,7 @@
 package consulo.java.compiler;
 
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerBundle;
@@ -29,7 +29,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.util.lang.JavaVersion;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;

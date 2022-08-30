@@ -7,7 +7,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import consulo.java.codeInsight.JavaInspectionsBundle;
+import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;
 

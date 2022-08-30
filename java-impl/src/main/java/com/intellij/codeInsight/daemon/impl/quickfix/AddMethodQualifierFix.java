@@ -28,7 +28,7 @@ import com.intellij.util.IncorrectOperationException;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.ide.IconDescriptorUpdaters;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.TestOnly;
 

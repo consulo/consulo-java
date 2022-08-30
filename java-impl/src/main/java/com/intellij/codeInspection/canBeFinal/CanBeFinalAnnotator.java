@@ -15,8 +15,13 @@
  */
 package com.intellij.codeInspection.canBeFinal;
 
-import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInspection.reference.*;
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
+import com.intellij.java.analysis.codeInspection.reference.RefField;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.*;
 import com.intellij.util.containers.ContainerUtil;

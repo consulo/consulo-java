@@ -24,8 +24,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiMatcherImpl;
-import com.intellij.psi.util.PsiMatchers;
-import consulo.java.JavaQuickFixBundle;
+import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class InsertConstructorCallFix implements IntentionAction, HighPriorityAction
 {

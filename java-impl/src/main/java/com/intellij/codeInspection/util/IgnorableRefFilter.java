@@ -16,7 +16,9 @@
 package com.intellij.codeInspection.util;
 
 import com.intellij.codeInspection.reference.RefElement;
+import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 
-public abstract class IgnorableRefFilter extends RefFilter {
+public abstract class IgnorableRefFilter extends RefFilter
+{
   public abstract void addIgnoreList(RefElement refElement);
 }

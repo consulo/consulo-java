@@ -21,7 +21,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiKeyword;

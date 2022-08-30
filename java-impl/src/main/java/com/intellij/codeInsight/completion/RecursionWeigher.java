@@ -18,7 +18,7 @@ package com.intellij.codeInsight.completion;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
+import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementWeigher;
 import com.intellij.openapi.util.Comparing;

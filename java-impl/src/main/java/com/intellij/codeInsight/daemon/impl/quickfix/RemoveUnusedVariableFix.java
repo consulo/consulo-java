@@ -40,7 +40,7 @@ import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class RemoveUnusedVariableFix implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(RemoveUnusedVariableFix.class);

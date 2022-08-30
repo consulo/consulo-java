@@ -1,22 +1,22 @@
 <consulo-plugin>
 	<extensions defaultExtensionNs="consulo.java">
-		<runConfigurationExtension implementation="com.intellij.execution.coverage.CoverageJavaRunConfigurationExtension"/>
+		<runConfigurationExtension implementation="com.intellij.java.coverage.CoverageJavaRunConfigurationExtension"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
-		<coverageRunner implementation="com.intellij.coverage.IDEACoverageRunner"/>
-		<coverageRunner implementation="com.intellij.coverage.JaCoCoCoverageRunner"/>
-		<coverageEngine implementation="com.intellij.coverage.JavaCoverageEngine" order="last"/>
-		<projectViewNodeDecorator implementation="com.intellij.coverage.CoverageProjectViewClassNodeDecorator"/>
+		<coverageRunner implementation="com.intellij.java.coverage.IDEACoverageRunner"/>
+		<coverageRunner implementation="com.intellij.java.coverage.JaCoCoCoverageRunner"/>
+		<coverageEngine implementation="com.intellij.java.coverage.JavaCoverageEngine" order="last"/>
+		<projectViewNodeDecorator implementation="com.intellij.java.coverage.CoverageProjectViewClassNodeDecorator"/>
 
-		<projectService serviceInterface="com.intellij.coverage.JavaCoverageAnnotator"
-						serviceImplementation="com.intellij.coverage.JavaCoverageAnnotator"/>
-		<programRunner implementation="com.intellij.coverage.DefaultJavaCoverageRunner" id="DefaultJavaCoverageRunner"/>
+		<projectService serviceInterface="com.intellij.java.coverage.JavaCoverageAnnotator"
+						serviceImplementation="com.intellij.java.coverage.JavaCoverageAnnotator"/>
+		<programRunner implementation="com.intellij.java.coverage.DefaultJavaCoverageRunner" id="DefaultJavaCoverageRunner"/>
 		<selectInTarget implementation="com.intellij.coverage.view.SelectInCoverageView"/>
 	</extensions>
 
 	<extensionPoints>
-		<extensionPoint name="coverageEngineExtension" interface="com.intellij.coverage.JavaCoverageEngineExtension"/>
+		<extensionPoint name="coverageEngineExtension" interface="com.intellij.java.coverage.JavaCoverageEngineExtension"/>
 	</extensionPoints>
 	<actions>
 		<group id="IDEACoverageMenu" popup="false">

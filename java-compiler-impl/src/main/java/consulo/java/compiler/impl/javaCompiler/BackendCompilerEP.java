@@ -19,7 +19,7 @@ import java.lang.reflect.Constructor;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.compiler.impl.javaCompiler.BackendCompiler;
+import com.intellij.java.compiler.impl.javaCompiler.BackendCompiler;
 import com.intellij.openapi.extensions.AbstractExtensionPointBean;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.ReflectionUtil;

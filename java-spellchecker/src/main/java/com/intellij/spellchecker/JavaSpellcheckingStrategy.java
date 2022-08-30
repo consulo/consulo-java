@@ -18,8 +18,8 @@ package com.intellij.spellchecker;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.BatchSuppressManager;
-import com.intellij.codeInspection.SuppressManager;
+import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
+import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;

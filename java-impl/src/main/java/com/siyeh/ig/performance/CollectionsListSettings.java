@@ -35,7 +35,7 @@ import com.intellij.openapi.util.WriteExternalException;
 import consulo.java.module.util.JavaClassNames;
 import com.intellij.util.SmartList;
 import com.siyeh.ig.ui.UiUtils;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
  * @author Dmitry Batkovich

@@ -35,6 +35,10 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -43,7 +47,7 @@ import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.impl.IdentifierUtil;
 import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.ex.EntryPointsManager;
+import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.reference.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
@@ -55,7 +59,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
-public class VisibilityInspection extends GlobalJavaInspectionTool {
+public class VisibilityInspection extends GlobalJavaInspectionTool
+{
   private static final Logger LOG = Logger.getInstance(VisibilityInspection.class);
   public boolean SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS = true;
   public boolean SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES = true;

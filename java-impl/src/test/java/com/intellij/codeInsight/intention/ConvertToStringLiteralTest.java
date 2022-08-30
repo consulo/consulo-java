@@ -19,7 +19,7 @@ package com.intellij.codeInsight.intention;
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 
 public abstract class ConvertToStringLiteralTest extends JavaCodeInsightFixtureTestCase {

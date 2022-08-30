@@ -34,7 +34,7 @@ import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.PsiReferenceList;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(MakeClassInterfaceFix.class);

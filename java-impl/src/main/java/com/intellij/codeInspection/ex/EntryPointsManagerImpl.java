@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.analysis.impl.codeInspection.ex.EntryPointsManagerBase;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javax.swing.JButton;

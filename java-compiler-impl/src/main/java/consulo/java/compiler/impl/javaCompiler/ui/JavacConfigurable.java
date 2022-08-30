@@ -1,7 +1,7 @@
 package consulo.java.compiler.impl.javaCompiler.ui;
 
-import com.intellij.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration;
-import com.intellij.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.util.execution.ParametersListUtil;
 import consulo.disposer.Disposable;

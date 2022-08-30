@@ -33,7 +33,7 @@ import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   protected final String mySignature;

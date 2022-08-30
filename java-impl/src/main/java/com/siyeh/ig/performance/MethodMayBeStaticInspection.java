@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NonNls;
-import consulo.java.codeInspection.JavaExtensionPoints;
+import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;

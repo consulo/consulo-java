@@ -17,9 +17,9 @@
 package consulo.java.compiler.bytecodeProcessing.impl;
 
 import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.compiler.cache.Cache;
-import com.intellij.compiler.cache.JavaDependencyCache;
-import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.java.compiler.cache.Cache;
+import com.intellij.java.compiler.cache.JavaDependencyCache;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.instrumentation.FailSafeClassReader;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.compiler.instrumentation.InstrumenterClassWriter;

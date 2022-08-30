@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.dependency;
 
-import com.intellij.codeInspection.reference.RefClass;
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefJavaUtil;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import consulo.util.dataholder.Key;
 
 import java.util.*;

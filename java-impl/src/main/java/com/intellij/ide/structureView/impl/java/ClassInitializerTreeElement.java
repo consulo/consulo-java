@@ -20,7 +20,7 @@ import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import consulo.java.codeInsight.JavaCodeInsightBundle;
+import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import javax.annotation.Nonnull;
 
 import java.util.Collection;

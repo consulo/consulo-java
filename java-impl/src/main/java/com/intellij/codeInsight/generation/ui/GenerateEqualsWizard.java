@@ -36,7 +36,7 @@ import com.intellij.refactoring.ui.AbstractMemberSelectionPanel;
 import com.intellij.refactoring.ui.MemberSelectionPanel;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.ui.NonFocusableCheckBox;
-import consulo.java.codeInsight.JavaCodeInsightBundle;
+import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 

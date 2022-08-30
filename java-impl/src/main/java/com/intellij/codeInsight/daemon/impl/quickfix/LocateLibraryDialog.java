@@ -44,7 +44,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.JBRadioButton;
 import consulo.disposer.Disposer;
-import consulo.java.JavaQuickFixBundle;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class LocateLibraryDialog extends DialogWrapper
 {

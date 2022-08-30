@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon;
 import com.intellij.codeInsight.daemon.impl.analysis.FileHighlightingSetting;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightingSettingsPerFile;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection;
+import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
 import com.intellij.psi.PsiFile;
 
 public abstract class UnusedImportsTest extends DaemonAnalyzerTestCase {

@@ -17,8 +17,9 @@ package com.intellij.codeInspection.defUse;
 
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.DefUseUtil;
+import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -29,7 +30,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool {
+public class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool
+{
   public boolean REPORT_PREFIX_EXPRESSIONS = false;
   public boolean REPORT_POSTFIX_EXPRESSIONS = true;
   public boolean REPORT_REDUNDANT_INITIALIZER = true;

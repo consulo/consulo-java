@@ -17,6 +17,8 @@ package com.intellij.find.findUsages;
 
 import com.intellij.find.FindBundle;
 import com.intellij.find.FindSettings;
+import com.intellij.java.analysis.impl.find.findUsages.JavaFindUsagesOptions;
+import com.intellij.java.analysis.impl.find.findUsages.JavaMethodFindUsagesOptions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;

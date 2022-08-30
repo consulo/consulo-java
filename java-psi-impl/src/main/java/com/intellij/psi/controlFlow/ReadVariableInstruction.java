@@ -18,7 +18,7 @@ package com.intellij.psi.controlFlow;
 import com.intellij.psi.PsiVariable;
 import javax.annotation.Nonnull;
 
-final class ReadVariableInstruction extends SimpleInstruction
+public final class ReadVariableInstruction extends SimpleInstruction
 {
 	@Nonnull
 	public final PsiVariable variable;

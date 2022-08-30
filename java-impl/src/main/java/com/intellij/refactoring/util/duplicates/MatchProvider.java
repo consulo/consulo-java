@@ -18,6 +18,8 @@ package com.intellij.refactoring.util.duplicates;
 import java.util.List;
 
 import javax.annotation.Nullable;
+
+import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 

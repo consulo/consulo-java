@@ -15,12 +15,14 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import consulo.java.JavaQuickFixBundle;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ClassKind;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
  * @author ven
 */
-public enum CreateClassKind implements ClassKind {
+public enum CreateClassKind implements ClassKind
+{
   CLASS     (JavaQuickFixBundle.message("create.class")),
   INTERFACE (JavaQuickFixBundle.message("create.interface")),
   ENUM      (JavaQuickFixBundle.message("create.enum")),

@@ -19,8 +19,8 @@ package consulo.java.compiler.bytecodeProcessing;
 import java.io.File;
 import java.io.IOException;
 
-import com.intellij.compiler.cache.Cache;
-import com.intellij.compiler.cache.JavaDependencyCache;
+import com.intellij.java.compiler.cache.Cache;
+import com.intellij.java.compiler.cache.JavaDependencyCache;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.openapi.compiler.CompileContext;

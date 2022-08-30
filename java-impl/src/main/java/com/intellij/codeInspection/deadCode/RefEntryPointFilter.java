@@ -24,9 +24,9 @@
  */
 package com.intellij.codeInspection.deadCode;
 
-import com.intellij.codeInspection.reference.RefJavaElement;
-import com.intellij.codeInspection.reference.RefParameter;
-import com.intellij.codeInspection.util.RefFilter;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaElement;
+import com.intellij.java.analysis.codeInspection.reference.RefParameter;
+import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 
 public class RefEntryPointFilter extends RefFilter {
   @Override

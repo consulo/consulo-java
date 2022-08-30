@@ -21,6 +21,10 @@ import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
+import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -42,7 +46,8 @@ import java.util.List;
 /**
  * @author max
  */
-public class RedundantThrows extends GlobalJavaInspectionTool {
+public class RedundantThrows extends GlobalJavaInspectionTool
+{
   private static final Logger LOG = Logger.getInstance(RedundantThrows.class);
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.redundant.throws.display.name");
   private final BidirectionalMap<String, QuickFix> myQuickFixes = new BidirectionalMap<String, QuickFix>();

@@ -28,7 +28,7 @@ import com.intellij.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import consulo.java.codeInsight.JavaInspectionsBundle;
+import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 
 /**
  * @author Danila Ponomarenko

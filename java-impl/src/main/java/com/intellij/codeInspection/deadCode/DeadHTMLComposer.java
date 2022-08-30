@@ -32,6 +32,9 @@ import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.ui.InspectionToolPresentation;
 import com.intellij.codeInspection.ui.InspectionTreeNode;
 import com.intellij.codeInspection.ui.RefElementNode;
+import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
+import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

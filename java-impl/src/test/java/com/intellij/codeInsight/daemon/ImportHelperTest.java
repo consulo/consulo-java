@@ -16,7 +16,7 @@ import com.intellij.codeInsight.daemon.impl.quickfix.ImportClassFix;
 import com.intellij.codeInsight.daemon.impl.quickfix.ImportClassFixBase;
 import com.intellij.codeInsight.generation.actions.CommentByBlockCommentAction;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection;
+import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;

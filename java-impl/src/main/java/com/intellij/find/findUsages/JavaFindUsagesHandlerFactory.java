@@ -16,6 +16,8 @@
 package com.intellij.find.findUsages;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.analysis.impl.find.findUsages.*;
 import jakarta.inject.Inject;
 
 import com.intellij.ide.util.SuperMethodWarningUtil;

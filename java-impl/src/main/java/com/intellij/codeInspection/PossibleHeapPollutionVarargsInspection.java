@@ -18,7 +18,8 @@ package com.intellij.codeInspection;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -27,6 +28,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtil;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -35,6 +37,7 @@ import javax.annotation.Nonnull;
  */
 public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(PossibleHeapPollutionVarargsInspection.class);
+
   @Nls
   @Nonnull
   @Override
@@ -77,13 +80,12 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
             method.hasModifierProperty(PsiModifier.STATIC) ||
             method.isConstructor()) {
           quickFix = new AnnotateAsSafeVarargsQuickFix();
-        }
-        else {
+        } else {
           final PsiClass containingClass = method.getContainingClass();
           LOG.assertTrue(containingClass != null);
           boolean canBeFinal = !method.hasModifierProperty(PsiModifier.ABSTRACT) &&
-                               !containingClass.isInterface() &&
-                               OverridingMethodsSearch.search(method).findFirst() == null;
+              !containingClass.isInterface() &&
+              OverridingMethodsSearch.search(method).findFirst() == null;
           quickFix = canBeFinal ? new MakeFinalAndAnnotateQuickFix() : null;
         }
         holder.registerProblem(nameIdentifier, "Possible heap pollution from parameterized vararg type #loc", quickFix);
@@ -108,7 +110,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
-        final PsiMethod psiMethod = (PsiMethod)psiElement.getParent();
+        final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         if (psiMethod != null) {
           new AddAnnotationPsiFix("java.lang.SafeVarargs", psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
         }
@@ -133,7 +135,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
-        final PsiMethod psiMethod = (PsiMethod)psiElement.getParent();
+        final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         psiMethod.getModifierList().setModifierProperty(PsiModifier.FINAL, true);
         new AddAnnotationPsiFix("java.lang.SafeVarargs", psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
       }
@@ -149,13 +151,13 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
       if (!method.isVarArgs()) return;
 
       final PsiParameter psiParameter = method.getParameterList().getParameters()[method.getParameterList().getParametersCount() - 1];
-      final PsiType componentType = ((PsiEllipsisType)psiParameter.getType()).getComponentType();
+      final PsiType componentType = ((PsiEllipsisType) psiParameter.getType()).getComponentType();
       if (JavaGenericsUtil.isReifiableType(componentType)) {
         return;
       }
       for (PsiReference reference : ReferencesSearch.search(psiParameter)) {
         final PsiElement element = reference.getElement();
-        if (element instanceof PsiExpression && !PsiUtil.isAccessedForReading((PsiExpression)element)) {
+        if (element instanceof PsiExpression && !PsiUtil.isAccessedForReading((PsiExpression) element)) {
           return;
         }
       }
