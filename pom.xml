@@ -42,21 +42,25 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>java-psi-api</module>
 		<module>java-indexing-api</module>
-		<module>java-analysis-api</module>
-		<module>java-compiler-api</module>
-		<module>java-execution-api</module>
-		<module>java-debugger-api</module>
-		<module>jam-api</module>
-
-		<module>java-psi-impl</module>
-		<module>java-debugger-impl</module>
-		<module>java-analysis-impl</module>
 		<module>java-indexing-impl</module>
-		<module>java-execution-impl</module>
+
+		<module>java-analysis-api</module>
+		<module>java-analysis-impl</module>
+
+		<module>java-compiler-api</module>
 		<module>java-compiler-impl</module>
 		<module>java-compiler-artifact-impl</module>
+
+		<module>java-execution-api</module>
+		<module>java-execution-impl</module>
+
+		<module>java-debugger-api</module>
+		<module>java-debugger-impl</module>
+
+		<module>java-language-api</module>
+		<module>java-language-impl</module>
+
 		<module>java-coverage-impl</module>
 		<module>java-manifest</module>
 		<module>java-coverage-impl/coverage_rt</module>
@@ -64,6 +68,7 @@
 		<module>jvm-bytecode-viewer</module>
 		<module>java-intellilang</module>
 		<module>java-impl-testing</module>
+		<module>jam-api</module>
 		<module>jam-impl</module>
 		<module>java-impl</module>
 

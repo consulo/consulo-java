@@ -104,12 +104,12 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-java.psi.api</artifactId>
+			<artifactId>consulo.java-java.language.api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-java.psi.impl</artifactId>
+			<artifactId>consulo.java-java.language.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

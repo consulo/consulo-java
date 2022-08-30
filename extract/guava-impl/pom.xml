@@ -46,7 +46,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-java.psi.impl</artifactId>
+			<artifactId>consulo.java-java.language.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
