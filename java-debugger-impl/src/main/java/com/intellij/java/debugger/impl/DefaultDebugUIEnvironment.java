@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.RemoteConnection;
+import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.runners.ExecutionEnvironment;

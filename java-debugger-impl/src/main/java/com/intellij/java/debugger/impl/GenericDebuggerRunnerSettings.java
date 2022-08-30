@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl;
 
 import org.jdom.Element;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.execution.configurations.DebuggingRunnerData;
+import com.intellij.java.execution.configurations.DebuggingRunnerData;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.util.xmlb.SmartSerializer;
 import com.intellij.util.xmlb.annotations.OptionTag;

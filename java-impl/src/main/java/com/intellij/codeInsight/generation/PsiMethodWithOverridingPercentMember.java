@@ -39,7 +39,7 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
 import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.search.searches.ClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.containers.ContainerUtil;

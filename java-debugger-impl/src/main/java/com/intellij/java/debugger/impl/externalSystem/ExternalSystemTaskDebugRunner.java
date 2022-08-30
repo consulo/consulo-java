@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.externalSystem;
 
 import com.intellij.java.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.RemoteConnection;
+import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultDebugExecutor;

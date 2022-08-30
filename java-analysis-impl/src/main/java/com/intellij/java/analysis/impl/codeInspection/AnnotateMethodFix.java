@@ -27,7 +27,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiNameValuePair;
-import com.intellij.psi.search.searches.OverridingMethodsSearch;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;

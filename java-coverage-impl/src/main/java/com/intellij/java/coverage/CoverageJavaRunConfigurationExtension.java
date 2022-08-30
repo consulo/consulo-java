@@ -6,14 +6,14 @@ package com.intellij.java.coverage;
 
 import com.intellij.coverage.*;
 import com.intellij.coverage.listeners.CoverageListener;
-import com.intellij.execution.CommonJavaRunConfigurationParameters;
+import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.Location;
-import com.intellij.execution.RunConfigurationExtension;
+import com.intellij.java.execution.impl.RunConfigurationExtension;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
-import com.intellij.execution.junit.RefactoringListeners;
+import com.intellij.java.execution.impl.junit.RefactoringListeners;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;

@@ -19,7 +19,7 @@ import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.OverridingMethodsSearch;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.util.ArrayUtil;
 
 import java.util.ArrayList;

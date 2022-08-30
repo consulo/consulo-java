@@ -4,7 +4,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.util.Processor;
 import javax.annotation.Nonnull;
 

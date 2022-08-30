@@ -33,7 +33,7 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.JavaCommandLineStateUtil;
+import com.intellij.java.execution.configurations.JavaCommandLineStateUtil;
 import com.intellij.execution.configurations.ModuleRunProfile;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.configurations.RunProfileState;

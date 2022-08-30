@@ -18,12 +18,12 @@ package com.intellij.java.coverage;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.coverage.CoverageRunner;
-import com.intellij.execution.CommonJavaRunConfigurationParameters;
+import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
-import com.intellij.execution.util.JreVersionDetector;
+import com.intellij.java.execution.impl.util.JreVersionDetector;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.PackageChooserDialog;

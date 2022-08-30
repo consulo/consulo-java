@@ -35,7 +35,7 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.fileTypes.ZipArchiveFileType;
 import consulo.java.JavaIcons;
 import consulo.java.fileTypes.JModFileType;
-import consulo.java.projectRoots.OwnJdkUtil;
+import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
 import consulo.roots.types.BinariesOrderRootType;

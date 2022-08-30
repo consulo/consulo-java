@@ -18,7 +18,7 @@ import com.intellij.openapi.vfs.newvfs.VfsImplUtil;
 import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent;
 import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent;
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
-import consulo.java.projectRoots.OwnJdkUtil;
+import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.util.collection.Maps;
 
 import javax.annotation.Nonnull;

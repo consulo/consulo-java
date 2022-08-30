@@ -19,7 +19,7 @@ import com.intellij.Patches;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.configurations.RemoteConnection;
+import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.execution.process.*;
 import com.intellij.execution.runners.ExecutionUtil;
 import com.intellij.idea.ActionsBundle;

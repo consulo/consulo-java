@@ -15,8 +15,8 @@
  */
 package com.intellij.openapi.vcs.contentAnnotation;
 
-import com.intellij.execution.filters.ExceptionInfoCache;
-import com.intellij.execution.filters.ExceptionWorker;
+import com.intellij.java.execution.filters.ExceptionInfoCache;
+import com.intellij.java.execution.filters.ExceptionWorker;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.FilterMixin;
 import com.intellij.openapi.application.ApplicationManager;

@@ -16,7 +16,7 @@
 package com.intellij.refactoring.rename.naming;
 
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.search.searches.ClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.refactoring.RefactoringBundle;
 
 /**

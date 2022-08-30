@@ -19,6 +19,7 @@ package consulo.java.execution.configurations;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.ParametersList;
+import com.intellij.java.execution.configurations.JavaParameters;
 import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -44,7 +45,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Replacement of {@link com.intellij.execution.configurations.JavaParameters} without dependecy to platform
+ * Replacement of {@link JavaParameters} without dependecy to platform
  */
 public class OwnJavaParameters extends OwnSimpleJavaParameters
 {

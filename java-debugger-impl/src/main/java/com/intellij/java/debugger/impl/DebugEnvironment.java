@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.configurations.RemoteConnection;
+import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.psi.search.GlobalSearchScope;
 

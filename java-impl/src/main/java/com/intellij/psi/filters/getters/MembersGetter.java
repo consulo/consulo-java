@@ -34,7 +34,7 @@ import com.intellij.openapi.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.TrueFilter;
-import com.intellij.psi.impl.java.stubs.index.JavaStaticMemberTypeIndex;
+import com.intellij.java.indexing.impl.stubs.index.JavaStaticMemberTypeIndex;
 import com.intellij.psi.scope.processor.FilterScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;

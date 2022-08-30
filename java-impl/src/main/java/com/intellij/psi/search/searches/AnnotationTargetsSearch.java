@@ -17,6 +17,7 @@ package com.intellij.psi.search.searches;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiModifierListOwner;

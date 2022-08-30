@@ -25,7 +25,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.AnnotatedMembersSearch;
+import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.util.Query;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

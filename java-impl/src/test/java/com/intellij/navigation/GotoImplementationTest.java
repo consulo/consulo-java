@@ -1,8 +1,8 @@
 package com.intellij.navigation;
 
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.codeInsight.navigation.ClassImplementationsSearch;
-import com.intellij.codeInsight.navigation.MethodImplementationsSearch;
+import com.intellij.java.indexing.impl.ClassImplementationsSearch;
+import com.intellij.java.indexing.impl.MethodImplementationsSearch;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.psi.PsiClass;

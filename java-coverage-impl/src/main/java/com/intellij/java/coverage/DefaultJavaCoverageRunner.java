@@ -24,7 +24,7 @@ import com.intellij.execution.configurations.ConfigurationInfoProvider;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.execution.impl.DefaultJavaProgramRunner;
+import com.intellij.java.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
 import com.intellij.openapi.extensions.Extensions;
 

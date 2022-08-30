@@ -22,8 +22,8 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.searches.ClassInheritorsSearch
-import com.intellij.psi.search.searches.OverridingMethodsSearch
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch
 import com.intellij.testFramework.PsiTestUtil
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase
 /**

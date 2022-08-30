@@ -3,8 +3,8 @@ package com.intellij.java.coverage;
 import com.intellij.coverage.*;
 import com.intellij.coverage.view.CoverageViewExtension;
 import com.intellij.coverage.view.CoverageViewManager;
-import com.intellij.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.execution.application.ApplicationConfiguration;
+import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
+import com.intellij.java.execution.impl.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
 import com.intellij.execution.testframework.AbstractTestProxy;
@@ -59,7 +59,7 @@ public class JavaCoverageEngine extends CoverageEngine {
   private static final Logger LOG = Logger.getInstance(JavaCoverageEngine.class);
 
   @Override
-  public boolean isApplicableTo(@javax.annotation.Nullable final RunConfigurationBase conf) {
+  public boolean isApplicableTo(@Nullable final RunConfigurationBase conf) {
     if (conf instanceof CommonJavaRunConfigurationParameters) {
       return true;
     }
@@ -72,7 +72,7 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public boolean canHavePerTestCoverage(@javax.annotation.Nullable RunConfigurationBase conf) {
+  public boolean canHavePerTestCoverage(@Nullable RunConfigurationBase conf) {
     return !(conf instanceof ApplicationConfiguration) && conf instanceof CommonJavaRunConfigurationParameters;
   }
 
@@ -82,7 +82,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     return new JavaCoverageEnabledConfiguration(conf, this);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public CoverageSuite createCoverageSuite(@Nonnull final CoverageRunner covRunner,
                                            @Nonnull final String name,
@@ -233,7 +233,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public List<Integer> collectSrcLinesForUntouchedFile(@Nonnull final File classFile, @Nonnull final CoverageSuitesBundle suite) {
     final List<Integer> uncoveredLines = new ArrayList<Integer>();
 
@@ -289,7 +289,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     }
     for (final PsiClass aClass : classes) {
       final String qName = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-        @javax.annotation.Nullable
+        @Nullable
         public String compute() {
           return aClass.getQualifiedName();
         }
@@ -302,7 +302,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
   @Nonnull
   public Set<File> getCorrespondingOutputFiles(@Nonnull final PsiFile srcFile,
-                                               @javax.annotation.Nullable final Module module,
+                                               @Nullable final Module module,
                                                @Nonnull final CoverageSuitesBundle suite) {
     if (module == null) {
       return Collections.emptySet();
@@ -366,7 +366,7 @@ public class JavaCoverageEngine extends CoverageEngine {
                                     int lineNumber,
                                     int startOffset,
                                     int endOffset,
-                                    @javax.annotation.Nullable LineData lineData) {
+                                    @Nullable LineData lineData) {
 
     final StringBuffer buf = new StringBuffer();
     buf.append("Hits: ");
@@ -470,7 +470,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     return buf.toString();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getTestMethodName(@Nonnull final PsiElement element,
                                   @Nonnull final AbstractTestProxy testProxy) {
     return testProxy.toString();

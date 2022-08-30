@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ShortenCommandLine;
+import com.intellij.java.execution.ShortenCommandLine;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.configurations.SimpleProgramParameters;
@@ -32,7 +32,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.util.PathsList;
-import consulo.java.projectRoots.OwnJdkUtil;
+import consulo.java.execution.projectRoots.OwnJdkUtil;
 
 /**
  * @author Gregory.Shrago

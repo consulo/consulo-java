@@ -20,7 +20,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.execution.filters.ExceptionFilters;
+import com.intellij.java.execution.filters.ExceptionFilters;
 import com.intellij.execution.filters.LineNumbersMapping;
 import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
@@ -66,8 +66,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.content.Content;
-import com.intellij.unscramble.ThreadDumpPanel;
-import com.intellij.unscramble.ThreadState;
+import com.intellij.java.execution.unscramble.ThreadDumpPanel;
+import com.intellij.java.execution.unscramble.ThreadState;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;

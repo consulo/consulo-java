@@ -454,10 +454,10 @@
 
 		<extensionPoint name="variableTypeCalculator" interface="com.intellij.codeInsight.template.macro.VariableTypeCalculator"/>
 
-		<extensionPoint name="testPatcher" interface="com.intellij.execution.JavaTestPatcher"/>
-		<extensionPoint name="exceptionFilter" interface="com.intellij.execution.filters.ExceptionFilterFactory"/>
+		<extensionPoint name="testPatcher" interface="com.intellij.java.execution.JavaTestPatcher"/>
+		<extensionPoint name="exceptionFilter" interface="com.intellij.java.execution.filters.ExceptionFilterFactory"/>
 		<extensionPoint name="programPatcher"
-						interface="com.intellij.execution.runners.JavaProgramPatcher"/>
+						interface="com.intellij.java.execution.runners.JavaProgramPatcher"/>
 
 		<extensionPoint name="codeInsight.changeVariableTypeQuickFixProvider"
 						interface="com.intellij.java.analysis.impl.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider"/>
@@ -470,7 +470,7 @@
 						interface="com.intellij.util.NotNullFunction"/>
 
 		<extensionPoint name="junitRecognizer"
-						interface="com.intellij.execution.JUnitRecognizer"/>
+						interface="com.intellij.java.execution.JUnitRecognizer"/>
 
 		<extensionPoint name="deadCode"
 						interface="com.intellij.codeInspection.reference.EntryPoint"/>
@@ -630,8 +630,8 @@
 		<extensionPoint name="bytecodeCompilerProcessor" interface="consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor"/>
 
 		<extensionPoint name="compiler.makeDependencyProcessor" interface="com.intellij.java.compiler.cache.DependencyProcessor"/>
-		<extensionPoint name="runConfigurationExtension" interface="com.intellij.execution.RunConfigurationExtension"/>
-		<extensionPoint name="jreProvider" interface="com.intellij.execution.ui.JreProvider"/>
+		<extensionPoint name="runConfigurationExtension" interface="com.intellij.java.execution.impl.RunConfigurationExtension"/>
+		<extensionPoint name="jreProvider" interface="com.intellij.java.execution.impl.ui.JreProvider"/>
 		<extensionPoint name="vetoSPICondition" interface="com.intellij.openapi.util.Condition"/>
 		<extensionPoint name="codeStyle.referenceAdjuster" beanClass="com.intellij.lang.LanguageExtensionPoint">
 			<with attribute="implementationClass" implements="com.intellij.psi.codeStyle.ReferenceAdjuster"/>
@@ -647,29 +647,29 @@
 	</extensionPoints>
 
 	<extensions defaultExtensionNs="consulo.java">
-		<allClassesSearch implementation="com.intellij.psi.impl.search.AllClassesSearchExecutor"/>
+		<allClassesSearch implementation="com.intellij.java.indexing.impl.search.AllClassesSearchExecutor"/>
 
 		<expressionSurrounder implementation="com.intellij.debugger.codeinsight.JavaWithRuntimeCastSurrounder"/>
 
 		<inferredAnnotationProvider implementation="com.intellij.java.analysis.impl.codeInsight.DefaultInferredAnnotationProvider"/>
 
-		<superMethodsSearch implementation="com.intellij.psi.impl.search.MethodSuperSearcher"/>
-		<annotatedElementsSearch implementation="com.intellij.psi.impl.search.AnnotatedElementsSearcher"/>
+		<superMethodsSearch implementation="com.intellij.java.indexing.impl.search.MethodSuperSearcher"/>
+		<annotatedElementsSearch implementation="com.intellij.java.indexing.impl.search.AnnotatedElementsSearcher"/>
 		<annotatedPackagesSearch implementation="com.intellij.psi.impl.search.AnnotatedPackagesSearcher"/>
-		<directClassInheritorsSearch implementation="com.intellij.psi.impl.search.JavaDirectInheritorsSearcher"/>
-		<classInheritorsSearch implementation="com.intellij.psi.impl.search.JavaClassInheritorsSearcher"/>
-		<overridingMethodsSearch implementation="com.intellij.psi.impl.search.JavaOverridingMethodsSearcher"/>
-		<allOverridingMethodsSearch implementation="com.intellij.psi.impl.search.JavaAllOverridingMethodsSearcher"/>
-		<methodReferencesSearch implementation="com.intellij.psi.impl.search.MethodUsagesSearcher"/>
-		<classesWithAnnotatedMembersSearch implementation="com.intellij.psi.impl.search.ClassesWithAnnotatedMembersSearcher"/>
-		<deepestSuperMethodsSearch implementation="com.intellij.psi.impl.search.MethodDeepestSuperSearcher"/>
-		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
+		<directClassInheritorsSearch implementation="com.intellij.java.indexing.impl.search.JavaDirectInheritorsSearcher"/>
+		<classInheritorsSearch implementation="com.intellij.java.indexing.impl.search.JavaClassInheritorsSearcher"/>
+		<overridingMethodsSearch implementation="com.intellij.java.indexing.impl.search.JavaOverridingMethodsSearcher"/>
+		<allOverridingMethodsSearch implementation="com.intellij.java.indexing.impl.search.JavaAllOverridingMethodsSearcher"/>
+		<methodReferencesSearch implementation="com.intellij.java.indexing.impl.search.MethodUsagesSearcher"/>
+		<classesWithAnnotatedMembersSearch implementation="com.intellij.java.indexing.impl.search.ClassesWithAnnotatedMembersSearcher"/>
+		<deepestSuperMethodsSearch implementation="com.intellij.java.indexing.impl.search.MethodDeepestSuperSearcher"/>
+		<functionalExpressionSearch implementation="com.intellij.java.indexing.impl.search.JavaFunctionalExpressionSearcher"/>
 
 		<encapsulateFields.helper language="JAVA" implementationClass="com.intellij.refactoring.encapsulateFields.JavaEncapsulateFieldHelper"/>
 		<codeStyle.referenceAdjuster language="JAVA" implementationClass="com.intellij.psi.impl.source.codeStyle.JavaReferenceAdjuster"/>
 		<exceptionFilter implementation="com.intellij.openapi.vcs.contentAnnotation.VcsContentAnnotationExceptionFilterFactory"/>
-		<exceptionFilter implementation="com.intellij.execution.filters.ExceptionBaseFilterFactory"/>
-		<exceptionFilter implementation="com.intellij.execution.filters.ExceptionExFilterFactory"/>
+		<exceptionFilter implementation="com.intellij.java.execution.impl.filters.ExceptionBaseFilterFactory"/>
+		<exceptionFilter implementation="com.intellij.java.execution.impl.filters.ExceptionExFilterFactory"/>
 
 		<constantExpressionEvaluator language="JAVA" implementationClass="com.intellij.psi.impl.PsiExpressionEvaluator"/>
 		<annotationSupport language="JAVA" implementationClass="com.intellij.psi.impl.source.tree.java.JavaAnnotationSupport"/>
@@ -685,7 +685,7 @@
 		<codeInsight.containerProvider implementation="com.intellij.codeInsight.JavaContainerProvider" id="JAVA"/>
 
 
-		<java.shortNamesCache implementation="com.intellij.psi.impl.PsiShortNamesCacheImpl"/>
+		<java.shortNamesCache implementation="com.intellij.java.indexing.impl.PsiShortNamesCacheImpl"/>
 
 		<debuggerEditorTextProvider language="JAVA" implementationClass="com.intellij.java.debugger.impl.JavaEditorTextProviderImpl"/>
 
@@ -802,14 +802,14 @@
 				displayName="Java"
 				instance="consulo.java.application.options.JavaCodeFoldingConfigurable"/>
 
-		<referencesSearch implementation="com.intellij.psi.impl.search.PsiAnnotationMethodReferencesSearcher"/>
-		<referencesSearch implementation="com.intellij.psi.impl.search.ConstructorReferencesSearcher"/>
-		<referencesSearch implementation="com.intellij.psi.impl.search.SimpleAccessorReferenceSearcher"/>
+		<referencesSearch implementation="com.intellij.java.indexing.impl.search.PsiAnnotationMethodReferencesSearcher"/>
+		<referencesSearch implementation="com.intellij.java.indexing.impl.search.ConstructorReferencesSearcher"/>
+		<referencesSearch implementation="com.intellij.java.indexing.impl.search.SimpleAccessorReferenceSearcher"/>
 		<referencesSearch implementation="com.intellij.psi.impl.search.VariableInIncompleteCodeSearcher"/>
-		<referencesSearch implementation="com.intellij.psi.impl.search.SPIReferencesSearcher"/>
+		<referencesSearch implementation="com.intellij.java.indexing.impl.search.SPIReferencesSearcher"/>
 
-		<definitionsScopedSearch implementation="com.intellij.codeInsight.navigation.MethodImplementationsSearch"/>
-		<definitionsScopedSearch implementation="com.intellij.codeInsight.navigation.ClassImplementationsSearch"/>
+		<definitionsScopedSearch implementation="com.intellij.java.indexing.impl.MethodImplementationsSearch"/>
+		<definitionsScopedSearch implementation="com.intellij.java.indexing.impl.ClassImplementationsSearch"/>
 
 		<fileTypeFactory implementation="com.intellij.openapi.fileTypes.impl.JavaFileTypeFactory"/>
 		<fileTypeFactory implementation="consulo.java.spi.SPIFileTypeFactory"/>
@@ -1008,7 +1008,7 @@
 						serviceImplementation="com.intellij.codeInsight.NullableNotNullManagerImpl"/>
 
 		<projectService serviceInterface="com.intellij.psi.search.PsiShortNamesCache"
-						serviceImplementation="com.intellij.psi.impl.CompositeShortNamesCache"/>
+						serviceImplementation="com.intellij.java.indexing.impl.CompositeShortNamesCache"/>
 
 		<projectService serviceImplementation="com.intellij.javadoc.JavadocGenerationManager"/>
 
@@ -1025,8 +1025,8 @@
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.SetupJDKNotificationProvider"/>
 		<editorNotificationProvider implementation="com.intellij.java.debugger.impl.ui.AlternativeSourceNotificationProvider"/>
 
-		<programRunner id="defaultRunRunner" implementation="com.intellij.execution.impl.DefaultJavaProgramRunner"/>
-		<programRunner implementation="com.intellij.execution.jar.JarApplicationDebuggerRunner"/>
+		<programRunner id="defaultRunRunner" implementation="com.intellij.java.execution.impl.DefaultJavaProgramRunner"/>
+		<programRunner implementation="com.intellij.java.execution.impl.jar.JarApplicationDebuggerRunner"/>
 
 		<editorTabTitleProvider implementation="consulo.java.fileEditor.impl.JavaModuleEditorTabTitleProvider" order="first"/>
 
@@ -1715,12 +1715,12 @@
 		<favoriteNodeProvider implementation="com.intellij.ide.favoritesTreeView.PsiMethodFavoriteNodeProvider"/>
 		<favoriteNodeProvider implementation="com.intellij.ide.favoritesTreeView.PsiPackageFavoriteNodeProvider"/>
 		<favoriteNodeProvider implementation="com.intellij.ide.favoritesTreeView.UsageFavoriteNodeProvider"/>
-		<configurationType implementation="com.intellij.execution.jar.JarApplicationConfigurationType"/>
+		<configurationType implementation="com.intellij.java.execution.impl.jar.JarApplicationConfigurationType"/>
 
-		<runConfigurationProducer implementation="com.intellij.execution.jar.JarApplicationConfigurationProducer"/>
+		<runConfigurationProducer implementation="com.intellij.java.execution.impl.jar.JarApplicationConfigurationProducer"/>
 
-		<configurationType implementation="com.intellij.execution.remote.RemoteConfigurationType"/>
-		<runLineMarkerContributor language="JAVA" implementationClass="com.intellij.execution.application.ApplicationRunLineMarkerProvider"/>
+		<configurationType implementation="com.intellij.java.execution.impl.remote.RemoteConfigurationType"/>
+		<runLineMarkerContributor language="JAVA" implementationClass="com.intellij.java.execution.impl.application.ApplicationRunLineMarkerProvider"/>
 
 		<!--TODO [VISTALL] core depend - we can't override services
 		<applicationService serviceInterface="com.intellij.packageDependencies.DependenciesVisitorFactory"
@@ -1849,17 +1849,17 @@
 		<codeInsight.surroundWithRangeAdjuster implementation="com.intellij.codeInsight.generation.surroundWith.XmlSurroundWithRangeAdjuster"/>
 
 
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaAnonymousClassBaseRefOccurenceIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaFieldNameIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaMethodNameIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaStaticMemberNameIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaStaticMemberTypeIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaSuperClassNameOccurenceIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaMethodParameterTypesIndex"/>
-		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaAnonymousClassBaseRefOccurenceIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaFieldNameIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaFullClassNameIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaMethodNameIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaStaticMemberNameIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaStaticMemberTypeIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaShortClassNameIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaSuperClassNameOccurenceIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaMethodParameterTypesIndex"/>
+		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex"/>
 
 		<fileBasedIndex implementation="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
 		<fileBasedIndex implementation="com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentIndex"/>
@@ -1888,7 +1888,7 @@
 
 		<iconDescriptorUpdater implementation="consulo.java.ide.JavaIconDescriptorUpdater" id="java"/>
 		<iconDescriptorUpdater implementation="consulo.java.ide.JavaModuleIconDescriptorUpdater" id="javaModule" order="after directory"/>
-		<iconDescriptorUpdater implementation="consulo.java.execution.testframework.TestIconDescriptorUpdater"/>
+		<iconDescriptorUpdater implementation="consulo.java.execution.impl.testframework.TestIconDescriptorUpdater"/>
 
 		<idIndexer filetype="JAVA" implementationClass="com.intellij.psi.impl.cache.impl.idCache.JavaIdIndexer"/>
 		<todoIndexer filetype="JAVA" implementationClass="com.intellij.psi.impl.cache.impl.idCache.JavaTodoIndexer"/>
@@ -1942,7 +1942,7 @@
 		<treeCopyHandler implementation="com.intellij.psi.impl.source.tree.JavaTreeCopyHandler"/>
 		<treeGenerator implementation="com.intellij.psi.impl.source.tree.JavaTreeGenerator"/>
 
-		<applicationService serviceImplementation="com.intellij.execution.JavaRunConfigurationExtensionManager"/>
+		<applicationService serviceImplementation="com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager"/>
 
 
 		<psi.referenceContributor language="JAVA"
@@ -1963,10 +1963,10 @@
 						serviceImplementation="com.intellij.psi.impl.PsiNameHelperImpl"/>
 
 		<projectService serviceInterface="com.intellij.psi.impl.file.impl.JavaFileManager"
-						serviceImplementation="com.intellij.psi.impl.file.impl.JavaFileManagerImpl"/>
+						serviceImplementation="com.intellij.java.indexing.impl.JavaFileManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.execution.testDiscovery.JavaAutoRunManager"
-						serviceImplementation="com.intellij.execution.testDiscovery.JavaAutoRunManager"/>
+		<projectService serviceInterface="com.intellij.java.execution.impl.testDiscovery.JavaAutoRunManager"
+						serviceImplementation="com.intellij.java.execution.impl.testDiscovery.JavaAutoRunManager"/>
 
 		<applicationService serviceInterface="com.intellij.psi.impl.file.PsiPackageImplementationHelper"
 							serviceImplementation="com.intellij.psi.impl.file.PsiPackageImplementationHelperImpl"/>
@@ -1975,10 +1975,10 @@
 		<applicationService serviceInterface="com.intellij.openapi.projectRoots.OwnJdkVersionDetector"
 							serviceImplementation="com.intellij.openapi.projectRoots.OwnJdkVersionDetectorImpl"/>
 
-		<consoleFilterProvider implementation="com.intellij.execution.filters.DefaultConsoleFiltersProvider"/>
+		<consoleFilterProvider implementation="com.intellij.java.execution.impl.filters.DefaultConsoleFiltersProvider"/>
 
-		<configurationType implementation="com.intellij.execution.application.ApplicationConfigurationType"/>
-		<runConfigurationProducer implementation="com.intellij.execution.application.ApplicationConfigurationProducer"/>
+		<configurationType implementation="com.intellij.java.execution.impl.application.ApplicationConfigurationType"/>
+		<runConfigurationProducer implementation="com.intellij.java.execution.impl.application.ApplicationConfigurationProducer"/>
 
 		<psi.packageSupportProvider implementation="consulo.java.psi.impl.JavaPsiPackageSupportProvider"/>
 		<customPropertyScopeProvider implementation="com.intellij.psi.impl.search.SimpleAccessorScopeProvider"/>
@@ -1989,8 +1989,8 @@
 		<applicationService serviceInterface="com.intellij.openapi.roots.libraries.LibrariesHelper"
 							serviceImplementation="com.intellij.openapi.roots.libraries.LibrariesHelperImpl"/>
 
-		<applicationService serviceInterface="com.intellij.execution.runners.ProcessProxyFactory"
-							serviceImplementation="com.intellij.execution.runners.ProcessProxyFactoryImpl"/>
+		<applicationService serviceInterface="com.intellij.java.execution.runners.ProcessProxyFactory"
+							serviceImplementation="com.intellij.java.execution.impl.runners.ProcessProxyFactoryImpl"/>
 
 		<!--Java SPI-->
 		<codeInsight.gotoSuper language="JAVA-SPI" implementationClass="com.intellij.spi.SPIGotoSuperHandler"/>
@@ -2031,9 +2031,9 @@
 
 		<targetElementUtilEx implementation="consulo.java.codeInsight.JavaTargetElementUtilEx"/>
 
-		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
-		<fileBasedIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaAutoModuleNameIndex"/>
-		<fileBasedIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaSourceModuleNameIndex"/>
+		<fileBasedIndex implementation="com.intellij.java.indexing.impl.search.JavaFunctionalExpressionIndex"/>
+		<fileBasedIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex"/>
+		<fileBasedIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex"/>
 
 		<xdebugger.lineBreakpointTypeResolver filetype="CLASS" implementationClass="consulo.java.debugger.impl.JavaLineBreakpointTypeResolver"/>
 		<xdebugger.lineBreakpointTypeResolver filetype="JAVA" implementationClass="consulo.java.debugger.impl.JavaLineBreakpointTypeResolver"/>
@@ -2058,7 +2058,7 @@
 		<applicationService serviceImplementation="consulo.java.unscramble.UnscrambleManager" lazy="false"/>
 
 		<projectService serviceImplementation="com.intellij.java.debugger.impl.ui.DebuggerPanelsManager" lazy="false"/>
-		<projectService serviceImplementation="com.intellij.execution.testDiscovery.TestDiscoveryIndex" lazy="false"/>
+		<projectService serviceImplementation="com.intellij.java.execution.impl.testDiscovery.TestDiscoveryIndex" lazy="false"/>
 		<projectService serviceInterface="com.intellij.java.debugger.DebuggerManager" serviceImplementation="com.intellij.java.debugger.impl.DebuggerManagerImpl" lazy="false"/>
 		<projectService serviceInterface="com.intellij.pom.java.PomJavaAspect" serviceImplementation="com.intellij.pom.java.impl.PomJavaAspectImpl" lazy="false"/>
 

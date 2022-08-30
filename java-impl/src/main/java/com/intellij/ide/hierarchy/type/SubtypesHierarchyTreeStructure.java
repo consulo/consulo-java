@@ -30,8 +30,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFunctionalExpression;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.search.searches.FunctionalExpressionSearch;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 

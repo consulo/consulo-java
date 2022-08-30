@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.execution.configurations.ConfigurationWithAlternativeJre;
+import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.openapi.project.Project;

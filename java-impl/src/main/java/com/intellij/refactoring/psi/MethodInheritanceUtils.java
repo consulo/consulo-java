@@ -18,7 +18,7 @@ package com.intellij.refactoring.psi;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.search.searches.OverridingMethodsSearch;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.util.containers.Stack;
 
 import java.util.ArrayList;

@@ -17,7 +17,7 @@ package com.intellij.openapi.vcs.contentAnnotation;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.execution.filters.ExceptionFilterFactory;
+import com.intellij.java.execution.filters.ExceptionFilterFactory;
 import com.intellij.execution.filters.Filter;
 import com.intellij.psi.search.GlobalSearchScope;
 

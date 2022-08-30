@@ -23,7 +23,7 @@ import com.intellij.find.findUsages.FindUsagesOptions;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.MethodReferencesSearch;
+import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.usageView.UsageInfo;

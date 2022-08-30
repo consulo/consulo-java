@@ -17,7 +17,7 @@ package com.intellij.java.debugger;
 
 import org.jetbrains.annotations.PropertyKey;
 import com.intellij.AbstractBundle;
-import com.intellij.execution.configurations.RemoteConnection;
+import com.intellij.java.execution.configurations.RemoteConnection;
 
 public class DebuggerBundle extends AbstractBundle
 {

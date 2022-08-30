@@ -30,7 +30,7 @@ import com.intellij.psi.filters.ClassFilter;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.filters.element.ExcludeDeclaredFilter;
 import com.intellij.psi.filters.element.ExcludeSillyAssignment;
-import com.intellij.psi.impl.search.MethodDeepestSuperSearcher;
+import com.intellij.java.indexing.impl.search.MethodDeepestSuperSearcher;
 import com.intellij.psi.scope.ElementClassFilter;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
