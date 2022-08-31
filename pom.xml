@@ -70,7 +70,7 @@
 		<module>java-impl-testing</module>
 		<module>jam-api</module>
 		<module>jam-impl</module>
-		<module>java-impl</module>
+		<module>plugin</module>
 
 		<module>jdk-annotations</module>
 

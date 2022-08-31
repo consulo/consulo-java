@@ -734,11 +734,11 @@
 
 		<bytecodeCompilerProcessor implementation="consulo.java.compiler.bytecodeProcessing.impl.NotNullJavaBytecodeProcessorCompiler"/>
 
-		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.ColorObjectRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.ColorObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.BinaryRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.TimestampRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.FileObjectRenderer"/>
-		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.StackTraceElementObjectRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.StackTraceElementObjectRenderer"/>
 
 		<augmentProvider implementation="consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider"/>
 		<augmentProvider implementation="com.intellij.java.language.impl.psi.impl.RecordAugmentProvider"/>
@@ -761,9 +761,6 @@
 
 		<projectService serviceInterface="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"
 						serviceImplementation="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"/>
-
-		<projectService serviceInterface="com.intellij.debugger.ui.DebuggerRecents"
-						serviceImplementation="com.intellij.debugger.ui.DebuggerRecents"/>
 
 		<projectService serviceImplementation="com.intellij.java.debugger.impl.HotSwapManager"/>
 		<projectService serviceInterface="com.intellij.java.debugger.impl.ui.HotSwapUI" serviceImplementation="com.intellij.java.debugger.impl.ui.HotSwapUIImpl"/>
