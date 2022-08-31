@@ -1,0 +1,5 @@
+<consulo-plugin>
+	<extensions defaultExtensionNs="consulo.javascript">
+		<jsonDescriptionByAnotherPsiElementProvider implementation="consulo.json.GsonDescriptionByAnotherPsiElementProvider" />
+	</extensions>
+</consulo-plugin>

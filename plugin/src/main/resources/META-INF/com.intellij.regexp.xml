@@ -1,0 +1,6 @@
+<consulo-plugin>
+  <extensions defaultExtensionNs="com.intellij.regexp">
+    <languageHost forClass="com.intellij.java.language.impl.psi.impl.source.tree.java.PsiLiteralExpressionImpl"
+                  implementationClass="com.intellij.psi.impl.JavaRegExpHost"/>
+  </extensions>
+</consulo-plugin>
