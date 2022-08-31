@@ -18,7 +18,7 @@ package com.intellij.codeInsight;
 import java.util.List;
 
 import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.codeInsight.generation.GenerateConstructorHandler;
+import com.intellij.java.impl.codeInsight.generation.GenerateConstructorHandler;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;

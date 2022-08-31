@@ -22,6 +22,7 @@ import static org.junit.Assert.fail;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.LanguageLevel;
@@ -32,7 +33,7 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.refactoring.MockInlineMethodOptions;
-import com.intellij.refactoring.util.InlineUtil;
+import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;

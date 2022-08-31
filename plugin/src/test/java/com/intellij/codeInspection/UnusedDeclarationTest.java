@@ -16,8 +16,8 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
-import com.intellij.codeInspection.ex.EntryPointsManagerImpl;
+import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
+import com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**

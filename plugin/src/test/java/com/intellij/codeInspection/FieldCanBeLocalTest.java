@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.varScopeCanBeNarrowed.FieldCanBeLocalInspection;
+import com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed.FieldCanBeLocalInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**

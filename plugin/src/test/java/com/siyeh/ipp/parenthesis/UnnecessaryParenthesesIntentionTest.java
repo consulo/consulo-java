@@ -1,5 +1,6 @@
 package com.siyeh.ipp.parenthesis;
 
+import com.intellij.java.impl.ipp.parenthesis.RemoveUnnecessaryParenthesesIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 

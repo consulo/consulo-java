@@ -18,7 +18,7 @@ package com.intellij.codeInsight;
 import static org.junit.Assert.fail;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.inferNullity.NullityInferrer;
+import com.intellij.java.impl.codeInspection.inferNullity.NullityInferrer;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.LocalFileSystem;

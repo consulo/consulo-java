@@ -33,7 +33,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileFilter;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
-import com.intellij.psi.search.searches.AnnotatedPackagesSearch;
+import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.testFramework.IdeaTestUtil;

@@ -32,7 +32,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.refactoring.copy.CopyClassesHandler;
+import com.intellij.java.impl.refactoring.copy.CopyClassesHandler;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;

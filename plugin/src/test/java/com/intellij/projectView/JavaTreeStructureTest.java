@@ -34,9 +34,9 @@ package com.intellij.projectView;
 import javax.swing.JTree;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.ide.structureView.impl.java.JavaInheritedMembersNodeProvider;
-import com.intellij.ide.structureView.impl.java.PublicElementsFilter;
-import com.intellij.ide.structureView.impl.java.VisibilitySorter;
+import com.intellij.java.impl.ide.structureView.impl.java.JavaInheritedMembersNodeProvider;
+import com.intellij.java.impl.ide.structureView.impl.java.PublicElementsFilter;
+import com.intellij.java.impl.ide.structureView.impl.java.VisibilitySorter;
 import com.intellij.ide.structureView.newStructureView.StructureViewComponent;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;

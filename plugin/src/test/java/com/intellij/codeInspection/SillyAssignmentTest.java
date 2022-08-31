@@ -11,7 +11,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.sillyAssignment.SillyAssignmentInspection;
+import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class SillyAssignmentTest extends InspectionTestCase {

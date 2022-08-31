@@ -5,7 +5,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.suspiciousNameCombination.SuspiciousNameCombinationInspection;
+import com.intellij.java.impl.codeInspection.suspiciousNameCombination.SuspiciousNameCombinationInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**

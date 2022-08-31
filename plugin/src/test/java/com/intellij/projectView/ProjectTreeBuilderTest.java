@@ -1,7 +1,7 @@
 package com.intellij.projectView;
 
 import com.intellij.ide.projectView.impl.AbstractProjectViewPSIPane;
-import com.intellij.ide.structureView.impl.java.JavaInheritedMembersNodeProvider;
+import com.intellij.java.impl.ide.structureView.impl.java.JavaInheritedMembersNodeProvider;
 import com.intellij.ide.structureView.newStructureView.StructureViewComponent;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;

@@ -16,7 +16,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.miscGenerics.RedundantArrayForVarargsCallInspection;
+import com.intellij.java.impl.codeInspection.miscGenerics.RedundantArrayForVarargsCallInspection;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.*;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;

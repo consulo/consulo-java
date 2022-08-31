@@ -1,5 +1,6 @@
-package com.intellij.codeInsight.completion;
+package com.intellij.codeInsight.completion
 
+import com.intellij.java.impl.codeInsight.completion.StaticallyImportable;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 import com.intellij.codeInsight.CodeInsightSettings
 import com.intellij.util.ArrayUtil

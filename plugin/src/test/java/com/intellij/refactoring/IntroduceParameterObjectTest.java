@@ -29,7 +29,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
+import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.util.Function;
 import com.intellij.java.language.util.VisibilityUtil;

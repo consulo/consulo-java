@@ -16,6 +16,7 @@
 package com.intellij.codeInsight.completion
 
 import com.intellij.codeInsight.TargetElementUtilOld
+import com.intellij.java.impl.codeInsight.completion.JavaPsiClassReferenceElement
 
 /**
  * @author peter

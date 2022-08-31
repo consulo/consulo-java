@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
+import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 
 
 public abstract class GenerifyFileTest extends LightQuickFixAvailabilityTestCase {

@@ -25,8 +25,8 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.extractclass.ExtractClassProcessor;
-import com.intellij.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.refactoring.extractclass.ExtractClassProcessor;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import junit.framework.Assert;
 
 import java.util.ArrayList;

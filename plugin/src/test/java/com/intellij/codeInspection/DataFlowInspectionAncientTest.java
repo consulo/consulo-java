@@ -16,7 +16,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.dataFlow.DataFlowInspection;
+import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**

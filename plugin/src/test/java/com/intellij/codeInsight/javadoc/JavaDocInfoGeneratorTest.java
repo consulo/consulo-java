@@ -2,8 +2,9 @@ package com.intellij.codeInsight.javadoc;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
+import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.java.JavaDocumentationProvider;
+import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;

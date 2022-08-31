@@ -34,7 +34,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.refactoring.rename.RenameProcessor;
-import com.intellij.refactoring.rename.RenameWrongRefHandler;
+import com.intellij.java.impl.refactoring.rename.RenameWrongRefHandler;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;

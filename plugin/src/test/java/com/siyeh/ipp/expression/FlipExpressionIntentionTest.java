@@ -15,11 +15,12 @@
  */
 package com.siyeh.ipp.expression;
 
+import com.intellij.java.impl.ipp.expression.FlipExpressionIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
 /**
- * @see com.siyeh.ipp.expression.FlipExpressionIntention
+ * @see FlipExpressionIntention
  */
 public abstract class FlipExpressionIntentionTest extends IPPTestCase {
   public void testPrefix() { doTest(); }

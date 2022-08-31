@@ -15,10 +15,10 @@
  */
 package com.intellij.codeInsight;
 
-import com.intellij.codeInsight.generation.JavaOverrideMethodsHandler;
-import com.intellij.codeInsight.generation.OverrideImplementUtil;
-import com.intellij.codeInsight.generation.PsiMethodMember;
-import com.intellij.codeInsight.intention.impl.ImplementAbstractMethodHandler;
+import com.intellij.java.impl.codeInsight.generation.JavaOverrideMethodsHandler;
+import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
+import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
+import com.intellij.java.impl.codeInsight.intention.impl.ImplementAbstractMethodHandler;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;

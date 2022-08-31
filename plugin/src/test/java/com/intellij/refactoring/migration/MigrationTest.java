@@ -1,5 +1,8 @@
 package com.intellij.refactoring.migration;
 
+import com.intellij.java.impl.refactoring.migration.MigrationMap;
+import com.intellij.java.impl.refactoring.migration.MigrationMapEntry;
+import com.intellij.java.impl.refactoring.migration.MigrationProcessor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.refactoring.MultiFileTestCase;

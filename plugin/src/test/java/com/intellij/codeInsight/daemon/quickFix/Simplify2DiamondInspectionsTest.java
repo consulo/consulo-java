@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.ExplicitTypeCanBeDiamondInspection;
+import com.intellij.java.impl.codeInspection.ExplicitTypeCanBeDiamondInspection;
 import com.intellij.codeInspection.LocalInspectionTool;
 
 

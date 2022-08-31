@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.switchtoif;
 
+import com.intellij.java.impl.ipp.switchtoif.ReplaceIfWithSwitchIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 

@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.testFramework.IdeaTestUtil;
 

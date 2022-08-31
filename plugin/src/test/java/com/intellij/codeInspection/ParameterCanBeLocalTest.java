@@ -16,7 +16,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.varScopeCanBeNarrowed.ParameterCanBeLocalInspection;
+import com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed.ParameterCanBeLocalInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class ParameterCanBeLocalTest extends InspectionTestCase {

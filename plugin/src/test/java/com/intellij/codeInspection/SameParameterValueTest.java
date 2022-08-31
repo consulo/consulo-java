@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.sameParameterValue.SameParameterValueInspection;
+import com.intellij.java.impl.codeInspection.sameParameterValue.SameParameterValueInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class SameParameterValueTest extends InspectionTestCase {

@@ -17,11 +17,11 @@ package com.intellij.unscramble;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.java.impl.unscramble.UnscrambleDialog;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import consulo.ui.image.Image;
 
-import javax.swing.*;
 import java.io.File;
 
 /**

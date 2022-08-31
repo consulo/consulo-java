@@ -15,11 +15,12 @@
  */
 package com.siyeh.ipp.forloop;
 
+import com.intellij.java.impl.ipp.forloop.ReplaceForEachLoopWithIteratorForLoopIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 
 /**
- * @see com.siyeh.ipp.forloop.ReplaceForEachLoopWithIteratorForLoopIntention
+ * @see ReplaceForEachLoopWithIteratorForLoopIntention
  */
 public abstract class ReplaceForEachLoopWithIteratorForLoopIntentionTest extends IPPTestCase {
   public void testBareCollectionLoop() { doTest(); }

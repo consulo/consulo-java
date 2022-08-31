@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.visibility.VisibilityInspection;
+import com.intellij.java.impl.codeInspection.visibility.VisibilityInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class VisibilityInspectionTest extends InspectionTestCase {

@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.miscGenerics.SuspiciousCollectionsMethodCallsInspection;
+import com.intellij.java.impl.codeInspection.miscGenerics.SuspiciousCollectionsMethodCallsInspection;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 public abstract class SuspiciousCollectionMethodCallsTest extends LightCodeInsightFixtureTestCase {

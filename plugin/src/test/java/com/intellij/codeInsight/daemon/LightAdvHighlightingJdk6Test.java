@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.compiler.JavacQuirksInspection;
+import com.intellij.java.impl.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
-import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
-import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
+import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;

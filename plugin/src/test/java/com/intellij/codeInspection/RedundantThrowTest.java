@@ -16,7 +16,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.unneededThrows.RedundantThrows;
+import com.intellij.java.impl.codeInspection.unneededThrows.RedundantThrows;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class RedundantThrowTest extends InspectionTestCase {

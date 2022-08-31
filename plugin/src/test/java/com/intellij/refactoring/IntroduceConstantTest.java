@@ -15,7 +15,7 @@ import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.TestDataPath;
 import com.intellij.java.language.util.VisibilityUtil;

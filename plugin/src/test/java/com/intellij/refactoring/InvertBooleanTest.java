@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.refactoring.invertBoolean.InvertBooleanProcessor;
+import com.intellij.java.impl.refactoring.invertBoolean.InvertBooleanProcessor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;

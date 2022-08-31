@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.intention;
 
-import com.intellij.codeInsight.intention.impl.CreateSubclassAction;
+import com.intellij.java.impl.codeInsight.intention.impl.CreateSubclassAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;

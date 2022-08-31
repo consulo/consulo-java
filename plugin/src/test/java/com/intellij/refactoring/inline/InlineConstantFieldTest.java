@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.impl.refactoring.inline.InlineConstantFieldProcessor;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiCompiledElement;

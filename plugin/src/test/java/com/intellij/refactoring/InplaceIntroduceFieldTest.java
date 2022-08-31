@@ -23,7 +23,7 @@ import com.intellij.openapi.util.Pass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
-import com.intellij.refactoring.introduceField.IntroduceFieldHandler;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceFieldHandler;
 
 /**
  * User: anna

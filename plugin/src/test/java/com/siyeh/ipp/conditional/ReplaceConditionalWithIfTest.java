@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.conditional;
 
+import com.intellij.java.impl.ipp.conditional.ReplaceConditionalWithIfIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 

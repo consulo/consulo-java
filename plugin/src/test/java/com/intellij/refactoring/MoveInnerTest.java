@@ -9,9 +9,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.move.moveInner.MoveInnerDialog;
-import com.intellij.refactoring.move.moveInner.MoveInnerImpl;
-import com.intellij.refactoring.move.moveInner.MoveInnerProcessor;
+import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerDialog;
+import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerImpl;
+import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerProcessor;
 import org.jetbrains.annotations.NonNls;
 
 /**

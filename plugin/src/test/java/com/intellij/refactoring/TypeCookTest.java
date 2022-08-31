@@ -22,11 +22,11 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.typeCook.Settings;
-import com.intellij.refactoring.typeCook.deductive.builder.ReductionSystem;
-import com.intellij.refactoring.typeCook.deductive.builder.SystemBuilder;
-import com.intellij.refactoring.typeCook.deductive.resolver.Binding;
-import com.intellij.refactoring.typeCook.deductive.resolver.ResolverTree;
+import com.intellij.java.impl.refactoring.typeCook.Settings;
+import com.intellij.java.impl.refactoring.typeCook.deductive.builder.ReductionSystem;
+import com.intellij.java.impl.refactoring.typeCook.deductive.builder.SystemBuilder;
+import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.Binding;
+import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.ResolverTree;
 
 import java.io.File;
 import java.io.FileNotFoundException;

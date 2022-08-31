@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PackageReferenceSet;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiPackageReference;
+import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.PackageReferenceSet;
+import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.PsiPackageReference;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

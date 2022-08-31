@@ -13,7 +13,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
+import com.intellij.java.impl.refactoring.util.duplicates.MethodDuplicatesHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;

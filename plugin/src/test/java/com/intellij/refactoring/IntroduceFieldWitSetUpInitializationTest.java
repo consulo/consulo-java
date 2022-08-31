@@ -21,8 +21,8 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.introduceField.BaseExpressionToFieldHandler;
-import com.intellij.refactoring.introduceField.LocalToFieldHandler;
+import com.intellij.java.impl.refactoring.introduceField.BaseExpressionToFieldHandler;
+import com.intellij.java.impl.refactoring.introduceField.LocalToFieldHandler;
 import com.intellij.util.PathUtil;
 
 public abstract class IntroduceFieldWitSetUpInitializationTest extends CodeInsightTestCase {

@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.defUse.DefUseInspection;
+import com.intellij.java.impl.codeInspection.defUse.DefUseInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class DefUseTest extends InspectionTestCase {

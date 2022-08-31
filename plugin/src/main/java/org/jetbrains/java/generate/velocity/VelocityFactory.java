@@ -19,7 +19,7 @@ import java.util.Properties;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
-import com.intellij.codeInsight.generation.VelocityIncludesClassLoader;
+import com.intellij.java.impl.codeInsight.generation.VelocityIncludesClassLoader;
 
 /**
  * Velocity factory.

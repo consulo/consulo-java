@@ -7,12 +7,12 @@ package com.intellij.refactoring;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectHandler;
-import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectProcessor;
+import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectHandler;
+import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectProcessor;
 
 public abstract class ExtractMethodObjectWithMultipleExitPointsTest extends LightRefactoringTestCase {
   @Nonnull

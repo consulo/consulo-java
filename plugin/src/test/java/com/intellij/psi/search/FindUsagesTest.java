@@ -16,8 +16,8 @@
 package com.intellij.psi.search;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.find.findUsages.JavaFindUsagesHandler;
-import com.intellij.find.findUsages.JavaFindUsagesHandlerFactory;
+import com.intellij.java.impl.find.findUsages.JavaFindUsagesHandler;
+import com.intellij.java.impl.find.findUsages.JavaFindUsagesHandlerFactory;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.Result;

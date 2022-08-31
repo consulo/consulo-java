@@ -3,13 +3,13 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
+import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
 import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
-import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
-import com.intellij.codeInspection.sillyAssignment.SillyAssignmentInspection;
-import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
-import com.intellij.codeInspection.unneededThrows.RedundantThrowsDeclaration;
-import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
+import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInspection;
+import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
+import com.intellij.java.impl.codeInspection.unneededThrows.RedundantThrowsDeclaration;
+import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 
 public abstract class SuppressNonInspectionsTest extends LightQuickFixTestCase {

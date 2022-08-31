@@ -21,7 +21,7 @@ import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.codeInspection.actions.RunInspectionIntention;
 import com.intellij.codeInspection.ex.*;
 import com.intellij.codeInspection.ui.InspectionToolPresentation;
-import com.intellij.codeInspection.visibility.VisibilityInspection;
+import com.intellij.java.impl.codeInspection.visibility.VisibilityInspection;
 import com.intellij.psi.PsiFile;
 
 import java.util.ArrayList;

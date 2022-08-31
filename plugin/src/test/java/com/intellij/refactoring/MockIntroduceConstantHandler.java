@@ -11,7 +11,7 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.refactoring.introduceField.IntroduceConstantHandler;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
 
 public class MockIntroduceConstantHandler extends IntroduceConstantHandler{
   private final PsiClass myTargetClass;

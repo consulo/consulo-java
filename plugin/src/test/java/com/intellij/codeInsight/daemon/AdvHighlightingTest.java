@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.analysis.PackagesScopesProvider;
+import com.intellij.java.impl.analysis.PackagesScopesProvider;
 import com.intellij.application.options.colors.ScopeAttributesUtil;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
@@ -37,7 +37,7 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.search.scope.packageSet.NamedScope;
 import com.intellij.psi.search.scope.packageSet.NamedScopeManager;
 import com.intellij.psi.search.scope.packageSet.NamedScopesHolder;
-import com.intellij.psi.search.scope.packageSet.PatternPackageSet;
+import com.intellij.java.impl.psi.search.scope.packageSet.PatternPackageSet;
 import com.intellij.testFramework.IdeaTestUtil;
 import consulo.ui.style.StandardColors;
 import org.jetbrains.annotations.NonNls;

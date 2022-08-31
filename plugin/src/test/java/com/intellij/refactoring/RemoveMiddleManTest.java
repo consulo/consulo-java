@@ -12,9 +12,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.removemiddleman.DelegationUtils;
-import com.intellij.refactoring.removemiddleman.RemoveMiddlemanProcessor;
-import com.intellij.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.refactoring.removemiddleman.DelegationUtils;
+import com.intellij.java.impl.refactoring.removemiddleman.RemoveMiddlemanProcessor;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 
 import java.util.ArrayList;
 import java.util.List;

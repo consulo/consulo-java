@@ -23,7 +23,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.dataFlow.DataFlowInspection;
+import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 
 public abstract class SurroundWithIfFixTest extends LightQuickFixTestCase {
   @Nonnull

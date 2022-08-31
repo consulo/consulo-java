@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.impl.refactoring.inline.InlineParameterExpressionProcessor;
+import com.intellij.java.impl.refactoring.inline.InlineParameterHandler;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.psi.PsiElement;

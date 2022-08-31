@@ -37,12 +37,12 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.refactoring.RefactoringTestUtil;
-import com.intellij.refactoring.listeners.JavaRefactoringListenerManager;
-import com.intellij.refactoring.listeners.MoveMemberListener;
-import com.intellij.refactoring.memberPullUp.PullUpConflictsUtil;
-import com.intellij.refactoring.memberPullUp.PullUpProcessor;
+import com.intellij.java.impl.refactoring.listeners.JavaRefactoringListenerManager;
+import com.intellij.java.impl.refactoring.listeners.MoveMemberListener;
+import com.intellij.java.impl.refactoring.memberPullUp.PullUpConflictsUtil;
+import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
-import com.intellij.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.ui.UIUtil;
 

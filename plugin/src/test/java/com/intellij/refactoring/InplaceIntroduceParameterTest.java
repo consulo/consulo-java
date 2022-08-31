@@ -21,7 +21,7 @@ import com.intellij.openapi.util.Pass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
-import com.intellij.refactoring.introduceParameter.IntroduceParameterHandler;
+import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterHandler;
 import javax.annotation.Nonnull;
 
 /**

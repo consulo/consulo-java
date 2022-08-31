@@ -1,0 +1,98 @@
+package com.intellij.java.impl.codeInsight.completion;
+
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.completion.InsertionContext;
+import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.featureStatistics.FeatureUsageTracker;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiSubstitutor;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Set;
+
+import static com.intellij.util.ObjectUtil.assertNotNull;
+
+/**
+ * @author peter
+ */
+public class JavaGlobalMemberLookupElement extends LookupElement implements StaticallyImportable {
+  private final MemberLookupHelper myHelper;
+  private final InsertHandler<JavaGlobalMemberLookupElement> myQualifiedInsertion;
+  private final InsertHandler<JavaGlobalMemberLookupElement> myImportInsertion;
+
+  public JavaGlobalMemberLookupElement(List<PsiMethod> overloads,
+                                       PsiClass containingClass,
+                                       InsertHandler<JavaGlobalMemberLookupElement> qualifiedInsertion,
+                                       InsertHandler<JavaGlobalMemberLookupElement> importInsertion,
+                                       boolean shouldImport) {
+    myHelper = new MemberLookupHelper(overloads, containingClass, shouldImport);
+    myQualifiedInsertion = qualifiedInsertion;
+    myImportInsertion = importInsertion;
+  }
+
+  public JavaGlobalMemberLookupElement(PsiMember member,
+                                       PsiClass containingClass,
+                                       InsertHandler<JavaGlobalMemberLookupElement> qualifiedInsertion,
+                                       InsertHandler<JavaGlobalMemberLookupElement> importInsertion,
+                                       boolean shouldImport) {
+    myHelper = new MemberLookupHelper(member, containingClass, shouldImport, false);
+    myQualifiedInsertion = qualifiedInsertion;
+    myImportInsertion = importInsertion;
+  }
+
+  @Nonnull
+  @Override
+  public PsiMember getObject() {
+    return myHelper.getMember();
+  }
+
+  @Nonnull
+  public PsiClass getContainingClass() {
+    return assertNotNull(myHelper.getContainingClass());
+  }
+
+  @Nonnull
+  @Override
+  public String getLookupString() {
+    return assertNotNull(getObject().getName());
+  }
+
+  @Override
+  public Set<String> getAllLookupStrings() {
+    return JavaCompletionUtil.getAllLookupStrings(getObject());
+  }
+
+  @Override
+  public void renderElement(LookupElementPresentation presentation) {
+    presentation.setIcon(DefaultLookupItemRenderer.getRawIcon(this, presentation.isReal()));
+    myHelper.renderElement(presentation, !myHelper.willBeImported(), true, PsiSubstitutor.EMPTY);
+  }
+
+  @Override
+  public void setShouldBeImported(boolean shouldImportStatic) {
+    myHelper.setShouldBeImported(shouldImportStatic);
+  }
+
+  @Override
+  public boolean canBeImported() {
+    return true;
+  }
+
+  @Override
+  public boolean willBeImported() {
+    return myHelper.willBeImported();
+  }
+
+  @Override
+  public void handleInsert(InsertionContext context) {
+    FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.GLOBAL_MEMBER_NAME);
+
+    (willBeImported() ? myImportInsertion : myQualifiedInsertion).handleInsert(context, this);
+  }
+
+}

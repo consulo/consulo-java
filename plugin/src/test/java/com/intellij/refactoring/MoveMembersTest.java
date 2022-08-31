@@ -17,7 +17,7 @@ import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.move.moveMembers.MockMoveMembersOptions;
-import com.intellij.refactoring.move.moveMembers.MoveMembersProcessor;
+import com.intellij.java.impl.refactoring.move.moveMembers.MoveMembersProcessor;
 import com.intellij.java.language.util.VisibilityUtil;
 
 public abstract class MoveMembersTest extends MultiFileTestCase {

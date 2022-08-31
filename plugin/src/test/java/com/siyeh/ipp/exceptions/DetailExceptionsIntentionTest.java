@@ -1,5 +1,6 @@
 package com.siyeh.ipp.exceptions;
 
+import com.intellij.java.impl.ipp.exceptions.DetailExceptionsIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 

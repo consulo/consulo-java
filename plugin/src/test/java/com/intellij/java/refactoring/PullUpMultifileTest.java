@@ -34,10 +34,10 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.MultiFileTestCase;
-import com.intellij.refactoring.memberPullUp.PullUpConflictsUtil;
-import com.intellij.refactoring.memberPullUp.PullUpProcessor;
+import com.intellij.java.impl.refactoring.memberPullUp.PullUpConflictsUtil;
+import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
-import com.intellij.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.containers.MultiMap;
 
 //pull first method from class a.A to class b.B

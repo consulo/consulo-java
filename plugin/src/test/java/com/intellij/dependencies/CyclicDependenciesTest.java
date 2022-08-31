@@ -17,8 +17,8 @@ package com.intellij.dependencies;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.JavaAnalysisScope;
-import com.intellij.cyclicDependencies.CyclicDependenciesBuilder;
+import com.intellij.java.impl.analysis.JavaAnalysisScope;
+import com.intellij.java.impl.cyclicDependencies.CyclicDependenciesBuilder;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.testFramework.IdeaTestUtil;

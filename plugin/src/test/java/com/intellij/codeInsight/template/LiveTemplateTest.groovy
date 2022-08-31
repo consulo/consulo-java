@@ -3,6 +3,9 @@
  */
 package com.intellij.codeInsight.template
 
+import com.intellij.java.impl.codeInsight.template.JavaCodeContextType
+import com.intellij.java.impl.codeInsight.template.JavaStringContextType
+
 /**
  * @author spleaner
  */

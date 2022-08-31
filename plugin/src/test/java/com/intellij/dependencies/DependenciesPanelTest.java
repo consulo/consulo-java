@@ -39,7 +39,7 @@ import com.intellij.packageDependencies.DependenciesBuilder;
 import com.intellij.packageDependencies.DependencyUISettings;
 import com.intellij.packageDependencies.ForwardDependenciesBuilder;
 import com.intellij.packageDependencies.ui.DependenciesPanel;
-import com.intellij.packageDependencies.ui.PackagePatternProvider;
+import com.intellij.java.impl.packageDependencies.ui.PackagePatternProvider;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;

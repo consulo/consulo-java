@@ -1,7 +1,7 @@
 
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.codeInspection.unneededThrows.RedundantThrowsDeclaration;
+import com.intellij.java.impl.codeInspection.unneededThrows.RedundantThrowsDeclaration;
 
 
 public abstract class MethodThrowsTest extends LightQuickFixTestCase {

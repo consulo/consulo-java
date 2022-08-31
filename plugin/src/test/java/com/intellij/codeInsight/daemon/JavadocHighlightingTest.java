@@ -4,8 +4,8 @@ import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
-import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.java.language.LanguageLevel;
 
 

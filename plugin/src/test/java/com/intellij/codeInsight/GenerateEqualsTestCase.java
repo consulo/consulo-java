@@ -1,6 +1,6 @@
 package com.intellij.codeInsight;
 
-import com.intellij.codeInsight.generation.GenerateEqualsHelper;
+import com.intellij.java.impl.codeInsight.generation.GenerateEqualsHelper;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;

@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import com.intellij.java.impl.slicer.*;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;

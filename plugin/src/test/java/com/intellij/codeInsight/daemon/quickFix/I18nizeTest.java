@@ -7,9 +7,9 @@ import java.io.File;
 import java.util.Collections;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.i18n.I18nQuickFixHandler;
-import com.intellij.codeInspection.i18n.I18nizeAction;
-import com.intellij.codeInspection.i18n.JavaI18nUtil;
+import com.intellij.java.impl.codeInspection.i18n.I18nQuickFixHandler;
+import com.intellij.java.impl.codeInspection.i18n.I18nizeAction;
+import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.ide.DataManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.actionSystem.AnActionEvent;

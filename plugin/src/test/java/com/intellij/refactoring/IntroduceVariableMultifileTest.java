@@ -10,7 +10,7 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
+import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 
 /**
  *  @author dsl

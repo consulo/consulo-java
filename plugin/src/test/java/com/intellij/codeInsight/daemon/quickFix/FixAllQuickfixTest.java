@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.dataFlow.DataFlowInspection;
+import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 
 public abstract class FixAllQuickfixTest extends LightQuickFixTestCase {
   @Nonnull

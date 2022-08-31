@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.emptyMethod.EmptyMethodInspection;
+import com.intellij.java.impl.codeInspection.emptyMethod.EmptyMethodInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**

@@ -4,7 +4,7 @@ import com.intellij.codeInsight.intention.EmptyIntentionAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.codeInspection.defUse.DefUseInspection;
+import com.intellij.java.impl.codeInspection.defUse.DefUseInspection;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiLiteralExpression;

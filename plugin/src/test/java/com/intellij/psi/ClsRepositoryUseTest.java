@@ -44,8 +44,8 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import consulo.java.module.extension.JavaModuleExtensionImpl;
-import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.impl.module.extension.JavaModuleExtensionImpl;
+import consulo.java.impl.module.extension.JavaMutableModuleExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 
 @PlatformTestCase.WrapInCommand

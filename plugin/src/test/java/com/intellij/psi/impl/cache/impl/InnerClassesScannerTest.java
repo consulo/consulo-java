@@ -20,7 +20,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaFileImpl;
-import com.intellij.psi.impl.source.tree.StdTokenSets;
+import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.testFramework.PsiTestCase;
 

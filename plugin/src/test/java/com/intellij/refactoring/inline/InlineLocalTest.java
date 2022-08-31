@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
+import com.intellij.java.impl.refactoring.inline.InlineLocalHandler;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.LanguageLevel;

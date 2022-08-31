@@ -23,7 +23,7 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.impl.DeannotateIntentionAction;
+import com.intellij.java.impl.codeInsight.intention.impl.DeannotateIntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;

@@ -26,7 +26,7 @@ package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
-import com.intellij.codeInspection.magicConstant.MagicConstantInspection;
+import com.intellij.java.impl.codeInspection.magicConstant.MagicConstantInspection;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;

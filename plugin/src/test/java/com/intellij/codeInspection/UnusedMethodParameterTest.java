@@ -11,7 +11,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.unusedParameters.UnusedParametersInspection;
+import com.intellij.java.impl.codeInspection.unusedParameters.UnusedParametersInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class UnusedMethodParameterTest extends InspectionTestCase {

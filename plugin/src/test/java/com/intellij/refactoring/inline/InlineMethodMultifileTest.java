@@ -16,6 +16,7 @@
 package com.intellij.refactoring.inline;
 
 import com.intellij.JavaTestUtil;
+import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
@@ -25,7 +26,7 @@ import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.MockInlineMethodOptions;
 import com.intellij.refactoring.RefactoringTestCase;
-import com.intellij.refactoring.util.InlineUtil;
+import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;

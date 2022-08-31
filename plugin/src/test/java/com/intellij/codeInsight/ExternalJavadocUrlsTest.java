@@ -17,7 +17,7 @@ package com.intellij.codeInsight;
 
 import static org.junit.Assert.*;
 
-import com.intellij.lang.java.JavaDocumentationProvider;
+import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;

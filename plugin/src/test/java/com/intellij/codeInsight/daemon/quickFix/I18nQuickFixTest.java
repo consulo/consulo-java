@@ -3,7 +3,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.i18n.I18nInspection;
+import com.intellij.java.impl.codeInspection.i18n.I18nInspection;
 import com.intellij.openapi.util.Comparing;
 
 /**

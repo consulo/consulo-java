@@ -16,8 +16,8 @@
 package com.intellij.codeInsight.daemon;
 
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
-import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
 
 public abstract class JavadocResolveTest extends DaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/javaDoc/resolve";

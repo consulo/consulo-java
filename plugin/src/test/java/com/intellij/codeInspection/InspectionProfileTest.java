@@ -16,8 +16,8 @@
 package com.intellij.codeInspection;
 
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.dataFlow.DataFlowInspection;
-import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
+import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
+import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.codeInspection.ex.*;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.WriteExternalException;

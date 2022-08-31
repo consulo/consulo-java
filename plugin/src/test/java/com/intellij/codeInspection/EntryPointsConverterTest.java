@@ -1,6 +1,6 @@
 package com.intellij.codeInspection;
 
-import com.intellij.codeInspection.ex.EntryPointsManagerImpl;
+import com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl;
 import com.intellij.codeInspection.reference.SmartRefElementPointer;
 import com.intellij.openapi.util.JDOMExternalizableStringList;
 import com.intellij.openapi.util.JDOMUtil;

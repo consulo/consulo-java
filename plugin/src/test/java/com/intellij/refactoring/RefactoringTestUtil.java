@@ -21,7 +21,7 @@
 package com.intellij.refactoring;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import junit.framework.Assert;
 
 public class RefactoringTestUtil {

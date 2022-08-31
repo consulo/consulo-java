@@ -15,7 +15,7 @@
  */
 package org.jetbrains.java.generate;
 
-import com.intellij.codeInsight.generation.actions.BaseGenerateAction;
+import com.intellij.java.impl.codeInsight.generation.actions.BaseGenerateAction;
 
 /**
  * This action handles the generation of a <code>toString()</code> method that dumps the fields

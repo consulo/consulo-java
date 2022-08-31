@@ -21,16 +21,16 @@
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
-import com.intellij.refactoring.extractMethod.ExtractMethodProcessor;
-import com.intellij.refactoring.ui.TypeSelectorManager;
-import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.refactoring.util.ParameterTablePanel;
+import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodProcessor;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import org.jetbrains.annotations.NonNls;

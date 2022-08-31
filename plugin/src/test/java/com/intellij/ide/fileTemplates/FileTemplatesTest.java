@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.intellij.ide.fileTemplates.impl.CustomFileTemplate;
+import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;

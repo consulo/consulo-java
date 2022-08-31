@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.opassign;
 
+import com.intellij.java.impl.ipp.opassign.ReplaceWithOperatorAssignmentIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 

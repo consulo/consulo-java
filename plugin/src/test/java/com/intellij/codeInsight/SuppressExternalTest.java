@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.sillyAssignment.SillyAssignmentInspection;
+import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInspection;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ModifiableRootModel;

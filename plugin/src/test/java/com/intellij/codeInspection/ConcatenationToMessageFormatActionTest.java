@@ -3,7 +3,7 @@
  */
 package com.intellij.codeInspection;
 
-import com.intellij.codeInsight.intention.impl.ConcatenationToMessageFormatAction;
+import com.intellij.java.impl.codeInsight.intention.impl.ConcatenationToMessageFormatAction;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.testFramework.LightIdeaTestCase;

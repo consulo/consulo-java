@@ -1,8 +1,9 @@
 package com.intellij.codeInspection;
 
-import com.intellij.codeInspection.emptyMethod.EmptyMethodInspection;
+import com.intellij.java.impl.codeInspection.RedundantSuppressInspection;
+import com.intellij.java.impl.codeInspection.emptyMethod.EmptyMethodInspection;
 import com.intellij.codeInspection.ex.*;
-import com.intellij.codeInspection.i18n.I18nInspection;
+import com.intellij.java.impl.codeInspection.i18n.I18nInspection;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.InspectionTestCase;
 import javax.annotation.Nonnull;

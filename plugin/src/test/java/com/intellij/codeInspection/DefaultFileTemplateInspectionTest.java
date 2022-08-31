@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.defaultFileTemplateUsage.DefaultFileTemplateUsageInspection;
+import com.intellij.java.impl.codeInspection.defaultFileTemplateUsage.DefaultFileTemplateUsageInspection;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.testFramework.InspectionTestCase;
 

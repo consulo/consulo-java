@@ -10,7 +10,7 @@ import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.refactoring.introduceField.IntroduceFieldHandler;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceFieldHandler;
 
 /**
  * @author ven

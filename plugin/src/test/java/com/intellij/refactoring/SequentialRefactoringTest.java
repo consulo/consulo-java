@@ -21,8 +21,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.refactoring.extractMethod.PrepareFailedException;
-import com.intellij.refactoring.inline.InlineMethodProcessor;
+import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
+import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 /**

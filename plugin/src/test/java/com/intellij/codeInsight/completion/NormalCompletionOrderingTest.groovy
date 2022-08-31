@@ -11,6 +11,7 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.impl.LookupImpl
 import com.intellij.ide.ui.UISettings
+import com.intellij.java.impl.codeInsight.completion.JavaPsiClassReferenceElement
 import com.intellij.java.language.psi.PsiClass
 import com.intellij.java.language.psi.PsiField
 import com.intellij.java.language.psi.PsiMethod

@@ -11,7 +11,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.unusedReturnValue.UnusedReturnValue;
+import com.intellij.java.impl.codeInspection.unusedReturnValue.UnusedReturnValue;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class UnusedReturnValueTest extends InspectionTestCase {

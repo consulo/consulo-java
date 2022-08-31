@@ -8,7 +8,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.inlineSuperClass.InlineSuperClassRefactoringProcessor;
+import com.intellij.java.impl.refactoring.inlineSuperClass.InlineSuperClassRefactoringProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
 
 public abstract class InlineSuperClassTest extends MultiFileTestCase {

@@ -16,6 +16,7 @@
 package com.intellij.refactoring.inline;
 
 import com.intellij.JavaTestUtil;
+import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -23,7 +24,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.newvfs.impl.VirtualFileSystemEntry;
 import com.intellij.psi.*;
 import com.intellij.refactoring.RefactoringTestCase;
-import com.intellij.refactoring.util.InlineUtil;
+import com.intellij.java.impl.refactoring.util.InlineUtil;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;

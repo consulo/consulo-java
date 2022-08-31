@@ -24,6 +24,7 @@ import java.io.StringReader;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;

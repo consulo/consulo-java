@@ -26,7 +26,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.javadoc.JavaDocExternalFilter;
+import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.vfs.LocalFileSystem;

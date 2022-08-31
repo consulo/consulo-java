@@ -7,6 +7,8 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassHandler;
+import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassProcessor;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.PsiCall;

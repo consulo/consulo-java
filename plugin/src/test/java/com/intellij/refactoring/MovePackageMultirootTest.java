@@ -15,13 +15,14 @@
  */
 package com.intellij.refactoring;
 
+import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiManager;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesProcessor;
-import com.intellij.refactoring.move.moveClassesOrPackages.MultipleRootsMoveDestination;
+import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesProcessor;
+import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MultipleRootsMoveDestination;
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 

@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class JavaDocInspectionTest extends InspectionTestCase {

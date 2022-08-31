@@ -26,9 +26,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.memberPushDown.PushDownProcessor;
+import com.intellij.java.impl.refactoring.memberPushDown.PushDownProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
-import com.intellij.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 
 //push first method from class a.A to class b.B
 public abstract class PushDownMultifileTest extends MultiFileTestCase {

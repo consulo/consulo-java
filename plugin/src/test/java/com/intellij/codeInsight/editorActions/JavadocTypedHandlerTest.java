@@ -17,6 +17,7 @@ package com.intellij.codeInsight.editorActions;
 
 import static org.junit.Assert.assertEquals;
 
+import com.intellij.java.impl.codeInsight.editorActions.JavadocTypedHandler;
 import org.junit.Test;
 
 /**

@@ -11,6 +11,8 @@ package com.intellij.refactoring;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
 import consulo.util.collection.primitive.ints.IntList;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import javax.annotation.Nonnull;
 import consulo.util.collection.primitive.ints.IntLists;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.LanguageLevel;
@@ -28,11 +30,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.introduceField.ElementToWorkOn;
-import com.intellij.refactoring.introduceParameter.IntroduceParameterHandler;
-import com.intellij.refactoring.introduceParameter.IntroduceParameterProcessor;
-import com.intellij.refactoring.introduceParameter.Util;
-import com.intellij.refactoring.util.occurrences.ExpressionOccurrenceManager;
+import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
+import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterHandler;
+import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterProcessor;
+import com.intellij.java.impl.refactoring.introduceParameter.Util;
+import com.intellij.java.impl.refactoring.util.occurrences.ExpressionOccurrenceManager;
 import com.intellij.testFramework.TestDataPath;
 
 @TestDataPath("$CONTENT_ROOT/testData")
@@ -484,7 +486,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			return false;
 		}
 
-		final List<PsiMethod> methods = com.intellij.refactoring.introduceParameter.IntroduceParameterHandler.getEnclosingMethods(method);
+		final List<PsiMethod> methods = IntroduceParameterHandler.getEnclosingMethods(method);
 		assertTrue(methods.size() > enclosingLevel);
 		method = methods.get(enclosingLevel);
 

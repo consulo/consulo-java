@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignatureProcessor;
+import com.intellij.java.impl.refactoring.changeClassSignature.TypeParameterInfo;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.PsiClass;

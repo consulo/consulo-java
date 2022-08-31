@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
+import com.intellij.java.impl.refactoring.convertToInstanceMethod.ConvertToInstanceMethodProcessor;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;

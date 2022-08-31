@@ -11,8 +11,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.replaceConstructorWithBuilder.ParameterData;
-import com.intellij.refactoring.replaceConstructorWithBuilder.ReplaceConstructorWithBuilderProcessor;
+import com.intellij.java.impl.refactoring.replaceConstructorWithBuilder.ParameterData;
+import com.intellij.java.impl.refactoring.replaceConstructorWithBuilder.ReplaceConstructorWithBuilderProcessor;
 import java.util.HashMap;
 
 import java.util.LinkedHashMap;

@@ -1,7 +1,7 @@
 package com.intellij.ide.hierarchy;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.ide.hierarchy.call.CallerMethodsTreeStructure;
+import com.intellij.java.impl.ide.hierarchy.call.CallerMethodsTreeStructure;
 import com.intellij.openapi.util.Computable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;

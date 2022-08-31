@@ -9,7 +9,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.wrapreturnvalue.WrapReturnValueProcessor;
+import com.intellij.java.impl.refactoring.wrapreturnvalue.WrapReturnValueProcessor;
 import com.intellij.JavaTestUtil;
 import org.jetbrains.annotations.NonNls;
 

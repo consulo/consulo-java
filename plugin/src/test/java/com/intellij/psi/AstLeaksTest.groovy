@@ -24,7 +24,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.java.MethodElement
 import com.intellij.testFramework.LeakHunter
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 import com.intellij.util.Processor
-import com.intellij.codeInspection.defaultFileTemplateUsage.DefaultFileTemplateUsageInspection
+import com.intellij.java.impl.codeInspection.defaultFileTemplateUsage.DefaultFileTemplateUsageInspection
 
 /**
  * @author peter

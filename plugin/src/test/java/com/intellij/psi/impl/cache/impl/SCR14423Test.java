@@ -22,8 +22,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import consulo.java.module.extension.JavaModuleExtensionImpl;
-import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.impl.module.extension.JavaModuleExtensionImpl;
+import consulo.java.impl.module.extension.JavaMutableModuleExtensionImpl;
 import consulo.roots.ContentFolderScopes;
 
 /**

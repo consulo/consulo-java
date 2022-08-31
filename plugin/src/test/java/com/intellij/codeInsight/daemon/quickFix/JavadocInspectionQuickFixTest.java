@@ -13,7 +13,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 
 public abstract class JavadocInspectionQuickFixTest extends LightQuickFix15TestCase {
 

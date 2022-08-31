@@ -5,8 +5,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.refactoring.introduceField.BaseExpressionToFieldHandler;
-import com.intellij.refactoring.introduceField.LocalToFieldHandler;
+import com.intellij.java.impl.refactoring.introduceField.BaseExpressionToFieldHandler;
+import com.intellij.java.impl.refactoring.introduceField.LocalToFieldHandler;
 
 /**
  * @author ven

@@ -16,7 +16,7 @@
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
@@ -25,10 +25,10 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.refactoring.extractMethod.ExtractMethodHandler;
-import com.intellij.refactoring.extractMethod.ExtractMethodProcessor;
-import com.intellij.refactoring.extractMethod.PrepareFailedException;
-import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
+import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
+import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodProcessor;
+import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
+import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.IncorrectOperationException;

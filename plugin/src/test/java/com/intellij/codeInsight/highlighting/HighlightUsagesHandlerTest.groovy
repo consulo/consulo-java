@@ -2,7 +2,7 @@ package com.intellij.codeInsight.highlighting;
 
 import com.intellij.JavaTestUtil
 import com.intellij.codeInsight.daemon.impl.IdentifierHighlighterPassFactory
-import com.intellij.codeInspection.sillyAssignment.SillyAssignmentInspection
+import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInspection
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NonNls;

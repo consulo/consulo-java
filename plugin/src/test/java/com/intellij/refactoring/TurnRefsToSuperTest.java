@@ -20,7 +20,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.turnRefsToSuper.TurnRefsToSuperProcessor;
+import com.intellij.java.impl.refactoring.turnRefsToSuper.TurnRefsToSuperProcessor;
 import org.jetbrains.annotations.NonNls;
 
 public abstract class TurnRefsToSuperTest extends MultiFileTestCase {

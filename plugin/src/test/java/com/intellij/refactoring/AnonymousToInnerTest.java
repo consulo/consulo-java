@@ -18,7 +18,7 @@ package com.intellij.refactoring;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.refactoring.anonymousToInner.AnonymousToInnerHandler;
+import com.intellij.java.impl.refactoring.anonymousToInner.AnonymousToInnerHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 /**

@@ -1,7 +1,7 @@
 package com.intellij.codeInsight.template;
 
 import com.intellij.codeInsight.template.impl.*;
-import com.intellij.codeInsight.template.macro.VariableOfTypeMacro;
+import com.intellij.java.impl.codeInsight.template.macro.VariableOfTypeMacro;
 import com.intellij.testFramework.LightIdeaTestCase;
 
 /**

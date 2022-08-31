@@ -30,10 +30,10 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.refactoring.encapsulateFields.EncapsulateFieldsDescriptor;
-import com.intellij.refactoring.encapsulateFields.EncapsulateFieldsProcessor;
-import com.intellij.refactoring.encapsulateFields.FieldDescriptor;
-import com.intellij.refactoring.encapsulateFields.FieldDescriptorImpl;
+import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsDescriptor;
+import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsProcessor;
+import com.intellij.java.impl.refactoring.encapsulateFields.FieldDescriptor;
+import com.intellij.java.impl.refactoring.encapsulateFields.FieldDescriptorImpl;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import junit.framework.Assert;
 

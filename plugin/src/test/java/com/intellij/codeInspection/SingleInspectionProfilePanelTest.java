@@ -17,7 +17,7 @@ package com.intellij.codeInspection;
 
 import com.intellij.codeInspection.ex.InspectionProfileImpl;
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
-import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
+import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager;

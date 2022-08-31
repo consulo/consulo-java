@@ -6,7 +6,7 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.psi.*;
-import com.intellij.refactoring.util.RefactoringUtil;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import java.util.HashSet;
 import junit.framework.Test;
 
